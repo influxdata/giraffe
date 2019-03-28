@@ -5,6 +5,7 @@
   "source": "src/index.ts",
   "license": "MIT",
   "scripts": {
+    "test": "jest",
     "build": "rm -rf dist && npx tsc",
     "eslint": "eslint 'src/**/*.{ts,tsx}'",
     "eslint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
@@ -14,7 +15,7 @@
     "@types/chroma-js": "^1.4.1",
     "@types/d3-array": "^1.2.6",
     "@types/d3-scale": "^2.1.1",
-    "@types/jest": "^24.0.5",
+    "@types/jest": "^24.0.11",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
@@ -23,10 +24,11 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
-    "jest": "^24.1.0",
+    "jest": "^24.5.0",
     "prettier": "^1.16.4",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
+    "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000"
   },
   "dependencies": {
