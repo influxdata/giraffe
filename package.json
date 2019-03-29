@@ -5,11 +5,8 @@
   "source": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "build": "rm -rf dist && npx tsc",
-    "eslint": "eslint 'src/**/*.{ts,tsx}'",
-    "eslint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
-    "prepublishOnly": "npm run eslint && npm run build"
+    "test": "echo 'Please use `make test` instead' && false",
+    "build": "echo 'Please use `make build` instead && false"
   },
   "devDependencies": {
     "@types/chroma-js": "^1.4.1",
@@ -29,7 +26,8 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "ts-jest": "^24.0.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.3.4000",
+    "version-bump-prompt": "^5.0.0"
   },
   "dependencies": {
     "chroma-js": "^2.0.2",
