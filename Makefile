@@ -18,7 +18,7 @@ publish: node_modules test build
 
 dist: node_modules $(srcfiles)
 	@rm -rf dist
-	$(nodebin)/tsc
+	$(nodebin)/microbundle
 
 node_modules:
 	npm install
