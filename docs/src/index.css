@@ -1,0 +1,125 @@
+:root {
+  /* Colors */
+  --g0-obsidian: #0f0e15;
+  --g1-raven: #1c1c21;
+  --g2-kevlar: #202028;
+  --g3-castle: #292933;
+  --g4-onyx: #31313d;
+  --g5-pepper: #383846;
+  --g6-smoke: #434453;
+  --g7-graphite: #545667;
+  --g8-storm: #676978;
+  --g9-mountain: #757888;
+  --g10-wolf: #8e91a1;
+  --g11-sidewalk: #999dab;
+  --g12-forge: #a4a8b6;
+  --g13-mist: #bec2cc;
+  --g14-chromium: #c6cad3;
+  --g15-platinum: #d4d7dd;
+  --g16-pearl: #e7e8eb;
+  --g17-whisper: #eeeff2;
+  --g18-cloud: #f6f6f8;
+  --g19-ghost: #fafafc;
+  --g20-white: #ffffff;
+
+  /* Type */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  --font-color: var(--g16-pearl);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+#root > *,
+.app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  body: 0;
+}
+
+a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+a:visited {
+  color: var(--font-color);
+}
+
+.app {
+  --padding: 40px;
+
+  color: var(--font-color);
+  font-family: var(--font-family);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: linear-gradient(
+    to bottom,
+    var(--g0-obsidian) 0%,
+    var(--g1-raven) 100%
+  );
+}
+
+.app-nav {
+  flex: 0 0 300px;
+  border-right: 1px solid var(--g3-castle);
+  padding: var(--padding);
+}
+
+.app-nav .logo,
+.app-nav h2 {
+  color: var(--g8-storm);
+}
+
+.app-nav .logo {
+  margin-bottom: 20px;
+}
+
+.app-nav a {
+  display: block;
+}
+
+.app-nav a:not(.logo) {
+  border-left: 1px solid var(--g8-storm);
+  padding: 5px 0 5px 10px;
+}
+
+.app-nav a[aria-current='page'] {
+  font-weight: bold;
+  border-left: 5px solid var(--g8-storm);
+}
+
+.app-nav h2 {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 40px;
+}
+
+.app-content {
+  flex: 1 1 0;
+  padding: var(--padding);
+}
+
+.app-content > * {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.histogram-example {
+  width: 80%;
+  height: 80%;
+}
