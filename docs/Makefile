@@ -1,13 +1,14 @@
 nodebin := ../node_modules/.bin
+approot := /vis
 
 build: dist
 
 dist:
 	# TODO: typecheck, lint
 	rm -rf dist
-	$(nodebin)/parcel build src/index.html	
+	APP_ROOT=$(approot) $(nodebin)/parcel build --public-url=$(approot) src/index.html
 
 run:
-	$(nodebin)/parcel src/index.html
+	APP_ROOT=$(approot) $(nodebin)/parcel serve --public-url=$(approot) src/index.html
 
 .PHONY: run build dist

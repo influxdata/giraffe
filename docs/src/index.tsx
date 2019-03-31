@@ -9,7 +9,7 @@ import {BasicHistogram} from './components/examples/BasicHistogram'
 
 import './index.css'
 
-export const APP_ROOT = '/vis'
+export const APP_ROOT = process.env.APP_ROOT || '/'
 
 render(
   <Router>
