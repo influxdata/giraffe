@@ -9,9 +9,11 @@ import {BasicHistogram} from './components/examples/BasicHistogram'
 
 import './index.css'
 
+export const APP_ROOT = '/vis'
+
 render(
   <Router>
-    <App path="/">
+    <App path={APP_ROOT}>
       <BasicHistogram path="examples/basic-histogram" />
       <StackedHistogram path="examples/stacked-histogram" />
       <OverlaidHistogram path="examples/overlaid-histogram" />
