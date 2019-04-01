@@ -1,35 +1,32 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, SFC} from 'react'
 
-import {PlotEnv, TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../'
+import {TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
+
+import {PlotEnv} from '../utils/PlotEnv'
 
 interface Props {
   env: PlotEnv
-  axesStroke?: string
-  tickFont?: string
-  tickFill?: string
 }
 
-export const drawAxes = (
-  canvas: HTMLCanvasElement,
-  env: PlotEnv,
-  axesStroke: string,
-  tickFont: string,
-  tickFill: string
-) => {
+export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   const {
-    width,
-    height,
     innerWidth,
     innerHeight,
     margins,
     xTicks,
     yTicks,
-    xAxisLabel,
-    yAxisLabel,
-    baseLayer: {
-      scales: {x: xScale, y: yScale},
+    xScale,
+    yScale,
+    config: {
+      width,
+      height,
+      axesStroke,
+      tickFont,
+      tickFill,
+      xAxisLabel,
+      yAxisLabel,
     },
   } = env
 
@@ -110,13 +107,12 @@ export const drawAxes = (
 }
 
 export const Axes: SFC<Props> = props => {
-  const {children, env, tickFill, tickFont, axesStroke} = props
+  const {children, env} = props
   const canvas = useRef<HTMLCanvasElement>(null)
 
-  useLayoutEffect(
-    () => drawAxes(canvas.current, env, axesStroke, tickFont, tickFill),
-    [canvas.current, env, axesStroke, tickFont, tickFill]
-  )
+  useLayoutEffect(() => {
+    drawAxes(canvas.current, env)
+  }, [canvas.current, env.config])
 
   return (
     <>

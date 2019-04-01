@@ -1,19 +1,18 @@
-import {HistogramTooltipProps, HistogramLayer} from '../'
-import {getBarFill} from './getBarFill'
+import {HistogramTooltipProps, Scale, HistogramTable} from '../types'
 
 export const getHistogramTooltipProps = (
-  layer: HistogramLayer,
-  rowIndices: number[]
+  hoveredRowIndices: number[],
+  table: HistogramTable,
+  fillColKeys: string[],
+  fillScale: Scale<number, string>
 ): HistogramTooltipProps => {
-  const {table, mappings} = layer
-
   const xMinCol = table.columns.xMin.data
   const xMaxCol = table.columns.xMax.data
   const yMinCol = table.columns.yMin.data
   const yMaxCol = table.columns.yMax.data
 
-  const counts = rowIndices.map(i => {
-    const grouping = mappings.fill.reduce(
+  const counts = hoveredRowIndices.map(i => {
+    const grouping = fillColKeys.reduce(
       (acc, colName) => ({
         ...acc,
         [colName]: table.columns[colName].data[i],
@@ -23,14 +22,14 @@ export const getHistogramTooltipProps = (
 
     return {
       count: yMaxCol[i] - yMinCol[i],
-      color: getBarFill(layer, i),
+      color: fillScale(i),
       grouping,
     }
   })
 
   const tooltipProps: HistogramTooltipProps = {
-    xMin: xMinCol[rowIndices[0]],
-    xMax: xMaxCol[rowIndices[0]],
+    xMin: xMinCol[hoveredRowIndices[0]],
+    xMax: xMaxCol[hoveredRowIndices[0]],
     counts,
   }
 

@@ -14,6 +14,7 @@
     "@types/d3-array": "^1.2.6",
     "@types/d3-scale": "^2.1.1",
     "@types/jest": "^24.0.11",
+    "@types/memoize-one": "^4.1.1",
     "@types/reach__router": "^1.2.3",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
@@ -37,7 +38,7 @@
     "chroma-js": "^2.0.2",
     "d3-array": "^2.0.3",
     "d3-scale": "^2.2.2",
-    "immer": "^2.0.0",
+    "memoize-one": "^5.0.2",
     "react-virtualized-auto-sizer": "^1.0.2"
   },
   "peerDependencies": {

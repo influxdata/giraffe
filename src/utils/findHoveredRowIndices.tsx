@@ -1,6 +1,6 @@
 import {range} from 'd3-array'
 
-import {Scale, HistogramTable} from '../'
+import {Scale, HistogramTable} from '../types'
 
 export const findHoveredRowIndices = (
   table: HistogramTable,

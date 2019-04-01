@@ -10,7 +10,10 @@
     "declaration": true,
     "outDir": "./dist",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "noImplicitAny": false,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "strictNullChecks": false,
     "downlevelIteration": true
   }

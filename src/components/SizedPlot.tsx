@@ -1,101 +1,23 @@
 import * as React from 'react'
-import {useReducer, useRef, useMemo, SFC, CSSProperties} from 'react'
+import {useRef, FunctionComponent, CSSProperties} from 'react'
 
-import {Table, PlotEnv} from '..'
 import {Axes} from './Axes'
+import {SizedConfig} from '../types'
+import {HistogramLayer} from './HistogramLayer'
+import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
-import {useMountedEffect} from '../utils/useMountedEffect'
-import {
-  setDimensions,
-  setTable,
-  setControlledXDomain,
-  setControlledYDomain,
-  setXAxisLabel,
-  setYAxisLabel,
-} from '../utils/plotEnvActions'
-import {plotEnvReducer, INITIAL_PLOT_ENV} from '../utils/plotEnvReducer'
 
-export interface Props {
-  //
-  // Required props
-  // ==============
-  //
-  table: Table
-  width: number
-  height: number
-  children: (env: PlotEnv) => JSX.Element
-
-  //
-  // Miscellaneous options
-  // =====================
-  //
-  axesStroke?: string
-  tickFont?: string
-  tickFill?: string
-  xAxisLabel?: string
-  yAxisLabel?: string
-
-  // The x domain of the plot can be explicitly set. If this prop is passed,
-  // then the component is operating in a "controlled" mode, where it always
-  // uses the passed x domain. Any interaction with the plot that should change
-  // the x domain (clicking, brushing, etc.) will call the `onSetXDomain` prop
-  // when the component is in controlled mode. If the `xDomain` prop is not
-  // passed, then the component is "uncontrolled". It will compute and set the
-  // `xDomain` automatically.
-  xDomain?: [number, number]
-  onSetXDomain?: (xDomain: [number, number]) => void
-
-  // See the `xDomain` and `onSetXDomain` props
-  yDomain?: [number, number]
-  onSetYDomain?: (yDomain: [number, number]) => void
+interface Props {
+  config: SizedConfig
 }
 
-export const SizedPlot: SFC<Props> = ({
-  width,
-  height,
-  table,
-  children,
-  axesStroke = '#31313d',
-  tickFont = 'bold 10px Roboto',
-  tickFill = '#8e91a1',
-  xAxisLabel = '',
-  yAxisLabel = '',
-  xDomain = null,
-  yDomain = null,
-}) => {
-  const [env, dispatch] = useReducer(plotEnvReducer, {
-    ...INITIAL_PLOT_ENV,
-    width,
-    height,
-    xDomain,
-    yDomain,
-    xAxisLabel,
-    yAxisLabel,
-    baseLayer: {...INITIAL_PLOT_ENV.baseLayer, table},
-  })
+export const SizedPlot: FunctionComponent<Props> = ({config}) => {
+  const env = usePlotEnv(config)
 
-  useMountedEffect(() => dispatch(setTable(table)), [table])
-  useMountedEffect(() => dispatch(setControlledXDomain(xDomain)), [xDomain])
-  useMountedEffect(() => dispatch(setControlledYDomain(yDomain)), [yDomain])
-  useMountedEffect(() => dispatch(setXAxisLabel(xAxisLabel)), [xAxisLabel])
-  useMountedEffect(() => dispatch(setYAxisLabel(yAxisLabel)), [yAxisLabel])
-  useMountedEffect(() => dispatch(setDimensions(width, height)), [
-    width,
-    height,
-  ])
-
-  const mouseRegion = useRef<HTMLDivElement>(null)
-  const {x: hoverX, y: hoverY} = useMousePos(mouseRegion.current)
-
-  const childProps = useMemo(
-    () => ({
-      ...env,
-      hoverX,
-      hoverY,
-      dispatch,
-    }),
-    [env, hoverX, hoverY, dispatch]
-  )
+  const {
+    margins,
+    config: {width, height},
+  } = env
 
   const plotStyle: CSSProperties = {
     position: 'relative',
@@ -105,22 +27,34 @@ export const SizedPlot: SFC<Props> = ({
 
   const layersStyle: CSSProperties = {
     position: 'absolute',
-    top: `${env.margins.top}px`,
-    right: `${env.margins.right}px`,
-    bottom: `${env.margins.bottom}px`,
-    left: `${env.margins.left}px`,
+    top: `${margins.top}px`,
+    right: `${margins.right}px`,
+    bottom: `${margins.bottom}px`,
+    left: `${margins.left}px`,
   }
+
+  const mouseRegion = useRef<HTMLDivElement>(null)
+  const {x: hoverX, y: hoverY} = useMousePos(mouseRegion.current)
 
   return (
     <div className="minard-plot" style={plotStyle}>
-      <Axes
-        env={env}
-        axesStroke={axesStroke}
-        tickFont={tickFont}
-        tickFill={tickFill}
-      >
+      <Axes env={env}>
         <div className="minard-layers" style={layersStyle}>
-          {children(childProps)}
+          {config.layers.map((layer, i) => {
+            if (layer.type === 'histogram') {
+              return (
+                <HistogramLayer
+                  key={i}
+                  layerIndex={i}
+                  env={env}
+                  hoverX={hoverX}
+                  hoverY={hoverY}
+                />
+              )
+            }
+
+            return null
+          })}
         </div>
         <div
           className="minard-interaction-region"

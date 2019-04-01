@@ -4,10 +4,10 @@ import {
   Table,
   HistogramTable,
   HistogramMappings,
-  HistogramPosition,
   NumericColumnType,
-  isNumeric,
-} from '../'
+} from '../types'
+
+import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 import {getGroupKey} from './getGroupKey'
 
@@ -40,10 +40,10 @@ import {getGroupKey} from './getGroupKey'
 export const bin = (
   table: Table,
   xColName: string,
-  xDomain: [number, number],
+  xDomain: number[],
   groupColNames: string[] = [],
   binCount: number,
-  position: HistogramPosition
+  position: 'stacked' | 'overlaid'
 ): [HistogramTable, HistogramMappings] => {
   const col = table.columns[xColName]
 
@@ -141,7 +141,7 @@ export const bin = (
     for (const bin of bins) {
       let yMin = 0
 
-      if (position === HistogramPosition.Stacked) {
+      if (position === 'stacked') {
         yMin = groupKeys
           .slice(0, i)
           .reduce((sum, k) => sum + (bin.values[k] || 0), 0)
@@ -189,7 +189,7 @@ const createBins = (
 
 const resolveXDomain = (
   xCol: number[],
-  preferredXDomain?: [number, number]
+  preferredXDomain?: number[]
 ): [number, number] => {
   let domain: [number, number]
 

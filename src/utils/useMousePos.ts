@@ -5,6 +5,9 @@ export const useMousePos = (el: Element): {x: number; y: number} => {
 
   useEffect(() => {
     if (!el) {
+      // Force one more render to give the ref a chance to attach
+      setState({x: null, y: null})
+
       return
     }
 

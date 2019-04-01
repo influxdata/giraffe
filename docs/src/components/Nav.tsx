@@ -11,13 +11,7 @@ export const Nav = () => {
       </a>
       <Link to={APP_ROOT}>Home</Link>
       <h2>Examples</h2>
-      <Link to={`${APP_ROOT}/examples/basic-histogram`}>Basic Histogram</Link>
-      <Link to={`${APP_ROOT}/examples/stacked-histogram`}>
-        Stacked Histogram
-      </Link>
-      <Link to={`${APP_ROOT}/examples/overlaid-histogram`}>
-        Overlaid Histogram
-      </Link>
+      <Link to={`${APP_ROOT}/examples/histogram`}>Histogram</Link>
     </nav>
   )
 }

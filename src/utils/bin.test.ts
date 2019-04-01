@@ -1,4 +1,4 @@
-import {HistogramPosition, Table} from '../'
+import {Table} from '../'
 import {bin} from './bin'
 
 const TABLE: Table = {
@@ -43,7 +43,7 @@ const TABLE: Table = {
 
 describe('bin', () => {
   test('without grouping', () => {
-    const actual = bin(TABLE, '_value', null, [], 5, HistogramPosition.Stacked)
+    const actual = bin(TABLE, '_value', null, [], 5, 'stacked')
     const expected = [
       {
         columns: {
@@ -61,14 +61,8 @@ describe('bin', () => {
   })
 
   test('with grouping by _field and cpu', () => {
-    const actual = bin(
-      TABLE,
-      '_value',
-      null,
-      ['_field'],
-      5,
-      HistogramPosition.Stacked
-    )[0].columns
+    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'stacked')[0]
+      .columns
 
     const expected = {
       xMin: {data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80], type: 'int'},
@@ -96,14 +90,8 @@ describe('bin', () => {
   })
 
   test('with grouping and overlaid positioning', () => {
-    const actual = bin(
-      TABLE,
-      '_value',
-      null,
-      ['_field'],
-      5,
-      HistogramPosition.Overlaid
-    )[0].columns
+    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'overlaid')[0]
+      .columns
 
     const expected = {
       xMin: {data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80], type: 'int'},
@@ -131,14 +119,8 @@ describe('bin', () => {
   })
 
   test('with an explicitly set xDomain', () => {
-    const actual = bin(
-      TABLE,
-      '_value',
-      [-200, 200],
-      [],
-      10,
-      HistogramPosition.Stacked
-    )[0].columns
+    const actual = bin(TABLE, '_value', [-200, 200], [], 10, 'stacked')[0]
+      .columns
 
     const expected = {
       xMin: {
@@ -157,14 +139,7 @@ describe('bin', () => {
   })
 
   test('ignores values outside of xDomain', () => {
-    const actual = bin(
-      TABLE,
-      '_value',
-      [50, 80],
-      [],
-      3,
-      HistogramPosition.Stacked
-    )[0].columns
+    const actual = bin(TABLE, '_value', [50, 80], [], 3, 'stacked')[0].columns
 
     const expected = {
       xMin: {data: [50, 60, 70], type: 'int'},
