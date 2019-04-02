@@ -18,5 +18,6 @@ export {
   Margins,
   HistogramTooltipProps,
   HistogramLayerConfig,
+  HistogramPosition,
   Config,
 } from './types'
