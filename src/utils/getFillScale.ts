@@ -2,34 +2,29 @@ import {scaleOrdinal} from 'd3-scale'
 import * as chroma from 'chroma-js'
 
 import {Table, Scale} from '../types'
-import {getGroupKey} from './getGroupKey'
+import {assert} from './assert'
+import {GROUP_COL_KEY} from '../constants'
 
 export const getFillScale = (
   table: Table,
   fillColKeys: string[],
   colors: string[]
-): Scale<number, string> => {
+): Scale<string, string> => {
   if (!fillColKeys.length) {
-    return (_i: number) => colors[0]
+    return (_i: string) => colors[0]
   }
+
+  const groupKeyCol = table.columns[GROUP_COL_KEY]
+
+  assert('expected table to have a column of group keys', !!groupKeyCol)
 
   const domain = {}
 
   for (let i = 0; i < table.length; i++) {
-    domain[getGroupKey(fillColKeys.map(k => table.columns[k].data[i]))] = true
+    domain[groupKeyCol.data[i] as string] = true
   }
 
-  const groupKeyFillScale = getColorScale(Object.keys(domain), colors)
-
-  const fillScale = (i: number) => {
-    const values = fillColKeys.map(colKey => table.columns[colKey].data[i])
-    const groupKey = getGroupKey(values)
-    const fill = groupKeyFillScale(groupKey)
-
-    return fill
-  }
-
-  return fillScale
+  return getColorScale(Object.keys(domain), colors)
 }
 
 /*

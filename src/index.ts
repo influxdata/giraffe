@@ -19,5 +19,7 @@ export {
   HistogramTooltipProps,
   HistogramLayerConfig,
   HistogramPosition,
+  LineInterpolation,
+  LineLayerConfig,
   Config,
 } from './types'
