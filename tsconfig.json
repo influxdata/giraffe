@@ -8,6 +8,7 @@
     "jsx": "react",
     "strict": true,
     "declaration": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -16,5 +17,6 @@
     "noUnusedLocals": true,
     "strictNullChecks": false,
     "downlevelIteration": true
-  }
+  },
+  "exclude": ["docs"]
 }

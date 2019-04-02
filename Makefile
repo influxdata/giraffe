@@ -16,7 +16,7 @@ publish: node_modules test build
 	$(nodebin)/bump --commit "Release v%s" --tag "v%s" --push
 	npm publish --access=public
 
-dist: node_modules $(srcfiles)
+dist: node_modules $(srcfiles) tsconfig.json
 	@rm -rf dist
 	$(nodebin)/microbundle
 
