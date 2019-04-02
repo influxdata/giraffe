@@ -105,12 +105,14 @@ export interface HistogramTooltipProps {
   }>
 }
 
+export type HistogramPosition = 'overlaid' | 'stacked'
+
 export interface HistogramLayerConfig {
   type: 'histogram'
   x: string
   fill: string[]
   colors: string[]
-  position?: 'overlaid' | 'stacked'
+  position?: HistogramPosition
   binCount?: number
   tooltip?: (props: HistogramTooltipProps) => JSX.Element
 }

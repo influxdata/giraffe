@@ -4,6 +4,7 @@ import {
   Table,
   HistogramTable,
   HistogramMappings,
+  HistogramPosition,
   NumericColumnType,
 } from '../types'
 
@@ -43,7 +44,7 @@ export const bin = (
   xDomain: number[],
   groupColNames: string[] = [],
   binCount: number,
-  position: 'stacked' | 'overlaid'
+  position: HistogramPosition
 ): [HistogramTable, HistogramMappings] => {
   const col = table.columns[xColName]
 
