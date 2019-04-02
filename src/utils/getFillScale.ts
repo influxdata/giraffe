@@ -13,13 +13,13 @@ export const getFillScale = (
     return (_i: number) => colors[0]
   }
 
-  const domain = new Set()
+  const domain = {}
 
   for (let i = 0; i < table.length; i++) {
-    domain.add(getGroupKey(fillColKeys.map(k => table.columns[k].data[i])))
+    domain[getGroupKey(fillColKeys.map(k => table.columns[k].data[i]))] = true
   }
 
-  const groupKeyFillScale = getColorScale([...domain], colors)
+  const groupKeyFillScale = getColorScale(Object.keys(domain), colors)
 
   const fillScale = (i: number) => {
     const values = fillColKeys.map(colKey => table.columns[colKey].data[i])

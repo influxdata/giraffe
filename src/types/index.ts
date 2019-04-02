@@ -1,3 +1,5 @@
+import {FunctionComponent} from 'react'
+
 export type ColumnType = 'int' | 'uint' | 'float' | 'string' | 'time' | 'bool'
 
 export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
@@ -114,7 +116,7 @@ export interface HistogramLayerConfig {
   colors: string[]
   position?: HistogramPosition
   binCount?: number
-  tooltip?: (props: HistogramTooltipProps) => JSX.Element
+  tooltip?: FunctionComponent<HistogramTooltipProps>
 }
 
 export interface Config {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HistogramTable, Scale} from '../types'
+import {HistogramTable, HistogramTooltipProps, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
@@ -98,11 +98,11 @@ export const HistogramLayer: FunctionComponent<Props> = ({
     yScale
   )
 
-  const tooltip = env.config.layers[layerIndex].tooltip
+  const Tooltip = env.config.layers[layerIndex].tooltip
 
-  let tooltipProps = null
+  let tooltipProps: HistogramTooltipProps = null
 
-  if (tooltip && hoveredRowIndices) {
+  if (Tooltip && hoveredRowIndices) {
     tooltipProps = getHistogramTooltipProps(
       hoveredRowIndices,
       table,
@@ -129,7 +129,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   return (
     <>
       <canvas className="minard-layer histogram" ref={canvas} />
-      {hoveredRowIndices && tooltip && tooltip(tooltipProps)}
+      {hoveredRowIndices && Tooltip && <Tooltip {...tooltipProps} />} />}
     </>
   )
 }
