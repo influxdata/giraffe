@@ -1,11 +1,17 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HistogramTable, HistogramTooltipProps, Scale} from '../types'
+import {
+  HistogramTable,
+  HistogramTooltipProps,
+  Scale,
+  HistogramLayerConfig,
+} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
 import {getHistogramTooltipProps} from '../utils/getHistogramTooltipProps'
+import {GROUP_COL_KEY} from '../constants'
 
 const BAR_TRANSPARENCY = 0.5
 const BAR_TRANSPARENCY_HOVER = 0.7
@@ -18,7 +24,7 @@ interface DrawBarsOptions {
   height: number
   xScale: Scale<number, number>
   yScale: Scale<number, number>
-  fillScale: Scale<number, string>
+  fillScale: Scale<string, string>
   hoveredRowIndices: number[] | null
 }
 
@@ -38,6 +44,7 @@ const drawBars = ({
   const xMaxCol = table.columns.xMax.data
   const yMinCol = table.columns.yMin.data
   const yMaxCol = table.columns.yMax.data
+  const groupKeyCol = table.columns[GROUP_COL_KEY].data as string[]
 
   const context = canvas.getContext('2d')
 
@@ -51,7 +58,8 @@ const drawBars = ({
     const y = yScale(yMaxCol[i])
     const width = xScale(xMaxCol[i]) - x - BAR_PADDING
     const height = yScale(yMinCol[i]) - y - BAR_PADDING
-    const fill = fillScale(i)
+
+    const fill = fillScale(groupKeyCol[i])
     const alpha =
       hoveredRowIndices && hoveredRowIndices.includes(i)
         ? BAR_TRANSPARENCY_HOVER
@@ -98,7 +106,8 @@ export const HistogramLayer: FunctionComponent<Props> = ({
     yScale
   )
 
-  const Tooltip = env.config.layers[layerIndex].tooltip
+  const layer = env.config.layers[layerIndex] as HistogramLayerConfig
+  const Tooltip = layer.tooltip
 
   let tooltipProps: HistogramTooltipProps = null
 

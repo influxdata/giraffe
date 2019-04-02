@@ -44,25 +44,21 @@ const TABLE: Table = {
 describe('bin', () => {
   test('without grouping', () => {
     const actual = bin(TABLE, '_value', null, [], 5, 'stacked')
-    const expected = [
-      {
-        columns: {
-          xMin: {data: [0, 20, 40, 60, 80], type: 'int'},
-          xMax: {data: [20, 40, 60, 80, 100], type: 'int'},
-          yMin: {data: [0, 0, 0, 0, 0], type: 'int'},
-          yMax: {data: [1, 0, 2, 6, 1], type: 'int'},
-        },
-        length: 5,
+    const expected = {
+      columns: {
+        xMin: {data: [0, 20, 40, 60, 80], type: 'int'},
+        xMax: {data: [20, 40, 60, 80, 100], type: 'int'},
+        yMin: {data: [0, 0, 0, 0, 0], type: 'int'},
+        yMax: {data: [1, 0, 2, 6, 1], type: 'int'},
       },
-      {xMin: 'xMin', xMax: 'xMax', yMin: 'yMin', yMax: 'yMax', fill: []},
-    ]
+      length: 5,
+    }
 
     expect(actual).toEqual(expected)
   })
 
   test('with grouping by _field and cpu', () => {
-    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'stacked')[0]
-      .columns
+    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'stacked').columns
 
     const expected = {
       xMin: {data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80], type: 'int'},
@@ -90,8 +86,7 @@ describe('bin', () => {
   })
 
   test('with grouping and overlaid positioning', () => {
-    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'overlaid')[0]
-      .columns
+    const actual = bin(TABLE, '_value', null, ['_field'], 5, 'overlaid').columns
 
     const expected = {
       xMin: {data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80], type: 'int'},
@@ -119,8 +114,7 @@ describe('bin', () => {
   })
 
   test('with an explicitly set xDomain', () => {
-    const actual = bin(TABLE, '_value', [-200, 200], [], 10, 'stacked')[0]
-      .columns
+    const actual = bin(TABLE, '_value', [-200, 200], [], 10, 'stacked').columns
 
     const expected = {
       xMin: {
@@ -139,7 +133,7 @@ describe('bin', () => {
   })
 
   test('ignores values outside of xDomain', () => {
-    const actual = bin(TABLE, '_value', [50, 80], [], 3, 'stacked')[0].columns
+    const actual = bin(TABLE, '_value', [50, 80], [], 3, 'stacked').columns
 
     const expected = {
       xMin: {data: [50, 60, 70], type: 'int'},

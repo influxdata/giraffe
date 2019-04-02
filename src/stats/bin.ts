@@ -5,12 +5,46 @@ import {
   HistogramTable,
   HistogramMappings,
   HistogramPosition,
+  HistogramScales,
+  HistogramLayerConfig,
   NumericColumnType,
 } from '../types'
 
-import {isNumeric} from './isNumeric'
-import {assert} from './assert'
-import {getGroupKey} from './getGroupKey'
+import {isNumeric} from '../utils/isNumeric'
+import {assert} from '../utils/assert'
+import {getGroupKey} from '../utils/getGroupKey'
+import {getFillScale} from '../utils/getFillScale'
+import {appendGroupCol} from '../utils/appendGroupCol'
+
+export const binStat = (
+  inTable: Table,
+  layer: HistogramLayerConfig,
+  xDomain: number[],
+  _
+): {
+  table: HistogramTable
+  mappings: HistogramMappings
+  scales: HistogramScales
+} => {
+  const table = appendGroupCol(
+    bin(inTable, layer.x, xDomain, layer.fill, layer.binCount, layer.position),
+    layer.fill
+  )
+
+  const mappings: HistogramMappings = {
+    xMin: 'xMin',
+    xMax: 'xMax',
+    yMin: 'yMin',
+    yMax: 'yMax',
+    fill: layer.fill,
+  }
+
+  const scales = {
+    fill: getFillScale(table, layer.fill, layer.colors),
+  }
+
+  return {table, mappings, scales}
+}
 
 /*
   Compute the data of a histogram visualization.
@@ -45,7 +79,7 @@ export const bin = (
   groupColNames: string[] = [],
   binCount: number,
   position: HistogramPosition
-): [HistogramTable, HistogramMappings] => {
+): HistogramTable => {
   const col = table.columns[xColName]
 
   assert(`could not find column "${xColName}"`, !!col)
@@ -159,15 +193,7 @@ export const bin = (
     }
   }
 
-  const mappings: HistogramMappings = {
-    xMin: 'xMin',
-    xMax: 'xMax',
-    yMin: 'yMin',
-    yMax: 'yMax',
-    fill: groupColNames,
-  }
-
-  return [statTable as HistogramTable, mappings]
+  return statTable as HistogramTable
 }
 
 const createBins = (

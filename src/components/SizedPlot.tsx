@@ -4,6 +4,7 @@ import {useRef, FunctionComponent, CSSProperties} from 'react'
 import {Axes} from './Axes'
 import {SizedConfig} from '../types'
 import {HistogramLayer} from './HistogramLayer'
+import {LineLayer} from './LineLayer'
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
 
@@ -41,19 +42,30 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
       <Axes env={env}>
         <div className="minard-layers" style={layersStyle}>
           {config.layers.map((layer, i) => {
-            if (layer.type === 'histogram') {
-              return (
-                <HistogramLayer
-                  key={i}
-                  layerIndex={i}
-                  env={env}
-                  hoverX={hoverX}
-                  hoverY={hoverY}
-                />
-              )
+            switch (layer.type) {
+              case 'line':
+                return (
+                  <LineLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
+              case 'histogram':
+                return (
+                  <HistogramLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
+              default:
+                return null
             }
-
-            return null
           })}
         </div>
         <div

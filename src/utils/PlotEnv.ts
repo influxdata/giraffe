@@ -21,9 +21,8 @@ import {
   AXIS_LABEL_PADDING_BOTTOM,
 } from '../constants'
 
-import {bin} from './bin'
+import {stats} from '../stats'
 import {getTicks} from './getTicks'
-import {getFillScale} from './getFillScale'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 
@@ -187,27 +186,10 @@ export class PlotEnv {
   })
 
   private registerLayer(layerIndex: number, layer: LayerConfig): void {
-    if (layer.type !== 'histogram') {
-      return
-    }
+    const {table: baseTable, xDomain, yDomain} = this.config
+    const stat = stats[layer.type]
 
-    const {x, fill, binCount, position, colors} = layer
-    const {table: baseTable, xDomain} = this.config
-
-    const [table, mappings] = bin(
-      baseTable,
-      x,
-      xDomain,
-      fill,
-      binCount,
-      position
-    )
-
-    this.layers[layerIndex] = {
-      mappings,
-      table,
-      scales: {fill: getFillScale(table, fill, colors)},
-    }
+    this.layers[layerIndex] = stat(baseTable, layer as any, xDomain, yDomain)
   }
 }
 

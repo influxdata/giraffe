@@ -1,5 +1,4 @@
 import {FunctionComponent} from 'react'
-
 export type ColumnType = 'int' | 'uint' | 'float' | 'string' | 'time' | 'bool'
 
 export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
@@ -60,6 +59,35 @@ export interface Scale<D = any, R = any> {
   invert?: (y: R) => D
 }
 
+export type LineInterpolation =
+  | 'linear'
+  | 'monotoneX'
+  | 'monotoneY'
+  | 'cubic'
+  | 'step'
+  | 'stepBefore'
+  | 'stepAfter'
+  | 'natural'
+
+export interface LineLayerConfig {
+  type: 'line'
+  x: string
+  y: string
+  fill: string[]
+  colors: string[]
+  interpolation: LineInterpolation
+}
+
+export interface LineMappings {
+  x: string
+  y: string
+  fill: string[]
+}
+
+export interface LineScales {
+  fill: Scale<string, string>
+}
+
 export interface HistogramTable extends Table {
   columns: {
     xMin: NumericTableColumn
@@ -87,15 +115,14 @@ export interface HistogramMappings {
 }
 
 export interface HistogramScales {
-  // x and y scale are from the `BaseLayer`
-  fill: Scale<number, string>
+  fill: Scale<string, string>
 }
 
-export type Mappings = HistogramMappings
+export type Mappings = LineMappings | HistogramMappings
 
-export type Scales = HistogramScales
+export type Scales = LineScales | HistogramScales
 
-export type LayerConfig = HistogramLayerConfig
+export type LayerConfig = LineLayerConfig | HistogramLayerConfig
 
 export interface HistogramTooltipProps {
   xMin: number

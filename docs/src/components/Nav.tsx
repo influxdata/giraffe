@@ -11,6 +11,7 @@ export const Nav = () => {
       </a>
       <Link to={APP_ROOT}>Home</Link>
       <h2>Examples</h2>
+      <Link to={`${APP_ROOT}/examples/line`}>Line</Link>
       <Link to={`${APP_ROOT}/examples/histogram`}>Histogram</Link>
     </nav>
   )
