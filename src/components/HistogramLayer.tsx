@@ -129,7 +129,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   return (
     <>
       <canvas className="minard-layer histogram" ref={canvas} />
-      {hoveredRowIndices && Tooltip && <Tooltip {...tooltipProps} />} />}
+      {hoveredRowIndices && Tooltip && <Tooltip {...tooltipProps} />}
     </>
   )
 }
