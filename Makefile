@@ -3,6 +3,10 @@ srcfiles := $(shell find src)
 
 build: dist
 
+run: node_modules
+	@rm -rf dist
+	$(nodebin)/microbundle watch
+
 test: node_modules
 	$(nodebin)/eslint 'src/**/*.{ts,tsx}'
 	$(nodebin)/tsc --noEmit
@@ -23,4 +27,4 @@ dist: node_modules $(srcfiles) tsconfig.json
 node_modules:
 	npm install
 
-.PHONY: clean test build publish
+.PHONY: clean test build publish run
