@@ -3,6 +3,7 @@ import {useRef, useLayoutEffect, SFC} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
+import {getTickFormatter} from '../utils/getTickFormatter'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -15,6 +16,8 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     innerWidth,
     innerHeight,
     margins,
+    xDomain,
+    yDomain,
     xTicks,
     yTicks,
     xScale,
@@ -48,12 +51,18 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   context.lineTo(margins.left, margins.top)
   context.stroke()
 
+  // Draw and label each tick on the x axis
+
   context.font = tickFont
   context.fillStyle = tickFill
   context.textAlign = 'center'
   context.textBaseline = 'top'
 
-  // Draw and label each tick on the x axis
+  const xTickFormatter = getTickFormatter(
+    xDomain,
+    env.getColumnTypeForAesthetic('x')
+  )
+
   for (const xTick of xTicks) {
     const x = xScale(xTick) + margins.left
 
@@ -62,13 +71,19 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     context.lineTo(x, margins.top)
     context.stroke()
 
-    context.fillText(String(xTick), x, xAxisY + TICK_PADDING_TOP)
+    context.fillText(xTickFormatter(xTick), x, xAxisY + TICK_PADDING_TOP)
   }
+
+  // Draw and label each tick on the y axis
 
   context.textAlign = 'end'
   context.textBaseline = 'middle'
 
-  // Draw and label each tick on the y axis
+  const yTickFormatter = getTickFormatter(
+    yDomain,
+    env.getColumnTypeForAesthetic('y')
+  )
+
   for (const yTick of yTicks) {
     const y = yScale(yTick) + margins.top
 
@@ -77,7 +92,11 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     context.lineTo(width - margins.right, y)
     context.stroke()
 
-    context.fillText(String(yTick), margins.left - TICK_PADDING_RIGHT, y)
+    context.fillText(
+      yTickFormatter(yTick),
+      margins.left - TICK_PADDING_RIGHT,
+      y
+    )
   }
 
   // Draw the x axis label

@@ -10,6 +10,7 @@ import {
   Table,
   Scales,
   LayerConfig,
+  ColumnType,
 } from '../types'
 
 import {
@@ -29,7 +30,7 @@ import {assert} from './assert'
 const CONFIG_DEFAULTS: Partial<Config> = {
   layers: [],
   axesStroke: '#31313d',
-  tickFont: 'bold 10px Helvetica',
+  tickFont: 'Medium 10px Helvetica Neue',
   tickFill: '#8e91a1',
   xAxisLabel: '',
   yAxisLabel: '',
@@ -97,11 +98,19 @@ export class PlotEnv {
   }
 
   public get xTicks(): number[] {
-    return this.getXTicks(this.xDomain, this.config.width)
+    return this.getXTicks(
+      this.xDomain,
+      this.config.width,
+      this.getColumnTypeForAesthetic('x')
+    )
   }
 
   public get yTicks(): number[] {
-    return this.getYTicks(this.yDomain, this.config.height)
+    return this.getYTicks(
+      this.yDomain,
+      this.config.height,
+      this.getColumnTypeForAesthetic('y')
+    )
   }
 
   public get xScale(): Scale<number, number> {
@@ -130,6 +139,29 @@ export class PlotEnv {
 
   public getMapping(layerIndex: number, aesthetic: string) {
     return this.layers[layerIndex].mappings[aesthetic]
+  }
+
+  public getColumnTypeForAesthetic(aesthetic: string): ColumnType | null {
+    const columnTypes = this.layers.reduce((acc: ColumnType[], layer) => {
+      const mapping = layer.mappings[aesthetic]
+
+      if (!mapping) {
+        return acc
+      }
+
+      return [...acc, layer.table.columns[mapping].type]
+    }, [])
+
+    if (!columnTypes.length) {
+      return null
+    }
+
+    assert(
+      `found multiple column types for aesthetic "${aesthetic}"`,
+      columnTypes.every(t => t === columnTypes[0])
+    )
+
+    return columnTypes[0]
   }
 
   private getMargins = memoizeOne(
