@@ -12,11 +12,11 @@ export const appendGroupCol = <T extends Table>(
     data.push(getGroupKey(groupColKeys.map(k => table.columns[k].data[i])))
   }
 
-  return {
-    ...table,
-    columns: {
-      ...table.columns,
-      [GROUP_COL_KEY]: {data, type: 'string'},
-    },
-  }
+  const columns = {...table.columns}
+
+  // Works around a build issue that shows up when using computed property
+  // syntax
+  columns[GROUP_COL_KEY] = {data, type: 'string'}
+
+  return {...table, columns}
 }
