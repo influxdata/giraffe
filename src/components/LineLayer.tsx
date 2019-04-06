@@ -8,19 +8,20 @@ import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {GROUP_COL_KEY, CURVES} from '../constants'
 import {isDefined} from '../utils/isDefined'
+import {simplify} from '../utils/simplify'
 
-interface LineDatum {
-  xs: number[]
-  ys: number[]
+type LineData = Array<{
+  xs: number[] | Float64Array
+  ys: number[] | Float64Array
   fill: string
-}
+}>
 
-const computeLineData = (
+const collectLineData = (
   table: Table,
   xColKey: string,
   yColKey: string,
   fillScale: Scale<string, string>
-): LineDatum[] => {
+): LineData => {
   const xCol = table.columns[xColKey].data
   const yCol = table.columns[yColKey].data
   const groupCol = table.columns[GROUP_COL_KEY].data as string[]
@@ -47,20 +48,27 @@ const computeLineData = (
   return result
 }
 
+const simplifyLineData = (lineData: LineData, xScale, yScale): LineData =>
+  lineData.map(({xs: initialXs, ys: initialYs, fill}) => {
+    const [xs, ys] = simplify(
+      initialXs.map(x => xScale(x)),
+      initialYs.map(y => yScale(y)),
+      1
+    )
+
+    return {xs, ys, fill}
+  })
+
 interface DrawLinesOptions {
   canvas: HTMLCanvasElement
-  xScale: Scale<number, number>
-  yScale: Scale<number, number>
   interpolation: LineInterpolation
-  lineData: LineDatum[]
+  lineData: LineData
   width: number
   height: number
 }
 
 const drawLines = ({
   canvas,
-  xScale,
-  yScale,
   lineData,
   interpolation,
   width,
@@ -73,8 +81,8 @@ const drawLines = ({
   for (const {xs, ys, fill} of lineData) {
     const lineGenerator: any = line()
       .context(context)
-      .x((i: any) => xScale(xs[i]))
-      .y((i: any) => yScale(ys[i]))
+      .x((i: any) => xs[i])
+      .y((i: any) => ys[i])
       .defined((i: any) => isDefined(xs[i]) && isDefined(ys[i]))
       .curve(CURVES[interpolation] || curveLinear)
 
@@ -102,9 +110,15 @@ export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
   const {xScale, yScale, innerWidth: width, innerHeight: height} = env
 
   const lineData = useMemo(
-    // TODO: Simplify with Ramer-Douglas-Peucker as well
-    () => computeLineData(table, xColKey, yColKey, fillScale),
+    () => collectLineData(table, xColKey, yColKey, fillScale),
     [table, xColKey, yColKey, fillScale]
+  )
+
+  // TODO: Simplify in data domain, resimplify when dimensions change on a
+  // debounced timer (for fast resizes)
+  const simplifiedLineData = useMemo(
+    () => simplifyLineData(lineData, xScale, yScale),
+    [lineData, xScale, yScale]
   )
 
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -112,9 +126,7 @@ export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
   useLayoutEffect(() => {
     drawLines({
       canvas: canvas.current,
-      lineData,
-      xScale,
-      yScale,
+      lineData: simplifiedLineData,
       interpolation,
       width,
       height,
