@@ -8,18 +8,16 @@ import {TABLE, COLOR_SCHEMES} from './'
 
 type Props = RouteComponentProps
 
-export const LineExample: FunctionComponent<Props> = ({}) => {
+export const HeatmapExample: FunctionComponent<Props> = ({}) => {
   const config: Config = {
     table: TABLE,
     yDomain: [0, 50],
     layers: [
       {
-        type: 'line',
+        type: 'heatmap',
         x: '_time',
         y: '_value',
-        fill: ['cpu'],
-        colors: COLOR_SCHEMES.find(d => d.name === 'InfluxDB A').colors,
-        interpolation: 'monotoneX',
+        colors: COLOR_SCHEMES.find(d => d.name === 'Inferno').colors,
       },
     ],
   }

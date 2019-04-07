@@ -1,14 +1,18 @@
-import {Table, LineLayerConfig, LineMappings, LineScales} from '../types'
+import {
+  Table,
+  LineLayerConfig,
+  LineMappings,
+  LineScales,
+  SizedConfig,
+} from '../types'
 import {getFillScale} from '../utils/getFillScale'
 import {appendGroupCol} from '../utils/appendGroupCol'
 
 export const lineStat = (
-  inTable: Table,
-  layer: LineLayerConfig,
-  _xDomain: number[],
-  _yDomain: number[]
+  config: SizedConfig,
+  layer: LineLayerConfig
 ): {table: Table; mappings: LineMappings; scales: LineScales} => {
-  const table = appendGroupCol(inTable, layer.fill)
+  const table = appendGroupCol(config.table, layer.fill)
 
   return {
     table,

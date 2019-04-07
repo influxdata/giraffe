@@ -3,7 +3,7 @@ import {extent} from 'd3-array'
 import memoizeOne from 'memoize-one'
 
 import {
-  Config,
+  SizedConfig,
   Margins,
   Scale,
   Mappings,
@@ -27,7 +27,7 @@ import {getTicks} from './getTicks'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 
-const CONFIG_DEFAULTS: Partial<Config> = {
+const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
   axesStroke: '#31313d',
   tickFont: 'Medium 10px Helvetica Neue',
@@ -46,14 +46,14 @@ interface LayerData {
 }
 
 export class PlotEnv {
-  private _config: Config | null = null
+  private _config: SizedConfig | null = null
   private layers: LayerData[] = []
 
-  public get config(): Config | null {
+  public get config(): SizedConfig | null {
     return this._config
   }
 
-  public set config(config: Config) {
+  public set config(config: SizedConfig) {
     const tableChanged = !this._config || config.table !== this._config.table
     const layersChanged = !this._config || config.layers !== this._config.layers
     const domainsChanged =
@@ -101,7 +101,7 @@ export class PlotEnv {
     return this.getXTicks(
       this.xDomain,
       this.config.width,
-      this.getColumnTypeForAesthetic('x')
+      this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
     )
   }
 
@@ -109,7 +109,7 @@ export class PlotEnv {
     return this.getYTicks(
       this.yDomain,
       this.config.height,
-      this.getColumnTypeForAesthetic('y')
+      this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
     )
   }
 
@@ -141,23 +141,25 @@ export class PlotEnv {
     return this.layers[layerIndex].mappings[aesthetic]
   }
 
-  public getColumnTypeForAesthetic(aesthetic: string): ColumnType | null {
-    const columnTypes = this.layers.reduce((acc: ColumnType[], layer) => {
-      const mapping = layer.mappings[aesthetic]
+  public getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
+    const columnTypes = []
 
-      if (!mapping) {
-        return acc
+    for (const layer of this.layers) {
+      for (const aesthetic of aesthetics) {
+        const mapping = layer.mappings[aesthetic]
+
+        if (mapping) {
+          columnTypes.push(layer.table.columns[mapping].type)
+        }
       }
-
-      return [...acc, layer.table.columns[mapping].type]
-    }, [])
+    }
 
     if (!columnTypes.length) {
       return null
     }
 
     assert(
-      `found multiple column types for aesthetic "${aesthetic}"`,
+      `found multiple column types for aesthetics "${aesthetics}"`,
       columnTypes.every(t => t === columnTypes[0])
     )
 
@@ -218,10 +220,9 @@ export class PlotEnv {
   })
 
   private registerLayer(layerIndex: number, layer: LayerConfig): void {
-    const {table: baseTable, xDomain, yDomain} = this.config
     const stat = stats[layer.type]
 
-    this.layers[layerIndex] = stat(baseTable, layer as any, xDomain, yDomain)
+    this.layers[layerIndex] = stat(this.config, layer as any)
   }
 }
 

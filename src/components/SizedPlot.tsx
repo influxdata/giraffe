@@ -5,6 +5,7 @@ import {Axes} from './Axes'
 import {SizedConfig} from '../types'
 import {HistogramLayer} from './HistogramLayer'
 import {LineLayer} from './LineLayer'
+import {HeatmapLayer} from './HeatmapLayer'
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
 
@@ -44,15 +45,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
           {config.layers.map((layer, i) => {
             switch (layer.type) {
               case 'line':
-                return (
-                  <LineLayer
-                    key={i}
-                    layerIndex={i}
-                    env={env}
-                    hoverX={hoverX}
-                    hoverY={hoverY}
-                  />
-                )
+                return <LineLayer key={i} layerIndex={i} env={env} />
               case 'histogram':
                 return (
                   <HistogramLayer
@@ -63,6 +56,8 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
                     hoverY={hoverY}
                   />
                 )
+              case 'heatmap':
+                return <HeatmapLayer key={i} layerIndex={i} env={env} />
               default:
                 return null
             }

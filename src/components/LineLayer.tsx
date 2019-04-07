@@ -98,8 +98,6 @@ const drawLines = ({
 interface Props {
   env: PlotEnv
   layerIndex: number
-  hoverX: number
-  hoverY: number
 }
 
 export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {

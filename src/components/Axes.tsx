@@ -60,7 +60,7 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
 
   const xTickFormatter = getTickFormatter(
     xDomain,
-    env.getColumnTypeForAesthetic('x')
+    env.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
   )
 
   for (const xTick of xTicks) {
@@ -81,7 +81,7 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
 
   const yTickFormatter = getTickFormatter(
     yDomain,
-    env.getColumnTypeForAesthetic('y')
+    env.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
   )
 
   for (const yTick of yTicks) {

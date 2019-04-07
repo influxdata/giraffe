@@ -4,7 +4,7 @@ import {RouteComponentProps} from '@reach/router'
 
 import {Plot, Config} from '../../../../src/'
 
-import {TABLE, COLORS} from './'
+import {TABLE, COLOR_SCHEMES} from './'
 
 type Props = RouteComponentProps
 
@@ -20,9 +20,9 @@ export const HistogramExample: FunctionComponent<Props> = ({}) => {
         type: 'histogram',
         x: '_value',
         fill: ['cpu'],
-        binCount: 10,
+        binCount: 30,
         position: 'stacked',
-        colors: COLORS,
+        colors: COLOR_SCHEMES.find(d => d.name === 'InfluxDB A').colors,
       },
     ],
   }

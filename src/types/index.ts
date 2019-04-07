@@ -59,6 +59,13 @@ export interface Scale<D = any, R = any> {
   invert?: (y: R) => D
 }
 
+export interface Margins {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}
+
 export type LineInterpolation =
   | 'linear'
   | 'monotoneX'
@@ -99,11 +106,34 @@ export interface HistogramTable extends Table {
   length: number
 }
 
-export interface Margins {
-  top: number
-  right: number
-  bottom: number
-  left: number
+export interface HeatmapTable extends Table {
+  columns: {
+    xMin: NumericTableColumn
+    xMax: NumericTableColumn
+    yMin: NumericTableColumn
+    yMax: NumericTableColumn
+    count: IntColumn
+  }
+  length: number
+}
+
+export interface HeatmapLayerConfig {
+  type: 'heatmap'
+  x: string
+  y: string
+  colors: string[]
+}
+
+export interface HeatmapScales {
+  fill: Scale<number, string>
+}
+
+export interface HeatmapMappings {
+  xMin: 'xMin'
+  xMax: 'xMax'
+  yMin: 'yMin'
+  yMax: 'yMax'
+  fill: 'count'
 }
 
 export interface HistogramMappings {
@@ -118,11 +148,14 @@ export interface HistogramScales {
   fill: Scale<string, string>
 }
 
-export type Mappings = LineMappings | HistogramMappings
+export type Mappings = LineMappings | HistogramMappings | HeatmapMappings
 
-export type Scales = LineScales | HistogramScales
+export type Scales = LineScales | HistogramScales | HeatmapScales
 
-export type LayerConfig = LineLayerConfig | HistogramLayerConfig
+export type LayerConfig =
+  | LineLayerConfig
+  | HistogramLayerConfig
+  | HeatmapLayerConfig
 
 export interface HistogramTooltipProps {
   xMin: number

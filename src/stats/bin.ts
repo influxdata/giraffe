@@ -8,6 +8,7 @@ import {
   HistogramScales,
   HistogramLayerConfig,
   NumericColumnType,
+  SizedConfig,
 } from '../types'
 
 import {isNumeric} from '../utils/isNumeric'
@@ -17,17 +18,22 @@ import {getFillScale} from '../utils/getFillScale'
 import {appendGroupCol} from '../utils/appendGroupCol'
 
 export const binStat = (
-  inTable: Table,
-  layer: HistogramLayerConfig,
-  xDomain: number[],
-  _
+  config: SizedConfig,
+  layer: HistogramLayerConfig
 ): {
   table: HistogramTable
   mappings: HistogramMappings
   scales: HistogramScales
 } => {
   const table = appendGroupCol(
-    bin(inTable, layer.x, xDomain, layer.fill, layer.binCount, layer.position),
+    bin(
+      config.table,
+      layer.x,
+      config.xDomain,
+      layer.fill,
+      layer.binCount,
+      layer.position
+    ),
     layer.fill
   )
 
