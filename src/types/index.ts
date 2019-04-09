@@ -1,4 +1,3 @@
-import {FunctionComponent} from 'react'
 export type ColumnType = 'int' | 'uint' | 'float' | 'string' | 'time' | 'bool'
 
 export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
@@ -64,6 +63,19 @@ export interface Margins {
   right: number
   bottom: number
   left: number
+}
+
+export interface TooltipData {
+  xMin?: number
+  xMax?: number
+  yMin?: number
+  yMax?: number
+  columns: Array<{
+    name: string
+    type: ColumnType
+    values: any[]
+    colors: Array<string | null>
+  }>
 }
 
 export type LineInterpolation =
@@ -157,16 +169,6 @@ export type LayerConfig =
   | HistogramLayerConfig
   | HeatmapLayerConfig
 
-export interface HistogramTooltipProps {
-  xMin: number
-  xMax: number
-  counts: Array<{
-    grouping: {[colName: string]: any}
-    count: number
-    color: string
-  }>
-}
-
 export type HistogramPosition = 'overlaid' | 'stacked'
 
 export interface HistogramLayerConfig {
@@ -176,7 +178,6 @@ export interface HistogramLayerConfig {
   colors: string[]
   position?: HistogramPosition
   binCount?: number
-  tooltip?: FunctionComponent<HistogramTooltipProps>
 }
 
 export interface Config {
@@ -186,9 +187,6 @@ export interface Config {
   width?: number
   height?: number
 
-  axesStroke?: string
-  tickFont?: string
-  tickFill?: string
   xAxisLabel?: string
   yAxisLabel?: string
 
@@ -205,6 +203,19 @@ export interface Config {
   // See the `xDomain` and `onSetXDomain` options
   yDomain?: number[]
   onSetYDomain?: (yDomain: number[]) => void
+
+  axisColor?: string
+  gridColor?: string
+  gridOpacity?: number
+
+  tickFont?: string
+  tickFontColor?: string
+
+  legendFont?: string
+  legendFontColor?: string
+  legendFontBrightColor?: string
+  legendBackgroundColor?: string
+  legendBorder?: string
 }
 
 export type SizedConfig = Config & {width: number; height: number}

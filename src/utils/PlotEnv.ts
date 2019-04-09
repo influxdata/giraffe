@@ -29,11 +29,18 @@ import {assert} from './assert'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
-  axesStroke: '#31313d',
-  tickFont: 'Medium 10px Helvetica Neue',
-  tickFill: '#8e91a1',
   xAxisLabel: '',
   yAxisLabel: '',
+  axisColor: '#31313d',
+  gridColor: '#31313d',
+  gridOpacity: 1,
+  tickFont: '10px "Helvetica Neue"',
+  tickFontColor: '#8e91a1',
+  legendFont: '12px "Helvetica Neue"',
+  legendFontColor: '#8e91a1',
+  legendFontBrightColor: '#c6cad3',
+  legendBackgroundColor: '#1c1c21',
+  legendBorder: '1px solid #202028',
 }
 
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]

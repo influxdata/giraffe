@@ -25,9 +25,11 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     config: {
       width,
       height,
-      axesStroke,
+      axisColor,
+      gridColor,
+      gridOpacity,
       tickFont,
-      tickFill,
+      tickFontColor,
       xAxisLabel,
       yAxisLabel,
     },
@@ -38,23 +40,9 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   const context = canvas.getContext('2d')
   const xAxisY = height - margins.bottom
 
-  // Draw x axis line
-  context.strokeStyle = axesStroke
-  context.beginPath()
-  context.moveTo(margins.left, xAxisY)
-  context.lineTo(width - margins.right, xAxisY)
-  context.stroke()
-
-  // Draw y axis line
-  context.beginPath()
-  context.moveTo(margins.left, xAxisY)
-  context.lineTo(margins.left, margins.top)
-  context.stroke()
-
   // Draw and label each tick on the x axis
 
   context.font = tickFont
-  context.fillStyle = tickFill
   context.textAlign = 'center'
   context.textBaseline = 'top'
 
@@ -66,11 +54,15 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   for (const xTick of xTicks) {
     const x = xScale(xTick) + margins.left
 
+    context.strokeStyle = gridColor
+    context.globalAlpha = gridOpacity
     context.beginPath()
     context.moveTo(x, xAxisY)
     context.lineTo(x, margins.top)
     context.stroke()
 
+    context.globalAlpha = 1
+    context.fillStyle = tickFontColor
     context.fillText(xTickFormatter(xTick), x, xAxisY + TICK_PADDING_TOP)
   }
 
@@ -87,17 +79,34 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   for (const yTick of yTicks) {
     const y = yScale(yTick) + margins.top
 
+    context.strokeStyle = gridColor
+    context.globalAlpha = gridOpacity
     context.beginPath()
     context.moveTo(margins.left, y)
     context.lineTo(width - margins.right, y)
     context.stroke()
 
+    context.globalAlpha = 1
+    context.fillStyle = tickFontColor
     context.fillText(
       yTickFormatter(yTick),
       margins.left - TICK_PADDING_RIGHT,
       y
     )
   }
+
+  // Draw x axis line
+  context.strokeStyle = axisColor
+  context.beginPath()
+  context.moveTo(margins.left, xAxisY)
+  context.lineTo(width - margins.right, xAxisY)
+  context.stroke()
+
+  // Draw y axis line
+  context.beginPath()
+  context.moveTo(margins.left, xAxisY)
+  context.lineTo(margins.left, margins.top)
+  context.stroke()
 
   // Draw the x axis label
   if (xAxisLabel) {

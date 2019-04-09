@@ -9,7 +9,7 @@ import {TABLE, COLOR_SCHEMES} from './'
 type Props = RouteComponentProps
 
 export const HistogramExample: FunctionComponent<Props> = ({}) => {
-  const [xDomain, setXDomain] = useState([0, 100])
+  const [xDomain, setXDomain] = useState([0, 50])
 
   const config: Config = {
     table: TABLE,
@@ -20,7 +20,7 @@ export const HistogramExample: FunctionComponent<Props> = ({}) => {
         type: 'histogram',
         x: '_value',
         fill: ['cpu'],
-        binCount: 30,
+        binCount: 10,
         position: 'stacked',
         colors: COLOR_SCHEMES.find(d => d.name === 'InfluxDB A').colors,
       },

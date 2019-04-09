@@ -1,17 +1,13 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {
-  HistogramTable,
-  HistogramTooltipProps,
-  Scale,
-  HistogramLayerConfig,
-} from '../types'
+import {HistogramTable, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
-import {getHistogramTooltipProps} from '../utils/getHistogramTooltipProps'
-import {GROUP_COL_KEY} from '../constants'
+import {getHistogramTooltipData} from '../utils/getHistogramTooltipData'
+import {getGroupColumn} from '../utils/getGroupColumn'
+import {Tooltip} from './Tooltip'
 
 const BAR_TRANSPARENCY = 0.5
 const BAR_TRANSPARENCY_HOVER = 0.7
@@ -44,7 +40,7 @@ const drawBars = ({
   const xMaxCol = table.columns.xMax.data
   const yMinCol = table.columns.yMin.data
   const yMaxCol = table.columns.yMax.data
-  const groupKeyCol = table.columns[GROUP_COL_KEY].data as string[]
+  const {data: groupKeyCol} = getGroupColumn(table)
 
   const context = canvas.getContext('2d')
 
@@ -94,33 +90,10 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   hoverX,
   hoverY,
 }) => {
+  const canvas = useRef<HTMLCanvasElement>(null)
   const {xScale, yScale, innerWidth, innerHeight} = env
   const table = env.getTable(layerIndex) as HistogramTable
   const fillScale = env.getScale(layerIndex, 'fill')
-
-  const hoveredRowIndices = findHoveredRowIndices(
-    table,
-    hoverX,
-    hoverY,
-    xScale,
-    yScale
-  )
-
-  const layer = env.config.layers[layerIndex] as HistogramLayerConfig
-  const Tooltip = layer.tooltip
-
-  let tooltipProps: HistogramTooltipProps = null
-
-  if (Tooltip && hoveredRowIndices) {
-    tooltipProps = getHistogramTooltipProps(
-      hoveredRowIndices,
-      table,
-      env.getMapping(layerIndex, 'fill'),
-      fillScale
-    )
-  }
-
-  const canvas = useRef<HTMLCanvasElement>(null)
 
   useLayoutEffect(() => {
     drawBars({
@@ -135,10 +108,25 @@ export const HistogramLayer: FunctionComponent<Props> = ({
     })
   })
 
+  const hoveredRowIndices = findHoveredRowIndices(
+    table,
+    hoverX,
+    hoverY,
+    xScale,
+    yScale
+  )
+
+  const tooltipData = getHistogramTooltipData(
+    hoveredRowIndices,
+    table,
+    env.getMapping(layerIndex, 'fill'),
+    fillScale
+  )
+
   return (
     <>
       <canvas className="minard-layer histogram" ref={canvas} />
-      {hoveredRowIndices && Tooltip && <Tooltip {...tooltipProps} />}
+      {tooltipData && <Tooltip data={tooltipData} env={env} />}
     </>
   )
 }

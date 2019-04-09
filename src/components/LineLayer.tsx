@@ -6,8 +6,9 @@ import {range} from 'd3-array'
 import {Table, Scale, LineInterpolation, LineLayerConfig} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
-import {GROUP_COL_KEY, CURVES} from '../constants'
+import {CURVES} from '../constants'
 import {isDefined} from '../utils/isDefined'
+import {getGroupColumn} from '../utils/getGroupColumn'
 import {simplify} from '../utils/simplify'
 
 type LineData = Array<{
@@ -24,7 +25,7 @@ const collectLineData = (
 ): LineData => {
   const xCol = table.columns[xColKey].data
   const yCol = table.columns[yColKey].data
-  const groupCol = table.columns[GROUP_COL_KEY].data as string[]
+  const {data: groupCol} = getGroupColumn(table)
   const groupKeys = new Set(groupCol)
 
   const result = []
