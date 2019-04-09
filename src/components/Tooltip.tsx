@@ -9,15 +9,15 @@ import {isNumeric} from '../utils/isNumeric'
 
 const isVoid = (x: any) => x === null || x === undefined
 
-const getXYLabel = (min: number, max: number): string => {
+const getXYLabel = (min: number, max: number, formatter): string => {
   let label = ''
 
   if (isVoid(min) || isVoid(max)) {
     label = ''
   } else if (min === max) {
-    label = String(min)
+    label = formatter(min)
   } else {
-    label = `${min} – ${max}`
+    label = `${formatter(min)} – ${formatter(max)}`
   }
 
   return label
@@ -30,7 +30,13 @@ interface Props {
 
 export const Tooltip: FunctionComponent<Props> = ({
   data: {xMin, xMax, yMin, yMax, columns},
-  env: {
+  env,
+}) => {
+  const tooltipElement = useTooltipElement()
+
+  const {
+    xTickFormatter,
+    yTickFormatter,
     config: {
       legendFont: font,
       legendFontColor: fontColor,
@@ -38,12 +44,10 @@ export const Tooltip: FunctionComponent<Props> = ({
       legendBackgroundColor: backgroundColor,
       legendBorder: border,
     },
-  },
-}) => {
-  const tooltipElement = useTooltipElement()
+  } = env
 
-  let xLabel = getXYLabel(xMin, xMax)
-  let yLabel = getXYLabel(yMin, yMax)
+  let xLabel = getXYLabel(xMin, xMax, xTickFormatter)
+  let yLabel = getXYLabel(yMin, yMax, yTickFormatter)
 
   return createPortal(
     <div
@@ -94,7 +98,8 @@ export const Tooltip: FunctionComponent<Props> = ({
                   whiteSpace: 'nowrap',
                 }}
               >
-                {value}
+                {/* TODO: Figure out a better way to decide if the `yTickFormatter` should be applied */}
+                {isNumeric(type) ? yTickFormatter(value) : value}
               </div>
             ))}
           </div>

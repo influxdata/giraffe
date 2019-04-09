@@ -28,7 +28,7 @@ export const getTicks = (
 }
 
 const getNumTicks = (sampleTick: string, length): number => {
-  const TICK_DENSITY = 0.3
+  const TICK_DENSITY = 0.2
   const sampleTickWidth = sampleTick.length * TICK_CHAR_WIDTH
   const numTicks = Math.round((length / sampleTickWidth) * TICK_DENSITY)
 

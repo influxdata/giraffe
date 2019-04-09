@@ -3,7 +3,6 @@ import {useRef, useLayoutEffect, SFC} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
-import {getTickFormatter} from '../utils/getTickFormatter'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -16,10 +15,10 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     innerWidth,
     innerHeight,
     margins,
-    xDomain,
-    yDomain,
     xTicks,
     yTicks,
+    xTickFormatter,
+    yTickFormatter,
     xScale,
     yScale,
     config: {
@@ -46,11 +45,6 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
   context.textAlign = 'center'
   context.textBaseline = 'top'
 
-  const xTickFormatter = getTickFormatter(
-    xDomain,
-    env.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
-  )
-
   for (const xTick of xTicks) {
     const x = xScale(xTick) + margins.left
 
@@ -70,11 +64,6 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
 
   context.textAlign = 'end'
   context.textBaseline = 'middle'
-
-  const yTickFormatter = getTickFormatter(
-    yDomain,
-    env.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
-  )
 
   for (const yTick of yTicks) {
     const y = yScale(yTick) + margins.top

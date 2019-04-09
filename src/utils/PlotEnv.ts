@@ -24,6 +24,7 @@ import {
 
 import {stats} from '../stats'
 import {getTicks} from './getTicks'
+import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 
@@ -136,6 +137,14 @@ export class PlotEnv {
     return this.getYDomain(this.config.yDomain, this.layers)
   }
 
+  public get xTickFormatter(): (tick: number) => string {
+    return this.getXTickFormatter(this.config, this.xDomain)
+  }
+
+  public get yTickFormatter(): (tick: number) => string {
+    return this.getYTickFormatter(this.config, this.yDomain)
+  }
+
   public getTable(layerIndex: number): Table {
     return this.layers[layerIndex].table
   }
@@ -225,6 +234,30 @@ export class PlotEnv {
       .domain(yDomain)
       .range([innerHeight, 0])
   })
+
+  private getXTickFormatter = memoizeOne(
+    (config: SizedConfig, xDomain: number[]) => {
+      return (
+        config.xTickFormatter ||
+        getTickFormatter(
+          xDomain,
+          this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
+        )
+      )
+    }
+  )
+
+  private getYTickFormatter = memoizeOne(
+    (config: SizedConfig, yDomain: number[]) => {
+      return (
+        config.yTickFormatter ||
+        getTickFormatter(
+          yDomain,
+          this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
+        )
+      )
+    }
+  )
 
   private registerLayer(layerIndex: number, layer: LayerConfig): void {
     const stat = stats[layer.type]

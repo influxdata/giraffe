@@ -204,6 +204,9 @@ export interface Config {
   yDomain?: number[]
   onSetYDomain?: (yDomain: number[]) => void
 
+  xTickFormatter?: (tickValue: number) => string
+  yTickFormatter?: (tickValue: number) => string
+
   axisColor?: string
   gridColor?: string
   gridOpacity?: number
