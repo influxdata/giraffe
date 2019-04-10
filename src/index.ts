@@ -16,7 +16,6 @@ export {
   Table,
   Scale,
   Margins,
-  HistogramTooltipProps,
   HistogramLayerConfig,
   HistogramPosition,
   LineInterpolation,
