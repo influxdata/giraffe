@@ -26,27 +26,25 @@ const collectLineData = (
   const xCol = table.columns[xColKey].data
   const yCol = table.columns[yColKey].data
   const {data: groupCol} = getGroupColumn(table)
-  const groupKeys = new Set(groupCol)
 
-  const result = []
+  const resultByGroupKey = {}
 
-  for (let groupKey of groupKeys) {
-    let xs = []
-    let ys = []
+  for (let i = 0; i < table.length; i++) {
+    const groupKey = groupCol[i]
 
-    for (let i = 0; i < table.length; i++) {
-      if (groupCol[i] !== groupKey) {
-        continue
+    if (!resultByGroupKey[groupKey]) {
+      resultByGroupKey[groupKey] = {
+        xs: [],
+        ys: [],
+        fill: fillScale(groupKey),
       }
-
-      xs.push(xCol[i])
-      ys.push(yCol[i])
     }
 
-    result.push({xs, ys, fill: fillScale(groupKey)})
+    resultByGroupKey[groupKey].xs.push(xCol[i])
+    resultByGroupKey[groupKey].ys.push(yCol[i])
   }
 
-  return result
+  return Object.values(resultByGroupKey)
 }
 
 const simplifyLineData = (lineData: LineData, xScale, yScale): LineData =>
