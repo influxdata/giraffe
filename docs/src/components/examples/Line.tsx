@@ -12,6 +12,7 @@ export const LineExample: FunctionComponent<Props> = ({}) => {
   const config: Config = {
     table: TABLE,
     yDomain: [0, 50],
+    yTickFormatter: x => `${Math.round(x)}%`,
     layers: [
       {
         type: 'line',

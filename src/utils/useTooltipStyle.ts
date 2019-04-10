@@ -1,7 +1,7 @@
 import {useLayoutStyle} from './useLayoutStyle'
 import {useMousePos} from './useMousePos'
 
-const MARGIN_X = 15
+const MARGIN_X = 20
 
 export const useTooltipStyle = (el: HTMLDivElement) => {
   const {x, y} = useMousePos(document.body)

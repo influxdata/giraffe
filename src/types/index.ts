@@ -219,6 +219,7 @@ export interface Config {
   legendFontBrightColor?: string
   legendBackgroundColor?: string
   legendBorder?: string
+  legendCrosshairColor?: string
 }
 
 export type SizedConfig = Config & {width: number; height: number}

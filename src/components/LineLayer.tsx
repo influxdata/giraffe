@@ -10,6 +10,8 @@ import {CURVES} from '../constants'
 import {isDefined} from '../utils/isDefined'
 import {getGroupColumn} from '../utils/getGroupColumn'
 import {simplify} from '../utils/simplify'
+import {Tooltip} from './Tooltip'
+import {useLineTooltipData} from '../utils/useLineTooltipData'
 
 type LineData = Array<{
   xs: number[] | Float64Array
@@ -64,6 +66,8 @@ interface DrawLinesOptions {
   lineData: LineData
   width: number
   height: number
+  hoverLinePosition: number | null
+  hoverLineColor: string
 }
 
 const drawLines = ({
@@ -72,6 +76,8 @@ const drawLines = ({
   interpolation,
   width,
   height,
+  hoverLinePosition,
+  hoverLineColor,
 }: DrawLinesOptions): void => {
   clearCanvas(canvas, width, height)
 
@@ -85,11 +91,17 @@ const drawLines = ({
       .defined((i: any) => isDefined(xs[i]) && isDefined(ys[i]))
       .curve(CURVES[interpolation] || curveLinear)
 
-    context.beginPath()
     context.strokeStyle = fill
-
+    context.beginPath()
     lineGenerator(range(0, xs.length))
+    context.stroke()
+  }
 
+  if (hoverLinePosition !== null) {
+    context.strokeStyle = hoverLineColor
+    context.beginPath()
+    context.moveTo(hoverLinePosition, 0)
+    context.lineTo(hoverLinePosition, height)
     context.stroke()
   }
 }
@@ -97,14 +109,27 @@ const drawLines = ({
 interface Props {
   env: PlotEnv
   layerIndex: number
+  hoverX: number
+  hoverY: number
 }
 
-export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
+export const LineLayer: FunctionComponent<Props> = ({
+  env,
+  layerIndex,
+  hoverX,
+}) => {
+  const canvas = useRef<HTMLCanvasElement>(null)
   const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
   const layer = env.config.layers[layerIndex] as LineLayerConfig
-  const {interpolation, x: xColKey, y: yColKey} = layer
-  const {xScale, yScale, innerWidth: width, innerHeight: height} = env
+  const {interpolation, x: xColKey, y: yColKey, fill: fillColKeys} = layer
+  const {
+    xScale,
+    yScale,
+    innerWidth: width,
+    innerHeight: height,
+    config: {legendCrosshairColor: hoverLineColor},
+  } = env
 
   const lineData = useMemo(
     () => collectLineData(table, xColKey, yColKey, fillScale),
@@ -118,7 +143,18 @@ export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
     [lineData, xScale, yScale]
   )
 
-  const canvas = useRef<HTMLCanvasElement>(null)
+  const tooltipData = useLineTooltipData(
+    table,
+    hoverX,
+    xColKey,
+    yColKey,
+    fillColKeys,
+    xScale,
+    fillScale,
+    width
+  )
+
+  const hoverLinePosition = tooltipData ? xScale(tooltipData.xMin) : hoverX
 
   useLayoutEffect(() => {
     drawLines({
@@ -127,8 +163,15 @@ export const LineLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
       interpolation,
       width,
       height,
+      hoverLinePosition,
+      hoverLineColor,
     })
   })
 
-  return <canvas className="minard-layer histogram" ref={canvas} />
+  return (
+    <>
+      <canvas className="minard-layer histogram" ref={canvas} />
+      {tooltipData && <Tooltip data={tooltipData} env={env} />}
+    </>
+  )
 }

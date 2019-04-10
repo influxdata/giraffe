@@ -34,7 +34,7 @@ const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   yAxisLabel: '',
   axisColor: '#31313d',
   gridColor: '#31313d',
-  gridOpacity: 1,
+  gridOpacity: 0.5,
   tickFont: '10px "Helvetica Neue"',
   tickFontColor: '#8e91a1',
   legendFont: '12px "Helvetica Neue"',
@@ -42,6 +42,7 @@ const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   legendFontBrightColor: '#c6cad3',
   legendBackgroundColor: '#1c1c21',
   legendBorder: '1px solid #202028',
+  legendCrosshairColor: '#31313d',
 }
 
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]

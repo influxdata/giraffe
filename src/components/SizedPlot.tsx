@@ -45,7 +45,15 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
           {config.layers.map((layer, i) => {
             switch (layer.type) {
               case 'line':
-                return <LineLayer key={i} layerIndex={i} env={env} />
+                return (
+                  <LineLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
               case 'histogram':
                 return (
                   <HistogramLayer
