@@ -14,8 +14,8 @@ export const HistogramExample: FunctionComponent<Props> = ({}) => {
   const config: Config = {
     table: TABLE,
     xTickFormatter: tick => `${tick}%`,
-    xDomain,
-    onSetXDomain: setXDomain,
+    // xDomain,
+    // onSetXDomain: setXDomain,
     layers: [
       {
         type: 'histogram',

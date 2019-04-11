@@ -3,6 +3,7 @@ import {useRef, useLayoutEffect, SFC} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
+import {Margins, Scale, SizedConfig} from '../types'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -10,31 +11,44 @@ interface Props {
   env: PlotEnv
 }
 
-export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
-  const {
-    innerWidth,
-    innerHeight,
-    margins,
-    xTicks,
-    yTicks,
-    xTickFormatter,
-    yTickFormatter,
-    xScale,
-    yScale,
-    config: {
-      width,
-      height,
-      axisColor,
-      axisOpacity,
-      gridColor,
-      gridOpacity,
-      tickFont,
-      tickFontColor,
-      xAxisLabel,
-      yAxisLabel,
-    },
-  } = env
+interface DrawAxesOptions {
+  canvas: HTMLCanvasElement
+  innerWidth: number
+  innerHeight: number
+  margins: Margins
+  xTicks: number[]
+  yTicks: number[]
+  xTickFormatter: (tick: number) => string
+  yTickFormatter: (tick: number) => string
+  xScale: Scale<number, number>
+  yScale: Scale<number, number>
+  config: SizedConfig
+}
 
+export const drawAxes = ({
+  canvas,
+  innerWidth,
+  innerHeight,
+  margins,
+  xTicks,
+  yTicks,
+  xTickFormatter,
+  yTickFormatter,
+  xScale,
+  yScale,
+  config: {
+    width,
+    height,
+    axisColor,
+    axisOpacity,
+    gridColor,
+    gridOpacity,
+    tickFont,
+    tickFontColor,
+    xAxisLabel,
+    yAxisLabel,
+  },
+}: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
   const context = canvas.getContext('2d')
@@ -142,9 +156,46 @@ export const Axes: SFC<Props> = props => {
   const {children, env} = props
   const canvas = useRef<HTMLCanvasElement>(null)
 
+  const {
+    innerWidth,
+    innerHeight,
+    margins,
+    xTicks,
+    yTicks,
+    xTickFormatter,
+    yTickFormatter,
+    xScale,
+    yScale,
+    config,
+  } = env
+
   useLayoutEffect(() => {
-    drawAxes(canvas.current, env)
-  }, [canvas.current, env.config])
+    drawAxes({
+      canvas: canvas.current,
+      innerWidth,
+      innerHeight,
+      margins,
+      xTicks,
+      yTicks,
+      xTickFormatter,
+      yTickFormatter,
+      xScale,
+      yScale,
+      config,
+    })
+  }, [
+    canvas.current,
+    innerWidth,
+    innerHeight,
+    margins,
+    xTicks,
+    yTicks,
+    xTickFormatter,
+    yTickFormatter,
+    xScale,
+    yScale,
+    config,
+  ])
 
   return (
     <>
