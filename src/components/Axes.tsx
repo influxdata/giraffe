@@ -25,6 +25,7 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
       width,
       height,
       axisColor,
+      axisOpacity,
       gridColor,
       gridOpacity,
       tickFont,
@@ -84,18 +85,32 @@ export const drawAxes = (canvas: HTMLCanvasElement, env: PlotEnv) => {
     )
   }
 
-  // Draw x axis line
+  // Draw x and y axis lines
+
+  context.globalAlpha = axisOpacity
   context.strokeStyle = axisColor
+
   context.beginPath()
   context.moveTo(margins.left, xAxisY)
   context.lineTo(width - margins.right, xAxisY)
   context.stroke()
 
-  // Draw y axis line
+  context.beginPath()
+  context.moveTo(margins.left, margins.top)
+  context.lineTo(width - margins.right, margins.top)
+  context.stroke()
+
   context.beginPath()
   context.moveTo(margins.left, xAxisY)
   context.lineTo(margins.left, margins.top)
   context.stroke()
+
+  context.beginPath()
+  context.moveTo(width - margins.right, xAxisY)
+  context.lineTo(width - margins.right, margins.top)
+  context.stroke()
+
+  context.globalAlpha = 1
 
   // Draw the x axis label
   if (xAxisLabel) {
