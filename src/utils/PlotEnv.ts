@@ -57,6 +57,8 @@ interface LayerData {
 
 export class PlotEnv {
   private _config: SizedConfig | null = null
+  private _xDomain: number[] | null = null
+  private _yDomain: number[] | null = null
   private layers: LayerData[] = []
 
   public get config(): SizedConfig | null {
@@ -132,11 +134,43 @@ export class PlotEnv {
   }
 
   public get xDomain(): number[] {
-    return this.getXDomain(this.config.xDomain, this.layers)
+    if (this.config.xDomain) {
+      return this.config.xDomain
+    }
+
+    if (!this._xDomain) {
+      this._xDomain = this.getXDomain(this.layers)
+    }
+
+    return this._xDomain
+  }
+
+  public set xDomain(newXDomain: number[]) {
+    if (this.config.onSetXDomain) {
+      this.config.onSetXDomain(newXDomain)
+    } else {
+      this._xDomain = newXDomain
+    }
   }
 
   public get yDomain(): number[] {
-    return this.getYDomain(this.config.yDomain, this.layers)
+    if (this.config.yDomain) {
+      return this.config.yDomain
+    }
+
+    if (!this._yDomain) {
+      this._yDomain = this.getYDomain(this.layers)
+    }
+
+    return this._yDomain
+  }
+
+  public set yDomain(newYDomain: number[]) {
+    if (this.config.onSetYDomain) {
+      this.config.onSetYDomain(newYDomain)
+    } else {
+      this._yDomain = newYDomain
+    }
   }
 
   public get xTickFormatter(): (tick: number) => string {
@@ -184,6 +218,20 @@ export class PlotEnv {
     return columnTypes[0]
   }
 
+  public resetDomains(): void {
+    if (this.config.xDomain) {
+      this.config.onResetXDomain()
+    } else {
+      this._xDomain = this.getXDomain(this.layers)
+    }
+
+    if (this.config.yDomain) {
+      this.config.onResetYDomain()
+    } else {
+      this._yDomain = this.getYDomain(this.layers)
+    }
+  }
+
   private getMargins = memoizeOne(
     (xAxisLabel: string, yAxisLabel: string, yTicks: number[]) => {
       const xAxisLabelHeight = xAxisLabel
@@ -212,17 +260,13 @@ export class PlotEnv {
   private getYTicks = memoizeOne(getTicks)
 
   private getXDomain = memoizeOne(
-    (preferredXDomain: number[], layers: LayerData[]) =>
-      preferredXDomain ||
-      getDomainForAesthetics(['x', 'xMin', 'xMax'], layers) ||
-      DEFAULT_X_DOMAIN
+    (layers: LayerData[]) =>
+      getDomainForAesthetics(['x', 'xMin', 'xMax'], layers) || DEFAULT_X_DOMAIN
   )
 
   private getYDomain = memoizeOne(
-    (preferredYDomain: number[], layers: LayerData[]) =>
-      preferredYDomain ||
-      getDomainForAesthetics(['y', 'yMin', 'yMax'], layers) ||
-      DEFAULT_Y_DOMAIN
+    (layers: LayerData[]) =>
+      getDomainForAesthetics(['y', 'yMin', 'yMax'], layers) || DEFAULT_Y_DOMAIN
   )
 
   private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {

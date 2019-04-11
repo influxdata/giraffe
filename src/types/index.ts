@@ -192,22 +192,26 @@ export interface Config {
 
   // The x domain of the plot can be explicitly set. If this option is passed,
   // then the component is operating in a "controlled" mode, where it always
-  // uses the passed x domain. Any interaction with the plot that should change
-  // the x domain (clicking, brushing, etc.) will call the `onSetXDomain`
-  // option when the component is in controlled mode. If the `xDomain` option
-  // is not passed, then the component is "uncontrolled". It will compute and
-  // set the `xDomain` automatically.
+  // uses the passed x domain. Any brush interaction with the plot that should
+  // change the x domain will call the `onSetXDomain` option when the component
+  // is in controlled mode. Double clicking the plot will call
+  // `onResetXDomain`. If the `xDomain` option is not passed, then the
+  // component is "uncontrolled". It will compute, set, and reset the `xDomain`
+  // automatically.
   xDomain?: number[]
   onSetXDomain?: (xDomain: number[]) => void
+  onResetXDomain?: () => void
 
-  // See the `xDomain` and `onSetXDomain` options
+  // See the `xDomain`, `onSetXDomain`, and `onResetXDomain` options
   yDomain?: number[]
   onSetYDomain?: (yDomain: number[]) => void
+  onResetYDomain?: () => void
 
   xTickFormatter?: (tickValue: number) => string
   yTickFormatter?: (tickValue: number) => string
 
   axisColor?: string
+  axisOpacity?: number
   gridColor?: string
   gridOpacity?: number
 

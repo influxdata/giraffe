@@ -1,13 +1,22 @@
 import * as React from 'react'
-import {useRef, FunctionComponent, CSSProperties} from 'react'
+import {
+  useRef,
+  useMemo,
+  useCallback,
+  FunctionComponent,
+  CSSProperties,
+} from 'react'
 
 import {Axes} from './Axes'
 import {SizedConfig} from '../types'
 import {HistogramLayer} from './HistogramLayer'
 import {LineLayer} from './LineLayer'
 import {HeatmapLayer} from './HeatmapLayer'
+import {Brush} from './Brush'
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
+import {useDragEvent} from '../utils/useDragEvent'
+import {useForceUpdate} from '../utils/useForceUpdate'
 
 interface Props {
   config: SizedConfig
@@ -15,28 +24,62 @@ interface Props {
 
 export const SizedPlot: FunctionComponent<Props> = ({config}) => {
   const env = usePlotEnv(config)
+  const forceUpdate = useForceUpdate()
 
   const {
     margins,
     config: {width, height},
   } = env
 
-  const plotStyle: CSSProperties = {
-    position: 'relative',
-    width: `${width}px`,
-    height: `${height}px`,
-  }
+  const plotStyle = useMemo(
+    () =>
+      ({
+        position: 'relative',
+        width: `${width}px`,
+        height: `${height}px`,
+      } as CSSProperties),
+    [width, height]
+  )
 
-  const layersStyle: CSSProperties = {
-    position: 'absolute',
-    top: `${margins.top}px`,
-    right: `${margins.right}px`,
-    bottom: `${margins.bottom}px`,
-    left: `${margins.left}px`,
-  }
+  const layersStyle = useMemo(
+    () =>
+      ({
+        position: 'absolute',
+        top: `${margins.top}px`,
+        right: `${margins.right}px`,
+        bottom: `${margins.bottom}px`,
+        left: `${margins.left}px`,
+        cursor: 'crosshair',
+      } as CSSProperties),
+    [margins]
+  )
 
   const mouseRegion = useRef<HTMLDivElement>(null)
-  const {x: hoverX, y: hoverY} = useMousePos(mouseRegion.current)
+  const hoverEvent = useMousePos(mouseRegion.current)
+  const dragEvent = useDragEvent(mouseRegion.current)
+  const hoverX = dragEvent ? null : hoverEvent.x
+  const hoverY = dragEvent ? null : hoverEvent.y
+
+  const setXDomain = useCallback(
+    (xDomain: number[]) => {
+      env.xDomain = xDomain
+      forceUpdate()
+    },
+    [env]
+  )
+
+  const setYDomain = useCallback(
+    (yDomain: number[]) => {
+      env.yDomain = yDomain
+      forceUpdate()
+    },
+    [env]
+  )
+
+  const resetDomains = useCallback(() => {
+    env.resetDomains()
+    forceUpdate()
+  }, [env])
 
   return (
     <div className="minard-plot" style={plotStyle}>
@@ -75,7 +118,15 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
           className="minard-interaction-region"
           style={layersStyle}
           ref={mouseRegion}
-        />
+          onDoubleClick={resetDomains}
+        >
+          <Brush
+            event={dragEvent}
+            env={env}
+            onSetXDomain={setXDomain}
+            onSetYDomain={setYDomain}
+          />
+        </div>
       </Axes>
     </div>
   )
