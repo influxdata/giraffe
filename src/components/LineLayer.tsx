@@ -11,7 +11,9 @@ import {isDefined} from '../utils/isDefined'
 import {getGroupColumn} from '../utils/getGroupColumn'
 import {simplify} from '../utils/simplify'
 import {Tooltip} from './Tooltip'
-import {useLineTooltipData} from '../utils/useLineTooltipData'
+import {useHoverLineIndices} from '../utils/useHoverLineIndices'
+import {getLineTooltipData} from '../utils/getLineTooltipData'
+import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 
 type LineData = Array<{
   xs: number[] | Float64Array
@@ -68,6 +70,7 @@ interface DrawLinesOptions {
   height: number
   hoverLinePosition: number | null
   hoverLineColor: string
+  hoverPoints: Array<{x: number; y: number; fill: string}> | null
 }
 
 const drawLines = ({
@@ -78,6 +81,7 @@ const drawLines = ({
   height,
   hoverLinePosition,
   hoverLineColor,
+  hoverPoints,
 }: DrawLinesOptions): void => {
   clearCanvas(canvas, width, height)
 
@@ -103,6 +107,15 @@ const drawLines = ({
     context.moveTo(hoverLinePosition, 0)
     context.lineTo(hoverLinePosition, height)
     context.stroke()
+  }
+
+  if (hoverPoints !== null) {
+    for (const {x, y, fill} of hoverPoints) {
+      context.beginPath()
+      context.arc(x, y, 2.5, 0, 2 * Math.PI)
+      context.fillStyle = fill
+      context.fill()
+    }
   }
 }
 
@@ -143,18 +156,34 @@ export const LineLayer: FunctionComponent<Props> = ({
     [lineData, xScale, yScale]
   )
 
-  const tooltipData = useLineTooltipData(
+  const hoverRowIndices = useHoverLineIndices(
     table,
     hoverX,
     xColKey,
-    yColKey,
-    fillColKeys,
     xScale,
-    fillScale,
     width
   )
 
+  const tooltipData = getLineTooltipData(
+    table,
+    hoverRowIndices,
+    xColKey,
+    yColKey,
+    fillColKeys,
+    fillScale
+  )
+
   const hoverLinePosition = tooltipData ? xScale(tooltipData.xMin) : hoverX
+
+  const hoverPoints = getLineHoverPoints(
+    table,
+    hoverRowIndices,
+    xColKey,
+    yColKey,
+    xScale,
+    yScale,
+    fillScale
+  )
 
   useLayoutEffect(() => {
     drawLines({
@@ -165,6 +194,7 @@ export const LineLayer: FunctionComponent<Props> = ({
       height,
       hoverLinePosition,
       hoverLineColor,
+      hoverPoints,
     })
   })
 
