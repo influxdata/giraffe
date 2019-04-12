@@ -3,54 +3,13 @@ import {extent, range, thresholdSturges} from 'd3-array'
 import {
   Table,
   HistogramTable,
-  HistogramMappings,
   HistogramPosition,
-  HistogramScales,
-  HistogramLayerConfig,
   NumericColumnType,
-  SizedConfig,
 } from '../types'
 
 import {isNumeric} from '../utils/isNumeric'
 import {assert} from '../utils/assert'
 import {getGroupKey} from '../utils/getGroupKey'
-import {getFillScale} from '../utils/getFillScale'
-import {appendGroupCol} from '../utils/appendGroupCol'
-
-export const binStat = (
-  config: SizedConfig,
-  layer: HistogramLayerConfig
-): {
-  table: HistogramTable
-  mappings: HistogramMappings
-  scales: HistogramScales
-} => {
-  const table = appendGroupCol(
-    bin(
-      config.table,
-      layer.x,
-      config.xDomain,
-      layer.fill,
-      layer.binCount,
-      layer.position
-    ),
-    layer.fill
-  )
-
-  const mappings: HistogramMappings = {
-    xMin: 'xMin',
-    xMax: 'xMax',
-    yMin: 'yMin',
-    yMax: 'yMax',
-    fill: layer.fill,
-  }
-
-  const scales = {
-    fill: getFillScale(table, layer.fill, layer.colors),
-  }
-
-  return {table, mappings, scales}
-}
 
 /*
   Compute the data of a histogram visualization.

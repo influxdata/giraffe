@@ -11,9 +11,11 @@ import {isDefined} from '../utils/isDefined'
 import {getGroupColumn} from '../utils/getGroupColumn'
 import {simplify} from '../utils/simplify'
 import {Tooltip} from './Tooltip'
+import {appendGroupCol} from '../utils/appendGroupCol'
 import {useHoverLineIndices} from '../utils/useHoverLineIndices'
 import {getLineTooltipData} from '../utils/getLineTooltipData'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
+import {getFillScale} from '../utils/getFillScale'
 
 type LineData = Array<{
   xs: number[] | Float64Array
@@ -132,17 +134,34 @@ export const LineLayer: FunctionComponent<Props> = ({
   hoverX,
 }) => {
   const canvas = useRef<HTMLCanvasElement>(null)
-  const table = env.getTable(layerIndex)
-  const fillScale = env.getScale(layerIndex, 'fill')
   const layer = env.config.layers[layerIndex] as LineLayerConfig
-  const {interpolation, x: xColKey, y: yColKey, fill: fillColKeys} = layer
+
+  const {
+    interpolation,
+    x: xColKey,
+    y: yColKey,
+    fill: fillColKeys,
+    colors,
+  } = layer
+
   const {
     xScale,
     yScale,
     innerWidth: width,
     innerHeight: height,
-    config: {legendCrosshairColor: hoverLineColor},
+    config: {table: configTable, legendCrosshairColor: hoverLineColor},
   } = env
+
+  const table = useMemo(() => appendGroupCol(configTable, fillColKeys), [
+    configTable,
+    fillColKeys,
+  ])
+
+  const fillScale = useMemo(() => getFillScale(table, fillColKeys, colors), [
+    table,
+    fillColKeys,
+    colors,
+  ])
 
   const lineData = useMemo(
     () => collectLineData(table, xColKey, yColKey, fillScale),

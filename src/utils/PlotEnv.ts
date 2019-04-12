@@ -6,9 +6,7 @@ import {
   SizedConfig,
   Margins,
   Scale,
-  Mappings,
   Table,
-  Scales,
   LayerConfig,
   ColumnType,
 } from '../types'
@@ -22,10 +20,9 @@ import {
   AXIS_LABEL_PADDING_BOTTOM,
 } from '../constants'
 
-import {stats} from '../stats'
 import {getTicks} from './getTicks'
 import {getTickFormatter} from '../utils/getTickFormatter'
-import {isNumeric} from './isNumeric'
+import {getNumericColumn} from './getNumericColumn'
 import {assert} from './assert'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
@@ -49,41 +46,17 @@ const CONFIG_DEFAULTS: Partial<SizedConfig> = {
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]
 const DEFAULT_Y_DOMAIN: [number, number] = [0, 1]
 
-interface LayerData {
-  table: Table
-  mappings: Mappings
-  scales: Scales
-}
-
 export class PlotEnv {
   private _config: SizedConfig | null = null
   private _xDomain: number[] | null = null
   private _yDomain: number[] | null = null
-  private layers: LayerData[] = []
 
   public get config(): SizedConfig | null {
     return this._config
   }
 
   public set config(config: SizedConfig) {
-    const tableChanged = !this._config || config.table !== this._config.table
-    const layersChanged = !this._config || config.layers !== this._config.layers
-    const domainsChanged =
-      !this._config ||
-      config.xDomain !== this._config.xDomain ||
-      config.yDomain !== this._config.yDomain
-
     this._config = {...CONFIG_DEFAULTS, ...config}
-
-    if (!tableChanged && !layersChanged && !domainsChanged) {
-      return
-    }
-
-    this.layers = []
-
-    for (let i = 0; i < this._config.layers.length; i++) {
-      this.registerLayer(i, this._config.layers[i])
-    }
   }
 
   public get margins(): Margins {
@@ -113,7 +86,7 @@ export class PlotEnv {
     return this.getXTicks(
       this.xDomain,
       this.config.width,
-      this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
+      getColumnTypeForAesthetic('x', this.config.table, this.config.layers)
     )
   }
 
@@ -121,7 +94,7 @@ export class PlotEnv {
     return this.getYTicks(
       this.yDomain,
       this.config.height,
-      this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
+      getColumnTypeForAesthetic('y', this.config.table, this.config.layers)
     )
   }
 
@@ -139,7 +112,8 @@ export class PlotEnv {
     }
 
     if (!this._xDomain) {
-      this._xDomain = this.getXDomain(this.layers)
+      // TODO: Clear when stale (check for staleness when config is set)
+      this._xDomain = this.getXDomain(this.config.table, this.config.layers)
     }
 
     return this._xDomain
@@ -159,7 +133,7 @@ export class PlotEnv {
     }
 
     if (!this._yDomain) {
-      this._yDomain = this.getYDomain(this.layers)
+      this._yDomain = this.getYDomain(this.config.table, this.config.layers)
     }
 
     return this._yDomain
@@ -181,54 +155,17 @@ export class PlotEnv {
     return this.getYTickFormatter(this.config, this.yDomain)
   }
 
-  public getTable(layerIndex: number): Table {
-    return this.layers[layerIndex].table
-  }
-
-  public getScale(layerIndex: number, aesthetic: string): Scale {
-    return this.layers[layerIndex].scales[aesthetic]
-  }
-
-  public getMapping(layerIndex: number, aesthetic: string) {
-    return this.layers[layerIndex].mappings[aesthetic]
-  }
-
-  public getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
-    const columnTypes = []
-
-    for (const layer of this.layers) {
-      for (const aesthetic of aesthetics) {
-        const mapping = layer.mappings[aesthetic]
-
-        if (mapping) {
-          columnTypes.push(layer.table.columns[mapping].type)
-        }
-      }
-    }
-
-    if (!columnTypes.length) {
-      return null
-    }
-
-    assert(
-      `found multiple column types for aesthetics "${aesthetics}"`,
-      columnTypes.every(t => t === columnTypes[0])
-    )
-
-    return columnTypes[0]
-  }
-
   public resetDomains(): void {
     if (this.config.xDomain) {
       this.config.onResetXDomain()
     } else {
-      this._xDomain = this.getXDomain(this.layers)
+      this._xDomain = this.getXDomain(this.config.table, this.config.layers)
     }
 
     if (this.config.yDomain) {
       this.config.onResetYDomain()
     } else {
-      this._yDomain = this.getYDomain(this.layers)
+      this._yDomain = this.getYDomain(this.config.table, this.config.layers)
     }
   }
 
@@ -260,13 +197,13 @@ export class PlotEnv {
   private getYTicks = memoizeOne(getTicks)
 
   private getXDomain = memoizeOne(
-    (layers: LayerData[]) =>
-      getDomainForAesthetics(['x', 'xMin', 'xMax'], layers) || DEFAULT_X_DOMAIN
+    (table: Table, layers: LayerConfig[]) =>
+      getDomainForAesthetic('x', table, layers) || DEFAULT_X_DOMAIN
   )
 
   private getYDomain = memoizeOne(
-    (layers: LayerData[]) =>
-      getDomainForAesthetics(['y', 'yMin', 'yMax'], layers) || DEFAULT_Y_DOMAIN
+    (table: Table, layers: LayerConfig[]) =>
+      getDomainForAesthetic('y', table, layers) || DEFAULT_Y_DOMAIN
   )
 
   private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {
@@ -287,7 +224,7 @@ export class PlotEnv {
         config.xTickFormatter ||
         getTickFormatter(
           xDomain,
-          this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
+          getColumnTypeForAesthetic('x', this.config.table, this.config.layers)
         )
       )
     }
@@ -299,49 +236,32 @@ export class PlotEnv {
         config.yTickFormatter ||
         getTickFormatter(
           yDomain,
-          this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
+          getColumnTypeForAesthetic('y', this.config.table, this.config.layers)
         )
       )
     }
   )
-
-  private registerLayer(layerIndex: number, layer: LayerConfig): void {
-    const stat = stats[layer.type]
-
-    this.layers[layerIndex] = stat(this.config, layer as any)
-  }
 }
 
-function getDomainsForLayer(
-  {table, mappings}: LayerData,
-  aesthetics: string[]
-): number[] {
-  return aesthetics.reduce((acc, aes) => {
-    if (!mappings[aes]) {
+function getDomainForAesthetic(
+  aesthetic: string,
+  table: Table,
+  layers: LayerConfig[]
+) {
+  const domains = layers.reduce((acc, layerConfig) => {
+    // Assumes that if the aesthetic is mapped in a layer, it is mapped to a
+    // single numeric column
+    const mapping = layerConfig[aesthetic] as string
+
+    if (!mapping) {
       return acc
     }
 
-    const column = table.columns[mappings[aes]]
+    const column = getNumericColumn(table, mapping)
 
-    assert(
-      `"${aes}" aesthetic mapped to non-existant column "${mappings[aes]}"`,
-      !!column
-    )
-
-    assert(
-      `expected column "${mappings[aes]}" to be numeric`,
-      isNumeric(column.type)
-    )
-
-    return [...acc, extent(column.data as number[])]
+    return [...acc, extent(column.data)]
   }, [])
-}
 
-function getDomainForAesthetics(
-  aesthetics: string[],
-  layers: LayerData[]
-): number[] | null {
-  const domains = layers.flatMap(layer => getDomainsForLayer(layer, aesthetics))
   const domainOfDomains = extent([].concat(...domains))
 
   if (domainOfDomains.some(x => x === undefined)) {
@@ -349,4 +269,31 @@ function getDomainForAesthetics(
   }
 
   return domainOfDomains
+}
+
+function getColumnTypeForAesthetic(
+  aesthetic: string,
+  table: Table,
+  layers: LayerConfig[]
+): ColumnType | null {
+  const columnTypes = []
+
+  for (const layerConfig of layers) {
+    const mapping = layerConfig[aesthetic]
+
+    if (mapping) {
+      columnTypes.push(table.columns[mapping].type)
+    }
+  }
+
+  if (!columnTypes.length) {
+    return null
+  }
+
+  assert(
+    `found multiple column types for aesthetic "${aesthetic}"`,
+    columnTypes.every(t => t === columnTypes[0])
+  )
+
+  return columnTypes[0]
 }

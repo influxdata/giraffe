@@ -1,12 +1,15 @@
 import * as React from 'react'
-import {useRef, useLayoutEffect, FunctionComponent} from 'react'
+import {useRef, useMemo, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HistogramTable, Scale} from '../types'
+import {HistogramTable, HistogramLayerConfig, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
 import {getHistogramTooltipData} from '../utils/getHistogramTooltipData'
 import {getGroupColumn} from '../utils/getGroupColumn'
+import {getFillScale} from '../utils/getFillScale'
+import {appendGroupCol} from '../utils/appendGroupCol'
+import {bin} from '../utils/bin'
 import {Tooltip} from './Tooltip'
 
 const BAR_TRANSPARENCY = 0.5
@@ -91,9 +94,31 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   hoverY,
 }) => {
   const canvas = useRef<HTMLCanvasElement>(null)
-  const {xScale, yScale, innerWidth, innerHeight} = env
-  const table = env.getTable(layerIndex) as HistogramTable
-  const fillScale = env.getScale(layerIndex, 'fill')
+  const {
+    xScale,
+    yScale,
+    innerWidth,
+    innerHeight,
+    config: {table: configTable, xDomain: configXDomain},
+  } = env
+
+  const layer = env.config.layers[layerIndex] as HistogramLayerConfig
+  const {x, fill, binCount, position, colors} = layer
+
+  const table = useMemo(
+    () =>
+      appendGroupCol(
+        bin(configTable, x, configXDomain, fill, binCount, position),
+        fill
+      ),
+    [configTable, x, configXDomain, fill, binCount, position]
+  )
+
+  const fillScale = useMemo(() => getFillScale(table, fill, colors), [
+    table,
+    fill,
+    colors,
+  ])
 
   useLayoutEffect(() => {
     drawBars({
@@ -119,7 +144,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   const tooltipData = getHistogramTooltipData(
     hoveredRowIndices,
     table,
-    env.getMapping(layerIndex, 'fill'),
+    fill,
     fillScale
   )
 

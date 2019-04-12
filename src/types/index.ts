@@ -97,12 +97,6 @@ export interface LineLayerConfig {
   interpolation: LineInterpolation
 }
 
-export interface LineMappings {
-  x: string
-  y: string
-  fill: string[]
-}
-
 export interface LineScales {
   fill: Scale<string, string>
 }
@@ -140,27 +134,9 @@ export interface HeatmapScales {
   fill: Scale<number, string>
 }
 
-export interface HeatmapMappings {
-  xMin: 'xMin'
-  xMax: 'xMax'
-  yMin: 'yMin'
-  yMax: 'yMax'
-  fill: 'count'
-}
-
-export interface HistogramMappings {
-  xMin: 'xMin'
-  xMax: 'xMax'
-  yMin: 'yMin'
-  yMax: 'yMax'
-  fill: string[]
-}
-
 export interface HistogramScales {
   fill: Scale<string, string>
 }
-
-export type Mappings = LineMappings | HistogramMappings | HeatmapMappings
 
 export type Scales = LineScales | HistogramScales | HeatmapScales
 
