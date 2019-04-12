@@ -6,6 +6,7 @@ import {App} from './components/App'
 import {HistogramExample} from './components/examples/Histogram'
 import {LineExample} from './components/examples/Line'
 import {HeatmapExample} from './components/examples/Heatmap'
+import {ScatterExample} from './components/examples/Scatter'
 
 import './index.css'
 
@@ -17,6 +18,7 @@ render(
       <HistogramExample path="examples/histogram" />
       <LineExample path="examples/line" />
       <HeatmapExample path="examples/heatmap" />
+      <ScatterExample path="examples/scatter" />
     </App>
   </Router>,
   document.querySelector('#root')

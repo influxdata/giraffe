@@ -12,6 +12,7 @@ import {SizedConfig} from '../types'
 import {HistogramLayer} from './HistogramLayer'
 import {LineLayer} from './LineLayer'
 import {HeatmapLayer} from './HeatmapLayer'
+import {ScatterLayer} from './ScatterLayer'
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'
 import {usePlotEnv} from '../utils/usePlotEnv'
@@ -110,6 +111,8 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
                 )
               case 'heatmap':
                 return <HeatmapLayer key={i} layerIndex={i} env={env} />
+              case 'scatter':
+                return <ScatterLayer key={i} layerIndex={i} env={env} />
               default:
                 return null
             }
