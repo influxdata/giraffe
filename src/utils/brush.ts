@@ -1,21 +1,21 @@
 import {Scale} from '../types'
-import {PlotEnv} from '../utils/PlotEnv'
 import {DragEvent} from '../utils/useDragEvent'
 
-export const getRectDimensions = (event: DragEvent, env: PlotEnv) => {
+export const getRectDimensions = (
+  event: DragEvent,
+  plotWidth: number,
+  plotHeight: number
+) => {
   if (event.dragMode === 'brushX') {
     const x = Math.max(0, Math.min(event.initialX, event.x))
 
-    const width = Math.min(
-      Math.max(event.initialX, event.x) - x,
-      env.innerWidth - x
-    )
+    const width = Math.min(Math.max(event.initialX, event.x) - x, plotWidth - x)
 
     return {
       x,
       y: 0,
       width,
-      height: env.innerHeight,
+      height: plotHeight,
     }
   }
 
@@ -24,13 +24,13 @@ export const getRectDimensions = (event: DragEvent, env: PlotEnv) => {
 
     const height = Math.min(
       Math.max(event.initialY, event.y) - y,
-      env.innerHeight - y
+      plotHeight - y
     )
 
     return {
       x: 0,
       y,
-      width: env.innerWidth,
+      width: plotWidth,
       height: height,
     }
   }
@@ -38,19 +38,11 @@ export const getRectDimensions = (event: DragEvent, env: PlotEnv) => {
   return null
 }
 
-export const getDomains = (
-  event: DragEvent,
-  xScale: Scale<number, number>,
-  yScale: Scale<number, number>,
-  width: number,
-  height: number
-): {xDomain: number[]; yDomain: number[]} => ({
-  xDomain: [
-    xScale.invert(Math.max(Math.min(event.initialX, event.x), 0)),
-    xScale.invert(Math.min(Math.max(event.initialX, event.x), width)),
-  ],
-  yDomain: [
-    yScale.invert(Math.min(Math.max(event.initialY, event.y), height)),
-    yScale.invert(Math.max(Math.min(event.initialY, event.y), 0)),
-  ],
-})
+export const rangeToDomain = (
+  [p0, p1]: number[],
+  scale: Scale<number, number>,
+  length: number
+): number[] => [
+  scale.invert(Math.max(Math.min(p0, p1), 0)),
+  scale.invert(Math.min(Math.max(p0, p1), length)),
+]

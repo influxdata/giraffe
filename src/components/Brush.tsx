@@ -2,68 +2,71 @@
 import * as React from 'react'
 import {useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
-import {PlotEnv} from '../utils/PlotEnv'
 import {DragEvent} from '../utils/useDragEvent'
-import {getRectDimensions, getDomains} from '../utils/brush'
+import {getRectDimensions} from '../utils/brush'
 
 const MIN_SELECTION_SIZE = 5 // pixels
 
 interface Props {
   event: DragEvent | null
-  env: PlotEnv
-  onSetXDomain: (xDomain: number[]) => void
-  onSetYDomain: (yDomain: number[]) => void
+  width: number
+  height: number
+  onXBrushEnd: (xRange: number[]) => void
+  onYBrushEnd: (yRange: number[]) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
   event,
-  env,
-  onSetXDomain,
-  onSetYDomain,
+  width,
+  height,
+  onXBrushEnd,
+  onYBrushEnd,
 }) => {
   useLayoutEffect(() => {
-    if (!event || event.type !== 'dragend') {
+    if (!event || !event.dragMode || event.type !== 'dragend') {
       return
     }
 
-    const {xDomain, yDomain} = getDomains(
-      event,
-      env.xScale,
-      env.yScale,
-      env.innerWidth,
-      env.innerHeight
-    )
+    let p0
+    let p1
+    let callback
 
-    const shouldSetXDomain =
-      event.dragMode === 'brushX' &&
-      Math.abs(event.initialX - event.x) >= MIN_SELECTION_SIZE
-
-    const shouldSetYDomain =
-      event.dragMode === 'brushY' &&
-      Math.abs(event.initialY - event.y) >= MIN_SELECTION_SIZE
-
-    if (shouldSetXDomain) {
-      onSetXDomain(xDomain)
+    if (event.dragMode === 'brushX') {
+      p0 = Math.min(event.initialX, event.x)
+      p1 = Math.max(event.initialX, event.x)
+      callback = onXBrushEnd
+    } else if (event.dragMode === 'brushY') {
+      p0 = Math.min(event.initialY, event.y)
+      p1 = Math.max(event.initialY, event.y)
+      callback = onYBrushEnd
+    } else {
+      return
     }
 
-    if (shouldSetYDomain) {
-      onSetYDomain(yDomain)
+    if (p1 - p0 < MIN_SELECTION_SIZE) {
+      return
     }
+
+    callback([p0, p1])
   })
 
   if (!event || !event.dragMode || event.type === 'dragend') {
     return null
   }
 
-  const {x, y, width, height} = getRectDimensions(event, env)
+  const {x, y, width: brushWidth, height: brushHeight} = getRectDimensions(
+    event,
+    width,
+    height
+  )
 
   const selectionStyle: CSSProperties = {
     display: event.initialX === null ? 'none' : 'inherit',
     position: 'absolute',
     left: `${x}px`,
-    width: `${width}px`,
+    width: `${brushWidth}px`,
     top: `${y}px`,
-    height: `${height}px`,
+    height: `${brushHeight}px`,
     opacity: 0.1,
     backgroundColor: 'aliceblue',
   }

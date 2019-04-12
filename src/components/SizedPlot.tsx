@@ -13,6 +13,7 @@ import {HistogramLayer} from './HistogramLayer'
 import {LineLayer} from './LineLayer'
 import {HeatmapLayer} from './HeatmapLayer'
 import {Brush} from './Brush'
+import {rangeToDomain} from '../utils/brush'
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
 import {useDragEvent} from '../utils/useDragEvent'
@@ -24,7 +25,6 @@ interface Props {
 
 export const SizedPlot: FunctionComponent<Props> = ({config}) => {
   const env = usePlotEnv(config)
-  const forceUpdate = useForceUpdate()
 
   const {
     margins,
@@ -54,29 +54,30 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
     [margins]
   )
 
+  const forceUpdate = useForceUpdate()
   const mouseRegion = useRef<HTMLDivElement>(null)
   const hoverEvent = useMousePos(mouseRegion.current)
   const dragEvent = useDragEvent(mouseRegion.current)
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-  const setXDomain = useCallback(
-    (xDomain: number[]) => {
-      env.xDomain = xDomain
+  const handleXBrushEnd = useCallback(
+    (xRange: number[]) => {
+      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
       forceUpdate()
     },
-    [env]
+    [env.xScale, env.innerWidth, forceUpdate]
   )
 
-  const setYDomain = useCallback(
-    (yDomain: number[]) => {
-      env.yDomain = yDomain
+  const handleYBrushEnd = useCallback(
+    (yRange: number[]) => {
+      env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()
       forceUpdate()
     },
-    [env]
+    [env.yScale, env.innerHeight, forceUpdate]
   )
 
-  const resetDomains = useCallback(() => {
+  const handleResetDomains = useCallback(() => {
     env.resetDomains()
     forceUpdate()
   }, [env])
@@ -118,13 +119,14 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
           className="minard-interaction-region"
           style={layersStyle}
           ref={mouseRegion}
-          onDoubleClick={resetDomains}
+          onDoubleClick={handleResetDomains}
         >
           <Brush
             event={dragEvent}
-            env={env}
-            onSetXDomain={setXDomain}
-            onSetYDomain={setYDomain}
+            width={env.innerWidth}
+            height={env.innerHeight}
+            onXBrushEnd={handleXBrushEnd}
+            onYBrushEnd={handleYBrushEnd}
           />
         </div>
       </Axes>
