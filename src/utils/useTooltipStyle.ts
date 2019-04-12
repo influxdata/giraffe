@@ -23,6 +23,12 @@ export const useTooltipStyle = (el: HTMLDivElement) => {
   //   margin), shift it just enough so that it is fully back inside the screen
   //
   useLayoutStyle(el, ({offsetWidth, offsetHeight}) => {
+    if (x === null || y === null) {
+      return {
+        display: 'none',
+      }
+    }
+
     let dx = MARGIN_X
     let dy = 0 - offsetHeight / 2
 
