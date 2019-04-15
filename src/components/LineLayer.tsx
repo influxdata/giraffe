@@ -110,10 +110,10 @@ const drawLines = ({
   }
 
   if (hoverPoints !== null) {
-    for (const {x, y, fill} of hoverPoints) {
+    for (let i = 0; i < hoverPoints.length; i++) {
       context.beginPath()
-      context.arc(x, y, 2.5, 0, 2 * Math.PI)
-      context.fillStyle = fill
+      context.arc(hoverPoints[i].x, hoverPoints[i].y, 2.5, 0, 2 * Math.PI)
+      context.fillStyle = hoverPoints[i].fill
       context.fill()
     }
   }
