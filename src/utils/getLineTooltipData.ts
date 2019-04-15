@@ -37,6 +37,6 @@ export const getLineTooltipData = (
   return {
     xMin: x,
     xMax: x,
-    columns: [...fillColumns, tooltipYCol],
+    columns: [tooltipYCol, ...fillColumns],
   }
 }

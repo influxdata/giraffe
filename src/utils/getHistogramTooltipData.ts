@@ -34,7 +34,7 @@ export const getHistogramTooltipData = (
   const tooltipProps: TooltipData = {
     xMin: xMinCol[hoveredRowIndices[0]],
     xMax: xMaxCol[hoveredRowIndices[0]],
-    columns: [...fillColumns, countColumn],
+    columns: [countColumn, ...fillColumns],
   }
 
   return tooltipProps
