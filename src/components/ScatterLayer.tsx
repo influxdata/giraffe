@@ -24,30 +24,25 @@ const collectScatterData = (
   const xCol = table.columns[xColKey].data
   const yCol = table.columns[yColKey].data
   const groupCol = table.columns[GROUP_COL_KEY].data as string[]
-  const groupKeys = new Set(groupCol)
 
-  const result = []
+  const resultByGroupKey = {}
 
-  for (let groupKey of groupKeys) {
-    let xs = []
-    let ys = []
-
-    for (let i = 0; i < table.length; i++) {
-      if (groupCol[i] !== groupKey) {
-        continue
+  for (let i = 0; i < table.length; i++) {
+    const groupKey = groupCol[i]
+    if (!resultByGroupKey[groupKey]) {
+      resultByGroupKey[groupKey] = {
+        xs: [],
+        ys: [],
+        fill: fillScale(groupKey),
+        symbol: symbolScale(groupKey),
       }
-
-      xs.push(xCol[i])
-      ys.push(yCol[i])
     }
 
-    const fill = fillScale(groupKey)
-    const symbol = symbolScale(groupKey)
-
-    result.push({xs, ys, fill, symbol})
+    resultByGroupKey[groupKey].xs.push(xCol[i])
+    resultByGroupKey[groupKey].ys.push(yCol[i])
   }
 
-  return result
+  return Object.values(resultByGroupKey)
 }
 
 interface DrawPointsOptions {
@@ -110,7 +105,7 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
 
   const scatterData = useMemo(
     () => collectScatterData(table, xColKey, yColKey, fillScale, symbolScale),
-    [table, xColKey, yColKey]
+    [table, xColKey, yColKey, fillScale, symbolScale]
   )
 
   useLayoutEffect(() => {
@@ -122,7 +117,7 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
       xScale,
       yScale,
     })
-  })
+  }, [canvas.current, scatterData, width, height, xScale, yScale])
 
   return <canvas className="minard-layer scatter" ref={canvas} />
 }
