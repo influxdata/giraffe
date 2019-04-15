@@ -1,3 +1,5 @@
+import {SymbolType} from 'd3-shape'
+
 export type ColumnType = 'int' | 'uint' | 'float' | 'string' | 'time' | 'bool'
 
 export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
@@ -160,14 +162,44 @@ export interface HistogramScales {
   fill: Scale<string, string>
 }
 
-export type Mappings = LineMappings | HistogramMappings | HeatmapMappings
+export interface ScatterLayerConfig {
+  type: 'scatter'
+  x: string
+  y: string
+  colors: string[]
+  fill: string[]
+  symbol: string[]
+}
 
-export type Scales = LineScales | HistogramScales | HeatmapScales
+export interface ScatterMappings {
+  x: string
+  y: string
+  fill: string[]
+  symbol: string[]
+}
+
+export interface ScatterScales {
+  fill: Scale<string, string>
+  symbol: Scale<string, SymbolType>
+}
+
+export type Mappings =
+  | LineMappings
+  | HistogramMappings
+  | HeatmapMappings
+  | ScatterMappings
+
+export type Scales =
+  | LineScales
+  | HistogramScales
+  | HeatmapScales
+  | ScatterScales
 
 export type LayerConfig =
   | LineLayerConfig
   | HistogramLayerConfig
   | HeatmapLayerConfig
+  | ScatterLayerConfig
 
 export type HistogramPosition = 'overlaid' | 'stacked'
 

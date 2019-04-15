@@ -14,6 +14,7 @@ export const Nav = () => {
       <Link to={`${APP_ROOT}/examples/line`}>Line</Link>
       <Link to={`${APP_ROOT}/examples/histogram`}>Histogram</Link>
       <Link to={`${APP_ROOT}/examples/heatmap`}>Heatmap</Link>
+      <Link to={`${APP_ROOT}/examples/scatter`}>Scatter</Link>
     </nav>
   )
 }
