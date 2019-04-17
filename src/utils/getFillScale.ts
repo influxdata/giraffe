@@ -33,14 +33,21 @@ const getColorScale = (
   domain: string[],
   colors: string[]
 ): Scale<string, string> => {
-  const interpolate = interpolateRgbBasis(colors)
-  const interpolatedColors = range(domain.length).map(k =>
-    interpolate(k / (domain.length - 1))
-  )
+  let scaleRange = []
+
+  if (domain.length <= colors.length) {
+    scaleRange = colors.slice(0, domain.length)
+  } else {
+    const interpolator = interpolateRgbBasis(colors)
+
+    scaleRange = range(domain.length).map(k =>
+      interpolator(k / (domain.length - 1))
+    )
+  }
 
   const scale = scaleOrdinal<string>()
     .domain(domain)
-    .range(interpolatedColors)
+    .range(scaleRange)
 
   return scale
 }
