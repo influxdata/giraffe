@@ -1,5 +1,6 @@
+import {range} from 'd3-array'
 import {scaleOrdinal} from 'd3-scale'
-import * as chroma from 'chroma-js'
+import {interpolateRgbBasis} from 'd3-interpolate'
 
 import {Table, Scale} from '../types'
 import {getGroupColumn} from './getGroupColumn'
@@ -32,14 +33,14 @@ const getColorScale = (
   domain: string[],
   colors: string[]
 ): Scale<string, string> => {
-  const range = chroma
-    .scale(colors)
-    .mode('lch')
-    .colors(domain.length)
+  const interpolate = interpolateRgbBasis(colors)
+  const interpolatedColors = range(domain.length).map(k =>
+    interpolate(k / (domain.length - 1))
+  )
 
   const scale = scaleOrdinal<string>()
     .domain(domain)
-    .range(range)
+    .range(interpolatedColors)
 
   return scale
 }

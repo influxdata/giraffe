@@ -5,7 +5,7 @@ build: dist
 
 run: node_modules
 	@rm -rf dist
-	$(nodebin)/microbundle watch
+	$(nodebin)/rollup -cw
 
 test: node_modules
 	$(nodebin)/eslint 'src/**/*.{ts,tsx}'
@@ -22,7 +22,7 @@ publish: node_modules test build
 
 dist: node_modules $(srcfiles) tsconfig.json
 	@rm -rf dist
-	$(nodebin)/microbundle
+	$(nodebin)/rollup -c
 
 node_modules:
 	npm install
