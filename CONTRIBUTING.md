@@ -35,10 +35,15 @@ As a workaround, you can symlink the `dist` directory directly.
 For example, if this repository has an absolute path of `$PROJECTDIR` and the external app has an absolute path of `$APPDIR`, run:
 
 ```
-ln -sF $PROJECTDIR/dist $APPDIR/node_modules/@influxdata/vis/dist
+mv $APPDIR/node_modules/@influxdata/vis/dist $APPDIR/node_modules/@influxdata/vis/dist_old
+ln -s $PROJECTDIR/dist $APPDIR/node_modules/@influxdata/vis/dist
 ```
 
-Remember to run `npm install` or `yarn install` in `$PROJECTDIR` once you are done developing to reset the symlinked `dist` folder.
+Remember to restore the published `dist` directory when you are done:
+
+```
+mv $APPDIR/node_modules/@influxdata/vis/dist_old $APPDIR/node_modules/@influxdata/vis/dist
+```
 
 ### Running tests
 
