@@ -20,5 +20,6 @@ export {
   HistogramPosition,
   LineInterpolation,
   LineLayerConfig,
+  LayerConfig,
   Config,
 } from './types'
