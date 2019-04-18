@@ -1,7 +1,6 @@
 import {range} from 'd3-array'
 
 import {Table, Scale} from '../types'
-
 import {getNumericColumn} from './getNumericColumn'
 import {getGroupColumn} from './getGroupColumn'
 import {useLazyMemo} from './useLazyMemo'
@@ -19,7 +18,6 @@ export const useHoverLineIndices = (
   const {data: xColData} = getNumericColumn(table, xColKey)
   const {data: groupColData} = getGroupColumn(table)
 
-  // TODO: Make this happen on first hover, rather than first render
   const index = useLazyMemo(
     () => buildIndex(xColData, xScale, width),
     [xColData, xScale, width],
@@ -33,16 +31,16 @@ export const useHoverLineIndices = (
   const hoveredRowIndices = lookupIndex(
     index,
     hoverX,
+    width,
     xScale.invert(hoverX),
     xColData,
-    groupColData,
-    width
+    groupColData
   )
 
   return hoveredRowIndices
 }
 
-const INDEX_BIN_WIDTH = 20
+const INDEX_BIN_WIDTH = 10
 
 const getBinIndex = (x: number, width: number): number => {
   const binCount = Math.ceil(width / INDEX_BIN_WIDTH)
@@ -97,48 +95,73 @@ const buildIndex = (
   return {xMins, xMaxes, indices}
 }
 
+interface NearestIndexByGroup {
+  [groupKey: string]: {i: number; distance: number}
+}
+
 const lookupIndex = (
   indexTable: IndexTable,
   hoverX: number,
+  width: number,
   dataX: number,
   xColData: number[],
-  groupColData: string[],
-  width: number
-): number[] => {
-  const binIndex = getBinIndex(hoverX, width)
+  groupColData: string[]
+) => {
+  const initialBinIndex = getBinIndex(hoverX, width)
+  const maxBinIndex = indexTable.indices.length - 1
 
-  const rowIndices =
-    binIndex === 0
-      ? indexTable.indices[binIndex]
-      : [...indexTable.indices[binIndex - 1], ...indexTable.indices[binIndex]]
+  let leftBinIndex = Math.max(0, initialBinIndex - 1)
+  let rightBinIndex = Math.min(initialBinIndex, maxBinIndex)
+  let leftRowIndices = indexTable.indices[leftBinIndex]
+  let rightRowIndices = indexTable.indices[rightBinIndex]
 
-  interface IndicesByGroup {
-    [groupKey: string]: {minIndex: number; dist: number}
+  // If no points are within the current left and right bins, expand the search
+  // outward to the next nearest bins
+  while (
+    !leftRowIndices.length &&
+    !rightRowIndices.length &&
+    (leftBinIndex !== 0 || rightBinIndex !== indexTable.indices.length)
+  ) {
+    leftBinIndex = Math.max(0, leftBinIndex - 1)
+    rightBinIndex = Math.min(rightBinIndex + 1, maxBinIndex)
+    leftRowIndices = indexTable.indices[leftBinIndex]
+    rightRowIndices = indexTable.indices[rightBinIndex]
   }
 
-  const indicesByGroup: IndicesByGroup = {}
+  let nearestIndexByGroup: NearestIndexByGroup = {}
 
+  collectNearestIndices(
+    nearestIndexByGroup,
+    leftRowIndices,
+    dataX,
+    xColData,
+    groupColData
+  )
+
+  collectNearestIndices(
+    nearestIndexByGroup,
+    rightRowIndices,
+    dataX,
+    xColData,
+    groupColData
+  )
+
+  return Object.values(nearestIndexByGroup).map(d => d.i)
+}
+
+const collectNearestIndices = (
+  acc: NearestIndexByGroup,
+  rowIndices: number[],
+  dataX: number,
+  xColData: number[],
+  groupColData: string[]
+): void => {
   for (const i of rowIndices) {
     const group = groupColData[i]
+    const distance = Math.abs(dataX - xColData[i])
 
-    if (!indicesByGroup[group]) {
-      indicesByGroup[group] = {
-        minIndex: i,
-        dist: Math.abs(dataX - xColData[i]),
-      }
-
-      continue
-    }
-
-    const dist = Math.abs(dataX - xColData[i])
-
-    if (dist < indicesByGroup[group].dist) {
-      indicesByGroup[group] = {
-        minIndex: i,
-        dist: Math.abs(dataX - xColData[i]),
-      }
+    if (!acc[group] || distance < acc[group].distance) {
+      acc[group] = {i, distance}
     }
   }
-
-  return Object.values(indicesByGroup).map(d => d.minIndex)
 }
