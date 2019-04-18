@@ -32,7 +32,7 @@ export const drawLinePoints = ({
   if (hoverPoints !== null) {
     for (const {x, y, fill} of hoverPoints) {
       context.beginPath()
-      context.arc(x, y, 2.5, 0, 2 * Math.PI)
+      context.arc(x, y, 3, 0, 2 * Math.PI)
       context.fillStyle = fill
       context.fill()
     }

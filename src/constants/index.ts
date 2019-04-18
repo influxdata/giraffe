@@ -12,7 +12,7 @@ import {
 // TODO: Make configurable
 export const PLOT_PADDING = 20
 export const TICK_PADDING_RIGHT = 8
-export const TICK_PADDING_TOP = 5
+export const TICK_PADDING_TOP = 8
 export const AXIS_LABEL_PADDING_BOTTOM = 15
 
 export const GROUP_COL_KEY = '_vis_group_keys'

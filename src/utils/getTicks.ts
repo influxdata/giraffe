@@ -5,7 +5,7 @@ import {ColumnType} from '../types'
 import {getTimeTickFormatter} from './getTickFormatter'
 import {TextMetrics} from './getTextMetrics'
 
-const TICK_DENSITY = 0.2
+const TICK_DENSITY = 0.5
 
 export const getTicks = (
   domain: number[],
