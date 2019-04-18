@@ -1,14 +1,18 @@
 import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
 
-import {TICK_CHAR_WIDTH} from '../constants'
 import {ColumnType} from '../types'
 import {getTimeTickFormatter} from './getTickFormatter'
+import {TextMetrics} from './getTextMetrics'
+
+const TICK_DENSITY = 0.2
 
 export const getTicks = (
   domain: number[],
   length: number,
-  columnType: ColumnType
+  orientation: 'vertical' | 'horizontal',
+  columnType: ColumnType,
+  textMetrics: TextMetrics
 ): number[] => {
   let sampleTick
 
@@ -18,7 +22,10 @@ export const getTicks = (
     sampleTick = String(domain[1])
   }
 
-  const numTicks = getNumTicks(sampleTick, length)
+  const charLength =
+    orientation === 'vertical' ? textMetrics.charHeight : textMetrics.charWidth
+
+  const numTicks = getNumTicks(sampleTick, length, charLength)
 
   if (columnType === 'time') {
     return getTimeTicks(domain, length, numTicks)
@@ -27,9 +34,12 @@ export const getTicks = (
   return ticks(domain[0], domain[1], numTicks)
 }
 
-const getNumTicks = (sampleTick: string, length): number => {
-  const TICK_DENSITY = 0.2
-  const sampleTickWidth = sampleTick.length * TICK_CHAR_WIDTH
+const getNumTicks = (
+  sampleTick: string,
+  length: number,
+  charLength: number
+): number => {
+  const sampleTickWidth = sampleTick.length * charLength
   const numTicks = Math.round((length / sampleTickWidth) * TICK_DENSITY)
 
   return Math.max(numTicks, 2)

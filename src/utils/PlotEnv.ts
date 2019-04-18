@@ -15,8 +15,6 @@ import {
 
 import {
   PLOT_PADDING,
-  TICK_CHAR_WIDTH,
-  TICK_CHAR_HEIGHT,
   TICK_PADDING_TOP,
   TICK_PADDING_RIGHT,
   AXIS_LABEL_PADDING_BOTTOM,
@@ -27,6 +25,7 @@ import {getTicks} from './getTicks'
 import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
+import {getTextMetrics, TextMetrics} from './getTextMetrics'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
@@ -92,10 +91,18 @@ export class PlotEnv {
   public get margins(): Margins {
     const {
       yTicks,
-      config: {xAxisLabel, yAxisLabel},
+      config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
 
-    return this.getMargins(xAxisLabel, yAxisLabel, yTicks)
+    const textMetrics = this.getTextMetrics(tickFont)
+
+    return this.getMargins(
+      xAxisLabel,
+      yAxisLabel,
+      yTicks,
+      this.yTickFormatter,
+      textMetrics
+    )
   }
 
   public get innerWidth(): number {
@@ -116,7 +123,9 @@ export class PlotEnv {
     return this.getXTicks(
       this.xDomain,
       this.config.width,
-      this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
+      'horizontal',
+      this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax']),
+      this.getTextMetrics(this.config.tickFont)
     )
   }
 
@@ -124,7 +133,9 @@ export class PlotEnv {
     return this.getYTicks(
       this.yDomain,
       this.config.height,
-      this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
+      'vertical',
+      this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax']),
+      this.getTextMetrics(this.config.tickFont)
     )
   }
 
@@ -235,6 +246,8 @@ export class PlotEnv {
     }
   }
 
+  private getTextMetrics = memoizeOne(getTextMetrics)
+
   private get isXControlled() {
     return (
       this.config.xDomain &&
@@ -252,23 +265,28 @@ export class PlotEnv {
   }
 
   private getMargins = memoizeOne(
-    (xAxisLabel: string, yAxisLabel: string, yTicks: number[]) => {
+    (
+      xAxisLabel: string,
+      yAxisLabel: string,
+      yTicks: number[],
+      yTickFormatter: (tick: number) => string,
+      {charWidth, charHeight}: TextMetrics
+    ) => {
       const xAxisLabelHeight = xAxisLabel
-        ? TICK_CHAR_HEIGHT + AXIS_LABEL_PADDING_BOTTOM
+        ? charHeight + AXIS_LABEL_PADDING_BOTTOM
         : 0
 
       const yAxisLabelHeight = yAxisLabel
-        ? TICK_CHAR_HEIGHT + AXIS_LABEL_PADDING_BOTTOM
+        ? charHeight + AXIS_LABEL_PADDING_BOTTOM
         : 0
 
       const yTickWidth =
-        Math.max(...yTicks.map(t => String(t).length)) * TICK_CHAR_WIDTH
+        Math.max(...yTicks.map(t => yTickFormatter(t).length)) * charWidth
 
       return {
         top: PLOT_PADDING,
         right: PLOT_PADDING,
-        bottom:
-          TICK_CHAR_HEIGHT + TICK_PADDING_TOP + PLOT_PADDING + xAxisLabelHeight,
+        bottom: charHeight + TICK_PADDING_TOP + PLOT_PADDING + xAxisLabelHeight,
         left: yTickWidth + TICK_PADDING_RIGHT + PLOT_PADDING + yAxisLabelHeight,
       }
     }
