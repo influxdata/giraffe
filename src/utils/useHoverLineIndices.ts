@@ -4,6 +4,7 @@ import {Table, Scale} from '../types'
 import {getNumericColumn} from './getNumericColumn'
 import {getGroupColumn} from './getGroupColumn'
 import {useLazyMemo} from './useLazyMemo'
+import {isDefined} from './isDefined'
 
 export const useHoverLineIndices = (
   table: Table,
@@ -83,7 +84,13 @@ const buildIndex = (
   const indices = range(binCount).map(_ => [])
 
   for (let i = 0; i < xColData.length; i++) {
-    const binIndex = getBinIndex(xScale(xColData[i]), width)
+    const x = xScale(xColData[i])
+
+    if (!isDefined(x)) {
+      continue
+    }
+
+    const binIndex = getBinIndex(x, width)
 
     if (binIndex < 0 || binIndex >= binCount) {
       continue
