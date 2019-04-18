@@ -8,28 +8,18 @@ import tsc from 'typescript'
 
 const pkg = require('./package.json')
 
-const globals = {
-  react: 'React',
-  'react-dom': 'ReactDOM',
-}
-
 export default {
   input: 'src/index.ts',
-  output: [
-    {
-      name: '@influxdata/vis',
-      file: pkg.main,
-      format: 'umd',
-      sourcemap: true,
-      globals,
+  output: {
+    name: '@influxdata/vis',
+    file: pkg.main,
+    format: 'umd',
+    sourcemap: true,
+    globals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
     },
-    {
-      file: pkg.module,
-      format: 'es',
-      sourcemap: true,
-      globals,
-    },
-  ],
+  },
   plugins: [
     resolve(),
     commonjs(),
