@@ -75,14 +75,17 @@ export class PlotEnv {
 
     this._config = {...CONFIG_DEFAULTS, ...config}
 
-    if (!tableChanged && !layersChanged && !domainsChanged) {
-      return
+    if (tableChanged || layersChanged || domainsChanged) {
+      // TODO: Be smarter about when stats are recomputed
+      this.layers = []
+
+      for (let i = 0; i < this._config.layers.length; i++) {
+        this.registerLayer(i, this._config.layers[i])
+      }
     }
 
-    this.layers = []
-
-    for (let i = 0; i < this._config.layers.length; i++) {
-      this.registerLayer(i, this._config.layers[i])
+    if (tableChanged || layersChanged) {
+      this.resetDomains()
     }
   }
 
@@ -134,7 +137,7 @@ export class PlotEnv {
   }
 
   public get xDomain(): number[] {
-    if (this.config.xDomain) {
+    if (this.isXControlled) {
       return this.config.xDomain
     }
 
@@ -146,7 +149,7 @@ export class PlotEnv {
   }
 
   public set xDomain(newXDomain: number[]) {
-    if (this.config.onSetXDomain) {
+    if (this.isXControlled) {
       this.config.onSetXDomain(newXDomain)
     } else {
       this._xDomain = newXDomain
@@ -154,7 +157,7 @@ export class PlotEnv {
   }
 
   public get yDomain(): number[] {
-    if (this.config.yDomain) {
+    if (this.isYControlled) {
       return this.config.yDomain
     }
 
@@ -166,7 +169,7 @@ export class PlotEnv {
   }
 
   public set yDomain(newYDomain: number[]) {
-    if (this.config.onSetYDomain) {
+    if (this.isYControlled) {
       this.config.onSetYDomain(newYDomain)
     } else {
       this._yDomain = newYDomain
@@ -219,17 +222,33 @@ export class PlotEnv {
   }
 
   public resetDomains(): void {
-    if (this.config.xDomain) {
+    if (this.isXControlled) {
       this.config.onResetXDomain()
     } else {
       this._xDomain = this.getXDomain(this.layers)
     }
 
-    if (this.config.yDomain) {
+    if (this.isYControlled) {
       this.config.onResetYDomain()
     } else {
       this._yDomain = this.getYDomain(this.layers)
     }
+  }
+
+  private get isXControlled() {
+    return (
+      this.config.xDomain &&
+      this.config.onSetXDomain &&
+      this.config.onResetXDomain
+    )
+  }
+
+  private get isYControlled() {
+    return (
+      this.config.yDomain &&
+      this.config.onSetYDomain &&
+      this.config.onResetYDomain
+    )
   }
 
   private getMargins = memoizeOne(
