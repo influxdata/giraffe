@@ -27,3 +27,5 @@ export const CURVES = {
   stepAfter: curveStepAfter,
   natural: curveNatural,
 }
+
+export const MAX_TOOLTIP_ROWS = 8

@@ -130,7 +130,6 @@ const simplifyDouglasPeucker = (
 
   let resultLength = 0
 
-  // TODO: Would closing over a resultLength variable in the helper be faster?
   for (let j = 0; j < keep.length; j++) {
     if (keep[j] === 1) {
       resultLength++

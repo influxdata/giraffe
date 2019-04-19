@@ -27,24 +27,6 @@ make run
 ```
 in the root of the repo.
 
-#### For external apps using Parcel
-
-Using `npm link` with to test changes in external apps built with [Parcel](https://parceljs.org/) will [fail](https://reactjs.org/warnings/invalid-hook-call-warning.html), due to how Parcel builds symlinked external dependencies in development.
-
-As a workaround, you can symlink the `dist` directory directly.
-For example, if this repository has an absolute path of `$PROJECTDIR` and the external app has an absolute path of `$APPDIR`, run:
-
-```
-mv $APPDIR/node_modules/@influxdata/vis/dist $APPDIR/node_modules/@influxdata/vis/dist_old
-ln -s $PROJECTDIR/dist $APPDIR/node_modules/@influxdata/vis/dist
-```
-
-Remember to restore the published `dist` directory when you are done:
-
-```
-mv $APPDIR/node_modules/@influxdata/vis/dist_old $APPDIR/node_modules/@influxdata/vis/dist
-```
-
 ### Running tests
 
 ```

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HistogramTable, Scale} from '../types'
+import {HistogramLayerConfig, HistogramTable, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
@@ -91,9 +91,21 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   hoverY,
 }) => {
   const canvas = useRef<HTMLCanvasElement>(null)
-  const {xScale, yScale, innerWidth, innerHeight} = env
   const table = env.getTable(layerIndex) as HistogramTable
   const fillScale = env.getScale(layerIndex, 'fill')
+
+  const {x: xColKey, fill: fillColKeys} = env.config.layers[
+    layerIndex
+  ] as HistogramLayerConfig
+
+  const {
+    xScale,
+    yScale,
+    innerWidth,
+    innerHeight,
+    xTickFormatter,
+    yTickFormatter,
+  } = env
 
   useLayoutEffect(() => {
     drawBars({
@@ -119,7 +131,10 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   const tooltipData = getHistogramTooltipData(
     hoveredRowIndices,
     table,
-    env.getMapping(layerIndex, 'fill'),
+    xColKey,
+    fillColKeys,
+    xTickFormatter,
+    yTickFormatter,
     fillScale
   )
 
