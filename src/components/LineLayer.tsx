@@ -3,13 +3,14 @@ import {useRef, useLayoutEffect, useMemo, FunctionComponent} from 'react'
 
 import {LineLayerConfig} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
-import {Tooltip} from './Tooltip'
-import {useHoverLineIndices} from '../utils/useHoverLineIndices'
-import {getLineTooltipData} from '../utils/getLineTooltipData'
-import {getLineHoverPoints} from '../utils/getLineHoverPoints'
-import {drawLinePoints} from '../utils/drawLinePoints'
 import {drawLines} from '../utils/drawLines'
 import {collectLineData, simplifyLineData} from '../utils/lineData'
+import {clearCanvas} from '../utils/clearCanvas'
+import {LineHoverLayer} from './LineHoverLayer'
+import {MAX_TOOLTIP_ROWS} from '../constants'
+import {useHoverLineIndices} from '../utils/useHoverLineIndices'
+import {getGroupColumn} from '../utils/getGroupColumn'
+import {getNumericColumn} from '../utils/getNumericColumn'
 
 interface Props {
   env: PlotEnv
@@ -22,20 +23,17 @@ export const LineLayer: FunctionComponent<Props> = ({
   env,
   layerIndex,
   hoverX,
+  hoverY,
 }) => {
-  const linesCanvas = useRef<HTMLCanvasElement>(null)
-  const legendCanvas = useRef<HTMLCanvasElement>(null)
   const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
   const layer = env.config.layers[layerIndex] as LineLayerConfig
-  const {interpolation, x: xColKey, y: yColKey, fill: fillColKeys} = layer
-  const {
-    xScale,
-    yScale,
-    innerWidth: width,
-    innerHeight: height,
-    config: {legendCrosshairColor: hoverLineColor},
-  } = env
+  const {interpolation, x: xColKey, y: yColKey} = layer
+  const {xScale, yScale, innerWidth: width, innerHeight: height} = env
+
+  const {data: xColData} = getNumericColumn(table, xColKey)
+  const {data: yColData} = getNumericColumn(table, yColKey)
+  const {data: groupColData} = getGroupColumn(table)
 
   const lineData = useMemo(
     () => collectLineData(table, xColKey, yColKey, fillScale),
@@ -49,76 +47,58 @@ export const LineLayer: FunctionComponent<Props> = ({
     [lineData, xScale, yScale]
   )
 
-  const hoverRowIndices = useHoverLineIndices(
-    table,
-    hoverX,
-    xColKey,
-    xScale,
-    width
-  )
+  let hoverDimension = layer.hoverDimension || 'auto'
 
-  const tooltipData = getLineTooltipData(
-    table,
-    hoverRowIndices,
-    xColKey,
-    yColKey,
-    fillColKeys,
-    fillScale
-  )
+  if (hoverDimension === 'auto') {
+    hoverDimension =
+      Object.keys(lineData).length > MAX_TOOLTIP_ROWS ? 'xy' : 'x'
+  }
 
-  const hoverLinePosition = tooltipData ? xScale(tooltipData.xMin) : null
-
-  const hoverPoints = getLineHoverPoints(
-    table,
-    hoverRowIndices,
-    xColKey,
-    yColKey,
-    xScale,
-    yScale,
-    fillScale
-  )
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useLayoutEffect(() => {
+    clearCanvas(canvasRef.current, width, height)
     drawLines({
-      canvas: linesCanvas.current,
+      canvas: canvasRef.current,
       lineData: simplifiedLineData,
       interpolation,
-      width,
-      height,
     })
-  }, [simplifiedLineData, linesCanvas.current, interpolation, width, height])
+  }, [simplifiedLineData, canvasRef.current, interpolation, width, height])
 
-  useLayoutEffect(() => {
-    drawLinePoints({
-      canvas: legendCanvas.current,
-      hoverLinePosition,
-      hoverLineColor,
-      hoverPoints,
-      width,
-      height,
-    })
-  }, [
-    hoverPoints,
-    hoverLineColor,
-    hoverLinePosition,
+  const hoverRowIndices = useHoverLineIndices(
+    hoverDimension,
+    hoverX,
+    hoverY,
+    xColData,
+    yColData,
+    groupColData,
+    xScale,
+    yScale,
     width,
-    height,
-    legendCanvas.current,
-  ])
+    height
+  )
+
+  const hasHoverData = hoverRowIndices && hoverRowIndices.length
 
   return (
     <>
       <canvas
         className="vis-layer line"
-        ref={linesCanvas}
-        style={{position: 'absolute'}}
+        ref={canvasRef}
+        style={{
+          position: 'absolute',
+          opacity: hoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
+        }}
       />
-      <canvas
-        className="vis-layer line-interactions"
-        ref={legendCanvas}
-        style={{position: 'absolute'}}
-      />
-      {tooltipData && <Tooltip data={tooltipData} env={env} />}
+      {hasHoverData && (
+        <LineHoverLayer
+          env={env}
+          layerIndex={layerIndex}
+          lineData={simplifiedLineData}
+          rowIndices={hoverRowIndices}
+          dimension={hoverDimension}
+        />
+      )}
     </>
   )
 }

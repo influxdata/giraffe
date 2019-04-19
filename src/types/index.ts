@@ -67,18 +67,14 @@ export interface Margins {
   left: number
 }
 
-export interface TooltipData {
-  xMin?: number
-  xMax?: number
-  yMin?: number
-  yMax?: number
-  columns: Array<{
-    name: string
-    type: ColumnType
-    values: any[]
-    colors: Array<string | null>
-  }>
+export interface TooltipColumn {
+  name: string
+  type: ColumnType
+  values: string[]
+  colors: string[] | null
 }
+
+export type TooltipData = TooltipColumn[]
 
 export type LineInterpolation =
   | 'linear'
@@ -90,6 +86,21 @@ export type LineInterpolation =
   | 'stepAfter'
   | 'natural'
 
+/*
+  The tooltip for a line layer can operate in one of three modes:
+
+  In the `x` mode, every y-value for the currently hovered x-value is displayed
+  in the tooltip. The crosshair is a vertical line.
+
+  In the `y` mode, every x-value for the currently hovered y-value is displayed
+  in the tooltip. The crosshair is a horizontal line.
+
+  In the `xy` mode, the single xy-point closest to the hovered mouse position
+  is displayed in the tooltip. The series that it belongs to is highlighted.
+  The crosshair is an intersecting pair of horizontal and vertical lines.
+*/
+export type LineHoverDimension = 'x' | 'y' | 'xy'
+
 export interface LineLayerConfig {
   type: 'line'
   x: string
@@ -97,6 +108,7 @@ export interface LineLayerConfig {
   fill: string[]
   colors: string[]
   interpolation: LineInterpolation
+  hoverDimension?: LineHoverDimension | 'auto'
 }
 
 export interface LineMappings {

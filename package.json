@@ -2,7 +2,6 @@
   "name": "@influxdata/vis",
   "version": "0.4.3",
   "main": "dist/index.js",
-  "source": "src/index.ts",
   "license": "MIT",
   "scripts": {
     "test": "echo 'Please use `make test` instead' && false",

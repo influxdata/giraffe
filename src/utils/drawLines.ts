@@ -3,7 +3,6 @@ import {range} from 'd3-array'
 
 import {LineInterpolation} from '../types'
 import {LineData} from './lineData'
-import {clearCanvas} from '../utils/clearCanvas'
 import {CURVES} from '../constants'
 import {isDefined} from '../utils/isDefined'
 
@@ -11,22 +10,20 @@ interface DrawLinesOptions {
   canvas: HTMLCanvasElement
   interpolation: LineInterpolation
   lineData: LineData
-  width: number
-  height: number
+  lineWidth?: number
 }
 
 export const drawLines = ({
   canvas,
   lineData,
   interpolation,
-  width,
-  height,
+  lineWidth = 1,
 }: DrawLinesOptions): void => {
-  clearCanvas(canvas, width, height)
-
   const context = canvas.getContext('2d')
 
-  for (const {xs, ys, fill} of lineData) {
+  context.lineWidth = lineWidth
+
+  for (const {xs, ys, fill} of Object.values(lineData)) {
     const lineGenerator: any = line()
       .context(context)
       .x((i: any) => xs[i])

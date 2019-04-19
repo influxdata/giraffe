@@ -12,10 +12,6 @@ export const getLineHoverPoints = (
   yScale: Scale<number, number>,
   fillScale: Scale<string, string>
 ): Array<{x: number; y: number; fill: string}> => {
-  if (!hoverRowIndices) {
-    return null
-  }
-
   const {data: xColData} = getNumericColumn(table, xColKey)
   const {data: yColData} = getNumericColumn(table, yColKey)
   const {data: groupColData} = getGroupColumn(table)

@@ -1,42 +1,42 @@
 import {getNumericColumn} from './getNumericColumn'
-import {getGroupColumn} from './getGroupColumn'
+import {getStringColumn} from './getStringColumn'
 import {TooltipData, Table, Scale} from '../types'
 
 export const getLineTooltipData = (
-  table: Table,
   hoveredRowIndices: number[],
+  table: Table,
   xColKey: string,
   yColKey: string,
+  groupColKey: string,
+  xTickFormatter: (tick: number) => string,
+  yTickFormatter: (tick: number) => string,
   fillColKeys: string[],
   fillScale: Scale<string, string>
 ): TooltipData => {
-  if (!hoveredRowIndices || hoveredRowIndices.length === 0) {
-    return null
-  }
-
-  const {data: xColData} = getNumericColumn(table, xColKey)
-  const {data: groupColData} = getGroupColumn(table)
+  const xCol = getNumericColumn(table, xColKey)
   const yCol = getNumericColumn(table, yColKey)
+  const groupCol = getStringColumn(table, groupColKey)
+
+  const tooltipXCol = {
+    name: xColKey,
+    type: xCol.type,
+    colors: [],
+    values: hoveredRowIndices.map(i => xTickFormatter(xCol.data[i])),
+  }
 
   const tooltipYCol = {
     name: yColKey,
     type: yCol.type,
     colors: [],
-    values: hoveredRowIndices.map(i => yCol.data[i]),
+    values: hoveredRowIndices.map(i => yTickFormatter(yCol.data[i])),
   }
 
   const fillColumns = fillColKeys.map(name => ({
     name,
     type: table.columns[name].type,
-    values: hoveredRowIndices.map(i => table.columns[name].data[i]),
-    colors: hoveredRowIndices.map(i => fillScale(groupColData[i])),
+    values: hoveredRowIndices.map(i => String(table.columns[name].data[i])),
+    colors: hoveredRowIndices.map(i => fillScale(groupCol.data[i])),
   }))
 
-  const x = xColData[hoveredRowIndices[0]]
-
-  return {
-    xMin: x,
-    xMax: x,
-    columns: [tooltipYCol, ...fillColumns],
-  }
+  return [tooltipXCol, tooltipYCol, ...fillColumns]
 }
