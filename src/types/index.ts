@@ -7,31 +7,37 @@ export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
 export interface FloatColumn {
   data: number[]
   type: 'float'
+  name: string
 }
 
 export interface IntColumn {
   data: number[]
   type: 'int'
+  name: string
 }
 
 export interface UIntColumn {
   data: number[]
   type: 'uint'
+  name: string
 }
 
 export interface TimeColumn {
   data: number[]
   type: 'time'
+  name: string
 }
 
 export interface StringColumn {
   data: string[]
   type: 'string'
+  name: string
 }
 
 export interface BoolColumn {
   data: boolean[]
   type: 'bool'
+  name: string
 }
 
 export type NumericTableColumn =
@@ -51,7 +57,7 @@ export type TableColumn =
 export interface Table {
   length: number
   columns: {
-    [columnName: string]: TableColumn
+    [columnKey: string]: TableColumn
   }
 }
 
