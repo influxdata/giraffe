@@ -5,6 +5,7 @@ const TABLE: Table = {
   columns: {
     _value: {
       data: [70, 56, 60, 100, 76, 0, 63, 48, 79, 67],
+      name: '_value',
       type: 'int',
     },
     _field: {
@@ -20,6 +21,7 @@ const TABLE: Table = {
         'usage_idle',
         'usage_idle',
       ],
+      name: '_field',
       type: 'string',
     },
     cpu: {
@@ -35,6 +37,7 @@ const TABLE: Table = {
         'cpu1',
         'cpu1',
       ],
+      name: 'cpu',
       type: 'string',
     },
   },

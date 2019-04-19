@@ -23,3 +23,5 @@ export {
   LayerConfig,
   Config,
 } from './types'
+
+export {fluxToTable} from './utils/fluxToTable'
