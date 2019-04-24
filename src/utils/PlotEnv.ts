@@ -26,6 +26,7 @@ import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 import {getTextMetrics, TextMetrics} from './getTextMetrics'
+import {isMostlyEqual} from './isMostlyEqual'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
@@ -65,25 +66,19 @@ export class PlotEnv {
   }
 
   public set config(config: SizedConfig) {
-    const tableChanged = !this._config || config.table !== this._config.table
-    const layersChanged = !this._config || config.layers !== this._config.layers
-    const domainsChanged =
-      !this._config ||
-      config.xDomain !== this._config.xDomain ||
-      config.yDomain !== this._config.yDomain
+    const prevConfig = this._config
 
     this._config = {...CONFIG_DEFAULTS, ...config}
 
-    if (tableChanged || layersChanged || domainsChanged) {
-      // TODO: Be smarter about when stats are recomputed
-      this.layers = []
-
-      for (let i = 0; i < this._config.layers.length; i++) {
-        this.registerLayer(i, this._config.layers[i])
+    // Re-register layers if necessary
+    this._config.layers.forEach((layer, i) => {
+      if (isLayerStale(this._config, prevConfig, i)) {
+        this.registerLayer(i, layer)
       }
-    }
+    })
 
-    if (tableChanged || layersChanged) {
+    // Reset domains if necessary
+    if (areDomainsStale(this._config, prevConfig)) {
       this.resetDomains()
     }
   }
@@ -349,10 +344,10 @@ export class PlotEnv {
   }
 }
 
-function getDomainsForLayer(
+const getDomainsForLayer = (
   {table, mappings}: LayerData,
   aesthetics: string[]
-): number[] {
+): number[] => {
   return aesthetics.reduce((acc, aes) => {
     if (!mappings[aes]) {
       return acc
@@ -374,10 +369,10 @@ function getDomainsForLayer(
   }, [])
 }
 
-function getDomainForAesthetics(
+const getDomainForAesthetics = (
   aesthetics: string[],
   layers: LayerData[]
-): number[] | null {
+): number[] | null => {
   const domains = layers.flatMap(layer => getDomainsForLayer(layer, aesthetics))
   const domainOfDomains = extent([].concat(...domains))
 
@@ -386,4 +381,38 @@ function getDomainForAesthetics(
   }
 
   return domainOfDomains
+}
+
+const isLayerStale = (
+  config: SizedConfig,
+  prevConfig: SizedConfig | null,
+  layerIndex: number
+): boolean => {
+  if (!prevConfig) {
+    return true
+  }
+
+  const layer = config.layers[layerIndex]
+  const prevLayer = prevConfig.layers[layerIndex]
+
+  if (!prevLayer) {
+    return true
+  }
+
+  return !isMostlyEqual(layer, prevLayer)
+}
+
+const areDomainsStale = (
+  config: SizedConfig,
+  prevConfig: SizedConfig | null
+): boolean => {
+  if (!prevConfig) {
+    return true
+  }
+
+  if (config.table !== prevConfig.table) {
+    return true
+  }
+
+  return config.layers.some((_, i) => isLayerStale(config, prevConfig, i))
 }
