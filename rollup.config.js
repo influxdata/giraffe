@@ -8,10 +8,22 @@ import tsc from 'typescript'
 
 const pkg = require('./package.json')
 
+let plugins = [
+  resolve(),
+  commonjs(),
+  typescript({typescript: tsc}),
+  sourceMaps(),
+]
+
+// Minify and compress output when in production
+if (process.env.NODE_ENV === 'production') {
+  plugins = [...plugins, terser(), gzip()]
+}
+
 export default {
   input: 'src/index.ts',
   output: {
-    name: '@influxdata/vis',
+    name: pkg.name,
     file: pkg.main,
     format: 'umd',
     sourcemap: true,
@@ -20,13 +32,6 @@ export default {
       'react-dom': 'ReactDOM',
     },
   },
-  plugins: [
-    resolve(),
-    commonjs(),
-    typescript({typescript: tsc}),
-    sourceMaps(),
-    terser(),
-    gzip(),
-  ],
-  external: ['react', 'react-dom'],
+  plugins,
+  external: ['react', 'react-dom'], // Do not bundle peer dependencies
 }

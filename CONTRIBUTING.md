@@ -18,14 +18,9 @@ Changes made either in the library source or in the documentation source will be
 
 ### Developing with an external app
 
-To test your local development branch in an external React app, symlink the built `dist` output in the root of this repo to the corresponding `dist` folder within the external app's `node_modules` directory.
-This can typically be achieved via `npm link`.
-
-To build this library in watch mode, run
-```
-make run
-```
-in the root of the repo.
+To test changes in this repository without publishing a new version, use the `make run` target.
+This target will execute `npm link` and build the library in watch/development mode.
+Running `npm link @influxdata/vis` in an external app directory will then use the development version of this library instead of the version specified in the external app's `package.json` file.
 
 ### Running tests
 

@@ -4,8 +4,9 @@ srcfiles := $(shell find src)
 build: dist
 
 run: node_modules
-	@rm -rf dist
-	$(nodebin)/rollup -cw
+	rm -rf dist
+	npm link
+	NODE_ENV=development $(nodebin)/rollup -cw
 
 test: node_modules
 	$(nodebin)/eslint 'src/**/*.{ts,tsx}'
@@ -21,8 +22,8 @@ publish: node_modules test build
 	npm publish --access=public
 
 dist: node_modules $(srcfiles) tsconfig.json
-	@rm -rf dist
-	$(nodebin)/rollup -c
+	rm -rf dist
+	NODE_ENV=production $(nodebin)/rollup -c
 
 node_modules:
 	npm install
