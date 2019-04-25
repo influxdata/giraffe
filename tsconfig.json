@@ -18,5 +18,12 @@
     "strictNullChecks": false,
     "downlevelIteration": true
   },
-  "exclude": ["docs"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx"
+  ]
 }
