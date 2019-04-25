@@ -1,4 +1,4 @@
-import {Table} from '../../../../src'
+import {Table} from '../src/types'
 
 export const TABLE: Table = {
   columns: {
