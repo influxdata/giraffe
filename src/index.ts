@@ -1,7 +1,15 @@
-export {useTooltipStyle} from './utils/useTooltipStyle'
-export {isNumeric} from './utils/isNumeric'
+// Components
 export {Plot} from './components/Plot'
 
+// Utils
+export {isNumeric} from './utils/isNumeric'
+export {fluxToTable} from './utils/fluxToTable'
+export {filterTable} from './utils/table'
+
+// Constants
+export * from './constants/colorSchemes'
+
+// Types
 export {
   ColumnType,
   NumericColumnType,
@@ -23,7 +31,3 @@ export {
   LayerConfig,
   Config,
 } from './types'
-
-export {fluxToTable} from './utils/fluxToTable'
-
-export * from './constants/colorSchemes'

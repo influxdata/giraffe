@@ -2,7 +2,7 @@ import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
 import {Tooltip} from './Tooltip'
-import {GROUP_COL_KEY, DEFAULT_LINE_WIDTH} from '../constants'
+import {GROUP_COL_KEY} from '../constants'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
@@ -37,7 +37,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     x: xColKey,
     y: yColKey,
     fill: fillColKeys,
-    lineWidth = DEFAULT_LINE_WIDTH,
+    lineWidth,
   } = layer
 
   const {
