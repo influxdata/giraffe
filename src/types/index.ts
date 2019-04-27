@@ -260,6 +260,8 @@ export interface Config {
   xTickFormatter?: (tickValue: number) => string
   yTickFormatter?: (tickValue: number) => string
 
+  showAxes?: boolean
+
   axisColor?: string
   axisOpacity?: number
   gridColor?: string

@@ -29,7 +29,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
 
   const {
     margins,
-    config: {width, height},
+    config: {width, height, showAxes},
   } = env
 
   const plotStyle = useMemo(
@@ -85,54 +85,55 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
 
   return (
     <div className="minard-plot" style={plotStyle}>
-      <Axes env={env}>
-        <div className="minard-layers" style={layersStyle}>
-          {config.layers.map((layer, i) => {
-            switch (layer.type) {
-              case 'line':
-                return (
-                  <LineLayer
-                    key={i}
-                    layerIndex={i}
-                    env={env}
-                    hoverX={hoverX}
-                    hoverY={hoverY}
-                  />
-                )
-              case 'histogram':
-                return (
-                  <HistogramLayer
-                    key={i}
-                    layerIndex={i}
-                    env={env}
-                    hoverX={hoverX}
-                    hoverY={hoverY}
-                  />
-                )
-              case 'heatmap':
-                return <HeatmapLayer key={i} layerIndex={i} env={env} />
-              case 'scatter':
-                return <ScatterLayer key={i} layerIndex={i} env={env} />
-              default:
-                return null
-            }
-          })}
-        </div>
-        <div
-          className="minard-interaction-region"
-          style={layersStyle}
-          ref={mouseRegion}
-          onDoubleClick={handleResetDomains}
-        >
-          <Brush
-            event={dragEvent}
-            width={env.innerWidth}
-            height={env.innerHeight}
-            onXBrushEnd={handleXBrushEnd}
-            onYBrushEnd={handleYBrushEnd}
-          />
-        </div>
-      </Axes>
+      {showAxes && (
+        <Axes env={env} style={{position: 'absolute', top: 0, left: 0}} />
+      )}
+      <div className="minard-layers" style={layersStyle}>
+        {config.layers.map((layer, i) => {
+          switch (layer.type) {
+            case 'line':
+              return (
+                <LineLayer
+                  key={i}
+                  layerIndex={i}
+                  env={env}
+                  hoverX={hoverX}
+                  hoverY={hoverY}
+                />
+              )
+            case 'histogram':
+              return (
+                <HistogramLayer
+                  key={i}
+                  layerIndex={i}
+                  env={env}
+                  hoverX={hoverX}
+                  hoverY={hoverY}
+                />
+              )
+            case 'heatmap':
+              return <HeatmapLayer key={i} layerIndex={i} env={env} />
+            case 'scatter':
+              return <ScatterLayer key={i} layerIndex={i} env={env} />
+            default:
+              return null
+          }
+        })}
+      </div>
+      <div
+        className="minard-interaction-region"
+        style={layersStyle}
+        ref={mouseRegion}
+        onDoubleClick={handleResetDomains}
+      >
+        <Brush
+          event={dragEvent}
+          width={env.innerWidth}
+          height={env.innerHeight}
+          onXBrushEnd={handleXBrushEnd}
+          onYBrushEnd={handleYBrushEnd}
+        />
+      </div>
     </div>
   )
 }

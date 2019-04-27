@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {useRef, useLayoutEffect, SFC} from 'react'
+import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
-import {TICK_PADDING_RIGHT, TICK_PADDING_TOP, PLOT_PADDING} from '../constants'
+import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
 import {Margins, Scale, SizedConfig} from '../types'
 
@@ -9,6 +9,7 @@ import {PlotEnv} from '../utils/PlotEnv'
 
 interface Props {
   env: PlotEnv
+  style: CSSProperties
 }
 
 interface DrawAxesOptions {
@@ -130,16 +131,12 @@ export const drawAxes = ({
   if (xAxisLabel) {
     context.textAlign = 'center'
     context.textBaseline = 'bottom'
-    context.fillText(
-      xAxisLabel,
-      margins.left + innerWidth / 2,
-      height - PLOT_PADDING
-    )
+    context.fillText(xAxisLabel, margins.left + innerWidth / 2, height)
   }
 
   // Draw the y axis label
   if (yAxisLabel) {
-    const x = PLOT_PADDING
+    const x = 0
     const y = margins.top + innerHeight / 2
 
     context.save()
@@ -152,8 +149,7 @@ export const drawAxes = ({
   }
 }
 
-export const Axes: SFC<Props> = props => {
-  const {children, env} = props
+export const Axes: FunctionComponent<Props> = ({env, style}) => {
   const canvas = useRef<HTMLCanvasElement>(null)
 
   const {
@@ -197,10 +193,5 @@ export const Axes: SFC<Props> = props => {
     config,
   ])
 
-  return (
-    <>
-      {children}
-      <canvas className="minard-axes" ref={canvas} />
-    </>
-  )
+  return <canvas className="vis-axes" ref={canvas} style={style} />
 }

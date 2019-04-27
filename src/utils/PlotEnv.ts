@@ -14,7 +14,6 @@ import {
 } from '../types'
 
 import {
-  PLOT_PADDING,
   TICK_PADDING_TOP,
   TICK_PADDING_RIGHT,
   AXIS_LABEL_PADDING_BOTTOM,
@@ -32,6 +31,7 @@ const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
   xAxisLabel: '',
   yAxisLabel: '',
+  showAxes: true,
   axisColor: '#292933',
   axisOpacity: 1,
   gridColor: '#292933',
@@ -92,6 +92,7 @@ export class PlotEnv {
     const textMetrics = this.getTextMetrics(tickFont)
 
     return this.getMargins(
+      this.config.showAxes,
       xAxisLabel,
       yAxisLabel,
       yTicks,
@@ -261,12 +262,17 @@ export class PlotEnv {
 
   private getMargins = memoizeOne(
     (
+      showAxes: boolean,
       xAxisLabel: string,
       yAxisLabel: string,
       yTicks: number[],
       yTickFormatter: (tick: number) => string,
       {charWidth, charHeight}: TextMetrics
     ) => {
+      if (!showAxes) {
+        return {top: 0, right: 0, bottom: 0, left: 0}
+      }
+
       const xAxisLabelHeight = xAxisLabel
         ? charHeight + AXIS_LABEL_PADDING_BOTTOM
         : 0
@@ -279,10 +285,10 @@ export class PlotEnv {
         Math.max(...yTicks.map(t => yTickFormatter(t).length)) * charWidth
 
       return {
-        top: PLOT_PADDING,
-        right: PLOT_PADDING,
-        bottom: charHeight + TICK_PADDING_TOP + PLOT_PADDING + xAxisLabelHeight,
-        left: yTickWidth + TICK_PADDING_RIGHT + PLOT_PADDING + yAxisLabelHeight,
+        top: charHeight / 2,
+        right: 0,
+        bottom: charHeight + TICK_PADDING_TOP + xAxisLabelHeight,
+        left: yTickWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
       }
     }
   )
