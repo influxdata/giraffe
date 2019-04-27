@@ -7,11 +7,7 @@ import {drawLines} from '../utils/drawLines'
 import {collectLineData, simplifyLineData} from '../utils/lineData'
 import {clearCanvas} from '../utils/clearCanvas'
 import {LineHoverLayer} from './LineHoverLayer'
-import {
-  MAX_TOOLTIP_ROWS,
-  DEFAULT_LINE_WIDTH,
-  DEFAULT_HOVER_DIMENSION,
-} from '../constants'
+import {MAX_TOOLTIP_ROWS} from '../constants'
 import {useHoverLineIndices} from '../utils/useHoverLineIndices'
 import {getGroupColumn} from '../utils/getGroupColumn'
 import {getNumericColumn} from '../utils/getNumericColumn'
@@ -38,7 +34,8 @@ export const LineLayer: FunctionComponent<Props> = ({
     interpolation,
     x: xColKey,
     y: yColKey,
-    lineWidth = DEFAULT_LINE_WIDTH,
+    lineWidth,
+    hoverDimension,
   } = layer
 
   const {data: xColData} = getNumericColumn(table, xColKey)
@@ -57,12 +54,12 @@ export const LineLayer: FunctionComponent<Props> = ({
     [lineData, xScale, yScale]
   )
 
-  let hoverDimension = layer.hoverDimension || DEFAULT_HOVER_DIMENSION
-
-  if (hoverDimension === 'auto') {
-    hoverDimension =
-      Object.keys(lineData).length > MAX_TOOLTIP_ROWS ? 'xy' : 'x'
-  }
+  const resolvedHoverDimension =
+    hoverDimension === 'auto'
+      ? Object.keys(lineData).length > MAX_TOOLTIP_ROWS
+        ? 'xy'
+        : 'x'
+      : hoverDimension
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -77,7 +74,7 @@ export const LineLayer: FunctionComponent<Props> = ({
   }, [simplifiedLineData, canvasRef.current, interpolation, width, height])
 
   const hoverRowIndices = useHoverLineIndices(
-    hoverDimension,
+    resolvedHoverDimension,
     hoverX,
     hoverY,
     xColData,
@@ -98,7 +95,7 @@ export const LineLayer: FunctionComponent<Props> = ({
         ref={canvasRef}
         style={{
           position: 'absolute',
-          opacity: hoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
+          opacity: resolvedHoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
         }}
       />
       {hasHoverData && (
@@ -107,7 +104,7 @@ export const LineLayer: FunctionComponent<Props> = ({
           layerIndex={layerIndex}
           lineData={simplifiedLineData}
           rowIndices={hoverRowIndices}
-          dimension={hoverDimension}
+          dimension={resolvedHoverDimension}
         />
       )}
     </>

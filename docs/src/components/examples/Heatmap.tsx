@@ -4,7 +4,7 @@ import {RouteComponentProps} from '@reach/router'
 
 import {Plot, Config} from '../../../../src/'
 
-import {TABLE, COLOR_SCHEMES} from './'
+import {TABLE} from './'
 
 type Props = RouteComponentProps
 
@@ -16,7 +16,6 @@ export const HeatmapExample: FunctionComponent<Props> = ({}) => {
         type: 'heatmap',
         x: '_time',
         y: '_value',
-        colors: COLOR_SCHEMES.find(d => d.name === 'Inferno').colors,
       },
     ],
   }

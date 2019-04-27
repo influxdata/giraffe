@@ -25,3 +25,5 @@ export {
 } from './types'
 
 export {fluxToTable} from './utils/fluxToTable'
+
+export * from './constants/colorSchemes'

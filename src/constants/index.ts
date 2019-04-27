@@ -9,6 +9,9 @@ import {
   curveNatural,
 } from 'd3-shape'
 
+import {LayerConfig} from '../types'
+import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
+
 // TODO: Make configurable
 export const TICK_PADDING_RIGHT = 8
 export const TICK_PADDING_TOP = 8
@@ -29,5 +32,26 @@ export const CURVES = {
 
 export const MAX_TOOLTIP_ROWS = 8
 
-export const DEFAULT_LINE_WIDTH = 1
-export const DEFAULT_HOVER_DIMENSION = 'auto'
+export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
+  line: {
+    lineWidth: 1,
+    hoverDimension: 'auto',
+    fill: [],
+    colors: DEFAULT_COLOR_SCHEME,
+    interpolation: 'linear',
+  },
+  heatmap: {
+    colors: DEFAULT_COLOR_SCHEME,
+  },
+  scatter: {
+    colors: DEFAULT_COLOR_SCHEME,
+    fill: [],
+    symbol: [],
+  },
+  histogram: {
+    fill: [],
+    colors: DEFAULT_COLOR_SCHEME,
+    position: 'stacked',
+    binCount: null,
+  },
+}

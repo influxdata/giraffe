@@ -111,9 +111,9 @@ export interface LineLayerConfig {
   type: 'line'
   x: string
   y: string
-  fill: string[]
-  colors: string[]
-  interpolation: LineInterpolation
+  fill?: string[]
+  colors?: string[]
+  interpolation?: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
 }
@@ -154,7 +154,7 @@ export interface HeatmapLayerConfig {
   type: 'heatmap'
   x: string
   y: string
-  colors: string[]
+  colors?: string[]
 }
 
 export interface HeatmapScales {
@@ -185,9 +185,9 @@ export interface ScatterLayerConfig {
   type: 'scatter'
   x: string
   y: string
-  colors: string[]
-  fill: string[]
-  symbol: string[]
+  colors?: string[]
+  fill?: string[]
+  symbol?: string[]
 }
 
 export interface ScatterMappings {
@@ -225,8 +225,8 @@ export type HistogramPosition = 'overlaid' | 'stacked'
 export interface HistogramLayerConfig {
   type: 'histogram'
   x: string
-  fill: string[]
-  colors: string[]
+  fill?: string[]
+  colors?: string[]
   position?: HistogramPosition
   binCount?: number
 }

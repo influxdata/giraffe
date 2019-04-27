@@ -17,6 +17,7 @@ import {
   TICK_PADDING_TOP,
   TICK_PADDING_RIGHT,
   AXIS_LABEL_PADDING_BOTTOM,
+  LAYER_DEFAULTS,
 } from '../constants'
 
 import {stats} from '../stats'
@@ -36,9 +37,9 @@ const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   axisOpacity: 1,
   gridColor: '#292933',
   gridOpacity: 1,
-  tickFont: '10px "Helvetica Neue"',
+  tickFont: '10px sans-serif',
   tickFontColor: '#8e91a1',
-  legendFont: '12px "Helvetica Neue"',
+  legendFont: '10px monospace',
   legendFontColor: '#8e91a1',
   legendFontBrightColor: '#c6cad3',
   legendBackgroundColor: '#1c1c21',
@@ -68,7 +69,15 @@ export class PlotEnv {
   public set config(config: SizedConfig) {
     const prevConfig = this._config
 
-    this._config = {...CONFIG_DEFAULTS, ...config}
+    this._config = {
+      ...CONFIG_DEFAULTS,
+      ...config,
+      layers: config.layers.map(layer =>
+        LAYER_DEFAULTS[layer.type]
+          ? {...LAYER_DEFAULTS[layer.type], ...layer}
+          : layer
+      ),
+    }
 
     // Re-register layers if necessary
     this._config.layers.forEach((layer, i) => {

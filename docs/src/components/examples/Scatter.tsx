@@ -4,7 +4,7 @@ import {RouteComponentProps} from '@reach/router'
 
 import {Plot, Config} from '../../../../src/'
 
-import {TABLE, COLOR_SCHEMES} from './'
+import {TABLE} from './'
 
 type Props = RouteComponentProps
 
@@ -19,7 +19,6 @@ export const ScatterExample: FunctionComponent<Props> = () => {
         y: '_value',
         fill: ['cpu'],
         symbol: ['cpu'],
-        colors: COLOR_SCHEMES.find(d => d.name === 'InfluxDB A').colors,
       },
     ],
   }
