@@ -2,7 +2,7 @@ import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
 import {Tooltip} from './Tooltip'
-import {GROUP_COL_KEY} from '../constants'
+import {GROUP_COL_KEY, DEFAULT_LINE_WIDTH} from '../constants'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
@@ -32,7 +32,13 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
   const layer = env.config.layers[layerIndex] as LineLayerConfig
-  const {interpolation, x: xColKey, y: yColKey, fill: fillColKeys} = layer
+  const {
+    interpolation,
+    x: xColKey,
+    y: yColKey,
+    fill: fillColKeys,
+    lineWidth = DEFAULT_LINE_WIDTH,
+  } = layer
 
   const {
     xScale,
@@ -97,7 +103,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
         canvas,
         lineData: {[groupKey]: lineDatum},
         interpolation,
-        lineWidth: 2.5,
+        lineWidth: lineWidth * 2,
       })
     }
 
@@ -109,6 +115,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
       crosshairY,
       crosshairColor,
       points,
+      radius: lineWidth * 2,
     })
   })
 

@@ -7,7 +7,11 @@ import {drawLines} from '../utils/drawLines'
 import {collectLineData, simplifyLineData} from '../utils/lineData'
 import {clearCanvas} from '../utils/clearCanvas'
 import {LineHoverLayer} from './LineHoverLayer'
-import {MAX_TOOLTIP_ROWS} from '../constants'
+import {
+  MAX_TOOLTIP_ROWS,
+  DEFAULT_LINE_WIDTH,
+  DEFAULT_HOVER_DIMENSION,
+} from '../constants'
 import {useHoverLineIndices} from '../utils/useHoverLineIndices'
 import {getGroupColumn} from '../utils/getGroupColumn'
 import {getNumericColumn} from '../utils/getNumericColumn'
@@ -27,9 +31,15 @@ export const LineLayer: FunctionComponent<Props> = ({
 }) => {
   const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
-  const layer = env.config.layers[layerIndex] as LineLayerConfig
-  const {interpolation, x: xColKey, y: yColKey} = layer
   const {xScale, yScale, innerWidth: width, innerHeight: height} = env
+  const layer = env.config.layers[layerIndex] as LineLayerConfig
+
+  const {
+    interpolation,
+    x: xColKey,
+    y: yColKey,
+    lineWidth = DEFAULT_LINE_WIDTH,
+  } = layer
 
   const {data: xColData} = getNumericColumn(table, xColKey)
   const {data: yColData} = getNumericColumn(table, yColKey)
@@ -47,7 +57,7 @@ export const LineLayer: FunctionComponent<Props> = ({
     [lineData, xScale, yScale]
   )
 
-  let hoverDimension = layer.hoverDimension || 'auto'
+  let hoverDimension = layer.hoverDimension || DEFAULT_HOVER_DIMENSION
 
   if (hoverDimension === 'auto') {
     hoverDimension =
@@ -62,6 +72,7 @@ export const LineLayer: FunctionComponent<Props> = ({
       canvas: canvasRef.current,
       lineData: simplifiedLineData,
       interpolation,
+      lineWidth,
     })
   }, [simplifiedLineData, canvasRef.current, interpolation, width, height])
 

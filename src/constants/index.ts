@@ -28,3 +28,6 @@ export const CURVES = {
 }
 
 export const MAX_TOOLTIP_ROWS = 8
+
+export const DEFAULT_LINE_WIDTH = 1
+export const DEFAULT_HOVER_DIMENSION = 'auto'

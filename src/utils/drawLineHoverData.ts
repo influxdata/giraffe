@@ -6,6 +6,7 @@ interface DrawLinePointOptions {
   crosshairY: number | null
   crosshairColor: string
   points: Array<{x: number; y: number; fill: string}> | null
+  radius: number
 }
 
 export const drawLineHoverData = ({
@@ -16,6 +17,7 @@ export const drawLineHoverData = ({
   crosshairY,
   crosshairColor,
   points,
+  radius,
 }: DrawLinePointOptions): void => {
   const context = canvas.getContext('2d')
 
@@ -40,7 +42,7 @@ export const drawLineHoverData = ({
   if (points !== null) {
     for (const {x, y, fill} of points) {
       context.beginPath()
-      context.arc(x, y, 3, 0, 2 * Math.PI)
+      context.arc(x, y, radius, 0, 2 * Math.PI)
       context.fillStyle = fill
       context.fill()
     }

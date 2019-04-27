@@ -115,6 +115,7 @@ export interface LineLayerConfig {
   colors: string[]
   interpolation: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
+  lineWidth?: number
 }
 
 export interface LineMappings {
