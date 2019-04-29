@@ -119,5 +119,5 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
     })
   }, [canvas.current, scatterData, width, height, xScale, yScale])
 
-  return <canvas className="minard-layer scatter" ref={canvas} />
+  return <canvas className="vis-layer scatter" ref={canvas} />
 }

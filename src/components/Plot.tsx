@@ -15,7 +15,7 @@ export const Plot: FunctionComponent<Props> = ({config}) => {
   }
 
   return (
-    <AutoSizer>
+    <AutoSizer className="vis-autosizer">
       {({width, height}) => {
         if (width === 0 || height === 0) {
           return null

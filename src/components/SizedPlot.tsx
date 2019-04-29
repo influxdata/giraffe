@@ -84,11 +84,11 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
   }, [env])
 
   return (
-    <div className="minard-plot" style={plotStyle}>
+    <div className="vis-plot" style={plotStyle}>
       {showAxes && (
         <Axes env={env} style={{position: 'absolute', top: 0, left: 0}} />
       )}
-      <div className="minard-layers" style={layersStyle}>
+      <div className="vis-layers" style={layersStyle}>
         {config.layers.map((layer, i) => {
           switch (layer.type) {
             case 'line':
@@ -121,7 +121,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
         })}
       </div>
       <div
-        className="minard-interaction-region"
+        className="vis-interaction-region"
         style={layersStyle}
         ref={mouseRegion}
         onDoubleClick={handleResetDomains}

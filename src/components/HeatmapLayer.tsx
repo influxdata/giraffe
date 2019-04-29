@@ -71,5 +71,5 @@ export const HeatmapLayer: FunctionComponent<Props> = ({layerIndex, env}) => {
     })
   }, [canvasRef.current, width, height, table, xScale, yScale, fillScale])
 
-  return <canvas className="minard-layer heatmap" ref={canvasRef} />
+  return <canvas className="vis-layer heatmap" ref={canvasRef} />
 }
