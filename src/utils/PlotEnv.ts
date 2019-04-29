@@ -279,7 +279,7 @@ export class PlotEnv {
       {charWidth, charHeight}: TextMetrics
     ) => {
       if (!showAxes) {
-        return {top: 0, right: 0, bottom: 0, left: 0}
+        return {top: 1, right: 1, bottom: 1, left: 1}
       }
 
       const xAxisLabelHeight = xAxisLabel
@@ -295,7 +295,7 @@ export class PlotEnv {
 
       return {
         top: charHeight / 2,
-        right: 0,
+        right: 1,
         bottom: charHeight + TICK_PADDING_TOP + xAxisLabelHeight,
         left: yTickWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
       }
