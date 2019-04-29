@@ -407,6 +407,10 @@ const isLayerStale = (
     return true
   }
 
+  if (prevConfig.table !== config.table) {
+    return true
+  }
+
   const layer = config.layers[layerIndex]
   const prevLayer = prevConfig.layers[layerIndex]
 
