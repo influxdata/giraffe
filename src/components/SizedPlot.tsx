@@ -38,6 +38,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
         position: 'relative',
         width: `${width}px`,
         height: `${height}px`,
+        userSelect: 'none',
       } as CSSProperties),
     [width, height]
   )
