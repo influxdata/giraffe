@@ -1,10 +1,10 @@
 import {useLayoutStyle} from './useLayoutStyle'
-import {useMousePos} from './useMousePos'
+import {useRefMousePos} from './useMousePos'
 
 const MARGIN_X = 30
 
 export const useTooltipStyle = (el: HTMLDivElement) => {
-  const {x, y} = useMousePos(document.body)
+  const {x, y} = useRefMousePos(document.body)
 
   // Position the tooltip next to the mouse cursor, like this:
   //

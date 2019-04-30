@@ -40,6 +40,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
         color: fontBrightColor,
         borderRadius: '3px',
         padding: '10px',
+        cursor: 'crosshair',
       }}
     >
       <div

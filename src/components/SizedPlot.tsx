@@ -43,7 +43,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
     [width, height]
   )
 
-  const layersStyle = useMemo(
+  const innerPlotStyle = useMemo(
     () =>
       ({
         position: 'absolute',
@@ -56,10 +56,18 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
     [margins]
   )
 
+  const fullsizeStyle: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
+
   const forceUpdate = useForceUpdate()
-  const mouseRegion = useRef<HTMLDivElement>(null)
-  const hoverEvent = useMousePos(mouseRegion.current)
-  const dragEvent = useDragEvent(mouseRegion.current)
+  const innerPlotRef = useRef<HTMLDivElement>(null)
+  const [hoverEvent, hoverProps] = useMousePos()
+  const dragEvent = useDragEvent(innerPlotRef.current)
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
@@ -86,48 +94,47 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
 
   return (
     <div className="vis-plot" style={plotStyle}>
-      {showAxes && (
-        <Axes env={env} style={{position: 'absolute', top: 0, left: 0}} />
-      )}
-      <div className="vis-layers" style={layersStyle}>
-        {config.layers.map((layer, i) => {
-          switch (layer.type) {
-            case 'line':
-              return (
-                <LineLayer
-                  key={i}
-                  layerIndex={i}
-                  env={env}
-                  hoverX={hoverX}
-                  hoverY={hoverY}
-                />
-              )
-            case 'histogram':
-              return (
-                <HistogramLayer
-                  key={i}
-                  layerIndex={i}
-                  env={env}
-                  hoverX={hoverX}
-                  hoverY={hoverY}
-                />
-              )
-            case 'heatmap':
-              return <HeatmapLayer key={i} layerIndex={i} env={env} />
-            case 'scatter':
-              return <ScatterLayer key={i} layerIndex={i} env={env} />
-            default:
-              return null
-          }
-        })}
-        {children && children}
-      </div>
+      {showAxes && <Axes env={env} style={fullsizeStyle} />}
       <div
-        className="vis-interaction-region"
-        style={layersStyle}
-        ref={mouseRegion}
+        className="vis-inner-plot"
+        style={innerPlotStyle}
+        ref={innerPlotRef}
         onDoubleClick={handleResetDomains}
+        {...hoverProps}
       >
+        <div className="vis-layers" style={fullsizeStyle}>
+          {config.layers.map((layer, i) => {
+            switch (layer.type) {
+              case 'line':
+                return (
+                  <LineLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
+              case 'histogram':
+                return (
+                  <HistogramLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
+              case 'heatmap':
+                return <HeatmapLayer key={i} layerIndex={i} env={env} />
+              case 'scatter':
+                return <ScatterLayer key={i} layerIndex={i} env={env} />
+              default:
+                return null
+            }
+          })}
+          {children && children}
+        </div>
         <Brush
           event={dragEvent}
           width={env.innerWidth}
