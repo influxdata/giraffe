@@ -20,24 +20,27 @@ export const getLineTooltipData = (
   const colors = hoveredRowIndices.map(i => fillScale(groupCol.data[i]))
 
   const tooltipXCol = {
-    name: xColKey,
+    key: xColKey,
+    name: xCol.name,
     type: xCol.type,
     colors,
     values: hoveredRowIndices.map(i => xTickFormatter(xCol.data[i])),
   }
 
   const tooltipYCol = {
-    name: yColKey,
+    key: yColKey,
+    name: yCol.name,
     type: yCol.type,
     colors,
     values: hoveredRowIndices.map(i => yTickFormatter(yCol.data[i])),
   }
 
-  const fillColumns = fillColKeys.map(name => ({
-    name,
-    type: table.columns[name].type,
+  const fillColumns = fillColKeys.map(key => ({
+    key,
+    name: table.columns[key].name,
+    type: table.columns[key].type,
     colors,
-    values: hoveredRowIndices.map(i => String(table.columns[name].data[i])),
+    values: hoveredRowIndices.map(i => String(table.columns[key].data[i])),
   }))
 
   return [tooltipXCol, tooltipYCol, ...fillColumns]

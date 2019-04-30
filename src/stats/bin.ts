@@ -151,18 +151,22 @@ export const bin = (
       xMin: {
         data: [],
         type: xColType,
+        name: 'xMin',
       },
       xMax: {
         data: [],
         type: xColType,
+        name: 'xMin',
       },
       yMin: {
         data: [],
         type: 'int',
+        name: 'xMin',
       },
       yMax: {
         data: [],
         type: 'int',
+        name: 'xMin',
       },
     },
     length: binCount * groupKeys.length,

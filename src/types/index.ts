@@ -74,6 +74,7 @@ export interface Margins {
 }
 
 export interface TooltipColumn {
+  key: string
   name: string
   type: ColumnType
   values: string[]
@@ -277,6 +278,7 @@ export interface Config {
   legendBackgroundColor?: string
   legendBorder?: string
   legendCrosshairColor?: string
+  legendColumns?: string[]
 }
 
 export type SizedConfig = Config & {width: number; height: number}

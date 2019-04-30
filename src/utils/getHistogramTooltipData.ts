@@ -40,6 +40,7 @@ export const getHistogramTooltipData = (
   const colors = hoveredRowIndices.map(i => fillScale(groupCol.data[i]))
 
   const xColumn = {
+    key: xColKey,
     name: xColKey,
     type: 'float' as ColumnType,
     colors,
@@ -49,6 +50,7 @@ export const getHistogramTooltipData = (
   }
 
   const countColumn = {
+    key: 'count',
     name: 'count',
     type: 'uint' as ColumnType,
     colors,
@@ -57,11 +59,12 @@ export const getHistogramTooltipData = (
     ),
   }
 
-  const fillColumns = fillColKeys.map(name => ({
-    name,
-    type: table.columns[name].type,
+  const fillColumns = fillColKeys.map(key => ({
+    key,
+    name: table.columns[key].name,
+    type: table.columns[key].type,
     colors,
-    values: hoveredRowIndices.map(i => String(table.columns[name].data[i])),
+    values: hoveredRowIndices.map(i => String(table.columns[key].data[i])),
   }))
 
   return [xColumn, countColumn, ...fillColumns]

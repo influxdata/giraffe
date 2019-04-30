@@ -22,8 +22,13 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
       legendFontBrightColor: fontBrightColor,
       legendBackgroundColor: backgroundColor,
       legendBorder: border,
+      legendColumns: columnsWhitelist,
     },
   } = env
+
+  const columns = columnsWhitelist
+    ? data.filter(column => columnsWhitelist.includes(column.key))
+    : data
 
   return createPortal(
     <div
@@ -44,7 +49,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
           justifyContent: 'space-between',
         }}
       >
-        {data.map(({name, type, values, colors}, i) => (
+        {columns.map(({name, type, values, colors}, i) => (
           <div
             key={name}
             className="vis-tooltip-column"
