@@ -37,10 +37,12 @@ export const getHistogramTooltipData = (
   const yMaxCol = getNumericColumn(table, 'yMax')
   const groupCol = getGroupColumn(table)
 
+  const colors = hoveredRowIndices.map(i => fillScale(groupCol.data[i]))
+
   const xColumn = {
     name: xColKey,
     type: 'float' as ColumnType,
-    colors: null,
+    colors,
     values: hoveredRowIndices.map(i =>
       getRangeLabel(xMinCol.data[i], xMaxCol.data[i], xTickFormatter)
     ),
@@ -49,7 +51,7 @@ export const getHistogramTooltipData = (
   const countColumn = {
     name: 'count',
     type: 'uint' as ColumnType,
-    colors: null,
+    colors,
     values: hoveredRowIndices.map(i =>
       yTickFormatter(yMaxCol.data[i] - yMinCol.data[i])
     ),
@@ -58,8 +60,8 @@ export const getHistogramTooltipData = (
   const fillColumns = fillColKeys.map(name => ({
     name,
     type: table.columns[name].type,
+    colors,
     values: hoveredRowIndices.map(i => String(table.columns[name].data[i])),
-    colors: hoveredRowIndices.map(i => fillScale(groupCol.data[i])),
   }))
 
   return [xColumn, countColumn, ...fillColumns]
