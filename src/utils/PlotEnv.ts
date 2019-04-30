@@ -25,7 +25,8 @@ import {getTicks} from './getTicks'
 import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
-import {getTextMetrics, TextMetrics} from './getTextMetrics'
+import {getTextMetrics} from './getTextMetrics'
+import {maxBy} from './extrema'
 import {isMostlyEqual} from './isMostlyEqual'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
@@ -98,15 +99,13 @@ export class PlotEnv {
       config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
 
-    const textMetrics = this.getTextMetrics(tickFont)
-
     return this.getMargins(
       this.config.showAxes,
       xAxisLabel,
       yAxisLabel,
       yTicks,
       this.yTickFormatter,
-      textMetrics
+      tickFont
     )
   }
 
@@ -130,7 +129,7 @@ export class PlotEnv {
       this.config.width,
       'horizontal',
       this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax']),
-      this.getTextMetrics(this.config.tickFont)
+      this.getCharMetrics(this.config.tickFont)
     )
   }
 
@@ -140,7 +139,7 @@ export class PlotEnv {
       this.config.height,
       'vertical',
       this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax']),
-      this.getTextMetrics(this.config.tickFont)
+      this.getCharMetrics(this.config.tickFont)
     )
   }
 
@@ -251,7 +250,10 @@ export class PlotEnv {
     }
   }
 
-  private getTextMetrics = memoizeOne(getTextMetrics)
+  private getCharMetrics = memoizeOne((font: string) => {
+    // https://stackoverflow.com/questions/3949422/which-letter-of-the-english-alphabet-takes-up-most-pixels
+    return getTextMetrics(font, 'W')
+  })
 
   private get isXControlled() {
     return (
@@ -276,28 +278,35 @@ export class PlotEnv {
       yAxisLabel: string,
       yTicks: number[],
       yTickFormatter: (tick: number) => string,
-      {charWidth, charHeight}: TextMetrics
+      tickFont: string
     ) => {
       if (!showAxes) {
         return {top: 1, right: 1, bottom: 1, left: 1}
       }
 
+      const longestYTick = maxBy(
+        d => d.length,
+        yTicks.map(t => yTickFormatter(t))
+      )
+
+      const {width: maxTextWidth, height: textHeight} = getTextMetrics(
+        tickFont,
+        longestYTick
+      )
+
       const xAxisLabelHeight = xAxisLabel
-        ? charHeight + AXIS_LABEL_PADDING_BOTTOM
+        ? textHeight + AXIS_LABEL_PADDING_BOTTOM
         : 0
 
       const yAxisLabelHeight = yAxisLabel
-        ? charHeight + AXIS_LABEL_PADDING_BOTTOM
+        ? textHeight + AXIS_LABEL_PADDING_BOTTOM
         : 0
 
-      const yTickWidth =
-        Math.max(...yTicks.map(t => yTickFormatter(t).length)) * charWidth
-
       return {
-        top: charHeight / 2,
+        top: textHeight / 2,
         right: 1,
-        bottom: charHeight + TICK_PADDING_TOP + xAxisLabelHeight,
-        left: yTickWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
+        bottom: textHeight + TICK_PADDING_TOP + xAxisLabelHeight,
+        left: maxTextWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
       }
     }
   )

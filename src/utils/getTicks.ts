@@ -12,7 +12,7 @@ export const getTicks = (
   length: number,
   orientation: 'vertical' | 'horizontal',
   columnType: ColumnType,
-  textMetrics: TextMetrics
+  charMetrics: TextMetrics
 ): number[] => {
   let sampleTick
 
@@ -23,7 +23,7 @@ export const getTicks = (
   }
 
   const charLength =
-    orientation === 'vertical' ? textMetrics.charHeight : textMetrics.charWidth
+    orientation === 'vertical' ? charMetrics.height : charMetrics.width
 
   const numTicks = getNumTicks(sampleTick, length, charLength)
 

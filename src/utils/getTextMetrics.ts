@@ -1,30 +1,27 @@
 export interface TextMetrics {
-  charWidth: number
-  charHeight: number
-  charSpacing: number
+  width: number
+  height: number
 }
 
-export const getTextMetrics = (fontSpec: string): TextMetrics => {
+export const getTextMetrics = (font: string, text: string): TextMetrics => {
   const div = document.createElement('div')
-
-  div.setAttribute(
-    'style',
-    `font: ${fontSpec}; display: inline; position: fixed; left: 0; right: 0`
-  )
-
   const span = document.createElement('span')
 
   div.appendChild(span)
 
-  // https://stackoverflow.com/questions/3949422/which-letter-of-the-english-alphabet-takes-up-most-pixels
-  span.appendChild(document.createTextNode('W'))
+  // Translate offscreen
+  div.setAttribute(
+    'style',
+    `font: ${font}; display: inline; position: fixed; transform: translate(-9999px, -9999px);`
+  )
 
   document.body.appendChild(div)
 
+  span.innerText = text
+
   const metrics = {
-    charWidth: span.offsetWidth,
-    charHeight: span.offsetHeight,
-    charSpacing: 1,
+    width: span.offsetWidth,
+    height: span.offsetHeight,
   }
 
   document.body.removeChild(div)

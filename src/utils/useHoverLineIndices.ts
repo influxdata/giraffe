@@ -3,6 +3,7 @@ import {range} from 'd3-array'
 import {Scale} from '../types'
 import {useLazyMemo} from './useLazyMemo'
 import {isDefined} from './isDefined'
+import {minBy} from './extrema'
 
 export const useHoverLineIndices = (
   mode: 'x' | 'y' | 'xy',
@@ -321,22 +322,6 @@ const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
 
 const sqDist = (x0: number, y0: number, x1: number, y1: number): number => {
   return (x1 - x0) ** 2 + (y1 - y0) ** 2
-}
-
-const minBy = <T>(f: (x: T) => number, xs: T[]): T => {
-  let minX = null
-  let minDistance = Infinity
-
-  for (const x of xs) {
-    const distance = f(x)
-
-    if (distance < minDistance) {
-      minX = x
-      minDistance = distance
-    }
-  }
-
-  return minX
 }
 
 interface NearestIndexByGroup {
