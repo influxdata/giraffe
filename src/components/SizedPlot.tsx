@@ -24,7 +24,7 @@ interface Props {
   config: SizedConfig
 }
 
-export const SizedPlot: FunctionComponent<Props> = ({config}) => {
+export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
   const env = usePlotEnv(config)
 
   const {
@@ -120,6 +120,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config}) => {
               return null
           }
         })}
+        {children && children}
       </div>
       <div
         className="vis-interaction-region"

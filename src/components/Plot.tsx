@@ -9,9 +9,9 @@ interface Props {
   config: Config
 }
 
-export const Plot: FunctionComponent<Props> = ({config}) => {
+export const Plot: FunctionComponent<Props> = ({config, children}) => {
   if (config.width && config.height) {
-    return <SizedPlot config={config as SizedConfig} />
+    return <SizedPlot config={config as SizedConfig}>{children}</SizedPlot>
   }
 
   return (
@@ -21,7 +21,9 @@ export const Plot: FunctionComponent<Props> = ({config}) => {
           return null
         }
 
-        return <SizedPlot config={{...config, width, height}} />
+        return (
+          <SizedPlot config={{...config, width, height}}>{children}</SizedPlot>
+        )
       }}
     </AutoSizer>
   )
