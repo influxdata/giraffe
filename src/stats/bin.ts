@@ -80,15 +80,15 @@ export const binStat = (
 */
 export const bin = (
   table: Table,
-  xColName: string,
+  xColKey: string,
   xDomain: number[],
-  groupColNames: string[] = [],
+  groupColKeys: string[] = [],
   binCount: number,
   position: HistogramPosition
 ): HistogramTable => {
-  const col = table.columns[xColName]
+  const col = table.columns[xColKey]
 
-  assert(`could not find column "${xColName}"`, !!col)
+  assert(`could not find column "${xColKey}"`, !!col)
   assert(`unsupported value column type "${col.type}"`, isNumeric(col.type))
 
   const xCol = col.data as number[]
@@ -103,7 +103,7 @@ export const bin = (
   const bins = createBins(xDomain, binCount)
 
   // A group is the set of key-value pairs that a row takes on for the column
-  // names specified in `groupColNames`. The group key is a hashable
+  // names specified in `groupColKeys`. The group key is a hashable
   // representation of the values of these pairs.
   const groupsByGroupKey = {}
 
@@ -122,7 +122,7 @@ export const bin = (
       continue
     }
 
-    const group = getGroup(table, groupColNames, i)
+    const group = getGroup(table, groupColKeys, i)
     const groupKey = getGroupKey(Object.values(group))
     const xPercentage = (x - xDomain[0]) / (xDomain[1] - xDomain[0])
 
@@ -156,27 +156,28 @@ export const bin = (
       xMax: {
         data: [],
         type: xColType,
-        name: 'xMin',
+        name: 'xMax',
       },
       yMin: {
         data: [],
         type: 'int',
-        name: 'xMin',
+        name: 'yMin',
       },
       yMax: {
         data: [],
         type: 'int',
-        name: 'xMin',
+        name: 'yMax',
       },
     },
     length: binCount * groupKeys.length,
   }
 
   // Include original columns used to group data in the resulting table
-  for (const name of groupColNames) {
-    statTable.columns[name] = {
+  for (const key of groupColKeys) {
+    statTable.columns[key] = {
       data: [],
-      type: table.columns[name].type,
+      name: table.columns[key].name,
+      type: table.columns[key].type,
     }
   }
 
@@ -245,10 +246,10 @@ const resolveXDomain = (
   return domain
 }
 
-const getGroup = (table: Table, groupColNames: string[], i: number) => {
+const getGroup = (table: Table, groupColKeys: string[], i: number) => {
   const result = {}
 
-  for (const key of groupColNames) {
+  for (const key of groupColKeys) {
     result[key] = table.columns[key].data[i]
   }
 
