@@ -9,7 +9,6 @@ import {
   Mappings,
   Table,
   Scales,
-  LayerConfig,
   ColumnType,
 } from '../types'
 
@@ -80,16 +79,24 @@ export class PlotEnv {
       ),
     }
 
-    // Re-register layers if necessary
-    this._config.layers.forEach((layer, i) => {
-      if (isLayerStale(this._config, prevConfig, i)) {
-        this.registerLayer(i, layer)
-      }
-    })
+    const shouldRunStats =
+      !prevConfig ||
+      this._config.table !== prevConfig.table ||
+      this._config.xDomain !== prevConfig.xDomain ||
+      this._config.yDomain !== prevConfig.yDomain ||
+      this._config.layers.some((_, i) =>
+        isLayerStale(this._config, prevConfig, i)
+      )
 
-    // Reset domains if necessary
-    if (areDomainsStale(this._config, prevConfig)) {
-      this.resetDomains()
+    if (shouldRunStats) {
+      this._xDomain = null
+      this._yDomain = null
+
+      this.layers = this._config.layers.map(layerConfig => {
+        const stat = stats[layerConfig.type]
+
+        return stat(this._config, layerConfig as any)
+      })
     }
   }
 
@@ -360,12 +367,6 @@ export class PlotEnv {
       )
     }
   )
-
-  private registerLayer(layerIndex: number, layer: LayerConfig): void {
-    const stat = stats[layer.type]
-
-    this.layers[layerIndex] = stat(this.config, layer as any)
-  }
 }
 
 const getDomainsForLayer = (
@@ -428,19 +429,4 @@ const isLayerStale = (
   }
 
   return !isMostlyEqual(layer, prevLayer)
-}
-
-const areDomainsStale = (
-  config: SizedConfig,
-  prevConfig: SizedConfig | null
-): boolean => {
-  if (!prevConfig) {
-    return true
-  }
-
-  if (config.table !== prevConfig.table) {
-    return true
-  }
-
-  return config.layers.some((_, i) => isLayerStale(config, prevConfig, i))
 }
