@@ -1006,6 +1006,7 @@ export const TABLE: Table = {
         1554311238000,
       ],
       type: 'time',
+      name: '_time',
     },
     _value: {
       data: [
@@ -2011,6 +2012,7 @@ export const TABLE: Table = {
         1.098901098901099,
       ],
       type: 'float',
+      name: '_value',
     },
     cpu: {
       data: [
@@ -3016,6 +3018,7 @@ export const TABLE: Table = {
         'cpu3',
       ],
       type: 'string',
+      name: 'cpu',
     },
   },
   length: 1000,
