@@ -29,7 +29,10 @@ export const isMostlyEqual = (a: object, b: object): boolean => {
     }
 
     if (Array.isArray(aValue)) {
-      return aValue.every((x, i) => x === bValue[i])
+      return (
+        aValue.length === bValue.length &&
+        aValue.every((x, i) => x === bValue[i])
+      )
     }
 
     return aValue === bValue
