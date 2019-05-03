@@ -1,4 +1,4 @@
-[ -f .env] && source .env
+[ -f .env ] && source .env
 
 # See https://docs.chromaticqa.com/setup_ci
 if [ "${CIRCLE_BRANCH}" != "master" ];
