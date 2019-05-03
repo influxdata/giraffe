@@ -1,7 +1,6 @@
 import {csvParse, csvParseRows} from 'd3-dsv'
 
 import {Table, ColumnType, TableColumn} from '../types'
-import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 
 interface FluxToTableResult {
@@ -36,7 +35,7 @@ interface FluxToTableResult {
 
       column_a | column_b (string) | column_b (float) | column_c | column_d  <-- key
       column_a | column_b          | column_b         | column_c | column_d  <-- name
-      int      | string            | float            | int      | bool      <-- type
+      number   | string            | number           | number   | bool      <-- type
       ---------------------------------------------------------------------
              1 |               "g" |             1.0  |       34 | 
              2 |               "f" |             2.0  |       58 |
@@ -55,7 +54,7 @@ interface FluxToTableResult {
   The `Table` stores a `key` for each column which is seperate from the column
   `name`. If multiple Flux tables have the same column but with different
   types, they will be distinguished by different keys in the resulting `Table`;
-  otherwise the `key` and `value` for each column in the result table will be
+  otherwise the `key` and `name` for each column in the result table will be
   identical.
 
   [0]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#csv
@@ -185,9 +184,9 @@ const extractTableText = (chunk: string): string => {
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
   boolean: 'bool',
-  unsignedLong: 'uint',
-  long: 'int',
-  double: 'float',
+  unsignedLong: 'number',
+  long: 'number',
+  double: 'number',
   string: 'string',
   'dateTime:RFC3339': 'time',
 }
@@ -229,7 +228,7 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return Date.parse(value)
   }
 
-  if (isNumeric(columnType)) {
+  if (columnType === 'number') {
     return Number(value)
   }
 

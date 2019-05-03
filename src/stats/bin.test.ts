@@ -6,7 +6,7 @@ const TABLE: Table = {
     _value: {
       data: [70, 56, 60, 100, 76, 0, 63, 48, 79, 67],
       name: '_value',
-      type: 'int',
+      type: 'number',
     },
     _field: {
       data: [
@@ -49,10 +49,10 @@ describe('bin', () => {
     const actual = bin(TABLE, '_value', null, [], 5, 'stacked')
     const expected = {
       columns: {
-        xMin: {data: [0, 20, 40, 60, 80], type: 'int', name: 'xMin'},
-        xMax: {data: [20, 40, 60, 80, 100], type: 'int', name: 'xMax'},
-        yMin: {data: [0, 0, 0, 0, 0], type: 'int', name: 'yMin'},
-        yMax: {data: [1, 0, 2, 6, 1], type: 'int', name: 'yMax'},
+        xMin: {data: [0, 20, 40, 60, 80], type: 'number', name: 'xMin'},
+        xMax: {data: [20, 40, 60, 80, 100], type: 'number', name: 'xMax'},
+        yMin: {data: [0, 0, 0, 0, 0], type: 'number', name: 'yMin'},
+        yMax: {data: [1, 0, 2, 6, 1], type: 'number', name: 'yMax'},
       },
       length: 5,
     }
@@ -66,16 +66,24 @@ describe('bin', () => {
     const expected = {
       xMin: {
         data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80],
-        type: 'int',
+        type: 'number',
         name: 'xMin',
       },
       xMax: {
         data: [20, 40, 60, 80, 100, 20, 40, 60, 80, 100],
-        type: 'int',
+        type: 'number',
         name: 'xMax',
       },
-      yMin: {data: [0, 0, 0, 0, 0, 0, 0, 1, 3, 1], type: 'int', name: 'yMin'},
-      yMax: {data: [0, 0, 1, 3, 1, 1, 0, 2, 6, 1], type: 'int', name: 'yMax'},
+      yMin: {
+        data: [0, 0, 0, 0, 0, 0, 0, 1, 3, 1],
+        type: 'number',
+        name: 'yMin',
+      },
+      yMax: {
+        data: [0, 0, 1, 3, 1, 1, 0, 2, 6, 1],
+        type: 'number',
+        name: 'yMax',
+      },
       _field: {
         data: [
           'usage_guest',
@@ -103,16 +111,24 @@ describe('bin', () => {
     const expected = {
       xMin: {
         data: [0, 20, 40, 60, 80, 0, 20, 40, 60, 80],
-        type: 'int',
+        type: 'number',
         name: 'xMin',
       },
       xMax: {
         data: [20, 40, 60, 80, 100, 20, 40, 60, 80, 100],
-        type: 'int',
+        type: 'number',
         name: 'xMax',
       },
-      yMin: {data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], type: 'int', name: 'yMin'},
-      yMax: {data: [0, 0, 1, 3, 1, 1, 0, 1, 3, 0], type: 'int', name: 'yMax'},
+      yMin: {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        type: 'number',
+        name: 'yMin',
+      },
+      yMax: {
+        data: [0, 0, 1, 3, 1, 1, 0, 1, 3, 0],
+        type: 'number',
+        name: 'yMax',
+      },
       _field: {
         data: [
           'usage_guest',
@@ -140,16 +156,24 @@ describe('bin', () => {
     const expected = {
       xMin: {
         data: [-200, -160, -120, -80, -40, 0, 40, 80, 120, 160],
-        type: 'int',
+        type: 'number',
         name: 'xMin',
       },
       xMax: {
         data: [-160, -120, -80, -40, 0, 40, 80, 120, 160, 200],
-        type: 'int',
+        type: 'number',
         name: 'xMax',
       },
-      yMin: {data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], type: 'int', name: 'yMin'},
-      yMax: {data: [0, 0, 0, 0, 0, 1, 8, 1, 0, 0], type: 'int', name: 'yMax'},
+      yMin: {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        type: 'number',
+        name: 'yMin',
+      },
+      yMax: {
+        data: [0, 0, 0, 0, 0, 1, 8, 1, 0, 0],
+        type: 'number',
+        name: 'yMax',
+      },
     }
 
     expect(actual).toEqual(expected)
@@ -159,10 +183,10 @@ describe('bin', () => {
     const actual = bin(TABLE, '_value', [50, 80], [], 3, 'stacked').columns
 
     const expected = {
-      xMin: {data: [50, 60, 70], type: 'int', name: 'xMin'},
-      xMax: {data: [60, 70, 80], type: 'int', name: 'xMax'},
-      yMin: {data: [0, 0, 0], type: 'int', name: 'yMin'},
-      yMax: {data: [1, 3, 3], type: 'int', name: 'yMax'},
+      xMin: {data: [50, 60, 70], type: 'number', name: 'xMin'},
+      xMax: {data: [60, 70, 80], type: 'number', name: 'xMax'},
+      yMin: {data: [0, 0, 0], type: 'number', name: 'yMin'},
+      yMax: {data: [1, 3, 3], type: 'number', name: 'yMax'},
     }
 
     expect(actual).toEqual(expected)

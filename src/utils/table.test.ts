@@ -6,12 +6,12 @@ test('filterTable', () => {
     columns: {
       a: {
         name: 'a',
-        type: 'int',
+        type: 'number',
         data: [11, 15, 20, 4, 2],
       },
       b: {
         name: 'b',
-        type: 'int',
+        type: 'number',
         data: [1, 2, 3, 1, 9],
       },
     },
@@ -24,12 +24,12 @@ test('filterTable', () => {
     columns: {
       a: {
         name: 'a',
-        type: 'int',
+        type: 'number',
         data: [15, 20, 2],
       },
       b: {
         name: 'b',
-        type: 'int',
+        type: 'number',
         data: [2, 3, 9],
       },
     },

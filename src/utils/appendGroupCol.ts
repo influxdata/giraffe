@@ -16,7 +16,7 @@ export const appendGroupCol = <T extends Table>(
     ...table,
     columns: {
       ...table.columns,
-      [GROUP_COL_KEY]: {data, type: 'string'},
+      [GROUP_COL_KEY]: {data, type: 'string', name: GROUP_COL_KEY},
     },
   }
 }

@@ -1,24 +1,10 @@
 import {SymbolType} from 'd3-shape'
 
-export type ColumnType = 'int' | 'uint' | 'float' | 'string' | 'time' | 'bool'
+export type ColumnType = 'number' | 'string' | 'time' | 'bool'
 
-export type NumericColumnType = 'int' | 'uint' | 'float' | 'time'
-
-export interface FloatColumn {
+export interface NumberColumn {
   data: number[]
-  type: 'float'
-  name: string
-}
-
-export interface IntColumn {
-  data: number[]
-  type: 'int'
-  name: string
-}
-
-export interface UIntColumn {
-  data: number[]
-  type: 'uint'
+  type: 'number'
   name: string
 }
 
@@ -40,19 +26,7 @@ export interface BoolColumn {
   name: string
 }
 
-export type NumericTableColumn =
-  | FloatColumn
-  | IntColumn
-  | UIntColumn
-  | TimeColumn
-
-export type TableColumn =
-  | FloatColumn
-  | IntColumn
-  | UIntColumn
-  | TimeColumn
-  | StringColumn
-  | BoolColumn
+export type TableColumn = NumberColumn | TimeColumn | StringColumn | BoolColumn
 
 export interface Table {
   length: number
@@ -131,10 +105,10 @@ export interface LineScales {
 
 export interface HistogramTable extends Table {
   columns: {
-    xMin: NumericTableColumn
-    xMax: NumericTableColumn
-    yMin: IntColumn
-    yMax: IntColumn
+    xMin: NumberColumn | TimeColumn
+    xMax: NumberColumn | TimeColumn
+    yMin: NumberColumn
+    yMax: NumberColumn
     [fillColumn: string]: TableColumn
   }
   length: number
@@ -142,11 +116,11 @@ export interface HistogramTable extends Table {
 
 export interface HeatmapTable extends Table {
   columns: {
-    xMin: NumericTableColumn
-    xMax: NumericTableColumn
-    yMin: NumericTableColumn
-    yMax: NumericTableColumn
-    count: IntColumn
+    xMin: NumberColumn | TimeColumn
+    xMax: NumberColumn | TimeColumn
+    yMin: NumberColumn | TimeColumn
+    yMax: NumberColumn | TimeColumn
+    count: NumberColumn
   }
   length: number
 }
