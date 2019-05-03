@@ -1,11 +1,11 @@
 import {assert} from './assert'
 import {isNumeric} from './isNumeric'
-import {Table, NumericTableColumn} from '../types'
+import {Table, NumberColumn, TimeColumn} from '../types'
 
 export const getNumericColumn = (
   table: Table,
   key: string
-): NumericTableColumn => {
+): NumberColumn | TimeColumn => {
   const col = table.columns[key]
 
   assert(
@@ -15,5 +15,5 @@ export const getNumericColumn = (
     isNumeric(col.type)
   )
 
-  return col as NumericTableColumn
+  return col as NumberColumn | TimeColumn
 }

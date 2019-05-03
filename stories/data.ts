@@ -2011,7 +2011,7 @@ export const TABLE: Table = {
         1.2012012012012012,
         1.098901098901099,
       ],
-      type: 'float',
+      type: 'number',
       name: '_value',
     },
     cpu: {

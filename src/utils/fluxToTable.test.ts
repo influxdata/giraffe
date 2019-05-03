@@ -41,8 +41,8 @@ describe('fluxToTable', () => {
             type: 'time',
             data: [1549064313000, 1549064323000, 1549064313000, 1549064323000],
           },
-          '_value (float)': {
-            type: 'float',
+          '_value (number)': {
+            type: 'number',
             name: '_value',
             data: [10, 20],
           },
@@ -73,7 +73,7 @@ describe('fluxToTable', () => {
           },
           table: {
             name: 'table',
-            type: 'int',
+            type: 'number',
             data: [0, 1, 2, 3],
           },
         },
@@ -86,7 +86,7 @@ describe('fluxToTable', () => {
         '_measurement',
         'cpu',
         'host',
-        '_value (float)',
+        '_value (number)',
         '_value (string)',
       ]),
     }

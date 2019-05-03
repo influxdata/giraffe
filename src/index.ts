@@ -12,14 +12,10 @@ export * from './constants/colorSchemes'
 // Types
 export {
   ColumnType,
-  NumericColumnType,
-  FloatColumn,
-  IntColumn,
-  UIntColumn,
+  NumberColumn,
   TimeColumn,
   StringColumn,
   BoolColumn,
-  NumericTableColumn,
   TableColumn,
   Table,
   Scale,

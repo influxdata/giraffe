@@ -7,7 +7,6 @@ import {
   HistogramPosition,
   HistogramScales,
   HistogramLayerConfig,
-  NumericColumnType,
   SizedConfig,
 } from '../types'
 
@@ -16,6 +15,7 @@ import {assert} from '../utils/assert'
 import {getGroupKey} from '../utils/getGroupKey'
 import {getFillScale} from '../utils/getFillScale'
 import {appendGroupCol} from '../utils/appendGroupCol'
+import {getNumericColumn} from '../utils/getNumericColumn'
 
 export const binStat = (
   config: SizedConfig,
@@ -91,14 +91,13 @@ export const bin = (
   assert(`could not find column "${xColKey}"`, !!col)
   assert(`unsupported value column type "${col.type}"`, isNumeric(col.type))
 
-  const xCol = col.data as number[]
-  const xColType = col.type as NumericColumnType
+  const {type: xColType, data: xColData} = getNumericColumn(table, xColKey)
 
   if (!binCount) {
-    binCount = thresholdSturges(xCol)
+    binCount = thresholdSturges(xColData)
   }
 
-  xDomain = resolveXDomain(xCol, xDomain)
+  xDomain = resolveXDomain(xColData, xDomain)
 
   const bins = createBins(xDomain, binCount)
 
@@ -108,8 +107,8 @@ export const bin = (
   const groupsByGroupKey = {}
 
   // Count x values by bin and group
-  for (let i = 0; i < xCol.length; i++) {
-    const x = xCol[i]
+  for (let i = 0; i < xColData.length; i++) {
+    const x = xColData[i]
 
     const shouldSkipPoint =
       x === undefined ||
@@ -160,12 +159,12 @@ export const bin = (
       },
       yMin: {
         data: [],
-        type: 'int',
+        type: 'number',
         name: 'yMin',
       },
       yMax: {
         data: [],
-        type: 'int',
+        type: 'number',
         name: 'yMax',
       },
     },
@@ -226,7 +225,7 @@ const createBins = (
 }
 
 const resolveXDomain = (
-  xCol: number[],
+  xColData: number[],
   preferredXDomain?: number[]
 ): [number, number] => {
   let domain: [number, number]
@@ -234,7 +233,7 @@ const resolveXDomain = (
   if (preferredXDomain) {
     domain = [preferredXDomain[0], preferredXDomain[1]]
   } else {
-    domain = extent(xCol)
+    domain = extent(xColData)
   }
 
   if (domain[0] === domain[1]) {
