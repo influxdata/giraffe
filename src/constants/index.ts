@@ -9,7 +9,7 @@ import {
   curveNatural,
 } from 'd3-shape'
 
-import {LayerConfig} from '../types'
+import {Config, LayerConfig} from '../types'
 import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
 
 // TODO: Make configurable
@@ -33,6 +33,25 @@ export const CURVES = {
 }
 
 export const MAX_TOOLTIP_ROWS = 8
+
+export const CONFIG_DEFAULTS: Partial<Config> = {
+  layers: [],
+  xAxisLabel: '',
+  yAxisLabel: '',
+  showAxes: true,
+  axisColor: '#292933',
+  axisOpacity: 1,
+  gridColor: '#292933',
+  gridOpacity: 1,
+  tickFont: '10px sans-serif',
+  tickFontColor: '#8e91a1',
+  legendFont: '10px monospace',
+  legendFontColor: '#8e91a1',
+  legendFontBrightColor: '#c6cad3',
+  legendBackgroundColor: '#1c1c21',
+  legendBorder: '1px solid #202028',
+  legendCrosshairColor: '#31313d',
+}
 
 export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
   line: {

@@ -6,8 +6,6 @@ import {
   HistogramMappings,
   HistogramPosition,
   HistogramScales,
-  HistogramLayerConfig,
-  SizedConfig,
 } from '../types'
 
 import {isNumeric} from '../utils/isNumeric'
@@ -18,41 +16,34 @@ import {getNumericColumn} from '../utils/getNumericColumn'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
 import {FILL_COL_KEY} from '../constants'
 
-export const binStat = (
-  config: SizedConfig,
-  layer: HistogramLayerConfig
-): {
-  table: HistogramTable
-  mappings: HistogramMappings
-  scales: HistogramScales
-} => {
-  const table = appendGroupingCol(
-    bin(
-      config.table,
-      layer.x,
-      config.xDomain,
-      layer.fill,
-      layer.binCount,
-      layer.position
-    ),
-    layer.fill,
+export const getHistogramTable = (
+  table: Table,
+  xColKey: string,
+  xDomain: number[],
+  groupColKeys: string[] = [],
+  binCount: number,
+  position: HistogramPosition
+): HistogramTable =>
+  appendGroupingCol(
+    bin(table, xColKey, xDomain, groupColKeys, binCount, position),
+    groupColKeys,
     FILL_COL_KEY
   )
 
-  const mappings: HistogramMappings = {
-    xMin: 'xMin',
-    xMax: 'xMax',
-    yMin: 'yMin',
-    yMax: 'yMax',
-    fill: layer.fill,
-  }
+export const getHistogramMappings = (fill: string[]): HistogramMappings => ({
+  xMin: 'xMin',
+  xMax: 'xMax',
+  yMin: 'yMin',
+  yMax: 'yMax',
+  fill,
+})
 
-  const scales = {
-    fill: getFillScale(table, layer.colors),
-  }
-
-  return {table, mappings, scales}
-}
+export const getHistogramScales = (
+  table: Table,
+  colors: string[]
+): HistogramScales => ({
+  fill: getFillScale(table, colors),
+})
 
 /*
   Compute the data of a histogram visualization.
