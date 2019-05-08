@@ -4024,6 +4024,7 @@ export const TABLE: Table = {
         'host-B',
       ],
       type: 'string',
+      name: 'host',
     },
   },
   length: 1000,

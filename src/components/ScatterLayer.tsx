@@ -18,11 +18,15 @@ const collectScatterData = (
   table: Table,
   xColKey: string,
   yColKey: string,
+  fillColKey: string,
+  symbolColKey: string,
   fillScale: Scale<string, string>,
   symbolScale: Scale<string, SymbolType>
 ): ScatterData => {
   const xCol = table.columns[xColKey].data
   const yCol = table.columns[yColKey].data
+  const fillCol = table.columns[fillColKey].data
+  const symbolCol = table.columns[symbolColKey].data
   const groupCol = table.columns[GROUP_COL_KEY].data as string[]
 
   const resultByGroupKey = {}
@@ -33,15 +37,14 @@ const collectScatterData = (
       resultByGroupKey[groupKey] = {
         xs: [],
         ys: [],
-        fill: fillScale(groupKey),
-        symbol: symbolScale(groupKey),
+        fill: fillScale(fillCol[i] as string),
+        symbol: symbolScale(symbolCol[i] as string),
       }
     }
 
     resultByGroupKey[groupKey].xs.push(xCol[i])
     resultByGroupKey[groupKey].ys.push(yCol[i])
   }
-
   return Object.values(resultByGroupKey)
 }
 
@@ -100,11 +103,20 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
 
   const layerConfig = env.config.layers[layerIndex] as ScatterLayerConfig
 
-  const {x: xColKey, y: yColKey} = layerConfig
+  const {x: xColKey, y: yColKey, fill, symbol} = layerConfig
   const {xScale, yScale, innerWidth: width, innerHeight: height} = env
 
   const scatterData = useMemo(
-    () => collectScatterData(table, xColKey, yColKey, fillScale, symbolScale),
+    () =>
+      collectScatterData(
+        table,
+        xColKey,
+        yColKey,
+        fill[0],
+        symbol[0],
+        fillScale,
+        symbolScale
+      ),
     [table, xColKey, yColKey, fillScale, symbolScale]
   )
 

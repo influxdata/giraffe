@@ -25,6 +25,18 @@ export const getFillScale = (
   return getColorScale(Object.keys(domain), colors)
 }
 
+export const getFillScale2 = (
+  table: Table,
+  fillColKeys: string[],
+  colors: string[]
+): Scale<string, string> => {
+  const fillCol = table.columns[fillColKeys[0]].data as string[]
+
+  const fillSet = Array.from(new Set(fillCol))
+
+  return getColorScale(fillSet, colors)
+}
+
 /*
   Get a scale that maps elements of the domain to a color according to the
   color scheme passed as `colors`.
