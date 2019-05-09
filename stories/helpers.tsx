@@ -4,7 +4,6 @@ import {select, text, boolean} from '@storybook/addon-knobs'
 import {Table, isNumeric} from '../src'
 import {TABLE} from './data'
 import * as colorSchemes from '../src/constants/colorSchemes'
-import {includes} from 'lodash'
 
 export const PlotContainer = ({children}) => (
   <div
@@ -29,7 +28,7 @@ const multiSelect = (
   options.forEach((value: string) => {
     const checkboxLabel = `${label}: ${value}`
 
-    const selected = boolean(checkboxLabel, includes(defaultValues, value))
+    const selected = boolean(checkboxLabel, defaultValues.includes(value))
 
     if (selected) {
       values.push(value)
