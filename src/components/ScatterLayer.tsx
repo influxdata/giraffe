@@ -5,47 +5,33 @@ import {symbol as d3Symbol, SymbolType} from 'd3-shape'
 import {Table, Scale, ScatterLayerConfig} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
-import {GROUP_COL_KEY} from '../constants'
+import {FILL_COL_KEY, SYMBOL_COL_KEY} from '../constants'
 
-type ScatterData = Array<{
+type ScatterData = {
   xs: number[] | Float64Array
   ys: number[] | Float64Array
-  fill: string
-  symbol: SymbolType
-}>
+  fill: string[]
+  symbol: SymbolType[]
+}
 
 const collectScatterData = (
   table: Table,
   xColKey: string,
   yColKey: string,
-  fillColKey: string,
-  symbolColKey: string,
   fillScale: Scale<string, string>,
   symbolScale: Scale<string, SymbolType>
 ): ScatterData => {
-  const xCol = table.columns[xColKey].data
-  const yCol = table.columns[yColKey].data
-  const fillCol = table.columns[fillColKey].data
-  const symbolCol = table.columns[symbolColKey].data
-  const groupCol = table.columns[GROUP_COL_KEY].data as string[]
+  const xCol = table.columns[xColKey].data as number[]
+  const yCol = table.columns[yColKey].data as number[]
+  const fillCol = table.columns[FILL_COL_KEY].data as string[]
+  const symbolCol = table.columns[SYMBOL_COL_KEY].data as string[]
 
-  const resultByGroupKey = {}
-
-  for (let i = 0; i < table.length; i++) {
-    const groupKey = groupCol[i]
-    if (!resultByGroupKey[groupKey]) {
-      resultByGroupKey[groupKey] = {
-        xs: [],
-        ys: [],
-        fill: fillScale(fillCol[i] as string),
-        symbol: symbolScale(symbolCol[i] as string),
-      }
-    }
-
-    resultByGroupKey[groupKey].xs.push(xCol[i])
-    resultByGroupKey[groupKey].ys.push(yCol[i])
+  return {
+    xs: xCol,
+    ys: yCol,
+    fill: fillCol.map(fillScale),
+    symbol: symbolCol.map(symbolScale),
   }
-  return Object.values(resultByGroupKey)
 }
 
 interface DrawPointsOptions {
@@ -59,7 +45,7 @@ interface DrawPointsOptions {
 
 const drawPoints = ({
   canvas,
-  scatterData,
+  scatterData: {xs, ys, fill, symbol},
   width,
   height,
   xScale,
@@ -69,22 +55,20 @@ const drawPoints = ({
 
   const context = canvas.getContext('2d')
 
-  for (const {xs, ys, fill, symbol} of scatterData) {
-    for (var i = 0; i < xs.length; i++) {
-      const symbolGenerator = d3Symbol()
-        .type(symbol)
-        .size(64)
-        .context(context)
+  for (var i = 0; i < xs.length; i++) {
+    const symbolGenerator = d3Symbol()
+      .type(symbol[i])
+      .size(64)
+      .context(context)
 
-      context.fillStyle = fill
-      context.translate(xScale(xs[i]), yScale(ys[i]))
-      context.beginPath()
-      symbolGenerator()
-      context.closePath()
-      context.fill()
-      context.stroke()
-      context.translate(-xScale(xs[i]), -yScale(ys[i]))
-    }
+    context.fillStyle = fill[i]
+    context.translate(xScale(xs[i]), yScale(ys[i]))
+    context.beginPath()
+    symbolGenerator()
+    context.closePath()
+    context.fill()
+    context.stroke()
+    context.translate(-xScale(xs[i]), -yScale(ys[i]))
   }
 }
 
@@ -103,20 +87,11 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
 
   const layerConfig = env.config.layers[layerIndex] as ScatterLayerConfig
 
-  const {x: xColKey, y: yColKey, fill, symbol} = layerConfig
+  const {x: xColKey, y: yColKey} = layerConfig
   const {xScale, yScale, innerWidth: width, innerHeight: height} = env
 
   const scatterData = useMemo(
-    () =>
-      collectScatterData(
-        table,
-        xColKey,
-        yColKey,
-        fill[0],
-        symbol[0],
-        fillScale,
-        symbolScale
-      ),
+    () => collectScatterData(table, xColKey, yColKey, fillScale, symbolScale),
     [table, xColKey, yColKey, fillScale, symbolScale]
   )
 

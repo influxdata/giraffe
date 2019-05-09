@@ -160,7 +160,6 @@ export interface ScatterLayerConfig {
   type: 'scatter'
   x: string
   y: string
-  group: string[]
   colors?: string[]
   fill?: string[]
   symbol?: string[]
@@ -169,7 +168,6 @@ export interface ScatterLayerConfig {
 export interface ScatterMappings {
   x: string
   y: string
-  group: string[]
   fill: string[]
   symbol: string[]
 }

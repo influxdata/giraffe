@@ -6,23 +6,26 @@ import {
   SizedConfig,
 } from '../types'
 import {getFillScale2} from '../utils/getFillScale'
-import {getSymbolScale} from '../utils/getSymbolScale'
-import {appendGroupCol} from '../utils/appendGroupCol'
+import {getSymbolScale2} from '../utils/getSymbolScale'
+import {appendGroupingCol} from '../utils/appendGroupingCol'
+import {SYMBOL_COL_KEY, FILL_COL_KEY} from '../constants'
 
 export const scatterStat = (
   config: SizedConfig,
   layer: ScatterLayerConfig
 ): {table: Table; mappings: ScatterMappings; scales: ScatterScales} => {
-  const table = appendGroupCol(config.table, layer.group)
+  let table = appendGroupingCol(config.table, layer.fill, FILL_COL_KEY)
 
-  const {x, y, group, fill, symbol} = layer
+  table = appendGroupingCol(table, layer.symbol, SYMBOL_COL_KEY)
+
+  const {x, y, fill, symbol} = layer
 
   return {
     table: table,
-    mappings: {x, y, group, fill, symbol},
+    mappings: {x, y, fill, symbol},
     scales: {
-      fill: getFillScale2(table, layer.fill, layer.colors),
-      symbol: getSymbolScale(table, layer.symbol),
+      fill: getFillScale2(table, layer.colors),
+      symbol: getSymbolScale2(table),
     },
   }
 }

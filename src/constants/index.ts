@@ -18,6 +18,8 @@ export const TICK_PADDING_TOP = 8
 export const AXIS_LABEL_PADDING_BOTTOM = 15
 
 export const GROUP_COL_KEY = '_vis_group_keys'
+export const FILL_COL_KEY = '_fill_group_keys'
+export const SYMBOL_COL_KEY = '_symbol_group_keys'
 
 export const CURVES = {
   linear: curveLinear,

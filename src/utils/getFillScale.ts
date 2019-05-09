@@ -4,6 +4,7 @@ import {interpolateRgbBasis} from 'd3-interpolate'
 
 import {Table, Scale} from '../types'
 import {getGroupColumn} from './getGroupColumn'
+import {FILL_COL_KEY} from '../constants'
 
 export const getFillScale = (
   table: Table,
@@ -27,10 +28,9 @@ export const getFillScale = (
 
 export const getFillScale2 = (
   table: Table,
-  fillColKeys: string[],
   colors: string[]
 ): Scale<string, string> => {
-  const fillCol = table.columns[fillColKeys[0]].data as string[]
+  const fillCol = table.columns[FILL_COL_KEY].data as string[]
 
   const fillSet = Array.from(new Set(fillCol))
 

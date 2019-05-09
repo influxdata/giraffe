@@ -70,11 +70,29 @@ const findXYColumns = (table: Table) =>
     }
   }, {})
 
+const findGroupableColumns = (table: Table) =>
+  Object.keys(table.columns).reduce((acc, k) => {
+    if (table.columns[k].type !== 'string') {
+      return acc
+    }
+
+    return {
+      ...acc,
+      [k]: table.columns[k].name,
+    }
+  }, {})
+
 export const xKnob = (table: Table, initial?: string) =>
   select('x', findXYColumns(table), initial || '_time')
 
 export const yKnob = (table: Table, initial?: string) =>
   select('y', findXYColumns(table), initial || '_value')
+
+export const fillKnob = (table: Table, initial?: string) =>
+  select('fill', findGroupableColumns(table), initial || 'cpu')
+
+export const symbolKnob = (table: Table, initial?: string) =>
+  select('symbol', findGroupableColumns(table), initial || 'host')
 
 export const interpolationKnob = () =>
   select(
