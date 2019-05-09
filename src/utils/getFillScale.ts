@@ -26,7 +26,7 @@ export const getFillScale = (
   return getColorScale(Object.keys(domain), colors)
 }
 
-export const getFillScale2 = (
+export const getFillScaleForScatter = (
   table: Table,
   colors: string[]
 ): Scale<string, string> => {
