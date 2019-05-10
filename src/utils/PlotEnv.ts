@@ -27,6 +27,7 @@ import {assert} from './assert'
 import {getTextMetrics} from './getTextMetrics'
 import {maxBy} from './extrema'
 import {isMostlyEqual} from './isMostlyEqual'
+import {identityMerge} from './identityMerge'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
@@ -69,15 +70,12 @@ export class PlotEnv {
   public set config(config: SizedConfig) {
     const prevConfig = this._config
 
-    this._config = {
+    // TODO: config.table should be compared by reference equality only
+    this._config = identityMerge(prevConfig, {
       ...CONFIG_DEFAULTS,
       ...config,
-      layers: config.layers.map(layer =>
-        LAYER_DEFAULTS[layer.type]
-          ? {...LAYER_DEFAULTS[layer.type], ...layer}
-          : layer
-      ),
-    }
+      layers: applyLayerDefaults(config.layers),
+    })
 
     const shouldRunStats =
       !prevConfig ||
@@ -398,7 +396,9 @@ const getDomainForAesthetics = (
   aesthetics: string[],
   layers: LayerData[]
 ): number[] | null => {
-  const domains = layers.flatMap(layer => getDomainsForLayer(layer, aesthetics))
+  const domains = [].concat(
+    ...layers.map(layer => getDomainsForLayer(layer, aesthetics))
+  )
   const domainOfDomains = extent([].concat(...domains))
 
   if (domainOfDomains.some(x => x === undefined)) {
@@ -430,3 +430,12 @@ const isLayerStale = (
 
   return !isMostlyEqual(layer, prevLayer)
 }
+
+const applyLayerDefaults = (
+  layers: SizedConfig['layers']
+): SizedConfig['layers'] =>
+  layers.map(layer =>
+    LAYER_DEFAULTS[layer.type]
+      ? {...LAYER_DEFAULTS[layer.type], ...layer}
+      : layer
+  )

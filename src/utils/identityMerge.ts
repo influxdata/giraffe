@@ -1,7 +1,8 @@
 /*
   Given a source and target object, produce an object that is logically
-  equivalent to the target, preserving the reference identity of nodes in the
-  source when possible.
+  equivalent to the target, but preserves the reference identity of nodes in
+  the source object when they are logically equivilant to the node at the
+  same path in the target object.
 */
 export const identityMerge = <S extends object, T extends object>(
   source: S,
@@ -33,7 +34,7 @@ export const enumeratePaths = (
   pathToTarget: Path = [],
   acc: Path[] = []
 ): Path[] => {
-  if (typeof target === 'string') {
+  if (target === undefined || target === null || typeof target === 'string') {
     return acc
   }
 
@@ -101,6 +102,10 @@ export const setByPath = (target: any, path: Path, value: any): void => {
 }
 
 export const isEqual = (a: any, b: any): boolean => {
+  if (a === null || a === undefined || b === null || b === undefined) {
+    return a === b
+  }
+
   switch (typeof b) {
     case 'number':
     case 'boolean':
