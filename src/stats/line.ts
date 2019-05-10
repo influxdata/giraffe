@@ -6,17 +6,18 @@ import {
   SizedConfig,
 } from '../types'
 import {getFillScale} from '../utils/getFillScale'
-import {appendGroupCol} from '../utils/appendGroupCol'
+import {appendGroupingCol} from '../utils/appendGroupingCol'
+import {FILL_COL_KEY} from '../constants'
 
 export const lineStat = (
   config: SizedConfig,
   layer: LineLayerConfig
 ): {table: Table; mappings: LineMappings; scales: LineScales} => {
-  const table = appendGroupCol(config.table, layer.fill)
+  const table = appendGroupingCol(config.table, layer.fill, FILL_COL_KEY)
 
   return {
     table,
     mappings: {x: layer.x, y: layer.y, fill: layer.fill},
-    scales: {fill: getFillScale(table, layer.fill, layer.colors)},
+    scales: {fill: getFillScale(table, layer.colors)},
   }
 }

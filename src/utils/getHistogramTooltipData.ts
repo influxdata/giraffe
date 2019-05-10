@@ -1,6 +1,7 @@
 import {TooltipData, Scale, HistogramTable, ColumnType} from '../types'
 import {getNumericColumn} from './getNumericColumn'
-import {getGroupColumn} from './getGroupColumn'
+import {getGroupingColumn} from './getGroupingColumn'
+import {FILL_COL_KEY} from '../constants'
 
 const isVoid = (x: any) => x === null || x === undefined
 
@@ -35,7 +36,7 @@ export const getHistogramTooltipData = (
   const xMaxCol = getNumericColumn(table, 'xMax')
   const yMinCol = getNumericColumn(table, 'yMin')
   const yMaxCol = getNumericColumn(table, 'yMax')
-  const groupCol = getGroupColumn(table)
+  const groupCol = getGroupingColumn(table, FILL_COL_KEY)
 
   const colors = hoveredRowIndices.map(i => fillScale(groupCol.data[i]))
 

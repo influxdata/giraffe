@@ -7,9 +7,9 @@ import {drawLines} from '../utils/drawLines'
 import {collectLineData, simplifyLineData} from '../utils/lineData'
 import {clearCanvas} from '../utils/clearCanvas'
 import {LineHoverLayer} from './LineHoverLayer'
-import {MAX_TOOLTIP_ROWS} from '../constants'
+import {MAX_TOOLTIP_ROWS, FILL_COL_KEY} from '../constants'
 import {useHoverLineIndices} from '../utils/useHoverLineIndices'
-import {getGroupColumn} from '../utils/getGroupColumn'
+import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {getNumericColumn} from '../utils/getNumericColumn'
 
 interface Props {
@@ -40,7 +40,7 @@ export const LineLayer: FunctionComponent<Props> = ({
 
   const {data: xColData} = getNumericColumn(table, xColKey)
   const {data: yColData} = getNumericColumn(table, yColKey)
-  const {data: groupColData} = getGroupColumn(table)
+  const {data: groupColData} = getGroupingColumn(table, FILL_COL_KEY)
 
   const lineData = useMemo(
     () => collectLineData(table, xColKey, yColKey, fillScale),

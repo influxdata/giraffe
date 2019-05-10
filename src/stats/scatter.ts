@@ -5,7 +5,7 @@ import {
   ScatterScales,
   SizedConfig,
 } from '../types'
-import {getFillScaleForScatter} from '../utils/getFillScale'
+import {getFillScale} from '../utils/getFillScale'
 import {getSymbolScale} from '../utils/getSymbolScale'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
 import {SYMBOL_COL_KEY, FILL_COL_KEY} from '../constants'
@@ -24,7 +24,7 @@ export const scatterStat = (
     table: table,
     mappings: {x, y, fill, symbol},
     scales: {
-      fill: getFillScaleForScatter(table, layer.colors),
+      fill: getFillScale(table, layer.colors),
       symbol: getSymbolScale(table),
     },
   }

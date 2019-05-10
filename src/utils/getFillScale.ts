@@ -3,30 +3,9 @@ import {scaleOrdinal} from 'd3-scale'
 import {interpolateRgbBasis} from 'd3-interpolate'
 
 import {Table, Scale} from '../types'
-import {getGroupColumn} from './getGroupColumn'
 import {FILL_COL_KEY} from '../constants'
 
 export const getFillScale = (
-  table: Table,
-  fillColKeys: string[],
-  colors: string[]
-): Scale<string, string> => {
-  if (!fillColKeys.length) {
-    return (_i: string) => colors[0]
-  }
-
-  const groupKeyCol = getGroupColumn(table)
-
-  const domain = {}
-
-  for (let i = 0; i < table.length; i++) {
-    domain[groupKeyCol.data[i] as string] = true
-  }
-
-  return getColorScale(Object.keys(domain), colors)
-}
-
-export const getFillScaleForScatter = (
   table: Table,
   colors: string[]
 ): Scale<string, string> => {
