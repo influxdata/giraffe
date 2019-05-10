@@ -6,8 +6,9 @@ import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
 import {getHistogramTooltipData} from '../utils/getHistogramTooltipData'
-import {getGroupColumn} from '../utils/getGroupColumn'
+import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {Tooltip} from './Tooltip'
+import {FILL_COL_KEY} from '../constants'
 
 const BAR_TRANSPARENCY = 0.5
 const BAR_TRANSPARENCY_HOVER = 0.7
@@ -40,7 +41,7 @@ const drawBars = ({
   const xMaxCol = table.columns.xMax.data
   const yMinCol = table.columns.yMin.data
   const yMaxCol = table.columns.yMax.data
-  const {data: groupKeyCol} = getGroupColumn(table)
+  const {data: groupKeyCol} = getGroupingColumn(table, FILL_COL_KEY)
 
   const context = canvas.getContext('2d')
 

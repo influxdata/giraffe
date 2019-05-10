@@ -2,7 +2,7 @@ import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
 import {Tooltip} from './Tooltip'
-import {GROUP_COL_KEY} from '../constants'
+import {FILL_COL_KEY} from '../constants'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
@@ -10,7 +10,7 @@ import {getLineTooltipData} from '../utils/getLineTooltipData'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
-import {getGroupColumn} from '../utils/getGroupColumn'
+import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {getNumericColumn} from '../utils/getNumericColumn'
 import {clearCanvas} from '../utils/clearCanvas'
 
@@ -52,14 +52,14 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
 
   const {data: xColData} = getNumericColumn(table, xColKey)
   const {data: yColData} = getNumericColumn(table, yColKey)
-  const {data: groupColData} = getGroupColumn(table)
+  const {data: groupColData} = getGroupingColumn(table, FILL_COL_KEY)
 
   const tooltipData = getLineTooltipData(
     rowIndices,
     table,
     xColKey,
     yColKey,
-    GROUP_COL_KEY,
+    FILL_COL_KEY,
     xTickFormatter,
     yTickFormatter,
     fillColKeys,

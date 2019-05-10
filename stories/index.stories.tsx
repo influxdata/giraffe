@@ -8,6 +8,8 @@ import {
   PlotContainer,
   xKnob,
   yKnob,
+  fillKnob,
+  symbolKnob,
   tableKnob,
   colorSchemeKnob,
   legendFontKnob,
@@ -67,6 +69,9 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const fill = fillKnob(table, 'cpu')
+    const symbol = symbolKnob(table, 'host')
+
     const showAxes = showAxesKnob()
 
     const config: Config = {
@@ -80,8 +85,8 @@ storiesOf('XY Plot', module)
           type: 'scatter',
           x,
           y,
-          fill: ['cpu'],
-          symbol: ['cpu'],
+          fill: fill,
+          symbol: symbol,
           colors,
         },
       ],

@@ -14,8 +14,9 @@ import {isNumeric} from '../utils/isNumeric'
 import {assert} from '../utils/assert'
 import {getGroupKey} from '../utils/getGroupKey'
 import {getFillScale} from '../utils/getFillScale'
-import {appendGroupCol} from '../utils/appendGroupCol'
 import {getNumericColumn} from '../utils/getNumericColumn'
+import {appendGroupingCol} from '../utils/appendGroupingCol'
+import {FILL_COL_KEY} from '../constants'
 
 export const binStat = (
   config: SizedConfig,
@@ -25,7 +26,7 @@ export const binStat = (
   mappings: HistogramMappings
   scales: HistogramScales
 } => {
-  const table = appendGroupCol(
+  const table = appendGroupingCol(
     bin(
       config.table,
       layer.x,
@@ -34,7 +35,8 @@ export const binStat = (
       layer.binCount,
       layer.position
     ),
-    layer.fill
+    layer.fill,
+    FILL_COL_KEY
   )
 
   const mappings: HistogramMappings = {
@@ -46,7 +48,7 @@ export const binStat = (
   }
 
   const scales = {
-    fill: getFillScale(table, layer.fill, layer.colors),
+    fill: getFillScale(table, layer.colors),
   }
 
   return {table, mappings, scales}
