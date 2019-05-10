@@ -1,8 +1,8 @@
 /*
   Given a source and target object, produce an object that is logically
   equivalent to the target, but preserves the reference identity of nodes in
-  the source object when they are logically equivilant to the node at the
-  same path in the target object.
+  the source object when their path matches the path of a logically equivalent
+  node in the target.
 */
 export const identityMerge = <S extends object, T extends object>(
   source: S,

@@ -19,7 +19,7 @@ import {
   LAYER_DEFAULTS,
 } from '../constants'
 
-import {stats} from '../stats'
+import * as stats from '../stats'
 import {getTicks} from './getTicks'
 import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
@@ -28,6 +28,7 @@ import {getTextMetrics} from './getTextMetrics'
 import {maxBy} from './extrema'
 import {isMostlyEqual} from './isMostlyEqual'
 import {identityMerge} from './identityMerge'
+import {MemoizedFunctionCache} from './MemoizedFunctionCache'
 
 const CONFIG_DEFAULTS: Partial<SizedConfig> = {
   layers: [],
@@ -62,6 +63,7 @@ export class PlotEnv {
   private _xDomain: number[] | null = null
   private _yDomain: number[] | null = null
   private layers: LayerData[] = []
+  private functionCache = new MemoizedFunctionCache()
 
   public get config(): SizedConfig | null {
     return this._config
@@ -205,11 +207,79 @@ export class PlotEnv {
   }
 
   public getTable(layerIndex: number): Table {
-    return this.layers[layerIndex].table
+    const table = this.config.table
+    const layerConfig = this.config.layers[layerIndex]
+    const transformKey = `${layerIndex} ${layerConfig.type}`
+
+    switch (layerConfig.type) {
+      case 'line': {
+        const {fill} = layerConfig
+        const transform = this.functionCache.get(
+          transformKey,
+          stats.getLineTable
+        )
+
+        return transform(table, fill)
+      }
+      case 'scatter': {
+        const {fill, symbol} = layerConfig
+        const transform = this.functionCache.get(
+          transformKey,
+          stats.getScatterTable
+        )
+
+        return transform(table, fill, symbol)
+      }
+      case 'histogram': {
+        const {x, fill, binCount, position} = layerConfig
+        const transform = this.functionCache.get(
+          transformKey,
+          stats.getHistogramTable
+        )
+
+        return transform(
+          table,
+          x,
+          this.config.xDomain,
+          fill,
+          binCount,
+          position
+        )
+      }
+      case 'heatmap': {
+        const {x, y} = layerConfig
+        const {xDomain, yDomain} = this.config
+        const {innerWidth, innerHeight} = this
+        const transform = this.functionCache.get(
+          transformKey,
+          stats.getHeatmapTable
+        )
+
+        return transform(table, x, y, xDomain, yDomain, innerWidth, innerHeight)
+      }
+      default: {
+        return this.config.table
+      }
+    }
   }
 
   public getScale(layerIndex: number, aesthetic: string): Scale {
-    return this.layers[layerIndex].scales[aesthetic]
+    const layerConfig = this.config.layers[layerIndex]
+
+    let scales = {}
+
+    switch (layerConfig.type) {
+      case 'line':
+        scales = stats.getLineScales(
+          this.getTable(layerIndex),
+          layerConfig.fill
+        )
+      case 'scatter':
+      case 'histogram':
+      case 'heatmap':
+    }
+
+    return scales[aesthetic]
   }
 
   public getMapping(layerIndex: number, aesthetic: string) {

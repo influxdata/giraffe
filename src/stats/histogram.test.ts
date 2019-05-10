@@ -1,5 +1,5 @@
 import {Table} from '../'
-import {bin} from './bin'
+import {bin} from './histogram'
 
 const TABLE: Table = {
   columns: {

@@ -4,11 +4,9 @@ import {scaleSequential} from 'd3-scale'
 
 import {
   Table,
-  HeatmapLayerConfig,
   HeatmapTable,
   HeatmapScales,
   HeatmapMappings,
-  SizedConfig,
   Scale,
 } from '../types'
 
@@ -16,40 +14,37 @@ import {getNumericColumn} from '../utils/getNumericColumn'
 
 const BIN_SIZE = 10
 
-export const bin2dStat = (
-  config: SizedConfig,
-  layer: HeatmapLayerConfig
-): {
-  table: HeatmapTable
-  mappings: HeatmapMappings
-  scales: HeatmapScales
-} => {
-  const table = bin2d(
-    config.table,
-    layer.x,
-    layer.y,
-    config.xDomain,
-    config.yDomain,
-    config.width,
-    config.height,
-    BIN_SIZE
-  )
+export const getHeatmapTable = (
+  table: Table,
+  xColKey: string,
+  yColKey: string,
+  xDomain: number[],
+  yDomain: number[],
+  width: number,
+  height: number
+): HeatmapTable =>
+  bin2d(table, xColKey, yColKey, xDomain, yDomain, width, height, BIN_SIZE)
 
-  const mappings: HeatmapMappings = {
-    xMin: 'xMin',
-    xMax: 'xMax',
-    yMin: 'yMin',
-    yMax: 'yMax',
-    fill: 'count',
-  }
-
+export const getHeatmapScales = (
+  table: HeatmapTable,
+  colors: string[]
+): HeatmapScales => {
   const domain = extent(table.columns.count.data)
-  const colorScheme = interpolateRgbBasis(layer.colors)
+  const colorScheme = interpolateRgbBasis(colors)
   const fillScale = scaleSequential(colorScheme).domain(domain)
-  const scales = {fill: fillScale as Scale<number, string>}
 
-  return {table, mappings, scales}
+  return {
+    fill: fillScale as Scale<number, string>,
+  }
 }
+
+export const getHeatmapMappings = (): HeatmapMappings => ({
+  xMin: 'xMin',
+  xMax: 'xMax',
+  yMin: 'yMin',
+  yMax: 'yMax',
+  fill: 'count',
+})
 
 export const bin2d = (
   table: Table,

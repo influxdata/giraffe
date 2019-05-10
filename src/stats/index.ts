@@ -1,11 +1,8 @@
-import {lineStat} from './line'
-import {binStat} from './bin'
-import {bin2dStat} from './bin2d'
-import {scatterStat} from './scatter'
-
-export const stats = {
-  line: lineStat,
-  histogram: binStat,
-  heatmap: bin2dStat,
-  scatter: scatterStat,
-}
+export {getLineTable, getLineMappings, getLineScales} from './line'
+export {getScatterTable, getScatterMappings, getScatterScales} from './scatter'
+export {getHeatmapTable, getHeatmapMappings, getHeatmapScales} from './heatmap'
+export {
+  getHistogramTable,
+  getHistogramMappings,
+  getHistogramScales,
+} from './histogram'
