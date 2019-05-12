@@ -33,16 +33,16 @@ interface FluxToTableResult {
   This function will spread them out to a single wide table that looks like
   this instead:
 
-      column_a | column_b (string) | column_b (float) | column_c | column_d  <-- key
-      column_a | column_b          | column_b         | column_c | column_d  <-- name
-      number   | string            | number           | number   | bool      <-- type
+      column_a | column_b (string) | column_c | column_b (number) | column_d  <-- key
+      column_a | column_b          | column_c | column_b          | column_d  <-- name
+      number   | string            | number   | number            | bool      <-- type
       ---------------------------------------------------------------------
-             1 |               "g" |             1.0  |       34 | 
-             2 |               "f" |             2.0  |       58 |
-             3 |                   |             3.0  |       21 |
-               |                   |                  |          |     true
-               |                   |                  |          |     true
-               |                   |                  |          |     true
+             1 |               "g" |       34 |                   | 
+             2 |               "f" |       58 |                   |
+             3 |                   |       21 |                   |
+               |                   |          |               1.0 |     true
+               |                   |          |               2.0 |     true
+               |                   |          |               3.0 |     true
 
 
   The `#group`, `#datatype`, and `#default` [annotations][1] are expected to be
