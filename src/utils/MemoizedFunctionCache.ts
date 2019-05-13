@@ -8,6 +8,7 @@ export class MemoizedFunctionCache {
       this.memoizedFunctions[key] = memoizeOne(fn)
     }
 
+    // TODO: Throw error if type of f is not `fn`
     return this.memoizedFunctions[key] as T
   }
 }

@@ -1,15 +1,15 @@
 import {scaleLinear} from 'd3-scale'
-import {extent} from 'd3-array'
+import {range} from 'd3-array'
 import memoizeOne from 'memoize-one'
 
 import {
   SizedConfig,
   Margins,
   Scale,
-  Mappings,
   Table,
-  Scales,
+  TableColumn,
   ColumnType,
+  HeatmapTable,
 } from '../types'
 
 import {
@@ -17,53 +17,30 @@ import {
   TICK_PADDING_RIGHT,
   AXIS_LABEL_PADDING_BOTTOM,
   LAYER_DEFAULTS,
+  CONFIG_DEFAULTS,
 } from '../constants'
 
-import * as stats from '../stats'
+import * as transforms from '../layerTransforms'
 import {getTicks} from './getTicks'
 import {getTickFormatter} from '../utils/getTickFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 import {getTextMetrics} from './getTextMetrics'
-import {maxBy} from './extrema'
-import {isMostlyEqual} from './isMostlyEqual'
+import {maxBy, extentOfExtents} from './extrema'
+import {flatMap} from './flatMap'
 import {identityMerge} from './identityMerge'
 import {MemoizedFunctionCache} from './MemoizedFunctionCache'
 
-const CONFIG_DEFAULTS: Partial<SizedConfig> = {
-  layers: [],
-  xAxisLabel: '',
-  yAxisLabel: '',
-  showAxes: true,
-  axisColor: '#292933',
-  axisOpacity: 1,
-  gridColor: '#292933',
-  gridOpacity: 1,
-  tickFont: '10px sans-serif',
-  tickFontColor: '#8e91a1',
-  legendFont: '10px monospace',
-  legendFontColor: '#8e91a1',
-  legendFontBrightColor: '#c6cad3',
-  legendBackgroundColor: '#1c1c21',
-  legendBorder: '1px solid #202028',
-  legendCrosshairColor: '#31313d',
-}
-
+const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
+const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]
 const DEFAULT_Y_DOMAIN: [number, number] = [0, 1]
-
-interface LayerData {
-  table: Table
-  mappings: Mappings
-  scales: Scales
-}
 
 export class PlotEnv {
   private _config: SizedConfig | null = null
   private _xDomain: number[] | null = null
   private _yDomain: number[] | null = null
-  private layers: LayerData[] = []
-  private functionCache = new MemoizedFunctionCache()
+  private fns = new MemoizedFunctionCache()
 
   public get config(): SizedConfig | null {
     return this._config
@@ -79,25 +56,7 @@ export class PlotEnv {
       layers: applyLayerDefaults(config.layers),
     })
 
-    const shouldRunStats =
-      !prevConfig ||
-      this._config.table !== prevConfig.table ||
-      this._config.xDomain !== prevConfig.xDomain ||
-      this._config.yDomain !== prevConfig.yDomain ||
-      this._config.layers.some((_, i) =>
-        isLayerStale(this._config, prevConfig, i)
-      )
-
-    if (shouldRunStats) {
-      this._xDomain = null
-      this._yDomain = null
-
-      this.layers = this._config.layers.map(layerConfig => {
-        const stat = stats[layerConfig.type]
-
-        return stat(this._config, layerConfig as any)
-      })
-    }
+    // TODO: Reset unconrolled x/y domains?
   }
 
   public get margins(): Margins {
@@ -164,7 +123,7 @@ export class PlotEnv {
     }
 
     if (!this._xDomain) {
-      this._xDomain = this.getXDomain(this.layers)
+      this._xDomain = this.getXDomain()
     }
 
     return this._xDomain
@@ -184,7 +143,7 @@ export class PlotEnv {
     }
 
     if (!this._yDomain) {
-      this._yDomain = this.getYDomain(this.layers)
+      this._yDomain = this.getYDomain()
     }
 
     return this._yDomain
@@ -209,32 +168,27 @@ export class PlotEnv {
   public getTable(layerIndex: number): Table {
     const table = this.config.table
     const layerConfig = this.config.layers[layerIndex]
-    const transformKey = `${layerIndex} ${layerConfig.type}`
+    const transformKey = `${layerIndex} ${layerConfig.type} table`
 
     switch (layerConfig.type) {
       case 'line': {
         const {fill} = layerConfig
-        const transform = this.functionCache.get(
-          transformKey,
-          stats.getLineTable
-        )
+        const transform = this.fns.get(transformKey, transforms.getLineTable)
 
         return transform(table, fill)
       }
       case 'scatter': {
         const {fill, symbol} = layerConfig
-        const transform = this.functionCache.get(
-          transformKey,
-          stats.getScatterTable
-        )
+        const transform = this.fns.get(transformKey, transforms.getScatterTable)
 
         return transform(table, fill, symbol)
       }
       case 'histogram': {
         const {x, fill, binCount, position} = layerConfig
-        const transform = this.functionCache.get(
+
+        const transform = this.fns.get(
           transformKey,
-          stats.getHistogramTable
+          transforms.getHistogramTable
         )
 
         return transform(
@@ -248,14 +202,10 @@ export class PlotEnv {
       }
       case 'heatmap': {
         const {x, y} = layerConfig
-        const {xDomain, yDomain} = this.config
-        const {innerWidth, innerHeight} = this
-        const transform = this.functionCache.get(
-          transformKey,
-          stats.getHeatmapTable
-        )
+        const {width, height, xDomain, yDomain} = this.config
+        const transform = this.fns.get(transformKey, transforms.getHeatmapTable)
 
-        return transform(table, x, y, xDomain, yDomain, innerWidth, innerHeight)
+        return transform(table, x, y, xDomain, yDomain, width, height)
       }
       default: {
         return this.config.table
@@ -264,40 +214,58 @@ export class PlotEnv {
   }
 
   public getScale(layerIndex: number, aesthetic: string): Scale {
-    const layerConfig = this.config.layers[layerIndex]
+    const {type: layerType, colors} = this.config.layers[layerIndex]
+    const transformKey = `${layerIndex} ${layerType} scales`
+    const table = this.getTable(layerIndex)
 
-    let scales = {}
+    switch (layerType) {
+      case 'line': {
+        const getter = this.fns.get(transformKey, transforms.getLineScales)
+
+        return getter(table, colors)[aesthetic]
+      }
+      case 'scatter': {
+        const getter = this.fns.get(transformKey, transforms.getScatterScales)
+
+        return getter(table, colors)[aesthetic]
+      }
+      case 'histogram': {
+        const getter = this.fns.get(transformKey, transforms.getHistogramScales)
+
+        return getter(table, colors)[aesthetic]
+      }
+      case 'heatmap': {
+        const getter = this.fns.get(transformKey, transforms.getHeatmapScales)
+
+        return getter(table as HeatmapTable, colors)[aesthetic]
+      }
+      default: {
+        throw new Error(`${aesthetic} scale for layer ${layerIndex} not found`)
+      }
+    }
+  }
+
+  public getMapping(layerIndex: number, aesthetic: string): string | null {
+    const layerConfig = this.config.layers[layerIndex]
 
     switch (layerConfig.type) {
       case 'line':
-        scales = stats.getLineScales(
-          this.getTable(layerIndex),
-          layerConfig.fill
-        )
+        return transforms.getLineMappings(layerConfig)[aesthetic]
       case 'scatter':
-      case 'histogram':
+        return transforms.getScatterMappings(layerConfig)[aesthetic]
       case 'heatmap':
+        return transforms.getHeatmapMappings()[aesthetic]
+      case 'histogram':
+        return transforms.getHistogramMappings(layerConfig.fill)[aesthetic]
+      default:
+        return null
     }
-
-    return scales[aesthetic]
-  }
-
-  public getMapping(layerIndex: number, aesthetic: string) {
-    return this.layers[layerIndex].mappings[aesthetic]
   }
 
   public getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
-    const columnTypes = []
-
-    for (const layer of this.layers) {
-      for (const aesthetic of aesthetics) {
-        const mapping = layer.mappings[aesthetic]
-
-        if (mapping) {
-          columnTypes.push(layer.table.columns[mapping].type)
-        }
-      }
-    }
+    const columnTypes = this.getColumnsForAesthetics(aesthetics).map(
+      col => col.type
+    )
 
     if (!columnTypes.length) {
       return null
@@ -315,13 +283,13 @@ export class PlotEnv {
     if (this.isXControlled) {
       this.config.onResetXDomain()
     } else {
-      this._xDomain = this.getXDomain(this.layers)
+      this._xDomain = this.getXDomain()
     }
 
     if (this.isYControlled) {
       this.config.onResetYDomain()
     } else {
-      this._yDomain = this.getYDomain(this.layers)
+      this._yDomain = this.getYDomain()
     }
   }
 
@@ -390,15 +358,48 @@ export class PlotEnv {
 
   private getYTicks = memoizeOne(getTicks)
 
-  private getXDomain = memoizeOne(
-    (layers: LayerData[]) =>
-      getDomainForAesthetics(['x', 'xMin', 'xMax'], layers) || DEFAULT_X_DOMAIN
-  )
+  private getXDomain() {
+    return this.getDomainForAesthetics(X_DOMAIN_AESTHETICS) || DEFAULT_X_DOMAIN
+  }
 
-  private getYDomain = memoizeOne(
-    (layers: LayerData[]) =>
-      getDomainForAesthetics(['y', 'yMin', 'yMax'], layers) || DEFAULT_Y_DOMAIN
-  )
+  private getYDomain() {
+    return this.getDomainForAesthetics(Y_DOMAIN_AESTHETICS) || DEFAULT_Y_DOMAIN
+  }
+
+  private getColumnsForAesthetics(aesthetics: string[]): TableColumn[] {
+    const columns = flatMap(layerIndex => {
+      const table = this.getTable(layerIndex)
+
+      const colKeys = aesthetics
+        .map(aes => this.getMapping(layerIndex, aes))
+        .filter(d => !!d)
+
+      const layerColumns = colKeys.map(k => table.columns[k]).filter(d => !!d)
+
+      return layerColumns
+    }, range(this.config.layers.length))
+
+    return columns
+  }
+
+  private getDomainForAesthetics(aesthetics: string[]): number[] {
+    // Collect column data arrays for all columns in the plot currently mapped
+    // to any of the passed `aesthetics`
+    const colData = this.getColumnsForAesthetics(aesthetics).map(col => {
+      assert(`expected column ${col.name} to be numeric`, isNumeric(col.type))
+
+      return col.data as number[]
+    })
+
+    const fnKey = `extentOfExtents ${aesthetics.join(', ')}`
+    const fn = this.fns.get(fnKey, extentOfExtents)
+
+    // Compute the domain of all of those columns (memoized, since doing so is
+    // an expensive operation)
+    const domain = fn(...colData)
+
+    return domain
+  }
 
   private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {
     return scaleLinear()
@@ -435,70 +436,6 @@ export class PlotEnv {
       )
     }
   )
-}
-
-const getDomainsForLayer = (
-  {table, mappings}: LayerData,
-  aesthetics: string[]
-): number[] => {
-  return aesthetics.reduce((acc, aes) => {
-    if (!mappings[aes]) {
-      return acc
-    }
-
-    const column = table.columns[mappings[aes]]
-
-    assert(
-      `"${aes}" aesthetic mapped to non-existant column "${mappings[aes]}"`,
-      !!column
-    )
-
-    assert(
-      `expected column "${mappings[aes]}" to be numeric`,
-      isNumeric(column.type)
-    )
-
-    return [...acc, extent(column.data as number[])]
-  }, [])
-}
-
-const getDomainForAesthetics = (
-  aesthetics: string[],
-  layers: LayerData[]
-): number[] | null => {
-  const domains = [].concat(
-    ...layers.map(layer => getDomainsForLayer(layer, aesthetics))
-  )
-  const domainOfDomains = extent([].concat(...domains))
-
-  if (domainOfDomains.some(x => x === undefined)) {
-    return null
-  }
-
-  return domainOfDomains
-}
-
-const isLayerStale = (
-  config: SizedConfig,
-  prevConfig: SizedConfig | null,
-  layerIndex: number
-): boolean => {
-  if (!prevConfig) {
-    return true
-  }
-
-  if (prevConfig.table !== config.table) {
-    return true
-  }
-
-  const layer = config.layers[layerIndex]
-  const prevLayer = prevConfig.layers[layerIndex]
-
-  if (!prevLayer) {
-    return true
-  }
-
-  return !isMostlyEqual(layer, prevLayer)
 }
 
 const applyLayerDefaults = (

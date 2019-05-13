@@ -5,21 +5,21 @@
 import {Table, SizedConfig, LineLayerConfig} from '../types'
 import {PlotEnv} from './PlotEnv'
 
-import {stats} from '../stats'
+import * as layerTransforms from '../layerTransforms'
 
 describe('PlotEnv', () => {
   describe('config updates and memoization', () => {
-    let histogramStatSpy
-    let lineStatSpy
+    let histogramTransformSpy
+    let lineTransformSpy
 
     beforeEach(() => {
-      histogramStatSpy = jest.spyOn(stats, 'histogram')
-      lineStatSpy = jest.spyOn(stats, 'line')
+      histogramTransformSpy = jest.spyOn(layerTransforms, 'getHistogramTable')
+      lineTransformSpy = jest.spyOn(layerTransforms, 'getLineTable')
     })
 
     afterEach(() => {
-      histogramStatSpy.mockRestore()
-      lineStatSpy.mockRestore()
+      histogramTransformSpy.mockRestore()
+      lineTransformSpy.mockRestore()
     })
 
     test('updates xScale when xDomain is updated', () => {
@@ -95,7 +95,7 @@ describe('PlotEnv', () => {
 
       expect(getFirstBinCount()).toEqual(2)
 
-      expect(histogramStatSpy).toHaveBeenCalledTimes(2)
+      expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
     test('runs bin stat when histogram layer x mapping changes', () => {
@@ -137,7 +137,7 @@ describe('PlotEnv', () => {
 
       expect(getFirstBinCount()).toEqual(9)
 
-      expect(histogramStatSpy).toHaveBeenCalledTimes(2)
+      expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
     test.skip('does not run bin stat when histogram colors change', () => {
@@ -171,7 +171,7 @@ describe('PlotEnv', () => {
         ],
       }
 
-      expect(histogramStatSpy).toHaveBeenCalledTimes(1)
+      expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
     })
 
     test.skip('updating line interpolation should not reset the x domain', () => {
@@ -246,11 +246,11 @@ describe('PlotEnv', () => {
 
       plotEnv.config = config
 
-      expect(lineStatSpy).toHaveBeenCalledTimes(1)
+      expect(lineTransformSpy).toHaveBeenCalledTimes(1)
 
       plotEnv.config = {...config, xDomain: [12, 14]}
 
-      expect(lineStatSpy).toHaveBeenCalledTimes(1)
+      expect(lineTransformSpy).toHaveBeenCalledTimes(1)
     })
   })
 })
