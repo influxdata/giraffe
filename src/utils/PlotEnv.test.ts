@@ -267,5 +267,47 @@ describe('PlotEnv', () => {
 
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
     })
+
+    test('resets uncontrolled domain state when x mapping changes', () => {
+      const plotEnv = new PlotEnv()
+
+      const table: Table = {
+        columns: {
+          a: {
+            name: 'a',
+            type: 'number',
+            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+          },
+          b: {
+            name: 'b',
+            type: 'number',
+            data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 19],
+          },
+        },
+        length: 10,
+      }
+
+      const config: SizedConfig = {
+        table,
+        width: 1000,
+        height: 500,
+        layers: [{type: 'line', x: 'b', y: 'a'}],
+      }
+
+      plotEnv.config = config
+
+      expect(plotEnv.xDomain).toEqual([10, 19])
+
+      plotEnv.xDomain = [12, 16]
+
+      expect(plotEnv.xDomain).toEqual([12, 16])
+
+      plotEnv.config = {
+        ...config,
+        layers: [{type: 'line', x: 'a', y: 'b'}], // Swap mappings
+      }
+
+      expect(plotEnv.xDomain).toEqual([10, 19])
+    })
   })
 })

@@ -49,8 +49,6 @@ export class PlotEnv {
   public set config(config: SizedConfig) {
     const prevConfig = this._config
 
-    console.log('setting config')
-
     this._config = mergeConfigs(config, prevConfig)
 
     if (areUncontrolledDomainsStale(this._config, prevConfig)) {
@@ -474,7 +472,18 @@ const areUncontrolledDomainsStale = (
     return true
   }
 
-  // TODO: Or if any of the mappings change
+  const xyMappingsChanged = [
+    ...X_DOMAIN_AESTHETICS,
+    ...Y_DOMAIN_AESTHETICS,
+  ].some(aes =>
+    config.layers.some(
+      (layer, layerIndex) => layer[aes] !== prevConfig.layers[layerIndex][aes]
+    )
+  )
+
+  if (xyMappingsChanged) {
+    return true
+  }
 
   return false
 }
