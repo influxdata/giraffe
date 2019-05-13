@@ -1,8 +1,38 @@
 /*
   Given a source and target object, produce an object that is logically
-  equivalent to the target, but preserves the reference identity of nodes in
-  the source object when their path matches the path of a logically equivalent
-  node in the target.
+  equivalent to the target. The produced object will preserve the reference
+  identity of nodes in the source object whenever the path of the node matches
+  the path of a logically equivalent node in the target.
+
+  This helper enables memoization of functions whose inputs often change their
+  reference identity, but rarely change their logical identity.
+
+  More about logical and reference identity: a primitive object is one of the
+  following:
+
+  - number
+  - string
+  - boolean
+  - function
+  - `undefined`
+  - `null`
+    
+  If `a` and `b` are primitive objects, then `a` and `b` are logically
+  equivalent iff `a === b`. Two non-primitive objects are logically equivalent
+  iff they have logically equivalent children.
+
+  For example, let
+
+  ```
+  const foo = {a: [4, 5, {b: 'six'}]}
+  const bar = {a: [4, 5, {b: 'six'}]}
+  const baz = {a: [4, 5]}
+  ```
+
+  Then `foo` and `bar` are logically equivalent even though `foo !== bar` (i.e.
+  `foo` and `bar` do not have the same reference identity).  The objects `foo`
+  and `baz` are neither logically nor referentially identical.
+  
 */
 export const identityMerge = <S extends object, T extends object>(
   source: S,

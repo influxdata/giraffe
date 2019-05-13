@@ -1,5 +1,26 @@
 import memoizeOne from 'memoize-one'
 
+/*
+  Stores a cache of memoized functions which can be looked up by an arbitrary
+  key. The memoized functions are instatiated lazily.
+
+  Example:
+
+  ```
+  const f = () => {
+    console.log('f called')
+
+    return 2
+  }
+
+  const cache = new MemoizedFunctionCache()
+  const fMemoized = cache.get('myKey', f)
+
+  fMemoized() // logs "f called", returns 2
+  fMemoized() // returns 2
+  ```
+
+*/
 export class MemoizedFunctionCache {
   private memoizedFunctions: {[key: string]: Function} = {}
 
@@ -8,7 +29,6 @@ export class MemoizedFunctionCache {
       this.memoizedFunctions[key] = memoizeOne(fn)
     }
 
-    // TODO: Throw error if type of f is not `fn`
     return this.memoizedFunctions[key] as T
   }
 }

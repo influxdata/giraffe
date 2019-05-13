@@ -49,14 +49,14 @@ export class PlotEnv {
   public set config(config: SizedConfig) {
     const prevConfig = this._config
 
-    // TODO: config.table should be compared by reference equality only
-    this._config = identityMerge(prevConfig, {
-      ...CONFIG_DEFAULTS,
-      ...config,
-      layers: applyLayerDefaults(config.layers),
-    })
+    console.log('setting config')
 
-    // TODO: Reset unconrolled x/y domains?
+    this._config = mergeConfigs(config, prevConfig)
+
+    if (areUncontrolledDomainsStale(this._config, prevConfig)) {
+      this._xDomain = null
+      this._yDomain = null
+    }
   }
 
   public get margins(): Margins {
@@ -446,3 +446,35 @@ const applyLayerDefaults = (
       ? {...LAYER_DEFAULTS[layer.type], ...layer}
       : layer
   )
+
+const mergeConfigs = (
+  config: SizedConfig,
+  prevConfig: SizedConfig | null
+): SizedConfig => ({
+  ...identityMerge(prevConfig, {
+    ...CONFIG_DEFAULTS,
+    ...config,
+    layers: applyLayerDefaults(config.layers),
+    // Avoid passing the `table` to `identityMerge` since checking its identity
+    // can be quite expensive if it is a large object
+    table: null,
+  }),
+  table: config.table,
+})
+
+const areUncontrolledDomainsStale = (
+  config: SizedConfig,
+  prevConfig: SizedConfig
+): boolean => {
+  if (!prevConfig) {
+    return true
+  }
+
+  if (config.table !== prevConfig.table) {
+    return true
+  }
+
+  // TODO: Or if any of the mappings change
+
+  return false
+}

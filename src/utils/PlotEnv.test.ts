@@ -164,12 +164,21 @@ describe('PlotEnv', () => {
       }
 
       plotEnv.config = config
+
+      expect(histogramTransformSpy).toHaveBeenCalledTimes(0)
+
+      plotEnv.getTable(0)
+
+      expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
+
       plotEnv.config = {
         ...config,
         layers: [
           {type: 'histogram', x: 'a', binCount: 10, colors: ['red', 'green']},
         ],
       }
+
+      plotEnv.getTable(0)
 
       expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
     })
@@ -246,9 +255,15 @@ describe('PlotEnv', () => {
 
       plotEnv.config = config
 
+      expect(lineTransformSpy).toHaveBeenCalledTimes(0)
+
+      plotEnv.getTable(0)
+
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
 
       plotEnv.config = {...config, xDomain: [12, 14]}
+
+      plotEnv.getTable(0)
 
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
     })
