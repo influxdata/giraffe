@@ -140,7 +140,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
-    test.skip('does not run bin stat when histogram colors change', () => {
+    test('does not run bin stat when histogram colors change', () => {
       const plotEnv = new PlotEnv()
 
       const table: Table = {
@@ -174,7 +174,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
     })
 
-    test.skip('updating line interpolation should not reset the x domain', () => {
+    test('updating line interpolation should not reset the x domain', () => {
       const plotEnv = new PlotEnv()
 
       const table: Table = {
@@ -215,7 +215,7 @@ describe('PlotEnv', () => {
       expect(plotEnv.xDomain).toEqual([12, 15])
     })
 
-    test.skip('does not run line stat when x domain changes', () => {
+    test('does not run line stat when x domain changes', () => {
       const plotEnv = new PlotEnv()
 
       const table: Table = {
