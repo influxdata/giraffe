@@ -27,6 +27,7 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const fill = fillKnob(table, 'cpu')
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
@@ -38,7 +39,7 @@ storiesOf('XY Plot', module)
 
     const config: Config = {
       table,
-      yTickFormatter: x => `${Math.round(x)}%`,
+      valueFormatters: {[y]: y => `${Math.round(y)}%`},
       legendFont,
       tickFont,
       showAxes,
@@ -47,7 +48,7 @@ storiesOf('XY Plot', module)
           type: 'line',
           x,
           y,
-          fill: ['cpu'],
+          fill,
           interpolation,
           colors,
           lineWidth,
@@ -76,7 +77,7 @@ storiesOf('XY Plot', module)
 
     const config: Config = {
       table,
-      yTickFormatter: x => `${Math.round(x)}%`,
+      valueFormatters: {[y]: y => `${Math.round(y)}%`},
       legendFont,
       tickFont,
       showAxes,
@@ -112,7 +113,7 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
-      yTickFormatter: x => `${Math.round(x)}%`,
+      valueFormatters: {[y]: y => `${Math.round(y)}%`},
       layers: [{type: 'heatmap', x, y, colors}],
     }
 
@@ -136,7 +137,7 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
-      xTickFormatter: x => `${Math.round(x)}%`,
+      valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
     }
 

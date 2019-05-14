@@ -2,7 +2,7 @@ import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
 
 import {ColumnType} from '../types'
-import {getTimeTickFormatter} from './getTickFormatter'
+import {getTimeFormatter} from './getTimeFormatter'
 import {TextMetrics} from './getTextMetrics'
 
 const TICK_DENSITY = 0.5
@@ -17,7 +17,7 @@ export const getTicks = (
   let sampleTick
 
   if (columnType === 'time') {
-    sampleTick = getTimeTickFormatter(domain)(domain[1])
+    sampleTick = getTimeFormatter(domain)(domain[1])
   } else {
     sampleTick = String(domain[1])
   }

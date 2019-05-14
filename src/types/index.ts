@@ -233,8 +233,9 @@ export interface Config {
   onSetYDomain?: (yDomain: number[]) => void
   onResetYDomain?: () => void
 
-  xTickFormatter?: (tickValue: number) => string
-  yTickFormatter?: (tickValue: number) => string
+  valueFormatters?: {
+    [colKey: string]: (value: any) => string
+  }
 
   showAxes?: boolean
 

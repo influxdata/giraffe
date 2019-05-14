@@ -6,7 +6,7 @@ import {FILL_COL_KEY} from '../constants'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
-import {getLineTooltipData} from '../utils/getLineTooltipData'
+import {getTooltipData} from '../utils/lineTooltip'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
@@ -43,8 +43,6 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   const {
     xScale,
     yScale,
-    xTickFormatter,
-    yTickFormatter,
     innerWidth: width,
     innerHeight: height,
     config: {legendCrosshairColor: crosshairColor},
@@ -54,14 +52,13 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   const {data: yColData} = getNumericColumn(table, yColKey)
   const {data: groupColData} = getGroupingColumn(table, FILL_COL_KEY)
 
-  const tooltipData = getLineTooltipData(
+  const tooltipData = getTooltipData(
     rowIndices,
     table,
     xColKey,
     yColKey,
     FILL_COL_KEY,
-    xTickFormatter,
-    yTickFormatter,
+    env.getFormatterForColumn,
     fillColKeys,
     fillScale
   )

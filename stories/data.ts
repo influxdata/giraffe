@@ -1,6 +1,6 @@
-import {Table} from '../src/types'
+import {Table} from '../src'
 
-export const TABLE: Table = {
+export const CPU: Table = {
   columns: {
     _time: {
       data: [

@@ -1,7 +1,10 @@
 /*
   Equivalent to `flatten(xs.map(f))`.
 */
-export const flatMap = <X, Y>(f: (x: X) => Y[], xs: X[]): Y[] => {
+export const flatMap = <X, Y>(
+  f: (x: X, i: number, xs: X[]) => Y[],
+  xs: X[]
+): Y[] => {
   const result = []
   const yss = xs.map(f)
 
