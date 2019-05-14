@@ -36,6 +36,7 @@ export const MAX_TOOLTIP_ROWS = 8
 
 export const CONFIG_DEFAULTS: Partial<Config> = {
   layers: [],
+  valueFormatters: {},
   xAxisLabel: '',
   yAxisLabel: '',
   showAxes: true,
