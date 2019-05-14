@@ -2,7 +2,7 @@ import * as React from 'react'
 import {select, text, boolean} from '@storybook/addon-knobs'
 
 import {Table, isNumeric} from '../src'
-import {TABLE} from './data'
+import {CPU} from './data'
 import * as colorSchemes from '../src/constants/colorSchemes'
 
 export const PlotContainer = ({children}) => (
@@ -67,13 +67,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
   )
 
 export const tableKnob = (initial?: Table) =>
-  select(
-    'Data',
-    {
-      CPU: TABLE,
-    },
-    initial || TABLE
-  )
+  select('Data', {CPU}, initial || CPU)
 
 /*
   Find all column keys in a table suitable for mapping to the `x` or `y`

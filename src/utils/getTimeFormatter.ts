@@ -1,17 +1,4 @@
-import {ColumnType} from '../types'
-
-export const getTickFormatter = (
-  domain: number[],
-  columnType: ColumnType
-): ((tick: number) => string) => {
-  if (columnType === 'time') {
-    return getTimeTickFormatter(domain)
-  }
-
-  return x => String(x)
-}
-
-export const getTimeTickFormatter = (domain: number[]) => {
+export const getTimeFormatter = (domain: number[]) => {
   const dateFormatter = getDateTickFormatter(domain)
 
   return x => dateFormatter(new Date(x))

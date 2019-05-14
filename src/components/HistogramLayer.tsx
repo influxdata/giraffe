@@ -4,8 +4,7 @@ import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 import {HistogramLayerConfig, HistogramTable, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
-import {findHoveredRowIndices} from '../utils/findHoveredRowIndices'
-import {getHistogramTooltipData} from '../utils/getHistogramTooltipData'
+import {findHoveredRowIndices, getTooltipData} from '../utils/histogramTooltip'
 import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {Tooltip} from './Tooltip'
 import {FILL_COL_KEY} from '../constants'
@@ -99,14 +98,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
     layerIndex
   ] as HistogramLayerConfig
 
-  const {
-    xScale,
-    yScale,
-    innerWidth,
-    innerHeight,
-    xTickFormatter,
-    yTickFormatter,
-  } = env
+  const {xScale, yScale, innerWidth, innerHeight} = env
 
   useLayoutEffect(() => {
     drawBars({
@@ -129,13 +121,12 @@ export const HistogramLayer: FunctionComponent<Props> = ({
     yScale
   )
 
-  const tooltipData = getHistogramTooltipData(
+  const tooltipData = getTooltipData(
     hoveredRowIndices,
     table,
     xColKey,
     fillColKeys,
-    xTickFormatter,
-    yTickFormatter,
+    env.getFormatterForColumn,
     fillScale
   )
 

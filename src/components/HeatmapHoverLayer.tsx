@@ -23,8 +23,6 @@ export const HeatmapHoverLayer: FunctionComponent<Props> = ({
     innerHeight: height,
     xScale,
     yScale,
-    xTickFormatter,
-    yTickFormatter,
     config: {table: configTable, layers},
   } = env
 
@@ -36,10 +34,11 @@ export const HeatmapHoverLayer: FunctionComponent<Props> = ({
 
   const tooltipData = getTooltipData(
     hoveredRowIndices,
+    xColKey,
+    yColKey,
     xColName,
     yColName,
-    xTickFormatter,
-    yTickFormatter,
+    env.getFormatterForColumn,
     table
   )
 

@@ -12,29 +12,26 @@ import {
   HeatmapTable,
 } from '../types'
 
-import {
-  TICK_PADDING_TOP,
-  TICK_PADDING_RIGHT,
-  AXIS_LABEL_PADDING_BOTTOM,
-  LAYER_DEFAULTS,
-  CONFIG_DEFAULTS,
-} from '../constants'
+import {LAYER_DEFAULTS, CONFIG_DEFAULTS} from '../constants'
 
 import * as transforms from '../layerTransforms'
 import {getTicks} from './getTicks'
-import {getTickFormatter} from '../utils/getTickFormatter'
+import {getTimeFormatter} from '../utils/getTimeFormatter'
 import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 import {getTextMetrics} from './getTextMetrics'
-import {maxBy, extentOfExtents} from './extrema'
+import {getMargins} from './getMargins'
+import {extentOfExtents} from './extrema'
 import {flatMap} from './flatMap'
 import {identityMerge} from './identityMerge'
 import {MemoizedFunctionCache} from './MemoizedFunctionCache'
+import {defaultNumberFormatter} from './defaultNumberFormatter'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
 const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]
 const DEFAULT_Y_DOMAIN: [number, number] = [0, 1]
+const DEFAULT_FORMATTER = x => String(x)
 
 export class PlotEnv {
   private _config: SizedConfig | null = null
@@ -63,7 +60,9 @@ export class PlotEnv {
       config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
 
-    return this.getMargins(
+    const getMarginsMemoized = this.fns.get('getMargins', getMargins)
+
+    return getMarginsMemoized(
       this.config.showAxes,
       xAxisLabel,
       yAxisLabel,
@@ -156,14 +155,39 @@ export class PlotEnv {
   }
 
   public get xTickFormatter(): (tick: number) => string {
-    return this.getXTickFormatter(this.config, this.xDomain)
+    const colKeys = this.getColumnKeysForAesthetics(X_DOMAIN_AESTHETICS)
+
+    return this.getFormatterForColumn(colKeys[0])
   }
 
   public get yTickFormatter(): (tick: number) => string {
-    return this.getYTickFormatter(this.config, this.yDomain)
+    const colKeys = this.getColumnKeysForAesthetics(Y_DOMAIN_AESTHETICS)
+
+    return this.getFormatterForColumn(colKeys[0])
   }
 
-  public getTable(layerIndex: number): Table {
+  public getFormatterForColumn = (colKey: string): ((x: any) => string) => {
+    const preferredFormatter = this.config.valueFormatters[colKey]
+
+    if (preferredFormatter) {
+      return preferredFormatter
+    }
+
+    const col = this.getColumnByKey(colKey)
+
+    assert(`cannot supply formatter for non-existant column "${colKey}"`, !!col)
+
+    switch (col.type) {
+      case 'number':
+        return defaultNumberFormatter
+      case 'time':
+        return this.timeFormatter
+      default:
+        return DEFAULT_FORMATTER
+    }
+  }
+
+  public getTable = (layerIndex: number): Table => {
     const table = this.config.table
     const layerConfig = this.config.layers[layerIndex]
     const transformKey = `${layerIndex} ${layerConfig.type} table`
@@ -211,7 +235,7 @@ export class PlotEnv {
     }
   }
 
-  public getScale(layerIndex: number, aesthetic: string): Scale {
+  public getScale = (layerIndex: number, aesthetic: string): Scale => {
     const {type: layerType, colors} = this.config.layers[layerIndex]
     const transformKey = `${layerIndex} ${layerType} scales`
     const table = this.getTable(layerIndex)
@@ -243,7 +267,10 @@ export class PlotEnv {
     }
   }
 
-  public getMapping(layerIndex: number, aesthetic: string): string | null {
+  public getMapping = (
+    layerIndex: number,
+    aesthetic: string
+  ): string | null => {
     const layerConfig = this.config.layers[layerIndex]
 
     switch (layerConfig.type) {
@@ -260,24 +287,7 @@ export class PlotEnv {
     }
   }
 
-  public getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
-    const columnTypes = this.getColumnsForAesthetics(aesthetics).map(
-      col => col.type
-    )
-
-    if (!columnTypes.length) {
-      return null
-    }
-
-    assert(
-      `found multiple column types for aesthetics "${aesthetics}"`,
-      columnTypes.every(t => t === columnTypes[0])
-    )
-
-    return columnTypes[0]
-  }
-
-  public resetDomains(): void {
+  public resetDomains = (): void => {
     if (this.isXControlled) {
       this.config.onResetXDomain()
     } else {
@@ -312,45 +322,14 @@ export class PlotEnv {
     )
   }
 
-  private getMargins = memoizeOne(
-    (
-      showAxes: boolean,
-      xAxisLabel: string,
-      yAxisLabel: string,
-      yTicks: number[],
-      yTickFormatter: (tick: number) => string,
-      tickFont: string
-    ) => {
-      if (!showAxes) {
-        return {top: 1, right: 1, bottom: 1, left: 1}
-      }
+  private get timeFormatter() {
+    const getTimeFormatterMemoized = this.fns.get(
+      'timeFormatter',
+      getTimeFormatter
+    )
 
-      const longestYTick = maxBy(
-        d => d.length,
-        yTicks.map(t => yTickFormatter(t))
-      )
-
-      const {width: maxTextWidth, height: textHeight} = getTextMetrics(
-        tickFont,
-        longestYTick
-      )
-
-      const xAxisLabelHeight = xAxisLabel
-        ? textHeight + AXIS_LABEL_PADDING_BOTTOM
-        : 0
-
-      const yAxisLabelHeight = yAxisLabel
-        ? textHeight + AXIS_LABEL_PADDING_BOTTOM
-        : 0
-
-      return {
-        top: textHeight / 2,
-        right: 1,
-        bottom: textHeight + TICK_PADDING_TOP + xAxisLabelHeight,
-        left: maxTextWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
-      }
-    }
-  )
+    return getTimeFormatterMemoized(this.xDomain)
+  }
 
   private getXTicks = memoizeOne(getTicks)
 
@@ -380,6 +359,43 @@ export class PlotEnv {
     return columns
   }
 
+  private getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
+    const columnTypes = this.getColumnsForAesthetics(aesthetics).map(
+      col => col.type
+    )
+
+    if (!columnTypes.length) {
+      return null
+    }
+
+    assert(
+      `found multiple column types for aesthetics "${aesthetics}"`,
+      columnTypes.every(t => t === columnTypes[0])
+    )
+
+    return columnTypes[0]
+  }
+
+  private getColumnKeysForAesthetics(aesthetics: string[]): string[] {
+    return flatMap((layer, layerIndex) => {
+      const columnKeysForLayer = aesthetics.reduce((acc, aes) => {
+        if (layer[aes]) {
+          return [...acc, layer[aes]]
+        }
+
+        const derivedMapping = this.getMapping(layerIndex, aes)
+
+        if (derivedMapping) {
+          return [...acc, derivedMapping]
+        }
+
+        return acc
+      }, [])
+
+      return columnKeysForLayer
+    }, this.config.layers)
+  }
+
   private getDomainForAesthetics(aesthetics: string[]): number[] {
     // Collect column data arrays for all columns in the plot currently mapped
     // to any of the passed `aesthetics`
@@ -399,6 +415,25 @@ export class PlotEnv {
     return domain
   }
 
+  private getColumnByKey(key: string): TableColumn | null {
+    let col = null
+
+    if (this.config.table.columns[key]) {
+      col = this.config.table.columns[key]
+    }
+
+    for (let i = 0; i < this.config.layers.length; i++) {
+      const table = this.getTable(i)
+
+      if (table.columns[key]) {
+        col = table.columns[key]
+        break
+      }
+    }
+
+    return col
+  }
+
   private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {
     return scaleLinear()
       .domain(xDomain)
@@ -410,30 +445,6 @@ export class PlotEnv {
       .domain(yDomain)
       .range([innerHeight, 0])
   })
-
-  private getXTickFormatter = memoizeOne(
-    (config: SizedConfig, xDomain: number[]) => {
-      return (
-        config.xTickFormatter ||
-        getTickFormatter(
-          xDomain,
-          this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax'])
-        )
-      )
-    }
-  )
-
-  private getYTickFormatter = memoizeOne(
-    (config: SizedConfig, yDomain: number[]) => {
-      return (
-        config.yTickFormatter ||
-        getTickFormatter(
-          yDomain,
-          this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax'])
-        )
-      )
-    }
-  )
 }
 
 const applyLayerDefaults = (
