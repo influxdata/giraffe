@@ -126,7 +126,15 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
                   />
                 )
               case 'heatmap':
-                return <HeatmapLayer key={i} layerIndex={i} env={env} />
+                return (
+                  <HeatmapLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
               case 'scatter':
                 return <ScatterLayer key={i} layerIndex={i} env={env} />
               default:

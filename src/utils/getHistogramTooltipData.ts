@@ -1,23 +1,8 @@
 import {TooltipData, Scale, HistogramTable, ColumnType} from '../types'
 import {getNumericColumn} from './getNumericColumn'
 import {getGroupingColumn} from './getGroupingColumn'
+import {getRangeLabel} from './tooltip'
 import {FILL_COL_KEY} from '../constants'
-
-const isVoid = (x: any) => x === null || x === undefined
-
-const getRangeLabel = (min: number, max: number, formatter): string => {
-  let label = ''
-
-  if (isVoid(min) || isVoid(max)) {
-    label = ''
-  } else if (min === max) {
-    label = formatter(min)
-  } else {
-    label = `${formatter(min)} – ${formatter(max)}`
-  }
-
-  return label
-}
 
 export const getHistogramTooltipData = (
   hoveredRowIndices: number[],
@@ -43,7 +28,7 @@ export const getHistogramTooltipData = (
   const xColumn = {
     key: xColKey,
     name: xColKey,
-    type: 'float' as ColumnType,
+    type: 'number' as ColumnType,
     colors,
     values: hoveredRowIndices.map(i =>
       getRangeLabel(xMinCol.data[i], xMaxCol.data[i], xTickFormatter)
@@ -53,7 +38,7 @@ export const getHistogramTooltipData = (
   const countColumn = {
     key: 'count',
     name: 'count',
-    type: 'uint' as ColumnType,
+    type: 'number' as ColumnType,
     colors,
     values: hoveredRowIndices.map(i =>
       yTickFormatter(yMaxCol.data[i] - yMinCol.data[i])

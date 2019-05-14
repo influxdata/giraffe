@@ -86,7 +86,7 @@ export const LineLayer: FunctionComponent<Props> = ({
     height
   )
 
-  const hasHoverData = hoverRowIndices && hoverRowIndices.length
+  const hasHoverData = hoverRowIndices && hoverRowIndices.length > 0
 
   return (
     <>
