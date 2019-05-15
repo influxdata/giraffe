@@ -10,9 +10,14 @@ import {
   TableColumn,
   ColumnType,
   HeatmapTable,
+  LineLayerConfig,
 } from '../types'
 
-import {LAYER_DEFAULTS, CONFIG_DEFAULTS} from '../constants'
+import {
+  DEFAULT_RANGE_PADDING,
+  LAYER_DEFAULTS,
+  CONFIG_DEFAULTS,
+} from '../constants'
 
 import * as transforms from '../layerTransforms'
 import {getTicks} from './getTicks'
@@ -434,16 +439,28 @@ export class PlotEnv {
     return col
   }
 
+  private get rangePadding(): number {
+    const specifiedLineWidths = this.config.layers
+      .filter(l => l.type === 'line')
+      .map(l => (l as LineLayerConfig).lineWidth)
+
+    return Math.max(DEFAULT_RANGE_PADDING, ...specifiedLineWidths)
+  }
+
   private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {
+    const {rangePadding} = this
+
     return scaleLinear()
       .domain(xDomain)
-      .range([0, innerWidth])
+      .range([rangePadding, innerWidth - rangePadding * 2])
   })
 
   private getYScale = memoizeOne((yDomain: number[], innerHeight: number) => {
+    const {rangePadding} = this
+
     return scaleLinear()
       .domain(yDomain)
-      .range([innerHeight, 0])
+      .range([innerHeight - rangePadding * 2, rangePadding])
   })
 }
 

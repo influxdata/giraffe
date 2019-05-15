@@ -12,6 +12,10 @@ interface Props {
   style: CSSProperties
 }
 
+// A grid line must be at least this many pixels away from both parallel axes
+// in order to be drawn
+const GRID_LINE_MIN_DIST = 5
+
 interface DrawAxesOptions {
   canvas: HTMLCanvasElement
   innerWidth: number
@@ -64,12 +68,17 @@ export const drawAxes = ({
   for (const xTick of xTicks) {
     const x = xScale(xTick) + margins.left
 
-    context.strokeStyle = gridColor
-    context.globalAlpha = gridOpacity
-    context.beginPath()
-    context.moveTo(x, xAxisY)
-    context.lineTo(x, margins.top)
-    context.stroke()
+    if (
+      Math.abs(x - margins.left) > GRID_LINE_MIN_DIST &&
+      Math.abs(x - (width - margins.right)) > GRID_LINE_MIN_DIST
+    ) {
+      context.strokeStyle = gridColor
+      context.globalAlpha = gridOpacity
+      context.beginPath()
+      context.moveTo(x, xAxisY)
+      context.lineTo(x, margins.top)
+      context.stroke()
+    }
 
     context.globalAlpha = 1
     context.fillStyle = tickFontColor
@@ -84,12 +93,17 @@ export const drawAxes = ({
   for (const yTick of yTicks) {
     const y = yScale(yTick) + margins.top
 
-    context.strokeStyle = gridColor
-    context.globalAlpha = gridOpacity
-    context.beginPath()
-    context.moveTo(margins.left, y)
-    context.lineTo(width - margins.right, y)
-    context.stroke()
+    if (
+      Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+      Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+    ) {
+      context.strokeStyle = gridColor
+      context.globalAlpha = gridOpacity
+      context.beginPath()
+      context.moveTo(margins.left, y)
+      context.lineTo(width - margins.right, y)
+      context.stroke()
+    }
 
     context.globalAlpha = 1
     context.fillStyle = tickFontColor
