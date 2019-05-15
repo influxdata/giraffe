@@ -48,16 +48,18 @@ describe('PlotEnv', () => {
 
       plotEnv.config = config
 
-      expect(plotEnv.xScale(10)).toEqual(0)
+      const rangePadding = plotEnv['rangePadding']
+
+      expect(plotEnv.xScale(10)).toEqual(rangePadding)
       expect(plotEnv.xScale(19)).toEqual(
-        1000 - plotEnv.margins.left - plotEnv.margins.right
+        1000 - plotEnv.margins.left - plotEnv.margins.right - rangePadding * 2
       )
 
       plotEnv.config = {...config, xDomain: [10, 28]}
 
-      expect(plotEnv.xScale(10)).toEqual(0)
+      expect(plotEnv.xScale(10)).toEqual(rangePadding)
       expect(plotEnv.xScale(28)).toEqual(
-        1000 - plotEnv.margins.left - plotEnv.margins.right
+        1000 - plotEnv.margins.left - plotEnv.margins.right - rangePadding * 2
       )
     })
 
