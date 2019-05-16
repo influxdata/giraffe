@@ -54,7 +54,6 @@ export const drawHeatmap = ({
 
     context.beginPath()
     context.rect(squareX, squareY, squareWidth, squareHeight)
-    context.globalAlpha = count === 0 ? 0 : 1
     context.fillStyle = fill
     context.fill()
   }
