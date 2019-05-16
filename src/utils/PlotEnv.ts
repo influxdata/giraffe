@@ -228,11 +228,11 @@ export class PlotEnv {
         )
       }
       case 'heatmap': {
-        const {x, y} = layerConfig
+        const {x, y, binSize} = layerConfig
         const {width, height, xDomain, yDomain} = this.config
         const transform = this.fns.get(transformKey, transforms.getHeatmapTable)
 
-        return transform(table, x, y, xDomain, yDomain, width, height)
+        return transform(table, x, y, xDomain, yDomain, width, height, binSize)
       }
       default: {
         return this.config.table

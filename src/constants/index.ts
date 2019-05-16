@@ -65,6 +65,7 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
   },
   heatmap: {
     colors: DEFAULT_COLOR_SCHEME,
+    binSize: 10,
   },
   scatter: {
     colors: DEFAULT_COLOR_SCHEME,

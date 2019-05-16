@@ -12,8 +12,6 @@ import {
 
 import {getNumericColumn} from '../utils/getNumericColumn'
 
-const BIN_SIZE = 10
-
 export const getHeatmapTable = (
   table: Table,
   xColKey: string,
@@ -21,9 +19,10 @@ export const getHeatmapTable = (
   xDomain: number[],
   yDomain: number[],
   width: number,
-  height: number
+  height: number,
+  binSize: number
 ): HeatmapTable =>
-  bin2d(table, xColKey, yColKey, xDomain, yDomain, width, height, BIN_SIZE)
+  bin2d(table, xColKey, yColKey, xDomain, yDomain, width, height, binSize)
 
 export const getHeatmapScales = (
   table: HeatmapTable,

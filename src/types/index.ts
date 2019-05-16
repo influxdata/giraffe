@@ -130,6 +130,7 @@ export interface HeatmapLayerConfig {
   x: string
   y: string
   colors?: string[]
+  binSize?: number
 }
 
 export interface HeatmapScales {
