@@ -379,7 +379,15 @@ const lookupIndex1D = (
     groupColData
   )
 
-  return Object.values(nearestIndexByGroup).map(d => d.i)
+  const nearestRows = Object.values(nearestIndexByGroup)
+
+  if (!nearestRows.length) {
+    return []
+  }
+
+  const nearestDistance = Math.min(...nearestRows.map(d => d.distance))
+
+  return nearestRows.filter(d => d.distance === nearestDistance).map(d => d.i)
 }
 
 const collectNearestIndices = (
@@ -391,7 +399,7 @@ const collectNearestIndices = (
 ): void => {
   for (const i of rowIndices) {
     const group = groupColData[i]
-    const distance = Math.abs(dataCoord - colData[i])
+    const distance = Math.floor(Math.abs(dataCoord - colData[i]))
 
     if (!acc[group] || distance < acc[group].distance) {
       acc[group] = {i, distance}
