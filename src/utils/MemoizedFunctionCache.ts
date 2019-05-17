@@ -22,13 +22,24 @@ import memoizeOne from 'memoize-one'
 
 */
 export class MemoizedFunctionCache {
-  private memoizedFunctions: {[key: string]: Function} = {}
+  private memoizedFunctions: {
+    [key: string]: {memoized: Function; original: Function}
+  } = {}
 
   public get<T extends (...args: any[]) => any>(key: string, fn: T): T {
     if (!this.memoizedFunctions[key]) {
-      this.memoizedFunctions[key] = memoizeOne(fn)
+      this.memoizedFunctions[key] = {
+        memoized: memoizeOne(fn),
+        original: fn,
+      }
     }
 
-    return this.memoizedFunctions[key] as T
+    const {memoized, original} = this.memoizedFunctions[key]
+
+    if (original !== fn) {
+      throw new Error(`expected ${fn} but found ${original}`)
+    }
+
+    return memoized as T
   }
 }
