@@ -131,8 +131,8 @@ const extractAnnotationText = (chunk: string): string => {
     .trim()
 
   assert(
-    'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?',
-    !!text
+    !!text,
+    'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
   )
 
   return text
@@ -152,9 +152,9 @@ const parseAnnotations = (
   const datatypeRow = rows.find(row => row[0] === '#datatype')
   const defaultRow = rows.find(row => row[0] === '#default')
 
-  assert('could not find group annotation in Flux response', !!groupRow)
-  assert('could not find group annotation in Flux response', !!datatypeRow)
-  assert('could not find group annotation in Flux response', !!defaultRow)
+  assert(!!groupRow, 'could not find group annotation in Flux response')
+  assert(!!datatypeRow, 'could not find datatype annotation in Flux response')
+  assert(!!defaultRow, 'could not find default annotation in Flux response')
 
   const groupKey = groupRow.reduce(
     (acc, val, i) => (val === 'true' ? [...acc, headerRow[i]] : acc),
@@ -194,7 +194,7 @@ const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
 const toColumnType = (fluxDataType: string): ColumnType => {
   const columnType = TO_COLUMN_TYPE[fluxDataType]
 
-  assert(`encountered unknown Flux column type ${fluxDataType}`, !!columnType)
+  assert(!!columnType, `encountered unknown Flux column type ${fluxDataType}`)
 
   return columnType
 }

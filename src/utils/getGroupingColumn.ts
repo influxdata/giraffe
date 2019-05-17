@@ -7,7 +7,7 @@ export const getGroupingColumn = (
 ): StringColumn => {
   const col = table.columns[columnKey]
 
-  assert(`expected column "${columnKey}" but did not find it`, !!col)
+  assert(!!col, `expected column "${columnKey}" but did not find it`)
 
   return col as StringColumn
 }
