@@ -91,6 +91,7 @@ export interface LineLayerConfig {
   interpolation?: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
+  maxTooltipRows?: number
 }
 
 export interface LineMappings {

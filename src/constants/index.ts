@@ -33,8 +33,6 @@ export const CURVES = {
   natural: curveNatural,
 }
 
-export const MAX_TOOLTIP_ROWS = 8
-
 export const CONFIG_DEFAULTS: Partial<Config> = {
   layers: [],
   valueFormatters: {},
@@ -62,6 +60,7 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     fill: [],
     colors: DEFAULT_COLOR_SCHEME,
     interpolation: 'linear',
+    maxTooltipRows: 24,
   },
   heatmap: {
     colors: DEFAULT_COLOR_SCHEME,
