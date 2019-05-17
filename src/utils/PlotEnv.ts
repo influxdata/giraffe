@@ -1,6 +1,4 @@
-import {scaleLinear} from 'd3-scale'
 import {range} from 'd3-array'
-import memoizeOne from 'memoize-one'
 
 import {
   SizedConfig,
@@ -31,6 +29,7 @@ import {flatMap} from './flatMap'
 import {identityMerge} from './identityMerge'
 import {MemoizedFunctionCache} from './MemoizedFunctionCache'
 import {defaultNumberFormatter} from './defaultNumberFormatter'
+import {getLinearScale} from './getLinearScale'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
 const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
@@ -65,7 +64,7 @@ export class PlotEnv {
       config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
 
-    const getMarginsMemoized = this.fns.get('getMargins', getMargins)
+    const getMarginsMemoized = this.fns.get('margins', getMargins)
 
     return getMarginsMemoized(
       this.config.showAxes,
@@ -92,31 +91,47 @@ export class PlotEnv {
   }
 
   public get xTicks(): number[] {
-    return this.getXTicks(
+    const getTicksMemoized = this.fns.get('xTicks', getTicks)
+
+    return getTicksMemoized(
       this.xDomain,
       this.config.width,
       'horizontal',
       this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax']),
-      this.getCharMetrics(this.config.tickFont)
+      this.charMetrics
     )
   }
 
   public get yTicks(): number[] {
-    return this.getYTicks(
+    const getTicksMemoized = this.fns.get('yTicks', getTicks)
+
+    return getTicksMemoized(
       this.yDomain,
       this.config.height,
       'vertical',
       this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax']),
-      this.getCharMetrics(this.config.tickFont)
+      this.charMetrics
     )
   }
 
   public get xScale(): Scale<number, number> {
-    return this.getXScale(this.xDomain, this.innerWidth)
+    const getXScaleMemoized = this.fns.get('xScale', getLinearScale)
+    const {xDomain, rangePadding, innerWidth} = this
+
+    return getXScaleMemoized(xDomain, [
+      rangePadding,
+      innerWidth - rangePadding * 2,
+    ])
   }
 
   public get yScale(): Scale<number, number> {
-    return this.getYScale(this.yDomain, this.innerHeight)
+    const getYScaleMemoized = this.fns.get('yScale', getLinearScale)
+    const {yDomain, rangePadding, innerHeight} = this
+
+    return getYScaleMemoized(yDomain, [
+      innerHeight - rangePadding * 2,
+      rangePadding,
+    ])
   }
 
   public get xDomain(): number[] {
@@ -306,10 +321,12 @@ export class PlotEnv {
     }
   }
 
-  private getCharMetrics = memoizeOne((font: string) => {
+  private get charMetrics() {
+    const getTextMetricsMemoized = this.fns.get('charMetrics', getTextMetrics)
+
     // https://stackoverflow.com/questions/3949422/which-letter-of-the-english-alphabet-takes-up-most-pixels
-    return getTextMetrics(font, 'W')
-  })
+    return getTextMetricsMemoized(this.config.tickFont, 'W')
+  }
 
   private get isXControlled() {
     return (
@@ -335,10 +352,6 @@ export class PlotEnv {
 
     return getTimeFormatterMemoized(this.xDomain)
   }
-
-  private getXTicks = memoizeOne(getTicks)
-
-  private getYTicks = memoizeOne(getTicks)
 
   private getXDomain() {
     return this.getDomainForAesthetics(X_DOMAIN_AESTHETICS) || DEFAULT_X_DOMAIN
@@ -446,22 +459,6 @@ export class PlotEnv {
 
     return Math.max(DEFAULT_RANGE_PADDING, ...specifiedLineWidths)
   }
-
-  private getXScale = memoizeOne((xDomain: number[], innerWidth: number) => {
-    const {rangePadding} = this
-
-    return scaleLinear()
-      .domain(xDomain)
-      .range([rangePadding, innerWidth - rangePadding * 2])
-  })
-
-  private getYScale = memoizeOne((yDomain: number[], innerHeight: number) => {
-    const {rangePadding} = this
-
-    return scaleLinear()
-      .domain(yDomain)
-      .range([innerHeight - rangePadding * 2, rangePadding])
-  })
 }
 
 const applyLayerDefaults = (
