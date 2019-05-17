@@ -7,7 +7,7 @@ import {drawLines} from '../utils/drawLines'
 import {collectLineData, simplifyLineData} from '../utils/lineData'
 import {clearCanvas} from '../utils/clearCanvas'
 import {LineHoverLayer} from './LineHoverLayer'
-import {MAX_TOOLTIP_ROWS, FILL_COL_KEY} from '../constants'
+import {FILL_COL_KEY} from '../constants'
 import {useHoverLineIndices} from '../utils/useHoverLineIndices'
 import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {getNumericColumn} from '../utils/getNumericColumn'
@@ -36,6 +36,7 @@ export const LineLayer: FunctionComponent<Props> = ({
     y: yColKey,
     lineWidth,
     hoverDimension,
+    maxTooltipRows,
   } = layer
 
   const {data: xColData} = getNumericColumn(table, xColKey)
@@ -56,7 +57,7 @@ export const LineLayer: FunctionComponent<Props> = ({
 
   const resolvedHoverDimension =
     hoverDimension === 'auto'
-      ? Object.keys(lineData).length > MAX_TOOLTIP_ROWS
+      ? Object.keys(lineData).length > maxTooltipRows
         ? 'xy'
         : 'x'
       : hoverDimension
