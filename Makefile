@@ -5,7 +5,6 @@ build: dist
 
 run: node_modules
 	rm -rf dist
-	npm link
 	NODE_ENV=development $(nodebin)/rollup -cw
 
 test: node_modules
