@@ -81,8 +81,8 @@ export const bin = (
 ): HistogramTable => {
   const col = table.columns[xColKey]
 
-  assert(`could not find column "${xColKey}"`, !!col)
-  assert(`unsupported value column type "${col.type}"`, isNumeric(col.type))
+  assert(!!col, `could not find column "${xColKey}"`)
+  assert(isNumeric(col.type), `unsupported value column type "${col.type}"`)
 
   const {type: xColType, data: xColData} = getNumericColumn(table, xColKey)
 

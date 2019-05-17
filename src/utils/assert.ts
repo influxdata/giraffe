@@ -1,5 +1,5 @@
-export const assert = (message: string, condition: boolean) => {
+export const assert = (condition: boolean, errorMessage: string) => {
   if (!condition) {
-    throw new Error(message)
+    throw new Error(errorMessage)
   }
 }

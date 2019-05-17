@@ -5,10 +5,10 @@ export const getStringColumn = (table: Table, key: string): StringColumn => {
   const col = table.columns[key]
 
   assert(
+    col.type === 'string',
     `expected column "${key}" to be numeric but received column of type "${
       col.type
-    }"`,
-    col.type === 'string'
+    }"`
   )
 
   return col as StringColumn

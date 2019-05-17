@@ -9,10 +9,10 @@ export const getNumericColumn = (
   const col = table.columns[key]
 
   assert(
+    isNumeric(col.type),
     `expected column "${key}" to be numeric but received column of type "${
       col.type
-    }"`,
-    isNumeric(col.type)
+    }"`
   )
 
   return col as NumberColumn | TimeColumn

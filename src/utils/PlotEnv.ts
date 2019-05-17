@@ -195,7 +195,7 @@ export class PlotEnv {
 
     const col = this.getColumnByKey(colKey)
 
-    assert(`cannot supply formatter for non-existant column "${colKey}"`, !!col)
+    assert(!!col, `cannot supply formatter for non-existant column "${colKey}"`)
 
     switch (col.type) {
       case 'number':
@@ -387,8 +387,8 @@ export class PlotEnv {
     }
 
     assert(
-      `found multiple column types for aesthetics "${aesthetics}"`,
-      columnTypes.every(t => t === columnTypes[0])
+      columnTypes.every(t => t === columnTypes[0]),
+      `found multiple column types for aesthetics "${aesthetics}"`
     )
 
     return columnTypes[0]
@@ -418,7 +418,7 @@ export class PlotEnv {
     // Collect column data arrays for all columns in the plot currently mapped
     // to any of the passed `aesthetics`
     const colData = this.getColumnsForAesthetics(aesthetics).map(col => {
-      assert(`expected column ${col.name} to be numeric`, isNumeric(col.type))
+      assert(isNumeric(col.type), `expected column ${col.name} to be numeric`)
 
       return col.data as number[]
     })
