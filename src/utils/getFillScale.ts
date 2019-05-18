@@ -3,13 +3,13 @@ import {scaleOrdinal} from 'd3-scale'
 import {interpolateRgbBasis} from 'd3-interpolate'
 
 import {Table, Scale} from '../types'
-import {FILL_COL_KEY} from '../constants'
+import {FILL} from '../constants/columnKeys'
 
 export const getFillScale = (
   table: Table,
   colors: string[]
 ): Scale<string, string> => {
-  const fillCol = table.columns[FILL_COL_KEY].data as string[]
+  const fillCol = table.getColumn(FILL, 'string')
 
   const fillSet = Array.from(new Set(fillCol))
 

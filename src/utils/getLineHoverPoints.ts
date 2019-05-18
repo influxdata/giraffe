@@ -1,8 +1,6 @@
 import {Table, Scale} from '../types'
 
-import {getNumericColumn} from './getNumericColumn'
-import {getGroupingColumn} from './getGroupingColumn'
-import {FILL_COL_KEY} from '../constants'
+import {FILL} from '../constants/columnKeys'
 
 export const getLineHoverPoints = (
   table: Table,
@@ -13,9 +11,9 @@ export const getLineHoverPoints = (
   yScale: Scale<number, number>,
   fillScale: Scale<string, string>
 ): Array<{x: number; y: number; fill: string}> => {
-  const {data: xColData} = getNumericColumn(table, xColKey)
-  const {data: yColData} = getNumericColumn(table, yColKey)
-  const {data: groupColData} = getGroupingColumn(table, FILL_COL_KEY)
+  const xColData = table.getColumn(xColKey, 'number')
+  const yColData = table.getColumn(yColKey, 'number')
+  const groupColData = table.getColumn(FILL, 'string')
 
   return hoverRowIndices.map(i => ({
     x: xScale(xColData[i]),

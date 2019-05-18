@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useLayoutEffect, useRef, FunctionComponent} from 'react'
 
-import {HeatmapTable, HeatmapLayerConfig} from '../types'
+import {HeatmapLayerConfig} from '../types'
 import {getTooltipData} from '../utils/heatmapTooltip'
 import {Tooltip} from './Tooltip'
 import {PlotEnv} from '../utils/PlotEnv'
@@ -27,9 +27,9 @@ export const HeatmapHoverLayer: FunctionComponent<Props> = ({
   } = env
 
   const {x: xColKey, y: yColKey} = layers[layerIndex] as HeatmapLayerConfig
-  const xColName = configTable.columns[xColKey].name
-  const yColName = configTable.columns[yColKey].name
-  const table = env.getTable(layerIndex) as HeatmapTable
+  const xColName = configTable.getColumnName(xColKey)
+  const yColName = configTable.getColumnName(yColKey)
+  const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
 
   const tooltipData = getTooltipData(

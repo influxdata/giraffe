@@ -2,14 +2,14 @@ import * as React from 'react'
 import {useRef, useLayoutEffect, useMemo, FunctionComponent} from 'react'
 import {symbol as d3Symbol, SymbolType} from 'd3-shape'
 
-import {Table, Scale, ScatterLayerConfig} from '../types'
+import {Table, Scale, ScatterLayerConfig, NumericColumnData} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
-import {FILL_COL_KEY, SYMBOL_COL_KEY} from '../constants'
+import {FILL, SYMBOL} from '../constants/columnKeys'
 
 type ScatterData = {
-  xs: number[] | Float64Array
-  ys: number[] | Float64Array
+  xs: NumericColumnData
+  ys: NumericColumnData
   fill: string[]
   symbol: SymbolType[]
 }
@@ -20,19 +20,12 @@ const collectScatterData = (
   yColKey: string,
   fillScale: Scale<string, string>,
   symbolScale: Scale<string, SymbolType>
-): ScatterData => {
-  const xCol = table.columns[xColKey].data as number[]
-  const yCol = table.columns[yColKey].data as number[]
-  const fillCol = table.columns[FILL_COL_KEY].data as string[]
-  const symbolCol = table.columns[SYMBOL_COL_KEY].data as string[]
-
-  return {
-    xs: xCol,
-    ys: yCol,
-    fill: fillCol.map(fillScale),
-    symbol: symbolCol.map(symbolScale),
-  }
-}
+): ScatterData => ({
+  xs: table.getColumn(xColKey, 'number'),
+  ys: table.getColumn(yColKey, 'number'),
+  fill: table.getColumn(FILL, 'string').map(fillScale),
+  symbol: table.getColumn(SYMBOL, 'string').map(symbolScale),
+})
 
 interface DrawPointsOptions {
   canvas: HTMLCanvasElement

@@ -1,26 +1,27 @@
 import {range} from 'd3-array'
 
-import {TooltipData, ColumnType, HeatmapTable} from '../types'
+import {Table, TooltipData, ColumnType} from '../types'
 import {getRangeLabel} from './tooltip'
+import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
 
 export const findHoveredRowIndices = (
-  table: HeatmapTable,
+  table: Table,
   dataX: number,
   dataY: number
 ): number[] => {
-  const xMinColData = table.columns.xMin.data
-  const xMaxColData = table.columns.xMax.data
-  const yMinColData = table.columns.yMin.data
-  const yMaxColData = table.columns.yMax.data
-  const countColData = table.columns.count.data
+  const xMinData = table.getColumn(X_MIN, 'number')
+  const xMaxData = table.getColumn(X_MAX, 'number')
+  const yMinData = table.getColumn(Y_MIN, 'number')
+  const yMaxData = table.getColumn(Y_MAX, 'number')
+  const countData = table.getColumn(COUNT, 'number')
 
-  const hoveredRowIndices = range(xMinColData.length).filter(
+  const hoveredRowIndices = range(table.length).filter(
     i =>
-      xMinColData[i] <= dataX &&
-      xMaxColData[i] > dataX &&
-      yMinColData[i] <= dataY &&
-      yMaxColData[i] > dataY &&
-      countColData[i] !== 0
+      xMinData[i] <= dataX &&
+      xMaxData[i] > dataX &&
+      yMinData[i] <= dataY &&
+      yMaxData[i] > dataY &&
+      countData[i] !== 0
   )
 
   return hoveredRowIndices
@@ -33,17 +34,17 @@ export const getTooltipData = (
   xColName: string,
   yColName: string,
   getValueFormatter: (colKey: string) => (x: any) => string,
-  table: HeatmapTable
+  table: Table
 ): TooltipData => {
   if (!hoveredRowIndices || hoveredRowIndices.length === 0) {
     return null
   }
 
-  const xMinColData = table.columns.xMin.data
-  const xMaxColData = table.columns.xMax.data
-  const yMinColData = table.columns.yMin.data
-  const yMaxColData = table.columns.yMax.data
-  const countColData = table.columns.count.data
+  const xMinData = table.getColumn(X_MIN, 'number')
+  const xMaxData = table.getColumn(X_MAX, 'number')
+  const yMinData = table.getColumn(Y_MIN, 'number')
+  const yMaxData = table.getColumn(Y_MAX, 'number')
+  const countData = table.getColumn(COUNT, 'number')
   const xFormatter = getValueFormatter(xColKey)
   const yFormatter = getValueFormatter(yColKey)
   const countFormatter = getValueFormatter('count')
@@ -54,7 +55,7 @@ export const getTooltipData = (
     type: 'number' as ColumnType,
     colors: null,
     values: hoveredRowIndices.map(i =>
-      getRangeLabel(xMinColData[i], xMaxColData[i], xFormatter)
+      getRangeLabel(xMinData[i], xMaxData[i], xFormatter)
     ),
   }
 
@@ -64,7 +65,7 @@ export const getTooltipData = (
     type: 'number' as ColumnType,
     colors: null,
     values: hoveredRowIndices.map(i =>
-      getRangeLabel(yMinColData[i], yMaxColData[i], yFormatter)
+      getRangeLabel(yMinData[i], yMaxData[i], yFormatter)
     ),
   }
 
@@ -73,7 +74,7 @@ export const getTooltipData = (
     name: 'count',
     type: 'number' as ColumnType,
     colors: null,
-    values: hoveredRowIndices.map(i => countFormatter(countColData[i])),
+    values: hoveredRowIndices.map(i => countFormatter(countData[i])),
   }
 
   return [xColumn, yColumn, countColumn]

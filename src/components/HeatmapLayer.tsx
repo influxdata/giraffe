@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HeatmapTable} from '../types'
 import {HeatmapHoverLayer} from './HeatmapHoverLayer'
 import {PlotEnv} from '../utils/PlotEnv'
 import {findHoveredRowIndices} from '../utils/heatmapTooltip'
@@ -22,7 +21,7 @@ export const HeatmapLayer: FunctionComponent<Props> = ({
 }) => {
   const {innerWidth: width, innerHeight: height, xScale, yScale} = env
   const fillScale = env.getScale(layerIndex, 'fill')
-  const table = env.getTable(layerIndex) as HeatmapTable
+  const table = env.getTable(layerIndex)
 
   let hoveredRowIndices = null
 

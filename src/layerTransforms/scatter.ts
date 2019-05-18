@@ -2,15 +2,15 @@ import {Table, ScatterLayerConfig, ScatterMappings} from '../types'
 import {getFillScale} from '../utils/getFillScale'
 import {getSymbolScale} from '../utils/getSymbolScale'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
-import {SYMBOL_COL_KEY, FILL_COL_KEY} from '../constants'
+import {FILL, SYMBOL} from '../constants/columnKeys'
 
 export const getScatterTable = (
   table: Table,
   fill: string[],
   symbol: string[]
 ): Table => {
-  const withFillCol = appendGroupingCol(table, fill, FILL_COL_KEY)
-  const withSymbolCol = appendGroupingCol(withFillCol, symbol, SYMBOL_COL_KEY)
+  const withFillCol = appendGroupingCol(table, fill, FILL)
+  const withSymbolCol = appendGroupingCol(withFillCol, symbol, SYMBOL)
 
   return withSymbolCol
 }

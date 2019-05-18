@@ -2,15 +2,9 @@ import {extent, range} from 'd3-array'
 import {interpolateRgbBasis} from 'd3-interpolate'
 import {scaleSequential} from 'd3-scale'
 
-import {
-  Table,
-  HeatmapTable,
-  HeatmapScales,
-  HeatmapMappings,
-  Scale,
-} from '../types'
-
-import {getNumericColumn} from '../utils/getNumericColumn'
+import {newTable} from '../utils/newTable'
+import {Table, HeatmapScales, HeatmapMappings, Scale} from '../types'
+import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
 
 export const getHeatmapTable = (
   table: Table,
@@ -21,14 +15,14 @@ export const getHeatmapTable = (
   width: number,
   height: number,
   binSize: number
-): HeatmapTable =>
+): Table =>
   bin2d(table, xColKey, yColKey, xDomain, yDomain, width, height, binSize)
 
 export const getHeatmapScales = (
-  table: HeatmapTable,
+  table: Table,
   colors: string[]
 ): HeatmapScales => {
-  const domain = extent(table.columns.count.data)
+  const domain = extent(table.getColumn(COUNT, 'number'))
   const colorScheme = interpolateRgbBasis(colors)
   const fillScale = scaleSequential(colorScheme).domain(domain)
 
@@ -54,9 +48,11 @@ export const bin2d = (
   width: number,
   height: number,
   binSize: number
-): HeatmapTable => {
-  const {data: xColData, type: xColType} = getNumericColumn(table, xColKey)
-  const {data: yColData, type: yColType} = getNumericColumn(table, yColKey)
+): Table => {
+  const xColData = table.getColumn(xColKey, 'number')
+  const yColData = table.getColumn(yColKey, 'number')
+  const xColType = table.getColumnType(xColKey) as 'time' | 'number'
+  const yColType = table.getColumnType(yColKey) as 'time' | 'number'
 
   if (!xDomain) {
     xDomain = extent(xColData)
@@ -107,46 +103,34 @@ export const bin2d = (
   }
 
   // Now build a `Table` from that matrix
-  const statTable = {
-    columns: {
-      xMin: {
-        data: [],
-        type: xColType,
-      },
-      xMax: {
-        data: [],
-        type: xColType,
-      },
-      yMin: {
-        data: [],
-        type: yColType,
-      },
-      yMax: {
-        data: [],
-        type: yColType,
-      },
-      count: {
-        data: [],
-        type: 'int',
-      },
-    },
-    length: 0,
-  }
+
   const xBinWidth = (xDomain[1] - xDomain[0]) / xBinCount
   const yBinWidth = (yDomain[1] - yDomain[0]) / yBinCount
 
+  const xMinData: number[] = []
+  const xMaxData: number[] = []
+  const yMinData: number[] = []
+  const yMaxData: number[] = []
+  const countData: number[] = []
+
   for (let i = 0; i < xBinCount; i++) {
     for (let j = 0; j < yBinCount; j++) {
-      statTable.columns.xMin.data.push(xDomain[0] + i * xBinWidth)
-      statTable.columns.xMax.data.push(xDomain[0] + (i + 1) * xBinWidth)
-      statTable.columns.yMin.data.push(yDomain[0] + j * yBinWidth)
-      statTable.columns.yMax.data.push(yDomain[0] + (j + 1) * yBinWidth)
-      statTable.columns.count.data.push(bins[i][j])
-      statTable.length += 1
+      xMinData.push(xDomain[0] + i * xBinWidth)
+      xMaxData.push(xDomain[0] + (i + 1) * xBinWidth)
+      yMinData.push(yDomain[0] + j * yBinWidth)
+      yMaxData.push(yDomain[0] + (j + 1) * yBinWidth)
+      countData.push(bins[i][j])
     }
   }
 
-  return statTable as HeatmapTable
+  const heatmapTable = newTable(xMinData.length)
+    .addColumn(X_MIN, xColType, xMinData)
+    .addColumn(X_MAX, xColType, xMaxData)
+    .addColumn(Y_MIN, yColType, yMinData)
+    .addColumn(Y_MAX, yColType, yMaxData)
+    .addColumn(COUNT, 'number', countData)
+
+  return heatmapTable
 }
 
 const getBinIndex = (val: number, domain: number[], binCount: number) => {

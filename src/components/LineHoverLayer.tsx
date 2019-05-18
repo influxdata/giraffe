@@ -2,7 +2,7 @@ import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
 import {Tooltip} from './Tooltip'
-import {FILL_COL_KEY} from '../constants'
+import {FILL} from '../constants/columnKeys'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
@@ -10,8 +10,6 @@ import {getTooltipData} from '../utils/lineTooltip'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
-import {getGroupingColumn} from '../utils/getGroupingColumn'
-import {getNumericColumn} from '../utils/getNumericColumn'
 import {clearCanvas} from '../utils/clearCanvas'
 
 interface Props {
@@ -48,16 +46,16 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     config: {legendCrosshairColor: crosshairColor},
   } = env
 
-  const {data: xColData} = getNumericColumn(table, xColKey)
-  const {data: yColData} = getNumericColumn(table, yColKey)
-  const {data: groupColData} = getGroupingColumn(table, FILL_COL_KEY)
+  const xColData = table.getColumn(xColKey, 'number')
+  const yColData = table.getColumn(yColKey, 'number')
+  const groupColData = table.getColumn(FILL, 'string')
 
   const tooltipData = getTooltipData(
     rowIndices,
     table,
     xColKey,
     yColKey,
-    FILL_COL_KEY,
+    FILL,
     env.getFormatterForColumn,
     fillColKeys,
     fillScale

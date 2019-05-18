@@ -1,12 +1,12 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 
-import {fluxToTable, Config, Plot} from '../src'
+import {fromFlux, Config, Plot} from '../src'
 
 storiesOf('Snapshot Tests', module).add('with multiple minimum values', () => {
   // https://github.com/influxdata/vis/issues/51
 
-  const {table} = fluxToTable(
+  const {table} = fromFlux(
     `#group,false,false,true,false,false
 #datatype,string,long,string,long,dateTime:RFC3339
 #default,_result,,,,

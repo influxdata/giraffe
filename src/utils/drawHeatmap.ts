@@ -1,14 +1,15 @@
 import {range} from 'd3-array'
 import {color} from 'd3-color'
 
-import {Scale, HeatmapTable} from '../types'
+import {Table, Scale} from '../types'
 import {clearCanvas} from '../utils/clearCanvas'
+import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
 
 interface DrawHeatmapOptions {
   canvas: HTMLCanvasElement
   width: number
   height: number
-  table: HeatmapTable
+  table: Table
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   fillScale: Scale<number, string>
@@ -32,12 +33,18 @@ export const drawHeatmap = ({
   const context = canvas.getContext('2d')
   const indices = rows ? rows : range(table.length)
 
+  const xMinData = table.getColumn(X_MIN, 'number')
+  const xMaxData = table.getColumn(X_MAX, 'number')
+  const yMinData = table.getColumn(Y_MIN, 'number')
+  const yMaxData = table.getColumn(Y_MAX, 'number')
+  const countData = table.getColumn(COUNT, 'number')
+
   for (const i of indices) {
-    const xMin = table.columns.xMin.data[i]
-    const xMax = table.columns.xMax.data[i]
-    const yMin = table.columns.yMin.data[i]
-    const yMax = table.columns.yMax.data[i]
-    const count = table.columns.count.data[i]
+    const xMin = xMinData[i]
+    const xMax = xMaxData[i]
+    const yMin = yMinData[i]
+    const yMax = yMaxData[i]
+    const count = countData[i]
 
     const squareX = xScale(xMin)
     const squareY = yScale(yMax)
