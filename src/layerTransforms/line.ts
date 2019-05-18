@@ -1,10 +1,10 @@
 import {Table, LineLayerConfig, LineMappings, LineScales} from '../types'
 import {getFillScale} from '../utils/getFillScale'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
-import {FILL_COL_KEY} from '../constants'
+import {FILL} from '../constants/columnKeys'
 
 export const getLineTable = (table: Table, fill: string[]): Table =>
-  appendGroupingCol(table, fill, FILL_COL_KEY)
+  appendGroupingCol(table, fill, FILL)
 
 export const getLineMappings = (
   layerConfig: LineLayerConfig

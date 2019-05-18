@@ -1,14 +1,12 @@
 import {range} from 'd3-array'
 
-import {TooltipData, Scale, HistogramTable, ColumnType} from '../types'
-import {getNumericColumn} from './getNumericColumn'
-import {getGroupingColumn} from './getGroupingColumn'
+import {Table, TooltipData, Scale, ColumnType} from '../types'
 import {getRangeLabel} from './tooltip'
 import {getTooltipGroupColumns} from './tooltip'
-import {FILL_COL_KEY} from '../constants'
+import {X_MIN, X_MAX, Y_MAX, COUNT, FILL} from '../constants/columnKeys'
 
 export const findHoveredRowIndices = (
-  table: HistogramTable,
+  table: Table,
   hoverX: number,
   hoverY: number,
   xScale: Scale,
@@ -18,20 +16,20 @@ export const findHoveredRowIndices = (
     return null
   }
 
-  const xMinCol = table.columns.xMin.data
-  const xMaxCol = table.columns.xMax.data
-  const yMaxCol = table.columns.yMax.data
+  const xMinData = table.getColumn(X_MIN, 'number')
+  const xMaxData = table.getColumn(X_MAX, 'number')
+  const yMaxData = table.getColumn(Y_MAX, 'number')
   const dataX = xScale.invert(hoverX)
   const dataY = yScale.invert(hoverY)
 
   // Find all bins whose x extent contain the mouse x position
-  const hoveredRowIndices = range(0, xMinCol.length).filter(
-    i => xMinCol[i] <= dataX && xMaxCol[i] > dataX
+  const hoveredRowIndices = range(0, xMinData.length).filter(
+    i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
 
   // If the mouse y position is above every one of those bars, then the mouse
   // isn't hovering over them
-  if (!hoveredRowIndices.some(i => yMaxCol[i] >= dataY)) {
+  if (!hoveredRowIndices.some(i => yMaxData[i] >= dataY)) {
     return null
   }
 
@@ -40,7 +38,7 @@ export const findHoveredRowIndices = (
 
 export const getTooltipData = (
   hoveredRowIndices: number[],
-  table: HistogramTable,
+  table: Table,
   xColKey: string,
   fillColKeys: string[],
   getValueFormatter: (colKey: string) => (x: any) => string,
@@ -50,12 +48,11 @@ export const getTooltipData = (
     return null
   }
 
-  const xMinCol = getNumericColumn(table, 'xMin')
-  const xMaxCol = getNumericColumn(table, 'xMax')
-  const yMinCol = getNumericColumn(table, 'yMin')
-  const yMaxCol = getNumericColumn(table, 'yMax')
-  const groupCol = getGroupingColumn(table, FILL_COL_KEY)
-  const colors = hoveredRowIndices.map(i => fillScale(groupCol.data[i]))
+  const xMinData = table.getColumn(X_MIN, 'number')
+  const xMaxData = table.getColumn(X_MAX, 'number')
+  const countData = table.getColumn(COUNT, 'number')
+  const groupCol = table.getColumn(FILL, 'string')
+  const colors = hoveredRowIndices.map(i => fillScale(groupCol[i]))
   const xFormatter = getValueFormatter(xColKey)
   const countFormatter = getValueFormatter('yMin')
 
@@ -65,7 +62,7 @@ export const getTooltipData = (
     type: 'number' as ColumnType,
     colors,
     values: hoveredRowIndices.map(i =>
-      getRangeLabel(xMinCol.data[i], xMaxCol.data[i], xFormatter)
+      getRangeLabel(xMinData[i], xMaxData[i], xFormatter)
     ),
   }
 
@@ -74,9 +71,7 @@ export const getTooltipData = (
     name: 'count',
     type: 'number' as ColumnType,
     colors,
-    values: hoveredRowIndices.map(i =>
-      countFormatter(yMaxCol.data[i] - yMinCol.data[i])
-    ),
+    values: hoveredRowIndices.map(i => countFormatter(countData[i])),
   }
 
   const fillColumns = getTooltipGroupColumns(

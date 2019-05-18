@@ -1,38 +1,40 @@
 import {SymbolType} from 'd3-shape'
 
-export type ColumnType = 'number' | 'string' | 'time' | 'bool'
+export type NumericColumnData =
+  | number[]
+  | Int8Array
+  | Int16Array
+  | Int32Array
+  | Uint8Array
+  | Uint16Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array
 
-export interface NumberColumn {
-  data: number[]
-  type: 'number'
-  name: string
+export type ColumnData = NumericColumnData | string[] | boolean[]
+
+export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
+
+export interface GetColumn {
+  (columnKey: string): ColumnData
+  (columnKey: string, type: 'number'): NumericColumnData
+  (columnKey: string, type: 'time'): NumericColumnData
+  (columnKey: string, type: 'string'): string[]
+  (columnKey: string, type: 'boolean'): boolean[]
 }
-
-export interface TimeColumn {
-  data: number[]
-  type: 'time'
-  name: string
-}
-
-export interface StringColumn {
-  data: string[]
-  type: 'string'
-  name: string
-}
-
-export interface BoolColumn {
-  data: boolean[]
-  type: 'bool'
-  name: string
-}
-
-export type TableColumn = NumberColumn | TimeColumn | StringColumn | BoolColumn
 
 export interface Table {
+  getColumn: GetColumn
+  getColumnName: (columnKey: string) => string
+  getColumnType: (columnKey: string) => ColumnType
+  columnKeys: string[]
   length: number
-  columns: {
-    [columnKey: string]: TableColumn
-  }
+  addColumn: (
+    columnKey: string,
+    type: ColumnType,
+    data: ColumnData,
+    name?: string
+  ) => Table
 }
 
 export interface Scale<D = any, R = any> {
@@ -102,28 +104,6 @@ export interface LineMappings {
 
 export interface LineScales {
   fill: Scale<string, string>
-}
-
-export interface HistogramTable extends Table {
-  columns: {
-    xMin: NumberColumn | TimeColumn
-    xMax: NumberColumn | TimeColumn
-    yMin: NumberColumn
-    yMax: NumberColumn
-    [fillColumn: string]: TableColumn
-  }
-  length: number
-}
-
-export interface HeatmapTable extends Table {
-  columns: {
-    xMin: NumberColumn | TimeColumn
-    xMax: NumberColumn | TimeColumn
-    yMin: NumberColumn | TimeColumn
-    yMax: NumberColumn | TimeColumn
-    count: NumberColumn
-  }
-  length: number
 }
 
 export interface HeatmapLayerConfig {

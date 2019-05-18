@@ -5,7 +5,6 @@ import {createPortal} from 'react-dom'
 import {TooltipData} from '../types'
 import {useTooltipElement} from '../utils/useTooltipElement'
 import {PlotEnv} from '../utils/PlotEnv'
-import {isNumeric} from '../utils/isNumeric'
 
 interface Props {
   data: TooltipData
@@ -56,7 +55,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
             className="vis-tooltip-column"
             style={{
               marginRight: i === data.length - 1 ? 0 : '15px',
-              textAlign: isNumeric(type) ? 'right' : 'left',
+              textAlign: type === 'number' ? 'right' : 'left',
             }}
           >
             <div

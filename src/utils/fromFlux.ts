@@ -1,14 +1,25 @@
 import {csvParse, csvParseRows} from 'd3-dsv'
 
-import {Table, ColumnType, TableColumn} from '../types'
+import {Table, ColumnType} from '../types'
 import {assert} from './assert'
+import {newTable} from './newTable'
 
-interface FluxToTableResult {
+export interface FromFluxResult {
   // The single parsed `Table`
   table: Table
 
   // The union of group keys from all input Flux tables
   fluxGroupKeyUnion: Set<string>
+}
+
+type Column =
+  | {name: string; type: 'number'; data: number[]}
+  | {name: string; type: 'time'; data: number[]}
+  | {name: string; type: 'boolean'; data: boolean[]}
+  | {name: string; type: 'string'; data: string[]}
+
+interface Columns {
+  [columnKey: string]: Column
 }
 
 /*
@@ -60,10 +71,12 @@ interface FluxToTableResult {
   [0]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#csv
   [1]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#annotations
 */
-export const fluxToTable = (fluxCSV: string): FluxToTableResult => {
-  const table: Table = {columns: {}, length: 0}
+export const fromFlux = (fluxCSV: string): FromFluxResult => {
+  const columns: Columns = {}
   const fluxGroupKeyUnion = new Set()
   const chunks = splitChunks(fluxCSV)
+
+  let tableLength = 0
 
   for (const chunk of chunks) {
     const tableText = extractTableText(chunk)
@@ -78,19 +91,19 @@ export const fluxToTable = (fluxCSV: string): FluxToTableResult => {
 
       const columnKey = `${columnName} (${columnType})`
 
-      if (!table.columns[columnKey]) {
-        table.columns[columnKey] = {
+      if (!columns[columnKey]) {
+        columns[columnKey] = {
           name: columnName,
           type: columnType,
           data: [],
-        } as TableColumn
+        } as Column
       }
 
-      const colData = table.columns[columnKey].data
+      const colData = columns[columnKey].data
       const columnDefault = annotationData.defaultByColumnName[columnName]
 
       for (let i = 0; i < tableData.length; i++) {
-        colData[table.length + i] = parseValue(
+        colData[tableLength + i] = parseValue(
           tableData[i][columnName] || columnDefault,
           columnType
         )
@@ -101,12 +114,21 @@ export const fluxToTable = (fluxCSV: string): FluxToTableResult => {
       }
     }
 
-    table.length += tableData.length
+    tableLength += tableData.length
   }
 
-  const result = {table, fluxGroupKeyUnion}
+  resolveNames(columns, fluxGroupKeyUnion)
 
-  resolveNames(result)
+  const table = Object.entries(columns).reduce(
+    (table, [key, {name, type, data}]) => {
+      data.length = tableLength
+
+      return table.addColumn(key, type, data, name)
+    },
+    newTable(tableLength)
+  )
+
+  const result = {table, fluxGroupKeyUnion}
 
   return result
 }
@@ -183,7 +205,7 @@ const extractTableText = (chunk: string): string => {
 }
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
-  boolean: 'bool',
+  boolean: 'boolean',
   unsignedLong: 'number',
   long: 'number',
   double: 'number',
@@ -212,11 +234,11 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return NaN
   }
 
-  if (columnType === 'bool' && value === 'true') {
+  if (columnType === 'boolean' && value === 'true') {
     return true
   }
 
-  if (columnType === 'bool' && value === 'false') {
+  if (columnType === 'boolean' && value === 'false') {
     return false
   }
 
@@ -250,10 +272,11 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   stage of parsing is to rename all column keys from the `$NAME ($TYPE)` format
   to just `$NAME` if we can do so safely. That is what this function does.
 */
-const resolveNames = (result: FluxToTableResult): void => {
-  const {table, fluxGroupKeyUnion} = result
-
-  const colNameCounts = Object.values(table.columns)
+const resolveNames = (
+  columns: Columns,
+  fluxGroupKeyUnion: Set<string>
+): void => {
+  const colNameCounts = Object.values(columns)
     .map(col => col.name)
     .reduce((acc, name) => ({...acc, [name]: (acc[name] || 0) + 1}), {})
 
@@ -262,13 +285,13 @@ const resolveNames = (result: FluxToTableResult): void => {
     .map(([name]) => name)
 
   for (const uniqueName of uniqueColNames) {
-    const [columnKey, column] = Object.entries(table.columns).find(
+    const [columnKey, column] = Object.entries(columns).find(
       ([_, col]) => col.name === uniqueName
     )
 
-    table.columns[uniqueName] = column
+    columns[uniqueName] = column
 
-    delete table.columns[columnKey]
+    delete columns[columnKey]
 
     if (fluxGroupKeyUnion.has(columnKey)) {
       fluxGroupKeyUnion.delete(columnKey)

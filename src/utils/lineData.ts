@@ -1,7 +1,6 @@
 import {Table, Scale} from '../types'
-import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {simplify} from '../utils/simplify'
-import {FILL_COL_KEY} from '../constants'
+import {FILL} from '../constants/columnKeys'
 
 export type LineData = {
   [groupKey: string]: {
@@ -17,9 +16,9 @@ export const collectLineData = (
   yColKey: string,
   fillScale: Scale<string, string>
 ): LineData => {
-  const xCol = table.columns[xColKey].data
-  const yCol = table.columns[yColKey].data
-  const {data: groupCol} = getGroupingColumn(table, FILL_COL_KEY)
+  const xCol = table.getColumn(xColKey, 'number')
+  const yCol = table.getColumn(yColKey, 'number')
+  const groupCol = table.getColumn(FILL, 'string')
 
   const result = {}
 

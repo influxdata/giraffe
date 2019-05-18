@@ -2,19 +2,17 @@ import {extent, range, thresholdSturges} from 'd3-array'
 
 import {
   Table,
-  HistogramTable,
   HistogramMappings,
   HistogramPosition,
   HistogramScales,
+  NumericColumnData,
 } from '../types'
 
-import {isNumeric} from '../utils/isNumeric'
-import {assert} from '../utils/assert'
 import {getGroupKey} from '../utils/getGroupKey'
 import {getFillScale} from '../utils/getFillScale'
-import {getNumericColumn} from '../utils/getNumericColumn'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
-import {FILL_COL_KEY} from '../constants'
+import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT, FILL} from '../constants/columnKeys'
+import {newTable} from '../utils/newTable'
 
 export const getHistogramTable = (
   table: Table,
@@ -23,11 +21,11 @@ export const getHistogramTable = (
   groupColKeys: string[] = [],
   binCount: number,
   position: HistogramPosition
-): HistogramTable =>
+): Table =>
   appendGroupingCol(
     bin(table, xColKey, xDomain, groupColKeys, binCount, position),
     groupColKeys,
-    FILL_COL_KEY
+    FILL
   )
 
 export const getHistogramMappings = (fill: string[]): HistogramMappings => ({
@@ -78,13 +76,9 @@ export const bin = (
   groupColKeys: string[] = [],
   binCount: number,
   position: HistogramPosition
-): HistogramTable => {
-  const col = table.columns[xColKey]
-
-  assert(!!col, `could not find column "${xColKey}"`)
-  assert(isNumeric(col.type), `unsupported value column type "${col.type}"`)
-
-  const {type: xColType, data: xColData} = getNumericColumn(table, xColKey)
+): Table => {
+  const xColData = table.getColumn(xColKey, 'number')
+  const xColType = table.getColumnType(xColKey) as 'number'
 
   if (!binCount) {
     binCount = thresholdSturges(xColData)
@@ -96,7 +90,14 @@ export const bin = (
 
   // A group is the set of key-value pairs that a row takes on for the column
   // names specified in `groupColKeys`. The group key is a hashable
-  // representation of the values of these pairs.
+  // representation of the values of these pairs. This object ends up looking
+  // like:
+  //
+  //     {
+  //       'cpu0,free': {cpu: 'cpu0', _field: 'free'},
+  //       'cpu1,free': {cpu: 'cpu1', _field: 'free'}
+  //     }
+  //
   const groupsByGroupKey = {}
 
   // Count x values by bin and group
@@ -138,45 +139,23 @@ export const bin = (
 
   // Next, build up a tabular representation of each of these bins by group
   const groupKeys = Object.keys(groupsByGroupKey)
-  const statTable = {
-    columns: {
-      xMin: {
-        data: [],
-        type: xColType,
-        name: 'xMin',
-      },
-      xMax: {
-        data: [],
-        type: xColType,
-        name: 'xMax',
-      },
-      yMin: {
-        data: [],
-        type: 'number',
-        name: 'yMin',
-      },
-      yMax: {
-        data: [],
-        type: 'number',
-        name: 'yMax',
-      },
-    },
-    length: binCount * groupKeys.length,
-  }
 
-  // Include original columns used to group data in the resulting table
-  for (const key of groupColKeys) {
-    statTable.columns[key] = {
-      data: [],
-      name: table.columns[key].name,
-      type: table.columns[key].type,
-    }
-  }
+  const xMinData: number[] = []
+  const xMaxData: number[] = []
+  const yMinData: number[] = []
+  const yMaxData: number[] = []
+  const countData: number[] = []
+  const groupKeyData: {[k: string]: any[]} = groupColKeys.reduce(
+    (acc, k) => ({...acc, [k]: []}),
+    {}
+  )
 
   for (let i = 0; i < groupKeys.length; i++) {
     const groupKey = groupKeys[i]
 
     for (const bin of bins) {
+      const count = bin.values[groupKey] || 0
+
       let yMin = 0
 
       if (position === 'stacked') {
@@ -185,18 +164,33 @@ export const bin = (
           .reduce((sum, k) => sum + (bin.values[k] || 0), 0)
       }
 
-      statTable.columns.xMin.data.push(bin.min)
-      statTable.columns.xMax.data.push(bin.max)
-      statTable.columns.yMin.data.push(yMin)
-      statTable.columns.yMax.data.push(yMin + (bin.values[groupKey] || 0))
+      xMinData.push(bin.min)
+      xMaxData.push(bin.max)
+      yMinData.push(yMin)
+      yMaxData.push(yMin + count)
+      countData.push(count)
 
       for (const [k, v] of Object.entries(groupsByGroupKey[groupKey])) {
-        statTable.columns[k].data.push(v)
+        groupKeyData[k].push(v)
       }
     }
   }
 
-  return statTable as HistogramTable
+  let binTable = newTable(binCount * groupKeys.length)
+    .addColumn(X_MIN, xColType, xMinData)
+    .addColumn(X_MAX, xColType, xMaxData)
+    .addColumn(Y_MIN, 'number', yMinData)
+    .addColumn(Y_MAX, 'number', yMaxData)
+    .addColumn(COUNT, 'number', countData)
+
+  for (const [key, data] of Object.entries(groupKeyData)) {
+    const type = table.getColumnType(key)
+    const name = table.getColumnName(key)
+
+    binTable = binTable.addColumn(key, type, data, name)
+  }
+
+  return binTable
 }
 
 const createBins = (
@@ -218,7 +212,7 @@ const createBins = (
 }
 
 const resolveXDomain = (
-  xColData: number[],
+  xColData: NumericColumnData,
   preferredXDomain?: number[]
 ): [number, number] => {
   let domain: [number, number]
@@ -242,7 +236,7 @@ const getGroup = (table: Table, groupColKeys: string[], i: number) => {
   const result = {}
 
   for (const key of groupColKeys) {
-    result[key] = table.columns[key].data[i]
+    result[key] = table.getColumn(key)[i]
   }
 
   return result

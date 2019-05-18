@@ -1,13 +1,12 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, FunctionComponent} from 'react'
 
-import {HistogramLayerConfig, HistogramTable, Scale} from '../types'
+import {Table, HistogramLayerConfig, Scale} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {findHoveredRowIndices, getTooltipData} from '../utils/histogramTooltip'
-import {getGroupingColumn} from '../utils/getGroupingColumn'
 import {Tooltip} from './Tooltip'
-import {FILL_COL_KEY} from '../constants'
+import {X_MIN, X_MAX, Y_MIN, Y_MAX, FILL} from '../constants/columnKeys'
 
 const BAR_TRANSPARENCY = 0.5
 const BAR_TRANSPARENCY_HOVER = 0.7
@@ -15,7 +14,7 @@ const BAR_PADDING = 1.5
 
 interface DrawBarsOptions {
   canvas: HTMLCanvasElement
-  table: HistogramTable
+  table: Table
   width: number
   height: number
   xScale: Scale<number, number>
@@ -36,11 +35,11 @@ const drawBars = ({
 }: DrawBarsOptions): void => {
   clearCanvas(canvas, width, height)
 
-  const xMinCol = table.columns.xMin.data
-  const xMaxCol = table.columns.xMax.data
-  const yMinCol = table.columns.yMin.data
-  const yMaxCol = table.columns.yMax.data
-  const {data: groupKeyCol} = getGroupingColumn(table, FILL_COL_KEY)
+  const xMinCol = table.getColumn(X_MIN, 'number')
+  const xMaxCol = table.getColumn(X_MAX, 'number')
+  const yMinCol = table.getColumn(Y_MIN, 'number')
+  const yMaxCol = table.getColumn(Y_MAX, 'number')
+  const groupKeyCol = table.getColumn(FILL, 'string')
 
   const context = canvas.getContext('2d')
 
@@ -91,7 +90,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
   hoverY,
 }) => {
   const canvas = useRef<HTMLCanvasElement>(null)
-  const table = env.getTable(layerIndex) as HistogramTable
+  const table = env.getTable(layerIndex)
   const fillScale = env.getScale(layerIndex, 'fill')
 
   const {x: xColKey, fill: fillColKeys} = env.config.layers[

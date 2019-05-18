@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {select, text, boolean} from '@storybook/addon-knobs'
 
-import {Table, isNumeric} from '../src'
+import {Table} from '../src'
 import {CPU} from './data'
 import * as colorSchemes from '../src/constants/colorSchemes'
 
@@ -74,21 +74,21 @@ export const tableKnob = (initial?: Table) =>
   aesthetic, and retun as a map from column keys to column names.
 */
 const findXYColumns = (table: Table) =>
-  Object.keys(table.columns).reduce((acc, k) => {
-    if (!isNumeric(table.columns[k].type)) {
+  table.columnKeys.reduce((acc, k) => {
+    const columnType = table.getColumnType(k)
+
+    if (columnType !== 'number' && columnType !== 'time') {
       return acc
     }
 
     return {
       ...acc,
-      [k]: table.columns[k].name,
+      [k]: table.getColumnName(k),
     }
   }, {})
 
 const findStringColumns = (table: Table) =>
-  Object.keys(table.columns).filter(col => {
-    return table.columns[col].type === 'string'
-  })
+  table.columnKeys.filter(k => table.getColumnType(k) === 'string')
 
 export const xKnob = (table: Table, initial?: string) =>
   select('x', findXYColumns(table), initial || '_time')

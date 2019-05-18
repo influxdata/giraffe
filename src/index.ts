@@ -2,9 +2,8 @@
 export {Plot} from './components/Plot'
 
 // Utils
-export {isNumeric} from './utils/isNumeric'
-export {fluxToTable} from './utils/fluxToTable'
-export {filterTable} from './utils/table'
+export {fromFlux} from './utils/fromFlux'
+export {newTable} from './utils/newTable'
 
 // Constants
 export * from './constants/colorSchemes'
@@ -12,11 +11,6 @@ export * from './constants/colorSchemes'
 // Types
 export {
   ColumnType,
-  NumberColumn,
-  TimeColumn,
-  StringColumn,
-  BoolColumn,
-  TableColumn,
   Table,
   Scale,
   Margins,

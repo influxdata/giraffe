@@ -24,14 +24,14 @@ export const getTooltipGroupColumns = (
   rowColors: string[] | null
 ): TooltipColumn[] =>
   groupColKeys.map(key => {
-    const {name, type, data} = table.columns[key]
+    const colData = table.getColumn(key)
     const formatter = getValueFormatter(key)
 
     return {
       key,
-      name,
-      type,
+      name: table.getColumnName(key),
+      type: table.getColumnType(key),
       colors: rowColors,
-      values: rowIndices.map(i => formatter(data[i])),
+      values: rowIndices.map(i => formatter(colData[i])),
     }
   })

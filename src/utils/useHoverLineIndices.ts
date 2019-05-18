@@ -1,6 +1,6 @@
 import {range} from 'd3-array'
 
-import {Scale} from '../types'
+import {Scale, NumericColumnData} from '../types'
 import {useLazyMemo} from './useLazyMemo'
 import {isDefined} from './isDefined'
 import {minBy} from './extrema'
@@ -9,8 +9,8 @@ export const useHoverLineIndices = (
   mode: 'x' | 'y' | 'xy',
   mouseX: number,
   mouseY: number,
-  xColData: number[],
-  yColData: number[],
+  xColData: NumericColumnData,
+  yColData: NumericColumnData,
   groupColData: string[],
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
@@ -95,8 +95,8 @@ type IndexTable = {
   See `lookupIndex2D` and `lookupIndex1D` for more info.
 */
 const buildIndex = (
-  xColData: number[],
-  yColData: number[],
+  xColData: NumericColumnData,
+  yColData: NumericColumnData,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
   width: number,
@@ -241,8 +241,8 @@ const lookupIndex2D = (
   mouseY: number,
   dataX: number,
   dataY: number,
-  xColData: number[],
-  yColData: number[],
+  xColData: NumericColumnData,
+  yColData: NumericColumnData,
   width: number,
   height: number
 ): number[] => {
@@ -336,7 +336,7 @@ const lookupIndex1D = (
   bins: number[][],
   mouseCoord: number,
   dataCoord: number,
-  colData: number[],
+  colData: NumericColumnData,
   groupColData: string[],
   length: number
 ): number[] => {
@@ -394,7 +394,7 @@ const collectNearestIndices = (
   acc: NearestIndexByGroup,
   rowIndices: number[],
   dataCoord: number,
-  colData: number[],
+  colData: NumericColumnData,
   groupColData: string[]
 ): void => {
   for (const i of rowIndices) {

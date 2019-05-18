@@ -2,8 +2,10 @@
   @jest-environment jsdom
 */
 
-import {Table, SizedConfig, LineLayerConfig} from '../types'
+import {SizedConfig, LineLayerConfig} from '../types'
 import {PlotEnv} from './PlotEnv'
+import {newTable} from './newTable'
+import {COUNT} from '../constants/columnKeys'
 
 import * as layerTransforms from '../layerTransforms'
 
@@ -25,16 +27,8 @@ describe('PlotEnv', () => {
     test('updates xScale when xDomain is updated', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const table = newTable(10).addColumn('a', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -66,16 +60,8 @@ describe('PlotEnv', () => {
     test('runs bin stat when x domain changes', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const table = newTable(10).addColumn('a', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -89,7 +75,8 @@ describe('PlotEnv', () => {
 
       plotEnv.config = config
 
-      const getFirstBinCount = () => plotEnv.getTable(0).columns.yMax.data[0]
+      const getFirstBinCount = () =>
+        plotEnv.getTable(0).getColumn(COUNT, 'number')[0]
 
       expect(getFirstBinCount()).toEqual(1)
 
@@ -103,21 +90,11 @@ describe('PlotEnv', () => {
     test('runs bin stat when histogram layer x mapping changes', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-          b: {
-            name: 'b',
-            type: 'number',
-            data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
+      const table = newTable(10)
+        .addColumn('a', 'number', aData)
+        .addColumn('b', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -128,7 +105,8 @@ describe('PlotEnv', () => {
 
       plotEnv.config = config
 
-      const getFirstBinCount = () => plotEnv.getTable(0).columns.yMax.data[0]
+      const getFirstBinCount = () =>
+        plotEnv.getTable(0).getColumn(COUNT, 'number')[0]
 
       expect(getFirstBinCount()).toEqual(1)
 
@@ -145,16 +123,8 @@ describe('PlotEnv', () => {
     test('does not run bin stat when histogram colors change', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const table = newTable(10).addColumn('a', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -188,21 +158,11 @@ describe('PlotEnv', () => {
     test('updating line interpolation should not reset the x domain', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-          b: {
-            name: 'b',
-            type: 'number',
-            data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
+      const table = newTable(10)
+        .addColumn('a', 'number', aData)
+        .addColumn('b', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -229,21 +189,11 @@ describe('PlotEnv', () => {
     test('does not run line stat when x domain changes', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-          b: {
-            name: 'b',
-            type: 'number',
-            data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
+      const table = newTable(10)
+        .addColumn('a', 'number', aData)
+        .addColumn('b', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -273,21 +223,11 @@ describe('PlotEnv', () => {
     test('resets uncontrolled domain state when x mapping changes', () => {
       const plotEnv = new PlotEnv()
 
-      const table: Table = {
-        columns: {
-          a: {
-            name: 'a',
-            type: 'number',
-            data: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-          },
-          b: {
-            name: 'b',
-            type: 'number',
-            data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 19],
-          },
-        },
-        length: 10,
-      }
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
+      const table = newTable(10)
+        .addColumn('a', 'number', aData)
+        .addColumn('b', 'number', bData)
 
       const config: SizedConfig = {
         table,

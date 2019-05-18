@@ -1,13 +1,9 @@
-import {range} from 'd3-array'
-
 import {
   SizedConfig,
   Margins,
   Scale,
   Table,
-  TableColumn,
   ColumnType,
-  HeatmapTable,
   LineLayerConfig,
 } from '../types'
 
@@ -20,7 +16,6 @@ import {
 import * as transforms from '../layerTransforms'
 import {getTicks} from './getTicks'
 import {getTimeFormatter} from '../utils/getTimeFormatter'
-import {isNumeric} from './isNumeric'
 import {assert} from './assert'
 import {getTextMetrics} from './getTextMetrics'
 import {getMargins} from './getMargins'
@@ -193,11 +188,9 @@ export class PlotEnv {
       return preferredFormatter
     }
 
-    const col = this.getColumnByKey(colKey)
+    const colType = this.getColumnTypeByKey(colKey)
 
-    assert(!!col, `cannot supply formatter for non-existant column "${colKey}"`)
-
-    switch (col.type) {
+    switch (colType) {
       case 'number':
         return defaultNumberFormatter
       case 'time':
@@ -279,7 +272,7 @@ export class PlotEnv {
       case 'heatmap': {
         const getter = this.fns.get(transformKey, transforms.getHeatmapScales)
 
-        return getter(table as HeatmapTable, colors)[aesthetic]
+        return getter(table, colors)[aesthetic]
       }
       default: {
         throw new Error(`${aesthetic} scale for layer ${layerIndex} not found`)
@@ -361,25 +354,18 @@ export class PlotEnv {
     return this.getDomainForAesthetics(Y_DOMAIN_AESTHETICS) || DEFAULT_Y_DOMAIN
   }
 
-  private getColumnsForAesthetics(aesthetics: string[]): TableColumn[] {
-    const columns = flatMap(layerIndex => {
-      const table = this.getTable(layerIndex)
-
-      const colKeys = aesthetics
-        .map(aes => this.getMapping(layerIndex, aes))
-        .filter(d => !!d)
-
-      const layerColumns = colKeys.map(k => table.columns[k]).filter(d => !!d)
-
-      return layerColumns
-    }, range(this.config.layers.length))
-
-    return columns
-  }
-
   private getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
-    const columnTypes = this.getColumnsForAesthetics(aesthetics).map(
-      col => col.type
+    const columnTypes: ColumnType[] = this.config.layers.reduce(
+      (acc, _, layerIndex) => {
+        const table = this.getTable(layerIndex)
+
+        const colKeys = aesthetics
+          .map(aes => this.getMapping(layerIndex, aes))
+          .filter(d => !!d)
+
+        return [...acc, ...colKeys.map(k => table.getColumnType(k))]
+      },
+      []
     )
 
     if (!columnTypes.length) {
@@ -417,11 +403,18 @@ export class PlotEnv {
   private getDomainForAesthetics(aesthetics: string[]): number[] {
     // Collect column data arrays for all columns in the plot currently mapped
     // to any of the passed `aesthetics`
-    const colData = this.getColumnsForAesthetics(aesthetics).map(col => {
-      assert(isNumeric(col.type), `expected column ${col.name} to be numeric`)
+    const colData: number[][] = this.config.layers.reduce(
+      (acc, _, layerIndex) => {
+        const table = this.getTable(layerIndex)
 
-      return col.data as number[]
-    })
+        const colKeys = aesthetics
+          .map(aes => this.getMapping(layerIndex, aes))
+          .filter(d => !!d)
+
+        return [...acc, ...colKeys.map(k => table.getColumn(k))]
+      },
+      []
+    )
 
     const fnKey = `extentOfExtents ${aesthetics.join(', ')}`
     const fn = this.fns.get(fnKey, extentOfExtents)
@@ -433,23 +426,20 @@ export class PlotEnv {
     return domain
   }
 
-  private getColumnByKey(key: string): TableColumn | null {
-    let col = null
-
-    if (this.config.table.columns[key]) {
-      col = this.config.table.columns[key]
+  private getColumnTypeByKey(key: string): ColumnType {
+    if (this.config.table.columnKeys.includes(key)) {
+      return this.config.table.getColumnType(key)
     }
 
     for (let i = 0; i < this.config.layers.length; i++) {
       const table = this.getTable(i)
 
-      if (table.columns[key]) {
-        col = table.columns[key]
-        break
+      if (table.columnKeys.includes(key)) {
+        return table.getColumnType(key)
       }
     }
 
-    return col
+    return null
   }
 
   private get rangePadding(): number {
@@ -496,6 +486,8 @@ const areUncontrolledDomainsStale = (
   if (config.table !== prevConfig.table) {
     return true
   }
+
+  // TODO: can be stale via binCount
 
   const xyMappingsChanged = [
     ...X_DOMAIN_AESTHETICS,
