@@ -73,4 +73,12 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     position: 'stacked',
     binCount: null,
   },
+  candlestick: {
+    lineWidth: 1,
+    hoverDimension: 'auto',
+    fill: [],
+    colors: DEFAULT_COLOR_SCHEME,
+    interpolation: 'linear',
+    maxTooltipRows: 24,
+  },
 }

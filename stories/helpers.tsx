@@ -66,6 +66,10 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || colorSchemes.NINETEEN_EIGHTY_FOUR
   )
 
+export const sampleKnob = () => {
+  return select('Sample', ['cpu0', 'cpu1', 'cpu2', 'cpu3'], 'cpu0')
+}
+
 export const tableKnob = (initial?: Table) =>
   select('Data', {CPU}, initial || CPU)
 

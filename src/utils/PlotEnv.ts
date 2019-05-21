@@ -208,7 +208,17 @@ export class PlotEnv {
     switch (layerConfig.type) {
       case 'line': {
         const {fill} = layerConfig
+
         const transform = this.fns.get(transformKey, transforms.getLineTable)
+
+        return transform(table, fill)
+      }
+      case 'candlestick': {
+        const {fill} = layerConfig
+        const transform = this.fns.get(
+          transformKey,
+          transforms.getCandlestickTable
+        )
 
         return transform(table, fill)
       }
@@ -259,6 +269,14 @@ export class PlotEnv {
 
         return getter(table, colors)[aesthetic]
       }
+      case 'candlestick': {
+        const getter = this.fns.get(
+          transformKey,
+          transforms.getCandlestickScales
+        )
+
+        return getter(table, colors)[aesthetic]
+      }
       case 'scatter': {
         const getter = this.fns.get(transformKey, transforms.getScatterScales)
 
@@ -289,6 +307,8 @@ export class PlotEnv {
     switch (layerConfig.type) {
       case 'line':
         return transforms.getLineMappings(layerConfig)[aesthetic]
+      case 'candlestick':
+        return transforms.getCandlestickMappings(layerConfig)[aesthetic]
       case 'scatter':
         return transforms.getScatterMappings(layerConfig)[aesthetic]
       case 'heatmap':

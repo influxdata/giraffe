@@ -6,3 +6,8 @@ export {
   getHistogramMappings,
   getHistogramScales,
 } from './histogram'
+export {
+  getCandlestickTable,
+  getCandlestickMappings,
+  getCandlestickScales,
+} from './candlestick'

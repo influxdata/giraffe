@@ -96,13 +96,36 @@ export interface LineLayerConfig {
   maxTooltipRows?: number
 }
 
+export interface CandlestickLayerConfig {
+  type: 'candlestick'
+  x: string
+  y: string
+  fill?: string[]
+  sample?: string
+  colors?: string[]
+  interpolation?: LineInterpolation
+  hoverDimension?: LineHoverDimension | 'auto'
+  lineWidth?: number
+  maxTooltipRows?: number
+}
+
 export interface LineMappings {
   x: string
   y: string
   fill: string[]
 }
 
+export interface CandlestickMappings {
+  x: string
+  y: string
+  fill: string[]
+}
+
 export interface LineScales {
+  fill: Scale<string, string>
+}
+
+export interface CandlestickScales {
   fill: Scale<string, string>
 }
 
@@ -164,18 +187,21 @@ export type Mappings =
   | HistogramMappings
   | HeatmapMappings
   | ScatterMappings
+  | CandlestickMappings
 
 export type Scales =
   | LineScales
   | HistogramScales
   | HeatmapScales
   | ScatterScales
+  | CandlestickScales
 
 export type LayerConfig =
   | LineLayerConfig
   | HistogramLayerConfig
   | HeatmapLayerConfig
   | ScatterLayerConfig
+  | CandlestickLayerConfig
 
 export type HistogramPosition = 'overlaid' | 'stacked'
 

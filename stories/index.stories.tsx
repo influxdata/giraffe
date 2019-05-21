@@ -8,6 +8,7 @@ import {
   PlotContainer,
   xKnob,
   yKnob,
+  sampleKnob,
   fillKnob,
   symbolKnob,
   tableKnob,
@@ -89,6 +90,51 @@ storiesOf('XY Plot', module)
           fill: fill,
           symbol: symbol,
           colors,
+        },
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Candlestick', () => {
+    const table = tableKnob()
+    const sample = sampleKnob()
+    const colors = colorSchemeKnob()
+    const fill = fillKnob(table, 'cpu')
+    const legendFont = legendFontKnob()
+    const tickFont = tickFontKnob()
+    const x = xKnob(table)
+    const y = yKnob(table)
+    const interpolation = interpolationKnob()
+    const showAxes = showAxesKnob()
+    const lineWidth = number('Line Width', 1)
+    const hoverDimension = select(
+      'Hover Dimension',
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      'auto'
+    )
+
+    const config: Config = {
+      table,
+      valueFormatters: {[y]: y => `${Math.round(y)}%`},
+      legendFont,
+      tickFont,
+      showAxes,
+      layers: [
+        {
+          type: 'candlestick',
+          x,
+          y,
+          fill,
+          sample,
+          interpolation,
+          colors,
+          lineWidth,
+          hoverDimension,
         },
       ],
     }

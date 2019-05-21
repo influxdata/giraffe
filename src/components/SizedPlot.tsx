@@ -10,6 +10,7 @@ import {
 import {Axes} from './Axes'
 import {SizedConfig} from '../types'
 import {HistogramLayer} from './HistogramLayer'
+import {CandlestickLayer} from './CandlestickLayer'
 import {LineLayer} from './LineLayer'
 import {HeatmapLayer} from './HeatmapLayer'
 import {ScatterLayer} from './ScatterLayer'
@@ -108,6 +109,16 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
               case 'line':
                 return (
                   <LineLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
+              case 'candlestick':
+                return (
+                  <CandlestickLayer
                     key={i}
                     layerIndex={i}
                     env={env}
