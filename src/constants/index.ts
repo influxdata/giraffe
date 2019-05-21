@@ -16,7 +16,7 @@ import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
 export const TICK_PADDING_RIGHT = 8
 export const TICK_PADDING_TOP = 8
 export const AXIS_LABEL_PADDING_BOTTOM = 15
-export const DEFAULT_RANGE_PADDING = 0 // pixels
+export const DEFAULT_RANGE_PADDING = 10 // pixels
 
 export const CURVES = {
   linear: curveLinear,

@@ -1,30 +1,49 @@
 import {Table as ArrowTable} from 'apache-arrow'
 import {Table as VisTable, ColumnType, ColumnData} from '../types'
+import {newTable} from './newTable'
 
 const TO_COLUMN_TYPE = {
+  Int8: 'number',
+  Int16: 'number',
   Int32: 'number',
+  Int64: 'number',
+  Float64: 'number',
+  Float32: 'number',
+  Timestamp: 'number',
+  Time: 'number',
+  Date: 'number',
 }
 
 class ArrowTableWrapper implements VisTable {
-  private table: ArrowTable
+  public length: number
+
+  private arrowTable: ArrowTable
+  private visTable: VisTable
 
   constructor(table: ArrowTable) {
-    this.table = table
+    this.arrowTable = table
+    this.length = table.length
+    this.visTable = newTable(table.length)
   }
 
   get columnKeys(): string[] {
-    return this.table.schema.fields.map(f => f.name)
+    return [
+      ...this.arrowTable.schema.fields.map(f => f.name),
+      ...this.visTable.columnKeys,
+    ]
   }
 
-  get length(): number {
-    return this.table.length
-  }
-
-  getColumn(columnKey: string): any[] {
+  getColumn(columnKey: string) {
     // TODO: Better checks / errors
     // TODO: Memoize
     // TODO: Date? .asEpochMilliseconds().toArray()
-    return this.table.getColumn(columnKey).toArray()
+    const arrowColumn = this.arrowTable.getColumn(columnKey)
+
+    if (arrowColumn) {
+      return arrowColumn.toArray()
+    }
+
+    return this.visTable.getColumn(columnKey)
   }
 
   getColumnName(columnKey: string): string {
@@ -34,10 +53,10 @@ class ArrowTableWrapper implements VisTable {
   }
 
   getColumnType(columnKey: string): ColumnType {
-    const field = this.table.schema.fields.find(f => f.name === columnKey)
+    const field = this.arrowTable.schema.fields.find(f => f.name === columnKey)
 
     if (!field) {
-      throw new Error('column not found')
+      return this.visTable.getColumnType(columnKey)
     }
 
     const arrowColumnType = field.type.toString()
@@ -53,49 +72,12 @@ class ArrowTableWrapper implements VisTable {
     return visColumnType
   }
 
-  addColumn(
-    columnKey: string,
-    type: ColumnType,
-    data: ColumnData,
-    name?: string
-  ): VisTable {
-    // TODO: Make a field
-    const field: any = null
+  addColumn(columnKey: string, type: ColumnType, data: ColumnData): VisTable {
+    const result = new ArrowTableWrapper(this.arrowTable)
 
-    const field = {
-      name: columnKey,
-      type: {},
-      nullable: false,
-    }
+    result.visTable = this.visTable.addColumn(columnKey, type, data)
 
-    // {
-    //   name: 'precipitation',
-    //     type: { name: 'floatingpoint', precision: 'SINGLE'},
-    //     nullable: false, children: []
-    // },
-    // {
-    //   name: 'date',
-    //   type: { name: 'date', unit: 'MILLISECOND' },
-    //   nullable: false, children: []
-    // }
-    //
-    // rainfall = arrow.Table.from({
-    //   schema: { fields: fields },
-    //   batches: [{
-    //     count: LENGTH,
-    //     columns: [
-    //       {name: "precipitation", count: LENGTH, VALIDITY: [], DATA: rainAmounts },
-    //       {name: "date",          count: LENGTH, VALIDITY: [], DATA: rainDates }
-    //     ]
-    //   }]
-    // })
-
-    const table = ArrowTable.from({
-      schema: {fields: {...this.table.schema.fields, field}},
-      // batches:
-    })
-
-    return new ArrowTableWrapper(table)
+    return result
   }
 }
 

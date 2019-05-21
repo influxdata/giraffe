@@ -10,12 +10,17 @@ export type LineData = {
   }
 }
 
+const w: any = window
+
 export const collectLineData = (
   table: Table,
   xColKey: string,
   yColKey: string,
   fillScale: Scale<string, string>
 ): LineData => {
+  console.log('table', table, w.prevTable && table !== w.prevTable)
+  w.prevTable = table
+
   const xCol = table.getColumn(xColKey, 'number')
   const yCol = table.getColumn(yColKey, 'number')
   const groupCol = table.getColumn(FILL, 'string')

@@ -3,6 +3,7 @@ export {Plot} from './components/Plot'
 
 // Utils
 export {fromFlux} from './utils/fromFlux'
+export {fromArrow} from './utils/fromArrow'
 export {newTable} from './utils/newTable'
 
 // Constants
