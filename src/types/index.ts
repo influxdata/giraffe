@@ -1,4 +1,4 @@
-import {SymbolType} from 'd3-shape'
+import {SymbolType} from '../utils/getSymbolScale'
 
 export type NumericColumnData =
   | number[]
