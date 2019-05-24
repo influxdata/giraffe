@@ -1,11 +1,12 @@
 import * as React from 'react'
 import {useRef, useLayoutEffect, useMemo, FunctionComponent} from 'react'
-import {symbol as d3Symbol, SymbolType} from 'd3-shape'
+import {SymbolType} from '../utils/getSymbolScale'
 
 import {Table, Scale, ScatterLayerConfig, NumericColumnData} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {FILL, SYMBOL} from '../constants/columnKeys'
+import {drawCircle, drawSquare, drawTriangle} from '../utils/drawShapes'
 
 type ScatterData = {
   xs: NumericColumnData
@@ -49,19 +50,21 @@ const drawPoints = ({
   const context = canvas.getContext('2d')
 
   for (var i = 0; i < xs.length; i++) {
-    const symbolGenerator = d3Symbol()
-      .type(symbol[i])
-      .size(64)
-      .context(context)
+    const x = xScale(xs[i])
+    const y = yScale(ys[i])
+    const fillStyle = fill[i]
+    const symbolType = symbol[i]
 
-    context.fillStyle = fill[i]
-    context.translate(xScale(xs[i]), yScale(ys[i]))
+    context.fillStyle = fillStyle
     context.beginPath()
-    symbolGenerator()
-    context.closePath()
+    if (symbolType === 'circle') {
+      drawCircle(context, x, y)
+    } else if (symbolType === 'square') {
+      drawSquare(context, x, y)
+    } else if (symbolType === 'triangle') {
+      drawTriangle(context, x, y)
+    }
     context.fill()
-    context.stroke()
-    context.translate(-xScale(xs[i]), -yScale(ys[i]))
   }
 }
 
