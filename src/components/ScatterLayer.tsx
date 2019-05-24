@@ -6,7 +6,14 @@ import {Table, Scale, ScatterLayerConfig, NumericColumnData} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {clearCanvas} from '../utils/clearCanvas'
 import {FILL, SYMBOL} from '../constants/columnKeys'
-import {drawCircle, drawSquare, drawTriangle} from '../utils/drawShapes'
+import {
+  drawCircle,
+  drawSquare,
+  drawPlus,
+  drawTriangle,
+  drawTritip,
+  drawEx,
+} from '../utils/drawShapes'
 
 type ScatterData = {
   xs: NumericColumnData
@@ -52,19 +59,25 @@ const drawPoints = ({
   for (var i = 0; i < xs.length; i++) {
     const x = xScale(xs[i])
     const y = yScale(ys[i])
-    const fillStyle = fill[i]
-    const symbolType = symbol[i]
 
+    const fillStyle = fill[i]
     context.fillStyle = fillStyle
-    context.beginPath()
+    context.strokeStyle = fillStyle
+
+    const symbolType = symbol[i]
     if (symbolType === 'circle') {
       drawCircle(context, x, y)
     } else if (symbolType === 'square') {
       drawSquare(context, x, y)
     } else if (symbolType === 'triangle') {
       drawTriangle(context, x, y)
+    } else if (symbolType === 'plus') {
+      drawPlus(context, x, y)
+    } else if (symbolType === 'tritip') {
+      drawTritip(context, x, y)
+    } else if (symbolType === 'ex') {
+      drawEx(context, x, y)
     }
-    context.fill()
   }
 }
 
