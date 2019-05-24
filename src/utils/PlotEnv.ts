@@ -447,6 +447,10 @@ export class PlotEnv {
   }
 
   private get rangePadding(): number {
+    if (this.config.layers.some(l => l.type === 'scatter')) {
+      return 10
+    }
+
     const specifiedLineWidths = this.config.layers
       .filter(l => l.type === 'line')
       .map(l => (l as LineLayerConfig).lineWidth)

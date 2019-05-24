@@ -10,13 +10,16 @@ import {
 } from 'd3-shape'
 
 import {Config, LayerConfig} from '../types'
-import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
+import {
+  NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME,
+  INFERNO,
+} from './colorSchemes'
 
 // TODO: Make configurable
 export const TICK_PADDING_RIGHT = 8
 export const TICK_PADDING_TOP = 8
 export const AXIS_LABEL_PADDING_BOTTOM = 15
-export const DEFAULT_RANGE_PADDING = 10 // pixels
+export const DEFAULT_RANGE_PADDING = 0 // pixels
 
 export const CURVES = {
   linear: curveLinear,
@@ -39,7 +42,7 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   axisOpacity: 1,
   gridColor: '#292933',
   gridOpacity: 1,
-  tickFont: '10px sans-serif',
+  tickFont: '12px sans-serif',
   tickFontColor: '#8e91a1',
   legendFont: '10px monospace',
   legendFontColor: '#8e91a1',
@@ -59,7 +62,7 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     maxTooltipRows: 24,
   },
   heatmap: {
-    colors: DEFAULT_COLOR_SCHEME,
+    colors: INFERNO,
     binSize: 10,
   },
   scatter: {

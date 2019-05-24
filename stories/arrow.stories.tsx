@@ -23,6 +23,10 @@ const LoadArrow = ({url, children}) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          color: 'gray',
+          font: '24px sans-serif',
+          width: '100%',
+          height: '100%',
         }}
       >
         Loading...
@@ -38,26 +42,25 @@ storiesOf('Arrow-Based Plot', module).add('Simple', () => {
     'https://raw.githubusercontent.com/vega/vega-datasets/master/data/flights-200k.arrow'
 
   return (
-    <LoadArrow url={URL}>
-      {table => {
-        const config: Config = {
-          table: fromArrow(table),
-          tickFont: '12px sans-serif',
-          layers: [
-            {
-              type: 'heatmap',
-              x: 'distance',
-              y: 'delay',
-            },
-          ],
-        }
+    <PlotContainer>
+      <LoadArrow url={URL}>
+        {table => {
+          const config: Config = {
+            table: fromArrow(table),
+            xAxisLabel: 'Distance (mi)',
+            yAxisLabel: 'Delay (min)',
+            layers: [
+              {
+                type: 'heatmap',
+                x: 'distance',
+                y: 'delay',
+              },
+            ],
+          }
 
-        return (
-          <PlotContainer>
-            <Plot config={config} />
-          </PlotContainer>
-        )
-      }}
-    </LoadArrow>
+          return <Plot config={config} />
+        }}
+      </LoadArrow>
+    </PlotContainer>
   )
 })
