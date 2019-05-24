@@ -57,11 +57,11 @@ const drawPoints = ({
 
     context.fillStyle = fillStyle
     context.beginPath()
-    if (symbolType === SymbolType.Circle) {
+    if (symbolType === 'circle') {
       drawCircle(context, x, y)
-    } else if (symbolType === SymbolType.Square) {
+    } else if (symbolType === 'square') {
       drawSquare(context, x, y)
-    } else if (symbolType === SymbolType.Triangle) {
+    } else if (symbolType === 'triangle') {
       drawTriangle(context, x, y)
     }
     context.fill()
