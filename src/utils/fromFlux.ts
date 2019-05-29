@@ -8,8 +8,8 @@ export interface FromFluxResult {
   // The single parsed `Table`
   table: Table
 
-  // The union of group keys from all input Flux tables
-  fluxGroupKeyUnion: Set<string>
+  // The union of unique group keys from all input Flux tables
+  fluxGroupKeyUnion: string[]
 }
 
 type Column =
@@ -128,7 +128,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     newTable(tableLength)
   )
 
-  const result = {table, fluxGroupKeyUnion}
+  const result = {table, fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion)}
 
   return result
 }

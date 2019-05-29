@@ -94,18 +94,16 @@ describe('fromFlux', () => {
 
     expect(actual.table.getColumnName('_value (string)')).toEqual('_value')
 
-    expect(actual.fluxGroupKeyUnion).toEqual(
-      new Set([
-        '_start',
-        '_stop',
-        '_field',
-        '_measurement',
-        'cpu',
-        'host',
-        '_value (number)',
-        '_value (string)',
-      ])
-    )
+    expect(actual.fluxGroupKeyUnion).toEqual([
+      '_value (number)',
+      '_value (string)',
+      '_start',
+      '_stop',
+      '_field',
+      '_measurement',
+      'cpu',
+      'host',
+    ])
   })
 
   test('uses the default annotation to fill in empty values', () => {
@@ -138,6 +136,6 @@ describe('fromFlux', () => {
 
     const {fluxGroupKeyUnion} = fromFlux(CSV)
 
-    expect(fluxGroupKeyUnion).toEqual(new Set(['a', 'c', 'd']))
+    expect(fluxGroupKeyUnion).toEqual(['a', 'c', 'd'])
   })
 })
