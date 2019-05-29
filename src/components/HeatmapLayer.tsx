@@ -49,7 +49,11 @@ export const HeatmapLayer: FunctionComponent<Props> = ({
 
   return (
     <>
-      <canvas className="vis-layer heatmap" ref={canvasRef} data-testid="vis-layer--heatmap"/>
+      <canvas
+        className="vis-layer heatmap"
+        ref={canvasRef}
+        data-testid="vis-layer--heatmap"
+      />
       {hoveredRowIndices && hoveredRowIndices.length > 0 && (
         <HeatmapHoverLayer
           layerIndex={layerIndex}
