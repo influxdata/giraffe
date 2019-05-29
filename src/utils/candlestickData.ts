@@ -1,5 +1,5 @@
 import {Table} from '../types'
-import {FILL} from '../constants/columnKeys'
+import {GROUPING} from '../constants/columnKeys'
 
 export type CandlestickData = {
   [groupKey: string]: CandlestickDataItem
@@ -19,20 +19,19 @@ export const collectCandlestickData = (
   table: Table,
   xColKey: string,
   yColKey: string,
-  colors: string[]
+  colors: string[],
+  binSize: number
 ): CandlestickData => {
   const xCol = table.getColumn(xColKey, 'number') as number[]
   const yCol = table.getColumn(yColKey, 'number') as number[]
-  const groupCol = table.getColumn(FILL, 'string')
-
-  const groupSize = 6
+  const groupCol = table.getColumn(GROUPING, 'string')
   const result = {}
 
-  for (let i = 0; i < table.length; i += groupSize) {
-    const groupKey = groupCol[i]
+  for (let i = 0; i < table.length; i += binSize) {
+    const dataSet = groupCol[i]
 
-    if (!result[groupKey]) {
-      result[groupKey] = {
+    if (!result[dataSet]) {
+      result[dataSet] = {
         xs: [],
         starts: [],
         ends: [],
@@ -43,12 +42,12 @@ export const collectCandlestickData = (
       }
     }
 
-    result[groupKey].xs.push(xCol[i])
-    result[groupKey].starts.push(yCol[i])
-    result[groupKey].ends.push(yCol[i + groupSize - 1])
-    result[groupKey].maxs.push(getMax(yCol.slice(i, i + groupSize - 1)))
-    result[groupKey].mins.push(getMin(yCol.slice(i, i + groupSize - 1)))
-    result[groupKey].ups.push(yCol[i + groupSize - 1] > yCol[i])
+    result[dataSet].xs.push(xCol[i])
+    result[dataSet].starts.push(yCol[i])
+    result[dataSet].ends.push(yCol[i + binSize - 1])
+    result[dataSet].maxs.push(getMax(yCol.slice(i, i + binSize - 1)))
+    result[dataSet].mins.push(getMin(yCol.slice(i, i + binSize - 1)))
+    result[dataSet].ups.push(yCol[i + binSize - 1] > yCol[i])
   }
 
   return result as CandlestickData

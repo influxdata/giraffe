@@ -117,15 +117,7 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
                   />
                 )
               case 'candlestick':
-                return (
-                  <CandlestickLayer
-                    key={i}
-                    layerIndex={i}
-                    env={env}
-                    hoverX={hoverX}
-                    hoverY={hoverY}
-                  />
-                )
+                return <CandlestickLayer key={i} layerIndex={i} env={env} />
               case 'histogram':
                 return (
                   <HistogramLayer

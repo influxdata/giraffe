@@ -7,4 +7,5 @@ export const COUNT = 'count'
 
 // Computed column names mapped to group aesthetics
 export const FILL = '__fill'
+export const GROUPING = '__grouping'
 export const SYMBOL = '__symbol'

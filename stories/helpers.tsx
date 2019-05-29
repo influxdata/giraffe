@@ -67,7 +67,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
   )
 
 export const sampleKnob = () => {
-  return select('Sample', ['cpu0', 'cpu1', 'cpu2', 'cpu3'], 'cpu0')
+  return select('Data Set / Table', ['cpu0', 'cpu1', 'cpu2', 'cpu3'], 'cpu0')
 }
 
 export const tableKnob = (initial?: Table) =>

@@ -103,10 +103,9 @@ export interface CandlestickLayerConfig {
   fill?: string[]
   sample?: string
   colors?: string[]
-  interpolation?: LineInterpolation
-  hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
-  maxTooltipRows?: number
+  barWidth?: number
+  binSize?: number
 }
 
 export interface LineMappings {

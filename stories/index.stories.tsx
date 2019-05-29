@@ -104,25 +104,17 @@ storiesOf('XY Plot', module)
     const table = tableKnob()
     const sample = sampleKnob()
     const colors = colorSchemeKnob()
-    const fill = fillKnob(table, 'cpu')
-    const legendFont = legendFontKnob()
-    const tickFont = tickFontKnob()
-    const x = xKnob(table)
-    const y = yKnob(table)
-    const interpolation = interpolationKnob()
+    const fill = ['cpu']
+    const x = '_time'
+    const y = '_value'
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
-    const hoverDimension = select(
-      'Hover Dimension',
-      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
-      'auto'
-    )
+    const barWidth = number('Bar Width', 10)
+    const binSize = number('Bin Size', 6)
 
     const config: Config = {
       table,
       valueFormatters: {[y]: y => `${Math.round(y)}%`},
-      legendFont,
-      tickFont,
       showAxes,
       layers: [
         {
@@ -131,10 +123,10 @@ storiesOf('XY Plot', module)
           y,
           fill,
           sample,
-          interpolation,
           colors,
           lineWidth,
-          hoverDimension,
+          barWidth,
+          binSize,
         },
       ],
     }

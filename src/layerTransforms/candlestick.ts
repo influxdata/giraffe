@@ -6,10 +6,10 @@ import {
 } from '../types'
 import {getFillScale} from '../utils/getFillScale'
 import {appendGroupingCol} from '../utils/appendGroupingCol'
-import {FILL} from '../constants/columnKeys'
+import {GROUPING} from '../constants/columnKeys'
 
 export const getCandlestickTable = (table: Table, fill: string[]): Table =>
-  appendGroupingCol(table, fill, FILL)
+  appendGroupingCol(table, fill, GROUPING)
 
 export const getCandlestickMappings = (
   layerConfig: CandlestickLayerConfig

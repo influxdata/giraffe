@@ -4,14 +4,14 @@ interface DrawCandlestickOptions {
   canvas: HTMLCanvasElement
   CandlestickDataItem: CandlestickDataItem
   lineWidth?: number
-  boxWidth?: number
+  barWidth?: number
 }
 
 export const drawCandlesticks = ({
   canvas,
   CandlestickDataItem,
   lineWidth = 1,
-  boxWidth = 10,
+  barWidth = 10,
 }: DrawCandlestickOptions): void => {
   const context = canvas.getContext('2d')
 
@@ -29,7 +29,7 @@ export const drawCandlesticks = ({
       maxs[i],
       mins[i],
       ups[i],
-      boxWidth
+      barWidth
     )
   })
 }
@@ -43,7 +43,7 @@ const drawCandlestickBox = (
   max,
   min,
   up,
-  boxWidth
+  barWidth
 ) => {
   ctx.beginPath()
   ctx.moveTo(x, min)
@@ -51,7 +51,7 @@ const drawCandlestickBox = (
   ctx.strokeStyle = up ? colors[0] : colors[2]
   ctx.stroke()
 
-  ctx.rect(x - boxWidth / 2, start, boxWidth, end - start)
+  ctx.rect(x - barWidth / 2, start, barWidth, end - start)
   ctx.fillStyle = up ? colors[0] : colors[2]
   ctx.fill()
 }
