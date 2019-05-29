@@ -50,10 +50,10 @@ const FORMATTERS: [number, ((d: Date) => string)][] = [
   ],
   [
     1000 * 60 * 60 * 24 * 30,
-    d => `${d.getFullYear()}-${leftPad(d.getMonth() + 1)}-${leftPad(d.getDay())} ${leftPad(d.getHours())}:${leftPad(d.getMinutes())}`,
+    d => `${d.getFullYear()}-${leftPad(d.getMonth() + 1)}-${leftPad(d.getDate())} ${leftPad(d.getHours())}:${leftPad(d.getMinutes())}`,
   ],
   [
     1000 * 60 * 60 * 24 * 30,
-    d => `${d.getFullYear()}-${leftPad(d.getMonth() + 1)}-${leftPad(d.getDay())}`,
+    d => `${d.getFullYear()}-${leftPad(d.getMonth() + 1)}-${leftPad(d.getDate())}`,
   ],
 ]
