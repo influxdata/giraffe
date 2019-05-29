@@ -21,7 +21,7 @@ export const drawSquare = (
   ctx.lineWidth = 1
 
   ctx.rect(x, y, size, size)
-  ctx.stroke()
+  ctx.fill()
 }
 
 export const drawTriangle = (
