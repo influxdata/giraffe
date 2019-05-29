@@ -132,7 +132,7 @@ export const HistogramLayer: FunctionComponent<Props> = ({
 
   return (
     <>
-      <canvas className="vis-layer histogram" ref={canvas} />
+      <canvas className="vis-layer histogram" ref={canvas} data-testid="vis-layer--histogram" />
       {tooltipData && <Tooltip data={tooltipData} env={env} />}
     </>
   )

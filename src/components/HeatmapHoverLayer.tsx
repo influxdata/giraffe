@@ -73,6 +73,7 @@ export const HeatmapHoverLayer: FunctionComponent<Props> = ({
         className="vis-layer heatmap-interactions"
         ref={canvasRef}
         style={{position: 'absolute', top: 0, left: 0}}
+        data-testid="vis-layer--heatmap-interact"
       />
       {tooltipData && <Tooltip data={tooltipData} env={env} />}
     </>
