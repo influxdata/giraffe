@@ -2,11 +2,15 @@ export const drawCircle = (
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
-  radius: number = 2
+  diameter: number = 5
 ) => {
+  ctx.lineWidth = diameter
   ctx.beginPath()
-  ctx.arc(x, y, radius, 0, Math.PI * 2, true)
-  ctx.fill()
+  ctx.lineCap = 'round'
+  ctx.moveTo(x, y)
+  ctx.lineTo(x, y)
+  ctx.stroke()
+  ctx.lineCap = 'butt'
 }
 
 export const drawSquare = (
@@ -18,10 +22,8 @@ export const drawSquare = (
   const x = centerX - size / 2
   const y = centerY - size / 2
 
-  ctx.lineWidth = 1
-
   ctx.rect(x, y, size, size)
-  ctx.stroke()
+  ctx.fill()
 }
 
 export const drawTriangle = (
@@ -62,7 +64,7 @@ export const drawEx = (
   ctx: CanvasRenderingContext2D,
   centerX: number,
   centerY: number,
-  size: number = 5
+  size: number = 6
 ) => {
   const mid = size / 2
 

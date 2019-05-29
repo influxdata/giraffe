@@ -18,8 +18,8 @@ export const getSymbolScale = (table: Table): Scale<string, SymbolType> => {
     'circle',
     'plus',
     'triangle',
-    'tritip',
     'square',
+    'tritip',
     'ex',
   ]
 
