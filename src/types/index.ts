@@ -11,14 +11,14 @@ export type NumericColumnData =
   | Float32Array
   | Float64Array
 
-export type ColumnData = NumericColumnData | string[] | boolean[]
+export type ColumnData = number[] | string[] | boolean[]
 
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
 export interface GetColumn {
   (columnKey: string): ColumnData
-  (columnKey: string, type: 'number'): NumericColumnData
-  (columnKey: string, type: 'time'): NumericColumnData
+  (columnKey: string, type: 'number'): number[]
+  (columnKey: string, type: 'time'): number[]
   (columnKey: string, type: 'string'): string[]
   (columnKey: string, type: 'boolean'): boolean[]
 }
