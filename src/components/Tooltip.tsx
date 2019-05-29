@@ -41,6 +41,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
         padding: '10px',
         cursor: 'crosshair',
       }}
+      data-testid="vis-tooltip"
     >
       <div
         className="vis-tooltip-table"
@@ -48,6 +49,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
           display: 'flex',
           justifyContent: 'space-between',
         }}
+        data-testid="vis-tooltip-table"
       >
         {columns.map(({name, type, values, colors}, i) => (
           <div

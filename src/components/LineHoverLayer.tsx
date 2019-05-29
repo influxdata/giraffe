@@ -120,6 +120,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
         className="vis-layer line-interactions"
         ref={canvasRef}
         style={{position: 'absolute'}}
+        data-testid="vis-layer--line-interact"
       />
       <Tooltip data={tooltipData} env={env} />
     </>

@@ -207,5 +207,5 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     config,
   ])
 
-  return <canvas className="vis-axes" ref={canvas} style={style} />
+  return <canvas className="vis-axes" ref={canvas} style={style} data-testid="vis-axes" />
 }

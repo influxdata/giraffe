@@ -96,6 +96,7 @@ export const LineLayer: FunctionComponent<Props> = ({
           position: 'absolute',
           opacity: resolvedHoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
         }}
+        data-testid="vis-layer--line"
       />
       {hasHoverData && (
         <LineHoverLayer
