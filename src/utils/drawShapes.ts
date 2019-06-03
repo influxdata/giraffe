@@ -21,7 +21,7 @@ export const drawSquare = (
 ) => {
   const x = centerX - size / 2
   const y = centerY - size / 2
-
+  ctx.beginPath()
   ctx.rect(x, y, size, size)
   ctx.fill()
 }
