@@ -20,20 +20,18 @@ class SimpleTable implements Table {
     return Object.keys(this.columns)
   }
 
-  getColumn(columnKey: string, columnType?: ColumnType): any[] {
+  getColumn(columnKey: string, columnType?: ColumnType): any[] | null {
     const column = this.columns[columnKey]
 
     if (!column) {
-      throw new Error('column not found')
+      return null
     }
 
     // Allow time columns to be retrieved as number columns
     const isWideningTimeType = columnType === 'number' && column.type === 'time'
 
     if (columnType && columnType !== column.type && !isWideningTimeType) {
-      throw new Error(
-        `expected ${columnType} column, found ${column.type} column instead`
-      )
+      return null
     }
 
     switch (columnType) {
