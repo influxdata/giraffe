@@ -117,9 +117,9 @@ export const ScatterLayer: FunctionComponent<Props> = ({env, layerIndex}) => {
 
   return (
     <canvas
-      className="vis-layer scatter"
+      className="giraffe-layer scatter"
       ref={canvas}
-      data-testid="vis-layer--scatter"
+      data-testid="giraffe-layer--scatter"
     />
   )
 }

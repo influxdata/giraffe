@@ -4,7 +4,7 @@ import {storiesOf} from '@storybook/react'
 import {fromFlux, Config, Plot} from '../src'
 
 storiesOf('Snapshot Tests', module).add('with multiple minimum values', () => {
-  // https://github.com/influxdata/vis/issues/51
+  // https://github.com/influxdata/giraffe/issues/51
 
   const {table} = fromFlux(
     `#group,false,false,true,false,false

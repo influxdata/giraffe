@@ -21,24 +21,24 @@ Typically you would be able to use `npm link` to see this development version in
 
 As a workaround:
 
-1. Set a `VIS_DIR` environment variable in your shell for the absolute path of your local vis repository, and an `APP_DIR` variable for the absolute path of the external app you wish to test the library with.
+1. Set a `GIRAFFE_DIR` environment variable in your shell for the absolute path of your local giraffe repository, and an `APP_DIR` variable for the absolute path of the external app you wish to test the library with.
    For me that looks like:
    ```
-   export VIS_DIR=/Users/chris/Dev/vis
+   export GIRAFFE_DIR=/Users/chris/Dev/giraffe
    export APP_DIR=/Users/chris/Dev/influxdb/ui
    ```
 
 2. Run
    ```
-   mv $APP_DIR/node_modules/@influxdata/vis/dist $APP_DIR/node_modules/@influxdata/vis/_dist && \
-   ln -s $VIS_DIR/dist $APP_DIR/node_modules/@influxdata/vis/dist
+   mv $APP_DIR/node_modules/@influxdata/giraffe/dist $APP_DIR/node_modules/@influxdata/giraffe/_dist && \
+   ln -s $GIRAFFE_DIR/dist $APP_DIR/node_modules/@influxdata/giraffe/dist
    ```
 
-When you're done developing the vis library, make sure to undo this:
+When you're done developing the giraffe, make sure to undo this:
 
 ```
-rm $APP_DIR/node_modules/@influxdata/vis/dist && \
-mv $APP_DIR/node_modules/@influxdata/vis/_dist $APP_DIR/node_modules/@influxdata/vis/dist
+rm $APP_DIR/node_modules/@influxdata/giraffe/dist && \
+mv $APP_DIR/node_modules/@influxdata/giraffe/_dist $APP_DIR/node_modules/@influxdata/giraffe/dist
 ```
 
 ### Running tests

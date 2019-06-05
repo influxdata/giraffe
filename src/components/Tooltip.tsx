@@ -31,7 +31,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
 
   return createPortal(
     <div
-      className="vis-tooltip"
+      className="giraffe-tooltip"
       style={{
         border,
         font,
@@ -41,34 +41,34 @@ export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
         padding: '10px',
         cursor: 'crosshair',
       }}
-      data-testid="vis-tooltip"
+      data-testid="giraffe-tooltip"
     >
       <div
-        className="vis-tooltip-table"
+        className="giraffe-tooltip-table"
         style={{
           display: 'flex',
           justifyContent: 'space-between',
         }}
-        data-testid="vis-tooltip-table"
+        data-testid="giraffe-tooltip-table"
       >
         {columns.map(({name, type, values, colors}, i) => (
           <div
             key={name}
-            className="vis-tooltip-column"
+            className="giraffe-tooltip-column"
             style={{
               marginRight: i === data.length - 1 ? 0 : '15px',
               textAlign: type === 'number' ? 'right' : 'left',
             }}
           >
             <div
-              className="vis-tooltip-column-header"
+              className="giraffe-tooltip-column-header"
               style={{marginBottom: '5px', color: fontColor}}
             >
               {name}
             </div>
             {values.map((value, i) => (
               <div
-                className="vis-tooltip-column-value"
+                className="giraffe-tooltip-column-value"
                 key={i}
                 style={{
                   color: colors && colors[i] ? colors[i] : fontBrightColor,
