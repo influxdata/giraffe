@@ -90,13 +90,13 @@ export const LineLayer: FunctionComponent<Props> = ({
   return (
     <>
       <canvas
-        className="vis-layer line"
+        className="giraffe-layer line"
         ref={canvasRef}
         style={{
           position: 'absolute',
           opacity: resolvedHoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
         }}
-        data-testid="vis-layer--line"
+        data-testid="giraffe-layer--line"
       />
       {hasHoverData && (
         <LineHoverLayer

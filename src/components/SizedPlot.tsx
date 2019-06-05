@@ -93,16 +93,16 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
   }, [env])
 
   return (
-    <div className="vis-plot" style={plotStyle}>
+    <div className="giraffe-plot" style={plotStyle}>
       {showAxes && <Axes env={env} style={fullsizeStyle} />}
       <div
-        className="vis-inner-plot"
+        className="giraffe-inner-plot"
         style={innerPlotStyle}
         ref={innerPlotRef}
         onDoubleClick={handleResetDomains}
         {...hoverProps}
       >
-        <div className="vis-layers" style={fullsizeStyle}>
+        <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layer, i) => {
             switch (layer.type) {
               case 'line':

@@ -117,10 +117,10 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   return (
     <>
       <canvas
-        className="vis-layer line-interactions"
+        className="giraffe-layer line-interactions"
         ref={canvasRef}
         style={{position: 'absolute'}}
-        data-testid="vis-layer--line-interact"
+        data-testid="giraffe-layer--line-interact"
       />
       <Tooltip data={tooltipData} env={env} />
     </>

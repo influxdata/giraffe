@@ -17,7 +17,7 @@ export const useTooltipElement = () => {
 
   if (ref.current === null) {
     ref.current = document.createElement('div')
-    ref.current.classList.add('vis-tooltip-container')
+    ref.current.classList.add('giraffe-tooltip-container')
 
     document.body.appendChild(ref.current)
   }

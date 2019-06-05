@@ -209,10 +209,10 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
 
   return (
     <canvas
-      className="vis-axes"
+      className="giraffe-axes"
       ref={canvas}
       style={style}
-      data-testid="vis-axes"
+      data-testid="giraffe-axes"
     />
   )
 }

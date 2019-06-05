@@ -71,5 +71,5 @@ export const Brush: FunctionComponent<Props> = ({
     backgroundColor: 'aliceblue',
   }
 
-  return <div className="vis-brush-selection" style={selectionStyle} />
+  return <div className="giraffe-brush-selection" style={selectionStyle} />
 }
