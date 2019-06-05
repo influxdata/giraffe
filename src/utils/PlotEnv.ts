@@ -113,20 +113,24 @@ export class PlotEnv {
     const getXScaleMemoized = this.fns.get('xScale', getLinearScale)
     const {xDomain, rangePadding, innerWidth} = this
 
-    return getXScaleMemoized(xDomain, [
+    return getXScaleMemoized(
+      xDomain[0],
+      xDomain[1],
       rangePadding,
-      innerWidth - rangePadding * 2,
-    ])
+      innerWidth - rangePadding * 2
+    )
   }
 
   public get yScale(): Scale<number, number> {
     const getYScaleMemoized = this.fns.get('yScale', getLinearScale)
     const {yDomain, rangePadding, innerHeight} = this
 
-    return getYScaleMemoized(yDomain, [
+    return getYScaleMemoized(
+      yDomain[0],
+      yDomain[1],
       innerHeight - rangePadding * 2,
-      rangePadding,
-    ])
+      rangePadding
+    )
   }
 
   public get xDomain(): number[] {

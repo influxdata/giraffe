@@ -3,10 +3,12 @@ import {scaleLinear} from 'd3-scale'
 import {Scale} from '../types'
 
 export const getLinearScale = (
-  domain: number[],
-  range: number[]
+  domainStart: number,
+  domainStop: number,
+  rangeStart: number,
+  rangeStop: number
 ): Scale<number, number> => {
   return scaleLinear()
-    .domain(domain)
-    .range(range)
+    .domain([domainStart, domainStop])
+    .range([rangeStart, rangeStop])
 }
