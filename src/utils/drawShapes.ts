@@ -30,12 +30,17 @@ export const drawTriangle = (
   ctx: CanvasRenderingContext2D,
   centerX: number,
   centerY: number,
-  size: number = 3
+  sideLength: number = 3
 ) => {
+  // Stroking and filling an area will result in a shape whose sides extend a
+  // little bit further than the same shape that is only filled
+  const STROKE_DELTA = 0.5
+  const halfSideLength = sideLength / 2 + STROKE_DELTA
+
   ctx.beginPath()
-  ctx.moveTo(centerX - size, centerY + size)
-  ctx.lineTo(centerX + size, centerY + size)
-  ctx.lineTo(centerX, centerY - size)
+  ctx.moveTo(centerX - halfSideLength, centerY + halfSideLength)
+  ctx.lineTo(centerX + halfSideLength, centerY + halfSideLength)
+  ctx.lineTo(centerX, centerY - halfSideLength)
   ctx.fill()
 }
 
@@ -47,7 +52,7 @@ export const drawPlus = (
 ) => {
   const mid = size / 2
 
-  ctx.lineWidth = 1
+  ctx.lineWidth = 2
 
   ctx.beginPath()
   ctx.moveTo(centerX - mid, centerY)
@@ -68,7 +73,7 @@ export const drawEx = (
 ) => {
   const mid = size / 2
 
-  ctx.lineWidth = 1
+  ctx.lineWidth = 2
 
   ctx.beginPath()
   ctx.moveTo(centerX - mid, centerY - mid)

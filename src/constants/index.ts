@@ -18,6 +18,9 @@ export const TICK_PADDING_TOP = 8
 export const AXIS_LABEL_PADDING_BOTTOM = 15
 export const DEFAULT_RANGE_PADDING = 0 // pixels
 
+export const SCATTER_POINT_SIZE = 6
+export const SCATTER_HOVER_POINT_SIZE = 12
+
 export const CURVES = {
   linear: curveLinear,
   monotoneX: curveMonotoneX,

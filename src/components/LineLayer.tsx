@@ -8,7 +8,7 @@ import {collectLineData, simplifyLineData} from '../utils/lineData'
 import {clearCanvas} from '../utils/clearCanvas'
 import {LineHoverLayer} from './LineHoverLayer'
 import {FILL} from '../constants/columnKeys'
-import {useHoverLineIndices} from '../utils/useHoverLineIndices'
+import {useHoverPointIndices} from '../utils/useHoverPointIndices'
 
 interface Props {
   env: PlotEnv
@@ -72,7 +72,7 @@ export const LineLayer: FunctionComponent<Props> = ({
     })
   }, [simplifiedLineData, canvasRef.current, interpolation, width, height])
 
-  const hoverRowIndices = useHoverLineIndices(
+  const hoverRowIndices = useHoverPointIndices(
     resolvedHoverDimension,
     hoverX,
     hoverY,

@@ -136,7 +136,15 @@ export const SizedPlot: FunctionComponent<Props> = ({config, children}) => {
                   />
                 )
               case 'scatter':
-                return <ScatterLayer key={i} layerIndex={i} env={env} />
+                return (
+                  <ScatterLayer
+                    key={i}
+                    layerIndex={i}
+                    env={env}
+                    hoverX={hoverX}
+                    hoverY={hoverY}
+                  />
+                )
               default:
                 return null
             }

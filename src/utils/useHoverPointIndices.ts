@@ -5,7 +5,7 @@ import {useLazyMemo} from './useLazyMemo'
 import {isDefined} from './isDefined'
 import {minBy} from './extrema'
 
-export const useHoverLineIndices = (
+export const useHoverPointIndices = (
   mode: 'x' | 'y' | 'xy',
   mouseX: number,
   mouseY: number,
