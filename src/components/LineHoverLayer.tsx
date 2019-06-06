@@ -6,7 +6,7 @@ import {FILL} from '../constants/columnKeys'
 import {LineLayerConfig, LineHoverDimension} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 import {LineData} from '../utils/lineData'
-import {getTooltipData} from '../utils/lineTooltip'
+import {getPointsTooltipData} from '../utils/tooltip'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
@@ -50,7 +50,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(FILL, 'string')
 
-  const tooltipData = getTooltipData(
+  const tooltipData = getPointsTooltipData(
     rowIndices,
     table,
     xColKey,
