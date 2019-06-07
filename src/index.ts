@@ -11,6 +11,8 @@ export * from './constants/colorSchemes'
 // Types
 export {
   ColumnType,
+  NumericColumnData,
+  ColumnData,
   Table,
   Scale,
   Margins,
