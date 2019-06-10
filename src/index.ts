@@ -2,7 +2,7 @@
 export {Plot} from './components/Plot'
 
 // Utils
-export {fromFlux} from './utils/fromFlux'
+export {fromFlux, FromFluxResult} from './utils/fromFlux'
 export {newTable} from './utils/newTable'
 
 // Constants
