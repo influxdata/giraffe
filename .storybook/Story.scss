@@ -1,5 +1,15 @@
 @import '../src/styles/modules';
 
+.story--example {
+  max-width: 100%;
+  border: $cf-border solid $g4-onyx;
+  border-radius: $cf-radius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 /*
   Markdown Styles
   ------------------------------------------------------------------------------

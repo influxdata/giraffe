@@ -66,9 +66,11 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
   .add('Scatterplot', () => {
@@ -102,9 +104,11 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
   .add('Heatmap', () => {
@@ -126,9 +130,11 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
   .add(
@@ -152,9 +158,11 @@ storiesOf('XY Plot', module)
       }
 
       return (
-        <PlotContainer>
-          <Plot config={config} />
-        </PlotContainer>
+        <div className="story--example">
+          <PlotContainer>
+            <Plot config={config} />
+          </PlotContainer>
+        </div>
       )
     },
     {
