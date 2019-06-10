@@ -13,6 +13,9 @@ module.exports = ({config}) => {
             },
           },
         },
+        {
+          loader: require.resolve('react-docgen-typescript-loader'),
+        },
       ],
     },
     {
@@ -22,6 +25,10 @@ module.exports = ({config}) => {
           loader: require.resolve('markdown-loader'),
         },
       ],
+    },
+    {
+      test: /\.(css|scss)$/,
+      loaders: ['style-loader', 'css-loader', 'sass-loader?sourceMap'],
     }
   )
   config.resolve.extensions.push('.ts', '.tsx')

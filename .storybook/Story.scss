@@ -1,0 +1,263 @@
+@import '../src/styles/modules';
+
+/*
+  Markdown Styles
+  ------------------------------------------------------------------------------
+*/
+
+$docs-text-base: 14px;
+$docs-text-scale: 1.19;
+$docs-text-base-1: (ceil($docs-text-base * $docs-text-scale));
+$docs-text-base-2: (
+  ceil($docs-text-base * $docs-text-scale * $docs-text-scale)
+);
+$docs-text-base-3: (
+  ceil($docs-text-base * $docs-text-scale * $docs-text-scale * $docs-text-scale)
+);
+$docs-text-base-4: (
+  ceil(
+    $docs-text-base * $docs-text-scale * $docs-text-scale * $docs-text-scale *
+      $docs-text-scale
+  )
+);
+$docs-text-base-5: (
+  ceil(
+    $docs-text-base * $docs-text-scale * $docs-text-scale * $docs-text-scale *
+      $docs-text-scale * $docs-text-scale
+  )
+);
+
+body.sb-show-main {
+  padding: 52px;
+}
+
+.storybook-readme-story div.markdown-body {
+  font-size: $docs-text-base;
+  font-family: 'Roboto', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ol,
+  ul {
+    color: $g13-mist;
+    margin: 0.25em 0 0.75em 0;
+  }
+
+  h1,
+  h2 {
+    border-bottom: 2px solid $g2-kevlar;
+  }
+
+  h1 {
+    line-height: 1.25em;
+    font-size: ceil($docs-text-base-5 * $docs-text-scale);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+  }
+  h2 {
+    line-height: 1.25em;
+    font-size: $docs-text-base-4;
+    font-weight: 300;
+  }
+  h3 {
+    line-height: 1.25em;
+    font-size: $docs-text-base-3;
+    font-weight: 500;
+    small {
+      font-weight: 500;
+    }
+  }
+  h4 {
+    line-height: 1.25em;
+    font-size: $docs-text-base-2;
+    font-weight: 400;
+    small {
+      font-weight: 400;
+    }
+  }
+  h5 {
+    line-height: 1.25em;
+    font-size: $docs-text-base-1;
+    font-weight: 600;
+    small {
+      font-weight: 500;
+    }
+  }
+  h6 {
+    line-height: 1.25em;
+    font-size: $docs-text-base;
+    font-weight: 900;
+    small {
+      font-weight: 500;
+    }
+  }
+  p {
+    color: $g11-sidewalk;
+    font-size: $docs-text-base;
+    line-height: 1.55em;
+    font-weight: 500;
+
+    b,
+    strong {
+      font-weight: 900;
+    }
+
+    small {
+      font-weight: 500;
+    }
+  }
+
+  ol,
+  ul {
+    font-size: $docs-text-base;
+  }
+
+  li {
+    line-height: 1.55em;
+    font-weight: 500;
+  }
+
+  hr {
+    margin: $cf-marg-d 0;
+    height: $cf-border;
+    border-radius: $cf-border / 2;
+    background-color: $g2-kevlar;
+  }
+
+  code {
+    font-family: 'RobotoMono', monospace;
+    text-shadow: none;
+    font-weight: 500;
+    color: $c-potassium;
+    background-color: $g2-kevlar;
+    font-size: inherit;
+  }
+
+  code.language-js span.token {
+    &.punctuation {
+      color: $g10-wolf;
+    }
+    &.keyword {
+      color: $c-hydrogen;
+    }
+    &.string {
+      color: $c-krypton;
+    }
+    &.function {
+      color: $c-pool;
+    }
+    &.operator {
+      color: $c-tungsten;
+    }
+    &.comment {
+      color: $g8-storm;
+      font-style: italic;
+    }
+  }
+
+  pre {
+    font-size: $docs-text-base;
+    background-color: $g2-kevlar;
+    margin: 0.5em 0 1.25em 0;
+
+    p {
+      margin: 0;
+      background-color: transparent;
+    }
+  }
+}
+
+.storybook-readme-story div.markdown-body table {
+  border: 0;
+
+  thead th,
+  tbody td {
+    border: 0;
+    padding: $cf-marg-b;
+    font-size: 13px;
+  }
+
+  thead tr {
+    border: 0;
+    border-bottom: $cf-border solid $g4-onyx;
+    background-color: transparent;
+  }
+
+  thead th {
+    color: $g17-whisper;
+  }
+
+  tbody tr {
+    border: 0;
+    border-top: $cf-border solid $g2-kevlar;
+    background-color: transparent;
+  }
+
+  tbody td {
+    color: $g13-mist;
+  }
+}
+
+.storybook-readme-story div.markdown-body.markdown-props-table {
+  h3 {
+    margin-top: 0.75em !important;
+    margin-bottom: 0.25em;
+  }
+
+  table {
+    display: table;
+    width: 100%;
+
+    thead th,
+    tbody td {
+      text-align: left;
+      border: 0;
+      padding: $cf-marg-b;
+      font-size: 13px;
+    }
+
+    tbody tr {
+      background-color: $g0-obsidian;
+      border: $cf-border solid $g3-castle;
+
+      &:nth-child(even) {
+        background-color: $g1-raven;
+      }
+
+      &:nth-child(odd) {
+        background-color: $g2-kevlar;
+      }
+    }
+  }
+}
+
+table.two-axis-table {
+  thead tr,
+  tbody tr {
+    border: 0;
+  }
+
+  tbody tr td {
+    border: $cf-border solid $g2-kevlar;
+    border-left: 0;
+    text-align: center;
+    vertical-align: center;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  tbody tr:first-child td {
+    border-top: 0;
+  }
+}
