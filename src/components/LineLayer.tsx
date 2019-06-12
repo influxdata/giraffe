@@ -35,6 +35,8 @@ export const LineLayer: FunctionComponent<Props> = ({
     lineWidth,
     hoverDimension,
     maxTooltipRows,
+    shadeBelow,
+    shadeBelowOpacity,
   } = layer
 
   const xColData = table.getColumn(xColKey, 'number')
@@ -69,8 +71,20 @@ export const LineLayer: FunctionComponent<Props> = ({
       lineData: simplifiedLineData,
       interpolation,
       lineWidth,
+      shadeBelow,
+      shadeBelowOpacity,
+      shadeAboveY: height,
     })
-  }, [simplifiedLineData, canvasRef.current, interpolation, width, height])
+  }, [
+    simplifiedLineData,
+    canvasRef.current,
+    interpolation,
+    width,
+    height,
+    shadeBelow,
+    shadeBelowOpacity,
+    height,
+  ])
 
   const hoverRowIndices = useHoverPointIndices(
     resolvedHoverDimension,

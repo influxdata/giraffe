@@ -60,6 +60,8 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     colors: DEFAULT_COLOR_SCHEME,
     interpolation: 'linear',
     maxTooltipRows: 24,
+    shadeBelow: false,
+    shadeBelowOpacity: 0.1,
   },
   heatmap: {
     colors: DEFAULT_COLOR_SCHEME,

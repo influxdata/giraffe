@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, number, select} from '@storybook/addon-knobs'
+import {withKnobs, number, select, boolean} from '@storybook/addon-knobs'
 
 import {Config, Plot, MAGMA} from '../src'
 
@@ -31,6 +31,8 @@ storiesOf('XY Plot', module)
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
+    const shadeBelow = boolean('Shade Area', false)
+    const shadeBelowOpacity = number('Area Opacity', 0.1)
     const hoverDimension = select(
       'Hover Dimension',
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
@@ -53,6 +55,8 @@ storiesOf('XY Plot', module)
           colors,
           lineWidth,
           hoverDimension,
+          shadeBelow,
+          shadeBelowOpacity,
         },
       ],
     }

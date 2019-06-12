@@ -36,6 +36,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     y: yColKey,
     fill: fillColKeys,
     lineWidth,
+    shadeBelow,
+    shadeBelowOpacity,
   } = layer
 
   const {
@@ -99,6 +101,9 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
         lineData: {[groupKey]: lineDatum},
         interpolation,
         lineWidth: lineWidth * 2,
+        shadeBelow,
+        shadeBelowOpacity: shadeBelowOpacity * 1.5,
+        shadeAboveY: height,
       })
     }
 
