@@ -2,12 +2,14 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 
 import {fromFlux, Config, Plot} from '../src'
+import {CPU} from './data'
 
-storiesOf('Snapshot Tests', module).add('with multiple minimum values', () => {
-  // https://github.com/influxdata/giraffe/issues/51
+storiesOf('Snapshot Tests', module)
+  .add('with multiple minimum values', () => {
+    // https://github.com/influxdata/giraffe/issues/51
 
-  const {table} = fromFlux(
-    `#group,false,false,true,false,false
+    const {table} = fromFlux(
+      `#group,false,false,true,false,false
 #datatype,string,long,string,long,dateTime:RFC3339
 #default,_result,,,,
 ,result,table,_field,_value,_time
@@ -24,20 +26,39 @@ storiesOf('Snapshot Tests', module).add('with multiple minimum values', () => {
 ,,0,event,0,2019-05-06T12:00:00Z
 ,,0,event,10,2019-05-07T00:00:00Z
 ,,0,event,0,2019-05-07T06:00:00Z`
-  )
+    )
 
-  const config: Config = {
-    width: 600,
-    height: 400,
-    table,
-    layers: [
-      {
-        type: 'line',
-        x: '_time',
-        y: '_value',
-      },
-    ],
-  }
+    const config: Config = {
+      width: 600,
+      height: 400,
+      table,
+      layers: [
+        {
+          type: 'line',
+          x: '_time',
+          y: '_value',
+        },
+      ],
+    }
 
-  return <Plot config={config} />
-})
+    return <Plot config={config} />
+  })
+  .add('line layer with shaded area and step interpolation', () => {
+    const config: Config = {
+      width: 600,
+      height: 400,
+      table: CPU,
+      layers: [
+        {
+          type: 'line',
+          x: '_time',
+          y: '_value',
+          fill: ['cpu'],
+          interpolation: 'step',
+          shadeBelow: true,
+        },
+      ],
+    }
+
+    return <Plot config={config} />
+  })

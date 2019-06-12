@@ -94,6 +94,8 @@ export interface LineLayerConfig {
   hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
   maxTooltipRows?: number
+  shadeBelow?: boolean
+  shadeBelowOpacity?: number
 }
 
 export interface LineMappings {
