@@ -102,8 +102,8 @@ const buildIndex = (
   width: number,
   height: number
 ): IndexTable => {
-  const xBinCount = Math.ceil(width / INDEX_BIN_WIDTH)
-  const yBinCount = Math.ceil(height / INDEX_BIN_WIDTH)
+  const xBinCount = Math.ceil(width / INDEX_BIN_WIDTH) + 1
+  const yBinCount = Math.ceil(height / INDEX_BIN_WIDTH) + 1
 
   const indexTable = {
     xBins: range(xBinCount).map(_ => []),
