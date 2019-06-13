@@ -250,6 +250,10 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return Date.parse(value)
   }
 
+  if (columnType === 'number' && value === '') {
+    return null
+  }
+
   if (columnType === 'number') {
     return Number(value)
   }

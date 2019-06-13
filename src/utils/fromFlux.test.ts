@@ -138,4 +138,17 @@ describe('fromFlux', () => {
 
     expect(fluxGroupKeyUnion).toEqual(['a', 'c', 'd'])
   })
+
+  test('parses empty numeric values as null', () => {
+    const CSV = `#group,false,false,true,true,false,true,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string
+#default,_result,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,cpu,host
+,,0,2019-02-01T23:38:32.524234Z,2019-02-01T23:39:02.524234Z,2019-02-01T23:38:33Z,10,usage_guest,cpu,cpu-total,oox4k.local
+,,1,2019-02-01T23:38:32.524234Z,2019-02-01T23:39:02.524234Z,2019-02-01T23:38:43Z,,usage_guest,cpu,cpu-total,oox4k.local`
+
+    const {table} = fromFlux(CSV)
+
+    expect(table.getColumn('_value')).toEqual([10, null])
+  })
 })
