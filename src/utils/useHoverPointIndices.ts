@@ -11,7 +11,7 @@ export const useHoverPointIndices = (
   mouseY: number,
   xColData: NumericColumnData,
   yColData: NumericColumnData,
-  groupColData: string[],
+  groupColData: NumericColumnData,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
   width: number,
@@ -337,7 +337,7 @@ const lookupIndex1D = (
   mouseCoord: number,
   dataCoord: number,
   colData: NumericColumnData,
-  groupColData: string[],
+  groupColData: NumericColumnData,
   length: number
 ): number[] => {
   const initialBinIndex = getBinIndex(mouseCoord, length)
@@ -395,7 +395,7 @@ const collectNearestIndices = (
   rowIndices: number[],
   dataCoord: number,
   colData: NumericColumnData,
-  groupColData: string[]
+  groupColData: NumericColumnData
 ): void => {
   for (const i of rowIndices) {
     const group = groupColData[i]

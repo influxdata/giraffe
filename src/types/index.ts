@@ -1,5 +1,3 @@
-import {SymbolType} from '../utils/getSymbolScale'
-
 export type NumericColumnData =
   | number[]
   | Int8Array
@@ -16,11 +14,11 @@ export type ColumnData = NumericColumnData | string[] | boolean[]
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
 export interface GetColumn {
-  (columnKey: string): ColumnData
-  (columnKey: string, type: 'number'): NumericColumnData
-  (columnKey: string, type: 'time'): NumericColumnData
-  (columnKey: string, type: 'string'): string[]
-  (columnKey: string, type: 'boolean'): boolean[]
+  (columnKey: string): ColumnData | null
+  (columnKey: string, type: 'number'): NumericColumnData | null
+  (columnKey: string, type: 'time'): NumericColumnData | null
+  (columnKey: string, type: 'string'): string[] | null
+  (columnKey: string, type: 'boolean'): boolean[] | null
 }
 
 export interface Table {
@@ -98,86 +96,17 @@ export interface LineLayerConfig {
   shadeBelowOpacity?: number
 }
 
-export interface LineMappings {
-  x: string
-  y: string
-  fill: string[]
-}
-
-export interface LineScales {
-  fill: Scale<string, string>
-}
-
 export interface HeatmapLayerConfig {
   type: 'heatmap'
   x: string
   y: string
   colors?: string[]
   binSize?: number
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
 }
-
-export interface HeatmapScales {
-  fill: Scale<number, string>
-}
-
-export interface HeatmapMappings {
-  xMin: 'xMin'
-  xMax: 'xMax'
-  yMin: 'yMin'
-  yMax: 'yMax'
-  fill: 'count'
-}
-
-export interface HistogramMappings {
-  xMin: 'xMin'
-  xMax: 'xMax'
-  yMin: 'yMin'
-  yMax: 'yMax'
-  fill: string[]
-}
-
-export interface HistogramScales {
-  fill: Scale<string, string>
-}
-
-export interface ScatterLayerConfig {
-  type: 'scatter'
-  x: string
-  y: string
-  colors?: string[]
-  fill?: string[]
-  symbol?: string[]
-}
-
-export interface ScatterMappings {
-  x: string
-  y: string
-  fill: string[]
-  symbol: string[]
-}
-
-export interface ScatterScales {
-  fill: Scale<string, string>
-  symbol: Scale<string, SymbolType>
-}
-
-export type Mappings =
-  | LineMappings
-  | HistogramMappings
-  | HeatmapMappings
-  | ScatterMappings
-
-export type Scales =
-  | LineScales
-  | HistogramScales
-  | HeatmapScales
-  | ScatterScales
-
-export type LayerConfig =
-  | LineLayerConfig
-  | HistogramLayerConfig
-  | HeatmapLayerConfig
-  | ScatterLayerConfig
 
 export type HistogramPosition = 'overlaid' | 'stacked'
 
@@ -188,7 +117,36 @@ export interface HistogramLayerConfig {
   colors?: string[]
   position?: HistogramPosition
   binCount?: number
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
 }
+
+export type RectLayerConfig = HistogramLayerConfig | HeatmapLayerConfig
+
+export type SymbolType =
+  | 'circle'
+  | 'triangle'
+  | 'square'
+  | 'plus'
+  | 'tritip'
+  | 'ex'
+
+export interface ScatterLayerConfig {
+  type: 'scatter'
+  x: string
+  y: string
+  colors?: string[]
+  fill?: string[]
+  symbol?: string[]
+}
+
+export type LayerConfig =
+  | LineLayerConfig
+  | HistogramLayerConfig
+  | HeatmapLayerConfig
+  | ScatterLayerConfig
 
 export interface Config {
   table: Table
@@ -241,3 +199,115 @@ export interface Config {
 }
 
 export type SizedConfig = Config & {width: number; height: number}
+
+export interface ColumnGroupMap {
+  // The column keys that specify the grouping
+  columnKeys: string[]
+
+  // A group ID `i` takes on the values specified by `mappings[i]` for the
+  // column keys that specify the grouping
+  mappings: Array<{[columnKey: string]: any}>
+}
+
+export type LineData = {
+  [groupID: number]: {
+    xs: number[]
+    ys: number[]
+    fill: string
+  }
+}
+
+export interface LineLayerSpec {
+  type: 'line'
+  inputTable: Table
+  table: Table // has `FILL` column added
+  lineData: LineData
+  xDomain: number[]
+  yDomain: number[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {
+    fill: Scale<number, string>
+  }
+  columnGroupMaps: {
+    fill: ColumnGroupMap
+  }
+}
+
+export interface ScatterLayerSpec {
+  type: 'scatter'
+  inputTable: Table
+  table: Table // has `FILL` and `SYMBOL` columns added
+  xDomain: number[]
+  yDomain: number[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {
+    fill: Scale<number, string>
+    symbol: Scale<number, SymbolType>
+  }
+  columnGroupMaps: {
+    fill: ColumnGroupMap
+    symbol: ColumnGroupMap
+  }
+}
+
+export interface RectLayerSpec {
+  type: 'rect'
+  inputTable: Table
+  table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column
+  binDimension: 'xy' | 'x'
+  xDomain: number[]
+  yDomain: number[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {fill: Scale<number, string>}
+  columnGroupMaps: {fill?: ColumnGroupMap}
+}
+
+export interface LayerProps {
+  xScale: Scale<number, number>
+  yScale: Scale<number, number>
+  width: number
+  height: number
+  spec: LayerSpec
+  config: LayerConfig
+  plotConfig: SizedConfig
+  columnFormatter: (colKey: string) => (x: any) => string
+  hoverX: number | null
+  hoverY: number | null
+}
+
+/*
+  When a user supplies a config for a layer, we derive various data from it:
+
+  - If the layer implies a certain statistical transform or aggregate, we
+    compute it. For example: a histogram layer needs to place data into bins,
+    and count the number of observations within each bin.
+
+  - Some layers support _group aesthetics_. These are aesthetics which multiple
+    columns in the input table may be mapped to at once. In this case, we
+    synthesize a new column in the table that contains a numeric group ID for
+    each unique combination of values from these columns. We also record the
+    values for each column that a particular group ID maps to, so that we can
+    display those values in a legend.
+
+  - For any data-to-aesthetic mapping, we create a scale function. The
+    exception to this is for the `x` and `y` aesthetics; since multiple layers
+    should use the same scale for `x` and `y` aesthetics, we do not generate
+    those scales in a layer transform. Instead we record the `xDomain` and
+    `yDomain` of the (transformed) data for the layer, so that some other
+    entity may compute these scales.
+
+  - We record the `xColumnType` and `yColumnType` for the layer, so that we can
+    format x and y values from the layer approriately.
+
+  We call the collection of this derived data a "spec".
+*/
+export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec

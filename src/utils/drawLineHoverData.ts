@@ -1,5 +1,5 @@
 interface DrawLinePointOptions {
-  canvas: HTMLCanvasElement
+  context: CanvasRenderingContext2D
   width: number
   height: number
   crosshairX: number | null
@@ -10,7 +10,7 @@ interface DrawLinePointOptions {
 }
 
 export const drawLineHoverData = ({
-  canvas,
+  context,
   width,
   height,
   crosshairX,
@@ -19,8 +19,6 @@ export const drawLineHoverData = ({
   points,
   radius,
 }: DrawLinePointOptions): void => {
-  const context = canvas.getContext('2d')
-
   context.strokeStyle = crosshairColor
 
   if (crosshairX !== null) {

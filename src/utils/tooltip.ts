@@ -16,7 +16,7 @@ export const getRangeLabel = (min: number, max: number, formatter): string => {
   return label
 }
 
-export const getTooltipGroupColumns = (
+const getTooltipGroupColumns = (
   table: Table,
   rowIndices: number[],
   groupColKeys: string[],
@@ -44,11 +44,11 @@ export const getPointsTooltipData = (
   groupColKey: string,
   getValueFormatter: (colKey: string) => (x: any) => string,
   fillColKeys: string[],
-  fillScale: Scale<string, string>
+  fillScale: Scale<number, string>
 ): TooltipData => {
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
-  const groupColData = table.getColumn(groupColKey, 'string')
+  const groupColData = table.getColumn(groupColKey, 'number')
   const colors = hoveredRowIndices.map(i => fillScale(groupColData[i]))
   const xFormatter = getValueFormatter(xColKey)
   const yFormatter = getValueFormatter(yColKey)

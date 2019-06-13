@@ -1,84 +1,52 @@
 import * as React from 'react'
-import {useRef, useLayoutEffect, FunctionComponent} from 'react'
+import {useRef, FunctionComponent} from 'react'
 
-import {ScatterLayerConfig} from '../types'
-import {PlotEnv} from '../utils/PlotEnv'
+import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../types'
 import {drawPoints} from '../utils/drawPoints'
+import {useCanvas} from '../utils/useCanvas'
 import {ScatterHoverLayer} from './ScatterHoverLayer'
 import {SCATTER_POINT_SIZE} from '../constants'
 import {FILL, SYMBOL} from '../constants/columnKeys'
 
-interface Props {
-  env: PlotEnv
-  layerIndex: number
-  hoverX: number
-  hoverY: number
+interface Props extends LayerProps {
+  spec: ScatterLayerSpec
+  config: ScatterLayerConfig
 }
 
-export const ScatterLayer: FunctionComponent<Props> = ({
-  env,
-  layerIndex,
-  hoverX,
-  hoverY,
-}) => {
-  const layerConfig = env.config.layers[layerIndex] as ScatterLayerConfig
-  const {x: xColKey, y: yColKey} = layerConfig
+export const ScatterLayer: FunctionComponent<Props> = props => {
+  const {config, spec, width, height, xScale, yScale} = props
 
-  const {xScale, yScale, innerWidth: width, innerHeight: height} = env
-  const fillScale = env.getScale(layerIndex, 'fill')
-  const symbolScale = env.getScale(layerIndex, 'symbol')
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const table = env.getTable(layerIndex)
-  const xColData = table.getColumn(xColKey, 'number')
-  const yColData = table.getColumn(yColKey, 'number')
-  const fillColData = table.getColumn(FILL, 'string')
-  const symbolColData = table.getColumn(SYMBOL, 'string')
-
-  const canvas = useRef<HTMLCanvasElement>(null)
-
-  useLayoutEffect(() => {
-    drawPoints({
-      canvas: canvas.current,
-      width,
-      height,
-      xColData,
-      yColData,
-      fillColData,
-      symbolColData,
-      xScale,
-      yScale,
-      fillScale,
-      symbolScale,
-      pointSize: SCATTER_POINT_SIZE,
-    })
-  }, [
-    canvas.current,
-    width,
-    height,
-    xColData,
-    yColData,
-    fillColData,
-    symbolColData,
+  const drawPointsOptions = {
+    xColData: spec.table.getColumn(config.x, 'number'),
+    yColData: spec.table.getColumn(config.y, 'number'),
+    fillColData: spec.table.getColumn(FILL, 'number'),
+    symbolColData: spec.table.getColumn(SYMBOL, 'number'),
     xScale,
     yScale,
-    fillScale,
-    symbolScale,
-  ])
+    fillScale: spec.scales.fill,
+    symbolScale: spec.scales.symbol,
+    pointSize: SCATTER_POINT_SIZE,
+  }
+
+  useCanvas(
+    canvasRef,
+    width,
+    height,
+    context => drawPoints({context, ...drawPointsOptions}),
+    Object.values(drawPointsOptions)
+  )
 
   return (
     <>
       <canvas
         className="giraffe-layer scatter"
-        ref={canvas}
+        ref={canvasRef}
         style={{position: 'absolute'}}
         data-testid="giraffe-layer--scatter"
       />
-      <ScatterHoverLayer
-        env={env}
-        layerIndex={layerIndex}
-        hoverX={hoverX}
-        hoverY={hoverY}
-      />
+      <ScatterHoverLayer {...props} />
     </>
   )
 }

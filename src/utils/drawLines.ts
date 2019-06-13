@@ -1,13 +1,12 @@
 import {line, curveLinear, area} from 'd3-shape'
 import {range} from 'd3-array'
 
-import {LineInterpolation} from '../types'
-import {LineData} from './lineData'
+import {LineInterpolation, LineData} from '../types'
 import {CURVES} from '../constants'
 import {isDefined} from '../utils/isDefined'
 
 interface DrawLinesOptions {
-  canvas: HTMLCanvasElement
+  context: CanvasRenderingContext2D
   interpolation: LineInterpolation
   lineData: LineData
   lineWidth: number
@@ -17,7 +16,7 @@ interface DrawLinesOptions {
 }
 
 export const drawLines = ({
-  canvas,
+  context,
   lineData,
   interpolation,
   lineWidth,
@@ -25,8 +24,6 @@ export const drawLines = ({
   shadeBelowOpacity,
   shadeAboveY,
 }: DrawLinesOptions): void => {
-  const context = canvas.getContext('2d')
-
   if (shadeBelow) {
     for (const {xs, ys, fill} of Object.values(lineData)) {
       const areaGenerator = area<number>()

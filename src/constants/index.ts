@@ -9,7 +9,7 @@ import {
   curveNatural,
 } from 'd3-shape'
 
-import {Config, LayerConfig} from '../types'
+import {Config, LayerConfig, SymbolType} from '../types'
 import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
 
 // TODO: Make configurable
@@ -66,6 +66,10 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
   heatmap: {
     colors: DEFAULT_COLOR_SCHEME,
     binSize: 10,
+    strokeWidth: 0,
+    strokePadding: 0,
+    strokeOpacity: 0,
+    fillOpacity: 1,
   },
   scatter: {
     colors: DEFAULT_COLOR_SCHEME,
@@ -77,5 +81,18 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     colors: DEFAULT_COLOR_SCHEME,
     position: 'stacked',
     binCount: null,
+    strokeWidth: 1,
+    strokePadding: 0.75,
+    strokeOpacity: 1,
+    fillOpacity: 0.75,
   },
 }
+
+export const ALL_SYMBOL_TYPES: SymbolType[] = [
+  'circle',
+  'plus',
+  'triangle',
+  'square',
+  'tritip',
+  'ex',
+]

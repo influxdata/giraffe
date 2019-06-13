@@ -1,43 +1,56 @@
-import {extent, range} from 'd3-array'
-import {interpolateRgbBasis} from 'd3-interpolate'
-import {scaleSequential} from 'd3-scale'
+import {range, extent} from 'd3-array'
 
+import {getContinuousColorScale} from './'
 import {newTable} from '../utils/newTable'
-import {Table, HeatmapScales, HeatmapMappings, Scale} from '../types'
 import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
+import {Table, RectLayerSpec} from '../types'
 
-export const getHeatmapTable = (
-  table: Table,
-  xColKey: string,
-  yColKey: string,
-  xDomain: number[],
-  yDomain: number[],
+export const heatmapTransform = (
+  inputTable: Table,
+  xColumnKey: string,
+  yColumnKey: string,
+  xDomain: number[] | null,
+  yDomain: number[] | null,
   width: number,
   height: number,
-  binSize: number
-): Table =>
-  bin2d(table, xColKey, yColKey, xDomain, yDomain, width, height, binSize)
-
-export const getHeatmapScales = (
-  table: Table,
+  binSize: number,
   colors: string[]
-): HeatmapScales => {
-  const domain = extent(table.getColumn(COUNT, 'number'))
-  const colorScheme = interpolateRgbBasis(colors)
-  const fillScale = scaleSequential(colorScheme).domain(domain)
+): RectLayerSpec => {
+  const resolvedXDomain =
+    xDomain || extent(inputTable.getColumn(xColumnKey, 'number'))
+
+  const resolvedYDomain =
+    yDomain || extent(inputTable.getColumn(yColumnKey, 'number'))
+
+  const table = bin2d(
+    inputTable,
+    xColumnKey,
+    yColumnKey,
+    resolvedXDomain,
+    resolvedYDomain,
+    width,
+    height,
+    binSize
+  )
+
+  const countDomain = extent(table.getColumn(COUNT, 'number'))
+  const fillScale = getContinuousColorScale(countDomain, colors)
 
   return {
-    fill: fillScale as Scale<number, string>,
+    type: 'rect',
+    inputTable,
+    table,
+    binDimension: 'xy',
+    xDomain: resolvedXDomain,
+    yDomain: resolvedYDomain,
+    xColumnKey,
+    yColumnKey,
+    xColumnType: inputTable.getColumnType(xColumnKey),
+    yColumnType: 'number',
+    scales: {fill: fillScale},
+    columnGroupMaps: {},
   }
 }
-
-export const getHeatmapMappings = (): HeatmapMappings => ({
-  xMin: 'xMin',
-  xMax: 'xMax',
-  yMin: 'yMin',
-  yMax: 'yMax',
-  fill: 'count',
-})
 
 export const bin2d = (
   table: Table,
@@ -53,14 +66,6 @@ export const bin2d = (
   const yColData = table.getColumn(yColKey, 'number')
   const xColType = table.getColumnType(xColKey) as 'time' | 'number'
   const yColType = table.getColumnType(yColKey) as 'time' | 'number'
-
-  if (!xDomain) {
-    xDomain = extent(xColData)
-  }
-
-  if (!yDomain) {
-    yDomain = extent(yColData)
-  }
 
   const xBinCount = Math.floor(width / binSize)
   const yBinCount = Math.floor(height / binSize)
