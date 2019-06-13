@@ -52,7 +52,7 @@ class SimpleTable implements Table {
     const column = this.columns[columnKey]
 
     if (!column) {
-      throw new Error('column not found')
+      return null
     }
 
     return column.name
@@ -62,7 +62,7 @@ class SimpleTable implements Table {
     const column = this.columns[columnKey]
 
     if (!column) {
-      throw new Error('column not found')
+      return null
     }
 
     return column.type

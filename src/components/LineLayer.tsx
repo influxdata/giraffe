@@ -1,98 +1,66 @@
 import * as React from 'react'
-import {useRef, useLayoutEffect, useMemo, FunctionComponent} from 'react'
+import {useMemo, useRef, FunctionComponent} from 'react'
 
-import {LineLayerConfig} from '../types'
-import {PlotEnv} from '../utils/PlotEnv'
-import {drawLines} from '../utils/drawLines'
-import {collectLineData, simplifyLineData} from '../utils/lineData'
-import {clearCanvas} from '../utils/clearCanvas'
+import {LayerProps, LineLayerSpec, LineLayerConfig} from '../types'
 import {LineHoverLayer} from './LineHoverLayer'
-import {FILL} from '../constants/columnKeys'
+import {simplifyLineData} from '../utils/lineData'
+import {useCanvas} from '../utils/useCanvas'
+import {drawLines} from '../utils/drawLines'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
+import {FILL} from '../constants/columnKeys'
 
-interface Props {
-  env: PlotEnv
-  layerIndex: number
-  hoverX: number
-  hoverY: number
+export interface Props extends LayerProps {
+  spec: LineLayerSpec
+  config: LineLayerConfig
 }
 
-export const LineLayer: FunctionComponent<Props> = ({
-  env,
-  layerIndex,
-  hoverX,
-  hoverY,
-}) => {
-  const table = env.getTable(layerIndex)
-  const fillScale = env.getScale(layerIndex, 'fill')
-  const {xScale, yScale, innerWidth: width, innerHeight: height} = env
-  const layer = env.config.layers[layerIndex] as LineLayerConfig
+export const LineLayer: FunctionComponent<Props> = props => {
+  const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
 
-  const {
-    interpolation,
-    x: xColKey,
-    y: yColKey,
-    lineWidth,
-    hoverDimension,
-    maxTooltipRows,
-    shadeBelow,
-    shadeBelowOpacity,
-  } = layer
-
-  const xColData = table.getColumn(xColKey, 'number')
-  const yColData = table.getColumn(yColKey, 'number')
-  const groupColData = table.getColumn(FILL, 'string')
-
-  const lineData = useMemo(
-    () => collectLineData(table, xColKey, yColKey, fillScale),
-    [table, xColKey, yColKey, fillScale]
-  )
-
-  // TODO: Simplify in data domain, resimplify when dimensions change on a
-  // debounced timer (for fast resizes)
   const simplifiedLineData = useMemo(
-    () => simplifyLineData(lineData, xScale, yScale),
-    [lineData, xScale, yScale]
+    () => simplifyLineData(spec.lineData, xScale, yScale),
+    [spec.lineData, xScale, yScale]
   )
 
-  const resolvedHoverDimension =
-    hoverDimension === 'auto'
-      ? Object.keys(lineData).length > maxTooltipRows
-        ? 'xy'
-        : 'x'
-      : hoverDimension
+  const drawLinesOptions = {
+    lineData: simplifiedLineData,
+    interpolation: config.interpolation,
+    lineWidth: config.lineWidth,
+    shadeBelow: config.shadeBelow,
+    shadeBelowOpacity: config.shadeBelowOpacity,
+    shadeAboveY: height,
+  }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  useLayoutEffect(() => {
-    clearCanvas(canvasRef.current, width, height)
-    drawLines({
-      canvas: canvasRef.current,
-      lineData: simplifiedLineData,
-      interpolation,
-      lineWidth,
-      shadeBelow,
-      shadeBelowOpacity,
-      shadeAboveY: height,
-    })
-  }, [
-    simplifiedLineData,
-    canvasRef.current,
-    interpolation,
+  useCanvas(
+    canvasRef,
     width,
     height,
-    shadeBelow,
-    shadeBelowOpacity,
-    height,
-  ])
+    context => drawLines({context, ...drawLinesOptions}),
+    Object.values(drawLinesOptions)
+  )
+
+  let hoverDimension: 'x' | 'y' | 'xy'
+
+  if (
+    config.hoverDimension === 'auto' &&
+    Object.keys(spec.lineData).length > config.maxTooltipRows
+  ) {
+    hoverDimension = 'xy'
+  } else if (config.hoverDimension === 'auto') {
+    hoverDimension = 'x'
+  } else {
+    hoverDimension = config.hoverDimension
+  }
 
   const hoverRowIndices = useHoverPointIndices(
-    resolvedHoverDimension,
+    hoverDimension,
     hoverX,
     hoverY,
-    xColData,
-    yColData,
-    groupColData,
+    spec.table.getColumn(config.x, 'number'),
+    spec.table.getColumn(config.y, 'number'),
+    spec.table.getColumn(FILL, 'number'),
     xScale,
     yScale,
     width,
@@ -104,21 +72,20 @@ export const LineLayer: FunctionComponent<Props> = ({
   return (
     <>
       <canvas
-        className="giraffe-layer line"
+        className="giraffe-layer giraffe-layer-line"
         ref={canvasRef}
         style={{
           position: 'absolute',
-          opacity: resolvedHoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
+          opacity: hoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
         }}
-        data-testid="giraffe-layer--line"
+        data-testid="giraffe-layer-line"
       />
       {hasHoverData && (
         <LineHoverLayer
-          env={env}
-          layerIndex={layerIndex}
-          lineData={simplifiedLineData}
+          {...props}
           rowIndices={hoverRowIndices}
-          dimension={resolvedHoverDimension}
+          dimension={hoverDimension}
+          simplifiedLineData={simplifiedLineData}
         />
       )}
     </>

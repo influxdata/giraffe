@@ -1,5 +1,4 @@
-import {Scale, NumericColumnData} from '../types'
-import {clearCanvas} from '../utils/clearCanvas'
+import {Scale, NumericColumnData, SymbolType} from '../types'
 import {
   drawCircle,
   drawSquare,
@@ -10,25 +9,21 @@ import {
 } from '../utils/drawShapes'
 
 interface DrawPointsOptions {
-  canvas: HTMLCanvasElement
-  width: number
-  height: number
+  context: CanvasRenderingContext2D
   xColData: NumericColumnData
   yColData: NumericColumnData
-  fillColData: string[]
-  symbolColData: string[]
+  fillColData: NumericColumnData
+  symbolColData: NumericColumnData
   yScale: Scale<number, number>
   xScale: Scale<number, number>
-  fillScale: Scale<string, string>
-  symbolScale: Scale<string, string>
+  fillScale: Scale<number, string>
+  symbolScale: Scale<number, SymbolType>
   pointSize: number
   rowIndices?: number[]
 }
 
 export const drawPoints = ({
-  canvas,
-  width,
-  height,
+  context,
   xColData,
   yColData,
   fillColData,
@@ -40,9 +35,6 @@ export const drawPoints = ({
   pointSize,
   rowIndices,
 }: DrawPointsOptions): void => {
-  clearCanvas(canvas, width, height)
-
-  const context = canvas.getContext('2d')
   const n = rowIndices ? rowIndices.length : xColData.length
 
   for (var i = 0; i < n; i++) {

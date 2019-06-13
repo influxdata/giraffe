@@ -1,11 +1,16 @@
-import {
-  SizedConfig,
-  Margins,
-  Scale,
-  Table,
-  ColumnType,
-  LineLayerConfig,
-} from '../types'
+import {getTicks} from './getTicks'
+import {getTimeFormatter} from '../utils/getTimeFormatter'
+import {getTextMetrics} from './getTextMetrics'
+import {getMargins} from './getMargins'
+import {extentOfExtents} from './extrema'
+import {identityMerge} from './identityMerge'
+import {MemoizedFunctionCache} from './MemoizedFunctionCache'
+import {defaultNumberFormatter} from './defaultNumberFormatter'
+import {getLinearScale} from './getLinearScale'
+import {lineTransform} from '../transforms/line'
+import {scatterTransform} from '../transforms/scatter'
+import {histogramTransform} from '../transforms/histogram'
+import {heatmapTransform} from '../transforms/heatmap'
 
 import {
   DEFAULT_RANGE_PADDING,
@@ -13,18 +18,14 @@ import {
   CONFIG_DEFAULTS,
 } from '../constants'
 
-import * as transforms from '../layerTransforms'
-import {getTicks} from './getTicks'
-import {getTimeFormatter} from '../utils/getTimeFormatter'
-import {assert} from './assert'
-import {getTextMetrics} from './getTextMetrics'
-import {getMargins} from './getMargins'
-import {extentOfExtents} from './extrema'
-import {flatMap} from './flatMap'
-import {identityMerge} from './identityMerge'
-import {MemoizedFunctionCache} from './MemoizedFunctionCache'
-import {defaultNumberFormatter} from './defaultNumberFormatter'
-import {getLinearScale} from './getLinearScale'
+import {
+  SizedConfig,
+  Margins,
+  Scale,
+  LineLayerConfig,
+  LayerSpec,
+  ColumnType,
+} from '../types'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
 const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
@@ -92,7 +93,7 @@ export class PlotEnv {
       this.xDomain,
       this.config.width,
       'horizontal',
-      this.getColumnTypeForAesthetics(['x', 'xMin', 'xMax']),
+      this.getSpec(0).xColumnType,
       this.charMetrics
     )
   }
@@ -104,7 +105,7 @@ export class PlotEnv {
       this.yDomain,
       this.config.height,
       'vertical',
-      this.getColumnTypeForAesthetics(['y', 'yMin', 'yMax']),
+      this.getSpec(0).yColumnType,
       this.charMetrics
     )
   }
@@ -174,15 +175,87 @@ export class PlotEnv {
   }
 
   public get xTickFormatter(): (tick: number) => string {
-    const colKeys = this.getColumnKeysForAesthetics(X_DOMAIN_AESTHETICS)
+    const firstXMapping = this.getSpec(0).xColumnKey
 
-    return this.getFormatterForColumn(colKeys[0])
+    return this.getFormatterForColumn(firstXMapping)
   }
 
   public get yTickFormatter(): (tick: number) => string {
-    const colKeys = this.getColumnKeysForAesthetics(Y_DOMAIN_AESTHETICS)
+    const firstYMapping = this.getSpec(0).yColumnKey
 
-    return this.getFormatterForColumn(colKeys[0])
+    return this.getFormatterForColumn(firstYMapping)
+  }
+
+  public getSpec(layerIndex: number): LayerSpec {
+    const layerConfig = this.config.layers[layerIndex]
+    const table = this.config.table
+
+    const memoizedTransformKey = `${layerIndex}: ${layerConfig.type}`
+
+    switch (layerConfig.type) {
+      case 'line': {
+        const transform = this.fns.get(memoizedTransformKey, lineTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          layerConfig.y,
+          layerConfig.fill,
+          layerConfig.colors
+        )
+      }
+
+      case 'scatter': {
+        const transform = this.fns.get(memoizedTransformKey, scatterTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          layerConfig.y,
+          layerConfig.fill,
+          layerConfig.symbol,
+          layerConfig.colors
+        )
+      }
+
+      case 'histogram': {
+        const transform = this.fns.get(memoizedTransformKey, histogramTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          this.config.xDomain,
+          layerConfig.colors,
+          layerConfig.fill,
+          layerConfig.binCount,
+          layerConfig.position
+        )
+      }
+
+      case 'heatmap': {
+        const transform = this.fns.get(memoizedTransformKey, heatmapTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          layerConfig.y,
+          this.config.xDomain,
+          this.config.yDomain,
+          this.config.width,
+          this.config.height,
+          layerConfig.binSize,
+          layerConfig.colors
+        )
+      }
+
+      default:
+        const unknownConfig: never = layerConfig
+        const unknownType = (unknownConfig as any).type
+
+        throw new Error(
+          `transform not implemented for layer of type "${unknownType}"`
+        )
+    }
   }
 
   public getFormatterForColumn = (colKey: string): ((x: any) => string) => {
@@ -201,106 +274,6 @@ export class PlotEnv {
         return this.timeFormatter
       default:
         return DEFAULT_FORMATTER
-    }
-  }
-
-  public getTable = (layerIndex: number): Table => {
-    const table = this.config.table
-    const layerConfig = this.config.layers[layerIndex]
-    const transformKey = `${layerIndex} ${layerConfig.type} table`
-
-    switch (layerConfig.type) {
-      case 'line': {
-        const {fill} = layerConfig
-        const transform = this.fns.get(transformKey, transforms.getLineTable)
-
-        return transform(table, fill)
-      }
-      case 'scatter': {
-        const {fill, symbol} = layerConfig
-        const transform = this.fns.get(transformKey, transforms.getScatterTable)
-
-        return transform(table, fill, symbol)
-      }
-      case 'histogram': {
-        const {x, fill, binCount, position} = layerConfig
-
-        const transform = this.fns.get(
-          transformKey,
-          transforms.getHistogramTable
-        )
-
-        return transform(
-          table,
-          x,
-          this.config.xDomain,
-          fill,
-          binCount,
-          position
-        )
-      }
-      case 'heatmap': {
-        const {x, y, binSize} = layerConfig
-        const {width, height, xDomain, yDomain} = this.config
-        const transform = this.fns.get(transformKey, transforms.getHeatmapTable)
-
-        return transform(table, x, y, xDomain, yDomain, width, height, binSize)
-      }
-      default: {
-        return this.config.table
-      }
-    }
-  }
-
-  public getScale = (layerIndex: number, aesthetic: string): Scale => {
-    const {type: layerType, colors} = this.config.layers[layerIndex]
-    const transformKey = `${layerIndex} ${layerType} scales`
-    const table = this.getTable(layerIndex)
-
-    switch (layerType) {
-      case 'line': {
-        const getter = this.fns.get(transformKey, transforms.getLineScales)
-
-        return getter(table, colors)[aesthetic]
-      }
-      case 'scatter': {
-        const getter = this.fns.get(transformKey, transforms.getScatterScales)
-
-        return getter(table, colors)[aesthetic]
-      }
-      case 'histogram': {
-        const getter = this.fns.get(transformKey, transforms.getHistogramScales)
-
-        return getter(table, colors)[aesthetic]
-      }
-      case 'heatmap': {
-        const getter = this.fns.get(transformKey, transforms.getHeatmapScales)
-
-        return getter(table, colors)[aesthetic]
-      }
-      default: {
-        throw new Error(`${aesthetic} scale for layer ${layerIndex} not found`)
-      }
-    }
-  }
-
-  public getMapping = (
-    layerIndex: number,
-    aesthetic: string
-  ): string | null => {
-    const layerConfig = this.config.layers[layerIndex]
-
-    switch (layerConfig.type) {
-      case 'line':
-        return transforms.getLineMappings(layerConfig)[aesthetic]
-      case 'scatter':
-        return transforms.getScatterMappings(layerConfig)[aesthetic]
-      case 'heatmap':
-        return transforms.getHeatmapMappings()[aesthetic]
-      case 'histogram':
-        return transforms.getHistogramMappings(layerConfig.fill)[aesthetic]
-      default:
-        return null
     }
   }
 
@@ -351,99 +324,35 @@ export class PlotEnv {
   }
 
   private getXDomain() {
-    return this.getDomainForAesthetics(X_DOMAIN_AESTHETICS) || DEFAULT_X_DOMAIN
+    return (
+      extentOfExtents(
+        ...this.config.layers.map((_, i) => this.getSpec(i).xDomain)
+      ) || DEFAULT_X_DOMAIN
+    )
   }
 
   private getYDomain() {
-    return this.getDomainForAesthetics(Y_DOMAIN_AESTHETICS) || DEFAULT_Y_DOMAIN
+    return (
+      extentOfExtents(
+        ...this.config.layers.map((_, i) => this.getSpec(i).yDomain)
+      ) || DEFAULT_Y_DOMAIN
+    )
   }
 
-  private getColumnTypeForAesthetics(aesthetics: string[]): ColumnType | null {
-    const columnTypes: ColumnType[] = this.config.layers.reduce(
-      (acc, _, layerIndex) => {
-        const table = this.getTable(layerIndex)
+  private getColumnTypeByKey(columnKey): ColumnType {
+    const suppliedColumnType = this.config.table.getColumnType(columnKey)
 
-        const colKeys = aesthetics
-          .map(aes => this.getMapping(layerIndex, aes))
-          .filter(d => !!d)
-
-        return [...acc, ...colKeys.map(k => table.getColumnType(k))]
-      },
-      []
-    )
-
-    if (!columnTypes.length) {
-      return null
+    if (suppliedColumnType) {
+      return suppliedColumnType
     }
 
-    assert(
-      columnTypes.every(t => t === columnTypes[0]),
-      `found multiple column types for aesthetics "${aesthetics}"`
-    )
+    const derivedColumnType = this.config.layers
+      .map((_, i) => this.getSpec(i).table)
+      .filter(table => !!table)
+      .map(table => table.getColumnType(columnKey))
+      .find(k => !!k)
 
-    return columnTypes[0]
-  }
-
-  private getColumnKeysForAesthetics(aesthetics: string[]): string[] {
-    return flatMap((layer, layerIndex) => {
-      const columnKeysForLayer = aesthetics.reduce((acc, aes) => {
-        if (layer[aes]) {
-          return [...acc, layer[aes]]
-        }
-
-        const derivedMapping = this.getMapping(layerIndex, aes)
-
-        if (derivedMapping) {
-          return [...acc, derivedMapping]
-        }
-
-        return acc
-      }, [])
-
-      return columnKeysForLayer
-    }, this.config.layers)
-  }
-
-  private getDomainForAesthetics(aesthetics: string[]): number[] {
-    // Collect column data arrays for all columns in the plot currently mapped
-    // to any of the passed `aesthetics`
-    const colData: number[][] = this.config.layers.reduce(
-      (acc, _, layerIndex) => {
-        const table = this.getTable(layerIndex)
-
-        const colKeys = aesthetics
-          .map(aes => this.getMapping(layerIndex, aes))
-          .filter(d => !!d)
-
-        return [...acc, ...colKeys.map(k => table.getColumn(k))]
-      },
-      []
-    )
-
-    const fnKey = `extentOfExtents ${aesthetics.join(', ')}`
-    const fn = this.fns.get(fnKey, extentOfExtents)
-
-    // Compute the domain of all of those columns (memoized, since doing so is
-    // an expensive operation)
-    const domain = fn(...colData)
-
-    return domain
-  }
-
-  private getColumnTypeByKey(key: string): ColumnType {
-    if (this.config.table.columnKeys.includes(key)) {
-      return this.config.table.getColumnType(key)
-    }
-
-    for (let i = 0; i < this.config.layers.length; i++) {
-      const table = this.getTable(i)
-
-      if (table.columnKeys.includes(key)) {
-        return table.getColumnType(key)
-      }
-    }
-
-    return null
+    return derivedColumnType
   }
 
   private get rangePadding(): number {
@@ -491,8 +400,6 @@ const areUncontrolledDomainsStale = (
     return true
   }
 
-  // TODO: can be stale via binCount
-
   const xyMappingsChanged = [
     ...X_DOMAIN_AESTHETICS,
     ...Y_DOMAIN_AESTHETICS,
@@ -503,6 +410,15 @@ const areUncontrolledDomainsStale = (
   )
 
   if (xyMappingsChanged) {
+    return true
+  }
+
+  const binCountChanged = config.layers.some(
+    (layer: any, layerIndex) =>
+      layer.binCount !== (prevConfig.layers[layerIndex] as any).binCount
+  )
+
+  if (binCountChanged) {
     return true
   }
 

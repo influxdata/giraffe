@@ -2,28 +2,25 @@ import * as React from 'react'
 import {FunctionComponent} from 'react'
 import {createPortal} from 'react-dom'
 
-import {TooltipData} from '../types'
+import {TooltipData, Config} from '../types'
 import {useTooltipElement} from '../utils/useTooltipElement'
-import {PlotEnv} from '../utils/PlotEnv'
 
 interface Props {
   data: TooltipData
-  env: PlotEnv
+  config: Config
 }
 
-export const Tooltip: FunctionComponent<Props> = ({data, env}) => {
+export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const tooltipElement = useTooltipElement()
 
   const {
-    config: {
-      legendFont: font,
-      legendFontColor: fontColor,
-      legendFontBrightColor: fontBrightColor,
-      legendBackgroundColor: backgroundColor,
-      legendBorder: border,
-      legendColumns: columnsWhitelist,
-    },
-  } = env
+    legendFont: font,
+    legendFontColor: fontColor,
+    legendFontBrightColor: fontBrightColor,
+    legendBackgroundColor: backgroundColor,
+    legendBorder: border,
+    legendColumns: columnsWhitelist,
+  } = config
 
   const columns = columnsWhitelist
     ? data.filter(column => columnsWhitelist.includes(column.key))

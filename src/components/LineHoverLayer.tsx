@@ -1,35 +1,35 @@
 import * as React from 'react'
-import {useRef, useLayoutEffect, FunctionComponent} from 'react'
+import {useRef, FunctionComponent} from 'react'
 
 import {Tooltip} from './Tooltip'
+import {Props as LineLayerProps} from './LineLayer'
 import {FILL} from '../constants/columnKeys'
-import {LineLayerConfig, LineHoverDimension} from '../types'
-import {PlotEnv} from '../utils/PlotEnv'
-import {LineData} from '../utils/lineData'
+import {LineHoverDimension, LineData} from '../types'
 import {getPointsTooltipData} from '../utils/tooltip'
 import {getLineHoverPoints} from '../utils/getLineHoverPoints'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
-import {clearCanvas} from '../utils/clearCanvas'
+import {useCanvas} from '../utils/useCanvas'
 
-interface Props {
-  env: PlotEnv
-  layerIndex: number
-  lineData: LineData
+interface Props extends LineLayerProps {
   rowIndices: number[] | null
   dimension: LineHoverDimension
+  simplifiedLineData: LineData
 }
 
 export const LineHoverLayer: FunctionComponent<Props> = ({
-  env,
-  layerIndex,
-  lineData,
   rowIndices,
   dimension,
+  simplifiedLineData,
+  config,
+  plotConfig,
+  spec,
+  width,
+  height,
+  xScale,
+  yScale,
+  columnFormatter,
 }) => {
-  const table = env.getTable(layerIndex)
-  const fillScale = env.getScale(layerIndex, 'fill')
-  const layer = env.config.layers[layerIndex] as LineLayerConfig
   const {
     interpolation,
     x: xColKey,
@@ -38,34 +38,15 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     lineWidth,
     shadeBelow,
     shadeBelowOpacity,
-  } = layer
+  } = config
 
-  const {
-    xScale,
-    yScale,
-    innerWidth: width,
-    innerHeight: height,
-    config: {legendCrosshairColor: crosshairColor},
-  } = env
+  const xColData = spec.table.getColumn(xColKey, 'number')
+  const yColData = spec.table.getColumn(yColKey, 'number')
+  const groupColData = spec.table.getColumn(FILL, 'number')
+  const fillScale = spec.scales.fill
 
-  const xColData = table.getColumn(xColKey, 'number')
-  const yColData = table.getColumn(yColKey, 'number')
-  const groupColData = table.getColumn(FILL, 'string')
-
-  const tooltipData = getPointsTooltipData(
-    rowIndices,
-    table,
-    xColKey,
-    yColKey,
-    FILL,
-    env.getFormatterForColumn,
-    fillColKeys,
-    fillScale
-  )
-
-  // TODO: Pass cols directly
   const points = getLineHoverPoints(
-    table,
+    spec.table,
     rowIndices,
     xColKey,
     yColKey,
@@ -74,30 +55,28 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     fillScale
   )
 
-  let crosshairX =
+  const crosshairColor = plotConfig.legendCrosshairColor
+
+  const crosshairX =
     dimension === 'xy' || dimension === 'x'
       ? xScale(xColData[rowIndices[0]])
       : null
 
-  let crosshairY =
+  const crosshairY =
     dimension === 'xy' || dimension === 'y'
       ? yScale(yColData[rowIndices[0]])
       : null
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current
-
-    clearCanvas(canvas, width, height)
-
+  useCanvas(canvasRef, width, height, context => {
     if (dimension === 'xy') {
       const groupKey = groupColData[rowIndices[0]]
-      const lineDatum = lineData[groupKey]
+      const lineDatum = simplifiedLineData[groupKey]
 
       // Highlight the line that the single hovered point belongs to
       drawLines({
-        canvas,
+        context,
         lineData: {[groupKey]: lineDatum},
         interpolation,
         lineWidth: lineWidth * 2,
@@ -108,7 +87,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     }
 
     drawLineHoverData({
-      canvas,
+      context,
       width,
       height,
       crosshairX,
@@ -119,15 +98,26 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     })
   })
 
+  const tooltipData = getPointsTooltipData(
+    rowIndices,
+    spec.table,
+    config.x,
+    config.y,
+    FILL,
+    columnFormatter,
+    fillColKeys,
+    fillScale
+  )
+
   return (
     <>
       <canvas
-        className="giraffe-layer line-interactions"
+        className="giraffe-layer giraffe-layer-hover-line"
         ref={canvasRef}
         style={{position: 'absolute'}}
-        data-testid="giraffe-layer--line-interact"
+        data-testid="giraffe-layer-hover-line"
       />
-      <Tooltip data={tooltipData} env={env} />
+      <Tooltip data={tooltipData} config={plotConfig} />
     </>
   )
 }

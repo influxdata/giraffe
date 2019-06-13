@@ -2,12 +2,13 @@
   @jest-environment jsdom
 */
 
-import {SizedConfig, LineLayerConfig} from '../types'
+import {SizedConfig, LineLayerConfig, RectLayerSpec} from '../types'
 import {PlotEnv} from './PlotEnv'
 import {newTable} from './newTable'
 import {COUNT} from '../constants/columnKeys'
 
-import * as layerTransforms from '../layerTransforms'
+import * as lineTransformModule from '../transforms/line'
+import * as histogramTransformModule from '../transforms/histogram'
 
 describe('PlotEnv', () => {
   describe('config updates and memoization', () => {
@@ -15,8 +16,12 @@ describe('PlotEnv', () => {
     let lineTransformSpy
 
     beforeEach(() => {
-      histogramTransformSpy = jest.spyOn(layerTransforms, 'getHistogramTable')
-      lineTransformSpy = jest.spyOn(layerTransforms, 'getLineTable')
+      histogramTransformSpy = jest.spyOn(
+        histogramTransformModule,
+        'histogramTransform'
+      )
+
+      lineTransformSpy = jest.spyOn(lineTransformModule, 'lineTransform')
     })
 
     afterEach(() => {
@@ -76,7 +81,10 @@ describe('PlotEnv', () => {
       plotEnv.config = config
 
       const getFirstBinCount = () =>
-        plotEnv.getTable(0).getColumn(COUNT, 'number')[0]
+        (plotEnv.getSpec(0) as RectLayerSpec).table.getColumn(
+          COUNT,
+          'number'
+        )[0]
 
       expect(getFirstBinCount()).toEqual(1)
 
@@ -106,7 +114,10 @@ describe('PlotEnv', () => {
       plotEnv.config = config
 
       const getFirstBinCount = () =>
-        plotEnv.getTable(0).getColumn(COUNT, 'number')[0]
+        (plotEnv.getSpec(0) as RectLayerSpec).table.getColumn(
+          COUNT,
+          'number'
+        )[0]
 
       expect(getFirstBinCount()).toEqual(1)
 
@@ -120,7 +131,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
-    test('does not run bin stat when histogram colors change', () => {
+    test('does not run bin stat when histogram fillOpacity change', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -130,27 +141,23 @@ describe('PlotEnv', () => {
         table,
         width: 1000,
         height: 500,
-        layers: [
-          {type: 'histogram', x: 'a', binCount: 10, colors: ['red', 'blue']},
-        ],
+        layers: [{type: 'histogram', x: 'a', binCount: 10, fillOpacity: 1}],
       }
 
       plotEnv.config = config
 
       expect(histogramTransformSpy).toHaveBeenCalledTimes(0)
 
-      plotEnv.getTable(0)
+      plotEnv.getSpec(0)
 
       expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
 
       plotEnv.config = {
         ...config,
-        layers: [
-          {type: 'histogram', x: 'a', binCount: 10, colors: ['red', 'green']},
-        ],
+        layers: [{type: 'histogram', x: 'a', binCount: 10, fillOpacity: 0.5}],
       }
 
-      plotEnv.getTable(0)
+      plotEnv.getSpec(0)
 
       expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
     })
@@ -209,13 +216,13 @@ describe('PlotEnv', () => {
 
       expect(lineTransformSpy).toHaveBeenCalledTimes(0)
 
-      plotEnv.getTable(0)
+      plotEnv.getSpec(0)
 
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
 
       plotEnv.config = {...config, xDomain: [12, 14]}
 
-      plotEnv.getTable(0)
+      plotEnv.getSpec(0)
 
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
     })

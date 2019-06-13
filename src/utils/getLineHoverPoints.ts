@@ -9,11 +9,11 @@ export const getLineHoverPoints = (
   yColKey: string,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
-  fillScale: Scale<string, string>
+  fillScale: Scale<number, string>
 ): Array<{x: number; y: number; fill: string}> => {
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
-  const groupColData = table.getColumn(FILL, 'string')
+  const groupColData = table.getColumn(FILL, 'number')
 
   return hoverRowIndices.map(i => ({
     x: xScale(xColData[i]),

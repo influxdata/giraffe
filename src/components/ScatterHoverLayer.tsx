@@ -1,44 +1,37 @@
-import React, {useRef, useLayoutEffect, FunctionComponent} from 'react'
+import React, {useRef, FunctionComponent} from 'react'
 
-import {PlotEnv} from '../utils/PlotEnv'
-import {ScatterLayerConfig} from '../types'
+import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../types'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
 import {drawPoints} from '../utils/drawPoints'
 import {Tooltip} from './Tooltip'
 import {getPointsTooltipData} from '../utils/tooltip'
 import {SCATTER_HOVER_POINT_SIZE} from '../constants'
 import {FILL, SYMBOL} from '../constants/columnKeys'
+import {useCanvas} from '../utils/useCanvas'
 
-interface Props {
-  env: PlotEnv
-  layerIndex: number
-  hoverX: number
-  hoverY: number
+interface Props extends LayerProps {
+  spec: ScatterLayerSpec
+  config: ScatterLayerConfig
 }
 
 export const ScatterHoverLayer: FunctionComponent<Props> = ({
-  env,
-  layerIndex,
+  config,
+  plotConfig,
+  spec,
+  width,
+  height,
+  xScale,
+  yScale,
   hoverX,
   hoverY,
+  columnFormatter,
 }) => {
-  const layerConfig = env.config.layers[layerIndex] as ScatterLayerConfig
-  const {
-    x: xColKey,
-    y: yColKey,
-    fill: fillColKeys,
-    symbol: symbolColKeys,
-  } = layerConfig
-
-  const {xScale, yScale, innerWidth: width, innerHeight: height} = env
-  const fillScale = env.getScale(layerIndex, 'fill')
-  const symbolScale = env.getScale(layerIndex, 'symbol')
-
-  const table = env.getTable(layerIndex)
-  const xColData = table.getColumn(xColKey, 'number')
-  const yColData = table.getColumn(yColKey, 'number')
-  const fillColData = table.getColumn(FILL, 'string')
-  const symbolColData = table.getColumn(SYMBOL, 'string')
+  const xColData = spec.table.getColumn(config.x, 'number')
+  const yColData = spec.table.getColumn(config.y, 'number')
+  const fillColData = spec.table.getColumn(FILL, 'number')
+  const symbolColData = spec.table.getColumn(SYMBOL, 'number')
+  const fillScale = spec.scales.fill
+  const symbolScale = spec.scales.symbol
 
   const rowIndices = useHoverPointIndices(
     'xy',
@@ -55,27 +48,24 @@ export const ScatterHoverLayer: FunctionComponent<Props> = ({
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  useLayoutEffect(() => {
-    if (!canvasRef.current) {
-      return
-    }
+  const drawPointsOptions = {
+    width,
+    height,
+    xColData,
+    yColData,
+    fillColData,
+    symbolColData,
+    xScale,
+    yScale,
+    fillScale,
+    symbolScale,
+    rowIndices,
+    pointSize: SCATTER_HOVER_POINT_SIZE,
+  }
 
-    drawPoints({
-      canvas: canvasRef.current,
-      width,
-      height,
-      xColData,
-      yColData,
-      fillColData,
-      symbolColData,
-      xScale,
-      yScale,
-      fillScale,
-      symbolScale,
-      rowIndices,
-      pointSize: SCATTER_HOVER_POINT_SIZE,
-    })
-  })
+  useCanvas(canvasRef, width, height, context =>
+    drawPoints({context, ...drawPointsOptions})
+  )
 
   if (!rowIndices) {
     return null
@@ -83,12 +73,12 @@ export const ScatterHoverLayer: FunctionComponent<Props> = ({
 
   const tooltipData = getPointsTooltipData(
     rowIndices,
-    table,
-    xColKey,
-    yColKey,
+    spec.table,
+    config.x,
+    config.y,
     FILL,
-    env.getFormatterForColumn,
-    [...new Set([...fillColKeys, ...symbolColKeys])],
+    columnFormatter,
+    [...new Set([...config.fill, ...config.symbol])],
     fillScale
   )
 
@@ -100,7 +90,7 @@ export const ScatterHoverLayer: FunctionComponent<Props> = ({
         style={{position: 'absolute'}}
         data-testid="giraffe-layer--scatter-interact"
       />
-      {tooltipData && <Tooltip data={tooltipData} env={env} />}
+      {tooltipData && <Tooltip data={tooltipData} config={plotConfig} />}
     </>
   )
 }

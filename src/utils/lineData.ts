@@ -1,14 +1,6 @@
-import {Table, Scale} from '../types'
+import {Table, Scale, LineData} from '../types'
 import {simplify} from '../utils/simplify'
 import {FILL} from '../constants/columnKeys'
-
-export type LineData = {
-  [groupKey: string]: {
-    xs: number[] | Float64Array
-    ys: number[] | Float64Array
-    fill: string
-  }
-}
 
 export const collectLineData = (
   table: Table,
