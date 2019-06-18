@@ -3,7 +3,7 @@ This repository contains Giraffe, a React-based visualization library used to im
 **This library is currently in a pre-alpha state.**
 Docs will follow as soon as the API has a chance to stabilize.
 
-## Features
+## 🦒 Features
 
 There exist plenty of terrific visualization libraries in the JavaScript ecosystem.
 Giraffe aims to distinguish itself with several features:
