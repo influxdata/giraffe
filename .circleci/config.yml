@@ -10,10 +10,19 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: npm install
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: make test
-      - run: make test-chromatic
+      - run: yarn test
+      - run:
+          name: chromatic
+          command: |
+            # See https://docs.chromaticqa.com/setup_ci
+            if [ "${CIRCLE_BRANCH}" != "master" ];
+            then
+              yarn run chromatic
+            else \
+              yarn run chromatic -- --auto-accept-changes
+            fi

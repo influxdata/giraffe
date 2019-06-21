@@ -80,9 +80,7 @@ class SimpleTable implements Table {
 
     if (data.length !== this.length) {
       throw new Error(
-        `expected column of length ${this.length}, got column of length ${
-          data.length
-        } instead`
+        `expected column of length ${this.length}, got column of length ${data.length} instead`
       )
     }
 

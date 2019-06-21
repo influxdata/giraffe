@@ -20,18 +20,39 @@ if (process.env.NODE_ENV === 'production') {
   plugins = [...plugins, terser(), gzip()]
 }
 
-export default {
-  input: 'src/index.ts',
-  output: {
-    name: pkg.name,
-    file: pkg.main,
-    format: 'umd',
-    sourcemap: true,
-    globals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
+const input = 'src/index.ts'
+
+const globals = {
+  react: 'React',
+  'react-dom': 'ReactDOM',
+}
+
+// Do not bundle peer dependencies
+const external = ['react', 'react-dom']
+
+export default [
+  {
+    input,
+    plugins,
+    external,
+    output: {
+      name: pkg.name,
+      file: pkg.main,
+      format: 'umd',
+      sourcemap: true,
+      globals,
     },
   },
-  plugins,
-  external: ['react', 'react-dom'], // Do not bundle peer dependencies
-}
+  {
+    input,
+    plugins,
+    external,
+    output: {
+      name: pkg.name,
+      file: pkg.module,
+      format: 'esm',
+      sourcemap: true,
+      globals,
+    },
+  },
+]

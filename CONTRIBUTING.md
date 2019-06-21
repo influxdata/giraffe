@@ -1,6 +1,6 @@
 ## Development
 
-Common development workflows are codified via `Makefile`s.
+Common development workflows are codified via scripts in the `package.json` file.
 
 ### Developing with the docs app
 
@@ -8,7 +8,7 @@ This repository contains a [Storybook](https://storybook.js.org/), which is conv
 To run the Storybook during development:
 
 ```
-make run-docs
+yarn run storybook
 ```
 
 Then visit [http://localhost:50000](http://localhost:50000).
@@ -16,8 +16,8 @@ Changes made either in the library source or in the Storybook stories will be re
 
 ### Developing with an external app
 
-To test changes in this repository without publishing a new version, use the `make run` target, which will start a development server that rebuilds the `dist` folder you make changes to source files.
-Typically you would be able to use `npm link` to see this development version in an external app, but attempting to do so with this library will throw a [confusing error](https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react).
+To test changes in this repository without publishing a new version, use the `yarn start` script, which will start a development server that rebuilds the `dist` folder you make changes to source files.
+Typically you would be able to use `yarn link` to see this development version in an external app, but attempting to do so with this library will throw a [confusing error](https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react).
 
 As a workaround:
 
@@ -44,7 +44,7 @@ mv $APP_DIR/node_modules/@influxdata/giraffe/_dist $APP_DIR/node_modules/@influx
 ### Running tests
 
 ```
-make test
+yarn test
 ```
 
 ### Publishing a new version
@@ -53,5 +53,5 @@ Ensure that you have administrator access to this repo and to the [influxdata](h
 Then run:
 
 ```
-make publish
+yarn publish --access public
 ```
