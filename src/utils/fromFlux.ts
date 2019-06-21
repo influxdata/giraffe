@@ -73,7 +73,7 @@ interface Columns {
 */
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
-  const fluxGroupKeyUnion = new Set()
+  const fluxGroupKeyUnion = new Set<string>()
   const chunks = splitChunks(fluxCSV)
 
   let tableLength = 0
