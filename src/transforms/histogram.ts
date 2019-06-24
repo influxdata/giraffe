@@ -1,15 +1,11 @@
-import {extent, range, thresholdSturges} from 'd3-array'
+import {range, thresholdSturges} from 'd3-array'
 
 import {FILL, X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
 import {newTable} from '../utils/newTable'
 import {extentOfExtents} from '../utils/extrema'
-import {
-  Table,
-  RectLayerSpec,
-  HistogramPosition,
-  NumericColumnData,
-} from '../types'
+import {resolveDomain} from '../utils/resolveDomain'
+import {Table, RectLayerSpec, HistogramPosition} from '../types'
 
 export const histogramTransform = (
   inputTable: Table,
@@ -25,7 +21,7 @@ export const histogramTransform = (
     fillColKeys
   )
 
-  const resolvedXDomain = resolveXDomain(
+  const resolvedXDomain = resolveDomain(
     inputTable.getColumn(xColumnKey, 'number'),
     xDomain
   )
@@ -198,25 +194,4 @@ const createBins = (
   })
 
   return bins
-}
-
-const resolveXDomain = (
-  xColData: NumericColumnData,
-  preferredXDomain?: number[]
-): [number, number] => {
-  let domain: [number, number]
-
-  if (preferredXDomain) {
-    domain = [preferredXDomain[0], preferredXDomain[1]]
-  } else {
-    domain = extent(xColData)
-  }
-
-  if (domain[0] === domain[1]) {
-    // Widen domains of zero width by an arbitrary amount so that they can be
-    // divided into bins
-    domain[1] = domain[0] + 1
-  }
-
-  return domain
 }
