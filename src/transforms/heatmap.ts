@@ -3,6 +3,7 @@ import {range, extent} from 'd3-array'
 import {getContinuousColorScale} from './'
 import {newTable} from '../utils/newTable'
 import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT} from '../constants/columnKeys'
+import {resolveDomain} from '../utils/resolveDomain'
 import {Table, RectLayerSpec} from '../types'
 
 export const heatmapTransform = (
@@ -16,11 +17,15 @@ export const heatmapTransform = (
   binSize: number,
   colors: string[]
 ): RectLayerSpec => {
-  const resolvedXDomain =
-    xDomain || extent(inputTable.getColumn(xColumnKey, 'number'))
+  const resolvedXDomain = resolveDomain(
+    inputTable.getColumn(xColumnKey, 'number'),
+    xDomain
+  )
 
-  const resolvedYDomain =
-    yDomain || extent(inputTable.getColumn(yColumnKey, 'number'))
+  const resolvedYDomain = resolveDomain(
+    inputTable.getColumn(yColumnKey, 'number'),
+    yDomain
+  )
 
   const table = bin2d(
     inputTable,

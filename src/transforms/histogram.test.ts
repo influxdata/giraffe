@@ -1,6 +1,6 @@
 import {extent} from 'd3-array'
 
-import {bin} from './histogram'
+import {histogramTransform, bin} from './histogram'
 import {newTable} from '../utils/newTable'
 import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT, FILL} from '../constants/columnKeys'
 
@@ -161,5 +161,26 @@ describe('bin', () => {
     expect(actual.getColumn(Y_MIN, 'number')).toEqual([0, 0, 0])
     expect(actual.getColumn(Y_MAX, 'number')).toEqual([1, 3, 3])
     expect(actual.getColumn(COUNT, 'number')).toEqual([1, 3, 3])
+  })
+})
+
+describe('histogramTransform', () => {
+  test('does not crash when passed zero-width domain', () => {
+    // x domain of this table has a zero-width domain
+    const table = newTable(3)
+      .addColumn('x', 'number', [1, 1, 1])
+      .addColumn('y', 'number', [0, 1, 2])
+
+    expect(() => {
+      histogramTransform(
+        table,
+        'x',
+        null,
+        ['papayawhip', 'tomato'],
+        [],
+        30,
+        'overlaid'
+      )
+    }).not.toThrow()
   })
 })
