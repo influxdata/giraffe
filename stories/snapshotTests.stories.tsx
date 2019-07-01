@@ -1,7 +1,14 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 
-import {fromFlux, Config, Plot} from '../src'
+import {
+  timeFormatter,
+  binaryPrefixFormatter,
+  fromFlux,
+  newTable,
+  Config,
+  Plot,
+} from '../src'
 import {CPU} from './data'
 
 storiesOf('Snapshot Tests', module)
@@ -56,6 +63,91 @@ storiesOf('Snapshot Tests', module)
           fill: ['cpu'],
           interpolation: 'step',
           shadeBelow: true,
+        },
+      ],
+    }
+
+    return <Plot config={config} />
+  })
+  .add('time zone support', () => {
+    const config: Config = {
+      width: 300,
+      height: 200,
+      table: CPU,
+      layers: [
+        {
+          type: 'line',
+          x: '_time',
+          y: '_value',
+          fill: ['cpu'],
+        },
+      ],
+    }
+
+    const timeZones = [
+      undefined,
+      'America/Los_Angeles',
+      'America/New_York',
+      'UTC',
+    ]
+
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateRows: '230px 230px',
+          gridTemplateColumns: '300px 300px',
+          gridGap: '20px',
+        }}
+      >
+        {timeZones.map(timeZone => (
+          <div
+            key={timeZone}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: 'gray',
+              fontFamily: 'sans-serif',
+            }}
+          >
+            <Plot
+              config={{
+                ...config,
+                valueFormatters: {
+                  _time: timeFormatter({timeZone, hour12: false}),
+                },
+              }}
+            />
+            {timeZone || 'Local Time'}
+          </div>
+        ))}
+      </div>
+    )
+  })
+  .add('binary prefix formatting', () => {
+    const table = newTable(4)
+      .addColumn('time', 'number', [0, 1, 2, 3])
+      .addColumn('bytes', 'number', [
+        6799245312,
+        6475784192,
+        6419197952,
+        6307565568,
+      ])
+
+    const config: Config = {
+      width: 600,
+      height: 400,
+      table,
+      valueFormatters: {
+        bytes: binaryPrefixFormatter({significantDigits: 2, suffix: 'iB'}),
+      },
+      layers: [
+        {
+          type: 'line',
+          x: 'time',
+          y: 'bytes',
         },
       ],
     }

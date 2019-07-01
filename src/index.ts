@@ -4,6 +4,11 @@ export {Plot} from './components/Plot'
 // Utils
 export {fromFlux, FromFluxResult} from './utils/fromFlux'
 export {newTable} from './utils/newTable'
+export {
+  timeFormatter,
+  siPrefixFormatter,
+  binaryPrefixFormatter,
+} from './utils/formatters'
 
 // Constants
 export * from './constants/colorSchemes'
@@ -22,4 +27,5 @@ export {
   LineLayerConfig,
   LayerConfig,
   Config,
+  Formatter,
 } from './types'

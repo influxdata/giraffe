@@ -64,7 +64,7 @@ export const enumeratePaths = (
   pathToTarget: Path = [],
   acc: Path[] = []
 ): Path[] => {
-  if (target === undefined || target === null || typeof target === 'string') {
+  if (target === undefined || target === null || typeof target !== 'object') {
     return acc
   }
 

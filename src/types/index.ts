@@ -1,3 +1,9 @@
+import {
+  TIME_FORMATTER_TYPE,
+  BINARY_PREFIX_FORMATTER_TYPE,
+  SI_PREFIX_FORMATTER_TYPE,
+} from '../utils/formatters'
+
 export type NumericColumnData =
   | number[]
   | Int8Array
@@ -148,6 +154,29 @@ export type LayerConfig =
   | HeatmapLayerConfig
   | ScatterLayerConfig
 
+export type FormatterType =
+  | typeof TIME_FORMATTER_TYPE
+  | typeof BINARY_PREFIX_FORMATTER_TYPE
+  | typeof SI_PREFIX_FORMATTER_TYPE
+
+export interface Formatter {
+  // A `Formatter` takes a value in a `Table` and formats it as a
+  // human-readable string
+  (val: any, options?: object): string
+
+  // The formatting of values in a plot affects our strategy for generating
+  // nice axis tick marks. For example, if a user formats x values as times,
+  // then a x axis tick at 2:00:00 PM would be nice, but a tick at 2:37:43 PM
+  // would not be nice. A similar problem exists if a user is formatting values
+  // with a [binary prefix][0]. As a library, we provide utilities to create
+  // `Formatter`s for these common formatting scenarios. We tag the created
+  // `Formatter`s with this property, so that we can recognize when they are
+  // used and generate nicer ticks in those cases.
+  //
+  // [0]: https://en.wikipedia.org/wiki/Binary_prefix
+  readonly _GIRAFFE_FORMATTER_TYPE?: FormatterType
+}
+
 export interface Config {
   table: Table
   layers: LayerConfig[]
@@ -176,7 +205,7 @@ export interface Config {
   onResetYDomain?: () => void
 
   valueFormatters?: {
-    [colKey: string]: (value: any) => string
+    [colKey: string]: Formatter
   }
 
   showAxes?: boolean

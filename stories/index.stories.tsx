@@ -2,7 +2,7 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean} from '@storybook/addon-knobs'
 
-import {Config, Plot, MAGMA} from '../src'
+import {Config, Plot, MAGMA, timeFormatter} from '../src'
 
 import {
   PlotContainer,
@@ -16,6 +16,7 @@ import {
   tickFontKnob,
   showAxesKnob,
   interpolationKnob,
+  timeZoneKnob,
 } from './helpers'
 
 storiesOf('XY Plot', module)
@@ -27,6 +28,7 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const timeZone = timeZoneKnob()
     const fill = fillKnob(table, 'cpu')
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
@@ -41,7 +43,10 @@ storiesOf('XY Plot', module)
 
     const config: Config = {
       table,
-      valueFormatters: {[y]: y => `${Math.round(y)}%`},
+      valueFormatters: {
+        _time: timeFormatter({timeZone}),
+        [y]: y => `${Math.round(y)}%`,
+      },
       legendFont,
       tickFont,
       showAxes,
