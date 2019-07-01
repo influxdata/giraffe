@@ -3,7 +3,7 @@ import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
-import {Margins, Scale, SizedConfig} from '../types'
+import {Margins, Scale, SizedConfig, Formatter} from '../types'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -21,10 +21,12 @@ interface DrawAxesOptions {
   innerWidth: number
   innerHeight: number
   margins: Margins
+  xDomain: number[]
+  yDomain: number[]
   xTicks: number[]
   yTicks: number[]
-  xTickFormatter: (tick: number) => string
-  yTickFormatter: (tick: number) => string
+  xTickFormatter: Formatter
+  yTickFormatter: Formatter
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   config: SizedConfig
@@ -35,6 +37,8 @@ export const drawAxes = ({
   innerWidth,
   innerHeight,
   margins,
+  xDomain,
+  yDomain,
   xTicks,
   yTicks,
   xTickFormatter,
@@ -58,6 +62,7 @@ export const drawAxes = ({
 
   const context = canvas.getContext('2d')
   const xAxisY = height - margins.bottom
+  const xDomainWidth = Math.abs(xDomain[1] - xDomain[0])
 
   // Draw and label each tick on the x axis
 
@@ -82,10 +87,16 @@ export const drawAxes = ({
 
     context.globalAlpha = 1
     context.fillStyle = tickFontColor
-    context.fillText(xTickFormatter(xTick), x, xAxisY + TICK_PADDING_TOP)
+    context.fillText(
+      xTickFormatter(xTick, {domainWidth: xDomainWidth}),
+      x,
+      xAxisY + TICK_PADDING_TOP
+    )
   }
 
   // Draw and label each tick on the y axis
+
+  const yDomainWidth = yDomain[1] - yDomain[0]
 
   context.textAlign = 'end'
   context.textBaseline = 'middle'
@@ -108,7 +119,7 @@ export const drawAxes = ({
     context.globalAlpha = 1
     context.fillStyle = tickFontColor
     context.fillText(
-      yTickFormatter(yTick),
+      yTickFormatter(yTick, {domainWidth: yDomainWidth}),
       margins.left - TICK_PADDING_RIGHT,
       y
     )
@@ -170,6 +181,8 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     innerWidth,
     innerHeight,
     margins,
+    xDomain,
+    yDomain,
     xTicks,
     yTicks,
     xTickFormatter,
@@ -185,6 +198,8 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       innerWidth,
       innerHeight,
       margins,
+      xDomain,
+      yDomain,
       xTicks,
       yTicks,
       xTickFormatter,
@@ -198,6 +213,8 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     innerWidth,
     innerHeight,
     margins,
+    xDomain,
+    yDomain,
     xTicks,
     yTicks,
     xTickFormatter,

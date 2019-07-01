@@ -1,11 +1,10 @@
 import {getTicks} from './getTicks'
-import {getTimeFormatter} from '../utils/getTimeFormatter'
 import {getTextMetrics} from './getTextMetrics'
 import {getMargins} from './getMargins'
 import {extentOfExtents} from './extrema'
 import {identityMerge} from './identityMerge'
 import {MemoizedFunctionCache} from './MemoizedFunctionCache'
-import {defaultNumberFormatter} from './defaultNumberFormatter'
+import {timeFormatter} from './formatters'
 import {getLinearScale} from './getLinearScale'
 import {lineTransform} from '../transforms/line'
 import {scatterTransform} from '../transforms/scatter'
@@ -25,6 +24,7 @@ import {
   LineLayerConfig,
   LayerSpec,
   ColumnType,
+  Formatter,
 } from '../types'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
@@ -32,6 +32,7 @@ const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
 const DEFAULT_X_DOMAIN: [number, number] = [0, 1]
 const DEFAULT_Y_DOMAIN: [number, number] = [0, 1]
 const DEFAULT_FORMATTER = x => String(x)
+const DEFAULT_TIME_FORMATTER = timeFormatter()
 
 export class PlotEnv {
   private _config: SizedConfig | null = null
@@ -92,9 +93,8 @@ export class PlotEnv {
     return getTicksMemoized(
       this.xDomain,
       this.config.width,
-      'horizontal',
-      this.getSpec(0).xColumnType,
-      this.charMetrics
+      this.charMetrics.width,
+      this.xTickFormatter
     )
   }
 
@@ -104,9 +104,8 @@ export class PlotEnv {
     return getTicksMemoized(
       this.yDomain,
       this.config.height,
-      'vertical',
-      this.getSpec(0).yColumnType,
-      this.charMetrics
+      this.charMetrics.height,
+      this.yTickFormatter
     )
   }
 
@@ -174,13 +173,13 @@ export class PlotEnv {
     }
   }
 
-  public get xTickFormatter(): (tick: number) => string {
+  public get xTickFormatter(): Formatter {
     const firstXMapping = this.getSpec(0).xColumnKey
 
     return this.getFormatterForColumn(firstXMapping)
   }
 
-  public get yTickFormatter(): (tick: number) => string {
+  public get yTickFormatter(): Formatter {
     const firstYMapping = this.getSpec(0).yColumnKey
 
     return this.getFormatterForColumn(firstYMapping)
@@ -258,7 +257,7 @@ export class PlotEnv {
     }
   }
 
-  public getFormatterForColumn = (colKey: string): ((x: any) => string) => {
+  public getFormatterForColumn = (colKey: string): Formatter => {
     const preferredFormatter = this.config.valueFormatters[colKey]
 
     if (preferredFormatter) {
@@ -268,10 +267,8 @@ export class PlotEnv {
     const colType = this.getColumnTypeByKey(colKey)
 
     switch (colType) {
-      case 'number':
-        return defaultNumberFormatter
       case 'time':
-        return this.timeFormatter
+        return DEFAULT_TIME_FORMATTER
       default:
         return DEFAULT_FORMATTER
     }
@@ -312,15 +309,6 @@ export class PlotEnv {
       this.config.onSetYDomain &&
       this.config.onResetYDomain
     )
-  }
-
-  private get timeFormatter() {
-    const getTimeFormatterMemoized = this.fns.get(
-      'timeFormatter',
-      getTimeFormatter
-    )
-
-    return getTimeFormatterMemoized(this.xDomain)
   }
 
   private getXDomain() {

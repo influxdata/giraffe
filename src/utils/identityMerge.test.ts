@@ -56,6 +56,19 @@ describe('identityMerge', () => {
 
     expect(result).toBe(source)
   })
+
+  test('can maintain reference equality of a function with a property', () => {
+    const f = () => 2
+
+    f.someProperty = 'foo'
+
+    const source = {f}
+    const target = {f}
+
+    const result = identityMerge(source, target)
+
+    expect(result.f).toBe(f)
+  })
 })
 
 describe('enumeratePaths', () => {

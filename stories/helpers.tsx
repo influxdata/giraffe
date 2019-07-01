@@ -119,3 +119,14 @@ export const interpolationKnob = () =>
   )
 
 export const showAxesKnob = () => boolean('Axes', true)
+
+export const timeZoneKnob = (initial?: string) =>
+  select(
+    'Time Zone',
+    {
+      UTC: 'UTC',
+      'America/Los_Angeles': 'America/Los_Angeles',
+      'America/New_York': 'America/New_York',
+    },
+    initial || 'UTC'
+  )
