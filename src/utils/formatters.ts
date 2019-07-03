@@ -17,10 +17,86 @@
 */
 
 import {format as d3Format} from 'd3-format'
+import {createDateFormatter} from 'intl-dateformat'
 
 import {Formatter} from '../types'
 
 export const TIME_FORMATTER_TYPE: 'TIME' = 'TIME'
+
+const DEFAULT_TIME_FORMATS = {
+  local12: 'YYYY-MM-DD hh:mm:ss A',
+  local24: 'YYYY-MM-DD HH:mm:ss',
+  zoned12: 'YYYY-MM-DD hh:mm:ss A ZZ',
+  zoned24: 'YYYY-MM-DD HH:mm:ss ZZ',
+}
+
+const MINUTE = 1000 * 60
+const HOUR = 1000 * 60 * 60
+const DAY = 1000 * 60 * 60 * 24
+const WEEK = 1000 * 60 * 60 * 24 * 7
+
+const TIME_FORMATS_BY_GRANULARITY = [
+  {
+    minWidth: 0,
+    maxWidth: 1 * MINUTE,
+    local12: 'hh:mm:ss.sss A',
+    local24: 'HH:mm:ss.sss',
+    zoned12: 'hh:mm:ss.sss A ZZ',
+    zoned24: 'HH:mm:ss.sss ZZ',
+  },
+  {
+    minWidth: 1 * MINUTE,
+    maxWidth: 1 * HOUR,
+    local12: 'hh:mm:ss A',
+    local24: 'HH:mm:ss',
+    zoned12: 'hh:mm:ss A ZZ',
+    zoned24: 'HH:mm:ss ZZ',
+  },
+  {
+    minWidth: 1 * HOUR,
+    maxWidth: 1 * DAY,
+    local12: 'hh:mm A',
+    local24: 'HH:mm',
+    zoned12: 'hh:mm A ZZ',
+    zoned24: 'HH:mm ZZ',
+  },
+  {
+    minWidth: 1 * DAY,
+    maxWidth: 2 * WEEK,
+    local12: 'MMM DD, hh:mm A',
+    local24: 'MMM DD, HH:mm',
+    zoned12: 'MMM DD, hh:mm A ZZ',
+    zoned24: 'MMM DD, HH:mm ZZ',
+  },
+  {
+    minWidth: 2 * WEEK,
+    maxWidth: 4 * WEEK,
+    local12: 'MMM DD',
+    local24: 'MMM DD',
+    zoned12: 'MMM DD',
+    zoned24: 'MMM DD',
+  },
+  {
+    minWidth: 4 * WEEK,
+    maxWidth: Infinity,
+    local12: 'YYYY-MM-DD',
+    local24: 'YYYY-MM-DD',
+    zoned12: 'YYYY-MM-DD',
+    zoned24: 'YYYY-MM-DD',
+  },
+]
+
+// Get the "short" name for a time zone, e.g. "America/Los_Angeles" => PST
+const getShortTimeZoneName = (timeZone: string, date: Date) => {
+  const formatted = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: 'numeric',
+    timeZoneName: 'short',
+  }).format(date)
+
+  return formatted.substring(formatted.indexOf(',') + 2)
+}
 
 interface TimeFormatter extends Formatter {
   (x: number, options?: {domainWidth?: number}): string
@@ -35,35 +111,73 @@ interface TimeFormatterFactoryOptions {
   // IANA Time Zone Database name (e.g. "America/New_York") or "UTC"
   timeZone?: string
 
-  // Should time be displayed on a 12 or 24 hour clock? Default is based on locale
+  // Whether to use a 12- or 24-hour clock (default true)
   hour12?: boolean
+
+  // Format string, e.g. "YYYY-MM-DD HH:mm".
+  //
+  // Support options are those [here][0], as well as:
+  //
+  // - `sss`: milliseconds
+  // - `Z`: short time zone name (e.g. "PST")
+  // - `D`: day of month without zero padding
+  //
+  // [0]: https://github.com/zapier/intl-dateformat#formats
+  format?: string
 }
 
 export const timeFormatter = ({
   locale,
   timeZone,
+  format,
   hour12,
 }: TimeFormatterFactoryOptions = {}): TimeFormatter => {
-  const formatter = (x: number, {domainWidth = null} = {}) => {
-    // We will format times differently based on the passed `domainWidth`. For
-    // example, if a user is viewing 10 years of data at a time, they probably
-    // don't need seconds granularity on their axis ticks
-    let granularityOptions: {} = DEFAULT_GRANULARITY_OPTIONS
+  const formatStringFormatter = createDateFormatter({
+    sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
+    D: parts => String(Number(parts.day)),
+    ZZ: (_, date) => getShortTimeZoneName(timeZone, date),
+  })
 
-    if (domainWidth) {
-      granularityOptions = TIME_GRANULARITY_OPTIONS.find(
-        d => d.minWidth <= domainWidth && d.maxWidth > domainWidth
-      ).options
+  let formatter
+
+  if (format) {
+    // If a `format` string is passed, we simply use it
+    formatter = (x: number) =>
+      formatStringFormatter(new Date(x), format, {locale, timezone: timeZone})
+  } else {
+    // Otherwise we will return a formatter that will vary the output format
+    // based on an optional `domainWidth` argument (e.g. we will show more
+    // detail in a formatted timestamp if a user is viewing data in a short
+    // time range)
+    formatter = (x: number, {domainWidth = null} = {}) => {
+      let timeFormats = DEFAULT_TIME_FORMATS
+
+      if (domainWidth) {
+        timeFormats = TIME_FORMATS_BY_GRANULARITY.find(
+          d => d.minWidth <= domainWidth && d.maxWidth > domainWidth
+        )
+      }
+
+      let timeFormat
+
+      if (
+        (timeZone === 'UTC' && hour12 === undefined) ||
+        (timeZone && hour12 === false)
+      ) {
+        timeFormat = timeFormats.zoned24
+      } else if (timeZone) {
+        timeFormat = timeFormats.zoned12
+      } else if (hour12 === false) {
+        timeFormat = timeFormats.local24
+      } else {
+        timeFormat = timeFormats.local12
+      }
+
+      return formatStringFormatter(new Date(x), timeFormat, {
+        timezone: timeZone,
+        locale,
+      })
     }
-
-    const dateFormatOptions = {
-      timeZone,
-      hour12: timeZone === 'UTC' && hour12 === undefined ? false : hour12,
-      timeZoneName: timeZone ? 'short' : undefined,
-      ...granularityOptions,
-    }
-
-    return new Intl.DateTimeFormat(locale, dateFormatOptions).format(x)
   }
 
   formatter._GIRAFFE_FORMATTER_TYPE = TIME_FORMATTER_TYPE
@@ -71,66 +185,9 @@ export const timeFormatter = ({
   return formatter
 }
 
-const DEFAULT_GRANULARITY_OPTIONS = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-}
-
-const HOUR = 1000 * 60 * 60
-const DAY = 1000 * 60 * 60 * 24
-const WEEK = 1000 * 60 * 60 * 24 * 7
-
-const TIME_GRANULARITY_OPTIONS = [
-  {
-    minWidth: 0,
-    maxWidth: 1 * HOUR,
-    options: {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-    },
-  },
-  {
-    minWidth: 1 * HOUR,
-    maxWidth: 1 * DAY,
-    options: {
-      hour: 'numeric',
-      minute: 'numeric',
-    },
-  },
-  {
-    minWidth: 1 * DAY,
-    maxWidth: 2 * WEEK,
-    options: {
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    },
-  },
-  {
-    minWidth: 2 * WEEK,
-    maxWidth: 4 * WEEK,
-    options: {
-      month: 'numeric',
-      day: 'numeric',
-    },
-  },
-  {
-    minWidth: 4 * WEEK,
-    maxWidth: Infinity,
-    options: {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    },
-  },
-]
-
 export const BINARY_PREFIX_FORMATTER_TYPE: 'BINARY_PREFIX' = 'BINARY_PREFIX'
+
+const BINARY_PREFIXES = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 
 interface BinaryPrefixFormatter extends Formatter {
   (x: number): string
@@ -143,8 +200,6 @@ interface BinaryPrefixFormatterFactoryOptions {
   suffix?: string
   significantDigits?: number
 }
-
-const BINARY_PREFIXES = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 
 export const binaryPrefixFormatter = ({
   prefix = '',

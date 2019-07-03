@@ -5,17 +5,52 @@ import {
 } from './formatters'
 
 describe('timeFormatter', () => {
-  test('defaults to 24 hour time when timezone is UTC', () => {
+  test('defaults to 12 hour time unless timezone is UTC', () => {
     const utcFormatter = timeFormatter({timeZone: 'UTC'})
     const nonUTCFormatter = timeFormatter({timeZone: 'America/Los_Angeles'})
 
     const d = new Date('2019-01-01T00:00Z')
 
     // 24 hour time when using UTC
-    expect(utcFormatter(d)).toEqual('1/1/2019, 00:00 UTC')
+    expect(utcFormatter(d)).toEqual('2019-01-01 00:00:00 UTC')
 
-    // Default (locale specific) when not UTC
-    expect(nonUTCFormatter(d)).toEqual('12/31/2018, 4:00 PM PST')
+    // Defaults to 12 hour time when not UTC
+    expect(nonUTCFormatter(d)).toEqual('2018-12-31 4:00:00 PM PST')
+  })
+
+  test('can format times with format strings', () => {
+    const tests = [
+      ['YYYY-MM-DD HH:mm:ss', '2019-01-01 00:00:00'],
+      ['YYYY-MM-DD HH:mm:ss ZZ', '2019-01-01 00:00:00 UTC'],
+      ['MM/DD/YYYY HH:mm:ss.sss', '01/01/2019 00:00:00.000'],
+      ['YYYY/MM/DD HH:mm:ss', '2019/01/01 00:00:00'],
+      ['HH:mm:ss', '00:00:00'],
+      ['HH:mm:ss.sss', '00:00:00.000'],
+      ['MMMM D, YYYY HH:mm:ss', 'January 1, 2019 00:00:00'],
+      ['dddd, MMMM D, YYYY HH:mm:ss', 'Tuesday, January 1, 2019 00:00:00'],
+    ]
+
+    for (const [format, expected] of tests) {
+      const d = new Date('2019-01-01T00:00:00Z')
+      const formatter = timeFormatter({format, timeZone: 'UTC'})
+
+      expect(formatter(d)).toEqual(expected)
+    }
+  })
+
+  test('it can format times with a variable level of detail', () => {
+    const formatter = timeFormatter({timeZone: 'UTC'})
+
+    // Defaults to quite detailed if no domainWidth passed
+    expect(formatter(0)).toEqual('1970-01-01 00:00:00 UTC')
+
+    const WEEK = 1000 * 60 * 60 * 24 * 7
+    const YEAR = 1000 * 60 * 60 * 24 * 365
+
+    // Otherwise formats numbers according to domainWidth
+    expect(formatter(0, {domainWidth: 1})).toEqual('00:00:00.000 UTC')
+    expect(formatter(0, {domainWidth: WEEK})).toEqual('Jan 01, 00:00 UTC')
+    expect(formatter(0, {domainWidth: YEAR})).toEqual('1970-01-01')
   })
 })
 
