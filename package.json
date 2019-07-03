@@ -2,7 +2,6 @@
   "name": "@influxdata/giraffe",
   "version": "0.13.0",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "license": "MIT",
   "scripts": {
     "test": "yarn run lint && yarn run typecheck && jest",

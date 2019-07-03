@@ -43,16 +43,4 @@ export default [
       globals,
     },
   },
-  {
-    input,
-    plugins,
-    external,
-    output: {
-      name: pkg.name,
-      file: pkg.module,
-      format: 'esm',
-      sourcemap: true,
-      globals,
-    },
-  },
 ]
