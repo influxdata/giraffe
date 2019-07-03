@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "strictNullChecks": false,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
