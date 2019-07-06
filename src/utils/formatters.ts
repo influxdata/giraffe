@@ -19,9 +19,7 @@
 import {format as d3Format} from 'd3-format'
 import {createDateFormatter} from 'intl-dateformat'
 
-import {Formatter} from '../types'
-
-export const TIME_FORMATTER_TYPE: 'TIME' = 'TIME'
+import {Formatter, FormatterType} from '../types'
 
 const DEFAULT_TIME_FORMATS = {
   local12: 'YYYY-MM-DD hh:mm:ss A',
@@ -101,7 +99,7 @@ const getShortTimeZoneName = (timeZone: string, date: Date) => {
 interface TimeFormatter extends Formatter {
   (x: number, options?: {domainWidth?: number}): string
 
-  _GIRAFFE_FORMATTER_TYPE: typeof TIME_FORMATTER_TYPE
+  _GIRAFFE_FORMATTER_TYPE: FormatterType.Time
 }
 
 interface TimeFormatterFactoryOptions {
@@ -180,7 +178,7 @@ export const timeFormatter = ({
     }
   }
 
-  formatter._GIRAFFE_FORMATTER_TYPE = TIME_FORMATTER_TYPE
+  formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.Time
 
   return formatter
 }
@@ -192,7 +190,7 @@ const BINARY_PREFIXES = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 interface BinaryPrefixFormatter extends Formatter {
   (x: number): string
 
-  _GIRAFFE_FORMATTER_TYPE: typeof BINARY_PREFIX_FORMATTER_TYPE
+  _GIRAFFE_FORMATTER_TYPE: FormatterType.BinaryPrefix
 }
 
 interface BinaryPrefixFormatterFactoryOptions {
@@ -219,7 +217,7 @@ export const binaryPrefixFormatter = ({
     return `${prefix}${decimalFormattedNumber}${binaryPrefix}${suffix}`
   }
 
-  formatter._GIRAFFE_FORMATTER_TYPE = BINARY_PREFIX_FORMATTER_TYPE
+  formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.BinaryPrefix as FormatterType.BinaryPrefix
 
   return formatter
 }
@@ -229,7 +227,7 @@ export const SI_PREFIX_FORMATTER_TYPE: 'SI_PREFIX' = 'SI_PREFIX'
 interface SIPrefixFormatter extends Formatter {
   (x: number): string
 
-  _GIRAFFE_FORMATTER_TYPE: typeof SI_PREFIX_FORMATTER_TYPE
+  _GIRAFFE_FORMATTER_TYPE: FormatterType.SIPrefix
 }
 
 interface SIPrefixFormatterFactoryOptions {
@@ -248,7 +246,7 @@ export const siPrefixFormatter = ({
   const formatter = (x: number): string =>
     `${prefix}${formatSIPrefix(x)}${suffix}`
 
-  formatter._GIRAFFE_FORMATTER_TYPE = SI_PREFIX_FORMATTER_TYPE
+  formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.SIPrefix as FormatterType.SIPrefix
 
   return formatter
 }
