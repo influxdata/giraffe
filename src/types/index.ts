@@ -1,9 +1,3 @@
-import {
-  TIME_FORMATTER_TYPE,
-  BINARY_PREFIX_FORMATTER_TYPE,
-  SI_PREFIX_FORMATTER_TYPE,
-} from '../utils/formatters'
-
 export type NumericColumnData =
   | number[]
   | Int8Array
@@ -154,10 +148,11 @@ export type LayerConfig =
   | HeatmapLayerConfig
   | ScatterLayerConfig
 
-export type FormatterType =
-  | typeof TIME_FORMATTER_TYPE
-  | typeof BINARY_PREFIX_FORMATTER_TYPE
-  | typeof SI_PREFIX_FORMATTER_TYPE
+export enum FormatterType {
+  Time = 'TIME',
+  BinaryPrefix = 'BINARY_PREFIX',
+  SIPrefix = 'SI_PREFIX',
+}
 
 export interface Formatter {
   // A `Formatter` takes a value in a `Table` and formats it as a
@@ -340,3 +335,8 @@ export interface LayerProps {
   We call the collection of this derived data a "spec".
 */
 export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
+
+export enum ErrorName {
+  UnknownColumnTypeError = 'UnknownColumnTypeError',
+  SchemaMismatchError = 'SchemaMismatchError',
+}

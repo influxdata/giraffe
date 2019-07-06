@@ -1,7 +1,7 @@
 import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
 
-import {Formatter} from '../types'
+import {Formatter, FormatterType} from '../types'
 
 const TICK_DENSITY = 0.5
 
@@ -15,7 +15,7 @@ export const getTicks = (
   const numTicks = getNumTicks(sampleTick, rangeLength, charLength)
 
   switch (formatter._GIRAFFE_FORMATTER_TYPE) {
-    case 'TIME':
+    case FormatterType.Time:
       return getTimeTicks(domain, rangeLength, numTicks)
 
     default:

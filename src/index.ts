@@ -3,6 +3,7 @@ export {Plot} from './components/Plot'
 
 // Utils
 export {fromFlux, FromFluxResult} from './utils/fromFlux'
+export {fromRows} from './utils/fromRows'
 export {newTable} from './utils/newTable'
 export {
   timeFormatter,
