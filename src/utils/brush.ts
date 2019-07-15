@@ -6,7 +6,7 @@ export const getRectDimensions = (
   plotWidth: number,
   plotHeight: number
 ) => {
-  if (event.dragMode === 'brushX') {
+  if (event.direction === 'x') {
     const x = Math.max(0, Math.min(event.initialX, event.x))
 
     const width = Math.min(Math.max(event.initialX, event.x) - x, plotWidth - x)
@@ -19,7 +19,7 @@ export const getRectDimensions = (
     }
   }
 
-  if (event.dragMode === 'brushY') {
+  if (event.direction === 'y') {
     const y = Math.max(0, Math.min(event.initialY, event.y))
 
     const height = Math.min(

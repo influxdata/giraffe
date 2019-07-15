@@ -1,126 +1,108 @@
-import {useRef, useReducer, useEffect} from 'react'
+import * as React from 'react'
+import {useRef, useCallback} from 'react'
+import {useForceUpdate} from './useForceUpdate'
 
-// Minimum number of pixels a user must brush before we decide whether the
-// action is a vertical or horizontal brush
-const MIN_BRUSH_DELTA = 5
+// Minimum number of pixels a user must drag before we decide whether the
+// action is a vertical or horizontal drag
+const MIN_DRAG_DELTA = 3
 
 export interface DragEvent {
   type: 'drag' | 'dragend'
   initialX: number
   initialY: number
-  dragMode: 'brushX' | 'brushY' | 'pan' | null
+  direction: 'x' | 'y' | null
   x: number
   y: number
-  shiftKey: boolean
-  ctrlKey: boolean
-  metaKey: boolean
 }
 
-export const useDragEvent = (el: HTMLElement): DragEvent | null => {
-  const dragJustEnded = useRef(false)
-  const isActive = useRef(false)
+interface UseDragEventProps {
+  onMouseDown: (e: React.MouseEvent<Element, MouseEvent>) => any
+}
 
-  const [event, dispatch] = useReducer(
-    (state: DragEvent | null, {type, e}) => {
-      const {left, top} = el.getBoundingClientRect()
-      const x = e.pageX - left
-      const y = e.pageY - top
+export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
+  const dragEventRef = useRef<DragEvent | null>(null)
+  const forceUpdate = useForceUpdate()
 
-      switch (type) {
-        case 'mousedown': {
-          return {
-            type: 'drag',
-            initialX: x,
-            initialY: y,
-            x,
-            y,
-            dragMode: null,
-            shiftKey: e.shiftKey,
-            metaKey: e.metaKey,
-            ctrlKey: e.ctrlKey,
-          }
-        }
+  const onMouseDown = useCallback(
+    (mouseDownEvent: React.MouseEvent<Element, MouseEvent>) => {
+      mouseDownEvent.stopPropagation()
 
-        case 'mousemove': {
-          let dragMode = state.dragMode
+      const el = mouseDownEvent.currentTarget
 
-          if (!dragMode) {
-            const dx = Math.abs(x - state.initialX)
-            const dy = Math.abs(y - state.initialY)
+      const getXYCoords = baseEvent => {
+        const {left, top} = el.getBoundingClientRect()
 
-            if (dx >= dy && dx > MIN_BRUSH_DELTA) {
-              dragMode = 'brushX'
-            } else if (dy > MIN_BRUSH_DELTA) {
-              dragMode = 'brushY'
-            }
-          }
-
-          return {
-            ...state,
-            type: 'drag',
-            dragMode,
-            x,
-            y,
-          }
-        }
-
-        case 'mouseup': {
-          return {
-            ...state,
-            type: 'dragend',
-            x,
-            y,
-          }
-        }
-
-        default: {
-          return null
-        }
+        return [baseEvent.pageX - left, baseEvent.pageY - top]
       }
+
+      const onMouseMove = mouseMoveEvent => {
+        const [x, y] = getXYCoords(mouseMoveEvent)
+
+        let {direction, initialX, initialY} = dragEventRef.current
+
+        if (!direction) {
+          const dx = Math.abs(x - initialX)
+          const dy = Math.abs(y - initialY)
+
+          if (dx >= dy && dx > MIN_DRAG_DELTA) {
+            direction = 'x'
+          } else if (dy > MIN_DRAG_DELTA) {
+            direction = 'y'
+          }
+        }
+
+        dragEventRef.current = {
+          ...dragEventRef.current,
+          type: 'drag',
+          direction,
+          x,
+          y,
+        }
+
+        forceUpdate()
+      }
+
+      const onMouseUp = mouseUpEvent => {
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mousemove', onMouseUp)
+
+        const [x, y] = getXYCoords(mouseUpEvent)
+
+        dragEventRef.current = {
+          ...dragEventRef.current,
+          type: 'dragend',
+          x,
+          y,
+        }
+
+        forceUpdate()
+      }
+
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+
+      const [x, y] = getXYCoords(mouseDownEvent)
+
+      dragEventRef.current = {
+        type: 'drag',
+        initialX: x,
+        initialY: y,
+        x,
+        y,
+        direction: null,
+      }
+
+      forceUpdate()
     },
-    null as never
+    []
   )
 
-  useEffect(() => {
-    if (!el) {
-      return
-    }
+  const {current: dragEvent} = dragEventRef
 
-    const onMouseMove = (e: MouseEvent) => {
-      dispatch({type: 'mousemove', e})
-    }
-
-    const onMouseDown = (e: MouseEvent) => {
-      document.addEventListener('mousemove', onMouseMove)
-      dragJustEnded.current = false
-      isActive.current = true
-      dispatch({type: 'mousedown', e})
-    }
-
-    const onMouseUp = (e: MouseEvent) => {
-      document.removeEventListener('mousemove', onMouseMove)
-      dragJustEnded.current = true
-      dispatch({type: 'mouseup', e})
-    }
-
-    el.addEventListener('mousedown', onMouseDown)
-    document.addEventListener('mouseup', onMouseUp)
-
-    return () => {
-      el.removeEventListener('mousedown', onMouseDown)
-      document.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('mousemove', onMouseMove)
-    }
-  }, [el])
-
-  if (!isActive.current) {
-    return null
+  if (dragEvent && dragEvent.type === 'dragend') {
+    // 'dragEnd' events should be emitted exactly once at the end of a drag
+    dragEventRef.current = null
   }
 
-  if (dragJustEnded.current) {
-    isActive.current = false
-    return event
-  }
-
-  return event
+  return [dragEvent, {onMouseDown}]
 }
