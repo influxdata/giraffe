@@ -157,3 +157,5 @@ export const SizedPlot: FunctionComponent<Props> = ({
     </div>
   )
 }
+
+SizedPlot.displayName = 'SizedPlot'

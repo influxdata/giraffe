@@ -28,3 +28,5 @@ export const Plot: FunctionComponent<Props> = ({config, children}) => {
     </AutoSizer>
   )
 }
+
+Plot.displayName = 'Plot'
