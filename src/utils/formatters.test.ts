@@ -74,6 +74,13 @@ describe('siPrefixFormatter', () => {
 
     expect(f(1000)).toEqual('howdy1k')
   })
+
+  test('can specify zeros are always included', () => {
+    const f = siPrefixFormatter({trimZeros: false, significantDigits: 4})
+
+    expect(f(37)).toEqual('37.00')
+    expect(f(37.1234)).toEqual('37.12')
+  })
 })
 
 describe('binaryPrefixFormatter', () => {
