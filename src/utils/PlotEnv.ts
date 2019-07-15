@@ -255,6 +255,9 @@ export class PlotEnv {
         )
       }
 
+      case 'custom':
+        return null
+
       default:
         const unknownConfig: never = layerConfig
         const unknownType = (unknownConfig as any).type
@@ -322,7 +325,10 @@ export class PlotEnv {
   private getXDomain() {
     return (
       extentOfExtents(
-        ...this.config.layers.map((_, i) => this.getSpec(i).xDomain)
+        ...this.config.layers
+          .map((_, i) => this.getSpec(i))
+          .filter(spec => spec && spec.xDomain)
+          .map(spec => spec.xDomain)
       ) || DEFAULT_X_DOMAIN
     )
   }
@@ -330,7 +336,10 @@ export class PlotEnv {
   private getYDomain() {
     return (
       extentOfExtents(
-        ...this.config.layers.map((_, i) => this.getSpec(i).yDomain)
+        ...this.config.layers
+          .map((_, i) => this.getSpec(i))
+          .filter(spec => spec && spec.yDomain)
+          .map(spec => spec.yDomain)
       ) || DEFAULT_Y_DOMAIN
     )
   }
