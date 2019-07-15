@@ -93,6 +93,22 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
+            if (layerConfig.type === 'custom') {
+              const renderProps = {
+                width,
+                height,
+                innerWidth: env.innerWidth,
+                innerHeight: env.innerHeight,
+                xScale: env.xScale,
+                yScale: env.yScale,
+                xDomain: env.xDomain,
+                yDomain: env.yDomain,
+                columnFormatter: env.getFormatterForColumn,
+              }
+
+              return layerConfig.render(renderProps)
+            }
+
             const spec = env.getSpec(layerIndex)
 
             const sharedProps = {

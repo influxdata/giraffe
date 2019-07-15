@@ -142,11 +142,29 @@ export interface ScatterLayerConfig {
   symbol?: string[]
 }
 
+export interface CustomLayerRenderProps {
+  xScale: Scale<number, number>
+  yScale: Scale<number, number>
+  xDomain: number[]
+  yDomain: number[]
+  width: number
+  height: number
+  innerWidth: number
+  innerHeight: number
+  columnFormatter: (colKey: string) => (x: any) => string
+}
+
+export interface CustomLayerConfig {
+  type: 'custom'
+  render: (p: CustomLayerRenderProps) => JSX.Element
+}
+
 export type LayerConfig =
   | LineLayerConfig
   | HistogramLayerConfig
   | HeatmapLayerConfig
   | ScatterLayerConfig
+  | CustomLayerConfig
 
 export enum FormatterType {
   Time = 'TIME',
