@@ -197,14 +197,18 @@ interface BinaryPrefixFormatterFactoryOptions {
   prefix?: string
   suffix?: string
   significantDigits?: number
+  trimZeros?: boolean
 }
 
 export const binaryPrefixFormatter = ({
   prefix = '',
   suffix = '',
   significantDigits = 6,
+  trimZeros = true,
 }: BinaryPrefixFormatterFactoryOptions = {}): BinaryPrefixFormatter => {
-  const formatSigFigs = d3Format(`.${significantDigits}~f`)
+  const formatSigFigs = d3Format(
+    `.${significantDigits}${trimZeros ? '~' : ''}f`
+  )
 
   const formatter = (x: number) => {
     const isXBig = Math.abs(x) >= 1024
@@ -234,14 +238,18 @@ interface SIPrefixFormatterFactoryOptions {
   prefix?: string
   suffix?: string
   significantDigits?: number
+  trimZeros?: boolean
 }
 
 export const siPrefixFormatter = ({
   prefix = '',
   suffix = '',
   significantDigits = 6,
+  trimZeros = true,
 }: SIPrefixFormatterFactoryOptions = {}): SIPrefixFormatter => {
-  const formatSIPrefix = d3Format(`.${significantDigits}~s`)
+  const formatSIPrefix = d3Format(
+    `.${significantDigits}${trimZeros ? '~' : ''}s`
+  )
 
   const formatter = (x: number): string =>
     `${prefix}${formatSIPrefix(x)}${suffix}`
