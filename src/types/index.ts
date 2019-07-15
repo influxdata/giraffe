@@ -182,6 +182,9 @@ export interface Config {
   xAxisLabel?: string
   yAxisLabel?: string
 
+  xTicks?: number[]
+  yTicks?: number[]
+
   // The x domain of the plot can be explicitly set. If this option is passed,
   // then the component is operating in a "controlled" mode, where it always
   // uses the passed x domain. Any brush interaction with the plot that should

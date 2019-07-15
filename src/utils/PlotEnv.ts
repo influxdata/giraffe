@@ -88,6 +88,10 @@ export class PlotEnv {
   }
 
   public get xTicks(): number[] {
+    if (this.config.xTicks) {
+      return this.config.xTicks
+    }
+
     const getTicksMemoized = this.fns.get('xTicks', getTicks)
 
     return getTicksMemoized(
@@ -99,6 +103,10 @@ export class PlotEnv {
   }
 
   public get yTicks(): number[] {
+    if (this.config.yTicks) {
+      return this.config.yTicks
+    }
+
     const getTicksMemoized = this.fns.get('yTicks', getTicks)
 
     return getTicksMemoized(

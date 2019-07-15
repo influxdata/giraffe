@@ -195,3 +195,21 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
+  .add('custom y ticks', () => {
+    const config: Config = {
+      width: 600,
+      height: 400,
+      table: CPU,
+      yTicks: [13, 19, 23],
+      layers: [
+        {
+          type: 'line',
+          x: '_time',
+          y: '_value',
+          fill: ['cpu'],
+        },
+      ],
+    }
+
+    return <Plot config={config} />
+  })
