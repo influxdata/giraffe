@@ -50,3 +50,5 @@ export const ScatterLayer: FunctionComponent<Props> = props => {
     </>
   )
 }
+
+ScatterLayer.displayName = 'ScatterLayer'

@@ -233,3 +233,5 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     />
   )
 }
+
+Axes.displayName = 'Axes'

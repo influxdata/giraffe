@@ -91,3 +91,5 @@ export const LineLayer: FunctionComponent<Props> = props => {
     </>
   )
 }
+
+LineLayer.displayName = 'LineLayer'

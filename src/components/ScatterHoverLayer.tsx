@@ -94,3 +94,5 @@ export const ScatterHoverLayer: FunctionComponent<Props> = ({
     </>
   )
 }
+
+ScatterHoverLayer.displayName = 'ScatterHoverLayer'
