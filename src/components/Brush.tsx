@@ -22,8 +22,10 @@ export const Brush: FunctionComponent<Props> = ({
   onXBrushEnd,
   onYBrushEnd,
 }) => {
+  const isBrushing = event && event.direction
+
   useLayoutEffect(() => {
-    if (!event || !event.dragMode || event.type !== 'dragend') {
+    if (!isBrushing || event.type !== 'dragend') {
       return
     }
 
@@ -31,11 +33,11 @@ export const Brush: FunctionComponent<Props> = ({
     let p1
     let callback
 
-    if (event.dragMode === 'brushX') {
+    if (event.direction === 'x') {
       p0 = Math.min(event.initialX, event.x)
       p1 = Math.max(event.initialX, event.x)
       callback = onXBrushEnd
-    } else if (event.dragMode === 'brushY') {
+    } else if (event.direction === 'y') {
       p0 = Math.min(event.initialY, event.y)
       p1 = Math.max(event.initialY, event.y)
       callback = onYBrushEnd
@@ -50,7 +52,7 @@ export const Brush: FunctionComponent<Props> = ({
     callback([p0, p1])
   })
 
-  if (!event || !event.dragMode || event.type === 'dragend') {
+  if (!isBrushing || event.type === 'dragend') {
     return null
   }
 

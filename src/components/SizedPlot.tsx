@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useRef, useCallback, FunctionComponent, CSSProperties} from 'react'
+import {useCallback, FunctionComponent, CSSProperties} from 'react'
 
 import {Axes} from './Axes'
 import {
@@ -29,9 +29,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const env = usePlotEnv(userConfig)
 
   const forceUpdate = useForceUpdate()
-  const innerPlotRef = useRef<HTMLDivElement>(null)
-  const [hoverEvent, hoverProps] = useMousePos()
-  const dragEvent = useDragEvent(innerPlotRef.current)
+  const [hoverEvent, hoverTargetProps] = useMousePos()
+  const [dragEvent, dragTargetProps] = useDragEvent()
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
@@ -88,9 +87,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
           left: `${margins.left}px`,
           cursor: 'crosshair',
         }}
-        ref={innerPlotRef}
         onDoubleClick={handleResetDomains}
-        {...hoverProps}
+        {...hoverTargetProps}
+        {...dragTargetProps}
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
