@@ -1,4 +1,5 @@
 import * as React from 'react'
+import marked from 'marked'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean} from '@storybook/addon-knobs'
 
@@ -18,6 +19,9 @@ import {
   interpolationKnob,
   timeZoneKnob,
 } from './helpers'
+
+// Notes
+const histogramReadme = marked(require('../src/components/HistogramLayer.md'))
 
 storiesOf('XY Plot', module)
   .addDecorator(withKnobs)
@@ -67,9 +71,11 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
   .add('Scatterplot', () => {
@@ -103,9 +109,11 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
   .add('Heatmap', () => {
@@ -127,32 +135,44 @@ storiesOf('XY Plot', module)
     }
 
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <div className="story--example">
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </div>
     )
   })
-  .add('Histogram', () => {
-    const table = tableKnob()
-    const colors = colorSchemeKnob()
-    const legendFont = legendFontKnob()
-    const tickFont = tickFontKnob()
-    const x = xKnob(table, '_value')
-    const showAxes = showAxesKnob()
-    const binCount = number('Bin Count', 10)
+  .add(
+    'Histogram',
+    () => {
+      const table = tableKnob()
+      const colors = colorSchemeKnob()
+      const legendFont = legendFontKnob()
+      const tickFont = tickFontKnob()
+      const x = xKnob(table, '_value')
+      const showAxes = showAxesKnob()
+      const binCount = number('Bin Count', 10)
 
-    const config: Config = {
-      table,
-      legendFont,
-      tickFont,
-      showAxes,
-      valueFormatters: {[x]: x => `${Math.round(x)}%`},
-      layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+      const config: Config = {
+        table,
+        legendFont,
+        tickFont,
+        showAxes,
+        valueFormatters: {[x]: x => `${Math.round(x)}%`},
+        layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+      }
+
+      return (
+        <div className="story--example">
+          <PlotContainer>
+            <Plot config={config} />
+          </PlotContainer>
+        </div>
+      )
+    },
+    {
+      readme: {
+        content: histogramReadme,
+      },
     }
-
-    return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
-    )
-  })
+  )

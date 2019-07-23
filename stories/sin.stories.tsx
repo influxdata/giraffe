@@ -20,8 +20,10 @@ storiesOf('Line Plot Stress Test', module).add('Line', () => {
   }
 
   return (
-    <PlotContainer>
-      <Plot config={config} />
-    </PlotContainer>
+    <div className="story--example">
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    </div>
   )
 })

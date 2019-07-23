@@ -1,6 +1,10 @@
-import {configure, addParameters} from '@storybook/react'
+import {configure, addParameters, addDecorator} from '@storybook/react'
 import {create} from '@storybook/theming'
+import {addReadme} from 'storybook-readme'
 import 'storybook-chromatic'
+import './Story.scss'
+
+addDecorator(addReadme)
 
 addParameters({
   options: {

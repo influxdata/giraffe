@@ -6,6 +6,7 @@ import {Config, SizedConfig} from '../types'
 import {SizedPlot} from './SizedPlot'
 
 interface Props {
+  /** Configuration object which describes the visualization */
   config: Config
 }
 
