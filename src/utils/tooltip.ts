@@ -32,7 +32,9 @@ const getTooltipGroupColumns = (
       name: table.getColumnName(key),
       type: table.getColumnType(key),
       colors: rowColors,
-      values: rowIndices.map(i => formatter(colData[i])),
+      values: rowIndices.map(i =>
+        !isVoid(colData[i]) ? formatter(colData[i]) : null
+      ),
     }
   })
 
