@@ -184,7 +184,17 @@ const createBins = (
 ): Array<{max: number; min: number; values: {}}> => {
   const domainWidth = xDomain[1] - xDomain[0]
   const binWidth = domainWidth / binCount
-  const binMinimums = range(xDomain[0], xDomain[1], binWidth)
+
+  let binMinimums = range(xDomain[0], xDomain[1], binWidth)
+
+  // Work around [an issue in d3-array][0] where the `stop` value for `range`
+  // is inclusive due to floating point inaccuracies, even though it is
+  // expected to be exclusive. Note that we don't use the recommended
+  // workaround, since we wish to handle the case where the `domainWidth` is
+  // less than 0.
+  //
+  // [0]: https://github.com/d3/d3-array/issues/5#issuecomment-132788501
+  binMinimums = binMinimums.slice(0, binCount)
 
   const bins = binMinimums.map((min, i) => {
     const isLastBin = i === binMinimums.length - 1
