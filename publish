@@ -31,10 +31,10 @@ yarn -s run test
 echo "Building production build"
 yarn run build
 
-# echo "Tagging and publishing $RELEASE_TYPE release"
-# yarn -s publish --$RELEASE_TYPE --access=public
+echo "Tagging and publishing $RELEASE_TYPE release"
+yarn -s publish --$RELEASE_TYPE --access=public
 
-# echo "Pushing git commit and tag"
-# git push --follow-tags
+echo "Pushing git commit and tag"
+git push --follow-tags
 
 echo "Publish successful!"
