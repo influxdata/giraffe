@@ -1,6 +1,40 @@
-yarn install --frozen-lockfile && \
-  yarn run test && \
-  yarn run build && \
-  yarn publish --minor --access=public && \
-  git push --follow-tags && \
-  echo "Publish successful"
+#!/bin/bash
+
+set -e 
+
+RELEASE_TYPE=${1:-patch}
+
+echo "Fetching git remotes"
+git fetch
+
+if ! git status | grep -q 'On branch master'; then
+  echo "Error! Must be on master branch to publish"
+  exit 1
+fi
+
+if ! git status | grep -q "Your branch is up to date with 'origin/master'."; then
+  echo "Error! Must be up to date with origin/master to publish"
+  exit 1
+fi
+
+if ! git status | grep -q 'working tree clean'; then
+  echo "Error! Cannot publish with dirty working tree"
+  exit 1
+fi
+
+echo "Installing dependencies"
+yarn -s install --frozen-lockfile
+
+echo "Running tests"
+yarn -s run test
+
+echo "Building production build"
+yarn run build
+
+# echo "Tagging and publishing $RELEASE_TYPE release"
+# yarn -s publish --$RELEASE_TYPE --access=public
+
+# echo "Pushing git commit and tag"
+# git push --follow-tags
+
+echo "Publish successful!"
