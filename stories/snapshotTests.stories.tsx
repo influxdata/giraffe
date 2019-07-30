@@ -213,3 +213,36 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
+  .add('specific histogram bin settings should not crash', () => {
+    const {table} = fromFlux(
+      `#group,false,false,true,true,false,false,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,long,string,string,string
+#default,_result,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,host
+,,0,2019-07-29T21:50:31.093428Z,2019-07-29T22:50:31.093428Z,2019-07-29T21:50:34Z,7246577664,available,mem,oox4k.local
+,,0,2019-07-29T21:50:31.093428Z,2019-07-29T22:50:31.093428Z,2019-07-29T22:50:24Z,7176134656,available,mem,oox4k.local
+
+#group,false,false,true,true,false,false,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,long,string,string,string
+#default,_result,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,host
+,,1,2019-07-29T21:50:31.093428Z,2019-07-29T22:50:31.093428Z,2019-07-29T21:50:34Z,6581714944,active,mem,oox4k.local
+,,1,2019-07-29T21:50:31.093428Z,2019-07-29T22:50:31.093428Z,2019-07-29T22:50:24Z,6296612864,active,mem,oox4k.local`
+    )
+
+    const config: Config = {
+      table,
+      width: 600,
+      height: 400,
+      xDomain: [5472854016, 7661821952],
+      layers: [
+        {
+          type: 'histogram',
+          x: '_value',
+          binCount: 30,
+        },
+      ],
+    }
+
+    return <Plot config={config} />
+  })
