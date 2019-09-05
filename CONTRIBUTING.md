@@ -1,53 +1,41 @@
 ## Development
 
-Common development workflows are codified via scripts in the `package.json` file.
+This repo contains several JavaScript packages linked together by [Yarn Workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) (i.e. it is a _monorepo_).
+The source code for the library published to npm as `@influxdata/giraffe` is contained in the `giraffe` workspace. 
 
-### Developing with the docs app
+### Developing Giraffe with Storybook
 
-This repository contains a [Storybook](https://storybook.js.org/), which is convenient place to test changes in development.
+The `stories` workspace in this repository contains a [Storybook](https://storybook.js.org/) application, which is convenient place to test changes to Giraffe.
+
 To run the Storybook during development:
 
-```
-yarn run storybook
-```
+1. In one terminal, change into the `giraffe` workspace and run `yarn start`.
+   This starts a [Rollup](https://rollupjs.org/guide/en/) process that will rebuild the library whenever its source files change.
 
-Then visit [http://localhost:50000](http://localhost:50000).
-Changes made either in the library source or in the Storybook stories will be reflected automatically at that URL.
+2. In another terminal, change into the `stories` workspace and run `yarn start`.
+   This will start a Storybook development server that consumes the locally build `@influxdata/giraffe` library. 
 
-### Developing with an external app
+3. Visit [http://localhost:50000](http://localhost:50000) to see the storybook.
+   Changes made either in the library source or in the stories source will be reflected automatically at that URL.
 
-To test changes in this repository without publishing a new version, use the `yarn start` script, which will start a development server that rebuilds the `dist` folder you make changes to source files.
-Typically you would be able to use `yarn link` to see this development version in an external app, but attempting to do so with this library will throw a [confusing error](https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react).
+### Unit tests
 
-As a workaround:
-
-1. Set a `GIRAFFE_DIR` environment variable in your shell for the absolute path of your local giraffe repository, and an `APP_DIR` variable for the absolute path of the external app you wish to test the library with.
-   For me that looks like:
-   ```
-   export GIRAFFE_DIR=/Users/chris/Dev/giraffe
-   export APP_DIR=/Users/chris/Dev/influxdb/ui
-   ```
-
-2. Run
-   ```
-   mv $APP_DIR/node_modules/@influxdata/giraffe/dist $APP_DIR/node_modules/@influxdata/giraffe/_dist && \
-   ln -s $GIRAFFE_DIR/dist $APP_DIR/node_modules/@influxdata/giraffe/dist
-   ```
-
-When you're done developing the giraffe, make sure to undo this:
-
-```
-rm $APP_DIR/node_modules/@influxdata/giraffe/dist && \
-mv $APP_DIR/node_modules/@influxdata/giraffe/_dist $APP_DIR/node_modules/@influxdata/giraffe/dist
-```
-
-### Running tests
+To run unit tests, change into the `giraffe` workspace and run:
 
 ```
 yarn test
 ```
 
-### Publishing a new version
+### Screenshot tests
+
+Giraffe uses Storybook and [Chromatic](https://www.chromaticqa.com) for screenshot testing.
+The screenshot tests will run automatically in CircleCI for all PRs.
+
+If you need to accept changes caught by the screenshot tests, follow the Chromatic build link listed in the logs for the failing CircleCI run.
+After logging into Chromatic with your GitHub account, you should be able to approve the changes.
+If you rerun the failing CircleCI build after approving changes, it will pass.
+
+## Publishing a new version
 
 Ensure that 
 
@@ -56,14 +44,14 @@ Ensure that
 - You are logged into Yarn (`yarn login`)
 - You are on `master` and the working tree is clean
 
-Then run the publish script in the root of the repo:
+Then from the root of the repo, run the publish script:
 
 ```
-./publish
+./giraffe/publish
 ```
 
-### Security Vulnerability Reporting
-InfluxData takes security and our users' trust very seriously. If you believe you have found a security issue in any of our
-open source projects, please responsibly disclose it by contacting security@influxdata.com. More details about 
-security vulnerability reporting, 
-including our GPG key, [can be found here](https://www.influxdata.com/how-to-report-security-vulnerabilities/).
+## Security Vulnerability Reporting
+
+InfluxData takes security and our user's trust very seriously.
+If you believe you have found a security issue in any of our open source projects, please responsibly disclose it by contacting security@influxdata.com.
+More details about security vulnerability reporting, including our GPG key, [can be found here](https://www.influxdata.com/how-to-report-security-vulnerabilities/).

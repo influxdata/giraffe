@@ -8,17 +8,22 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - v1-dependencies-{{ checksum "yarn.lock" }}
       - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn test
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: cd giraffe && yarn run lint
+      - run: cd giraffe && yarn run typecheck
+      - run: cd giraffe && yarn run test
+      - run: cd giraffe && yarn run build
+      - run: cd stories && yarn run lint
+      - run: cd stories && yarn run typecheck
       - run:
           name: chromatic
           command: |
+            cd stories
             # See https://docs.chromaticqa.com/setup_ci
             if [ "${CIRCLE_BRANCH}" != "master" ];
             then

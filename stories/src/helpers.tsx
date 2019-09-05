@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {select, text, boolean} from '@storybook/addon-knobs'
 
-import {Table} from '../src'
+import {Table} from '@influxdata/giraffe'
 import {CPU} from './data'
-import * as colorSchemes from '../src/constants/colorSchemes'
+import * as giraffe from '@influxdata/giraffe'
 
 export const PlotContainer = ({children}) => (
   <div
@@ -48,22 +48,22 @@ export const colorSchemeKnob = (initial?: string[]) =>
   select(
     'Color Scheme',
     {
-      'Nineteen Eighty Four': colorSchemes.NINETEEN_EIGHTY_FOUR,
-      Atlantis: colorSchemes.ATLANTIS,
-      'Do Androids Dream': colorSchemes.DO_ANDROIDS_DREAM,
-      Delorean: colorSchemes.DELOREAN,
-      Cthulhu: colorSchemes.CTHULHU,
-      Ectoplasm: colorSchemes.ECTOPLASM,
-      'T Max 400 Film': colorSchemes.T_MAX_400_FILM,
-      Viridis: colorSchemes.VIRIDIS,
-      Magma: colorSchemes.MAGMA,
-      Inferno: colorSchemes.INFERNO,
-      Plasma: colorSchemes.PLASMA,
-      ylOrRd: colorSchemes.YL_OR_RD,
-      ylGnBu: colorSchemes.YL_GN_BU,
-      buGn: colorSchemes.BU_GN,
+      'Nineteen Eighty Four': giraffe.NINETEEN_EIGHTY_FOUR,
+      Atlantis: giraffe.ATLANTIS,
+      'Do Androids Dream': giraffe.DO_ANDROIDS_DREAM,
+      Delorean: giraffe.DELOREAN,
+      Cthulhu: giraffe.CTHULHU,
+      Ectoplasm: giraffe.ECTOPLASM,
+      'T Max 400 Film': giraffe.T_MAX_400_FILM,
+      Viridis: giraffe.VIRIDIS,
+      Magma: giraffe.MAGMA,
+      Inferno: giraffe.INFERNO,
+      Plasma: giraffe.PLASMA,
+      ylOrRd: giraffe.YL_OR_RD,
+      ylGnBu: giraffe.YL_GN_BU,
+      buGn: giraffe.BU_GN,
     },
-    initial || colorSchemes.NINETEEN_EIGHTY_FOUR
+    initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
 export const tableKnob = (initial?: Table) =>

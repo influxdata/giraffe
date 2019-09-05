@@ -2,7 +2,7 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean} from '@storybook/addon-knobs'
 
-import {Config, Plot, MAGMA, timeFormatter} from '../src'
+import {Config, Plot, MAGMA, timeFormatter} from '@influxdata/giraffe'
 
 import {
   PlotContainer,
