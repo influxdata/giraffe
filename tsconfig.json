@@ -8,8 +8,6 @@
     "jsx": "react",
     "strict": true,
     "declaration": true,
-    "rootDir": "./src",
-    "outDir": "./dist",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noImplicitAny": false,
@@ -18,13 +16,5 @@
     "strictNullChecks": false,
     "downlevelIteration": true,
     "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx"
-  ]
+  }
 }

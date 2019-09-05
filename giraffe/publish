@@ -2,7 +2,8 @@
 
 set -e 
 
-RELEASE_TYPE=${1:-patch}
+# Make sure our working dir is the dir of the publish script
+cd $(dirname ${BASH_SOURCE[0]})
 
 echo "Fetching git remotes"
 git fetch
@@ -30,6 +31,8 @@ yarn -s run test
 
 echo "Building production build"
 yarn run build
+
+RELEASE_TYPE=${1:-patch}
 
 echo "Tagging and publishing $RELEASE_TYPE release"
 yarn -s publish --$RELEASE_TYPE --access=public

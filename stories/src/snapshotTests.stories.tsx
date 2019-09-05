@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-
 import {
   timeFormatter,
   binaryPrefixFormatter,
@@ -9,7 +8,8 @@ import {
   newTable,
   Config,
   Plot,
-} from '../src'
+} from '@influxdata/giraffe'
+
 import {CPU} from './data'
 
 storiesOf('Snapshot Tests', module)

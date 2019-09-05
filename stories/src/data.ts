@@ -1,4 +1,4 @@
-import {newTable} from '../src'
+import {newTable} from '@influxdata/giraffe'
 
 const CPU_TIME_COL = [
   1554308748000,
