@@ -26,9 +26,6 @@ fi
 echo "Installing dependencies"
 yarn -s install --frozen-lockfile
 
-echo "Running tests"
-yarn -s run test
-
 echo "Building production build"
 yarn run build
 
