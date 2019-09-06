@@ -151,4 +151,39 @@ describe('fromFlux', () => {
 
     expect(table.getColumn('_value')).toEqual([10, null])
   })
+
+  test('handles newlines inside string values', () => {
+    const CSV = `#group,false,false,false,false
+#datatype,string,long,string,long
+#default,_result,,,
+,result,table,message,value
+,,0,howdy,5
+,,0,"hello
+
+there",5
+,,0,hi,6
+
+#group,false,false,false,false
+#datatype,string,long,string,long
+#default,_result,,,
+,result,table,message,value
+,,1,howdy,5
+,,1,"hello
+
+there",5
+,,1,hi,6`
+
+    const {table} = fromFlux(CSV)
+
+    expect(table.getColumn('value')).toEqual([5, 5, 6, 5, 5, 6])
+
+    expect(table.getColumn('message')).toEqual([
+      'howdy',
+      'hello\n\nthere',
+      'hi',
+      'howdy',
+      'hello\n\nthere',
+      'hi',
+    ])
+  })
 })
