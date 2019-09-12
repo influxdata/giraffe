@@ -1,0 +1,39 @@
+.index-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 500px;
+  height: 100%;
+}
+
+.index-page h1 {
+  text-align: center;
+  margin-bottom: var(--spacing-m);
+}
+
+.index-page h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-l);
+}
+
+.index-page__actions {
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.index-page__action {
+  margin-bottom: var(--spacing-xs);
+}
+
+.index-page__actions .index-page__action:first-child {
+  margin-right: var(--spacing-xs);
+}
+
+.index-page__plot {
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+}

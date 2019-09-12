@@ -1,0 +1,68 @@
+.docs-article h1 {
+  font-size: var(--font-xxl);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-l);
+}
+
+.docs-article h2 {
+  font-size: var(--font-xl);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-l);
+}
+
+.docs-article h3 {
+  font-size: var(--font-l);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-l);
+}
+
+.docs-article h4,
+.docs-article h5,
+.docs-article h6 {
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-xs);
+}
+
+.docs-article p {
+  line-height: calc(var(--font-s) * 1.75);
+  font-size: var(--font-s);
+}
+
+.docs-article a {
+  color: var(--c-pool);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.docs-article em {
+  font-weight: 500;
+}
+
+.docs-article pre {
+  margin-bottom: var(--spacing-m);
+}
+
+.docs-article ul {
+  padding-left: 0;
+}
+
+.docs-article li {
+  line-height: calc(var(--font-s) * 1.75);
+  margin: var(--spacing-s) 0;
+}
+
+.docs-article table th {
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--g10);
+}
+
+.docs-article table th,
+.docs-article table td {
+  padding: var(--spacing-xs) var(--spacing-s);
+}
+
+.docs-article table th:first-child,
+.docs-article table td:first-child {
+  padding: var(--spacing-xs) 0;
+}

@@ -1,0 +1,44 @@
+import {BasicLinePlot} from '../../../examples/BasicLinePlot'
+
+# The Line Layer
+
+A line layer displays one or more lines.
+
+## Required Props
+
+
+
+## Optional Props
+
+Name | Type | Description | Required?
+-----|------|-------------|----------
+`x` | `string` | The table column used for x values in the plot | Yes
+`y` | `string` | The table column used for y values in the plot | Yes
+`fill` | `string[]` | A list of table columns whose values are used to group data into lines | 
+`colors` | `string[]` | | 
+`interpolation` | | | 
+`hoverDimension` | | | 
+`lineWidth` | | | 
+`maxTooltipRows` | | | 
+`shadeBelow` | | | 
+`shadeBelowOpacity` | | | 
+
+
+## Example
+
+```json
+{
+  width: 600,
+  height: 400,
+  table,
+  layers: [
+    {
+      type: 'scatter',
+      x: 'x',
+      y: 'y',
+    },
+  ],
+}
+```
+
+<BasicLinePlot />

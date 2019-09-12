@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono|Rubik:400,400i,500,500i&display=swap');
+
+:root {
+  --spacing-xxs: 3px;
+  --spacing-xs: 6px;
+  --spacing-s: 12px;
+  --spacing-m: 24px;
+  --spacing-l: 36px;
+  --spacing-xl: 64px;
+  --spacing-xxl: 84px;
+  --spacing-xxl: 124px;
+
+  --font-xxs: 10px;
+  --font-xs: 12px;
+  --font-s: 16px;
+  --font-m: 20px;
+  --font-l: 24px;
+  --font-xl: 36px;
+  --font-xxl: 48px;
+  --font-xxxl: 64px;
+
+  --font-sans: 'Rubik', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+
+  --radius-s: 4px;
+
+  --g0: #0f0e15;
+  --g1: #1c1c21;
+  --g2: #202028;
+  --g3: #292933;
+  --g4: #31313d;
+  --g5: #383846;
+  --g6: #434453;
+  --g7: #545667;
+  --g8: #676978;
+  --g9: #757888;
+  --g10: #8e91a1;
+  --g11: #999dab;
+  --g12: #a4a8b6;
+  --g13: #bec2cc;
+  --g14: #c6cad3;
+  --g15: #d4d7dd;
+  --g16: #e7e8eb;
+  --g17: #eeeff2;
+  --g18: #f6f6f8;
+  --g19: #fafafc;
+  --g20: #ffffff;
+
+  --c-basalt: #2f1f29;
+  --c-ruby: #bf3d5e;
+  --c-fire: #dc4e58;
+  --c-fire-disabled: #6f3943;
+  --c-curacao: #f95f53;
+  --c-curacao-disabled: #eadad8;
+  --c-dreamsicle: #ff8564;
+  --c-tungsten: #ffb6a0;
+  --c-marmelade: #ffdccf;
+  --c-flan: #fff7f4;
+
+  --c-abyss: #182838;
+  --c-sapphire: #326bba;
+  --c-ocean: #4591ed;
+  --c-ocean-disabled: #32547f;
+  --c-pool: #22adf6;
+  --c-pool-disabled: #c9e0ed;
+  --c-laser: #00c9ff;
+  --c-hydrogen: #6bdfff;
+  --c-neutrino: #bef0ff;
+  --c-yeti: #f0fcff;
+
+  --c-shadow: #1f2039;
+  --c-void: #311f94;
+  --c-amethyst: #513cc6;
+  --c-amethyst-disabled: #484281;
+  --c-star: #7a65f2;
+  --c-star-disabled: #d6d5ed;
+  --c-comet: #9394ff;
+  --c-potassium: #b1b6ff;
+  --c-moonstone: #c9d0ff;
+  --c-twilight: #f2f4ff;
+
+  --c-gypsy: #152b2d;
+  --c-emerald: #108174;
+  --c-viridian: #32b08c;
+  --c-viridian-disabled: #2b6058;
+  --c-rainforest: #4ed8a0;
+  --c-rainforest-disabled: #cfe6e1;
+  --c-honeydew: #7ce490;
+  --c-krypton: #a5f3b4;
+  --c-wasabi: #c6ffd0;
+  --c-mint: #f2fff4;
+
+  --c-oak: #3f241f;
+  --c-topaz: #e85b1c;
+  --c-tiger: #f48d38;
+  --c-pineapple: #ffb94a;
+  --c-thunder: #ffd255;
+  --c-sulfur: #ffe480;
+  --c-daisy: #fff6b8;
+  --c-banana: #fffdde;
+}
+
+html,
+body,
+#___gatsby,
+#gatsby-focus-wrapper,
+.layout {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a,
+a:link {
+  color: var(--g16);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+a:hover,
+a:visited:hover {
+  color: var(--c-laser);
+}
+
+pre {
+  padding: var(--spacing-s) var(--spacing-m);
+  border-radius: var(--radius-s);
+  background: var(--g2);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--font-s);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+.layout {
+  background: linear-gradient(var(--g0), var(--g1));
+  color: var(--g16);
+  font-family: var(--font-sans);
+  font-size: var(--font-s);
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.layout > .header {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.layout__content {
+  flex: 1 1 0;
+  overflow: hidden;
+}

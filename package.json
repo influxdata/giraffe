@@ -1,4 +1,4 @@
 {
   "private": true,
-  "workspaces": ["giraffe", "stories"]
+  "workspaces": ["giraffe", "stories", "docs"]
 }

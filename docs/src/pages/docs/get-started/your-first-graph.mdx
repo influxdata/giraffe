@@ -1,0 +1,37 @@
+# Creating Your First Graph with Giraffe
+
+Let's create a simple line graph with Giraffe.
+
+Giraffe is designed work with within React apps.
+We'll start assuming you already have a React app set up that you would like to use.
+If not, try using [Create React App](https://create-react-app.dev) can help you start one.
+
+First we need to define a component that will render our visulization:
+
+```tsx
+import * as React from 'react'
+
+const MyLineGraph: React.FC = () => {
+  // TODO
+}
+
+export default MyLineGraph
+```
+
+Next, we need some data.
+Giraffe can accept data from a variety of sources, but for now we'll start by just defining some simple fixture data as a variable:
+
+```tsx
+const LINE_DATA = [
+  {month: 0, temperature: 12},
+]
+```
+
+
+
+- need a component
+- need some input data
+  - here's that
+- need to transform input data to table format (link) using fromRows
+- define a config
+- pass the config to a plot component

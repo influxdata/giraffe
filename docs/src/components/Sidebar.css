@@ -1,0 +1,38 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--g1);
+  overflow-y: auto;
+  padding: var(--spacing-m) 0;
+}
+
+.sidebar__header,
+.sidebar__link {
+  padding-left: var(--spacing-m);
+  padding-right: var(--spacing-m);
+}
+
+.sidebar__header {
+  text-transform: uppercase;
+  font-size: var(--font-s);
+  font-weight: 500;
+  font-style: italic;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-s);
+  color: var(--g10);
+}
+
+.sidebar__link {
+  display: block;
+  margin: var(--spacing-xs) 0;
+}
+
+.sidebar__link--active {
+  color: var(--c-pool);
+  border-left: 2px solid var(--c-pool);
+  padding-left: calc(var(--spacing-m) - 2px);
+}
+
+.sidebar__footer {
+  border-top: 1px solid var(--g3);
+}

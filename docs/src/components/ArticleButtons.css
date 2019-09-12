@@ -1,0 +1,35 @@
+.article-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.article-buttons__prev,
+.article-buttons__next {
+  width: 50%;
+}
+
+.article-buttons__prev {
+  background: var(--g2);
+}
+
+.article-buttons__prev .article-buttons__link:hover {
+  background: var(--g3);
+}
+
+.article-buttons__next {
+  background: var(--g3);
+}
+
+.article-buttons__next .article-buttons__link:hover {
+  background: var(--g4);
+}
+
+.article-buttons__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-m);
+}

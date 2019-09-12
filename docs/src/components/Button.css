@@ -1,0 +1,30 @@
+.button {
+  all: unset;
+  padding: var(--spacing-s);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+}
+
+.button--default {
+  background: var(--g3);
+}
+
+.button--default:hover {
+  background: var(--g6);
+}
+
+.button--default:active {
+  background: var(--g1);
+}
+
+.button--primary {
+  background: var(--c-ocean);
+}
+
+.button--primary:hover {
+  background: var(--c-pool);
+}
+
+.button--primary:active {
+  background: var(--c-abyss);
+}
