@@ -71,7 +71,7 @@ export const drawAxes = ({
   context.textBaseline = 'top'
 
   for (const xTick of xTicks) {
-    const x = xScale(xTick) + margins.left
+    const x = xScale(xTick) + margins.left + 100
 
     if (
       Math.abs(x - margins.left) > GRID_LINE_MIN_DIST &&
