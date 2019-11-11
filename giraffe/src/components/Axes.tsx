@@ -192,6 +192,9 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     config,
   } = env
 
+  console.log('CONFIG HERE: ', config)
+  console.log('margins HERE: ', margins)
+
   useLayoutEffect(() => {
     drawAxes({
       canvas: canvas.current,

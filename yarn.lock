@@ -1094,10 +1094,11 @@
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
-"@influxdata/giraffe@0.16.2":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@influxdata/giraffe/-/giraffe-0.16.2.tgz#a2da3d157c4c751de8348f381a4d1b45d6bc3a43"
-  integrity sha512-cUbFwUeXbcyQp1Y5/3kEqb8Gt2Mh8+lFRRkgbpmdzTDub6xl1vJwlQvkXMLgdxebofVuApRjy0xj/Sbuq34Eug==
+"@influxdata/giraffe#margins@0.16.4":
+  name "@influxdata/giraffe"
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/@influxdata/giraffe/-/giraffe-0.16.4.tgz#679792950bccdcfb64d9530f07aba71985d341b4"
+  integrity sha512-krykV32T2pUq1EwQqHlrgPBlyBm9UZyDOvaCh1D3gVB9ZQJ9+87ftzECYbE0htbxKxBTUlnAKEmyzmIktNfxOQ==
 
 "@jest/console@^24.7.1":
   version "24.7.1"
