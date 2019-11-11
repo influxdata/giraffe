@@ -71,7 +71,7 @@ export const drawAxes = ({
   context.textBaseline = 'top'
 
   for (const xTick of xTicks) {
-    const x = xScale(xTick) + margins.left + 100
+    const x = xScale(xTick) + margins.left
 
     if (
       Math.abs(x - margins.left) > GRID_LINE_MIN_DIST &&
@@ -191,9 +191,6 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     yScale,
     config,
   } = env
-
-  console.log('CONFIG HERE: ', config)
-  console.log('margins HERE: ', margins)
 
   useLayoutEffect(() => {
     drawAxes({

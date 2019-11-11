@@ -36,8 +36,8 @@ export const getMargins = (
 
   return {
     top: textHeight / 2,
-    right: 100,
+    right: 1,
     bottom: textHeight + TICK_PADDING_TOP + xAxisLabelHeight,
-    left: maxTextWidth + TICK_PADDING_RIGHT + yAxisLabelHeight + 100,
+    left: maxTextWidth + TICK_PADDING_RIGHT + yAxisLabelHeight,
   }
 }
