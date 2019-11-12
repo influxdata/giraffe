@@ -25,7 +25,7 @@ export const useHoverPointIndices = (
     mouseY !== undefined &&
     mouseY !== null &&
     mouseY >= 0 &&
-    mouseY < width
+    mouseY < height
 
   const index = useLazyMemo(
     () => buildIndex(xColData, yColData, xScale, yScale, width, height),
