@@ -38,7 +38,7 @@
     "webpack": "^4.35.3"
   },
   "dependencies": {
-    "@influxdata/giraffe": "0.16.2",
+    "@influxdata/giraffe": "0.16.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   }
