@@ -26,7 +26,7 @@ const getNumTicks = (
   charLength: number
 ): number => {
   const sampleTickWidth = sampleTick.length * charLength
-  return Math.round(length / sampleTickWidth)
+  return sampleTickWidth === 0 ? 0 : Math.round(length / sampleTickWidth)
 }
 
 const getTimeTicks = (
@@ -39,9 +39,10 @@ const getTimeTicks = (
     .range([0, length])
     .ticks(numTicks)
     .map(d => d.getTime())
+  // added this to force D3 to use the numTicks since D3
+  // treats the tick params as suggestions:
+  // https://observablehq.com/@d3/scale-ticks
   if (results.length > numTicks) {
-    // added this to force D3 to use the numTicks since
-    // D3 treats the numTicks as a suggestion rather than a source
     return results.slice(0, numTicks)
   }
   return results
