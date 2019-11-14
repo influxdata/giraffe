@@ -1094,8 +1094,7 @@
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
-"@influxdata/giraffe#margins@0.16.4":
-  name "@influxdata/giraffe"
+"@influxdata/giraffe@0.16.4":
   version "0.16.4"
   resolved "https://registry.yarnpkg.com/@influxdata/giraffe/-/giraffe-0.16.4.tgz#679792950bccdcfb64d9530f07aba71985d341b4"
   integrity sha512-krykV32T2pUq1EwQqHlrgPBlyBm9UZyDOvaCh1D3gVB9ZQJ9+87ftzECYbE0htbxKxBTUlnAKEmyzmIktNfxOQ==
