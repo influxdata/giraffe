@@ -167,13 +167,15 @@ export const timeFormatter = ({
         timeFormat = timeFormats.zoned12
       } else if (hour12 === false) {
         timeFormat = timeFormats.local24
-      } else {
-        // this is a temporary solution. Russ said that we should
-        // allow users to choose their timeformat based on their settings
-        // rather than having a default system setting dictate their times
+      } else if (
+        new Date(2014, 1, 1, 15, 0, 0, 0).toLocaleTimeString().includes('15')
+      ) {
+        // this implementation checks the user's OS/browser settings to
+        // check whether their locale is 12h or 24h
+        // Evaluating true means that the local is based on a 24h locale
         timeFormat = timeFormats.local24
-        // this default statement is causing problems
-        // timeFormat = timeFormats.local12
+      } else {
+        timeFormat = timeFormats.local12
       }
 
       return formatStringFormatter(new Date(x), timeFormat, {
