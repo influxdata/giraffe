@@ -167,6 +167,13 @@ export const timeFormatter = ({
         timeFormat = timeFormats.zoned12
       } else if (hour12 === false) {
         timeFormat = timeFormats.local24
+      } else if (
+        new Date(2014, 1, 1, 15, 0, 0, 0).toLocaleTimeString().includes('15')
+      ) {
+        // this implementation checks the user's OS/browser settings to
+        // check whether their locale is 12h or 24h
+        // Evaluating true means that the local is based on a 24h locale
+        timeFormat = timeFormats.local24
       } else {
         timeFormat = timeFormats.local12
       }
