@@ -168,7 +168,12 @@ export const timeFormatter = ({
       } else if (hour12 === false) {
         timeFormat = timeFormats.local24
       } else {
-        timeFormat = timeFormats.local12
+        // this is a temporary solution. Russ said that we should
+        // allow users to choose their timeformat based on their settings
+        // rather than having a default system setting dictate their times
+        timeFormat = timeFormats.local24
+        // this default statement is causing problems
+        // timeFormat = timeFormats.local12
       }
 
       return formatStringFormatter(new Date(x), timeFormat, {
