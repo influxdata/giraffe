@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {select, text, boolean} from '@storybook/addon-knobs'
 
-import {Table} from '@influxdata/giraffe'
+import {Table} from '../../giraffe/src'
 import {CPU} from './data'
-import * as giraffe from '@influxdata/giraffe'
+import * as giraffe from '../../giraffe/src'
 
 export const PlotContainer = ({children}) => (
   <div

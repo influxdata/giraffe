@@ -8,7 +8,7 @@ import {
   newTable,
   Config,
   Plot,
-} from '@influxdata/giraffe'
+} from '../../giraffe/src'
 
 import {CPU} from './data'
 

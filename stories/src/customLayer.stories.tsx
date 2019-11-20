@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {Config, Plot} from '@influxdata/giraffe'
+import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
 import {CPU} from './data'

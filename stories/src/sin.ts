@@ -1,6 +1,6 @@
 import {range} from 'd3-array'
 
-import {newTable} from '@influxdata/giraffe'
+import {newTable} from '../../giraffe/src'
 
 const size = 200000
 const tags = ['a', 'b', 'c', 'd', 'e']
