@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 
-import {Config, Plot} from '@influxdata/giraffe'
+import {Config, Plot} from '../../giraffe/src'
 import {SIN} from './sin'
 
 import {PlotContainer} from './helpers'

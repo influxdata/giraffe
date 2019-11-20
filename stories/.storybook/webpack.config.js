@@ -6,7 +6,7 @@ module.exports = ({config}) => {
         loader: require.resolve('ts-loader'),
         options: {
           compilerOptions: {
-            rootDir: null,
+            rootDir: '../../giraffe',
             outDir: null,
             declaration: false,
           },
