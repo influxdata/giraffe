@@ -208,7 +208,8 @@ export class PlotEnv {
           layerConfig.x,
           layerConfig.y,
           layerConfig.fill,
-          layerConfig.colors
+          layerConfig.colors,
+          layerConfig.position
         )
       }
 

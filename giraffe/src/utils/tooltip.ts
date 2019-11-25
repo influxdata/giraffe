@@ -1,4 +1,14 @@
-import {TooltipData, TooltipColumn, Scale, Table} from '../types'
+import {
+  LinePosition,
+  LineData,
+  TooltipData,
+  TooltipColumn,
+  Scale,
+  Table,
+  DomainLabel,
+} from '../types'
+
+import {getDomainDataFromLines} from './lineData'
 
 const isVoid = (x: any) => x === null || x === undefined
 
@@ -46,7 +56,9 @@ export const getPointsTooltipData = (
   groupColKey: string,
   getValueFormatter: (colKey: string) => (x: any) => string,
   fillColKeys: string[],
-  fillScale: Scale<number, string>
+  fillScale: Scale<number, string>,
+  position?: LinePosition,
+  lineData?: LineData
 ): TooltipData => {
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
@@ -71,6 +83,23 @@ export const getPointsTooltipData = (
     values: hoveredRowIndices.map(i => yFormatter(yColData[i])),
   }
 
+  const tooltipAdditionalColumns = []
+  if (position === 'stacked') {
+    tooltipAdditionalColumns.push({
+      key: yColKey,
+      name: 'cumulative',
+      type: table.getColumnType(yColKey),
+      colors,
+      values: hoveredRowIndices.map(i => {
+        const cumulativeColData = getDomainDataFromLines(
+          lineData,
+          DomainLabel.Y
+        )
+        return yFormatter(cumulativeColData[i])
+      }),
+    })
+  }
+
   const fillColumns = getTooltipGroupColumns(
     table,
     hoveredRowIndices,
@@ -79,5 +108,5 @@ export const getPointsTooltipData = (
     colors
   )
 
-  return [tooltipXCol, tooltipYCol, ...fillColumns]
+  return [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
 }

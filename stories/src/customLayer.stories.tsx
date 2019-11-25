@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
-import {CPU} from './data'
+import {CPU} from './data/cpu'
 
 storiesOf('Custom Layer', module).add('Highlighted Region', () => {
   const config: Config = {

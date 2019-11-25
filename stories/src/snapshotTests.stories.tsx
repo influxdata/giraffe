@@ -10,7 +10,7 @@ import {
   Plot,
 } from '../../giraffe/src'
 
-import {CPU} from './data'
+import {CPU} from './data/cpu'
 
 storiesOf('Snapshot Tests', module)
   .add('with multiple minimum values', () => {

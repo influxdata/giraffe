@@ -1,8 +1,12 @@
-import {Table, Scale} from '../types'
+import {LinePosition, LineData, Table, Scale, DomainLabel} from '../types'
 
 import {FILL} from '../constants/columnKeys'
 
+import {getDomainDataFromLines} from './lineData'
+
 export const getLineHoverPoints = (
+  position: LinePosition,
+  lineData: LineData,
   table: Table,
   hoverRowIndices: number[],
   xColKey: string,
@@ -12,7 +16,10 @@ export const getLineHoverPoints = (
   fillScale: Scale<number, string>
 ): Array<{x: number; y: number; fill: string}> => {
   const xColData = table.getColumn(xColKey, 'number')
-  const yColData = table.getColumn(yColKey, 'number')
+  const yColData =
+    position === 'stacked'
+      ? getDomainDataFromLines(lineData, DomainLabel.Y)
+      : table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(FILL, 'number')
 
   return hoverRowIndices.map(i => ({
