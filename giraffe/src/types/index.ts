@@ -82,12 +82,15 @@ export type LineInterpolation =
 */
 export type LineHoverDimension = 'x' | 'y' | 'xy'
 
+export type LinePosition = 'overlaid' | 'stacked'
+
 export interface LineLayerConfig {
   type: 'line'
   x: string
   y: string
   fill?: string[]
   colors?: string[]
+  position?: LinePosition | 'overlaid'
   interpolation?: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
@@ -360,4 +363,9 @@ export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
 export enum ErrorName {
   UnknownColumnTypeError = 'UnknownColumnTypeError',
   SchemaMismatchError = 'SchemaMismatchError',
+}
+
+export enum DomainLabel {
+  X = 'xs',
+  Y = 'ys',
 }

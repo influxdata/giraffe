@@ -31,6 +31,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   columnFormatter,
 }) => {
   const {
+    position,
     interpolation,
     x: xColKey,
     y: yColKey,
@@ -46,6 +47,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   const fillScale = spec.scales.fill
 
   const points = getLineHoverPoints(
+    position,
+    spec.lineData,
     spec.table,
     rowIndices,
     xColKey,
@@ -106,7 +109,9 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     FILL,
     columnFormatter,
     fillColKeys,
-    fillScale
+    fillScale,
+    position,
+    spec.lineData
   )
 
   return (

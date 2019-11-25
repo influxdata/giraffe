@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint": "eslint '{src,../giraffe/src}/**/*.{ts,tsx}'",
+    "prettier": "prettier --config ../.prettierrc.json --check '{.,../giraffe}/**/*.{ts,tsx}'",
+    "prettier:fix": "prettier --config ../.prettierrc.json --write '{.,../giraffe}/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit --pretty",
     "start": "yarn -s run storybook",
     "storybook": "start-storybook -p 50000",
