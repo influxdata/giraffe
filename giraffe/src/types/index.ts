@@ -145,6 +145,22 @@ export interface ScatterLayerConfig {
   symbol?: string[]
 }
 
+export interface WorldmapLayerConfig {
+  type: 'worldmap'
+  x: string
+  y: string
+  colors?: string[]
+  fill?: string[]
+  symbol?: string[]
+  variant: string
+  zoom: number
+  center: number[]
+  metrics: string[]
+  weight: string
+  blur?: number
+  radius?: number
+}
+
 export interface CustomLayerRenderProps {
   xScale: Scale<number, number>
   yScale: Scale<number, number>
@@ -167,6 +183,7 @@ export type LayerConfig =
   | HistogramLayerConfig
   | HeatmapLayerConfig
   | ScatterLayerConfig
+  | WorldmapLayerConfig
   | CustomLayerConfig
 
 export enum FormatterType {
@@ -304,6 +321,26 @@ export interface ScatterLayerSpec {
   }
 }
 
+export interface WorldmapLayerSpec {
+  type: 'worldmap'
+  inputTable: Table
+  table: Table // has `FILL` and `SYMBOL` columns added
+  xDomain: number[]
+  yDomain: number[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {
+    fill: Scale<number, string>
+    symbol: Scale<number, SymbolType>
+  }
+  columnGroupMaps: {
+    fill: ColumnGroupMap
+    symbol: ColumnGroupMap
+  }
+}
+
 export interface RectLayerSpec {
   type: 'rect'
   inputTable: Table
@@ -358,7 +395,7 @@ export interface LayerProps {
 
   We call the collection of this derived data a "spec".
 */
-export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
+export type LayerSpec = LineLayerSpec | ScatterLayerSpec | WorldmapLayerSpec | RectLayerSpec
 
 export enum ErrorName {
   UnknownColumnTypeError = 'UnknownColumnTypeError',

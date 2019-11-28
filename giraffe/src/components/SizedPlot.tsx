@@ -7,9 +7,11 @@ import {
   LineLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
+  WorldmapLayerConfig,
 } from '../types'
 import {LineLayer} from './LineLayer'
 import {ScatterLayer} from './ScatterLayer'
+import {WorldmapLayer} from './WorldmapLayer'
 import {RectLayer} from './RectLayer'
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'
@@ -140,6 +142,17 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as ScatterLayerConfig}
+                  />
+                )
+              }
+
+              case 'worldmap': {
+                return (
+                  <WorldmapLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as WorldmapLayerConfig}
                   />
                 )
               }

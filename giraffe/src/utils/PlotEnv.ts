@@ -8,6 +8,7 @@ import {timeFormatter} from './formatters'
 import {getLinearScale} from './getLinearScale'
 import {lineTransform} from '../transforms/line'
 import {scatterTransform} from '../transforms/scatter'
+import {worldmapTransform} from '../transforms/worldmap'
 import {histogramTransform} from '../transforms/histogram'
 import {heatmapTransform} from '../transforms/heatmap'
 
@@ -215,6 +216,19 @@ export class PlotEnv {
 
       case 'scatter': {
         const transform = this.fns.get(memoizedTransformKey, scatterTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          layerConfig.y,
+          layerConfig.fill,
+          layerConfig.symbol,
+          layerConfig.colors
+        )
+      }
+
+      case 'worldmap': {
+        const transform = this.fns.get(memoizedTransformKey, worldmapTransform)
 
         return transform(
           table,

@@ -4,6 +4,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 import {terser} from 'rollup-plugin-terser'
 import gzip from 'rollup-plugin-gzip'
 import typescript from 'rollup-plugin-typescript2'
+import scss from 'rollup-plugin-scss'
 import tsc from 'typescript'
 
 const pkg = require('./package.json')
@@ -13,6 +14,7 @@ let plugins = [
   commonjs(),
   typescript({typescript: tsc}),
   sourceMaps(),
+  scss()
 ]
 
 // Minify and compress output when in production
