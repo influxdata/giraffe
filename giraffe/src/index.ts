@@ -24,6 +24,7 @@ export {
   Margins,
   HistogramLayerConfig,
   HistogramPosition,
+  LinePosition,
   LineInterpolation,
   LineLayerConfig,
   LayerConfig,
