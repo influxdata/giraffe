@@ -90,7 +90,7 @@ export interface LineLayerConfig {
   y: string
   fill?: string[]
   colors?: string[]
-  position?: LinePosition | 'overlaid'
+  position?: LinePosition
   interpolation?: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
   lineWidth?: number
