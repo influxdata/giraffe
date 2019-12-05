@@ -140,7 +140,7 @@ export const timeFormatter = ({
   // output the timezone incorrectly. The same goes for determining the `HH`, etc...
   const formatStringFormatter = createDateFormatter({
     HH: ({hour}) => {
-      if (format === 'HH:mm a' && is24hourLocale) {
+      if (format.includes('a') && is24hourLocale) {
         if (Number(hour) > 12) {
           return String(Number(hour) - 12)
         }
