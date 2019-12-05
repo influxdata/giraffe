@@ -1,6 +1,6 @@
 /*
   This module contains utilites for formatting values in visualizations.
-  
+
   A `Formatter` takes a value in a table and formats it as a user-facing
   string. A formatter factory creates a `Formatter`. Here we define several
   formatter factories for common use cases such as formatting time values, or
@@ -151,7 +151,7 @@ export const timeFormatter = ({
     sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
     D: parts => String(Number(parts.day)),
     a: ({hour}) => {
-      if (format === 'HH:mm a' && is24hourLocale) {
+      if (format.includes('a') && is24hourLocale) {
         if (Number(hour) >= 1 && Number(hour) <= 11) {
           return 'am'
         } else {
