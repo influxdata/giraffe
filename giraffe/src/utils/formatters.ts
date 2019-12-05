@@ -150,15 +150,15 @@ export const timeFormatter = ({
     },
     sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
     D: parts => String(Number(parts.day)),
-    a: ({hour}) => {
+    a: ({dayPeriod, hour}) => {
       if (format.includes('a') && is24hourLocale) {
-        if (Number(hour) >= 1 && Number(hour) <= 11) {
-          return 'am'
+        if (Number(hour) >= 12) {
+          return 'PM'
         } else {
-          return 'pm'
+          return 'AM'
         }
       }
-      return ''
+      return dayPeriod || ''
     },
     ZZ: (_, date) => getShortTimeZoneName(timeZone, date),
   })
