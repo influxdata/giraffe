@@ -130,9 +130,36 @@ export const timeFormatter = ({
   format,
   hour12,
 }: TimeFormatterFactoryOptions = {}): TimeFormatter => {
+  // this check is used to determine whether a user's locale is 24h or 12h
+  const is24hourLocale = new Date(2014, 1, 1, 15, 0, 0, 0)
+    .toLocaleTimeString()
+    .includes('15')
+
+  // createDateFormatter is very particular in terms of order of operation
+  // for example, modifying the timezone before determing the `am/pm` will
+  // output the timezone incorrectly. The same goes for determining the `HH`, etc...
   const formatStringFormatter = createDateFormatter({
+    HH: ({hour}) => {
+      if (format === 'HH:mm a' && is24hourLocale) {
+        if (Number(hour) > 12) {
+          return String(Number(hour) - 12)
+        }
+        return String(Number(hour))
+      }
+      return hour
+    },
     sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
     D: parts => String(Number(parts.day)),
+    a: ({hour}) => {
+      if (format === 'HH:mm a' && is24hourLocale) {
+        if (Number(hour) >= 1 && Number(hour) <= 11) {
+          return 'am'
+        } else {
+          return 'pm'
+        }
+      }
+      return ''
+    },
     ZZ: (_, date) => getShortTimeZoneName(timeZone, date),
   })
 
@@ -141,7 +168,10 @@ export const timeFormatter = ({
   if (format) {
     // If a `format` string is passed, we simply use it
     formatter = (x: number) =>
-      formatStringFormatter(new Date(x), format, {locale, timezone: timeZone})
+      formatStringFormatter(new Date(x), format, {
+        locale,
+        timezone: timeZone,
+      })
   } else {
     // Otherwise we will return a formatter that will vary the output format
     // based on an optional `domainWidth` argument (e.g. we will show more
@@ -167,9 +197,7 @@ export const timeFormatter = ({
         timeFormat = timeFormats.zoned12
       } else if (hour12 === false) {
         timeFormat = timeFormats.local24
-      } else if (
-        new Date(2014, 1, 1, 15, 0, 0, 0).toLocaleTimeString().includes('15')
-      ) {
+      } else if (is24hourLocale) {
         // this implementation checks the user's OS/browser settings to
         // check whether their locale is 12h or 24h
         // Evaluating true means that the local is based on a 24h locale
@@ -186,7 +214,6 @@ export const timeFormatter = ({
   }
 
   formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.Time
-
   return formatter
 }
 
