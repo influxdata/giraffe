@@ -139,20 +139,23 @@ export const timeFormatter = ({
   // for example, modifying the timezone before determing the `am/pm` will
   // output the timezone incorrectly. The same goes for determining the `HH`, etc...
   const formatStringFormatter = createDateFormatter({
-    HH: ({hour}) => {
-      if (format && format.includes('a') && is24hourLocale) {
-        if (Number(hour) > 12) {
-          return String(Number(hour) - 12)
+    HH: ({lhour}) => {
+      if (format && format.includes('a')) {
+        if (Number(lhour) === 0) {
+          return '12'
         }
-        return String(Number(hour))
+        if (Number(lhour) > 12) {
+          return String(Number(lhour) - 12)
+        }
+        return String(Number(lhour))
       }
-      return hour
+      return lhour
     },
     sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
     D: parts => String(Number(parts.day)),
-    a: ({dayPeriod, hour}) => {
+    a: ({dayPeriod, lhour}) => {
       if (format && format.includes('a') && is24hourLocale) {
-        if (Number(hour) >= 12) {
+        if (Number(lhour) >= 12) {
           return 'PM'
         } else {
           return 'AM'
