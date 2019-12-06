@@ -22,8 +22,11 @@ describe('timeFormatter', () => {
     const tests = [
       ['YYYY-MM-DD HH:mm:ss', '2019-01-01 00:00:00'],
       ['YYYY-MM-DD HH:mm:ss ZZ', '2019-01-01 00:00:00 UTC'],
+      ['DD/MM/YYYY HH:mm:ss.sss', '01/01/2019 00:00:00.000'],
       ['MM/DD/YYYY HH:mm:ss.sss', '01/01/2019 00:00:00.000'],
       ['YYYY/MM/DD HH:mm:ss', '2019/01/01 00:00:00'],
+      ['HH:mm a', '12:00 AM'],
+      ['HH:mm', '00:00'],
       ['HH:mm:ss', '00:00:00'],
       ['HH:mm:ss.sss', '00:00:00.000'],
       ['MMMM D, YYYY HH:mm:ss', 'January 1, 2019 00:00:00'],
