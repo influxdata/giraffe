@@ -37,7 +37,7 @@ export const drawPoints = ({
 }: DrawPointsOptions): void => {
   const n = rowIndices ? rowIndices.length : xColData.length
 
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     const rowIndex = rowIndices ? rowIndices[i] : i
     const x = xScale(xColData[rowIndex])
     const y = yScale(yColData[rowIndex])

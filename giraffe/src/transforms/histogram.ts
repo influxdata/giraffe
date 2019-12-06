@@ -167,7 +167,7 @@ export const bin = (
     }
   }
 
-  let binTable = newTable(binCount * groupIDs.length)
+  const binTable = newTable(binCount * groupIDs.length)
     .addColumn(X_MIN, xColType, xMinData)
     .addColumn(X_MAX, xColType, xMaxData)
     .addColumn(Y_MIN, 'number', yMinData)
