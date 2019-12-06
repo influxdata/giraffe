@@ -20,14 +20,15 @@ jobs:
       - run: cd giraffe && yarn run build
       - run: cd stories && yarn run lint
       - run: cd stories && yarn run typecheck
-      - run:
-          name: chromatic
-          command: |
-            cd stories
-            # See https://docs.chromaticqa.com/setup_ci
-            if [ "${CIRCLE_BRANCH}" != "master" ];
-            then
-              yarn run chromatic
-            else \
-              yarn run chromatic -- --auto-accept-changes
-            fi
+      # See: https://github.com/influxdata/giraffe/issues/129
+      # - run:
+      #     name: chromatic
+      #     command: |
+      #       cd stories
+      #       # See https://docs.chromaticqa.com/setup_ci
+      #       if [ "${CIRCLE_BRANCH}" != "master" ];
+      #       then
+      #         yarn run chromatic
+      #       else \
+      #         yarn run chromatic -- --auto-accept-changes
+      #       fi

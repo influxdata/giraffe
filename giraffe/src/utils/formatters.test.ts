@@ -15,7 +15,7 @@ describe('timeFormatter', () => {
     expect(utcFormatter(d)).toEqual('2019-01-01 00:00:00 UTC')
 
     // Defaults to 12 hour time when not UTC
-    expect(nonUTCFormatter(d)).toEqual('2018-12-31 4:00:00 PM PST')
+    expect(nonUTCFormatter(d)).toEqual('2018-12-31 04:00:00 PM PST')
   })
 
   test('can format times with format strings', () => {
