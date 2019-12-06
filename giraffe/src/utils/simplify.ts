@@ -60,7 +60,7 @@ const sqSegmentDist = (
   let dy = y1 - y0
 
   if (dx !== 0 || dy !== 0) {
-    var t = ((x2 - x) * dx + (y2 - y) * dy) / (dx * dx + dy * dy)
+    const t = ((x2 - x) * dx + (y2 - y) * dy) / (dx * dx + dy * dy)
 
     if (t > 1) {
       x = x1

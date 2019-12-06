@@ -38,7 +38,8 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
       const onMouseMove = mouseMoveEvent => {
         const [x, y] = getXYCoords(mouseMoveEvent)
 
-        let {direction, initialX, initialY} = dragEventRef.current
+        const {initialX, initialY} = dragEventRef.current
+        let {direction} = dragEventRef.current
 
         if (!direction) {
           const dx = Math.abs(x - initialX)

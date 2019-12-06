@@ -38,6 +38,8 @@
     "no-useless-escape": "off",
     "no-undef": "off",
     "no-fallthrough": "off",
+    "prefer-rest-params": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-namespace": "off",

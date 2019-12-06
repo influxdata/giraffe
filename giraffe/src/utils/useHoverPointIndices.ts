@@ -290,7 +290,7 @@ const lookupIndex2D = (
 }
 
 const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
-  let closestRowIndices = []
+  const closestRowIndices = []
 
   let x = i0
   let y = j0
@@ -368,7 +368,7 @@ const lookupIndex1D = (
     rightRowIndices = bins[rightBinIndex]
   }
 
-  let nearestIndexByGroup: NearestIndexByGroup = {}
+  const nearestIndexByGroup: NearestIndexByGroup = {}
 
   collectNearestIndices(
     nearestIndexByGroup,
