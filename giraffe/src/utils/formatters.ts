@@ -139,6 +139,7 @@ export const timeFormatter = ({
   // for example, modifying the timezone before determing the `am/pm` will
   // output the timezone incorrectly. The same goes for determining the `HH`, etc...
   const formatStringFormatter = createDateFormatter({
+    hh: ({hour}) => (Number(hour) < 10 ? `0${hour}` : String(hour)),
     HH: ({lhour}) => {
       if (format && format.includes('a')) {
         if (Number(lhour) === 0) {

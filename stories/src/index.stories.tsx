@@ -31,6 +31,22 @@ storiesOf('XY Plot', module)
     const y = yKnob(table)
     const yAxisLabel = text('Y Axis Label', 'foo')
     const timeZone = timeZoneKnob()
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'hh:mm a': 'hh:mm a',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'hh:mm a'
+    )
     const fill = fillKnob(table, 'cpu')
     const position = select(
       'Line Position',
@@ -51,7 +67,7 @@ storiesOf('XY Plot', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({timeZone}),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         [y]: y => `${Math.round(y)} ${yAxisLabel}`,
       },
       legendFont,
@@ -88,6 +104,22 @@ storiesOf('XY Plot', module)
     const x = xKnob(table)
     const y = yKnob(table)
     const timeZone = timeZoneKnob()
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'hh:mm a': 'hh:mm a',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'YYYY/MM/DD HH:mm:ss'
+    )
     const fill = fillKnob(table, 'cpu')
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
@@ -103,7 +135,7 @@ storiesOf('XY Plot', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({timeZone}),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         [y]: y => `${Math.round(y)}%`,
       },
       legendFont,
