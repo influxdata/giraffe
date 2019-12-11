@@ -23,15 +23,29 @@ describe('timeFormatter', () => {
       timeZone: 'UTC',
       format: 'YYYY-MM-DD HH:mm:ss a ZZ',
     })
+    const utcFormatterWithFormatWithLowerH = timeFormatter({
+      timeZone: 'UTC',
+      format: 'YYYY-MM-DD hh:mm:ss a ZZ',
+    })
     const nonUTCFormatterWithFormat = timeFormatter({
       timeZone: 'America/Los_Angeles',
       format: 'YYYY-MM-DD HH:mm:ss a ZZ',
+    })
+    const nonUTCFormatterWithFormatWithLowerH = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'YYYY-MM-DD hh:mm:ss a ZZ',
     })
 
     const d = new Date('2019-01-01T00:00Z')
 
     expect(utcFormatterWithFormat(d)).toEqual('2019-01-01 12:00:00 AM UTC')
+    expect(utcFormatterWithFormatWithLowerH(d)).toEqual(
+      '2019-01-01 12:00:00 AM UTC'
+    )
     expect(nonUTCFormatterWithFormat(d)).toEqual('2018-12-31 4:00:00 PM PST')
+    expect(nonUTCFormatterWithFormatWithLowerH(d)).toEqual(
+      '2018-12-31 04:00:00 PM PST'
+    )
   })
 
   test('can format times with format strings', () => {
