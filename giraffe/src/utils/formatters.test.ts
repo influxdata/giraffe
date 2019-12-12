@@ -18,6 +18,36 @@ describe('timeFormatter', () => {
     expect(nonUTCFormatter(d)).toEqual('2018-12-31 04:00:00 PM PST')
   })
 
+  test('uses AM/PM when given "a" in the format regardless of time zone or time format', () => {
+    const utcFormatterWithFormat = timeFormatter({
+      timeZone: 'UTC',
+      format: 'YYYY-MM-DD HH:mm:ss a ZZ',
+    })
+    const utcFormatterWithFormatWithLowerH = timeFormatter({
+      timeZone: 'UTC',
+      format: 'YYYY-MM-DD hh:mm:ss a ZZ',
+    })
+    const nonUTCFormatterWithFormat = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'YYYY-MM-DD HH:mm:ss a ZZ',
+    })
+    const nonUTCFormatterWithFormatWithLowerH = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'YYYY-MM-DD hh:mm:ss a ZZ',
+    })
+
+    const d = new Date('2019-01-01T00:00Z')
+
+    expect(utcFormatterWithFormat(d)).toEqual('2019-01-01 12:00:00 AM UTC')
+    expect(utcFormatterWithFormatWithLowerH(d)).toEqual(
+      '2019-01-01 12:00:00 AM UTC'
+    )
+    expect(nonUTCFormatterWithFormat(d)).toEqual('2018-12-31 4:00:00 PM PST')
+    expect(nonUTCFormatterWithFormatWithLowerH(d)).toEqual(
+      '2018-12-31 04:00:00 PM PST'
+    )
+  })
+
   test('can format times with format strings', () => {
     const tests = [
       ['YYYY-MM-DD HH:mm:ss', '2019-01-01 00:00:00'],
@@ -25,6 +55,7 @@ describe('timeFormatter', () => {
       ['DD/MM/YYYY HH:mm:ss.sss', '01/01/2019 00:00:00.000'],
       ['MM/DD/YYYY HH:mm:ss.sss', '01/01/2019 00:00:00.000'],
       ['YYYY/MM/DD HH:mm:ss', '2019/01/01 00:00:00'],
+      ['hh:mm a', '12:00 AM'],
       ['HH:mm a', '12:00 AM'],
       ['HH:mm', '00:00'],
       ['HH:mm:ss', '00:00:00'],
