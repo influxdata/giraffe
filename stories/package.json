@@ -40,6 +40,7 @@
     "webpack": "^4.35.3"
   },
   "dependencies": {
+    "d3-array": "^2.4.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   }

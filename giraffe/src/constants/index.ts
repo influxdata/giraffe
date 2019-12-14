@@ -37,6 +37,8 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   valueFormatters: {},
   xAxisLabel: '',
   yAxisLabel: '',
+  xScale: 'linear',
+  yScale: 'linear',
   showAxes: true,
   axisColor: '#292933',
   axisOpacity: 1,

@@ -119,6 +119,26 @@ export const interpolationKnob = () =>
     'monotoneX'
   )
 
+export const xScaleKnob = () =>
+  select(
+    'X-Scale',
+    {
+      linear: 'linear',
+      log: 'log',
+    },
+    'linear'
+  )
+
+export const yScaleKnob = () =>
+  select(
+    'Y-Scale',
+    {
+      linear: 'linear',
+      log: 'log',
+    },
+    'linear'
+  )
+
 export const showAxesKnob = () => boolean('Axes', true)
 
 export const timeZoneKnob = (initial?: string) =>
