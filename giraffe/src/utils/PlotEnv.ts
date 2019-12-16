@@ -118,10 +118,13 @@ export class PlotEnv {
   }
 
   public get xScale(): Scale<number, number> {
-    const scale = getScale(this.config.xScale)
+    const getXScaleMemoized = this.fns.get(
+      `xScale_${this.config.xScale}`,
+      getScale(this.config.xScale)
+    )
     const {xDomain, rangePadding, innerWidth} = this
 
-    return scale(
+    return getXScaleMemoized(
       xDomain[0],
       xDomain[1],
       rangePadding,
@@ -130,10 +133,13 @@ export class PlotEnv {
   }
 
   public get yScale(): Scale<number, number> {
-    const scale = getScale(this.config.yScale)
+    const getYScaleMemoized = this.fns.get(
+      `yScale_${this.config.yScale}`,
+      getScale(this.config.yScale)
+    )
     const {yDomain, rangePadding, innerHeight} = this
 
-    return scale(
+    return getYScaleMemoized(
       yDomain[0],
       yDomain[1],
       innerHeight - rangePadding * 2,
