@@ -5,7 +5,7 @@ import {extentOfExtents} from './extrema'
 import {identityMerge} from './identityMerge'
 import {MemoizedFunctionCache} from './MemoizedFunctionCache'
 import {timeFormatter} from './formatters'
-import {getLinearScale} from './getLinearScale'
+import {getScale} from './getScale'
 import {lineTransform} from '../transforms/line'
 import {scatterTransform} from '../transforms/scatter'
 import {histogramTransform} from '../transforms/histogram'
@@ -118,7 +118,10 @@ export class PlotEnv {
   }
 
   public get xScale(): Scale<number, number> {
-    const getXScaleMemoized = this.fns.get('xScale', getLinearScale)
+    const getXScaleMemoized = this.fns.get(
+      `xScale_${this.config.xScale}`,
+      getScale(this.config.xScale)
+    )
     const {xDomain, rangePadding, innerWidth} = this
 
     return getXScaleMemoized(
@@ -130,7 +133,10 @@ export class PlotEnv {
   }
 
   public get yScale(): Scale<number, number> {
-    const getYScaleMemoized = this.fns.get('yScale', getLinearScale)
+    const getYScaleMemoized = this.fns.get(
+      `yScale_${this.config.yScale}`,
+      getScale(this.config.yScale)
+    )
     const {yDomain, rangePadding, innerHeight} = this
 
     return getYScaleMemoized(

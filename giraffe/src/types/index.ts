@@ -40,6 +40,13 @@ export interface Scale<D = any, R = any> {
   invert?: (y: R) => D
 }
 
+export type ScaleFactory = (
+  domainStart: number,
+  domainStop: number,
+  rangeStart: number,
+  rangeStop: number
+) => Scale<number, number>
+
 export interface Margins {
   top: number
   right: number
@@ -202,6 +209,9 @@ export interface Config {
 
   xAxisLabel?: string
   yAxisLabel?: string
+
+  xScale?: string
+  yScale?: string
 
   xTicks?: number[]
   yTicks?: number[]

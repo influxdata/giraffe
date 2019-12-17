@@ -9,6 +9,8 @@ import {
   PlotContainer,
   xKnob,
   yKnob,
+  xScaleKnob,
+  yScaleKnob,
   fillKnob,
   symbolKnob,
   tableKnob,
@@ -30,6 +32,8 @@ storiesOf('XY Plot', module)
     const x = xKnob(table)
     const y = yKnob(table)
     const yAxisLabel = text('Y Axis Label', 'foo')
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
     const timeZone = timeZoneKnob()
     const timeFormat = select(
       'Time Format',
@@ -70,6 +74,8 @@ storiesOf('XY Plot', module)
         _time: timeFormatter({timeZone, format: timeFormat}),
         [y]: y => `${Math.round(y)} ${yAxisLabel}`,
       },
+      xScale,
+      yScale,
       legendFont,
       tickFont,
       showAxes,
@@ -103,6 +109,8 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
     const timeZone = timeZoneKnob()
     const timeFormat = select(
       'Time Format',
@@ -141,6 +149,8 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
+      xScale,
+      yScale,
       layers: [
         {
           type: 'line',
@@ -170,6 +180,8 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
     const fill = fillKnob(table, 'cpu')
     const symbol = symbolKnob(table, 'host')
 
@@ -181,6 +193,8 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
+      xScale,
+      yScale,
       layers: [
         {
           type: 'scatter',
@@ -206,11 +220,15 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
     const showAxes = showAxesKnob()
 
     const config: Config = {
       table,
       legendFont,
+      xScale,
+      yScale,
       tickFont,
       showAxes,
       valueFormatters: {[y]: y => `${Math.round(y)}%`},
@@ -229,6 +247,8 @@ storiesOf('XY Plot', module)
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
     const x = xKnob(table, '_value')
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
     const showAxes = showAxesKnob()
     const binCount = number('Bin Count', 10)
 
@@ -237,6 +257,8 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
+      xScale,
+      yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
     }
