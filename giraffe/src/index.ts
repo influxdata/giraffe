@@ -10,6 +10,7 @@ export {
   siPrefixFormatter,
   binaryPrefixFormatter,
 } from './utils/formatters'
+export {getDomainDataFromLines} from './utils/lineData'
 
 // Transforms
 export {lineTransform} from './transforms/line'
