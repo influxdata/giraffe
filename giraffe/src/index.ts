@@ -11,6 +11,9 @@ export {
   binaryPrefixFormatter,
 } from './utils/formatters'
 
+// Transforms
+export {lineTransform} from './transforms/line'
+
 // Constants
 export * from './constants/colorSchemes'
 
