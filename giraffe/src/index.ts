@@ -34,4 +34,5 @@ export {
   LayerConfig,
   Config,
   Formatter,
+  DomainLabel,
 } from './types'
