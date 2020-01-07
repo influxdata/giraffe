@@ -1,24 +1,13 @@
+// Libraries
 import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
+import memoizeOne from 'memoize-one'
 
+// Types
 import {Formatter, FormatterType} from '../types'
 
-export const getTicks = (
-  domain: number[],
-  rangeLength: number,
-  charLength: number,
-  formatter?: Formatter
-): number[] => {
-  const sampleTick = formatter(domain[1])
-  const numTicks = getNumTicks(sampleTick, rangeLength, charLength)
-  switch (formatter._GIRAFFE_FORMATTER_TYPE) {
-    case FormatterType.Time:
-      return getTimeTicks(domain, rangeLength, numTicks)
-
-    default:
-      return ticks(domain[0], domain[1], numTicks)
-  }
-}
+// Utils
+import {getTextMetrics} from './getTextMetrics'
 
 const getNumTicks = (
   sampleTick: string,
@@ -29,21 +18,53 @@ const getNumTicks = (
   return sampleTickWidth === 0 ? 0 : Math.round(length / sampleTickWidth)
 }
 
-const getTimeTicks = (
+const getOptimalTimeTicks = (
   [d0, d1]: number[],
-  length: number,
-  numTicks: number
-): number[] => {
-  const results = scaleUtc()
+  rangeLength: number,
+  timeTickLength: number
+): Date[] => {
+  const maxUseableLength = rangeLength - timeTickLength
+  const scaledTime = scaleUtc()
     .domain([d0, d1])
-    .range([0, length])
-    .ticks(numTicks)
-    .map(d => d.getTime())
-  // added this to force D3 to use the numTicks since D3
-  // treats the tick params as suggestions:
-  // https://observablehq.com/@d3/scale-ticks
-  if (results.length > numTicks) {
-    return results.slice(0, numTicks)
+    .range([0, rangeLength])
+
+  const maxNumTicks = Math.floor(rangeLength / timeTickLength)
+
+  let optimalTicks = scaledTime.ticks(maxNumTicks)
+  let counter = 1
+
+  while (
+    counter < maxNumTicks &&
+    optimalTicks.length * timeTickLength > maxUseableLength
+  ) {
+    optimalTicks = scaledTime.ticks(maxNumTicks - counter)
+    counter += 1
   }
-  return results
+  return optimalTicks
+}
+
+const getTimeTicksMemoized = memoizeOne(
+  ([d0, d1]: number[], length: number, timeTickLength: number): number[] => {
+    const timeTicks = getOptimalTimeTicks([d0, d1], length, timeTickLength)
+    return timeTicks.map(d => d.getTime())
+  }
+)
+
+export const getTicks = (
+  domain: number[],
+  rangeLength: number,
+  charLength: number,
+  tickFont: string,
+  formatter: Formatter
+): number[] => {
+  const sampleTick = formatter(domain[1])
+  const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
+  const numTicks = getNumTicks(sampleTick, rangeLength, charLength)
+  switch (formatter._GIRAFFE_FORMATTER_TYPE) {
+    case FormatterType.Time:
+      return getTimeTicksMemoized(domain, rangeLength, tickTextMetrics.width)
+
+    default:
+      return ticks(domain[0], domain[1], numTicks)
+  }
 }
