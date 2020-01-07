@@ -36,7 +36,7 @@ const hasOptimalSpacing = (
   const fractionalSpaceAsPadding = 0.25
   const totalLength = ticks.length * timeTickLength
   if (ticks.length < 4) {
-    const padding = timeTickLength * ticks.length * fractionalSpaceAsPadding
+    const padding = totalLength * fractionalSpaceAsPadding
     if (totalLength < rangeLength - padding) {
       return true
     }
