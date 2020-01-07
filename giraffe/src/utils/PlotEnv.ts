@@ -98,6 +98,7 @@ export class PlotEnv {
       this.xDomain,
       this.config.width,
       this.charMetrics.width,
+      this.config.tickFont,
       this.xTickFormatter
     )
   }
@@ -113,6 +114,7 @@ export class PlotEnv {
       this.yDomain,
       this.config.height,
       this.charMetrics.height,
+      this.config.tickFont,
       this.yTickFormatter
     )
   }

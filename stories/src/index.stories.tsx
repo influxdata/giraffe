@@ -41,6 +41,7 @@ storiesOf('XY Plot', module)
         'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
         'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
         'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
         'hh:mm a': 'hh:mm a',
         'HH:mm': 'HH:mm',
         'HH:mm:ss': 'HH:mm:ss',
@@ -49,7 +50,7 @@ storiesOf('XY Plot', module)
         'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
         'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
       },
-      'hh:mm a'
+      'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, 'cpu')
     const position = select(
@@ -118,6 +119,7 @@ storiesOf('XY Plot', module)
         'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
         'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
         'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
         'hh:mm a': 'hh:mm a',
         'HH:mm': 'HH:mm',
         'HH:mm:ss': 'HH:mm:ss',
@@ -126,7 +128,7 @@ storiesOf('XY Plot', module)
         'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
         'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
       },
-      'YYYY/MM/DD HH:mm:ss'
+      'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, 'cpu')
     const interpolation = interpolationKnob()
