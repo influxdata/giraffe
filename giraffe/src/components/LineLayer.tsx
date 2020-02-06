@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {useMemo, useRef, FunctionComponent} from 'react'
 
-import {LayerProps, LineLayerSpec, LineLayerConfig} from '../types'
+import {LayerProps, LineLayerSpec, LineLayerConfig, DomainLabel} from '../types'
 import {LineHoverLayer} from './LineHoverLayer'
-import {simplifyLineData} from '../utils/lineData'
+import {simplifyLineData, getDomainDataFromLines} from '../utils/lineData'
 import {useCanvas} from '../utils/useCanvas'
 import {drawLines} from '../utils/drawLines'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
@@ -16,6 +16,7 @@ export interface Props extends LayerProps {
 
 export const LineLayer: FunctionComponent<Props> = props => {
   const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
+  const {position} = config
 
   const simplifiedLineData = useMemo(
     () => simplifyLineData(spec.lineData, xScale, yScale),
@@ -54,12 +55,16 @@ export const LineLayer: FunctionComponent<Props> = props => {
     hoverDimension = config.hoverDimension
   }
 
+  const hoverYColumnData =
+    position === 'stacked'
+      ? getDomainDataFromLines(spec.lineData, DomainLabel.Y)
+      : spec.table.getColumn(config.y, 'number')
   const hoverRowIndices = useHoverPointIndices(
     hoverDimension,
     hoverX,
     hoverY,
     spec.table.getColumn(config.x, 'number'),
-    spec.table.getColumn(config.y, 'number'),
+    hoverYColumnData,
     spec.table.getColumn(FILL, 'number'),
     xScale,
     yScale,
