@@ -10,7 +10,7 @@ const VALUE_COL = []
 const CPU_COL = []
 
 function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max))
+  return Math.random() * Math.floor(max)
 }
 for (let i = 0; i < numberOfRecords; i += 1) {
   VALUE_COL.push(getRandomInt(maxIntValue))
