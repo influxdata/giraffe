@@ -7,7 +7,6 @@ interface SampleTableOptions {
   maxValue?: number
   numberOfRecords?: number
   recordsPerLine?: number
-  hoveredRowIndices?: number[]
 }
 
 const turnNegativeRandomly = (num: number) =>

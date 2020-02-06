@@ -21,8 +21,8 @@ describe('getPointsTooltipData', () => {
   let cumulativeValueColumn
 
   const setUp = options => {
-    const {hoveredRowIndices, position} = options
-    sampleTable = createSampleTable(options)
+    const {hoveredRowIndices, position, ...tableOptions} = options
+    sampleTable = createSampleTable(tableOptions)
     lineSpec = lineTransform(
       sampleTable,
       xColKey,
