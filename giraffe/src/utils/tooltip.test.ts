@@ -20,7 +20,7 @@ describe('getPointsTooltipData', () => {
   let result
   let cumulativeValueColumn
 
-  const numberOfRecords = 40
+  const numberOfRecords = 1000
   const recordsPerLine = 10
   let startingIndex
 
