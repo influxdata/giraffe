@@ -135,7 +135,7 @@ export const getPointsTooltipData = (
   const tooltipAdditionalColumns = []
   if (position === 'stacked') {
     tooltipAdditionalColumns.push({
-      key: STACKED_LINE_CUMULATIVE,
+      key: yColKey,
       name: STACKED_LINE_CUMULATIVE,
       type: table.getColumnType(yColKey),
       colors,
@@ -152,7 +152,7 @@ export const getPointsTooltipData = (
       ),
     })
     tooltipAdditionalColumns.push({
-      key: LINE_COUNT,
+      key: yColKey,
       name: LINE_COUNT,
       type: table.getColumnType(FILL),
       colors,
