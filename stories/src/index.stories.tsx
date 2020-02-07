@@ -73,7 +73,7 @@ storiesOf('XY Plot', module)
       table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
-        [y]: y => `${Math.round(y)} ${yAxisLabel}`,
+        [y]: y => `${y.toFixed(2)} ${yAxisLabel}`,
       },
       xScale,
       yScale,

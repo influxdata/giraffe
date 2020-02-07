@@ -8,3 +8,5 @@ export const COUNT = 'count'
 // Computed column names mapped to group aesthetics
 export const FILL = '__fill'
 export const SYMBOL = '__symbol'
+export const STACKED_LINE_CUMULATIVE = 'cumulative'
+export const LINE_COUNT = 'lines'
