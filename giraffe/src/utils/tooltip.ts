@@ -22,9 +22,9 @@ const orderDataByValue = (
   nextOrder: number[],
   data: Array<any>
 ) => {
-  const map = {}
-  originalOrder.forEach((key, i) => (map[key] = data[i]))
-  return nextOrder.map(index => map[index])
+  const dataMap = {}
+  originalOrder.forEach((place, index) => (dataMap[place] = data[index]))
+  return nextOrder.map(place => dataMap[place])
 }
 
 const getDataSortOrder = (
@@ -35,21 +35,21 @@ const getDataSortOrder = (
   if (position === 'overlaid') {
     return hoveredRowIndices
   }
-  const map = {}
-  const values = Object.keys(lineData).reduce(
-    (accum, value) => accum.concat(lineData[value][DomainLabel.Y]),
+  const dataMap = {}
+  const measurementValues = Object.keys(lineData).reduce(
+    (accumulator, id) => accumulator.concat(lineData[id][DomainLabel.Y]),
     []
   )
   const sortable = []
-  hoveredRowIndices.forEach(hoverRowIndex => {
-    if (!map[values[hoverRowIndex]]) {
-      map[values[hoverRowIndex]] = []
+  hoveredRowIndices.forEach(hoveredRowIndex => {
+    if (!dataMap[measurementValues[hoveredRowIndex]]) {
+      dataMap[measurementValues[hoveredRowIndex]] = []
     }
-    map[values[hoverRowIndex]].push(hoverRowIndex)
-    sortable.push(values[hoverRowIndex])
+    dataMap[measurementValues[hoveredRowIndex]].push(hoveredRowIndex)
+    sortable.push(measurementValues[hoveredRowIndex])
   })
   sortable.sort((first, second) => second - first)
-  return sortable.map(value => map[value].shift())
+  return sortable.map(measurement => dataMap[measurement].shift())
 }
 
 export const getRangeLabel = (min: number, max: number, formatter): string => {

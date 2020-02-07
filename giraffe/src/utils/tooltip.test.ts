@@ -7,7 +7,7 @@ import {
 } from '../constants/columnKeys'
 import {getNominalColorScale, createGroupIDColumn} from '../transforms'
 import {lineTransform} from '../transforms/line'
-import {createSampleTable, columnKey} from './fixtures/tooltip'
+import {createSampleTable, COLUMN_KEY} from './fixtures/tooltip'
 
 describe('getPointsTooltipData', () => {
   let sampleTable
@@ -20,6 +20,10 @@ describe('getPointsTooltipData', () => {
   let result
   let cumulativeValueColumn
 
+  const numberOfRecords = 1000
+  const recordsPerLine = 10
+  let startingIndex
+
   const setUp = options => {
     const {hoveredRowIndices, position, ...tableOptions} = options
     sampleTable = createSampleTable(tableOptions)
@@ -27,13 +31,13 @@ describe('getPointsTooltipData', () => {
       sampleTable,
       xColKey,
       yColKey,
-      [columnKey],
+      [COLUMN_KEY],
       NINETEEN_EIGHTY_FOUR,
       position
     )
 
     const [fillColumn, fillColumnMap] = createGroupIDColumn(sampleTable, [
-      columnKey,
+      COLUMN_KEY,
     ])
     fillScale = getNominalColorScale(fillColumnMap, NINETEEN_EIGHTY_FOUR)
     sampleTable = sampleTable.addColumn(FILL, 'number', fillColumn)
@@ -51,10 +55,16 @@ describe('getPointsTooltipData', () => {
     const position = 'overlaid'
 
     it('should have a value column that is not necessarily sorted', () => {
-      const hoveredRowIndices = [3, 8, 13, 18]
+      startingIndex = 3
+      const hoveredRowIndices = []
+      for (let i = startingIndex; i < numberOfRecords; i += recordsPerLine) {
+        hoveredRowIndices.push(i)
+      }
       setUp({
         include_negative: true,
         all_negative: false,
+        numberOfRecords,
+        recordsPerLine,
         hoveredRowIndices,
         position,
       })
@@ -65,7 +75,7 @@ describe('getPointsTooltipData', () => {
         yColKey,
         FILL,
         columnFormatter,
-        [columnKey],
+        [COLUMN_KEY],
         fillScale,
         'overlaid',
         lineSpec.lineData
@@ -81,6 +91,27 @@ describe('getPointsTooltipData', () => {
     const position = 'stacked'
 
     afterEach(() => {
+      const totalColumns = result.length
+      const colorsCounter = {}
+
+      result.forEach(column => {
+        const {colors} = column
+        colors.forEach(color => {
+          if (!colorsCounter[color]) {
+            colorsCounter[color] = 0
+          }
+          colorsCounter[color] += 1
+        })
+      })
+      expect(Object.keys(colorsCounter).length).toEqual(
+        numberOfRecords / recordsPerLine
+      )
+      expect(
+        Object.values(colorsCounter).every(
+          colorCount => colorCount === totalColumns
+        )
+      ).toEqual(true)
+
       cumulativeValueColumn = result.find(
         column => column.key === STACKED_LINE_CUMULATIVE
       )
@@ -98,10 +129,16 @@ describe('getPointsTooltipData', () => {
     })
 
     it('should create proper columns when all values are positive numbers', () => {
-      const hoveredRowIndices = [0, 5, 10, 15]
+      startingIndex = 0
+      const hoveredRowIndices = []
+      for (let i = startingIndex; i < numberOfRecords; i += recordsPerLine) {
+        hoveredRowIndices.push(i)
+      }
       setUp({
         include_negative: false,
         all_negative: false,
+        numberOfRecords,
+        recordsPerLine,
         hoveredRowIndices,
         position,
       })
@@ -112,7 +149,7 @@ describe('getPointsTooltipData', () => {
         yColKey,
         FILL,
         columnFormatter,
-        [columnKey],
+        [COLUMN_KEY],
         fillScale,
         'stacked',
         lineSpec.lineData
@@ -125,10 +162,16 @@ describe('getPointsTooltipData', () => {
     })
 
     it('should create proper columns when all values are negative numbers', () => {
-      const hoveredRowIndices = [1, 6, 11, 16]
+      startingIndex = 1
+      const hoveredRowIndices = []
+      for (let i = startingIndex; i < numberOfRecords; i += recordsPerLine) {
+        hoveredRowIndices.push(i)
+      }
       setUp({
         include_negative: true,
         all_negative: true,
+        numberOfRecords,
+        recordsPerLine,
         hoveredRowIndices,
         position,
       })
@@ -139,7 +182,7 @@ describe('getPointsTooltipData', () => {
         yColKey,
         FILL,
         columnFormatter,
-        [columnKey],
+        [COLUMN_KEY],
         fillScale,
         'stacked',
         lineSpec.lineData
@@ -153,10 +196,16 @@ describe('getPointsTooltipData', () => {
     })
 
     it('should create proper columns when values can be positive or negative', () => {
-      const hoveredRowIndices = [2, 7, 12, 17]
+      startingIndex = 2
+      const hoveredRowIndices = []
+      for (let i = startingIndex; i < numberOfRecords; i += recordsPerLine) {
+        hoveredRowIndices.push(i)
+      }
       setUp({
         include_negative: true,
         all_negative: false,
+        numberOfRecords,
+        recordsPerLine,
         hoveredRowIndices,
         position,
       })
@@ -167,7 +216,7 @@ describe('getPointsTooltipData', () => {
         yColKey,
         FILL,
         columnFormatter,
-        [columnKey],
+        [COLUMN_KEY],
         fillScale,
         'stacked',
         lineSpec.lineData
