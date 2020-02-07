@@ -80,7 +80,7 @@ describe('getPointsTooltipData', () => {
         'overlaid',
         lineSpec.lineData
       )
-      const singleValueColumn = result.find(column => column.key === yColKey)
+      const singleValueColumn = result.find(column => column.name === yColKey)
       expect(singleValueColumn.values.map(value => Number(value))).toEqual(
         hoveredValues
       )
@@ -113,7 +113,7 @@ describe('getPointsTooltipData', () => {
       ).toEqual(true)
 
       cumulativeValueColumn = result.find(
-        column => column.key === STACKED_LINE_CUMULATIVE
+        column => column.name === STACKED_LINE_CUMULATIVE
       )
       expect(cumulativeValueColumn).toBeTruthy()
       expect(
@@ -125,7 +125,7 @@ describe('getPointsTooltipData', () => {
         })
       ).toEqual(true)
 
-      expect(result.find(column => column.key === LINE_COUNT)).toBeTruthy()
+      expect(result.find(column => column.name === LINE_COUNT)).toBeTruthy()
     })
 
     it('should create proper columns when all values are positive numbers', () => {
@@ -154,7 +154,7 @@ describe('getPointsTooltipData', () => {
         'stacked',
         lineSpec.lineData
       )
-      const singleValueColumn = result.find(column => column.key === yColKey)
+      const singleValueColumn = result.find(column => column.name === yColKey)
       expect(singleValueColumn).toBeTruthy()
       expect(
         singleValueColumn.values.map(value => Number(value)).reverse()
@@ -187,7 +187,7 @@ describe('getPointsTooltipData', () => {
         'stacked',
         lineSpec.lineData
       )
-      const singleValueColumn = result.find(column => column.key === yColKey)
+      const singleValueColumn = result.find(column => column.name === yColKey)
 
       expect(singleValueColumn).toBeTruthy()
       expect(singleValueColumn.values.map(value => Number(value))).toEqual(
@@ -221,7 +221,7 @@ describe('getPointsTooltipData', () => {
         'stacked',
         lineSpec.lineData
       )
-      expect(result.find(column => column.key === yColKey)).toBeTruthy()
+      expect(result.find(column => column.name === yColKey)).toBeTruthy()
     })
   })
 })
