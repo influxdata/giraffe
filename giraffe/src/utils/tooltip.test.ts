@@ -92,8 +92,16 @@ describe('getPointsTooltipData', () => {
 
     afterEach(() => {
       const totalColumns = result.length
+      const totalRows = numberOfRecords / recordsPerLine
       const colorsCounter = {}
 
+      // color is the same across a row
+      for (let i = 0; i < totalRows; i += 1) {
+        for (let j = 0; j < totalColumns; j += 1) {
+          const rowColor = result[0].colors[i]
+          expect(rowColor === result[j].colors[i])
+        }
+      }
       result.forEach(column => {
         const {colors} = column
         colors.forEach(color => {
@@ -103,9 +111,11 @@ describe('getPointsTooltipData', () => {
           colorsCounter[color] += 1
         })
       })
-      expect(Object.keys(colorsCounter).length).toEqual(
-        numberOfRecords / recordsPerLine
-      )
+
+      // number of different colors should equal number of rows
+      expect(Object.keys(colorsCounter).length).toEqual(totalRows)
+
+      // each column should have color
       expect(
         Object.values(colorsCounter).every(
           colorCount => colorCount === totalColumns
