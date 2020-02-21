@@ -151,6 +151,12 @@ export const getPointsTooltipData = (
         })
       ),
     })
+
+    const lineCountByGroupId = {}
+    hoveredRowIndices
+      .map(hoveredRowIndex => groupColData[hoveredRowIndex])
+      .sort()
+      .forEach((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
     tooltipAdditionalColumns.push({
       key: yColKey,
       name: LINE_COUNT,
@@ -159,17 +165,9 @@ export const getPointsTooltipData = (
       values: orderDataByValue(
         hoveredRowIndices,
         sortOrder,
-        (() => {
-          const lineCountByGroupId = {}
-          hoveredRowIndices
-            .map(hoveredRowIndex => groupColData[hoveredRowIndex])
-            .sort()
-            .forEach((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
-
-          return hoveredRowIndices.map(
-            hoveredRowIndex => lineCountByGroupId[groupColData[hoveredRowIndex]]
-          )
-        })()
+        hoveredRowIndices.map(
+          hoveredRowIndex => lineCountByGroupId[groupColData[hoveredRowIndex]]
+        )
       ),
     })
   }
