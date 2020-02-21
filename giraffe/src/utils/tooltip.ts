@@ -164,7 +164,7 @@ export const getPointsTooltipData = (
           hoveredRowIndices
             .map(hoveredRowIndex => groupColData[hoveredRowIndex])
             .sort()
-            .map((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
+            .forEach((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
 
           return hoveredRowIndices.map(
             hoveredRowIndex => lineCountByGroupId[groupColData[hoveredRowIndex]]
