@@ -21,9 +21,12 @@ export const mapCumulativeValuesToTimeRange = (
       cumulativeValues[time] = {}
     }
     const maxGroup = fillCol[index]
-    for (let i = 0; i < maxGroup; i += 1) {
-      if (!cumulativeValues[time][i]) {
-        cumulativeValues[time][i] = 0
+
+    if (!cumulativeValues[time][maxGroup - 1]) {
+      for (let i = 0; i < maxGroup; i += 1) {
+        if (!cumulativeValues[time][i]) {
+          cumulativeValues[time][i] = 0
+        }
       }
     }
     cumulativeValues[time][maxGroup] =
