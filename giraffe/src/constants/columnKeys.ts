@@ -6,6 +6,7 @@ export const Y_MAX = 'yMax'
 export const COUNT = 'count'
 
 // Computed column names mapped to group aesthetics
+export const VALUE = '_value'
 export const FILL = '__fill'
 export const SYMBOL = '__symbol'
 export const STACKED_LINE_CUMULATIVE = 'cumulative'

@@ -159,7 +159,10 @@ export const getPointsTooltipData = (
       values: orderDataByValue(
         hoveredRowIndices,
         sortOrder,
-        hoveredRowIndices.map(i => Number(table.getColumn(FILL)[i]) + 1)
+        hoveredRowIndices
+          .map(hoveredRowIndex => groupColData[hoveredRowIndex])
+          .sort()
+          .map((_groupId, key) => key + 1)
       ),
     })
   }
