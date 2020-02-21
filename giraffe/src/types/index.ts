@@ -275,6 +275,12 @@ export type LineData = {
   }
 }
 
+export type CumulativeValuesByTime = {
+  [time: number]: {
+    [groupID: number]: number
+  }
+}
+
 export interface LineLayerSpec {
   type: 'line'
   inputTable: Table

@@ -3,25 +3,50 @@ import {
   LineLayerSpec,
   LineData,
   LinePosition,
-  DomainLabel,
+  NumericColumnData,
+  CumulativeValuesByTime,
 } from '../types'
-import {FILL} from '../constants/columnKeys'
+import {FILL, VALUE} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
 
-export const getPreviousDomainNextValue = (
-  lineData: LineData,
-  groupID: number,
-  domainLabel: DomainLabel
+export const mapCumulativeValuesToTimeRange = (
+  timesCol: NumericColumnData,
+  valuesCol: NumericColumnData,
+  fillCol: NumericColumnData
+): CumulativeValuesByTime => {
+  const cumulativeValues: CumulativeValuesByTime = {}
+
+  timesCol.forEach((time, index) => {
+    if (!cumulativeValues[time]) {
+      cumulativeValues[time] = {}
+    }
+    const maxGroup = fillCol[index]
+    for (let i = 0; i < maxGroup; i += 1) {
+      if (!cumulativeValues[time][i]) {
+        cumulativeValues[time][i] = 0
+      }
+    }
+    cumulativeValues[time][maxGroup] =
+      maxGroup - 1 >= 0
+        ? cumulativeValues[time][maxGroup - 1] + valuesCol[index]
+        : valuesCol[index]
+  })
+  return cumulativeValues
+}
+
+const getCumulativeValueAtTime = (
+  cumulativeValues: CumulativeValuesByTime,
+  time: number,
+  groupID: number
 ): number => {
-  if (!lineData[groupID] || !lineData[groupID - 1]) {
+  if (
+    !cumulativeValues ||
+    !cumulativeValues[time] ||
+    !cumulativeValues[time][groupID]
+  ) {
     return 0
   }
-  const currentGroupLength = lineData[groupID][domainLabel].length
-  const previousGroupLength = lineData[groupID - 1][domainLabel].length
-  if (previousGroupLength > currentGroupLength) {
-    return lineData[groupID - 1][domainLabel][currentGroupLength]
-  }
-  return 0
+  return cumulativeValues[time][groupID]
 }
 
 export const lineTransform = (
@@ -42,6 +67,23 @@ export const lineTransform = (
   const yCol = table.getColumn(yColumnKey, 'number')
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const lineData: LineData = {}
+  let stackedValuesByTime: CumulativeValuesByTime = {}
+
+  if (position === 'stacked') {
+    if (yColumnKey === VALUE) {
+      stackedValuesByTime = mapCumulativeValuesToTimeRange(
+        xCol,
+        yCol,
+        fillColumn
+      )
+    } else if (xColumnKey === VALUE) {
+      stackedValuesByTime = mapCumulativeValuesToTimeRange(
+        yCol,
+        xCol,
+        fillColumn
+      )
+    }
+  }
 
   let xMin = Infinity
   let xMax = -Infinity
@@ -50,18 +92,21 @@ export const lineTransform = (
 
   for (let i = 0; i < table.length; i++) {
     const groupID = fillColumn[i]
-    const x = xCol[i]
+    let x = xCol[i]
     let y = yCol[i]
 
     if (!lineData[groupID]) {
       lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
     }
 
-    lineData[groupID].xs.push(x)
-
     if (position === 'stacked') {
-      y += getPreviousDomainNextValue(lineData, groupID, DomainLabel.Y)
+      if (yColumnKey === VALUE) {
+        y = getCumulativeValueAtTime(stackedValuesByTime, xCol[i], groupID)
+      } else if (xColumnKey === VALUE) {
+        x = getCumulativeValueAtTime(stackedValuesByTime, yCol[i], groupID)
+      }
     }
+    lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
     if (x < xMin) {
