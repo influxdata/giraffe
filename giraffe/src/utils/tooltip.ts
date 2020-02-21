@@ -159,10 +159,17 @@ export const getPointsTooltipData = (
       values: orderDataByValue(
         hoveredRowIndices,
         sortOrder,
-        hoveredRowIndices
-          .map(hoveredRowIndex => groupColData[hoveredRowIndex])
-          .sort()
-          .map((_groupId, key) => key + 1)
+        (() => {
+          const lineCountByGroupId = {}
+          hoveredRowIndices
+            .map(hoveredRowIndex => groupColData[hoveredRowIndex])
+            .sort()
+            .map((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
+
+          return hoveredRowIndices.map(
+            hoveredRowIndex => lineCountByGroupId[groupColData[hoveredRowIndex]]
+          )
+        })()
       ),
     })
   }
