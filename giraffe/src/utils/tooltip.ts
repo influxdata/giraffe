@@ -28,11 +28,11 @@ const orderDataByValue = (
 }
 
 const getDataSortOrder = (
-  lineData: LineData = {},
+  lineData: LineData,
   hoveredRowIndices: number[],
   position: LinePosition
 ): number[] => {
-  if (position === 'overlaid' || Object.keys(lineData).length === 0) {
+  if (position === 'overlaid') {
     return hoveredRowIndices
   }
   const dataMap = {}
@@ -100,7 +100,9 @@ export const getPointsTooltipData = (
   position?: LinePosition,
   lineData?: LineData
 ): TooltipData => {
-  const sortOrder = getDataSortOrder(lineData, hoveredRowIndices, position)
+  const sortOrder = lineData
+    ? getDataSortOrder(lineData, hoveredRowIndices, position)
+    : hoveredRowIndices
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(groupColKey, 'number')
