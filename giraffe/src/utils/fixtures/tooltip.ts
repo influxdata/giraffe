@@ -23,7 +23,7 @@ const getRandomNumber = (
 }
 
 export const COLUMN_KEY = 'cpu'
-export const POINT_KEY = 'cpu'
+export const POINT_KEY = 'disk'
 export const HOST_KEY = 'host'
 
 export const createSampleTable = (options: SampleTableOptions) => {
@@ -42,6 +42,7 @@ export const createSampleTable = (options: SampleTableOptions) => {
   const VALUE_COL = []
   const CPU_COL = []
   const SYMBOL_COL = []
+  const DISK_COL = []
   const HOST_COL = []
 
   for (let i = 0; i < numberOfRecords; i += 1) {
@@ -56,18 +57,19 @@ export const createSampleTable = (options: SampleTableOptions) => {
     TIME_COL.push(now + (i % recordsPerLine) * 1000 * 60)
     if (plotType === 'scatterplot') {
       SYMBOL_COL.push(i % 2)
+      DISK_COL.push(`disk-${i % recordsPerLine}`)
       HOST_COL.push(`host-${i % 2}`)
     }
   }
   const table = newTable(numberOfRecords)
     .addColumn('_time', 'time', TIME_COL)
     .addColumn('_value', 'number', VALUE_COL)
-    .addColumn('cpu', 'string', CPU_COL)
 
   if (plotType === 'scatterplot') {
     return table
+      .addColumn(POINT_KEY, 'string', DISK_COL)
       .addColumn('__symbol', 'string', SYMBOL_COL)
       .addColumn(HOST_KEY, 'string', HOST_COL)
   }
-  return table
+  return table.addColumn(COLUMN_KEY, 'string', CPU_COL)
 }

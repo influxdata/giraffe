@@ -51,7 +51,7 @@ describe('getPointsTooltipData', () => {
     }
 
     const [fillColumn, fillColumnMap] = createGroupIDColumn(sampleTable, [
-      COLUMN_KEY,
+      plotType === 'line' ? COLUMN_KEY : HOST_KEY,
     ])
     fillScale = getNominalColorScale(fillColumnMap, NINETEEN_EIGHTY_FOUR)
     sampleTable = sampleTable.addColumn(FILL, 'number', fillColumn)
@@ -271,7 +271,7 @@ describe('getPointsTooltipData', () => {
         yColKey,
         FILL,
         pointFormatter,
-        [COLUMN_KEY, HOST_KEY],
+        [POINT_KEY, HOST_KEY],
         fillScale
       )
       expect(sampleTable.getColumn(POINT_KEY)).toBeTruthy()
