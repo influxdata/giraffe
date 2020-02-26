@@ -7,6 +7,7 @@ interface SampleTableOptions {
   maxValue?: number
   numberOfRecords?: number
   recordsPerLine?: number
+  plotType?: string
 }
 
 const getRandomNumber = (
@@ -22,6 +23,8 @@ const getRandomNumber = (
 }
 
 export const COLUMN_KEY = 'cpu'
+export const POINT_KEY = 'cpu'
+export const HOST_KEY = 'host'
 
 export const createSampleTable = (options: SampleTableOptions) => {
   const {
@@ -31,12 +34,15 @@ export const createSampleTable = (options: SampleTableOptions) => {
     maxValue = 100,
     numberOfRecords = 20,
     recordsPerLine = 5,
+    plotType = 'line',
   } = options
 
   const now = Date.now()
   const TIME_COL = []
   const VALUE_COL = []
   const CPU_COL = []
+  const SYMBOL_COL = []
+  const HOST_COL = []
 
   for (let i = 0; i < numberOfRecords; i += 1) {
     let num = getRandomNumber(maxValue, decimalPlaces)
@@ -48,9 +54,20 @@ export const createSampleTable = (options: SampleTableOptions) => {
     VALUE_COL.push(num)
     CPU_COL.push(`${COLUMN_KEY}${Math.floor(i / recordsPerLine)}`)
     TIME_COL.push(now + (i % recordsPerLine) * 1000 * 60)
+    if (plotType === 'scatterplot') {
+      SYMBOL_COL.push(i % 2)
+      HOST_COL.push(`host-${i % 2}`)
+    }
   }
-  return newTable(numberOfRecords)
+  const table = newTable(numberOfRecords)
     .addColumn('_time', 'time', TIME_COL)
     .addColumn('_value', 'number', VALUE_COL)
     .addColumn('cpu', 'string', CPU_COL)
+
+  if (plotType === 'scatterplot') {
+    return table
+      .addColumn('__symbol', 'string', SYMBOL_COL)
+      .addColumn(HOST_KEY, 'string', HOST_COL)
+  }
+  return table
 }
