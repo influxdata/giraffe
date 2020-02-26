@@ -28,11 +28,11 @@ const orderDataByValue = (
 }
 
 const getDataSortOrder = (
-  lineData: LineData,
+  lineData: LineData = {},
   hoveredRowIndices: number[],
   position: LinePosition
 ): number[] => {
-  if (position === 'overlaid') {
+  if (position === 'overlaid' || Object.keys(lineData).length === 0) {
     return hoveredRowIndices
   }
   const dataMap = {}
