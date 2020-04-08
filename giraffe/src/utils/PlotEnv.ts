@@ -1,5 +1,4 @@
-import {getTicks} from './getTicks'
-import {getTextMetrics} from './getTextMetrics'
+import {getHorizontalTicks, getVerticalTicks} from './getTicks'
 import {getMargins} from './getMargins'
 import {extentOfExtents} from './extrema'
 import {identityMerge} from './identityMerge'
@@ -92,12 +91,11 @@ export class PlotEnv {
       return this.config.xTicks
     }
 
-    const getTicksMemoized = this.fns.get('xTicks', getTicks)
+    const getTicksMemoized = this.fns.get('xTicks', getHorizontalTicks)
 
     return getTicksMemoized(
       this.xDomain,
       this.config.width,
-      this.charMetrics.width,
       this.config.tickFont,
       this.xTickFormatter
     )
@@ -108,12 +106,11 @@ export class PlotEnv {
       return this.config.yTicks
     }
 
-    const getTicksMemoized = this.fns.get('yTicks', getTicks)
+    const getTicksMemoized = this.fns.get('yTicks', getVerticalTicks)
 
     return getTicksMemoized(
       this.yDomain,
       this.config.height,
-      this.charMetrics.height,
       this.config.tickFont,
       this.yTickFormatter
     )
@@ -306,13 +303,6 @@ export class PlotEnv {
     } else {
       this._yDomain = this.getYDomain()
     }
-  }
-
-  private get charMetrics() {
-    const getTextMetricsMemoized = this.fns.get('charMetrics', getTextMetrics)
-
-    // https://stackoverflow.com/questions/3949422/which-letter-of-the-english-alphabet-takes-up-most-pixels
-    return getTextMetricsMemoized(this.config.tickFont, 'W')
   }
 
   private get isXControlled() {

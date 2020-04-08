@@ -1,34 +1,49 @@
 import {FormatterType} from '../types'
-import {getTicks} from './getTicks'
+import {getVerticalTicks, getHorizontalTicks} from './getTicks'
 
 jest.mock('./getTextMetrics')
 
 describe('getTicks', () => {
-  const charHeight = 12
   const font = '10px sans-serif'
 
   describe('vertical axis', () => {
     const laptopScreenHeight = 788
     const formatter = (num: number): string => `${num} foo`
     const domain = [0, 100]
-    const result = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    const result = [
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65,
+      70,
+      75,
+      80,
+      85,
+      90,
+      95,
+      100,
+    ]
 
     it('should give the correct number of ticks', () => {
       expect(
-        getTicks(domain, laptopScreenHeight, charHeight, font, formatter)
+        getVerticalTicks(domain, laptopScreenHeight, font, formatter)
       ).toEqual(result)
     })
-    it('should handle extreme or unusual inputs', () => {
-      expect(getTicks(domain, 0, charHeight, font, formatter)).toEqual([])
-      expect(getTicks(domain, laptopScreenHeight, 0, font, formatter)).toEqual(
-        []
-      )
+    it('should handle 0 domain or screen height', () => {
+      expect(getVerticalTicks(domain, 0, font, formatter)).toEqual([])
       expect(
-        getTicks([0, 0], laptopScreenHeight, charHeight, font, formatter)
+        getVerticalTicks([0, 0], laptopScreenHeight, font, formatter)
       ).toEqual([0])
-      expect(
-        getTicks(domain, laptopScreenHeight, charHeight, font, formatter)
-      ).toEqual(result)
     })
   })
 
@@ -78,26 +93,15 @@ describe('getTicks', () => {
       1578357060000,
     ]
     it('should give the correct number of ticks', () => {
-      expect(getTicks(domain, axisLength, charHeight, font, formatter)).toEqual(
+      expect(getHorizontalTicks(domain, axisLength, font, formatter)).toEqual(
         result
       )
     })
-    it('should handle extreme or unusual inputs', () => {
-      expect(getTicks(domain, 0, charHeight, font, formatter)).toEqual([])
-      expect(getTicks([0, 0], axisLength, charHeight, font, formatter)).toEqual(
-        [0]
-      )
-      expect(getTicks(domain, axisLength, 0, font, formatter)).toEqual(result)
-      expect(
-        getTicks(domain, axisLength, 100000000000000000, font, formatter)
-      ).toEqual(result)
-      expect(getTicks(domain, axisLength, charHeight, font, formatter)).toEqual(
-        result
-      )
-      expect(
-        getTicks(domain, axisLength / 2, charHeight, font, formatter).length
-      ).toBeLessThan(result.length)
-      expect(getTicks(domain, 0, charHeight, font, formatter).length).toEqual(0)
+    it('should handle 0 domain or screen height', () => {
+      expect(getHorizontalTicks([0, 0], axisLength, font, formatter)).toEqual([
+        0,
+      ])
+      expect(getHorizontalTicks(domain, 0, font, formatter).length).toEqual(0)
     })
   })
 })
