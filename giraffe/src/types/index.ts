@@ -385,3 +385,5 @@ export enum DomainLabel {
   X = 'xs',
   Y = 'ys',
 }
+
+export type AxisTicks = Date[] | number[]

@@ -1,37 +1,30 @@
 // Libraries
 import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
-import memoizeOne from 'memoize-one'
 
 // Types
-import {Formatter, FormatterType} from '../types'
+import {AxisTicks, Formatter, FormatterType} from '../types'
 
 // Utils
 import {getTextMetrics} from './getTextMetrics'
 
-const getNumTicks = (
-  sampleTick: string,
-  length: number,
-  charLength: number
-): number => {
-  const sampleTickWidth = sampleTick.length * charLength
-  return sampleTickWidth === 0 ? 0 : Math.round(length / sampleTickWidth)
-}
-
 /*
-  Optimal spacing defined as:
-    I. when there are less than four ticks:
+  Minimum spacing defined as:
+    I. when there are less than 4 ticks:
       for each tick, spacing is one-quarter of the length of a tick
-      thusly: 0.25, 0.50, 0.75 of a tick's length as spacing for one, two, and three ticks respectively
-    II. when there are four or more ticks:
+      thusly: 0.25, 0.50, 0.75 of a tick's length as spacing for 1, 2, and 3 ticks respectively
+    II. when there are 4 to 10 ticks:
       sum of all tick lengths is shorter than total available space by at least one tick's length
-    III. Based on rules I and II, we call d3 with the suggested number of ticks, and
-      allow d3 to determine the actual number of ticks and spacing
+    III. when there are more than 10 ticks:
+      for every group of up to 10 ticks there is spacing equal at least 1 tick's length
+    IV. length of a tick is:
+         vertical axis - the height of a span that wraps the formatted last tick in the range
+         horizontal axis - the width of a span that wraps the formatted last tick in the range
 */
-const hasOptimalSpacing = (
+const hasMinimumSpacing = (
   rangeLength: number,
   timeTickLength: number,
-  ticks: Date[]
+  ticks: AxisTicks
 ): boolean => {
   const fractionalSpaceAsPadding = 0.25
   const totalLength = ticks.length * timeTickLength
@@ -41,12 +34,47 @@ const hasOptimalSpacing = (
       return true
     }
     return false
-  } else if (totalLength < rangeLength - timeTickLength) {
+  } else if (ticks.length <= 10) {
+    if (totalLength < rangeLength - timeTickLength) {
+      return true
+    }
+    return false
+  } else if (
+    totalLength <
+    rangeLength - Math.ceil(ticks.length / 10) * timeTickLength
+  ) {
     return true
   }
   return false
 }
 
+/*
+  Optimal number of ticks is defined as:
+  I. allow d3 to choose the ticks and
+  II. meets minimum spacing requirements checked by hasMinimumSpacing
+*/
+const getOptimalTicks = (
+  [d0, d1]: number[],
+  rangeLength: number,
+  tickLength: number
+): number[] => {
+  const maxNumTicks = Math.floor(rangeLength / tickLength)
+  let optimalTicks = ticks(d0, d1, maxNumTicks)
+
+  for (
+    let counter = 1;
+    counter < maxNumTicks &&
+    !hasMinimumSpacing(rangeLength, tickLength, optimalTicks);
+    counter += 1
+  ) {
+    optimalTicks = ticks(d0, d1, maxNumTicks - counter)
+  }
+  return optimalTicks
+}
+
+/*
+  Same as getOptimalTicks but for Date objects
+*/
 const getOptimalTimeTicks = (
   [d0, d1]: number[],
   rangeLength: number,
@@ -61,7 +89,7 @@ const getOptimalTimeTicks = (
   for (
     let counter = 1;
     counter < maxNumTicks &&
-    !hasOptimalSpacing(rangeLength, timeTickLength, optimalTicks);
+    !hasMinimumSpacing(rangeLength, timeTickLength, optimalTicks);
     counter += 1
   ) {
     optimalTicks = scaledTime.ticks(maxNumTicks - counter)
@@ -69,28 +97,41 @@ const getOptimalTimeTicks = (
   return optimalTicks
 }
 
-const getTimeTicksMemoized = memoizeOne(
-  ([d0, d1]: number[], length: number, timeTickLength: number): number[] => {
-    const timeTicks = getOptimalTimeTicks([d0, d1], length, timeTickLength)
-    return timeTicks.map(d => d.getTime())
-  }
-)
-
-export const getTicks = (
+const getTicks = (
   domain: number[],
   rangeLength: number,
-  charLength: number,
+  tickSize: number,
+  formatter: Formatter
+): number[] =>
+  formatter._GIRAFFE_FORMATTER_TYPE === FormatterType.Time
+    ? getOptimalTimeTicks(domain, rangeLength, tickSize).map(d => d.getTime())
+    : getOptimalTicks(domain, rangeLength, tickSize)
+
+export const getVerticalTicks = (
+  domain: number[],
+  rangeLength: number,
   tickFont: string,
   formatter: Formatter
 ): number[] => {
   const sampleTick = formatter(domain[1])
   const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
-  const numTicks = getNumTicks(sampleTick, rangeLength, charLength)
-  switch (formatter._GIRAFFE_FORMATTER_TYPE) {
-    case FormatterType.Time:
-      return getTimeTicksMemoized(domain, rangeLength, tickTextMetrics.width)
 
-    default:
-      return ticks(domain[0], domain[1], numTicks)
-  }
+  const maxTickHeight = 5 * tickTextMetrics.height
+  const tickHeight = Math.min(
+    tickTextMetrics.height + tickTextMetrics.width / 2,
+    maxTickHeight
+  )
+  return getTicks(domain, rangeLength, tickHeight, formatter)
+}
+
+export const getHorizontalTicks = (
+  domain: number[],
+  rangeLength: number,
+  tickFont: string,
+  formatter: Formatter
+): number[] => {
+  const sampleTick = formatter(domain[1])
+  const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
+
+  return getTicks(domain, rangeLength, tickTextMetrics.width, formatter)
 }

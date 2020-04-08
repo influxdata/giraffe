@@ -31,7 +31,7 @@ storiesOf('XY Plot', module)
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
-    const yAxisLabel = text('Y Axis Label', 'foo')
+    const valueAxisLabel = text('Value Axis Label', 'foo')
     const xScale = xScaleKnob()
     const yScale = yScaleKnob()
     const timeZone = timeZoneKnob()
@@ -73,7 +73,10 @@ storiesOf('XY Plot', module)
       table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
-        [y]: y => `${y.toFixed(2)} ${yAxisLabel}`,
+        _value: val =>
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          }`,
       },
       xScale,
       yScale,
@@ -146,7 +149,7 @@ storiesOf('XY Plot', module)
       table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
-        [y]: y => `${Math.round(y)}%`,
+        _value: val => `${Math.round(val)}%`,
       },
       legendFont,
       tickFont,
@@ -191,7 +194,7 @@ storiesOf('XY Plot', module)
 
     const config: Config = {
       table,
-      valueFormatters: {[y]: y => `${Math.round(y)}%`},
+      valueFormatters: {_value: val => `${Math.round(val)}%`},
       legendFont,
       tickFont,
       showAxes,
@@ -233,7 +236,7 @@ storiesOf('XY Plot', module)
       yScale,
       tickFont,
       showAxes,
-      valueFormatters: {[y]: y => `${Math.round(y)}%`},
+      valueFormatters: {_value: val => `${Math.round(val)}%`},
       layers: [{type: 'heatmap', x, y, colors}],
     }
 
