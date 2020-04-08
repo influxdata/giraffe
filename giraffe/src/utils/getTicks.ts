@@ -1,9 +1,13 @@
 // Libraries
 import {scaleUtc} from 'd3-scale'
 import {ticks} from 'd3-array'
+import memoizeOne from 'memoize-one'
 
 // Types
 import {AxisTicks, Formatter, FormatterType} from '../types'
+
+// Constants
+import {TIME, VALUE} from '../constants/columnKeys'
 
 // Utils
 import {getTextMetrics} from './getTextMetrics'
@@ -18,7 +22,7 @@ import {getTextMetrics} from './getTextMetrics'
     III. when there are more than 10 ticks:
       for every group of up to 10 ticks there is spacing equal at least 1 tick's length
     IV. length of a tick is:
-         vertical axis - the height of a span that wraps the formatted last tick in the range
+         vertical axis - the average of the height and width of a span that wraps the formatted last tick in the range
          horizontal axis - the width of a span that wraps the formatted last tick in the range
 */
 const hasMinimumSpacing = (
@@ -97,41 +101,73 @@ const getOptimalTimeTicks = (
   return optimalTicks
 }
 
-const getTicks = (
+export const getTicks = (
   domain: number[],
   rangeLength: number,
   tickSize: number,
-  formatter: Formatter
-): number[] =>
-  formatter._GIRAFFE_FORMATTER_TYPE === FormatterType.Time
+  columnKey: string
+): number[] => {
+  return columnKey === TIME
     ? getOptimalTimeTicks(domain, rangeLength, tickSize).map(d => d.getTime())
     : getOptimalTicks(domain, rangeLength, tickSize)
-
-export const getVerticalTicks = (
-  domain: number[],
-  rangeLength: number,
-  tickFont: string,
-  formatter: Formatter
-): number[] => {
-  const sampleTick = formatter(domain[1])
-  const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
-
-  const maxTickHeight = 5 * tickTextMetrics.height
-  const tickHeight = Math.min(
-    tickTextMetrics.height + tickTextMetrics.width / 2,
-    maxTickHeight
-  )
-  return getTicks(domain, rangeLength, tickHeight, formatter)
 }
 
-export const getHorizontalTicks = (
-  domain: number[],
-  rangeLength: number,
-  tickFont: string,
-  formatter: Formatter
-): number[] => {
-  const sampleTick = formatter(domain[1])
-  const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
+const getMemoizedVerticalTicks = memoizeOne(
+  (
+    domain: number[],
+    rangeLength: number,
+    tickSize: number,
+    columnKey: string
+  ) => getTicks(domain, rangeLength, tickSize, columnKey)
+)
+export const getVerticalTicks = memoizeOne(
+  (
+    domain: number[],
+    rangeLength: number,
+    tickFont: string,
+    formatter: Formatter
+  ): number[] => {
+    const sampleTick = formatter(domain[1])
+    const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
 
-  return getTicks(domain, rangeLength, tickTextMetrics.width, formatter)
-}
+    const maxTickHeight = 5 * tickTextMetrics.height
+    const tickHeight = Math.min(
+      tickTextMetrics.height + tickTextMetrics.width / 2,
+      maxTickHeight
+    )
+    const columnKey =
+      formatter._GIRAFFE_FORMATTER_TYPE === FormatterType.Time ? TIME : VALUE
+
+    return getMemoizedVerticalTicks(domain, rangeLength, tickHeight, columnKey)
+  }
+)
+
+const getMemoizedHorizontalTicks = memoizeOne(
+  (
+    domain: number[],
+    rangeLength: number,
+    tickSize: number,
+    columnKey: string
+  ) => getTicks(domain, rangeLength, tickSize, columnKey)
+)
+export const getHorizontalTicks = memoizeOne(
+  (
+    domain: number[],
+    rangeLength: number,
+    tickFont: string,
+    formatter: Formatter
+  ): number[] => {
+    const sampleTick = formatter(domain[1])
+    const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
+
+    const columnKey =
+      formatter._GIRAFFE_FORMATTER_TYPE === FormatterType.Time ? TIME : VALUE
+
+    return getMemoizedHorizontalTicks(
+      domain,
+      rangeLength,
+      tickTextMetrics.width,
+      columnKey
+    )
+  }
+)
