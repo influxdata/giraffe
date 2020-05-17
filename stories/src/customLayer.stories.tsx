@@ -16,9 +16,10 @@ storiesOf('Custom Layer', module).add('Highlighted Region', () => {
       },
       {
         type: 'custom',
-        render: ({yScale}) => {
+        render: ({key, yScale}) => {
           return (
             <div
+              key={key}
               style={{
                 width: '100%',
                 position: 'absolute',

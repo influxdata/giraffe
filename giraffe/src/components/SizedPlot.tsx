@@ -95,6 +95,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           {config.layers.map((layerConfig, layerIndex) => {
             if (layerConfig.type === 'custom') {
               const renderProps = {
+                key: layerIndex,
                 width,
                 height,
                 innerWidth: env.innerWidth,
