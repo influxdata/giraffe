@@ -153,6 +153,7 @@ export interface ScatterLayerConfig {
 }
 
 export interface CustomLayerRenderProps {
+  key: string | number
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   xDomain: number[]
