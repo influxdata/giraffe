@@ -1,7 +1,7 @@
 ## Development
 
-This repo contains several JavaScript packages linked together by [Yarn Workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) (i.e. it is a _monorepo_).
-The source code for the library published to npm as `@influxdata/giraffe` is contained in the `giraffe` workspace. 
+This repo contains multiple JavaScript packages linked together by [Yarn Workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) (i.e. it is a _monorepo_).
+The source code for the library published to npm as `@influxdata/giraffe` is contained in the `giraffe` workspace.
 
 ### Developing Giraffe with Storybook
 
@@ -9,35 +9,41 @@ The `stories` workspace in this repository contains a [Storybook](https://storyb
 
 To run the Storybook during development:
 
-1. In one terminal, change into the `giraffe` workspace and run `yarn start`.
-   This starts a [Rollup](https://rollupjs.org/guide/en/) process that will rebuild the library whenever its source files change.
+1. In a terminal, change into the `stories` workspace and run `yarn start`.
+   This will start a Storybook development server.
 
-2. In another terminal, change into the `stories` workspace and run `yarn start`.
-   This will start a Storybook development server that consumes the locally build `@influxdata/giraffe` library. 
-
-3. Visit [http://localhost:50000](http://localhost:50000) to see the storybook.
+1. Visit [http://localhost:50000](http://localhost:50000) to see the storybook.
    Changes made either in the library source or in the stories source will be reflected automatically at that URL.
+
+_Just looking for how to render a graph in your UI?_ See **Getting Started** in the [`README.md`](./README.md#getting-started).
+
+### Linting & Formatting
+
+To run linting, change into either `/giraffe` or `/stories` and run:
+
+```
+yarn lint
+```
+
+To run formatting, which uses [Prettier](https://www.npmjs.com/package/prettier), change into either `/giraffe` or `/stories` and run:
+
+```
+yarn prettier --fix
+```
+
+To see the formatting issues without fixing, run the above without the `--fix` option
 
 ### Unit tests
 
-To run unit tests, change into the `giraffe` workspace and run:
+To run unit tests, change into the `/giraffe` or `/stories` and run:
 
 ```
 yarn test
 ```
 
-### Screenshot tests
-
-Giraffe uses Storybook and [Chromatic](https://www.chromaticqa.com) for screenshot testing.
-The screenshot tests will run automatically in CircleCI for all PRs.
-
-If you need to accept changes caught by the screenshot tests, follow the Chromatic build link listed in the logs for the failing CircleCI run.
-After logging into Chromatic with your GitHub account, you should be able to approve the changes.
-If you rerun the failing CircleCI build after approving changes, it will pass.
-
 ## Publishing a new version
 
-Ensure that 
+Ensure that
 
 - You have administrator access to this repo on GitHub
 - You have permissions to publish to the [influxdata](https://www.npmjs.com/org/influxdata) organization on npm
