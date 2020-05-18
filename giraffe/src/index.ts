@@ -6,9 +6,9 @@ export {fromFlux, FromFluxResult} from './utils/fromFlux'
 export {fromRows} from './utils/fromRows'
 export {newTable} from './utils/newTable'
 export {
-  timeFormatter,
-  siPrefixFormatter,
   binaryPrefixFormatter,
+  siPrefixFormatter,
+  timeFormatter,
 } from './utils/formatters'
 export {getDomainDataFromLines} from './utils/lineData'
 
@@ -20,19 +20,19 @@ export * from './constants/colorSchemes'
 
 // Types
 export {
-  ColumnType,
-  NumericColumnData,
   ColumnData,
-  Table,
-  Scale,
-  Margins,
+  ColumnType,
+  Config,
+  DomainLabel,
+  Formatter,
   HistogramLayerConfig,
   HistogramPosition,
-  LinePosition,
+  LayerConfig,
   LineInterpolation,
   LineLayerConfig,
-  LayerConfig,
-  Config,
-  Formatter,
-  DomainLabel,
+  LinePosition,
+  Margins,
+  NumericColumnData,
+  Scale,
+  Table,
 } from './types'

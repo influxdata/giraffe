@@ -1,181 +1,61 @@
-export type NumericColumnData =
-  | number[]
-  | Int8Array
-  | Int16Array
-  | Int32Array
-  | Uint8Array
-  | Uint16Array
-  | Uint32Array
-  | Float32Array
-  | Float64Array
+export type SizedConfig = Config & {width: number; height: number}
 
-export type ColumnData = NumericColumnData | string[] | boolean[]
+export interface Config {
+  width?: number
+  height?: number
 
-export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
+  gridColor?: string
+  gridOpacity?: number
 
-export interface GetColumn {
-  (columnKey: string): ColumnData | null
-  (columnKey: string, type: 'number'): NumericColumnData | null
-  (columnKey: string, type: 'time'): NumericColumnData | null
-  (columnKey: string, type: 'string'): string[] | null
-  (columnKey: string, type: 'boolean'): boolean[] | null
+  showAxes?: boolean
+  axisColor?: string
+  axisOpacity?: number
+  xAxisLabel?: string
+  yAxisLabel?: string
+
+  // The scaling of the axes, usually linear or logarithmic
+  xScale?: string
+  yScale?: string
+
+  // Ticks on the axes can be specified, or else they are calculated,
+  // as well as the font, color, and the unit labels for each tick
+  xTicks?: number[]
+  yTicks?: number[]
+  tickFont?: string
+  tickFontColor?: string
+  valueFormatters?: {
+    [colKey: string]: Formatter
+  }
+
+  table: Table
+  layers: LayerConfig[]
+
+  // The x domain of the plot can be explicitly set. If this option is passed,
+  // then the component is operating in a "controlled" mode, where it always
+  // uses the passed x domain. Any brush interaction with the plot that should
+  // change the x domain will call the `onSetXDomain` option when the component
+  // is in controlled mode. Double clicking the plot will call
+  // `onResetXDomain`. If the `xDomain` option is not passed, then the
+  // component is "uncontrolled". It will compute, set, and reset the `xDomain`
+  // automatically.
+  xDomain?: number[]
+  onSetXDomain?: (xDomain: number[]) => void
+  onResetXDomain?: () => void
+
+  // See the `xDomain`, `onSetXDomain`, and `onResetXDomain` options
+  yDomain?: number[]
+  onSetYDomain?: (yDomain: number[]) => void
+  onResetYDomain?: () => void
+
+  // The legend is the tooltip that appears when hovering over data points
+  legendFont?: string
+  legendFontColor?: string
+  legendFontBrightColor?: string
+  legendBackgroundColor?: string
+  legendBorder?: string
+  legendCrosshairColor?: string
+  legendColumns?: string[]
 }
-
-export interface Table {
-  getColumn: GetColumn
-  getColumnName: (columnKey: string) => string
-  getColumnType: (columnKey: string) => ColumnType
-  columnKeys: string[]
-  length: number
-  addColumn: (
-    columnKey: string,
-    type: ColumnType,
-    data: ColumnData,
-    name?: string
-  ) => Table
-}
-
-export interface Scale<D = any, R = any> {
-  (x: D): R
-  invert?: (y: R) => D
-}
-
-export type ScaleFactory = (
-  domainStart: number,
-  domainStop: number,
-  rangeStart: number,
-  rangeStop: number
-) => Scale<number, number>
-
-export interface Margins {
-  top: number
-  right: number
-  bottom: number
-  left: number
-}
-
-export interface TooltipColumn {
-  key: string
-  name: string
-  type: ColumnType
-  values: string[]
-  colors: string[] | null
-}
-
-export type TooltipData = TooltipColumn[]
-
-export type LineInterpolation =
-  | 'linear'
-  | 'monotoneX'
-  | 'monotoneY'
-  | 'cubic'
-  | 'step'
-  | 'stepBefore'
-  | 'stepAfter'
-  | 'natural'
-
-/*
-  The tooltip for a line layer can operate in one of three modes:
-
-  In the `x` mode, every y-value for the currently hovered x-value is displayed
-  in the tooltip. The crosshair is a vertical line.
-
-  In the `y` mode, every x-value for the currently hovered y-value is displayed
-  in the tooltip. The crosshair is a horizontal line.
-
-  In the `xy` mode, the single xy-point closest to the hovered mouse position
-  is displayed in the tooltip. The series that it belongs to is highlighted.
-  The crosshair is an intersecting pair of horizontal and vertical lines.
-*/
-export type LineHoverDimension = 'x' | 'y' | 'xy'
-
-export type LinePosition = 'overlaid' | 'stacked'
-
-export interface LineLayerConfig {
-  type: 'line'
-  x: string
-  y: string
-  fill?: string[]
-  colors?: string[]
-  position?: LinePosition
-  interpolation?: LineInterpolation
-  hoverDimension?: LineHoverDimension | 'auto'
-  lineWidth?: number
-  maxTooltipRows?: number
-  shadeBelow?: boolean
-  shadeBelowOpacity?: number
-}
-
-export interface HeatmapLayerConfig {
-  type: 'heatmap'
-  x: string
-  y: string
-  colors?: string[]
-  binSize?: number
-  strokeWidth?: number
-  strokePadding?: number
-  strokeOpacity?: number
-  fillOpacity?: number
-}
-
-export type HistogramPosition = 'overlaid' | 'stacked'
-
-export interface HistogramLayerConfig {
-  type: 'histogram'
-  x: string
-  fill?: string[]
-  colors?: string[]
-  position?: HistogramPosition
-  binCount?: number
-  strokeWidth?: number
-  strokePadding?: number
-  strokeOpacity?: number
-  fillOpacity?: number
-}
-
-export type RectLayerConfig = HistogramLayerConfig | HeatmapLayerConfig
-
-export type SymbolType =
-  | 'circle'
-  | 'triangle'
-  | 'square'
-  | 'plus'
-  | 'tritip'
-  | 'ex'
-
-export interface ScatterLayerConfig {
-  type: 'scatter'
-  x: string
-  y: string
-  colors?: string[]
-  fill?: string[]
-  symbol?: string[]
-}
-
-export interface CustomLayerRenderProps {
-  key: string | number
-  xScale: Scale<number, number>
-  yScale: Scale<number, number>
-  xDomain: number[]
-  yDomain: number[]
-  width: number
-  height: number
-  innerWidth: number
-  innerHeight: number
-  columnFormatter: (colKey: string) => (x: any) => string
-}
-
-export interface CustomLayerConfig {
-  type: 'custom'
-  render: (p: CustomLayerRenderProps) => JSX.Element
-}
-
-export type LayerConfig =
-  | LineLayerConfig
-  | HistogramLayerConfig
-  | HeatmapLayerConfig
-  | ScatterLayerConfig
-  | CustomLayerConfig
 
 export enum FormatterType {
   Time = 'TIME',
@@ -201,86 +81,146 @@ export interface Formatter {
   readonly _GIRAFFE_FORMATTER_TYPE?: FormatterType
 }
 
-export interface Config {
-  table: Table
-  layers: LayerConfig[]
-
-  width?: number
-  height?: number
-
-  xAxisLabel?: string
-  yAxisLabel?: string
-
-  xScale?: string
-  yScale?: string
-
-  xTicks?: number[]
-  yTicks?: number[]
-
-  // The x domain of the plot can be explicitly set. If this option is passed,
-  // then the component is operating in a "controlled" mode, where it always
-  // uses the passed x domain. Any brush interaction with the plot that should
-  // change the x domain will call the `onSetXDomain` option when the component
-  // is in controlled mode. Double clicking the plot will call
-  // `onResetXDomain`. If the `xDomain` option is not passed, then the
-  // component is "uncontrolled". It will compute, set, and reset the `xDomain`
-  // automatically.
-  xDomain?: number[]
-  onSetXDomain?: (xDomain: number[]) => void
-  onResetXDomain?: () => void
-
-  // See the `xDomain`, `onSetXDomain`, and `onResetXDomain` options
-  yDomain?: number[]
-  onSetYDomain?: (yDomain: number[]) => void
-  onResetYDomain?: () => void
-
-  valueFormatters?: {
-    [colKey: string]: Formatter
-  }
-
-  showAxes?: boolean
-
-  axisColor?: string
-  axisOpacity?: number
-  gridColor?: string
-  gridOpacity?: number
-
-  tickFont?: string
-  tickFontColor?: string
-
-  legendFont?: string
-  legendFontColor?: string
-  legendFontBrightColor?: string
-  legendBackgroundColor?: string
-  legendBorder?: string
-  legendCrosshairColor?: string
-  legendColumns?: string[]
-}
-
-export type SizedConfig = Config & {width: number; height: number}
-
-export interface ColumnGroupMap {
-  // The column keys that specify the grouping
+export interface Table {
+  getColumn: GetColumn
+  getColumnName: (columnKey: string) => string
+  getColumnType: (columnKey: string) => ColumnType
   columnKeys: string[]
-
-  // A group ID `i` takes on the values specified by `mappings[i]` for the
-  // column keys that specify the grouping
-  mappings: Array<{[columnKey: string]: any}>
+  length: number
+  addColumn: (
+    columnKey: string,
+    type: ColumnType,
+    data: ColumnData,
+    name?: string
+  ) => Table
 }
 
-export type LineData = {
-  [groupID: number]: {
-    xs: number[]
-    ys: number[]
-    fill: string
-  }
+export interface GetColumn {
+  (columnKey: string): ColumnData | null
+  (columnKey: string, type: 'number'): NumericColumnData | null
+  (columnKey: string, type: 'time'): NumericColumnData | null
+  (columnKey: string, type: 'string'): string[] | null
+  (columnKey: string, type: 'boolean'): boolean[] | null
 }
 
-export type CumulativeValuesByTime = {
-  [time: number]: {
-    [groupID: number]: number
-  }
+export type NumericColumnData =
+  | number[]
+  | Int8Array
+  | Int16Array
+  | Int32Array
+  | Uint8Array
+  | Uint16Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array
+
+export type ColumnData = NumericColumnData | string[] | boolean[]
+
+export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
+
+export type LayerConfig =
+  | CustomLayerConfig
+  | HeatmapLayerConfig
+  | HistogramLayerConfig
+  | LineLayerConfig
+  | ScatterLayerConfig
+
+export interface CustomLayerConfig {
+  type: 'custom'
+  render: (p: CustomLayerRenderProps) => JSX.Element
 }
+
+export interface CustomLayerRenderProps {
+  key: string | number
+  xScale: Scale<number, number>
+  yScale: Scale<number, number>
+  xDomain: number[]
+  yDomain: number[]
+  width: number
+  height: number
+  innerWidth: number
+  innerHeight: number
+  columnFormatter: (colKey: string) => (x: any) => string
+}
+
+export interface HeatmapLayerConfig {
+  type: 'heatmap'
+  x: string
+  y: string
+  colors?: string[]
+  binSize?: number
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
+}
+
+export interface HistogramLayerConfig {
+  type: 'histogram'
+  x: string
+  fill?: string[]
+  colors?: string[]
+  position?: HistogramPosition
+  binCount?: number
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
+}
+
+export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
+
+export interface LineLayerConfig {
+  type: 'line'
+  x: string
+  y: string
+  fill?: string[]
+  colors?: string[]
+  position?: LinePosition
+  interpolation?: LineInterpolation
+  hoverDimension?: LineHoverDimension | 'auto'
+  lineWidth?: number
+  maxTooltipRows?: number
+  shadeBelow?: boolean
+  shadeBelowOpacity?: number
+}
+
+export interface ScatterLayerConfig {
+  type: 'scatter'
+  x: string
+  y: string
+  colors?: string[]
+  fill?: string[]
+  symbol?: string[]
+}
+
+/*
+  When a user supplies a config for a layer, we derive various data from it:
+
+  - If the layer implies a certain statistical transform or aggregate, we
+    compute it. For example: a histogram layer needs to place data into bins,
+    and count the number of observations within each bin.
+
+  - Some layers support _group aesthetics_. These are aesthetics which multiple
+    columns in the input table may be mapped to at once. In this case, we
+    synthesize a new column in the table that contains a numeric group ID for
+    each unique combination of values from these columns. We also record the
+    values for each column that a particular group ID maps to, so that we can
+    display those values in a legend.
+
+  - For any data-to-aesthetic mapping, we create a scale function. The
+    exception to this is for the `x` and `y` aesthetics; since multiple layers
+    should use the same scale for `x` and `y` aesthetics, we do not generate
+    those scales in a layer transform. Instead we record the `xDomain` and
+    `yDomain` of the (transformed) data for the layer, so that some other
+    entity may compute these scales.
+
+  - We record the `xColumnType` and `yColumnType` for the layer, so that we can
+    format x and y values from the layer approriately.
+
+  We call the collection of this derived data a "spec".
+*/
+export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
 
 export interface LineLayerSpec {
   type: 'line'
@@ -349,33 +289,94 @@ export interface LayerProps {
   hoverY: number | null
 }
 
+export interface Scale<D = any, R = any> {
+  (x: D): R
+  invert?: (y: R) => D
+}
+
+export type ScaleFactory = (
+  domainStart: number,
+  domainStop: number,
+  rangeStart: number,
+  rangeStop: number
+) => Scale<number, number>
+
+export interface Margins {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}
+
+export interface TooltipColumn {
+  key: string
+  name: string
+  type: ColumnType
+  values: string[]
+  colors: string[] | null
+}
+
+export type TooltipData = TooltipColumn[]
+
+export type LineInterpolation =
+  | 'linear'
+  | 'monotoneX'
+  | 'monotoneY'
+  | 'cubic'
+  | 'step'
+  | 'stepBefore'
+  | 'stepAfter'
+  | 'natural'
+
 /*
-  When a user supplies a config for a layer, we derive various data from it:
+  The tooltip for a line layer can operate in one of three modes:
 
-  - If the layer implies a certain statistical transform or aggregate, we
-    compute it. For example: a histogram layer needs to place data into bins,
-    and count the number of observations within each bin.
+  In the `x` mode, every y-value for the currently hovered x-value is displayed
+  in the tooltip. The crosshair is a vertical line.
 
-  - Some layers support _group aesthetics_. These are aesthetics which multiple
-    columns in the input table may be mapped to at once. In this case, we
-    synthesize a new column in the table that contains a numeric group ID for
-    each unique combination of values from these columns. We also record the
-    values for each column that a particular group ID maps to, so that we can
-    display those values in a legend.
+  In the `y` mode, every x-value for the currently hovered y-value is displayed
+  in the tooltip. The crosshair is a horizontal line.
 
-  - For any data-to-aesthetic mapping, we create a scale function. The
-    exception to this is for the `x` and `y` aesthetics; since multiple layers
-    should use the same scale for `x` and `y` aesthetics, we do not generate
-    those scales in a layer transform. Instead we record the `xDomain` and
-    `yDomain` of the (transformed) data for the layer, so that some other
-    entity may compute these scales.
-
-  - We record the `xColumnType` and `yColumnType` for the layer, so that we can
-    format x and y values from the layer approriately.
-
-  We call the collection of this derived data a "spec".
+  In the `xy` mode, the single xy-point closest to the hovered mouse position
+  is displayed in the tooltip. The series that it belongs to is highlighted.
+  The crosshair is an intersecting pair of horizontal and vertical lines.
 */
-export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
+export type LineHoverDimension = 'x' | 'y' | 'xy'
+
+export type LinePosition = 'overlaid' | 'stacked'
+
+export type HistogramPosition = 'overlaid' | 'stacked'
+
+export type SymbolType =
+  | 'circle'
+  | 'triangle'
+  | 'square'
+  | 'plus'
+  | 'tritip'
+  | 'ex'
+
+export interface ColumnGroupMap {
+  // The column keys that specify the grouping
+  columnKeys: string[]
+
+  // A group ID `i` takes on the values specified by `mappings[i]` for the
+  // column keys that specify the grouping
+  mappings: Array<{[columnKey: string]: any}>
+}
+
+export type LineData = {
+  [groupID: number]: {
+    xs: number[]
+    ys: number[]
+    fill: string
+  }
+}
+
+export type CumulativeValuesByTime = {
+  [time: number]: {
+    [groupID: number]: number
+  }
+}
 
 export enum ErrorName {
   UnknownColumnTypeError = 'UnknownColumnTypeError',
