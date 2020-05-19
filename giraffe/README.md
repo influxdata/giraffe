@@ -2,29 +2,7 @@
 
 A React-based visualization library powering the graphs in [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
-**This library is currently in pre-beta**
-
-## 🦒 Features
-
-There exist plenty of terrific visualization libraries in the JavaScript ecosystem.
-Giraffe aims to distinguish itself with several features:
-
-- Supports [Flux](https://www.influxdata.com/products/flux)
-- Easy reactivity and extensibility via React
-- Support for mapping groupings of columns to a single visual aesthetic
-- A high-level [_Grammar of Graphics_](http://vita.had.co.nz/papers/layered-grammar.pdf) style API that can specify a wide variety of visualizations with a few simple concepts
-- A [columnar](https://observablehq.com/@mbostock/manipulating-flat-arrays) interface for input data that enables efficient interop with Web Workers and [Apache Arrow](https://arrow.apache.org/)
-- Self-contained configs in the style of [Vega-Lite](https://vega.github.io/vega-lite/)
-
-## Getting Started [](#getting-started)
-
-#### Installation
-
-Install [Giraffe](https://www.npmjs.com/package/@influxdata/giraffe) with your package manager
-
-`yarn add @influxdata/giraffe` or `npm install @influxdata/giraffe`
-
-#### Quick Start Example
+## Quick Start Example
 
 1. In your React code, import the `Plot` component and the `newTable` utility function
 
@@ -45,7 +23,7 @@ import {Plot, newTable} from '@influxdata/giraffe'
    - ticks: generation, formatting and labeling, font, and color
    - legend (tooltip): labeling and styling
 
-   To see details on the optional properties, go to the [configuration guide](./giraffe/README.md#config).
+   To see details on the optional properties, skip to [config](#config) documentation.
 
    The following example uses only required properties in the config object and skips optional properties.
 
@@ -86,7 +64,7 @@ const config = {
   </div>
 ```
 
-#### Example Using Flux [](#example-using-flux)
+## Example Using Flux [](#example-using-flux)
 
 When generating the table through a Flux result:
 
@@ -139,6 +117,46 @@ When generating the table through a Flux result:
   </div>
 ```
 
-## Development
+## Config
 
-To contribute to Giraffe see [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+A detailed guide to all configuration properties for `<Plot>`
+
+width:  
+height:
+
+gridColor:  
+gridOpacity:
+
+showAxes:  
+axisColor:  
+axisOpacity:  
+xAxisLabel:  
+yAxisLabel:
+
+xScale:  
+yScale:
+
+xTicks:  
+yTicks:  
+tickFont:  
+tickFontColor:  
+valueFormatters:
+
+table:  
+layers:
+
+xDomain:  
+onSetXDomain:  
+onResetXDomain:
+
+yDomain:  
+onSetYDomain:  
+onResetYDomain:
+
+legendFont:  
+legendFontColor:  
+legendFontBrightColor:  
+legendBackgroundColor:  
+legendBorder:  
+legendCrosshairColor:  
+legendColumns:
