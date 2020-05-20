@@ -24,7 +24,7 @@ Install [Giraffe](https://www.npmjs.com/package/@influxdata/giraffe) with your p
 
 `yarn add @influxdata/giraffe` or `npm install @influxdata/giraffe`
 
-#### Quick Start Example
+#### Example
 
 1. In your React code, import the `Plot` component and the `newTable` utility function
 
@@ -45,7 +45,7 @@ import {Plot, newTable} from '@influxdata/giraffe'
    - ticks: generation, formatting and labeling, font, and color
    - legend (tooltip): labeling and styling
 
-   To see details on the optional properties, go to the [configuration guide](./giraffe/README.md#config).
+   For details on all configuration properties, go to the [configuration guide](./giraffe/README.md#config).
 
 Here is an example of building the config object while skipping optional properties:
 
@@ -143,4 +143,6 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 ## Development
 
-To contribute to Giraffe see [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+To contribute to Giraffe, see the [contributing guide](./CONTRIBUTING.md).
+
+Looking for details on the configuration? See the [configuration guide](./giraffe/README.md#config).

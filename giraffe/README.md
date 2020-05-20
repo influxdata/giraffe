@@ -2,7 +2,7 @@
 
 A React-based visualization library powering the data visualizations in [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
-## Quick Start Example
+## Quick Start
 
 1. In your React code, import the `Plot` component and the `newTable` utility function
 
@@ -23,7 +23,7 @@ import {Plot, newTable} from '@influxdata/giraffe'
    - ticks: generation, formatting and labeling, font, and color
    - legend (tooltip): labeling and styling
 
-   To see details on the optional properties, skip to [config](#config) documentation.
+   For details on all configuration properties, skip to [config](#Config) documentation.
 
 Here is an example of building the config object while skipping optional properties:
 
@@ -121,9 +121,20 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 ## Config
 
-Details on the `<Plot>` component's `config` prop which has the following properties.
+`<Plot>` requires a `config` prop which is an object with properties that serve three purposes:
 
-## Appearance properties for `<Plot>` config
+- customizing the [appearance](#appearance-properties) of `<Plot>`
+- specifying the [data](#data-properties) to be visualized
+- defining the columns and appearance of the [legend (tooltip)](#legend-tooltip-properties).
+
+<pre>
+  const config = {
+    <b><i>property</i></b>: <b><i>value</i></b>,
+    <b><i>...</i></b>
+  }
+</pre>
+
+### Appearance properties
 
 - **width**: _number. Optional._ The width in _CSS px_ of the Plot. Includes the space to the left and below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the width of the parent element to `<Plot>` will determine.
 
@@ -166,7 +177,7 @@ const config = {
 
 - **yAxisLabel**: _string. Optional._ Uses **tickFont**, **tickFontColor**. Name to display to the left of the y-axis.
 
-## Data properties for `<Plot>` config
+### Data properties
 
 - **table**: _Object. **Required**._
 
@@ -176,30 +187,30 @@ const config = {
 
 - **yScale**: _"linear" | "log". Optional._ Sets the scaling of the y-axis. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
-- **xDomain**: _array[min, max]. Optional._
+- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed x domain. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
-- **onSetXDomain**:
+- **onSetXDomain**: _function. Optional._ See above regarding **xDomain**.
 
-- **onResetXDomain**:
+- **onResetXDomain**: _function. Optional._ See above regarding **xDomain**.
 
-- **yDomain**: _array[min, max]. Optional._
+- **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
 
-- **onSetYDomain**:
+- **onSetYDomain**: _function. Optional._ See above regarding **yDomain**.
 
-- **onResetYDomain**:
+- **onResetYDomain**: _function. Optional._ See above regarding **yDomain**.
 
-## Legend (Tooltip) properties for `<Plot>` config
+### Legend Tooltip properties
 
-- **legendFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip on hover).
+- **legendFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
 
-- **legendFontColor**: _string. Optional._ The _CSS color value_ of the column headers in the legend (tooltip on hover). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
+- **legendFontColor**: _string. Optional._ The _CSS color value_ of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
 
-- **legendFontBrightColor**: _string. Optional. Recommendation: do not include._ The _CSS color value_ of any text that is not a column header or in a row inside the legend (tooltip on hover). Currently no such text exists and may be added in the future.
+- **legendFontBrightColor**: _string. Optional. Recommendation: do not include._ The _CSS color value_ of any text that is not a column header or in a row inside the legend (tooltip). Currently no such text exists and may be added in the future.
 
-- **legendBackgroundColor**: _string. Optional._ The _CSS color value_ of the background in the legend (tooltip on hover).
+- **legendBackgroundColor**: _string. Optional._ The _CSS color value_ of the background in the legend (tooltip).
 
-- **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend (tooltip on hover).
+- **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend (tooltip).
 
 - **legendCrosshairColor**: _string | Object. Optional._ The _CSS color value_ or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendColumns**: _array[string, ...]. Optional_. When included, this array will determine which column key names that should be included in the legend (tooltip on hover). If this option is included as an empty array, the legend will be empty.
+- **legendColumns**: _array[string, ...]. Optional_. When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
