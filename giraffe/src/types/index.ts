@@ -10,12 +10,6 @@ export interface Config {
   showAxes?: boolean
   axisColor?: string
   axisOpacity?: number
-  xAxisLabel?: string
-  yAxisLabel?: string
-
-  // The scaling of the axes, usually linear or logarithmic
-  xScale?: string
-  yScale?: string
 
   // Ticks on the axes can be specified, or else they are calculated,
   // as well as the font, color, and the unit labels for each tick
@@ -26,6 +20,12 @@ export interface Config {
   valueFormatters?: {
     [colKey: string]: Formatter
   }
+  xAxisLabel?: string
+  yAxisLabel?: string
+
+  // The scaling of the axes, usually linear or logarithmic
+  xScale?: string
+  yScale?: string
 
   table: Table
   layers: LayerConfig[]
