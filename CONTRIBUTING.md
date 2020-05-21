@@ -5,11 +5,11 @@ The source code for the library published to npm as `@influxdata/giraffe` is con
 
 ### Developing Giraffe with Storybook
 
-The `stories` workspace in this repository contains a [Storybook](https://storybook.js.org/) application, which is convenient place to test changes to Giraffe.
+The **/stories** workspace in this repository contains a [Storybook](https://storybook.js.org/) application, which is convenient place to test changes to Giraffe.
 
 To run the Storybook during development:
 
-1. In a terminal, change into the `stories` workspace and run `yarn start`.
+1. In a terminal, `cd` into the **/stories** workspace and run `yarn start`.
    This will start a Storybook development server.
 
 1. Visit [http://localhost:50000](http://localhost:50000) to see the storybook.
@@ -19,13 +19,13 @@ _Just looking for how to render a graph in your UI?_ See **Getting Started** in 
 
 ### Linting & Formatting
 
-To run linting, change into either `/giraffe` or `/stories` and run:
+To run linting, `cd` into either **/giraffe** or **/stories** and run:
 
 ```
 yarn lint
 ```
 
-To run formatting, which uses [Prettier](https://www.npmjs.com/package/prettier), change into either `/giraffe` or `/stories` and run:
+To run formatting, which uses [Prettier](https://www.npmjs.com/package/prettier), `cd` into either **/giraffe** or **/stories** and run:
 
 ```
 yarn prettier --fix
@@ -35,7 +35,7 @@ To see the formatting issues without fixing, run the above without the `--fix` o
 
 ### Unit tests
 
-To run unit tests, change into the `/giraffe` or `/stories` and run:
+To run unit tests, `cd` into the **/giraffe** or **/stories** and run:
 
 ```
 yarn test
