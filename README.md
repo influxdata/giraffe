@@ -68,7 +68,7 @@ Install [Giraffe](https://www.npmjs.com/package/@influxdata/giraffe) with your p
   }
   </pre>
 
-3. Render your component by passing the `confg` object as the config prop to the `<Plot>` component. Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.
+3. Render your component by passing the `config` object as the config prop to the `<Plot>` component. **Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.**
 
    For example, to make a `<Plot>` that adjusts to screen height and width, in your React rendering code return this element:
 

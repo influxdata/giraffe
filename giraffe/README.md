@@ -46,7 +46,7 @@ A React-based visualization library powering the data visualizations in [InfluxD
   }
   </pre>
 
-3. Render your component by passing the `confg` object as the config prop to the `<Plot>` component. Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.
+3. Render your component by passing the `config` object as the config prop to the `<Plot>` component. Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.
 
    For example, to make a `<Plot>` that adjusts to screen height and width, in your React rendering code return this element:
 
@@ -123,9 +123,9 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 `<Plot>` requires a `config` prop which is an object with properties that serve three purposes:
 
-- customizing the [appearance](#appearance-properties) of `<Plot>`
-- specifying the [data](#data-properties) to be visualized
-- defining the columns and appearance of the [legend (tooltip)](#legend-tooltip-properties).
+- [appearance](#appearance-properties) customization for sizing and framing
+- [data](#data-properties) store, getters and setters, and plot-type specific options
+- [legend (tooltip)](#legend-tooltip-properties) customization
 
 <pre>
   const config = {
@@ -136,9 +136,9 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 ### Appearance properties
 
-- **width**: _number. Optional._ The width in _CSS px_ of the Plot. Includes the space to the left and below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the width of the parent element to `<Plot>` will determine.
+- **width**: _number. Optional._ The width in _CSS px_ of the Plot. Includes the space to the left of the axes surrounding the ticks, tick labels, and axis labels. When not specified, the width of `<Plot>`'s parent element will determine the width.
 
-- **height**: _number. Optional._ The height in _CSS px_ of the Plot. Includes the space to the left and below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the height of the parent element to `<Plot>` will determine.
+- **height**: _number. Optional._ The height in _CSS px_ of the Plot. Includes the space below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the height of `<Plot>`'s parent element will determine the height.
 
 - **gridColor**: _string. Optional._ The _CSS color value_ of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
 
@@ -150,9 +150,9 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 - **axisOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
-- **xTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the x-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks.
+- **xTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the x-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the x-axis while keeping reasonable spacing between them.
 
-- **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks.
+- **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the y-axis while keeping reasonable spacing between them.
 
 - **tickFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the tick labels and axis labels.
 
@@ -185,19 +185,25 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
   - the return value from the `fromRows` utility function.
   - the return value from the `newTable` utility function.
 
-- **layers**: _array[Object, ...]. **Required**._ An array of [LayerConfig objects](#layerconfig). These objects are customizations specific to a type of `<Plot>`. Currently, Giraffe supports only one pre-defined `<Plot>` type with any number of "custom layers". Custom layers are not pre-defined in Giraffe, but created through a callback render function in the configuration.
+- **layers**: _array[Object, ...]. **Required**._ An array of [LayerConfig objects](#layerconfig). These objects are customizations specific to a type of `<Plot>`. Currently, Giraffe supports only one pre-defined `<Plot>` type per graph with any number of "custom layers". Custom layers are not pre-defined in Giraffe, but created through a callback render function in the configuration.
 
-- **xScale**: _"linear" | "log". Optional._ Sets the scaling of the x-axis by selecting the correct scaling function to be used by Layers. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+- **xScale**: _"linear" | "log". Optional._ Sets the scaling function to be used on the x-axis internally by Giraffe to generate values for resources, such as tick marks.
 
-- **yScale**: _"linear" | "log". Optional._ Sets the scaling of the y-axis by selecting the correct scaling function to be used by Layers. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+  - "linear" scaling means the same distance between ticks represents the same increase in value.
+  - "log" (logarithmic) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
-- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed x domain. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
+- **yScale**: _"linear" | "log". Optional._ Sets the scaling function to be used on the y-axis internally by Giraffe to generate values for resources, such as tick marks.
+
+  - "linear" scaling means the same distance between ticks represents the same increase in value.
+  - "log" (logarithmic) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+
+- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain to set the minimum and maximum value of the x-axis. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
 - **onSetXDomain**: _function(array[min, max]). Optional._ See above regarding **xDomain**.
 
 - **onResetXDomain**: _function(). Optional._ See above regarding **xDomain**.
 
-- **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
+- **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
 
 - **onSetYDomain**: _function(array[min, max]). Optional._ See above regarding **yDomain**.
 
@@ -243,11 +249,15 @@ Giraffe comes with utility functions.
 
   - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
 
-  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along the "x" axis or "y" axis during mouse hover. When "xy" is chosen, the legend will display for a single data point nearest the mouse rather than for all data points along an entire axis.
+  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
 
-  - **maxTooltipRows**: _number. Optional._ The maxium number of data rows to display in the legend (tooltip). Subject to screen size limitations. Scrolling not implemented.
+    - "x" means the legend will display all data points along the y-axis that have the same x-axis value
+    - "y" means the legend will display all data points along the x-axis that have the same y-axis value
+    - "xy" means the legend will display for a single data point nearest the mouse
 
-  - **interpolation**: _string. Optional._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points.
+  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
+
+  - **interpolation**: _string. Optional. Defaults to "linear" when not included._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points. The options are [linear](https://github.com/d3/d3-shape#curveLinear), [natural](https://github.com/d3/d3-shape#curveNatural), [monotoneX](https://github.com/d3/d3-shape#curveMonotoneX), [monotoneY](https://github.com/d3/d3-shape#curveMonotoneY), [cubic](https://github.com/d3/d3-shape#curveBasis), [step](https://github.com/d3/d3-shape#curveStep), [stepBefore](https://github.com/d3/d3-shape#curveStepBefore), and [stepAfter](https://github.com/d3/d3-shape#curveStepAfter).
 
   - **lineWidth**: _number. Optional._ The [CanvasRenderingContext2D lineWidth](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of each graph line.
 
@@ -318,6 +328,7 @@ Giraffe comes with utility functions.
   A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:
 
   - **type**: _'custom'. Required._ Specifies that this LayerConfig is a custom layer.
+
   - **render**: _function(Object). Required._ A configuration-defined callback function called with a `CustomLayerRenderProps` and returns a JSX Element. The `CustomerLayerRenderProps` Object has the following properties available to use in the callback function:
 
     - **key**: \_string | number. As part of a [React list of rendered elements](https://reactjs.org/docs/lists-and-keys.html), a unique `key` prop is required on the JSX Element returned by the custom layer's render function. Use this **key** for the `key` prop in the JSX Element.
