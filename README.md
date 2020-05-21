@@ -28,9 +28,9 @@ Install [Giraffe](https://www.npmjs.com/package/@influxdata/giraffe) with your p
 
 1. In your React code, import the `Plot` component and the `newTable` utility function
 
-```
-import {Plot, newTable} from '@influxdata/giraffe'
-```
+  <pre>
+  import {Plot, newTable} from '@influxdata/giraffe'
+  </pre>
 
 2. Build the config object.  
    a. **Required properties**:
@@ -47,44 +47,44 @@ import {Plot, newTable} from '@influxdata/giraffe'
 
    For details on all configuration properties, go to the [configuration guide](./giraffe/README.md#config).
 
-Here is an example of building the config object while skipping optional properties:
+   Here is an example of building the config object while skipping optional properties:
 
-```
-// Example table and layer
+  <pre>
+  // Example table and layer
 
-const table = newTable(5)
-  .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
-  .addColumn('_value', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
+  const table = newTable(5)
+    .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
+    .addColumn('_value', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
 
-const lineLayer = {
-  type: "line",
-  x: "_time",
-  y: "_value",
-}
+  const lineLayer = {
+    type: "line",
+    x: "_time",
+    y: "_value",
+  }
 
-const config = {
-  table: table,
-  layers: [lineLayer],
-}
-```
+  const config = {
+    table: table,
+    layers: [lineLayer],
+  }
+  </pre>
 
 3. Render your component by passing the `confg` object as the config prop to the `<Plot>` component. Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.
 
    For example, to make a `<Plot>` that adjusts to screen height and width, in your React rendering code return this element:
 
-```
+  <pre>
   // return this element in your React rendering code:
 
-  <div
+  &#60;div
     style={{
       width: "calc(70vw - 20px)",
       height: "calc(70vh - 20px)",
       margin: "40px",
     }}
-  >
-    <Plot config={config} />
-  </div>
-```
+  &#62;
+    &#60;Plot config={config} /&#62;
+  &#60;/div&#62;
+  </pre>
 
 #### Example Using Flux [](#example-using-flux)
 
@@ -95,7 +95,7 @@ When generating the table through a Flux result:
 
 Here is an example of turning a result in comma separate values (CSV) from Flux into a table and rendering it without optional properties:
 
-```
+  <pre>
   import {Plot, fromFlux} from '@influxdata/giraffe'
 
   // ...
@@ -130,16 +130,16 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
   // return this element in your React rendering code:
 
-  <div
+  &#60;div
     style={{
       width: "calc(70vw - 20px)",
       height: "calc(70vh - 20px)",
       margin: "40px",
     }}
-  >
-    <Plot config={config} />
-  </div>
-```
+  &#62;
+    &#60;Plot config={config} /&#62;
+  &#60;/div&#62;
+  </pre>
 
 ## Development
 

@@ -147,25 +147,25 @@ export interface HeatmapLayerConfig {
   type: 'heatmap'
   x: string
   y: string
-  colors?: string[]
   binSize?: number
+  colors?: string[]
+  fillOpacity?: number
+  strokeOpacity?: number
   strokeWidth?: number
   strokePadding?: number
-  strokeOpacity?: number
-  fillOpacity?: number
 }
 
 export interface HistogramLayerConfig {
   type: 'histogram'
   x: string
-  fill?: string[]
-  colors?: string[]
   position?: HistogramPosition
   binCount?: number
+  fill?: string[]
+  colors?: string[]
+  fillOpacity?: number
+  strokeOpacity?: number
   strokeWidth?: number
   strokePadding?: number
-  strokeOpacity?: number
-  fillOpacity?: number
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
@@ -175,12 +175,12 @@ export interface LineLayerConfig {
   x: string
   y: string
   fill?: string[]
-  colors?: string[]
   position?: LinePosition
-  interpolation?: LineInterpolation
   hoverDimension?: LineHoverDimension | 'auto'
-  lineWidth?: number
   maxTooltipRows?: number
+  interpolation?: LineInterpolation
+  lineWidth?: number
+  colors?: string[]
   shadeBelow?: boolean
   shadeBelowOpacity?: number
 }
@@ -189,8 +189,8 @@ export interface ScatterLayerConfig {
   type: 'scatter'
   x: string
   y: string
-  colors?: string[]
   fill?: string[]
+  colors?: string[]
   symbol?: string[]
 }
 
