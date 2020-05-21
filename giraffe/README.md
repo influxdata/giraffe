@@ -6,9 +6,9 @@ A React-based visualization library powering the data visualizations in [InfluxD
 
 1. In your React code, import the `Plot` component and the `newTable` utility function
 
-```
-import {Plot, newTable} from '@influxdata/giraffe'
-```
+  <pre>
+  import {Plot, newTable} from '@influxdata/giraffe'
+  </pre>
 
 2. Build the config object.  
    a. **Required properties**:
@@ -25,44 +25,44 @@ import {Plot, newTable} from '@influxdata/giraffe'
 
    For details on all configuration properties, skip to [config](#Config) documentation.
 
-Here is an example of building the config object while skipping optional properties:
+   Here is an example of building the config object while skipping optional properties:
 
-```
-// Example table and layer
+  <pre>
+  // Example table and layer
 
-const table = newTable(5)
-  .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
-  .addColumn('_value', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
+  const table = newTable(5)
+    .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
+    .addColumn('_value', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
 
-const lineLayer = {
-  type: "line",
-  x: "_time",
-  y: "_value",
-}
+  const lineLayer = {
+    type: "line",
+    x: "_time",
+    y: "_value",
+  }
 
-const config = {
-  table: table,
-  layers: [lineLayer],
-}
-```
+  const config = {
+    table: table,
+    layers: [lineLayer],
+  }
+  </pre>
 
 3. Render your component by passing the `confg` object as the config prop to the `<Plot>` component. Be sure that the parent component around `<Plot>` has both a height and a width measured in positive values. If either is not a positive value, the graph will not be visible.
 
    For example, to make a `<Plot>` that adjusts to screen height and width, in your React rendering code return this element:
 
-```
+  <pre>
   // return this element in your React rendering code:
 
-  <div
+  &#60;div
     style={{
       width: "calc(70vw - 20px)",
       height: "calc(70vh - 20px)",
       margin: "40px",
     }}
-  >
-    <Plot config={config} />
-  </div>
-```
+  &#62;
+    &#60;Plot config={config} /&#62;
+  &#60;/div&#62;
+  </pre>
 
 ## Example Using Flux [](#example-using-flux)
 
@@ -73,7 +73,7 @@ When generating the table through a Flux result:
 
 Here is an example of turning a result in comma separate values (CSV) from Flux into a table and rendering it without optional properties:
 
-```
+  <pre>
   import {Plot, fromFlux} from '@influxdata/giraffe'
 
   // ...
@@ -108,16 +108,16 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
   // return this element in your React rendering code:
 
-  <div
+  &#60;div
     style={{
       width: "calc(70vw - 20px)",
       height: "calc(70vh - 20px)",
       margin: "40px",
     }}
-  >
-    <Plot config={config} />
-  </div>
-```
+  &#62;
+    &#60;Plot config={config} /&#62;
+  &#60;/div&#62;
+  </pre>
 
 ## Config
 
@@ -160,18 +160,18 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 - **valueFormatters**: _object. Optional._ An object containing column keys and their corresponding functions that format data for that column type. Each function takes a data value as the first argument, and an optional second argument as an options object. Returns a formatted string for that data value. For example:
 
-```
-const config = {
-  // ...
-
-  valueFormatters: {
-    _time: (t) => new Date(t).toLocaleTimeString(),  // ECMAScript time to human-readable time stamp
-    _value: (num) => num.toFixed(2),                 // values fixed to 2 decimal places
-  },
-
-  // ...
-}
-```
+  <pre>
+  const config = {
+    // ...
+  
+    valueFormatters: {
+      _time: (t) => new Date(t).toLocaleTimeString(),  // ECMAScript time to human-readable time stamp
+      _value: (num) => num.toFixed(2),                 // values fixed to 2 decimal places
+    },
+  
+    // ...
+  }
+  </pre>
 
 - **xAxisLabel**: _string. Optional._ Uses **tickFont**, **tickFontColor**. Name to display below the x-axis.
 
@@ -179,25 +179,29 @@ const config = {
 
 ### Data properties
 
-- **table**: _Object. **Required**._
+- **table**: _Object. **Required**._ A data object produced by [Giraffe's utility functions](#utility-functions). Houses the data and getters and setters for that data, for the `<Plot>`.
 
-- **layers**: _array[Object, ...]. **Required**._
+  - the `table` property of the return value from the `fromFlux` utility function.
+  - the return value from the `fromRows` utility function.
+  - the return value from the `newTable` utility function.
 
-- **xScale**: _"linear" | "log". Optional._ Sets the scaling of the x-axis. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+- **layers**: _array[Object, ...]. **Required**._ An array of [LayerConfig objects](#layerconfig). These objects are customizations specific to a type of `<Plot>`. Currently, Giraffe supports only one pre-defined `<Plot>` type with any number of "custom layers". Custom layers are not pre-defined in Giraffe, but created through a callback render function in the configuration.
 
-- **yScale**: _"linear" | "log". Optional._ Sets the scaling of the y-axis. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+- **xScale**: _"linear" | "log". Optional._ Sets the scaling of the x-axis by selecting the correct scaling function to be used by Layers. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
+
+- **yScale**: _"linear" | "log". Optional._ Sets the scaling of the y-axis by selecting the correct scaling function to be used by Layers. Linear scaling means the same distance between ticks represent the same increase in value. Logarithmic (log) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
 - **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed x domain. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
-- **onSetXDomain**: _function. Optional._ See above regarding **xDomain**.
+- **onSetXDomain**: _function(array[min, max]). Optional._ See above regarding **xDomain**.
 
-- **onResetXDomain**: _function. Optional._ See above regarding **xDomain**.
+- **onResetXDomain**: _function(). Optional._ See above regarding **xDomain**.
 
 - **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a _min_ and _max_. If this option is passed, then `<Plot>` is operating in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
 
-- **onSetYDomain**: _function. Optional._ See above regarding **yDomain**.
+- **onSetYDomain**: _function(array[min, max]). Optional._ See above regarding **yDomain**.
 
-- **onResetYDomain**: _function. Optional._ See above regarding **yDomain**.
+- **onResetYDomain**: _function(). Optional._ See above regarding **yDomain**.
 
 ### Legend Tooltip properties
 
@@ -213,4 +217,125 @@ const config = {
 
 - **legendCrosshairColor**: _string | Object. Optional._ The _CSS color value_ or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendColumns**: _array[string, ...]. Optional_. When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
+- **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
+
+## Utility Functions
+
+Giraffe comes with utility functions.
+
+- **fromFlux**: _function(string)._ Takes a Flux CSV, converts it, and returns a `Table` used in the [table property](#data-properties) of the config.
+
+- **fromRows**: _function([Object, ...], Object)._ The first argument is an array of objects, each representing a row of data. The optional second argument describes the schema for the data. Returns a `Table` used in the [table property](#data-properties) of the config.
+
+- **newTable**: _function(number)._ The argument is a length for a newly created `Table` with no initial data that allows only columns equal to that length to be added. Returns the created `Table`.
+
+## LayerConfig
+
+- **LineLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"line". **Required**_. Specifies that this LayerConfig and `<Plot>` is a line graph.
+
+  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+
+  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+
+  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+
+  - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
+
+  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along the "x" axis or "y" axis during mouse hover. When "xy" is chosen, the legend will display for a single data point nearest the mouse rather than for all data points along an entire axis.
+
+  - **maxTooltipRows**: _number. Optional._ The maxium number of data rows to display in the legend (tooltip). Subject to screen size limitations. Scrolling not implemented.
+
+  - **interpolation**: _string. Optional._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points.
+
+  - **lineWidth**: _number. Optional._ The [CanvasRenderingContext2D lineWidth](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of each graph line.
+
+  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
+
+  - **shadeBelow**: _boolean. Optional._ Uses **colors**. Indicates whether the area below each line should be shaded.
+
+  - **shadeBelowOpacity**: _number. Optional._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shaded color below each line. No effect when **shadeBelow** is false or not included.
+
+- **ScatterLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"scatter". **Required**_. Specifies that this LayerConfig and `<Plot>` is a scatter plot.
+
+  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+
+  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+
+  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+
+  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give dots in the graph different colors based on the **fill** columns.
+
+  - **symbol**: _array[string, ...]. Optional._ An array of columm key names of column filters that should be visualized. Acts like a secondary **fill** using different symbols for the dots rather than **colors**. Limited to 6 different symbols. Symbols will repeat above limit.
+
+* **HistogramLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"histogram". **Required**_. Specifies that this LayerConfig and `<Plot>` is a [histogram](https://en.wikipedia.org/wiki/Histogram).
+
+  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis. Note: the y-axis is always the count.
+
+  - **binCount**: _number. Optional. Defaults to using [Sturges' Formula](https://en.wikipedia.org/wiki/Histogram#Sturges) when not included._ The number of buckets or bins on the x-axis. The range of values that fall into each bin depends on the scale and domain of the x-axis.
+
+  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+
+  - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the fill columns of different colors for the same bin should cover each other ("overlaid") or be "stacked" upon each other touching only at the borders. When "overlaid" the covering order follows the same order as found in each column of the data, with the lower indexed values covered by the higher indexed values.
+
+  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give bars in each bin different colors based on the **fill** columns.
+
+  - **fillOpacity**: _number. Optional._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shading inside the bins.
+
+  - **strokeOpacity**: _number. Optional._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0.
+
+  - **strokeWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0. A high value for **strokeWidth** will completely fill the bin with border color at an opacity indicated by **strokeOpacity**.
+
+  - **strokePadding**: _number. Optional._ The space around all four sides of each fill column or bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
+- **HeatmapLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"heatmap". **Required**_. Specifies that this LayerConfig and `<Plot>` is a heatmap.
+
+  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+
+  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+
+  - **binSize**: _number. Optional._ The _CSS px_ size of each heat bin. [config's width](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the x-axis. [config's height](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the y-axis.
+
+  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as the color scheme in the heatmap. The color in index 0 is used to represent the "cold" area or background of the heatmap. The higher the index, the "hotter" the color will represent on the heatmap.
+
+  - **fillOpacity**: _number. Optional._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shading inside the heat bins. Warning: low opacity is difficult to see visually and may be counterproductive for heatmaps.
+
+  - **strokeOpacity**: _number. Optional._ A value between 0 and 1 for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the border of the heat bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0.
+
+  - **strokeWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0. A high value for **strokeWidth** will completely fill the heat bin with border color at an opacity indicated by **strokeOpacity**.
+
+  - **strokePadding**: _number. Optional._ The space around all four sides of each heat bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
+- **CustomLayerConfig**: _Object_. No limit per `<Plot>`.
+
+  A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:
+
+  - **type**: _'custom'. Required._ Specifies that this LayerConfig is a custom layer.
+  - **render**: _function(Object). Required._ A configuration-defined callback function called with a `CustomLayerRenderProps` and returns a JSX Element. The `CustomerLayerRenderProps` Object has the following properties available to use in the callback function:
+
+    - **key**: \_string | number. As part of a [React list of rendered elements](https://reactjs.org/docs/lists-and-keys.html), a unique `key` prop is required on the JSX Element returned by the custom layer's render function. Use this **key** for the `key` prop in the JSX Element.
+
+    - **xScale**: _function(number)._ The scaling function produced by the [config's xScale property](#data-properties). Can be used for scaling the JSX Element's x-dimension.
+
+    - **yScale**: _function(number)._ The scaling function produced by the [config's yScale property](#data-properties). Can be used for scaling the JSX Element's y-dimension.
+
+    - **xDomain**: _array[min, max]._ See the [config's xDomain property](#data-properties). Gives the JSX Element access to the `<Plot>`'s xDomain.
+
+    - **yDomain**: _array[min, max]._ See the [config's yDomain property](#data-properties). Gives the JSX Element access to the `<Plot>`'s yDomain.
+
+    - **width**: _number._ See the [config's width property](#appearance-properties). Gives the JSX Element access to the `<Plot>`'s width.
+
+    - **innerWidth**: _number._ The **width** (see above) without the size of the area to the left of the y-axis.
+
+    - **height**: _number._ See the [config's width property](#appearance-properties). Gives the JSX Element access to the `<Plot>`'s height.
+
+    - **innerHeight**: _number._ The **height** (see above) without the size of the area below the x-axis.
+
+    - **columnFormatter**: _function(string)._ A function that takes a column key and returns a function that can format values for that type of column. When **columnFormatter** is called with "\_time", it returns a function that takes ECMAScript time values and returns the human-readable time stamp for that value.
