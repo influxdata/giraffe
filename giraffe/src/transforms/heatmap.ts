@@ -72,9 +72,11 @@ export const bin2d = (
   const xColType = table.getColumnType(xColKey) as 'time' | 'number'
   const yColType = table.getColumnType(yColKey) as 'time' | 'number'
 
-  const xBinCount = Math.floor(width / binSize)
-  const yBinCount = Math.floor(height / binSize)
-
+  const xBinCount = Math.max(Math.floor(width / (binSize > 0 ? binSize : 1)), 1)
+  const yBinCount = Math.max(
+    Math.floor(height / (binSize > 0 ? binSize : 1)),
+    1
+  )
   // Count occurences in each bin in a `xBinCount` by `yBinCount` matrix
   //
   //                 4th y bin
