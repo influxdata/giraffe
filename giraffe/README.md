@@ -327,11 +327,11 @@ Giraffe comes with utility functions.
 
   A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:
 
-  - **type**: _'custom'. Required._ Specifies that this LayerConfig is a custom layer.
+  - **type**: _'custom'. **Required**._ Specifies that this LayerConfig is a custom layer.
 
   - **render**: _function(Object). Required._ A configuration-defined callback function called with a `CustomLayerRenderProps` and returns a JSX Element. The `CustomerLayerRenderProps` Object has the following properties available to use in the callback function:
 
-    - **key**: \_string | number. As part of a [React list of rendered elements](https://reactjs.org/docs/lists-and-keys.html), a unique `key` prop is required on the JSX Element returned by the custom layer's render function. Use this **key** for the `key` prop in the JSX Element.
+    - **key**: _string | number._ As part of a [React list of rendered elements](https://reactjs.org/docs/lists-and-keys.html), a unique `key` prop is required on the JSX Element returned by the custom layer's render function. Use this **key** for the `key` prop in the JSX Element.
 
     - **xScale**: _function(number)._ The scaling function produced by the [config's xScale property](#data-properties). Can be used for scaling the JSX Element's x-dimension.
 

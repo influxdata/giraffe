@@ -13,6 +13,18 @@
     "prettier:fix": "prettier --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit --pretty"
   },
+  "keywords": [
+    "influxdb",
+    "giraffe",
+    "graph",
+    "plot",
+    "visualization",
+    "layer",
+    "line",
+    "scatterplot",
+    "heatmap",
+    "histogram"
+  ],
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
