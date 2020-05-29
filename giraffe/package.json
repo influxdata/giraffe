@@ -14,16 +14,20 @@
     "typecheck": "tsc --noEmit --pretty"
   },
   "keywords": [
-    "influxdb",
+    "data",
     "giraffe",
     "graph",
-    "plot",
-    "visualization",
+    "heatmap",
+    "histogram",
+    "influxdb",
     "layer",
     "line",
+    "plot",
     "scatterplot",
-    "heatmap",
-    "histogram"
+    "stat",
+    "time series",
+    "timescale",
+    "visualization"
   ],
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
