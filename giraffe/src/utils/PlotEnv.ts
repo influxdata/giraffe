@@ -187,13 +187,21 @@ export class PlotEnv {
   }
 
   public get xTickFormatter(): Formatter {
-    const firstXMapping = this.getSpec(0).xColumnKey
+    const spec = this.getSpec(0)
+    if (!spec) {
+      return DEFAULT_FORMATTER
+    }
+    const firstXMapping = spec.xColumnKey
 
     return this.getFormatterForColumn(firstXMapping)
   }
 
   public get yTickFormatter(): Formatter {
-    const firstYMapping = this.getSpec(0).yColumnKey
+    const spec = this.getSpec(0)
+    if (!spec) {
+      return DEFAULT_FORMATTER
+    }
+    const firstYMapping = spec.yColumnKey
 
     return this.getFormatterForColumn(firstYMapping)
   }
@@ -262,6 +270,7 @@ export class PlotEnv {
       }
 
       case 'custom':
+      case 'single stat':
         return null
 
       default:

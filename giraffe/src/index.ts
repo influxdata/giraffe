@@ -17,6 +17,7 @@ export {lineTransform} from './transforms/line'
 
 // Constants
 export * from './constants/colorSchemes'
+export * from './constants/singleStatStyles'
 
 // Types
 export {
@@ -34,5 +35,6 @@ export {
   Margins,
   NumericColumnData,
   Scale,
+  SingleStatLayerConfig,
   Table,
 } from './types'
