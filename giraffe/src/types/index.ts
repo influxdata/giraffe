@@ -1,3 +1,5 @@
+import CSS from 'csstype'
+
 export type SizedConfig = Config & {width: number; height: number}
 
 export interface Config {
@@ -120,6 +122,7 @@ export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
 export type LayerConfig =
   | CustomLayerConfig
+  | SingleStatLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
   | LineLayerConfig
@@ -141,6 +144,34 @@ export interface CustomLayerRenderProps {
   innerWidth: number
   innerHeight: number
   columnFormatter: (colKey: string) => (x: any) => string
+}
+
+export interface SingleStatLayerConfig {
+  type: 'single stat'
+  prefix: string
+  suffix: string
+  decimalPlaces: SingleStatDecimalPlaces
+  textColor: string
+  textOpacity?: number
+  backgroundColor?: string
+  testID?: string
+  style?: CSS.Properties
+  resizerStyle?: CSS.Properties
+  svgAttributes?: SingleStatSVGAttributes
+  svgStyle?: CSS.Properties
+  svgTextAttributes?: SingleStatSVGAttributes
+  svgTextStyle?: CSS.Properties
+}
+
+export interface SingleStatDecimalPlaces {
+  isEnforced?: boolean
+  digits?: number
+}
+
+export type SingleStatSVGAttributeFunction = (stat: string) => string
+
+export interface SingleStatSVGAttributes {
+  [attributeName: string]: string | SingleStatSVGAttributeFunction
 }
 
 export interface HeatmapLayerConfig {

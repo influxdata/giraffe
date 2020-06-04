@@ -4,10 +4,12 @@ import {useCallback, FunctionComponent, CSSProperties} from 'react'
 import {Axes} from './Axes'
 import {
   SizedConfig,
+  SingleStatLayerConfig,
   LineLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
 } from '../types'
+import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
@@ -17,6 +19,7 @@ import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
 import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
+import {LatestValueTransform} from './LatestValueTransform'
 
 interface Props {
   config: SizedConfig
@@ -108,6 +111,23 @@ export const SizedPlot: FunctionComponent<Props> = ({
               }
 
               return layerConfig.render(renderProps)
+            }
+
+            if (layerConfig.type === 'single stat') {
+              return (
+                <LatestValueTransform
+                  key={layerIndex}
+                  table={config.table}
+                  allowString={true}
+                >
+                  {latestValue => (
+                    <SingleStatLayer
+                      stat={latestValue}
+                      config={layerConfig as SingleStatLayerConfig}
+                    />
+                  )}
+                </LatestValueTransform>
+              )
             }
 
             const spec = env.getSpec(layerIndex)

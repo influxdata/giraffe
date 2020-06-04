@@ -1,9 +1,9 @@
 import {newTable} from '../../../giraffe/src'
 
 const now = Date.now()
-const numberOfRecords = 80
+const numberOfRecords = 20
 const recordsPerLine = 20
-const maxValue = 100
+const maxValue = 10
 
 const TIME_COL = []
 const VALUE_COL = []
@@ -18,7 +18,7 @@ for (let i = 0; i < numberOfRecords; i += 1) {
   TIME_COL.push(now + (i % recordsPerLine) * 1000 * 60)
 }
 
-export const stackedLineTable = newTable(numberOfRecords)
+export const singleStatTable = newTable(numberOfRecords)
   .addColumn('_time', 'time', TIME_COL)
   .addColumn('_value', 'number', VALUE_COL)
   .addColumn('cpu', 'string', CPU_COL)

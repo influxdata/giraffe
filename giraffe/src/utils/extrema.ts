@@ -43,7 +43,7 @@ export const maxBy = <T>(f: (x: T) => number, xs: T[]): T => {
 export const extentOfExtents = (
   ...data: number[][]
 ): [number, number] | null => {
-  const result = extent(flatMap(d => extent(d), data))
+  const result = extent(flatMap(data, d => extent(d)))
 
   if (result.some(x => x === undefined)) {
     return null
