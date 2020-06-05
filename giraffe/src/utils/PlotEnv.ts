@@ -417,19 +417,24 @@ const areUncontrolledDomainsStale = (
     ...X_DOMAIN_AESTHETICS,
     ...Y_DOMAIN_AESTHETICS,
   ].some(aes =>
-    config.layers.some(
-      (layer, layerIndex) => layer[aes] !== prevConfig.layers[layerIndex][aes]
-    )
+    config.layers.some((layer, layerIndex) => {
+      if (layerIndex >= prevConfig.layers.length) {
+        return false
+      }
+      return layer[aes] !== prevConfig.layers[layerIndex][aes]
+    })
   )
 
   if (xyMappingsChanged) {
     return true
   }
 
-  const binCountChanged = config.layers.some(
-    (layer: any, layerIndex) =>
-      layer.binCount !== (prevConfig.layers[layerIndex] as any).binCount
-  )
+  const binCountChanged = config.layers.some((layer: any, layerIndex) => {
+    if (layerIndex >= prevConfig.layers.length) {
+      return false
+    }
+    return layer.binCount !== (prevConfig.layers[layerIndex] as any).binCount
+  })
 
   if (binCountChanged) {
     return true
