@@ -189,6 +189,14 @@ storiesOf('XY Plot', module)
   .add('Line Layer + Single Stat', () => {
     const includeSingleStatLayer = boolean('Single Stat', true)
     const decimalPlaces = Number(text('Decimal Places', '2'))
+    const textOpacity = number('Single Stat Opacity', 1, {
+      range: true,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    })
+    const prefix = text('Prefix', '')
+    const suffix = text('Suffix', '')
     const table = singleStatTable
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
@@ -252,13 +260,14 @@ storiesOf('XY Plot', module)
     if (includeSingleStatLayer) {
       layers.push({
         type: 'single stat',
-        prefix: '',
-        suffix: '',
+        prefix,
+        suffix,
         decimalPlaces: {
           isEnforced: true,
           digits: decimalPlaces,
         },
         textColor: LASER,
+        textOpacity,
       })
     }
 

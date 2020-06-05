@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, text} from '@storybook/addon-knobs'
+import {withKnobs, number, text} from '@storybook/addon-knobs'
 import {Config, Plot, LASER} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
@@ -47,19 +47,28 @@ storiesOf('Custom Layer', module)
   })
   .add('Single Stat', () => {
     const decimalPlaces = Number(text('Decimal Places', '4'))
+    const textOpacity = number('Single Stat Opacity', 1, {
+      range: true,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    })
+    const prefix = text('Prefix', '')
+    const suffix = text('Suffix', '')
     const config: Config = {
       table: singleStatTable,
       showAxes: false,
       layers: [
         {
           type: 'single stat',
-          prefix: '',
-          suffix: '',
+          prefix,
+          suffix,
           decimalPlaces: {
             isEnforced: true,
             digits: decimalPlaces,
           },
           textColor: LASER,
+          textOpacity,
         },
       ],
     }
