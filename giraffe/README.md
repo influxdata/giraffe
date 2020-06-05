@@ -358,7 +358,7 @@ Giraffe comes with utility functions.
       &#60;/div&#62;
     </pre>
 
-  - **style**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-layer-single-stat` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. See the `SINGLE_STAT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
+  - **style**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-layer-single-stat` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `backgroundColor` cannot be overridden and is controlled by the **backgroundColor** option (see above). See the `SINGLE_STAT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
   - **resizerStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--resizer` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. See the `SINGLE_STAT_RESIZER_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
@@ -366,9 +366,9 @@ Giraffe comes with utility functions.
 
   - **svgStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--svg` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). This element has no existing default styling.
 
-  - **svgTextAttributes**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for the element attributes of `.giraffe-single-stat--text`. If used please be aware of the existing default attributes that may need to be overridden. See the `SINGLE_STAT_SVG_TEXT_DEFAULT_ATTRIBUTES` [here](./src/constants/singleStatStyles.ts).
+  - **svgTextAttributes**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for the element attributes of `.giraffe-single-stat--text`. If used please be aware of the existing default attributes that may need to be overridden. `opacity` cannot be overridden and is controlled by the **textOpacity** option (see above). See the `SINGLE_STAT_SVG_TEXT_DEFAULT_ATTRIBUTES` [here](./src/constants/singleStatStyles.ts).
 
-  - **svgTextStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--text` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. See the `SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
+  - **svgTextStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--text` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `fill` cannot be overridden and is controlled by the **textColor** option (see above). See the `SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
 * **CustomLayerConfig**: _Object_. No limit per `<Plot>`.
 
