@@ -2,7 +2,14 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
-import {Config, Plot, MAGMA, timeFormatter, LASER} from '../../giraffe/src'
+import {
+  Config,
+  Plot,
+  MAGMA,
+  timeFormatter,
+  LASER,
+  LayerConfig,
+} from '../../giraffe/src'
 import {stackedLineTable} from './data/stackedLineLayer'
 import {singleStatTable} from './data/singleStatLayer'
 
@@ -180,6 +187,7 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Line Layer + Single Stat', () => {
+    const includeSingleStatLayer = boolean('Single Stat', true)
     const decimalPlaces = Number(text('Decimal Places', '2'))
     const table = singleStatTable
     const colors = colorSchemeKnob()
@@ -225,6 +233,35 @@ storiesOf('XY Plot', module)
       'auto'
     )
 
+    const layers = [
+      {
+        type: 'line',
+        x,
+        y,
+        fill,
+        position,
+        interpolation,
+        colors,
+        lineWidth,
+        hoverDimension,
+        shadeBelow,
+        shadeBelowOpacity,
+      },
+    ] as LayerConfig[]
+
+    if (includeSingleStatLayer) {
+      layers.push({
+        type: 'single stat',
+        prefix: '',
+        suffix: '',
+        decimalPlaces: {
+          isEnforced: true,
+          digits: decimalPlaces,
+        },
+        textColor: LASER,
+      })
+    }
+
     const config: Config = {
       table,
       valueFormatters: {
@@ -239,31 +276,7 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
-      layers: [
-        {
-          type: 'line',
-          x,
-          y,
-          fill,
-          position,
-          interpolation,
-          colors,
-          lineWidth,
-          hoverDimension,
-          shadeBelow,
-          shadeBelowOpacity,
-        },
-        {
-          type: 'single stat',
-          prefix: '',
-          suffix: '',
-          decimalPlaces: {
-            isEnforced: true,
-            digits: decimalPlaces,
-          },
-          textColor: LASER,
-        },
-      ],
+      layers,
     }
 
     return (
