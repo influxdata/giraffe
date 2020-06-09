@@ -13,7 +13,7 @@ import {
   POINT_KEY,
   HOST_KEY,
 } from './fixtures/tooltip'
-import {LineLayerSpec, ScatterLayerSpec} from '../types'
+import {LayerTypes, LineLayerSpec, ScatterLayerSpec} from '../types'
 
 describe('getPointsTooltipData', () => {
   let sampleTable
@@ -262,7 +262,7 @@ describe('getPointsTooltipData', () => {
         numberOfRecords,
         recordsPerLine,
         hoveredRowIndices,
-        plotType: 'scatter',
+        plotType: LayerTypes.Scatter,
       })
       result = getPointsTooltipData(
         hoveredRowIndices,
