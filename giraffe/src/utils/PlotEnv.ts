@@ -17,13 +17,14 @@ import {
 } from '../constants'
 
 import {
-  SizedConfig,
-  Margins,
-  Scale,
-  LineLayerConfig,
-  LayerSpec,
   ColumnType,
   Formatter,
+  LayerSpec,
+  LayerTypes,
+  LineLayerConfig,
+  Margins,
+  Scale,
+  SizedConfig,
 } from '../types'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
@@ -213,7 +214,7 @@ export class PlotEnv {
     const memoizedTransformKey = `${layerIndex}: ${layerConfig.type}`
 
     switch (layerConfig.type) {
-      case 'line': {
+      case LayerTypes.Line: {
         const transform = this.fns.get(memoizedTransformKey, lineTransform)
 
         return transform(
@@ -226,7 +227,7 @@ export class PlotEnv {
         )
       }
 
-      case 'scatter': {
+      case LayerTypes.Scatter: {
         const transform = this.fns.get(memoizedTransformKey, scatterTransform)
 
         return transform(
@@ -239,7 +240,7 @@ export class PlotEnv {
         )
       }
 
-      case 'histogram': {
+      case LayerTypes.Histogram: {
         const transform = this.fns.get(memoizedTransformKey, histogramTransform)
 
         return transform(
@@ -253,7 +254,7 @@ export class PlotEnv {
         )
       }
 
-      case 'heatmap': {
+      case LayerTypes.Heatmap: {
         const transform = this.fns.get(memoizedTransformKey, heatmapTransform)
 
         return transform(
@@ -269,12 +270,12 @@ export class PlotEnv {
         )
       }
 
-      case 'custom':
-      case 'single stat':
+      case LayerTypes.Custom:
+      case LayerTypes.SingleStat:
         return null
 
       default:
-        const unknownConfig: never = layerConfig
+        const unknownConfig = layerConfig
         const unknownType = (unknownConfig as any).type
 
         throw new Error(

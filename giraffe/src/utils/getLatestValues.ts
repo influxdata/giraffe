@@ -75,8 +75,8 @@ const sortTableKeys = (keyA: string, keyB: string): number => {
 */
 export const getLatestValues = (table: Table): number[] => {
   const valueColsData = table.columnKeys
-    .sort((a, b) => sortTableKeys(a, b))
     .filter(k => isValueCol(table, k))
+    .sort((a, b) => sortTableKeys(a, b))
     .map(k => table.getColumn(k)) as number[][]
 
   if (!valueColsData.length) {

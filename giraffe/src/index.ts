@@ -29,6 +29,7 @@ export {
   HistogramLayerConfig,
   HistogramPosition,
   LayerConfig,
+  LayerTypes,
   LineInterpolation,
   LineLayerConfig,
   LinePosition,

@@ -120,6 +120,15 @@ export type ColumnData = NumericColumnData | string[] | boolean[]
 
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
+export enum LayerTypes {
+  Custom = 'custom',
+  SingleStat = 'single stat',
+  Heatmap = 'heatmap',
+  Histogram = 'histogram',
+  Line = 'line',
+  Scatter = 'scatter',
+}
+
 export type LayerConfig =
   | CustomLayerConfig
   | SingleStatLayerConfig
@@ -129,7 +138,7 @@ export type LayerConfig =
   | ScatterLayerConfig
 
 export interface CustomLayerConfig {
-  type: 'custom'
+  type: 'custom' // do not refactor or restrict to LayerTypes.Custom
   render: (p: CustomLayerRenderProps) => JSX.Element
 }
 
@@ -147,7 +156,7 @@ export interface CustomLayerRenderProps {
 }
 
 export interface SingleStatLayerConfig {
-  type: 'single stat'
+  type: 'single stat' // do not refactor or restrict to LayerTypes.SingleStat
   prefix: string
   suffix: string
   decimalPlaces: SingleStatDecimalPlaces
@@ -175,7 +184,7 @@ export interface SingleStatSVGAttributes {
 }
 
 export interface HeatmapLayerConfig {
-  type: 'heatmap'
+  type: 'heatmap' // do not refactor or restrict to LayerTypes.Heatmap
   x: string
   y: string
   binSize?: number
@@ -187,7 +196,7 @@ export interface HeatmapLayerConfig {
 }
 
 export interface HistogramLayerConfig {
-  type: 'histogram'
+  type: 'histogram' // do not refactor or restrict to LayerTypes.Histogram
   x: string
   position?: HistogramPosition
   binCount?: number
@@ -202,7 +211,7 @@ export interface HistogramLayerConfig {
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
 
 export interface LineLayerConfig {
-  type: 'line'
+  type: 'line' // do not refactor or restrict to LayerTypes.Line
   x: string
   y: string
   fill?: string[]
@@ -217,7 +226,7 @@ export interface LineLayerConfig {
 }
 
 export interface ScatterLayerConfig {
-  type: 'scatter'
+  type: 'scatter' // do not refactor or restrict to LayerTypes.Scatter
   x: string
   y: string
   fill?: string[]
@@ -253,8 +262,14 @@ export interface ScatterLayerConfig {
 */
 export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
 
+export enum SpecTypes {
+  Line = 'line',
+  Scatter = 'scatter',
+  Rect = 'rect',
+}
+
 export interface LineLayerSpec {
-  type: 'line'
+  type: 'line' // do not refactor or restrict to SpecTypes.Line
   inputTable: Table
   table: Table // has `FILL` column added
   lineData: LineData
@@ -273,7 +288,7 @@ export interface LineLayerSpec {
 }
 
 export interface ScatterLayerSpec {
-  type: 'scatter'
+  type: 'scatter' // do not refactor or restrict to SpecTypes.Scatter
   inputTable: Table
   table: Table // has `FILL` and `SYMBOL` columns added
   xDomain: number[]
@@ -293,7 +308,7 @@ export interface ScatterLayerSpec {
 }
 
 export interface RectLayerSpec {
-  type: 'rect'
+  type: 'rect' // do not refactor or restrict to SpecTypes.Rect
   inputTable: Table
   table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column
   binDimension: 'xy' | 'x'

@@ -8,6 +8,8 @@ import {
   LineLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
+  LayerTypes,
+  SpecTypes,
 } from '../types'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -96,7 +98,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
-            if (layerConfig.type === 'custom') {
+            if (layerConfig.type === LayerTypes.Custom) {
               const renderProps = {
                 key: layerIndex,
                 width,
@@ -113,7 +115,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               return layerConfig.render(renderProps)
             }
 
-            if (layerConfig.type === 'single stat') {
+            if (layerConfig.type === LayerTypes.SingleStat) {
               return (
                 <LatestValueTransform
                   key={layerIndex}
@@ -144,7 +146,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
             }
 
             switch (spec.type) {
-              case 'line':
+              case SpecTypes.Line:
                 return (
                   <LineLayer
                     key={layerIndex}
@@ -154,7 +156,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   />
                 )
 
-              case 'scatter': {
+              case SpecTypes.Scatter: {
                 return (
                   <ScatterLayer
                     key={layerIndex}
@@ -165,7 +167,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                 )
               }
 
-              case 'rect': {
+              case SpecTypes.Rect: {
                 return (
                   <RectLayer
                     key={layerIndex}
