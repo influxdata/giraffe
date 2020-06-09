@@ -262,7 +262,7 @@ describe('getPointsTooltipData', () => {
         numberOfRecords,
         recordsPerLine,
         hoveredRowIndices,
-        plotType: 'scatterplot',
+        plotType: 'scatter',
       })
       result = getPointsTooltipData(
         hoveredRowIndices,

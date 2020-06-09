@@ -63,10 +63,29 @@ describe('getLatestValues', () => {
         startTime + interval,
         startTime + interval * 2,
       ])
-      .addColumn(yColKey, 'number', [0, 1.67, 2.32])
+      .addColumn(yColKey, 'number', [0, 4.67, 2.32])
     const result = getLatestValues(table)
 
     expect(Array.isArray(result)).toEqual(true)
     expect(result[0]).toEqual(2.32)
+  })
+
+  test('ignores columns with invalid types', () => {
+    const xColKey = '_time'
+    const yColKey = '_value'
+    const startTime = Date.now()
+    const interval = 100
+    const table = newTable(3)
+      .addColumn(xColKey, 'time', [
+        startTime,
+        startTime + interval,
+        startTime + interval * 2,
+      ])
+      .addColumn(yColKey, 'number', [2.32, 4.67, 0.01])
+      .addColumn('didItWork', 'boolean', [true, false, true])
+    const result = getLatestValues(table)
+
+    expect(Array.isArray(result)).toEqual(true)
+    expect(result[0]).toEqual(0.01)
   })
 })

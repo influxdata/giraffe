@@ -55,7 +55,7 @@ export const createSampleTable = (options: SampleTableOptions) => {
     VALUE_COL.push(num)
     CPU_COL.push(`${COLUMN_KEY}${Math.floor(i / recordsPerLine)}`)
     TIME_COL.push(now + (i % recordsPerLine) * 1000 * 60)
-    if (plotType === 'scatterplot') {
+    if (plotType === 'scatter') {
       SYMBOL_COL.push(i % 2)
       DISK_COL.push(`disk-${i % recordsPerLine}`)
       HOST_COL.push(`host-${i % 2}`)
@@ -65,7 +65,7 @@ export const createSampleTable = (options: SampleTableOptions) => {
     .addColumn('_time', 'time', TIME_COL)
     .addColumn('_value', 'number', VALUE_COL)
 
-  if (plotType === 'scatterplot') {
+  if (plotType === 'scatter') {
     return table
       .addColumn(POINT_KEY, 'string', DISK_COL)
       .addColumn('__symbol', 'string', SYMBOL_COL)

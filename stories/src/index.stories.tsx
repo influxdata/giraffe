@@ -294,7 +294,7 @@ storiesOf('XY Plot', module)
       </PlotContainer>
     )
   })
-  .add('Scatterplot', () => {
+  .add('Scatter Plot', () => {
     const table = tableKnob()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
