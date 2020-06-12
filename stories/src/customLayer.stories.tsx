@@ -53,6 +53,24 @@ storiesOf('Custom Layer', module)
       max: 1,
       step: 0.01,
     })
+    const viewBoxWidth = number('SVG viewBox width', 55, {
+      range: true,
+      min: 0,
+      max: 1000,
+      step: 1,
+    })
+    const viewBoxX = number('SVG viewBox x', 0, {
+      range: true,
+      min: -500,
+      max: 500,
+      step: 1,
+    })
+    const viewBoxY = number('SVG viewBox y', 0, {
+      range: true,
+      min: -500,
+      max: 500,
+      step: 1,
+    })
     const prefix = text('Prefix', '')
     const suffix = text('Suffix', '')
     const config: Config = {
@@ -69,6 +87,10 @@ storiesOf('Custom Layer', module)
           },
           textColor: LASER,
           textOpacity,
+          svgAttributes: {
+            viewBox: stat =>
+              `${viewBoxX} ${viewBoxY} ${stat.length * viewBoxWidth} 100`,
+          },
         },
       ],
     }
