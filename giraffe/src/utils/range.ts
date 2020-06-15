@@ -1,4 +1,4 @@
-import {getJavaScriptTag} from './getJavaScriptTag'
+import {isSymbol} from './isSymbol'
 
 const INFINITY = 1 / 0
 const MAX_INTEGER = 1.7976931348623157e308
@@ -9,15 +9,6 @@ const reIsBinary = /^0b[01]+$/i
 const reIsOctal = /^0o[0-7]+$/i
 const freeParseInt = parseInt
 
-const isSymbol = (value: any): boolean => {
-  const type = typeof value
-  return (
-    type == 'symbol' ||
-    (type === 'object' &&
-      value != null &&
-      getJavaScriptTag(value) == '[object Symbol]')
-  )
-}
 const isObject = (value: any): boolean => {
   const type = typeof value
   return value != null && (type === 'object' || type === 'function')

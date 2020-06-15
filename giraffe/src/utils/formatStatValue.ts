@@ -2,12 +2,12 @@ import {isNumber} from './isNumber'
 import {isString} from './isString'
 import {preventNegativeZero} from './preventNegativeZero'
 
-import {SingleStatDecimalPlaces} from '../types'
+import {DecimalPlaces} from '../types'
 
 const MAX_DECIMAL_PLACES = 10
 
 interface FormatStatValueOptions {
-  decimalPlaces?: SingleStatDecimalPlaces
+  decimalPlaces?: DecimalPlaces
   prefix?: string
   suffix?: string
 }
@@ -24,25 +24,27 @@ export const formatStatValue = (
 ): string => {
   let localeFormattedValue: undefined | string | number
 
+  let digits: number
+
+  if (decimalPlaces && decimalPlaces.isEnforced) {
+    digits = decimalPlaces.digits
+  } else {
+    digits = getAutoDigits(value)
+  }
+
+  digits = Math.min(digits, MAX_DECIMAL_PLACES)
+
   if (isNumber(value)) {
-    let digits: number
-
-    if (decimalPlaces && decimalPlaces.isEnforced) {
-      digits = decimalPlaces.digits
-    } else {
-      digits = getAutoDigits(value)
-    }
-
     const roundedValue = Number(value).toFixed(digits)
+    const endsWithZero = /\.[1-9]{0,}0{1,}$/
 
-    localeFormattedValue =
-      Number(roundedValue) === 0
-        ? roundedValue
-        : Number(roundedValue).toLocaleString(undefined, {
-            maximumFractionDigits: MAX_DECIMAL_PLACES,
-          })
+    localeFormattedValue = endsWithZero.test(roundedValue)
+      ? roundedValue
+      : Number(roundedValue).toLocaleString(undefined, {
+          maximumFractionDigits: MAX_DECIMAL_PLACES,
+        })
   } else if (isString(value)) {
-    localeFormattedValue = value
+    localeFormattedValue = value ? Number(value).toFixed(digits) : value
   } else {
     return 'Data cannot be displayed'
   }
