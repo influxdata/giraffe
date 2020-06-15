@@ -34,7 +34,7 @@ storiesOf('Gauge', module)
     const minLineWidth = number('Gauge Color Thickness', 22, {
       range: true,
       min: 0,
-      max: 100,
+      max: 200,
       step: 1,
     })
     const gaugeMin = Number(text('Gauge Min', '0'))

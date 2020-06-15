@@ -31,14 +31,14 @@ const memoize = (func, resolver) => {
   ) {
     throw new TypeError('Expected a function')
   }
-  const memoized = function(...args) {
-    const key = resolver ? resolver(args) : args[0]
+  const memoized = (...args) => {
+    const key = resolver ? resolver(...args) : args[0]
     const cache = memoized.cache
 
     if (cache.has(key)) {
       return cache.get(key)
     }
-    const result = func(args)
+    const result = func(...args)
     memoized.cache = cache.set(key, result) || cache
     return result
   }
@@ -56,7 +56,6 @@ const memoizeCapped = func => {
     }
     return key
   })
-
   return result
 }
 
@@ -77,7 +76,7 @@ const stringToPath = memoizeCapped(string => {
   return result
 })
 
-const toKey = value => {
+const toKey = (value: string): string => {
   if (typeof value === 'string' || isSymbol(value)) {
     return value
   }
@@ -85,7 +84,7 @@ const toKey = value => {
   return result == '0' && 1 / value == -INFINITY ? '-0' : result
 }
 
-const isKey = (value, object) => {
+const isKey = (value: any, object: any): boolean => {
   if (Array.isArray(value)) {
     return false
   }
@@ -98,6 +97,7 @@ const isKey = (value, object) => {
   ) {
     return true
   }
+
   return (
     reIsPlainProp.test(value) ||
     !reIsDeepProp.test(value) ||
@@ -105,14 +105,14 @@ const isKey = (value, object) => {
   )
 }
 
-const castPath = (value, object) => {
+const castPath = (value: any, object: any): Array<string> => {
   if (Array.isArray(value)) {
     return value
   }
   return isKey(value, object) ? [value] : stringToPath(value)
 }
 
-const baseGet = (object, path) => {
+const baseGet = (object: any, path: any) => {
   path = castPath(path, object)
 
   let index = 0
@@ -124,7 +124,7 @@ const baseGet = (object, path) => {
   return index && index == length ? object : undefined
 }
 
-export const get = (object, path, defaultValue) => {
+export const get = (object?: any, path?: any, defaultValue?: any) => {
   const result = object == null ? undefined : baseGet(object, path)
   return result === undefined ? defaultValue : result
 }
