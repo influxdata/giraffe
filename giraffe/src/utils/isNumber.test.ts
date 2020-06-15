@@ -31,7 +31,7 @@ describe('isNumber', () => {
     expect(isNumber(NaN)).toEqual(true)
   })
 
-  test('everything else is not a number', () => {
+  test('anything else is not a number', () => {
     expect(isNumber(undefined)).toEqual(false)
     expect(isNumber(null)).toEqual(false)
     expect(isNumber({})).toEqual(false)

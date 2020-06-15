@@ -24,7 +24,7 @@ describe('isString', () => {
     expect(isString('-4567.89')).toEqual(true)
   })
 
-  test('everything else is not a string', () => {
+  test('anything else is not a string', () => {
     expect(isString(undefined)).toEqual(false)
     expect(isString(null)).toEqual(false)
     expect(isString({})).toEqual(false)
