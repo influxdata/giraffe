@@ -121,6 +121,7 @@ export type ColumnData = NumericColumnData | string[] | boolean[]
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
 export enum LayerTypes {
+  Gauge = 'gauge',
   Custom = 'custom',
   SingleStat = 'single stat',
   Heatmap = 'heatmap',
@@ -131,6 +132,7 @@ export enum LayerTypes {
 
 export type LayerConfig =
   | CustomLayerConfig
+  | GaugeLayerConfig
   | SingleStatLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
@@ -155,11 +157,43 @@ export interface CustomLayerRenderProps {
   columnFormatter: (colKey: string) => (x: any) => string
 }
 
+export interface GaugeLayerConfig {
+  type: 'gauge' // do not refactor or restrict to LayerTypes.Gauge
+  prefix: string
+  suffix: string
+  tickPrefix: string
+  tickSuffix: string
+  decimalPlaces: DecimalPlaces
+  gaugeColors: Color[]
+  gaugeSize?: number
+  theme?: GaugeTheme
+}
+
+export interface GaugeTheme {
+  lineCount: number
+  smallLineCount: number
+  lineColor: string
+  labelColor: string
+  labelFontSize: number
+  lineStrokeSmall: number
+  lineStrokeLarge: number
+  tickSizeSmall: number
+  tickSizeLarge: number
+  minFontSize: number
+  minLineWidth: number
+  valueColor: string
+  valuePositionXOffset: number
+  valuePositionYOffset: number
+  needleColor0: string
+  needleColor1: string
+  overflowDelta: number
+}
+
 export interface SingleStatLayerConfig {
   type: 'single stat' // do not refactor or restrict to LayerTypes.SingleStat
   prefix: string
   suffix: string
-  decimalPlaces: SingleStatDecimalPlaces
+  decimalPlaces: DecimalPlaces
   textColor: string
   textOpacity?: number
   backgroundColor?: string
@@ -170,11 +204,6 @@ export interface SingleStatLayerConfig {
   svgStyle?: CSS.Properties
   svgTextAttributes?: SingleStatSVGAttributes
   svgTextStyle?: CSS.Properties
-}
-
-export interface SingleStatDecimalPlaces {
-  isEnforced?: boolean
-  digits?: number
 }
 
 export type SingleStatSVGAttributeFunction = (stat: string) => string
@@ -347,11 +376,24 @@ export type ScaleFactory = (
   rangeStop: number
 ) => Scale<number, number>
 
+export interface DecimalPlaces {
+  isEnforced?: boolean
+  digits?: number
+}
+
 export interface Margins {
   top: number
   right: number
   bottom: number
   left: number
+}
+
+export interface Color {
+  id: string
+  type: 'min' | 'max' | 'threshold' | 'scale' | 'text' | 'background'
+  hex: string
+  name: string
+  value: number
 }
 
 export interface TooltipColumn {

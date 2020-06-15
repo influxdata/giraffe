@@ -323,6 +323,73 @@ Giraffe comes with utility functions.
 
   - **strokePadding**: _number. Optional._ The space around all four sides of each heat bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
 
+- **GaugeLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _'gauge'. **Required**._ Specifies that this LayerConfig is a gauge layer.
+
+  - **prefix**: _string. **Required**._ The text that appears before the gauge value. Use an empty string if no text is preferred.
+
+  - **suffix**: _string. **Required**._ The text that appears after the gauge value. Use an empty string if no text is preferred.
+
+  - **tickPrefix**: _string. **Required**._ The text that appears before each tick label. Use an empty string if no text is preferred.
+
+  - **tickSuffix**: _string. **Required**._ The text that appears after each tick label. Use an empty string if no text is preferred.
+
+  - **decimalPlaces**: _Object. **Required**._
+
+    - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
+    - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
+
+  - **gaugeSize**: _number. Optional. **3.142** &#8804; gaugeSize &#8804; **6.283**._ The size of the Gauge as measured in [_radians_](https://www.mathsisfun.com/geometry/radians.html). Valid Gauge sizes range from a half circle to a full circle. Any size below &#960; is considered &#960; and any size above 2&#960; is considered 2&#960;. Rounded to 3 decimal places.
+
+  - **gaugeColors**: _Array. **Required**._ An array of objects that defines the colors of the Gauge. Each object has the following properties.
+
+    - **id**: _string. **Required**._ The id for this color. Should be unique within the **gaugeColors** array.
+
+    - **type**: _'min' | 'max' | 'threshold'. **Required**._ The type of value associated with this color. _'min'_ type comes first, _'max'_ type comes last, and _'threshold'_ types are in between _'min'_ and _'max'_. **gaugeColors** must contain at least one _'min'_ type and one _'max'_ type for the Gauge to have color. Only the first _'min'_ and first _'max'_ in the array are recognized for each of their respective types. The color will change as a gradient if the **gaugeColors** array contains only _'min'_ and _'max'_. The color will be segmented if any _'threshold'_ types are included in the **gaugeColors** array. Segmented colors on a Gauge will not display the _'max'_ type's color. _Exception_: a full circle Gauge with only _'min'_ and _'max'_ types will be segmented and include both the _'min'_ and _'max'_ colors.
+
+    - **hex**: _string. **Required**._ The [_color hex_](https://www.color-hex.com/) string for this color.
+
+    - **name**: _string. **Required**._ For descriptive purposes only. The name given to this color.
+
+    - **value**: _number. **Required**._ The starting gauge value associated with this color.
+
+  - **theme**: _Object. Optional._ An object controlling additional visual styling and details of the Gauge.
+
+    - **lineCount**: _number. Optional._ The total number of labeled gauge lines (large ticks) not counting the first.
+
+    - **smallLineCount**: _number. Optional._ The total number of unlabeled gauge lines (small ticks) between two labeled gauge lines excluding the starting label but including the ending label.
+
+    - **lineColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the gauge lines (ticks).
+
+    - **labelColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the labels for the gauge lines.
+
+    - **labelFontSize**: _number. Optional._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the gauge labels.
+
+    - **lineStrokeSmall**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the unlabeled gauge lines (small ticks).
+
+    - **lineStrokeLarge**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the labeled gauge lines (large ticks).
+
+    - **tickSizeSmall**: _number. Optional._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the unlabeled gauge lines (small ticks). Use a different value than **tickSizeLarge** to visually distinguish the length of the gauge lines (ticks).
+
+    - **tickSizeLarge**: _number. Optional._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the labeled gauge lines (large ticks). Use a different value than **tickSizeSmall** to visually distinguish the length of the gauge lines (ticks).
+
+    - **minFontSize**: _number. Optional._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the Gauge's value. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
+
+    - **minLineWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) or thickness of the Gauge's colors. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
+
+    - **valueColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the Gauge's current value.
+
+    - **valuePositionXOffset**: _number. Optional._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the horizontal dimension that the Gauge's value should be moved from its default position.
+
+    - **valuePositionYOffset**: _number. Optional._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the vertical dimension that the Gauge's value should be moved from its default position.
+
+    - **needleColor0**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string of the starting color for the color gradient of the Gauge's needle. **needleColor0** should be used in conjunction with **needleColor1**.
+
+    - **needleColor1**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string of the ending color for the color gradient of the Gauge's needle. **needleColor1** should be used in conjunction with **needleColor0**.
+
+    - **overflowDelta**: _number. Optional._ This constant expresses how far past the gauge min or gauge max the needle should be drawn if the value for the needle is less than gauge min or greater than the gauge max. It is expressed as a percentage of the circumference of a circle, e.g. 0.5 means draw halfway around the gauge from the min or max value.
+
 - **SingleStatLayerConfig**: _Object_. No limit but generally one per `<Plot>`. Using more than one requires additional styling through configuration and is not recommended.
 
   <br />A Single Stat layer is a pre-defined custom layer that displays a single value on top of any other plot type, or by itself, but usually displayed on top of (single) line graphs. The displayed value is the latest value by timestamp. If more than one value has the latest timestamp, then the first value in the [table](#data-properties) with the latest timestamp will be displayed. Currently, there is no guarantee which value will be considered the first value when there are multiple values with the same timestamp.
@@ -336,7 +403,7 @@ Giraffe comes with utility functions.
   - **decimalPlaces**: _Object. **Required**._
 
     - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
-    - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding and trailing 0 will be truncated. For example: **digits** is 2 and stat value is `1.299` which rounds to `1.30` and then becomes `1.3` when displayed.
+    - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
 
   - **textColor**: _string. **Required**._ The _CSS color value_ of the entire Single Stat to display including prefix, the stat value, and suffix.
 

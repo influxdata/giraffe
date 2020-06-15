@@ -270,6 +270,7 @@ export class PlotEnv {
         )
       }
 
+      case LayerTypes.Gauge:
       case LayerTypes.Custom:
       case LayerTypes.SingleStat:
         return null

@@ -6,6 +6,14 @@ describe('formatStatValue', () => {
   let suffix: string
 
   describe('handles bad input gracefully', () => {
+    test('does not throw an error when decimal places is greater than 100', () => {
+      expect(() =>
+        formatStatValue('2.00', {
+          decimalPlaces: {isEnforced: true, digits: 101},
+        })
+      ).not.toThrow()
+    })
+
     test('handles undefined', () => {
       prefix = 'LOL'
       value = undefined
@@ -179,5 +187,45 @@ describe('formatStatValue', () => {
         suffix,
       })
     ).toEqual(`${prefix}${value}${suffix}`)
+  })
+
+  test('keeps trailing zeroes for the required number of decimal places', () => {
+    value = '2.000'
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    value = '2.00000000000000000000000000'
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    value = '2.0'
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    value = '2'
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    /* prettier-ignore */
+    value = 2
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    /* prettier-ignore */
+    value = 2.0
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
+
+    /* prettier-ignore */
+    value = 2.00000000
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
+    ).toEqual('2.000')
   })
 })
