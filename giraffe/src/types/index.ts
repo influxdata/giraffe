@@ -83,17 +83,46 @@ export interface Formatter {
   readonly _GIRAFFE_FORMATTER_TYPE?: FormatterType
 }
 
+export type ParsedFluxColumnLookup = {[key: string]: ParsedFluxColumn}
+
+export type ParsedReturnTypes = string | undefined | null | number | boolean
+
+export interface ParsedFluxColumn {
+  name: string
+  group: string
+  type: ParsedTypes
+  data: ParsedReturnTypes[]
+}
+
+export const enum ParsedTypes {
+  boolean = 'boolean',
+  number = 'number',
+  string = 'string',
+  time = 'time',
+}
+
+export const enum FluxBasicTypes {
+  boolean = 'boolean',
+  unsignedLong = 'unsignedLong',
+  long = 'long',
+  double = 'double',
+  string = 'string',
+  time = 'dateTime:RFC3339',
+}
+
 export interface Table {
   getColumn: GetColumn
   getColumnName: (columnKey: string) => string
   getColumnType: (columnKey: string) => ColumnType
   columnKeys: string[]
+  columns?: ParsedFluxColumnLookup
   length: number
   addColumn: (
     columnKey: string,
     type: ColumnType,
     data: ColumnData,
-    name?: string
+    name?: string,
+    group?: string
   ) => Table
 }
 
