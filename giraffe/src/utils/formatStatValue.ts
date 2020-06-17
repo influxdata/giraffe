@@ -44,7 +44,7 @@ export const formatStatValue = (
           maximumFractionDigits: MAX_DECIMAL_PLACES,
         })
   } else if (isString(value)) {
-    localeFormattedValue = value ? Number(value).toFixed(digits) : value
+    localeFormattedValue = value
   } else {
     return 'Data cannot be displayed'
   }
