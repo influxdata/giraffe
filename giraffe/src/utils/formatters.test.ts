@@ -18,6 +18,62 @@ describe('timeFormatter', () => {
     expect(nonUTCFormatter(d)).toEqual('2018-12-31  4:00:00 PM PST')
   })
 
+  test('handles ante meridiem and post meridiem', () => {
+    let d = new Date('2019-01-01T00:00Z')
+
+    let meridiemFormatter = timeFormatter({
+      timeZone: 'Europe/London',
+      format: 'HH:mm a',
+    })
+    expect(meridiemFormatter(d)).toEqual('12:00 AM')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'Europe/London',
+      format: 'HH:mm A',
+    })
+    expect(meridiemFormatter(d)).toEqual('12:00 AM')
+
+    d = new Date('2019-01-01T13:00Z')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'Europe/London',
+      format: 'HH:mm a',
+    })
+    expect(meridiemFormatter(d)).toEqual('1:00 PM')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'Europe/London',
+      format: 'HH:mm A',
+    })
+    expect(meridiemFormatter(d)).toEqual('1:00 PM')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'HH:mm a',
+    })
+    expect(meridiemFormatter(d)).toEqual('5:00 AM')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'HH:mm A',
+    })
+    expect(meridiemFormatter(d)).toEqual('5:00 AM')
+
+    d = new Date('2019-01-01T00:00Z')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'HH:mm a',
+    })
+    expect(meridiemFormatter(d)).toEqual('4:00 PM')
+
+    meridiemFormatter = timeFormatter({
+      timeZone: 'America/Los_Angeles',
+      format: 'HH:mm A',
+    })
+    expect(meridiemFormatter(d)).toEqual('4:00 PM')
+  })
+
   test('uses AM/PM when given "a" in the format regardless of time zone or time format', () => {
     const utcFormatterWithFormat = timeFormatter({
       timeZone: 'UTC',

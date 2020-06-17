@@ -143,7 +143,8 @@ export const timeFormatter = ({
     // and the total number of ticks consistent regardless of time frame
     hh: ({hour}) => (Number(hour) < 10 ? ` ${Number(hour)}` : String(hour)),
     HH: ({lhour}) => {
-      if (format && format.includes('a')) {
+      const hasMeridiem = / a/i
+      if (hasMeridiem.test(format)) {
         if (Number(lhour) === 0) {
           return '12'
         }
