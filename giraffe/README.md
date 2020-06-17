@@ -2,6 +2,10 @@
 
 A React-based visualization library powering the data visualizations in [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
+## Demos
+
+[See the visualizations in action using Storybook](https://influxdata.github.io/giraffe)
+
 ## Quick Start
 
 1. In your React code, import the `Plot` component and the `newTable` utility function

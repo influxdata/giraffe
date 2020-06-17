@@ -16,6 +16,10 @@ Giraffe aims to distinguish itself with several features:
 - A [columnar](https://observablehq.com/@mbostock/manipulating-flat-arrays) interface for input data that enables efficient interop with Web Workers and [Apache Arrow](https://arrow.apache.org/)
 - Self-contained configs in the style of [Vega-Lite](https://vega.github.io/vega-lite/)
 
+## Demos
+
+[See the visualizations in action using Storybook](https://influxdata.github.io/giraffe)
+
 ## Getting Started [](#getting-started)
 
 #### Installation
