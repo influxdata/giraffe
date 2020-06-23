@@ -85,7 +85,7 @@ const simplifyDouglasPeuckerHelper = (
   i1: number,
   keep: Uint8Array
 ) => {
-  let indexStack = []
+  const indexStack = []
 
   indexStack.push({i0, i1})
 
