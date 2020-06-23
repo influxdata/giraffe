@@ -85,32 +85,39 @@ const simplifyDouglasPeuckerHelper = (
   i1: number,
   keep: Uint8Array
 ) => {
-  const x0 = xs[i0]
-  const y0 = ys[i0]
-  const x1 = xs[i1]
-  const y1 = ys[i1]
+  const indexStack = []
 
-  let maxIndex = 0
-  let maxDist = -1
+  indexStack.push({i0, i1})
 
-  for (let i = i0 + 1; i < i1; i++) {
-    const sqDist = sqSegmentDist(x0, y0, x1, y1, xs[i], ys[i])
+  while (indexStack.length > 0) {
+    const {i0, i1} = indexStack.pop()
+    const x0 = xs[i0]
+    const y0 = ys[i0]
+    const x1 = xs[i1]
+    const y1 = ys[i1]
 
-    if (sqDist > maxDist) {
-      maxIndex = i
-      maxDist = sqDist
+    let maxIndex = 0
+    let maxDist = -1
+
+    for (let i = i0 + 1; i < i1; i++) {
+      const sqDist = sqSegmentDist(x0, y0, x1, y1, xs[i], ys[i])
+
+      if (sqDist > maxDist) {
+        maxIndex = i
+        maxDist = sqDist
+      }
     }
-  }
 
-  if (maxDist > epsilonSq) {
-    keep[maxIndex] = 1
+    if (maxDist > epsilonSq) {
+      keep[maxIndex] = 1
 
-    if (maxIndex - i0 > 1) {
-      simplifyDouglasPeuckerHelper(xs, ys, epsilonSq, i0, maxIndex, keep)
-    }
+      if (maxIndex - i0 > 1) {
+        indexStack.push({i0, i1: maxIndex})
+      }
 
-    if (i1 - maxIndex > 1) {
-      simplifyDouglasPeuckerHelper(xs, ys, epsilonSq, maxIndex, i1, keep)
+      if (i1 - maxIndex > 1) {
+        indexStack.push({i0: maxIndex, i1})
+      }
     }
   }
 }
