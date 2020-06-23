@@ -1,3 +1,4 @@
+import {newTableFromConfig} from './newTable'
 import {getHorizontalTicks, getVerticalTicks} from './getTicks'
 import {getMargins} from './getMargins'
 import {extentOfExtents} from './extrema'
@@ -209,6 +210,10 @@ export class PlotEnv {
 
   public getSpec(layerIndex: number): LayerSpec {
     const layerConfig = this.config.layers[layerIndex]
+
+    if (!this.config.table) {
+      this.config.table = newTableFromConfig(this.config)
+    }
     const table = this.config.table
 
     const memoizedTransformKey = `${layerIndex}: ${layerConfig.type}`

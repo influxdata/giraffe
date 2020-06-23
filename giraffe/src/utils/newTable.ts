@@ -1,4 +1,5 @@
-import {Table, ColumnType, ColumnData} from '../types'
+import {Table, ColumnType, ColumnData, Config} from '../types'
+import {fromFlux} from './fromFlux'
 
 // Don't export me!
 class SimpleTable implements Table {
@@ -100,3 +101,16 @@ class SimpleTable implements Table {
 }
 
 export const newTable = (length: number): Table => new SimpleTable(length)
+
+export const newTableFromConfig = (config: Config): Table => {
+  if (!config) {
+    return newTable(0)
+  }
+  if (config.table) {
+    return config.table
+  }
+  if (config.fluxResponse) {
+    return fromFlux(config.fluxResponse).table
+  }
+  return newTable(0)
+}

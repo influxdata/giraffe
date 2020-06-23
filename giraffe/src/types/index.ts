@@ -29,7 +29,8 @@ export interface Config {
   xScale?: string
   yScale?: string
 
-  table: Table
+  table?: Table
+  fluxResponse?: string
   layers: LayerConfig[]
 
   // The x domain of the plot can be explicitly set. If this option is passed,
