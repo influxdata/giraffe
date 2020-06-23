@@ -172,10 +172,15 @@ export const timeFormatter = ({
 
   let formatter
 
+  const getValidDate = (d: number): Date => {
+    const date = new Date(d)
+    return date.getTime() === date.getTime() ? date : new Date()
+  }
+
   if (format) {
     // If a `format` string is passed, we simply use it
     formatter = (x: number) =>
-      formatStringFormatter(new Date(x), format, {
+      formatStringFormatter(getValidDate(x), format, {
         locale,
         timezone: timeZone,
       })

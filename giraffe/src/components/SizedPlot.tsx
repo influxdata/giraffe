@@ -24,6 +24,7 @@ import {useMousePos} from '../utils/useMousePos'
 import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
+import {newTableFromConfig} from '../utils/newTable'
 
 interface Props {
   config: SizedConfig
@@ -104,7 +105,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               return (
                 <LatestValueTransform
                   key={layerIndex}
-                  table={config.table}
+                  table={newTableFromConfig(config)}
                   allowString={true}
                 >
                   {latestValue => (
@@ -138,7 +139,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               return (
                 <LatestValueTransform
                   key={layerIndex}
-                  table={config.table}
+                  table={newTableFromConfig(config)}
                   allowString={true}
                 >
                   {latestValue => (

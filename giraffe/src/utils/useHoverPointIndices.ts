@@ -9,8 +9,8 @@ export const useHoverPointIndices = (
   mode: 'x' | 'y' | 'xy',
   mouseX: number,
   mouseY: number,
-  xColData: NumericColumnData,
-  yColData: NumericColumnData,
+  xColumnData: NumericColumnData,
+  yColumnData: NumericColumnData,
   groupColData: NumericColumnData,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
@@ -26,6 +26,9 @@ export const useHoverPointIndices = (
     mouseY !== null &&
     mouseY >= 0 &&
     mouseY < height
+
+  const xColData = xColumnData ? xColumnData : []
+  const yColData = yColumnData ? yColumnData : []
 
   const index = useLazyMemo(
     () => buildIndex(xColData, yColData, xScale, yScale, width, height),
