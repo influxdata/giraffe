@@ -97,7 +97,7 @@ const getShortTimeZoneName = (timeZone: string, date: Date) => {
 }
 
 interface TimeFormatter extends Formatter {
-  (x: number, options?: {domainWidth?: number}): string
+  (timestamp: number, options?: {domainWidth?: number}): string
 
   _GIRAFFE_FORMATTER_TYPE: FormatterType.Time
 }
@@ -172,15 +172,15 @@ export const timeFormatter = ({
 
   let formatter
 
-  const getValidDate = (d: number): Date => {
-    const date = new Date(d)
+  const getValidDate = (timestamp: number): Date => {
+    const date = new Date(timestamp)
     return date.getTime() === date.getTime() ? date : new Date()
   }
 
   if (format) {
     // If a `format` string is passed, we simply use it
-    formatter = (x: number) =>
-      formatStringFormatter(getValidDate(x), format, {
+    formatter = (timestamp: number) =>
+      formatStringFormatter(getValidDate(timestamp), format, {
         locale,
         timezone: timeZone,
       })
@@ -189,7 +189,7 @@ export const timeFormatter = ({
     // based on an optional `domainWidth` argument (e.g. we will show more
     // detail in a formatted timestamp if a user is viewing data in a short
     // time range)
-    formatter = (x: number, {domainWidth = null} = {}) => {
+    formatter = (timestamp: number, {domainWidth = null} = {}) => {
       let timeFormats = DEFAULT_TIME_FORMATS
 
       if (domainWidth) {
@@ -218,7 +218,7 @@ export const timeFormatter = ({
         timeFormat = timeFormats.local12
       }
 
-      return formatStringFormatter(new Date(x), timeFormat, {
+      return formatStringFormatter(getValidDate(timestamp), timeFormat, {
         timezone: timeZone,
         locale,
       })
