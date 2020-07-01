@@ -15,6 +15,7 @@
   },
   "keywords": [
     "data",
+    "gauge",
     "giraffe",
     "graph",
     "heatmap",
@@ -26,6 +27,7 @@
     "plot",
     "scatter",
     "stat",
+    "table",
     "time series",
     "timescale",
     "visualization"
@@ -80,6 +82,7 @@
     "ts-jest": "^24.0.0",
     "typescript": "3.8.3",
     "unraw": "2.0.0",
+    "uuid": "^3.2.1",
     "version-bump-prompt": "^5.0.0"
   },
   "peerDependencies": {

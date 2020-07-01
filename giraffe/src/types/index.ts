@@ -315,6 +315,100 @@ export interface ScatterLayerConfig {
   colors?: string[]
   symbol?: string[]
 }
+export interface FluxTable {
+  id: string
+  name: string
+  data: string[][]
+  result: string
+  groupKey: {
+    [columnName: string]: string
+  }
+  dataTypes: {
+    [columnName: string]: string
+  }
+}
+
+export interface DashboardQuery {
+  text?: string
+  editMode?: QueryEditMode
+  name?: string
+  builderConfig?: BuilderConfig
+}
+
+export type QueryEditMode = 'builder' | 'advanced'
+
+export interface BuilderConfig {
+  buckets?: string[]
+  tags?: BuilderTagsType[]
+  functions?: BuilderFunctionsType[]
+  aggregateWindow?: {
+    period?: string
+  }
+}
+
+export interface BuilderTagsType {
+  key?: string
+  values?: string[]
+  aggregateFunctionType?: BuilderAggregateFunctionType
+}
+
+export type BuilderAggregateFunctionType = 'filter' | 'group'
+
+export interface BuilderFunctionsType {
+  name?: string
+}
+
+export interface RenamableField {
+  readonly internalName?: string
+  displayName?: string
+  visible?: boolean
+}
+
+export * from './timeZones'
+
+export type Theme = 'light' | 'dark'
+
+export interface TableViewProperties {
+  type: 'table'
+  queries: DashboardQuery[]
+  colors: Color[]
+  shape: 'chronograf-v2'
+  note: string
+  showNoteWhenEmpty: boolean
+  tableOptions: {
+    verticalTimeAxis?: boolean
+    sortBy?: RenamableField
+    wrapping?: 'truncate' | 'wrap' | 'single-line'
+    fixFirstColumn?: boolean
+  }
+  fieldOptions: RenamableField[]
+  timeFormat: string
+  decimalPlaces: DecimalPlaces
+}
+
+export interface ColumnWidths {
+  totalWidths: number
+  widths: {[x: string]: number}
+}
+
+export interface TransformTableDataReturnType {
+  transformedData: string[][]
+  sortedTimeVals: string[]
+  columnWidths: ColumnWidths
+  resolvedRenamableFields: RenamableField[]
+  sortOptions: SortOptions
+}
+
+export interface SortOptions {
+  field: string
+  direction: string
+}
+
+export interface TimeField {
+  internalName: string
+  displayName: string
+  visible: boolean
+}
 
 export interface FluxTable {
   id: string
