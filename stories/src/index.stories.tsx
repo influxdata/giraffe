@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
+import {CPUString} from './data/cpuString'
+// import {SERIES} from './data/mosaicDataSet'
 
 import {
   Config,
@@ -404,6 +406,37 @@ storiesOf('XY Plot', module)
       yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Mosaic', () => {
+    //const table = tableKnob()
+    //const x = xKnob(table)
+    //const y = yKnob(table)
+
+    // const legendFont = legendFontKnob()
+    const showAxes = showAxesKnob()
+    // const binCount = number('Bin Count', 10)
+
+    const config: Config = {
+      table: CPUString,
+      // legendFont,
+      // tickFont,
+      showAxes,
+      //valueFormatters: {_value: val => `${Math.round(val)}%`},
+      layers: [
+        {
+          type: 'mosaic',
+          x: '_time',
+          y: '_value',
+          fill: ['_value'],
+        } as LayerConfig,
+      ],
     }
 
     return (

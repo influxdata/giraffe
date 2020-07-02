@@ -10,6 +10,7 @@ import {lineTransform} from '../transforms/line'
 import {scatterTransform} from '../transforms/scatter'
 import {histogramTransform} from '../transforms/histogram'
 import {heatmapTransform} from '../transforms/heatmap'
+import {mosaicTransform} from '../transforms/mosaic'
 
 import {
   DEFAULT_RANGE_PADDING,
@@ -148,6 +149,24 @@ export class PlotEnv {
     )
   }
 
+  //lets hope this works
+  public get yColumnType(): ColumnType {
+    //console.log('config', this.config) //undefined
+    for (let i = 0; i < this.config.layers.length; i++) {
+      const layer: any = this.config.layers[i]
+      if (layer.yColumnType) {
+        return layer.yColumnType
+      }
+    }
+
+    return 'number'
+  }
+
+  public set yColumnType(columnType: ColumnType) {
+    //console.log('config', this.config) //undefined
+    this.config.yColumnType = columnType
+  }
+
   public get xDomain(): number[] {
     if (this.isXControlled) {
       return this.config.xDomain
@@ -259,6 +278,20 @@ export class PlotEnv {
         )
       }
 
+      case LayerTypes.Mosaic: {
+        const transform = this.fns.get(memoizedTransformKey, mosaicTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          this.config.xDomain,
+          layerConfig.colors,
+          layerConfig.fill
+          //this.config.yColumnType
+          // layerConfig.position
+        )
+      }
+
       case LayerTypes.Heatmap: {
         const transform = this.fns.get(memoizedTransformKey, heatmapTransform)
 
@@ -342,7 +375,9 @@ export class PlotEnv {
       extentOfExtents(
         ...this.config.layers
           .map((_, i) => this.getSpec(i))
-          .filter(spec => spec && spec.xDomain)
+          .filter(spec => {
+            return spec && spec.xDomain
+          })
           .map(spec => spec.xDomain)
       ) || DEFAULT_X_DOMAIN
     )

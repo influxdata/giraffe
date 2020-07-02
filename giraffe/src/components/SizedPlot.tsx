@@ -9,6 +9,7 @@ import {
   LineLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
+  MosaicLayerConfig,
   LayerTypes,
   SpecTypes,
 } from '../types'
@@ -25,6 +26,7 @@ import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
+import {MosaicLayer} from './MosaicLayer'
 
 interface Props {
   config: SizedConfig
@@ -35,7 +37,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
   children,
 }) => {
   const env = usePlotEnv(userConfig)
-
+  // console.log('deniz', userConfig.layers)
+  // console.log('envnew', env)
+  // console.log('LAYERS YAYAYA', env.config.layers)
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()
@@ -74,6 +78,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
+  // console.log('plotenv', env)
   return (
     <div
       className="giraffe-plot"
@@ -118,6 +123,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               )
             }
 
+            //console.log('yColumnType', env.yColumnType)
             if (layerConfig.type === LayerTypes.Custom) {
               const renderProps = {
                 key: layerIndex,
@@ -130,6 +136,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                 xDomain: env.xDomain,
                 yDomain: env.yDomain,
                 columnFormatter: env.getFormatterForColumn,
+                yColumnType: env.yColumnType,
               }
 
               return layerConfig.render(renderProps)
@@ -153,6 +160,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
             }
 
             const spec = env.getSpec(layerIndex)
+            // console.log('in SizedPlot yColumnType', spec.yColumnType)
 
             const sharedProps = {
               hoverX,
@@ -162,6 +170,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               yScale: env.yScale,
               width: env.innerWidth,
               height: env.innerHeight,
+              yColumnType: spec.yColumnType,
               columnFormatter: env.getFormatterForColumn,
             }
 
@@ -194,6 +203,19 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as RectLayerConfig}
+                  />
+                )
+              }
+
+              case SpecTypes.Mosaic: {
+                // console.log('sharedprops', sharedProps)
+                // console.log('SPEC IN SIZED PLOT', spec)
+                return (
+                  <MosaicLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as MosaicLayerConfig}
                   />
                 )
               }

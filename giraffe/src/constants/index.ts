@@ -88,6 +88,17 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     strokeOpacity: 1,
     fillOpacity: 0.75,
   },
+  mosaic: {
+    fill: [],
+    colors: DEFAULT_COLOR_SCHEME,
+    position: 'stacked',
+    binCount: null,
+    strokeWidth: 1,
+    strokePadding: 0.75,
+    strokeOpacity: 1,
+    fillOpacity: 0.75,
+    yColumnType: 'string',
+  },
 }
 
 export const ALL_SYMBOL_TYPES: SymbolType[] = [

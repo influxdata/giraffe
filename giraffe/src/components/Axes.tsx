@@ -3,7 +3,7 @@ import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
-import {Margins, Scale, SizedConfig, Formatter} from '../types'
+import {Margins, Scale, SizedConfig, Formatter, ColumnType} from '../types'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -22,14 +22,16 @@ interface DrawAxesOptions {
   innerHeight: number
   margins: Margins
   xDomain: number[]
-  yDomain: number[]
+  yDomain: number[] //| string[]
   xTicks: number[]
-  yTicks: number[]
+  yTicks: number[] //| string[]
   xTickFormatter: Formatter
   yTickFormatter: Formatter
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   config: SizedConfig
+  //layerIndex: number
+  yColumnType?: ColumnType
 }
 
 export const drawAxes = ({
@@ -57,7 +59,9 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
-}: DrawAxesOptions) => {
+  yColumnType,
+}: //layerIndex,
+DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
   const context = canvas.getContext('2d')
@@ -96,33 +100,92 @@ export const drawAxes = ({
 
   // Draw and label each tick on the y axis
 
+  // if (PlotEnv.config.layers[layerIndex].type === 'mosaic') {
+  // }
+
+  // original code
+  // const yDomainWidth = yDomain[1] - yDomain[0]
+  // console.log('xscale', xScale)
+  // attempt at adding strings to axes
+  // console.log('yDomainWidth', yDomainWidth)
+
   const yDomainWidth = yDomain[1] - yDomain[0]
 
-  context.textAlign = 'end'
-  context.textBaseline = 'middle'
+  if (yColumnType === 'string') {
+    console.log('yay it workes!! :)')
+  } else {
+    for (const yTick of yTicks) {
+      let y
+      if (typeof yTick === 'number') {
+        y = yScale(yTick) + margins.top
+        if (
+          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+        ) {
+          context.strokeStyle = gridColor
+          context.globalAlpha = gridOpacity
+          context.beginPath()
+          context.moveTo(margins.left, y)
+          context.lineTo(width - margins.right, y)
+          context.stroke()
+        }
 
-  for (const yTick of yTicks) {
-    const y = yScale(yTick) + margins.top
+        context.globalAlpha = 1
+        context.fillStyle = tickFontColor
+        context.fillText(
+          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+          margins.left - TICK_PADDING_RIGHT,
+          y
+        )
+      } else {
+        y = yTick
+        if (
+          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+        ) {
+          context.strokeStyle = gridColor
+          context.globalAlpha = gridOpacity
+          context.beginPath()
+          context.moveTo(margins.left, y)
+          context.lineTo(width - margins.right, y)
+          context.stroke()
+        }
 
-    if (
-      Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-      Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-    ) {
-      context.strokeStyle = gridColor
-      context.globalAlpha = gridOpacity
-      context.beginPath()
-      context.moveTo(margins.left, y)
-      context.lineTo(width - margins.right, y)
-      context.stroke()
+        context.globalAlpha = 1
+        context.fillStyle = tickFontColor
+        context.fillText(
+          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+          margins.left - TICK_PADDING_RIGHT,
+          y
+        )
+      }
     }
 
-    context.globalAlpha = 1
-    context.fillStyle = tickFontColor
-    context.fillText(
-      yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-      margins.left - TICK_PADDING_RIGHT,
-      y
-    )
+    // if (
+    //   Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+    //   Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+    // ) {
+    //   context.strokeStyle = gridColor
+    //   context.globalAlpha = gridOpacity
+    //   context.beginPath()
+    //   context.moveTo(margins.left, y)
+    //   context.lineTo(width - margins.right, y)
+    //   context.stroke()
+    // }
+
+    // context.globalAlpha = 1
+    // context.fillStyle = tickFontColor
+    // context.fillText(
+    //   yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+    //   margins.left - TICK_PADDING_RIGHT,
+    //   y
+    // )
+    // context.fillText(
+    //   yTickFormatter('hello', {domainWidth: yDomainWidth}),
+    //   margins.left - TICK_PADDING_RIGHT,
+    //   y
+    // )
+    // context.fillText('hello', margins.left - TICK_PADDING_RIGHT, y)
   }
 
   // Draw x and y axis lines
@@ -190,7 +253,9 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
+    yColumnType,
   } = env
+  // console.log('env', env)
 
   useLayoutEffect(() => {
     drawAxes({
@@ -207,6 +272,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       xScale,
       yScale,
       config,
+      yColumnType,
     })
   }, [
     canvas.current,
@@ -222,8 +288,8 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
+    yColumnType,
   ])
-
   return (
     <canvas
       className="giraffe-axes"

@@ -19,6 +19,7 @@
     "graph",
     "heatmap",
     "histogram",
+    "mosaic",
     "influxdb",
     "layer",
     "line",

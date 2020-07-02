@@ -6,7 +6,7 @@ import {useMountedEffect} from './useMountedEffect'
 
 /*
   Get a `PlotEnv` for a plot.
-  
+
   The `PlotEnv` will be instantiated if it doesn't already exist. If the passed
   `config` changes, it will be set on the `PlotEnv` and the component will
   rerender.

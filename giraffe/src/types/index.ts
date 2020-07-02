@@ -1,7 +1,6 @@
 import CSS from 'csstype'
 
 export type SizedConfig = Config & {width: number; height: number}
-
 export interface Config {
   width?: number
   height?: number
@@ -16,7 +15,7 @@ export interface Config {
   // Ticks on the axes can be specified, or else they are calculated,
   // as well as the font, color, and the unit labels for each tick
   xTicks?: number[]
-  yTicks?: number[]
+  yTicks?: number[] //| string[]
   tickFont?: string
   tickFontColor?: string
   valueFormatters?: {
@@ -58,6 +57,9 @@ export interface Config {
   legendBorder?: string
   legendCrosshairColor?: string
   legendColumns?: string[]
+
+  // The type of the y-axis column
+  yColumnType?: ColumnType
 }
 
 export enum FormatterType {
@@ -129,6 +131,7 @@ export enum LayerTypes {
   Histogram = 'histogram',
   Line = 'line',
   Scatter = 'scatter',
+  Mosaic = 'mosaic',
 }
 
 export type LayerConfig =
@@ -139,6 +142,7 @@ export type LayerConfig =
   | HistogramLayerConfig
   | LineLayerConfig
   | ScatterLayerConfig
+  | MosaicLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -155,6 +159,7 @@ export interface CustomLayerRenderProps {
   height: number
   innerWidth: number
   innerHeight: number
+  yColumnType: ColumnType
   columnFormatter: (colKey: string) => (x: any) => string
 }
 
@@ -238,6 +243,20 @@ export interface HistogramLayerConfig {
   strokePadding?: number
 }
 
+export interface MosaicLayerConfig {
+  type: 'mosaic' // do not refactor or restrict to LayerTypes.Mosaic
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
+  x: string
+  y: string
+  fill?: string[]
+  colors?: string[]
+  yColumnType: ColumnType
+  // position?: MosaicPosition
+}
+
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
 
 export interface LineLayerConfig {
@@ -290,12 +309,36 @@ export interface ScatterLayerConfig {
 
   We call the collection of this derived data a "spec".
 */
-export type LayerSpec = LineLayerSpec | ScatterLayerSpec | RectLayerSpec
+export type LayerSpec =
+  | LineLayerSpec
+  | ScatterLayerSpec
+  | RectLayerSpec
+  | MosaicLayerSpec
 
 export enum SpecTypes {
   Line = 'line',
   Scatter = 'scatter',
   Rect = 'rect',
+  Mosaic = 'mosaic',
+}
+
+export interface MosaicLayerSpec {
+  type: 'mosaic'
+  inputTable: Table
+  table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column
+  //binDimension: 'x'
+  xDomain: number[]
+  yDomain: number[] //| string[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {fill: Scale<number, string>}
+  columnGroupMaps: {
+    fill: ColumnGroupMap
+  }
+  // columnGroupMaps: {fill?: ColumnGroupMap}
+  //console.log('yColumnType', yColumnType)
 }
 
 export interface LineLayerSpec {
@@ -360,6 +403,7 @@ export interface LayerProps {
   spec: LayerSpec
   config: LayerConfig
   plotConfig: SizedConfig
+  yColumnType: ColumnType
   columnFormatter: (colKey: string) => (x: any) => string
   hoverX: number | null
   hoverY: number | null
@@ -435,6 +479,8 @@ export type LineHoverDimension = 'x' | 'y' | 'xy'
 export type LinePosition = 'overlaid' | 'stacked'
 
 export type HistogramPosition = 'overlaid' | 'stacked'
+
+export type MosaicPosition = 'stacked'
 
 export type SymbolType =
   | 'circle'
