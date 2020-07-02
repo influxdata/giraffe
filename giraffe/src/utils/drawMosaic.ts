@@ -62,6 +62,31 @@ export const drawMosaic = ({
 
     const fill = fillScale(colorVal)
 
+    // if (hoveredRowIndices && hoveredRowIndices.includes(i)) {
+    //   fill = color(fill)
+    //     .brighter(1)
+    //     .hex()
+    // }
+    console.log(
+      'DRAW MOSAIC: i = ',
+      i,
+      cpuCol[i],
+      valueCol[i],
+      'x = ',
+      x,
+      'y = ',
+      y,
+      'xMinCol[i] = ',
+      xMinCol[i],
+      'xscale = ',
+      xScale(xMinCol[i]),
+      'strokePadding = ',
+      strokePadding
+    )
+    // if (i === 1) {
+    //   width = 10
+    // }
+
     if (strokeWidth || strokeOpacity) {
       // See https://stackoverflow.com/a/45125187
       context.beginPath()

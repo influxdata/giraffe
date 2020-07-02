@@ -284,9 +284,13 @@ export class PlotEnv {
         return transform(
           table,
           layerConfig.x,
+          layerConfig.y,
           this.config.xDomain,
-          layerConfig.colors,
-          layerConfig.fill
+          layerConfig.fill,
+          layerConfig.symbol,
+          layerConfig.colors
+          //this.config.yColumnType
+          // layerConfig.position
         )
       }
 

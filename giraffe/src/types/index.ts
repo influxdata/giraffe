@@ -245,14 +245,15 @@ export interface HistogramLayerConfig {
 
 export interface MosaicLayerConfig {
   type: 'mosaic' // do not refactor or restrict to LayerTypes.Mosaic
-  strokeWidth?: number
-  strokePadding?: number
-  strokeOpacity?: number
-  fillOpacity?: number
   x: string
   y: string
   fill?: string[]
   colors?: string[]
+  symbol?: string[]
+  strokeWidth?: number
+  strokePadding?: number
+  strokeOpacity?: number
+  fillOpacity?: number
   yColumnType: ColumnType
   // position?: MosaicPosition
 }

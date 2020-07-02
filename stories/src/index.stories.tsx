@@ -1,7 +1,8 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
-import {CPUString} from './data/cpuString'
+//import {CPUString} from './data/cpuString'
+import {SERIES} from './data/mosaicDataSet'
 
 import {
   Config,
@@ -414,17 +415,29 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Mosaic', () => {
+    const table = tableKnob()
+    const colors = colorSchemeKnob()
+    const x = xKnob(table)
+    const y = yKnob(table)
+    const fill = ['_value']
+    const symbol = symbolKnob(table, 'host')
+
+    // const legendFont = legendFontKnob()
     const showAxes = showAxesKnob()
 
     const config: Config = {
-      table: CPUString,
+      table: SERIES,
+      // legendFont,
+      // tickFont,
       showAxes,
       layers: [
         {
           type: 'mosaic',
-          x: '_time',
-          y: '_value',
-          fill: ['_value'],
+          x,
+          y,
+          fill: fill,
+          symbol: symbol,
+          colors,
         } as LayerConfig,
       ],
     }
