@@ -1,5 +1,4 @@
 import {useState, useRef} from 'react'
-
 import {SizedConfig} from '../types'
 import {PlotEnv} from './PlotEnv'
 import {useMountedEffect} from './useMountedEffect'

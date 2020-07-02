@@ -78,7 +78,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  // console.log('plotenv', env)
   return (
     <div
       className="giraffe-plot"
@@ -123,7 +122,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
               )
             }
 
-            //console.log('yColumnType', env.yColumnType)
             if (layerConfig.type === LayerTypes.Custom) {
               const renderProps = {
                 key: layerIndex,
@@ -160,7 +158,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
             }
 
             const spec = env.getSpec(layerIndex)
-            // console.log('in SizedPlot yColumnType', spec.yColumnType)
 
             const sharedProps = {
               hoverX,
@@ -208,8 +205,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
               }
 
               case SpecTypes.Mosaic: {
-                // console.log('sharedprops', sharedProps)
-                // console.log('SPEC IN SIZED PLOT', spec)
                 return (
                   <MosaicLayer
                     key={layerIndex}

@@ -15,7 +15,7 @@ export interface Config {
   // Ticks on the axes can be specified, or else they are calculated,
   // as well as the font, color, and the unit labels for each tick
   xTicks?: number[]
-  yTicks?: number[] //| string[]
+  yTicks?: number[]
   tickFont?: string
   tickFontColor?: string
   valueFormatters?: {
@@ -326,9 +326,8 @@ export interface MosaicLayerSpec {
   type: 'mosaic'
   inputTable: Table
   table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column
-  //binDimension: 'x'
   xDomain: number[]
-  yDomain: number[] //| string[]
+  yDomain: number[]
   xColumnKey: string
   yColumnKey: string
   xColumnType: ColumnType
@@ -337,8 +336,6 @@ export interface MosaicLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
-  // columnGroupMaps: {fill?: ColumnGroupMap}
-  //console.log('yColumnType', yColumnType)
 }
 
 export interface LineLayerSpec {

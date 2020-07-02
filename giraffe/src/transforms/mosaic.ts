@@ -1,7 +1,5 @@
-//import {extent} from 'd3-array'
 import {newTable} from '../utils/newTable'
 import {MosaicLayerSpec, Table} from '../types'
-// import {extent} from 'd3-array'
 import {FILL, X_MIN, X_MAX, VALUE, SYMBOL} from '../constants/columnKeys'
 import {createGroupIDColumn} from './'
 import {resolveDomain} from '../utils/resolveDomain'
@@ -13,7 +11,6 @@ export const mosaicTransform = (
   xDomain: number[],
   colors: string[],
   fillColKeys: string[]
-  // position: MosaicPosition
 ): MosaicLayerSpec => {
   const resolvedXDomain = resolveDomain(
     inputTable.getColumn(xColumnKey, 'number'),
@@ -28,7 +25,6 @@ export const mosaicTransform = (
   console.log('ignore', fillColumn)
 
   // break up into itervals while adding to table
-
   const startTimes = []
   const endTimes = []
   const values = []
@@ -51,8 +47,7 @@ export const mosaicTransform = (
   prevValue = inputTable.getColumn('_value', 'string')[0]
 
   for (let i = 1; i < inputTable.length; i++) {
-    // check if the value has changed or if you've reached the end of the table
-    // if so, add a new value to all the lists
+    // check if we have moved to a new series, and update the end time for the previous series correctly
     if (inputTable.getColumn('cpu', 'string')[i] != prevSeries) {
       endTimes.push(inputTable.getColumn('_time', 'time')[i - 1])
       startTimes.push(inputTable.getColumn('_time', 'time')[i])
@@ -62,6 +57,8 @@ export const mosaicTransform = (
       prevSeries = inputTable.getColumn('cpu', 'string')[i]
       tableLength += 1
     } else if (inputTable.getColumn('_value', 'string')[i] != prevValue) {
+      // check if the value has changed or if you've reached the end of the table
+      // if so, add a new value to all the lists
       endTimes.push(inputTable.getColumn('_time', 'time')[i])
       startTimes.push(inputTable.getColumn('_time', 'time')[i])
       values.push(inputTable.getColumn('_value', 'string')[i])
@@ -84,7 +81,7 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
-  console.log(tableLength)
+
   const table = newTable(tableLength)
     .addColumn(X_MIN, 'number', startTimes)
     .addColumn(X_MAX, 'number', endTimes)
@@ -92,10 +89,7 @@ export const mosaicTransform = (
     .addColumn(FILL, 'string', cpus)
     .addColumn(SYMBOL, 'string', hosts)
 
-  console.log('TABLE IN MOSAIC', table)
-
   const resolvedYDomain = [0, yCol.length]
-  // const resolvedYDomain = ['cpu0', 'cpu1', 'cpu2', 'cpu3']
 
   const fillScale = getNominalColorScale(fillColumnMap, colors)
 
@@ -103,7 +97,6 @@ export const mosaicTransform = (
     type: 'mosaic',
     inputTable,
     table,
-    // binDimension: 'x', // right? if binDimension is the axis bins are on, it should be 'y'?
     xDomain: resolvedXDomain,
     yDomain: resolvedYDomain,
     xColumnKey,

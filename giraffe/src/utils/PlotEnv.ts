@@ -149,9 +149,7 @@ export class PlotEnv {
     )
   }
 
-  //lets hope this works
   public get yColumnType(): ColumnType {
-    //console.log('config', this.config) //undefined
     for (let i = 0; i < this.config.layers.length; i++) {
       const layer: any = this.config.layers[i]
       if (layer.yColumnType) {
@@ -163,7 +161,6 @@ export class PlotEnv {
   }
 
   public set yColumnType(columnType: ColumnType) {
-    //console.log('config', this.config) //undefined
     this.config.yColumnType = columnType
   }
 
@@ -287,8 +284,6 @@ export class PlotEnv {
           this.config.xDomain,
           layerConfig.colors,
           layerConfig.fill
-          //this.config.yColumnType
-          // layerConfig.position
         )
       }
 

@@ -22,15 +22,14 @@ interface DrawAxesOptions {
   innerHeight: number
   margins: Margins
   xDomain: number[]
-  yDomain: number[] //| string[]
+  yDomain: number[]
   xTicks: number[]
-  yTicks: number[] //| string[]
+  yTicks: number[]
   xTickFormatter: Formatter
   yTickFormatter: Formatter
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   config: SizedConfig
-  //layerIndex: number
   yColumnType?: ColumnType
 }
 
@@ -60,8 +59,7 @@ export const drawAxes = ({
     yAxisLabel,
   },
   yColumnType,
-}: //layerIndex,
-DrawAxesOptions) => {
+}: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
   const context = canvas.getContext('2d')
@@ -99,15 +97,6 @@ DrawAxesOptions) => {
   }
 
   // Draw and label each tick on the y axis
-
-  // if (PlotEnv.config.layers[layerIndex].type === 'mosaic') {
-  // }
-
-  // original code
-  // const yDomainWidth = yDomain[1] - yDomain[0]
-  // console.log('xscale', xScale)
-  // attempt at adding strings to axes
-  // console.log('yDomainWidth', yDomainWidth)
 
   const yDomainWidth = yDomain[1] - yDomain[0]
 
@@ -160,32 +149,6 @@ DrawAxesOptions) => {
         )
       }
     }
-
-    // if (
-    //   Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-    //   Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-    // ) {
-    //   context.strokeStyle = gridColor
-    //   context.globalAlpha = gridOpacity
-    //   context.beginPath()
-    //   context.moveTo(margins.left, y)
-    //   context.lineTo(width - margins.right, y)
-    //   context.stroke()
-    // }
-
-    // context.globalAlpha = 1
-    // context.fillStyle = tickFontColor
-    // context.fillText(
-    //   yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-    //   margins.left - TICK_PADDING_RIGHT,
-    //   y
-    // )
-    // context.fillText(
-    //   yTickFormatter('hello', {domainWidth: yDomainWidth}),
-    //   margins.left - TICK_PADDING_RIGHT,
-    //   y
-    // )
-    // context.fillText('hello', margins.left - TICK_PADDING_RIGHT, y)
   }
 
   // Draw x and y axis lines
@@ -255,7 +218,6 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     config,
     yColumnType,
   } = env
-  // console.log('env', env)
 
   useLayoutEffect(() => {
     drawAxes({
