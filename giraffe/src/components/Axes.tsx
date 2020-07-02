@@ -101,7 +101,7 @@ export const drawAxes = ({
   const yDomainWidth = yDomain[1] - yDomain[0]
 
   if (yColumnType === 'string') {
-    console.log('yay it workes!! :)')
+    //TODO: implement
   } else {
     for (const yTick of yTicks) {
       let y

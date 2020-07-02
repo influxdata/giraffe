@@ -37,9 +37,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
   children,
 }) => {
   const env = usePlotEnv(userConfig)
-  // console.log('deniz', userConfig.layers)
-  // console.log('envnew', env)
-  // console.log('LAYERS YAYAYA', env.config.layers)
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()

@@ -17,12 +17,7 @@ export const mosaicTransform = (
     xDomain
   )
 
-  const [fillColumn, fillColumnMap] = createGroupIDColumn(
-    inputTable,
-    fillColKeys
-  )
-
-  console.log('ignore', fillColumn)
+  const [, fillColumnMap] = createGroupIDColumn(inputTable, fillColKeys)
 
   // break up into itervals while adding to table
   const startTimes = []
@@ -107,3 +102,4 @@ export const mosaicTransform = (
     columnGroupMaps: {fill: fillColumnMap},
   }
 }
+//TODO: fix hard-coding

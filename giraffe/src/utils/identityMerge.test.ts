@@ -155,12 +155,7 @@ describe('isEqual', () => {
       isEqual({a: '2', b: [1, 2, {c: 3}]}, {a: '2', b: [1, 2, {c: 4}]})
     ).toBeFalsy()
 
-    expect(
-      isEqual(
-        () => 2,
-        () => 2
-      )
-    ).toBeFalsy()
+    expect(isEqual(() => 2, () => 2)).toBeFalsy()
 
     const f = () => 2
 
