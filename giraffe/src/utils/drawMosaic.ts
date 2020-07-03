@@ -1,5 +1,5 @@
 import {Table, Scale, ColumnType} from '../types'
-import {X_MIN, X_MAX, VALUE, FILL} from '../constants/columnKeys'
+import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
 
 interface DrawMosaicOptions {
   context: CanvasRenderingContext2D
@@ -27,8 +27,8 @@ export const drawMosaic = ({
 }: DrawMosaicOptions): void => {
   const xMinCol = table.getColumn(X_MIN, 'number')
   const xMaxCol = table.getColumn(X_MAX, 'number')
-  const valueCol = table.getColumn(VALUE, 'string')
-  const cpuCol = table.getColumn(FILL, 'string')
+  const valueCol = table.getColumn(FILL, 'string')
+  const cpuCol = table.getColumn(SERIES, 'string')
   context.globalAlpha = fillOpacity
 
   for (let i = 0; i < xMaxCol.length; i++) {
@@ -67,22 +67,22 @@ export const drawMosaic = ({
     //     .brighter(1)
     //     .hex()
     // }
-    console.log(
-      'DRAW MOSAIC: i = ',
-      i,
-      cpuCol[i],
-      valueCol[i],
-      'x = ',
-      x,
-      'y = ',
-      y,
-      'xMinCol[i] = ',
-      xMinCol[i],
-      'xscale = ',
-      xScale(xMinCol[i]),
-      'strokePadding = ',
-      strokePadding
-    )
+    // console.log(
+    //   'DRAW MOSAIC: i = ',
+    //   i,
+    //   cpuCol[i],
+    //   valueCol[i],
+    //   'x = ',
+    //   x,
+    //   'y = ',
+    //   y,
+    //   'xMinCol[i] = ',
+    //   xMinCol[i],
+    //   'xscale = ',
+    //   xScale(xMinCol[i]),
+    //   'strokePadding = ',
+    //   strokePadding
+    // )
     // if (i === 1) {
     //   width = 10
     // }

@@ -26,10 +26,15 @@ export const mosaicTransform = (
     inputTable,
     symbolColKeys
   ) //use to map hosts?
+  // console.log('ignore', fillColumn, symbolColumn, symbolColumnMap)
 
-  console.log('ignore', fillColumn, symbolColumn, symbolColumnMap)
-
-  console.log('inputTable', inputTable.getColumn(FILL, 'string'))
+  // console.log('inputTable', inputTable.getColumn(FILL, 'string'))
+  // console.log('symbolColumn', symbolColumn)
+  // console.log('symbolColumnMap', symbolColumnMap)
+  // console.log('valueType', typeof valueType)
+  // console.log('attempt to get value', symbolColumnMap.mappings[symbolColumn[0]][valueType])
+  // console.log('type', symbolColumnMap.columnKeys[0])
+  // console.log('type2', fillColumnMap.columnKeys[0])
 
   // break up into itervals while adding to table
 
@@ -37,7 +42,7 @@ export const mosaicTransform = (
   const xMaxData = []
   const fillData = []
   const seriesData = []
-  const symboData = []
+  const symbolData = []
   let prevValue = ''
   let tableLength = 0
   let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
@@ -45,14 +50,17 @@ export const mosaicTransform = (
   // find all series in the data set
   const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
 
+  const valueType1 = symbolColumnMap.columnKeys[0]
+  const valueType2 = fillColumnMap.columnKeys[0]
+
   // so the indices for the lists and the actual input table will be offset
   // first add a new entry in all the lists except xMaxData
   // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
   xMinData.push(inputTable.getColumn(xColumnKey, 'number')[0])
-  fillData.push(inputTable.getColumn(FILL, 'string')[0])
+  fillData.push(fillColumnMap.mappings[fillColumn[0]][valueType2])
   seriesData.push(inputTable.getColumn(yColumnKey, 'string')[0])
-  symboData.push(inputTable.getColumn(SYMBOL, 'string')[0])
-  prevValue = inputTable.getColumn(FILL, 'string')[0]
+  symbolData.push(symbolColumnMap.mappings[symbolColumn[0]][valueType1])
+  prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
 
   for (let i = 1; i < inputTable.length; i++) {
     // check if the value has changed or if you've reached the end of the table
@@ -60,23 +68,23 @@ export const mosaicTransform = (
     if (inputTable.getColumn(yColumnKey, 'string')[i] != prevSeries) {
       xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i - 1])
       xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(inputTable.getColumn(FILL, 'string')[i])
+      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
       seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      symboData.push(inputTable.getColumn(SYMBOL, 'string')[i])
+      symbolData.push(symbolColumnMap.mappings[symbolColumn[i]][valueType1])
       prevSeries = inputTable.getColumn(yColumnKey, 'string')[i]
       tableLength += 1
-    } else if (inputTable.getColumn(FILL, 'string')[i] != prevValue) {
+    } else if (fillColumnMap.mappings[fillColumn[i]][valueType2] != prevValue) {
       xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i])
       xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(inputTable.getColumn(FILL, 'string')[i])
+      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
       seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      symboData.push(inputTable.getColumn(SYMBOL, 'string')[i])
+      symbolData.push(symbolColumnMap.mappings[symbolColumn[i]][valueType1])
       tableLength += 1
     }
     // if a series isn't already in valueStrings, add it
     if (!valueStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
       valueStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
-    prevValue = inputTable.getColumn(FILL, 'string')[i]
+    prevValue = fillColumnMap.mappings[fillColumn[i]][valueType2]
   }
   //close the last interval
   xMaxData.push(
@@ -96,7 +104,7 @@ export const mosaicTransform = (
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
     .addColumn(FILL, 'string', fillData) //values
     .addColumn(SERIES, 'string', seriesData) //cpus
-    .addColumn(SYMBOL, 'string', symboData) //hosts
+    .addColumn(SYMBOL, 'string', symbolData) //hosts
 
   console.log('TABLE IN MOSAIC', table)
 
