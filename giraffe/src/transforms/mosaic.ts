@@ -1,7 +1,5 @@
-//import {extent} from 'd3-array'
 import {newTable} from '../utils/newTable'
 import {MosaicLayerSpec, Table} from '../types'
-// import {extent} from 'd3-array'
 import {X_MIN, X_MAX, FILL, SYMBOL, SERIES} from '../constants/columnKeys'
 import {createGroupIDColumn} from './'
 import {resolveDomain} from '../utils/resolveDomain'
@@ -15,29 +13,18 @@ export const mosaicTransform = (
   fillColKeys: string[],
   symbolColKeys: string[],
   colors: string[]
-  // position: MosaicPosition
 ): MosaicLayerSpec => {
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
-  ) //used to map cpus? We want to see if we can use this instead of adding it in the loop
+  )
 
   const [symbolColumn, symbolColumnMap] = createGroupIDColumn(
     inputTable,
     symbolColKeys
-  ) //use to map hosts?
-  // console.log('ignore', fillColumn, symbolColumn, symbolColumnMap)
-
-  // console.log('inputTable', inputTable.getColumn(FILL, 'string'))
-  // console.log('symbolColumn', symbolColumn)
-  // console.log('symbolColumnMap', symbolColumnMap)
-  // console.log('valueType', typeof valueType)
-  // console.log('attempt to get value', symbolColumnMap.mappings[symbolColumn[0]][valueType])
-  // console.log('type', symbolColumnMap.columnKeys[0])
-  // console.log('type2', fillColumnMap.columnKeys[0])
+  )
 
   // break up into itervals while adding to table
-
   const xMinData = []
   const xMaxData = []
   const fillData = []
@@ -98,7 +85,6 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
-  console.log(tableLength)
   const table = newTable(tableLength)
     .addColumn(X_MIN, 'number', xMinData) //startTimes
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
@@ -106,19 +92,13 @@ export const mosaicTransform = (
     .addColumn(SERIES, 'string', seriesData) //cpus
     .addColumn(SYMBOL, 'string', symbolData) //hosts
 
-  console.log('TABLE IN MOSAIC', table)
-
   const resolvedXDomain = resolveDomain(
     inputTable.getColumn(xColumnKey, 'number'),
     xDomain
   )
 
   const resolvedYDomain = [0, valueStrings.length]
-  // const resolvedYDomain = ['cpu0', 'cpu1', 'cpu2', 'cpu3']
-
   const fillScale = getNominalColorScale(fillColumnMap, colors)
-
-  console.log(xColumnKey, xColumnKey)
 
   return {
     type: 'mosaic',
@@ -126,7 +106,6 @@ export const mosaicTransform = (
     table,
     xDomain: resolvedXDomain,
     yDomain: resolvedYDomain,
-    // yColumnLabels: yStrings,
     xColumnKey,
     yColumnKey,
     xColumnType: inputTable.getColumnType(xColumnKey),
