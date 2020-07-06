@@ -1,8 +1,8 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
-//import {CPUString} from './data/cpuString'
-import {SERIES} from './data/mosaicDataSet'
+import {CPUString} from './data/cpuString'
+//import {SERIES} from './data/mosaicDataSet'
 
 import {
   Config,
@@ -418,7 +418,7 @@ storiesOf('XY Plot', module)
     const table = tableKnob()
     const colors = colorSchemeKnob()
     const x = xKnob(table)
-    const y = yKnob(table)
+    const y = yKnob(table, 'cpu')
     const fill = ['_value']
     const symbol = symbolKnob(table, 'host')
 
@@ -426,7 +426,7 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
 
     const config: Config = {
-      table: SERIES,
+      table: CPUString,
       // legendFont,
       // tickFont,
       showAxes,

@@ -31,34 +31,36 @@ export const drawMosaic = ({
   const cpuCol = table.getColumn(SERIES, 'string')
   context.globalAlpha = fillOpacity
 
+  const colorMap = new Map()
+  //if value isn't in map yet, add it & increment number
+  let i = 0
+  for (const val of valueCol) {
+    if (!colorMap.has(val)) {
+      colorMap.set(val, i)
+      i++
+    }
+  }
+
+  const yValMap = new Map()
+  //if cpu isn't in map yet, add it & increment number
+  i = 0
+  for (const cpu of cpuCol) {
+    if (!yValMap.has(cpu)) {
+      yValMap.set(cpu, i)
+      i++
+    }
+  }
+
   for (let i = 0; i < xMaxCol.length; i++) {
     const x = xScale(xMinCol[i])
 
-    let yVal = 0
-    if (cpuCol[i] === 'cpu0') {
-      yVal = 1
-    } else if (cpuCol[i] === 'cpu1') {
-      yVal = 2
-    } else if (cpuCol[i] === 'cpu2') {
-      yVal = 3
-    } else if (cpuCol[i] === 'cpu3') {
-      yVal = 4
-    }
+    const yVal = yValMap.get(cpuCol[i])
     const y = yScale(yVal)
 
     const width = xScale(xMaxCol[i]) - x - strokePadding
-    const height = yScale(3)
+    const height = yScale(yValMap.size + 1)
 
-    let colorVal = 0
-    if (valueCol[i] === 'eenie') {
-      colorVal = 0
-    } else if (valueCol[i] === 'meenie') {
-      colorVal = 1
-    } else if (valueCol[i] === 'miney') {
-      colorVal = 2
-    } else if (valueCol[i] === 'mo') {
-      colorVal = 3
-    }
+    const colorVal = colorMap.get(valueCol[i])
 
     const fill = fillScale(colorVal)
 
