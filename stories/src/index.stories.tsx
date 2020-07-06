@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
+import {CPUString} from './data/cpuString'
 
 import {
   Config,
@@ -404,6 +405,28 @@ storiesOf('XY Plot', module)
       yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Mosaic', () => {
+    const showAxes = showAxesKnob()
+
+    const config: Config = {
+      table: CPUString,
+      showAxes,
+      layers: [
+        {
+          type: 'mosaic',
+          x: '_time',
+          y: '_value',
+          fill: ['_value'],
+        } as LayerConfig,
+      ],
     }
 
     return (

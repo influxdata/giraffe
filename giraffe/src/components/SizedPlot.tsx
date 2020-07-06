@@ -9,6 +9,7 @@ import {
   LineLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
+  MosaicLayerConfig,
   LayerTypes,
   SpecTypes,
 } from '../types'
@@ -25,6 +26,7 @@ import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
+import {MosaicLayer} from './MosaicLayer'
 
 interface Props {
   config: SizedConfig
@@ -35,7 +37,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
   children,
 }) => {
   const env = usePlotEnv(userConfig)
-
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()
@@ -130,6 +131,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                 xDomain: env.xDomain,
                 yDomain: env.yDomain,
                 columnFormatter: env.getFormatterForColumn,
+                yColumnType: env.yColumnType,
               }
 
               return layerConfig.render(renderProps)
@@ -162,6 +164,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               yScale: env.yScale,
               width: env.innerWidth,
               height: env.innerHeight,
+              yColumnType: spec.yColumnType,
               columnFormatter: env.getFormatterForColumn,
             }
 
@@ -194,6 +197,17 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as RectLayerConfig}
+                  />
+                )
+              }
+
+              case SpecTypes.Mosaic: {
+                return (
+                  <MosaicLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as MosaicLayerConfig}
                   />
                 )
               }

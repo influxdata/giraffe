@@ -10,6 +10,7 @@ import {lineTransform} from '../transforms/line'
 import {scatterTransform} from '../transforms/scatter'
 import {histogramTransform} from '../transforms/histogram'
 import {heatmapTransform} from '../transforms/heatmap'
+import {mosaicTransform} from '../transforms/mosaic'
 
 import {
   DEFAULT_RANGE_PADDING,
@@ -148,6 +149,24 @@ export class PlotEnv {
     )
   }
 
+  public get yColumnType(): ColumnType {
+    //added to allow the y-axis type to be a string
+    //if there are multiple layers (ex. single stat + line graph),
+    //it will pick the yColumnType of the 1st layer (so BEWARE)
+    for (let i = 0; i < this.config.layers.length; i++) {
+      const layer: any = this.config.layers[i]
+      if (layer.yColumnType) {
+        return layer.yColumnType
+      }
+    }
+
+    return 'number'
+  }
+
+  public set yColumnType(columnType: ColumnType) {
+    this.config.yColumnType = columnType
+  }
+
   public get xDomain(): number[] {
     if (this.isXControlled) {
       return this.config.xDomain
@@ -256,6 +275,18 @@ export class PlotEnv {
           layerConfig.fill,
           layerConfig.binCount,
           layerConfig.position
+        )
+      }
+
+      case LayerTypes.Mosaic: {
+        const transform = this.fns.get(memoizedTransformKey, mosaicTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          this.config.xDomain,
+          layerConfig.colors,
+          layerConfig.fill
         )
       }
 

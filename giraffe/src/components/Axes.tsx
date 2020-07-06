@@ -3,7 +3,7 @@ import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
-import {Margins, Scale, SizedConfig, Formatter} from '../types'
+import {Margins, Scale, SizedConfig, Formatter, ColumnType} from '../types'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -30,6 +30,7 @@ interface DrawAxesOptions {
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   config: SizedConfig
+  yColumnType?: ColumnType
 }
 
 export const drawAxes = ({
@@ -57,6 +58,7 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
+  yColumnType,
 }: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
@@ -98,31 +100,55 @@ export const drawAxes = ({
 
   const yDomainWidth = yDomain[1] - yDomain[0]
 
-  context.textAlign = 'end'
-  context.textBaseline = 'middle'
+  if (yColumnType === 'string') {
+    //TODO: implement
+  } else {
+    for (const yTick of yTicks) {
+      let y
+      if (typeof yTick === 'number') {
+        y = yScale(yTick) + margins.top
+        if (
+          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+        ) {
+          context.strokeStyle = gridColor
+          context.globalAlpha = gridOpacity
+          context.beginPath()
+          context.moveTo(margins.left, y)
+          context.lineTo(width - margins.right, y)
+          context.stroke()
+        }
 
-  for (const yTick of yTicks) {
-    const y = yScale(yTick) + margins.top
+        context.globalAlpha = 1
+        context.fillStyle = tickFontColor
+        context.fillText(
+          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+          margins.left - TICK_PADDING_RIGHT,
+          y
+        )
+      } else {
+        y = yTick
+        if (
+          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+        ) {
+          context.strokeStyle = gridColor
+          context.globalAlpha = gridOpacity
+          context.beginPath()
+          context.moveTo(margins.left, y)
+          context.lineTo(width - margins.right, y)
+          context.stroke()
+        }
 
-    if (
-      Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-      Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-    ) {
-      context.strokeStyle = gridColor
-      context.globalAlpha = gridOpacity
-      context.beginPath()
-      context.moveTo(margins.left, y)
-      context.lineTo(width - margins.right, y)
-      context.stroke()
+        context.globalAlpha = 1
+        context.fillStyle = tickFontColor
+        context.fillText(
+          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+          margins.left - TICK_PADDING_RIGHT,
+          y
+        )
+      }
     }
-
-    context.globalAlpha = 1
-    context.fillStyle = tickFontColor
-    context.fillText(
-      yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-      margins.left - TICK_PADDING_RIGHT,
-      y
-    )
   }
 
   // Draw x and y axis lines
@@ -190,6 +216,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
+    yColumnType,
   } = env
 
   useLayoutEffect(() => {
@@ -207,6 +234,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       xScale,
       yScale,
       config,
+      yColumnType,
     })
   }, [
     canvas.current,
@@ -222,8 +250,8 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
+    yColumnType,
   ])
-
   return (
     <canvas
       className="giraffe-axes"
