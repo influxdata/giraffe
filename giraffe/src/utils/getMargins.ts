@@ -20,22 +20,28 @@ export const getMargins = (
     return {top: 1, right: 1, bottom: 1, left: 1}
   }
 
-  const longestYTick = maxBy(
-    d => d.length,
-    yTicks.map(t => yTickFormatter(t))
-  )
-
-  const longestYColumnLabel =
-    //find longest yColumnLabel
-
-  if (yColumnType === 'string') {
-    //new case
+  let longestYTick
+  if (yColumnLabels) {
+    // for cases where they y-axis has strings as values
+    // find the longest label in the list
+    let maxVal = yColumnLabels[0]
+    let maxLength = maxVal.length
+    let i
+    for (i = 1; i < yColumnLabels.length; i++) {
+      if (yColumnLabels[i].length > maxLength) {
+        maxVal = yColumnLabels[i]
+        maxLength = maxVal.length
+      }
+    }
+    longestYTick = maxVal
   } else {
-    const {width: maxTextWidth, height: textHeight} = getTextMetrics(
-      tickFont,
-      longestYTick
-    )
+    longestYTick = maxBy(d => d.length, yTicks.map(t => yTickFormatter(t)))
   }
+
+  const {width: maxTextWidth, height: textHeight} = getTextMetrics(
+    tickFont,
+    longestYTick
+  )
 
   const xAxisLabelHeight = xAxisLabel
     ? textHeight + AXIS_LABEL_PADDING_BOTTOM
