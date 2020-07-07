@@ -97,7 +97,8 @@ export const drawAxes = ({
   }
 
   // Draw and label each tick on the y axis
-
+  context.textAlign = 'end'
+  context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
 
   if (yColumnType === 'string') {
