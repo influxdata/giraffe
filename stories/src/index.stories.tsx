@@ -2,7 +2,6 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 import {CPUString} from './data/cpuString'
-//import {SERIES} from './data/mosaicDataSet'
 
 import {
   Config,
@@ -422,13 +421,10 @@ storiesOf('XY Plot', module)
     const fill = ['_value']
     const symbol = symbolKnob(table, 'host')
 
-    // const legendFont = legendFontKnob()
     const showAxes = showAxesKnob()
 
     const config: Config = {
       table: CPUString,
-      // legendFont,
-      // tickFont,
       showAxes,
       layers: [
         {
