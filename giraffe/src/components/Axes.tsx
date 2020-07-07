@@ -102,6 +102,7 @@ export const drawAxes = ({
 
   if (yColumnType === 'string') {
     //TODO: implement
+    // work in progress
   } else {
     for (const yTick of yTicks) {
       let y
