@@ -414,6 +414,13 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Mosaic', () => {
+    const table = tableKnob()
+    const colors = colorSchemeKnob()
+    const x = xKnob(table)
+    const y = yKnob(table, 'cpu')
+    const fill = ['_value']
+    const symbol = symbolKnob(table, 'host')
+
     const showAxes = showAxesKnob()
 
     const config: Config = {
@@ -422,9 +429,11 @@ storiesOf('XY Plot', module)
       layers: [
         {
           type: 'mosaic',
-          x: '_time',
-          y: '_value',
-          fill: ['_value'],
+          x,
+          y,
+          fill: fill,
+          symbol: symbol,
+          colors,
         } as LayerConfig,
       ],
     }

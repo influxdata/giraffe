@@ -96,7 +96,7 @@ export const xKnob = (table: Table, initial?: string) =>
   select('x', findXYColumns(table), initial || '_time')
 
 export const yKnob = (table: Table, initial?: string) =>
-  select('y', findXYColumns(table), initial || '_value')
+  select('y', findXYColumns(table), initial || '_value' || 'cpu')
 
 export const fillKnob = (table: Table, initial?: string) =>
   multiSelect('fill', findStringColumns(table), initial || 'cpu')
