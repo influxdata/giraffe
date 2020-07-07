@@ -41,10 +41,17 @@ export const getMargins = (
     )
   }
 
-  const {width: maxTextWidth, height: textHeight} = getTextMetrics(
-    tickFont,
-    longestYTick
-  )
+  const longestYColumnLabel =
+    //find longest yColumnLabel
+
+  if (yColumnType === 'string') {
+    //new case
+  } else {
+    const {width: maxTextWidth, height: textHeight} = getTextMetrics(
+      tickFont,
+      longestYTick
+    )
+  }
 
   const xAxisLabelHeight = xAxisLabel
     ? textHeight + AXIS_LABEL_PADDING_BOTTOM
