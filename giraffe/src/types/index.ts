@@ -60,6 +60,9 @@ export interface Config {
 
   // The type of the y-axis column
   yColumnType?: ColumnType
+
+  // The labels for the y-axis column
+  yColumnLabels?: string[]
 }
 
 export enum FormatterType {
@@ -255,6 +258,7 @@ export interface MosaicLayerConfig {
   strokeOpacity?: number
   fillOpacity?: number
   yColumnType: ColumnType
+  yColumnLabels: string[]
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
@@ -336,6 +340,7 @@ export interface MosaicLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  yColumnLabels?: string[]
 }
 
 export interface LineLayerSpec {
@@ -355,6 +360,7 @@ export interface LineLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  yColumnLabels?: string[]
 }
 
 export interface ScatterLayerSpec {
@@ -375,6 +381,7 @@ export interface ScatterLayerSpec {
     fill: ColumnGroupMap
     symbol: ColumnGroupMap
   }
+  yColumnLabels?: string[]
 }
 
 export interface RectLayerSpec {
@@ -390,6 +397,7 @@ export interface RectLayerSpec {
   yColumnType: ColumnType
   scales: {fill: Scale<number, string>}
   columnGroupMaps: {fill?: ColumnGroupMap}
+  yColumnLabels?: string[]
 }
 
 export interface LayerProps {
@@ -404,6 +412,7 @@ export interface LayerProps {
   columnFormatter: (colKey: string) => (x: any) => string
   hoverX: number | null
   hoverY: number | null
+  yColumnLabels?: string[]
 }
 
 export interface Scale<D = any, R = any> {

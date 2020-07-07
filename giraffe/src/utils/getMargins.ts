@@ -13,7 +13,8 @@ export const getMargins = (
   yAxisLabel: string,
   yTicks: number[],
   yTickFormatter: (tick: number) => string,
-  tickFont: string
+  tickFont: string,
+  yColumnLabels: string[]
 ) => {
   if (!showAxes) {
     return {top: 1, right: 1, bottom: 1, left: 1}
@@ -24,10 +25,17 @@ export const getMargins = (
     yTicks.map(t => yTickFormatter(t))
   )
 
-  const {width: maxTextWidth, height: textHeight} = getTextMetrics(
-    tickFont,
-    longestYTick
-  )
+  const longestYColumnLabel =
+    //find longest yColumnLabel
+
+  if (yColumnType === 'string') {
+    //new case
+  } else {
+    const {width: maxTextWidth, height: textHeight} = getTextMetrics(
+      tickFont,
+      longestYTick
+    )
+  }
 
   const xAxisLabelHeight = xAxisLabel
     ? textHeight + AXIS_LABEL_PADDING_BOTTOM
