@@ -19,7 +19,10 @@ export const getMargins = (
     return {top: 1, right: 1, bottom: 1, left: 1}
   }
 
-  const longestYTick = maxBy(d => d.length, yTicks.map(t => yTickFormatter(t)))
+  const longestYTick = maxBy(
+    d => d.length,
+    yTicks.map(t => yTickFormatter(t))
+  )
 
   const {width: maxTextWidth, height: textHeight} = getTextMetrics(
     tickFont,

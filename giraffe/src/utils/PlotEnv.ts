@@ -289,8 +289,6 @@ export class PlotEnv {
           layerConfig.fill,
           layerConfig.symbol,
           layerConfig.colors
-          //this.config.yColumnType
-          // layerConfig.position
         )
       }
 

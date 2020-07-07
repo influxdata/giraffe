@@ -255,7 +255,6 @@ export interface MosaicLayerConfig {
   strokeOpacity?: number
   fillOpacity?: number
   yColumnType: ColumnType
-  // position?: MosaicPosition
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
