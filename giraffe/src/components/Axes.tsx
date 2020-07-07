@@ -102,12 +102,9 @@ export const drawAxes = ({
   context.textAlign = 'end'
   context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
-  console.log('yticks', yTicks)
   if (yColumnType === 'string') {
-    // TODO: implement
     let y
     for (let i = 0; i < yColumnLabels.length; i++) {
-      // console.log('yColumnLabel', label)
       y = yScale(i) + margins.top - height / (yColumnLabels.length * 2)
 
       context.globalAlpha = 1
