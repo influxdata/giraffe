@@ -35,7 +35,7 @@ export const mosaicTransform = (
   let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
 
   // find all series in the data set
-  const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
+  const seriesStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
 
   const valueType1 = symbolColumnMap.columnKeys[0]
   const valueType2 = fillColumnMap.columnKeys[0]
@@ -69,8 +69,8 @@ export const mosaicTransform = (
       tableLength += 1
     }
     // if a series isn't already in valueStrings, add it
-    if (!valueStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
-      valueStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
+    if (!seriesStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
+      seriesStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
     prevValue = fillColumnMap.mappings[fillColumn[i]][valueType2]
   }
   //close the last interval
@@ -97,7 +97,7 @@ export const mosaicTransform = (
     xDomain
   )
 
-  const resolvedYDomain = [0, valueStrings.length]
+  const resolvedYDomain = [0, seriesStrings.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
 
   return {
@@ -112,5 +112,6 @@ export const mosaicTransform = (
     yColumnType: inputTable.getColumnType(yColumnKey),
     scales: {fill: fillScale},
     columnGroupMaps: {fill: fillColumnMap},
+    yColumnLabels: seriesStrings,
   }
 }

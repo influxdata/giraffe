@@ -31,6 +31,7 @@ interface DrawAxesOptions {
   yScale: Scale<number, number>
   config: SizedConfig
   yColumnType?: ColumnType
+  yColumnLabels?: string[]
 }
 
 export const drawAxes = ({
@@ -59,6 +60,7 @@ export const drawAxes = ({
     yAxisLabel,
   },
   yColumnType,
+  yColumnLabels,
 }: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
@@ -97,12 +99,26 @@ export const drawAxes = ({
   }
 
   // Draw and label each tick on the y axis
+  context.textAlign = 'end'
+  context.textBaseline = 'middle'
 
   const yDomainWidth = yDomain[1] - yDomain[0]
-
+  console.log('yticks', yTicks)
   if (yColumnType === 'string') {
-    //TODO: implement
-    // work in progress
+    // TODO: implement
+    let y
+    for (let i = 0; i < yColumnLabels.length; i++) {
+      // console.log('yColumnLabel', label)
+      y = yScale(i) + margins.top - height / (yColumnLabels.length * 2)
+
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      context.fillText(
+        yTickFormatter(yColumnLabels[i], {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
+    }
   } else {
     for (const yTick of yTicks) {
       let y
@@ -218,6 +234,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     yScale,
     config,
     yColumnType,
+    yColumnLabels,
   } = env
 
   useLayoutEffect(() => {
@@ -236,6 +253,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       yScale,
       config,
       yColumnType,
+      yColumnLabels,
     })
   }, [
     canvas.current,
@@ -252,6 +270,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     yScale,
     config,
     yColumnType,
+    yColumnLabels,
   ])
   return (
     <canvas
