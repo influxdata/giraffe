@@ -131,7 +131,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
                 xDomain: env.xDomain,
                 yDomain: env.yDomain,
                 columnFormatter: env.getFormatterForColumn,
-                yColumnType: env.yColumnType,
               }
 
               return layerConfig.render(renderProps)
@@ -164,7 +163,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
               yScale: env.yScale,
               width: env.innerWidth,
               height: env.innerHeight,
-              yColumnType: spec.yColumnType,
               columnFormatter: env.getFormatterForColumn,
             }
 

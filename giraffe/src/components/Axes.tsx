@@ -3,7 +3,7 @@ import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
-import {Margins, Scale, SizedConfig, Formatter, ColumnType} from '../types'
+import {Margins, Scale, SizedConfig, Formatter} from '../types'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
@@ -30,7 +30,6 @@ interface DrawAxesOptions {
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   config: SizedConfig
-  yColumnType?: ColumnType
   yColumnLabels?: string[]
 }
 
@@ -59,7 +58,6 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
-  yColumnType,
   yColumnLabels,
 }: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
@@ -103,7 +101,7 @@ export const drawAxes = ({
   context.textBaseline = 'middle'
 
   const yDomainWidth = yDomain[1] - yDomain[0]
-  if (yColumnType === 'string') {
+  if (yColumnLabels) {
     let y
     for (let i = 0; i < yColumnLabels.length; i++) {
       y = yScale(i) + margins.top - height / (yColumnLabels.length * 2)
@@ -230,7 +228,6 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
-    yColumnType,
     yColumnLabels,
   } = env
 
@@ -249,7 +246,6 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       xScale,
       yScale,
       config,
-      yColumnType,
       yColumnLabels,
     })
   }, [
@@ -266,7 +262,6 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
     xScale,
     yScale,
     config,
-    yColumnType,
     yColumnLabels,
   ])
   return (

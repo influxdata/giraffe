@@ -17,14 +17,14 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   height,
   xScale,
   yScale,
-  yColumnType,
+  //yColumnType,
 }) => {
   const drawMosaicOptions = {
     table: spec.table,
     xScale,
     yScale,
     fillScale: spec.scales.fill,
-    yColumnType,
+    //yColumnType,
     strokeWidth: config.strokeWidth,
     strokePadding: config.strokePadding,
     strokeOpacity: config.strokeOpacity,
