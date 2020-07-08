@@ -9,6 +9,8 @@ import {MosaicLayerConfig, MosaicLayerSpec, LayerProps} from '../types'
 //   get1DTooltipData,
 //   get2DTooltipData,
 // } from '../utils/rectTooltip'
+import {Tooltip} from './Tooltip'
+import {TooltipData} from '../types'
 
 export interface Props extends LayerProps {
   spec: MosaicLayerSpec
@@ -45,6 +47,32 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     Object.values(drawMosaicOptions)
   )
 
+  const tooltipData: TooltipData = [
+    {
+      colors: ['white'],
+      key: '',
+      name: 'type',
+      type: 'string',
+      values: ['Mosaic'],
+    },
+    {
+      colors: ['orange'],
+      key: '',
+      name: 'data',
+      type: 'string',
+      values: ['cpu'],
+    },
+  ]
+  const plotConfig = {
+    layers: [],
+    legendBackgroundColor: '#1c1c21',
+    legendBorder: '1px solid #202028',
+    legendCrosshairColor: '#31313d',
+    legendFont: '12px sans-serif',
+    legendFontBrightColor: '#c6cad3',
+    legendFontColor: '#8e91a1',
+  }
+
   return (
     <>
       <canvas
@@ -53,6 +81,9 @@ export const MosaicLayer: FunctionComponent<Props> = ({
         style={{position: 'absolute'}}
         data-testid="giraffe-layer-mosaic"
       />
+      {tooltipData.length > 0 && (
+        <Tooltip data={tooltipData} config={plotConfig} />
+      )}
     </>
   )
 }
