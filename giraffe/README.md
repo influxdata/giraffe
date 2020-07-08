@@ -14,7 +14,7 @@ A React-based visualization library powering the data visualizations in [InfluxD
   import {Plot, newTable} from '@influxdata/giraffe'
   </pre>
 
-2. Build the config object.  
+2. Build the config object.
    a. **Required properties**:
 
    - `table` is data built using the newTable utilty function or built from Flux results, _see_ [Flux example](./README.md#example-using-flux)
