@@ -70,7 +70,7 @@
     "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-typescript2": "^0.25.3",
     "ts-jest": "^24.0.0",
-    "typescript": "^3.3.4000",
+    "typescript": "3.8.3",
     "version-bump-prompt": "^5.0.0"
   },
   "peerDependencies": {
