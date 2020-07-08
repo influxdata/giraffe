@@ -11,7 +11,6 @@ interface DrawMosaicOptions {
   strokePadding: number
   strokeOpacity: number
   fillOpacity: number
-  //yColumnType: ColumnType
 }
 
 export const drawMosaic = ({
