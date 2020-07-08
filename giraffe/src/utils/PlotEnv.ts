@@ -150,24 +150,6 @@ export class PlotEnv {
     )
   }
 
-  public get yColumnType(): ColumnType {
-    //added to allow the y-axis type to be a string
-    //if there are multiple layers (ex. single stat + line graph),
-    //it will pick the yColumnType of the 1st layer (so BEWARE)
-    for (let i = 0; i < this.config.layers.length; i++) {
-      const layer: any = this.config.layers[i]
-      if (layer.yColumnType) {
-        return layer.yColumnType
-      }
-    }
-
-    return 'number'
-  }
-
-  public set yColumnType(columnType: ColumnType) {
-    this.config.yColumnType = columnType
-  }
-
   public get yColumnLabels(): string[] {
     return this.config.layers
       .map((_, i) => this.getSpec(i))

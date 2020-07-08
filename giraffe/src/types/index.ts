@@ -58,9 +58,6 @@ export interface Config {
   legendCrosshairColor?: string
   legendColumns?: string[]
 
-  // The type of the y-axis column
-  yColumnType?: ColumnType
-
   // The labels for the y-axis column
   yColumnLabels?: string[]
 }
@@ -162,7 +159,6 @@ export interface CustomLayerRenderProps {
   height: number
   innerWidth: number
   innerHeight: number
-  yColumnType: ColumnType
   columnFormatter: (colKey: string) => (x: any) => string
 }
 
@@ -257,7 +253,6 @@ export interface MosaicLayerConfig {
   strokePadding?: number
   strokeOpacity?: number
   fillOpacity?: number
-  yColumnType: ColumnType
   yColumnLabels: string[]
 }
 
@@ -408,7 +403,6 @@ export interface LayerProps {
   spec: LayerSpec
   config: LayerConfig
   plotConfig: SizedConfig
-  yColumnType: ColumnType
   columnFormatter: (colKey: string) => (x: any) => string
   hoverX: number | null
   hoverY: number | null

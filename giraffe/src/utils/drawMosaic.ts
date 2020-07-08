@@ -1,4 +1,4 @@
-import {Table, Scale, ColumnType} from '../types'
+import {Table, Scale} from '../types'
 import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
 
 interface DrawMosaicOptions {
@@ -11,7 +11,7 @@ interface DrawMosaicOptions {
   strokePadding: number
   strokeOpacity: number
   fillOpacity: number
-  yColumnType: ColumnType
+  //yColumnType: ColumnType
 }
 
 export const drawMosaic = ({
