@@ -157,13 +157,6 @@ export class PlotEnv {
       .map(spec => spec.yColumnLabels)[0]
   }
 
-  public get yColumnLabels(): string[] {
-    return this.config.layers
-      .map((_, i) => this.getSpec(i))
-      .filter(spec => spec && spec.yColumnLabels)
-      .map(spec => spec.yColumnLabels)[0]
-  }
-
   public get xDomain(): number[] {
     if (this.isXControlled) {
       return this.config.xDomain
