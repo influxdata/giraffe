@@ -4,6 +4,11 @@ import {useRef, FunctionComponent} from 'react'
 import {useCanvas} from '../utils/useCanvas'
 import {drawMosaic} from '../utils/drawMosaic'
 import {MosaicLayerConfig, MosaicLayerSpec, LayerProps} from '../types'
+import {
+  findHoveredRects,
+  get1DTooltipData,
+  get2DTooltipData,
+} from '../utils/rectTooltip'
 
 export interface Props extends LayerProps {
   spec: MosaicLayerSpec
