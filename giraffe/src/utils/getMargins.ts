@@ -24,16 +24,7 @@ export const getMargins = (
   if (yColumnLabels) {
     // for cases where they y-axis has strings as values
     // find the longest label in the list
-    let maxVal = yColumnLabels[0]
-    let maxLength = maxVal.length
-    let i
-    for (i = 1; i < yColumnLabels.length; i++) {
-      if (yColumnLabels[i].length > maxLength) {
-        maxVal = yColumnLabels[i]
-        maxLength = maxVal.length
-      }
-    }
-    longestYTick = maxVal
+    longestYTick = maxBy(d => d.length, yColumnLabels)
   } else {
     longestYTick = maxBy(
       d => d.length,

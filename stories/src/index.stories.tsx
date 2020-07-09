@@ -2,7 +2,8 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 import {CPUString} from './data/cpuString'
-
+import {SERIES} from './data/mosaicDataSet'
+CPUString
 import {
   Config,
   Plot,
@@ -424,7 +425,7 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
 
     const config: Config = {
-      table: CPUString,
+      table: SERIES,
       showAxes,
       layers: [
         {

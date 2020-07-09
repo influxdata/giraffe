@@ -58,7 +58,6 @@ export interface Config {
   legendCrosshairColor?: string
   legendColumns?: string[]
 
-  // The labels for the y-axis column
   yColumnLabels?: string[]
 }
 
@@ -335,7 +334,7 @@ export interface MosaicLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
-  yColumnLabels?: string[]
+  yColumnLabels: string[]
 }
 
 export interface LineLayerSpec {

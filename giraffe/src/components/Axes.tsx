@@ -101,12 +101,11 @@ export const drawAxes = ({
   context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
   if (yColumnLabels) {
-    let y
+    context.globalAlpha = 1
+    context.fillStyle = tickFontColor
     for (let i = 0; i < yColumnLabels.length; i++) {
-      y = yScale(i) + margins.top - height / (yColumnLabels.length * 2)
+      const y = yScale(i) + margins.top - height / (yColumnLabels.length * 2)
 
-      context.globalAlpha = 1
-      context.fillStyle = tickFontColor
       context.fillText(
         yTickFormatter(yColumnLabels[i], {domainWidth: yDomainWidth}),
         margins.left - TICK_PADDING_RIGHT,
