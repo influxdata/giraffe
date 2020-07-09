@@ -354,7 +354,6 @@ export interface LineLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
-  yColumnLabels?: string[]
 }
 
 export interface ScatterLayerSpec {

@@ -151,21 +151,12 @@ export class PlotEnv {
   }
 
   public get yColumnLabels(): string[] {
-    // const currLayerSpec = this.config.layers.map((_, i) => this.getSpec(i))
-    // if (Array.isArray(currLayerSpec.yColumnLabels)) {
-    //   return currLayerSpec.yColumnLabels
-    // }
-    // const filteredLayerSpec = currLayerSpec.filter(
-    //   spec => spec && spec.yColumnLabels
-    // )
-    // const layerSpecYColumnLabels = filteredLayerSpec.map(
-    //   spec => spec.yColumnLabels
-    // )
-    // const thisYColumnLabels = layerSpecYColumnLabels[0]
-    return this.config.layers
-      .map((_, i) => this.getSpec(i))
-      .filter(spec => spec && spec.yColumnLabels)
-      .map(spec => spec.yColumnLabels)[0]
+    const currLayerSpec = this.config.layers.map((_, i) => this.getSpec(i))[0]
+
+    if (currLayerSpec.type === 'mosaic') {
+      return currLayerSpec.yColumnLabels
+    }
+    return []
   }
 
   public get xDomain(): number[] {
