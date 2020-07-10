@@ -13,6 +13,7 @@ import {
   LayerTypes,
   SpecTypes,
 } from '../types'
+import {RawFluxDataTable} from './RawFluxDataTable'
 import {GaugeLayer} from './GaugeLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -75,6 +76,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
+  const fluxResponse = config.fluxResponse ? config.fluxResponse : ''
+
   return (
     <div
       className="giraffe-plot"
@@ -102,6 +105,20 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
+            if (layerConfig.type === LayerTypes.RawFluxDataTable) {
+              return (
+                <RawFluxDataTable
+                  key={layerIndex}
+                  config={{
+                    ...layerConfig,
+                    files: [fluxResponse],
+                    width: config.width,
+                    height: config.height,
+                  }}
+                />
+              )
+            }
+
             if (layerConfig.type === LayerTypes.Gauge) {
               return (
                 <LatestValueTransform
