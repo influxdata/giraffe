@@ -100,7 +100,7 @@ DrawAxesOptions) => {
   context.textAlign = 'end'
   context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
-
+  let count = 0
   for (const yTick of yTicks) {
     let y
     if (typeof yTick === 'number') {
@@ -125,8 +125,18 @@ DrawAxesOptions) => {
         y
       )
     } else if (typeof yTick === 'string') {
-      console.log('yTicks in Axes', yTicks)
-      y = yTick
+      console.log('STRING CASE REACHED')
+      y = yScale(count) + margins.top - height / (yTicks.length * 2)
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      //console.log('yTicks in string case', yTicks)
+
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
+      count += 1
     } else {
       y = yTick
 
