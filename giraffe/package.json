@@ -31,6 +31,8 @@
     "visualization"
   ],
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^8.1.0",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-dsv": "^1.0.36",
@@ -62,13 +64,11 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "rollup": "^1.27.8",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-gzip": "^2.2.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-terser": "^5.1.2",
-    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup": "^2.21.0",
+    "rollup-plugin-gzip": "^2.5.0",
+    "rollup-plugin-sourcemaps": "^0.6.2",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^24.0.0",
     "typescript": "3.8.3",
     "version-bump-prompt": "^5.0.0"
