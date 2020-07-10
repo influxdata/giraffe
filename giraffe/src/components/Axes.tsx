@@ -24,7 +24,7 @@ interface DrawAxesOptions {
   xDomain: number[]
   yDomain: number[]
   xTicks: number[]
-  yTicks: number[]
+  yTicks: number[] | string[]
   xTickFormatter: Formatter
   yTickFormatter: Formatter
   xScale: Scale<number, number>
@@ -95,7 +95,7 @@ export const drawAxes = ({
       xAxisY + TICK_PADDING_TOP
     )
   }
-
+  console.log('yTicks in Axes', yTicks)
   // Draw and label each tick on the y axis
   context.textAlign = 'end'
   context.textBaseline = 'middle'

@@ -15,7 +15,7 @@ export interface Config {
   // Ticks on the axes can be specified, or else they are calculated,
   // as well as the font, color, and the unit labels for each tick
   xTicks?: number[]
-  yTicks?: number[]
+  yTicks?: number[] | string[]
   tickFont?: string
   tickFontColor?: string
   valueFormatters?: {
