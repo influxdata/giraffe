@@ -112,5 +112,6 @@ export const mosaicTransform = (
     yColumnType: inputTable.getColumnType(yColumnKey),
     scales: {fill: fillScale},
     columnGroupMaps: {fill: fillColumnMap},
+    yTicks: valueStrings,
   }
 }

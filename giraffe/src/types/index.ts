@@ -255,6 +255,7 @@ export interface MosaicLayerConfig {
   strokeOpacity?: number
   fillOpacity?: number
   yColumnType: ColumnType
+  yTicks: string[]
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
@@ -336,6 +337,7 @@ export interface MosaicLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  yTicks: string[]
 }
 
 export interface LineLayerSpec {
