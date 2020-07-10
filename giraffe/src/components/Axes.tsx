@@ -58,8 +58,8 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
-  yColumnType,
-}: DrawAxesOptions) => {
+}: //yColumnType,
+DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
   const context = canvas.getContext('2d')
@@ -95,60 +95,67 @@ export const drawAxes = ({
       xAxisY + TICK_PADDING_TOP
     )
   }
-  console.log('yTicks in Axes', yTicks)
+
   // Draw and label each tick on the y axis
   context.textAlign = 'end'
   context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
 
-  if (yColumnType === 'string') {
-    //TODO: implement
-  } else {
-    for (const yTick of yTicks) {
-      let y
-      if (typeof yTick === 'number') {
-        y = yScale(yTick) + margins.top
-        if (
-          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-        ) {
-          context.strokeStyle = gridColor
-          context.globalAlpha = gridOpacity
-          context.beginPath()
-          context.moveTo(margins.left, y)
-          context.lineTo(width - margins.right, y)
-          context.stroke()
-        }
-
-        context.globalAlpha = 1
-        context.fillStyle = tickFontColor
-        context.fillText(
-          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-          margins.left - TICK_PADDING_RIGHT,
-          y
-        )
-      } else {
-        y = yTick
-        if (
-          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-        ) {
-          context.strokeStyle = gridColor
-          context.globalAlpha = gridOpacity
-          context.beginPath()
-          context.moveTo(margins.left, y)
-          context.lineTo(width - margins.right, y)
-          context.stroke()
-        }
-
-        context.globalAlpha = 1
-        context.fillStyle = tickFontColor
-        context.fillText(
-          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-          margins.left - TICK_PADDING_RIGHT,
-          y
-        )
+  for (const yTick of yTicks) {
+    let y
+    if (typeof yTick === 'number') {
+      y = yScale(yTick) + margins.top
+      if (
+        Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+        Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+      ) {
+        context.strokeStyle = gridColor
+        context.globalAlpha = gridOpacity
+        context.beginPath()
+        context.moveTo(margins.left, y)
+        context.lineTo(width - margins.right, y)
+        context.stroke()
       }
+
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
+    } else if (typeof yTick === 'string') {
+      console.log('yTicks in Axes', yTicks)
+      y = yTick
+    } else {
+      y = yTick
+
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
+      if (
+        Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+        Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+      ) {
+        context.strokeStyle = gridColor
+        context.globalAlpha = gridOpacity
+        context.beginPath()
+        context.moveTo(margins.left, y)
+        context.lineTo(width - margins.right, y)
+        context.stroke()
+      }
+
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
     }
   }
 

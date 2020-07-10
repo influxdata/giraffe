@@ -62,7 +62,7 @@ export class PlotEnv {
       yTicks,
       config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
-    console.log('yTicks in margins', yTicks)
+    //console.log('yTicks in margins', yTicks)
     const getMarginsMemoized = this.fns.get('margins', getMargins)
 
     return getMarginsMemoized(
@@ -281,7 +281,7 @@ export class PlotEnv {
       case LayerTypes.Mosaic: {
         const transform = this.fns.get(memoizedTransformKey, mosaicTransform)
 
-        return transform(
+        const foo = transform(
           table,
           layerConfig.x,
           layerConfig.y,
@@ -290,6 +290,8 @@ export class PlotEnv {
           layerConfig.symbol,
           layerConfig.colors
         )
+        //console.log('this.config', this.config)
+        return foo
       }
 
       case LayerTypes.Heatmap: {
