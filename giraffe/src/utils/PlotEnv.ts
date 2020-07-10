@@ -105,10 +105,17 @@ export class PlotEnv {
   }
 
   public get yTicks(): number[] | string[] {
+    const currLayerSpec = this.config.layers.map((_, i) => this.getSpec(i))[0]
+    if (
+      currLayerSpec &&
+      currLayerSpec.type === 'mosaic' &&
+      Array.isArray(currLayerSpec.yTicks)
+    ) {
+      return currLayerSpec.yTicks
+    }
     if (this.config.yTicks) {
       return this.config.yTicks
     }
-
     const getTicksMemoized = this.fns.get('yTicks', getVerticalTicks)
 
     return getTicksMemoized(
