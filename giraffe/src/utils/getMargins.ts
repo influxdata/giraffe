@@ -11,15 +11,26 @@ export const getMargins = (
   showAxes: boolean,
   xAxisLabel: string,
   yAxisLabel: string,
-  yTicks: number[] | string[],
+  yTicks: string[] | number[],
   yTickFormatter: (tick: number | string) => string,
   tickFont: string
 ) => {
   if (!showAxes) {
     return {top: 1, right: 1, bottom: 1, left: 1}
   }
-  console.log('yTicks in getMargins', yTicks)
-  const longestYTick = maxBy(d => d.length, yTicks.map(t => yTickFormatter(t)))
+
+  let longestYTick
+  if (typeof yTicks[0] === 'string') {
+    longestYTick = maxBy(
+      d => d.length,
+      (yTicks as string[]).map(t => yTickFormatter(t))
+    )
+  } else {
+    longestYTick = maxBy(
+      d => d.length,
+      (yTicks as number[]).map(t => yTickFormatter(t))
+    )
+  }
 
   const {width: maxTextWidth, height: textHeight} = getTextMetrics(
     tickFont,

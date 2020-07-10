@@ -426,6 +426,7 @@ storiesOf('XY Plot', module)
     const config: Config = {
       table: CPUString,
       showAxes,
+      yTicks: ['cpu0', 'cpu1', 'cpu2', 'cpu3'], //how do we get yColumnLabels here?
       layers: [
         {
           type: 'mosaic',
