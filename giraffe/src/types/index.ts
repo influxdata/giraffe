@@ -124,6 +124,7 @@ export type ColumnData = NumericColumnData | string[] | boolean[]
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
 
 export enum LayerTypes {
+  RawFluxDataTable = 'flux data table',
   Gauge = 'gauge',
   Custom = 'custom',
   SingleStat = 'single stat',
@@ -136,6 +137,7 @@ export enum LayerTypes {
 
 export type LayerConfig =
   | CustomLayerConfig
+  | RawFluxDataTableLayerConfig
   | GaugeLayerConfig
   | SingleStatLayerConfig
   | HeatmapLayerConfig
@@ -161,6 +163,14 @@ export interface CustomLayerRenderProps {
   innerHeight: number
   yColumnType: ColumnType
   columnFormatter: (colKey: string) => (x: any) => string
+}
+
+export interface RawFluxDataTableLayerConfig {
+  type: 'flux data table'
+  files: string[]
+  width: number
+  height: number
+  disableVerticalScrolling?: boolean
 }
 
 export interface GaugeLayerConfig {
@@ -281,6 +291,19 @@ export interface ScatterLayerConfig {
   fill?: string[]
   colors?: string[]
   symbol?: string[]
+}
+
+export interface FluxTable {
+  id: string
+  name: string
+  data: string[][]
+  result: string
+  groupKey: {
+    [columnName: string]: string
+  }
+  dataTypes: {
+    [columnName: string]: string
+  }
 }
 
 /*
