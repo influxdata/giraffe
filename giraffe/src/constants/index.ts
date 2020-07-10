@@ -98,7 +98,6 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     strokeOpacity: 1,
     fillOpacity: 0.75,
     yColumnType: 'string',
-    //yTicks: ['default'],
   },
 }
 

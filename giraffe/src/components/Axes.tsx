@@ -58,8 +58,7 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
-}: //yColumnType,
-DrawAxesOptions) => {
+}: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
   const context = canvas.getContext('2d')
@@ -125,11 +124,9 @@ DrawAxesOptions) => {
         y
       )
     } else if (typeof yTick === 'string') {
-      console.log('STRING CASE REACHED')
       y = yScale(count) + margins.top - height / (yTicks.length * 2)
       context.globalAlpha = 1
       context.fillStyle = tickFontColor
-      //console.log('yTicks in string case', yTicks)
 
       context.fillText(
         yTickFormatter(yTick, {domainWidth: yDomainWidth}),
