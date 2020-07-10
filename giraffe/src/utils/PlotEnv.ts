@@ -62,7 +62,7 @@ export class PlotEnv {
       yTicks,
       config: {xAxisLabel, yAxisLabel, tickFont},
     } = this
-
+    console.log('yTicks in margins', yTicks)
     const getMarginsMemoized = this.fns.get('margins', getMargins)
 
     return getMarginsMemoized(
@@ -104,7 +104,7 @@ export class PlotEnv {
     )
   }
 
-  public get yTicks(): number[] {
+  public get yTicks(): number[] | string[] {
     if (this.config.yTicks) {
       return this.config.yTicks
     }
