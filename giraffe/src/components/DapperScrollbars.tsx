@@ -12,71 +12,7 @@ import classnames from 'classnames'
 import Scrollbar from 'react-scrollbars-custom'
 import {ScrollState} from 'react-scrollbars-custom/dist/types/types'
 
-// Styles
-import {createUseStyles} from 'react-jss'
-
-const useStyles = createUseStyles({
-  'cf-dapper-scrollbars--wrapper': {
-    margin: {
-      right: 0,
-      bottom: 0,
-    },
-    right: 0,
-    bottom: 0,
-    color: '#bec2cc',
-  },
-  'cf-dapper-scrollbars--content': {
-    display: 'block',
-  },
-  'cf-dapper-scrollbars--track-x': {
-    'border-radius': '6px',
-    position: 'absolute',
-    'background-color': 'rgba(15, 14, 21, 0.4)',
-    'user-select': 'none',
-    overflow: 'hidden',
-    transition: 'opacity 0.25s ease',
-    height: '6px',
-    width: 'calc(100% - 3px)',
-    bottom: '3px',
-    left: '3px',
-  },
-  'cf-dapper-scrollbars--track-y': {
-    'border-radius': '6px',
-    position: 'absolute',
-    'background-color': 'rgba(15, 14, 21, 0.4)',
-    'user-select': 'none',
-    overflow: 'hidden',
-    transition: 'opacity 0.25s ease',
-    width: '6px',
-    height: 'calc(100% - 6px)',
-    right: '3px',
-    top: '3px',
-  },
-  'cf-dapper-scrollbars--thumb-x': {
-    'border-radius': '3px',
-    height: '6px',
-  },
-  'cf-dapper-scrollbars--thumb-y': {
-    'border-radius': '3px',
-    width: '6px',
-  },
-  'cf-dapper-scrollbars--autohide': {
-    '& .cf-dapper-scrollbars--track-x': {
-      opacity: 0,
-    },
-    '& .cf-dapper-scrollbars--track-y': {
-      opacity: 0,
-    },
-    '&:hover': {
-      '& .cf-dapper-scrollbars--track-x': {
-        opacity: 1,
-      },
-      '& .cf-dapper-scrollbars--track-y': {
-        opacity: 1,
-      },
-    },
-  },
-})
+import styles from './DapperScrollbars.scss'
 
 // Types
 export interface StandardFunctionProps {
@@ -251,8 +187,6 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
     setScrollLeftPos(Number(scrollLeft))
   }, [scrollTop, scrollLeft])
 
-  const classes = useStyles()
-
   const dapperScrollbarsClass = classnames('cf-dapper-scrollbars', {
     'cf-dapper-scrollbars--autohide': autoHide,
     [`${className}`]: className,
@@ -294,7 +228,7 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
       translateContentSizesToHolder={autoSize}
       translateContentSizeYToHolder={autoSizeHeight}
       translateContentSizeXToHolder={autoSizeWidth}
-      className={classes[dapperScrollbarsClass]}
+      className={styles[dapperScrollbarsClass]}
       style={style}
       noDefaultStyles={false}
       removeTracksWhenNotUsed={removeTracksWhenNotUsed}
@@ -303,16 +237,16 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
       noScrollX={noScrollX}
       noScrollY={noScrollY}
       noScroll={noScroll}
-      wrapperProps={{className: classes['cf-dapper-scrollbars--wrapper']}}
-      contentProps={{className: classes['cf-dapper-scrollbars--content']}}
-      trackXProps={{className: classes['cf-dapper-scrollbars--track-x']}}
+      wrapperProps={{className: styles['cf-dapper-scrollbars--wrapper']}}
+      contentProps={{className: styles['cf-dapper-scrollbars--content']}}
+      trackXProps={{className: styles['cf-dapper-scrollbars--track-x']}}
       thumbXProps={{
         renderer: props => {
           const {elementRef, style, ...restProps} = props
           const thumbStyle = {...style, ...thumbXStyle}
           return (
             <div
-              className={classes['cf-dapper-scrollbars--thumb-x']}
+              className={styles['cf-dapper-scrollbars--thumb-x']}
               ref={elementRef}
               style={thumbStyle}
               {...restProps}
@@ -321,14 +255,14 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
           )
         },
       }}
-      trackYProps={{className: classes['cf-dapper-scrollbars--track-y']}}
+      trackYProps={{className: styles['cf-dapper-scrollbars--track-y']}}
       thumbYProps={{
         renderer: props => {
           const {elementRef, style, ...restProps} = props
           const thumbStyle = {...style, ...thumbYStyle}
           return (
             <div
-              className={classes['cf-dapper-scrollbars--thumb-y']}
+              className={styles['cf-dapper-scrollbars--thumb-y']}
               ref={elementRef}
               style={thumbStyle}
               {...restProps}
