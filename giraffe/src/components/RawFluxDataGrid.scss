@@ -1,0 +1,40 @@
+.raw-flux-data-table--cell {
+  box-sizing: border-box;
+  border: 2px solid #202028;
+}
+
+.raw-flux-data-table--cell {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 12px;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  .raw-flux-data-table--cell-bg {
+    box-sizing: border-box;
+    background: #0f0e15;
+    border: 2px solid #0f0e15;
+    position: absolute;
+    padding: 5px;
+    border-radius: 2px;
+    width: calc(100% - 10px);
+    min-width: 100%;
+    min-height: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: text;
+    cursor: text;
+  }
+
+  &:hover {
+    z-index: 2;
+
+    .raw-flux-data-table--cell-bg {
+      border: 2px solid #00a3ff;
+      background: #383846;
+      width: auto;
+    }
+  }
+}

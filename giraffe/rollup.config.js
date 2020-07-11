@@ -1,6 +1,8 @@
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import sourceMaps from 'rollup-plugin-sourcemaps'
+import postcss from 'rollup-plugin-postcss'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import {terser} from 'rollup-plugin-terser'
 import gzip from 'rollup-plugin-gzip'
 import typescript from 'rollup-plugin-typescript2'
@@ -13,6 +15,12 @@ let plugins = [
   commonjs(),
   typescript({typescript: tsc}),
   sourceMaps(),
+  peerDepsExternal(),
+  postcss({
+    extract: false,
+    modules: true,
+    use: ['sass'],
+  }),
 ]
 
 // Minify and compress output when in production

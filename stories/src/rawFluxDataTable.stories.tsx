@@ -12,7 +12,6 @@ storiesOf('Raw Flux Data Table', module)
   .addDecorator(withKnobs)
   .add('Raw Flux Data Table', () => {
     const csv = text('Paste CSV here:', '')
-    console.log('csv', csv)
 
     const config: Config = {
       fluxResponse: csv || fluxCSV,
