@@ -18,7 +18,9 @@ export const findHoveredRects = (
   yScale: Scale<number, number>,
   binDimension: 'xy' | 'x'
 ): number[] => {
+  console.log('entered findHoveredRects')
   if (!hoverX || !hoverY) {
+    console.log('no hovers')
     return []
   }
 
@@ -35,8 +37,10 @@ export const findHoveredRects = (
   )
 
   if (binDimension === 'x' && !xIndices.some(i => yMaxData[i] >= dataY)) {
+    console.log('case 1')
     return []
   } else if (binDimension === 'x') {
+    console.log('case 2', xIndices)
     return xIndices
   }
   const xyIndices = xIndices.filter(
