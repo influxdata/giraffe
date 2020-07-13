@@ -23,9 +23,11 @@ export const findHoveredBoxes = (
   hoverX: number | null,
   hoverY: number | null,
   xScale: Scale<number, number>,
-  yScale: Scale<number, number>
+  yScale: Scale<number, number>,
+  yDomain: number[]
 ): number[] => {
-  console.log('yScale', yScale)
+  console.log('YDOMAIN', yDomain)
+  // console.log('yScale', yScale)
   console.log('entered findHoveredRects')
   if (!hoverX || !hoverY) {
     console.log('no hovers')
@@ -33,16 +35,42 @@ export const findHoveredBoxes = (
   }
   const xMinData = boxTable.getColumn(X_MIN, 'number')
   const xMaxData = boxTable.getColumn(X_MAX, 'number')
-  //const valData = boxTable.getColumn(FILL, 'number')
-  //const seriesData = boxTable.getColumn(SERIES, 'number')
+  //const valData = boxTable.getColumn(FILL, 'string')
+  //const seriesData = boxTable.getColumn(SERIES, 'string')
   const dataX = xScale.invert(hoverX)
-  //const dataY = yScale.invert(hoverY)
-
+  const dataY = yScale.invert(hoverY)
   // Find all bins whose x extent contain the mouse x position
   const xIndices = range(0, xMinData.length).filter(
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
-  return xIndices
+
+  /////////////////////////////////////////////////////
+  const yValMap = new Map()
+  //if cpu isn't in map yet, add it & increment number
+  for (const cpu of yDomain) {
+    //if (!yValMap.has(cpu)) {
+    const index = yDomain.indexOf(cpu)
+    const yMin = yScale(index)
+    const yMax = yScale(index + 1)
+    yValMap.set(cpu, [yMin, yMax])
+    //}
+  }
+  console.log('yValMap', yValMap)
+  // const yVal = yValMap.get(seriesData[i])
+  //console.log('y', y)
+
+  /////////////////////////////////////////////////////
+
+  const xyIndices = xIndices.filter(
+    i => yValMap[yDomain[i]][0] <= dataY && yValMap[yDomain[i]][1] >= dataY
+    // for (const val of yDomain){
+    //   if ((yValMap[val][0] <= dataY) && (yValMap[val][1] >= dataY)) {
+    //     return
+    //   }
+    // }
+  )
+  console.log('XYINDICES', xyIndices)
+  return xyIndices
 
   //   if (!xIndices.some(i => yMaxData[i] >= dataY)) {
   //     return []
