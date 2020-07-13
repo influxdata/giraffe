@@ -102,28 +102,7 @@ export const drawAxes = ({
   let count = 0
   for (const yTick of yTicks) {
     let y
-    if (typeof yTick === 'number') {
-      y = yScale(yTick) + margins.top
-      if (
-        Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-        Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-      ) {
-        context.strokeStyle = gridColor
-        context.globalAlpha = gridOpacity
-        context.beginPath()
-        context.moveTo(margins.left, y)
-        context.lineTo(width - margins.right, y)
-        context.stroke()
-      }
-
-      context.globalAlpha = 1
-      context.fillStyle = tickFontColor
-      context.fillText(
-        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-        margins.left - TICK_PADDING_RIGHT,
-        y
-      )
-    } else if (typeof yTick === 'string') {
+    if (typeof yTick === 'string') {
       y = yScale(count) + margins.top - height / (yTicks.length * 2)
       context.globalAlpha = 1
       context.fillStyle = tickFontColor
@@ -135,15 +114,7 @@ export const drawAxes = ({
       )
       count += 1
     } else {
-      y = yTick
-
-      context.globalAlpha = 1
-      context.fillStyle = tickFontColor
-      context.fillText(
-        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-        margins.left - TICK_PADDING_RIGHT,
-        y
-      )
+      y = yScale(yTick) + margins.top
       if (
         Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
         Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
