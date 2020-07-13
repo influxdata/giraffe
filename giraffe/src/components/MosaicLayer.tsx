@@ -4,13 +4,9 @@ import {useRef, FunctionComponent} from 'react'
 import {useCanvas} from '../utils/useCanvas'
 import {drawMosaic} from '../utils/drawMosaic'
 import {MosaicLayerConfig, MosaicLayerSpec, LayerProps} from '../types'
-// import {
-//   findHoveredRects,
-//   get1DTooltipData,
-//   get2DTooltipData,
-// } from '../utils/rectTooltip'
+import {findHoveredBoxes, getMosaicTooltipData} from '../utils/mosaicTooltip'
 import {Tooltip} from './Tooltip'
-import {TooltipData} from '../types'
+//import {TooltipData} from '../types'
 
 export interface Props extends LayerProps {
   spec: MosaicLayerSpec
@@ -24,13 +20,26 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   height,
   xScale,
   yScale,
+  hoverX,
+  hoverY,
   yColumnType,
+  columnFormatter,
 }) => {
+  const hoveredRowIndices = findHoveredBoxes(
+    spec.table,
+    hoverX,
+    hoverY,
+    xScale,
+    yScale
+    //spec.binDimension
+  )
+
   const drawMosaicOptions = {
     table: spec.table,
     xScale,
     yScale,
     fillScale: spec.scales.fill,
+    hoveredRowIndices,
     yColumnType,
     strokeWidth: config.strokeWidth,
     strokePadding: config.strokePadding,
@@ -47,22 +56,31 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     Object.values(drawMosaicOptions)
   )
 
-  const tooltipData: TooltipData = [
-    {
-      colors: ['white'],
-      key: '',
-      name: 'type',
-      type: 'string',
-      values: ['Mosaic'],
-    },
-    {
-      colors: ['orange'],
-      key: '',
-      name: 'data',
-      type: 'string',
-      values: ['cpu'],
-    },
-  ]
+  const tooltipData = getMosaicTooltipData(
+    hoveredRowIndices,
+    spec.table,
+    spec.inputTable,
+    config.x,
+    //(config as any).y
+    columnFormatter
+  )
+
+  // const tooltipData: TooltipData = [
+  //   {
+  //     colors: ['white'],
+  //     key: '',
+  //     name: 'type',
+  //     type: 'string',
+  //     values: ['Mosaic'],
+  //   },
+  //   {
+  //     colors: ['orange'],
+  //     key: '',
+  //     name: 'data',
+  //     type: 'string',
+  //     values: ['cpu'],
+  //   },
+  // ]
   const plotConfig = {
     layers: [],
     legendBackgroundColor: '#1c1c21',
