@@ -61,7 +61,8 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     spec.table,
     spec.inputTable,
     config.x,
-    //(config as any).y,
+    spec.columnGroupMaps.fill,
+    spec.scales.fill,
     columnFormatter
   )
 

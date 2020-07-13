@@ -31,19 +31,19 @@ export const drawMosaic = ({
   const cpuCol = table.getColumn(SERIES, 'string')
   context.globalAlpha = fillOpacity
 
-  const colorMap = new Map()
-  //if value isn't in map yet, add it & increment number
-  let i = 0
-  for (const val of valueCol) {
-    if (!colorMap.has(val)) {
-      colorMap.set(val, i)
-      i++
-    }
-  }
+  // const colorMap = new Map()
+  // //if value isn't in map yet, add it & increment number
+  // let i = 0
+  // for (const val of valueCol) {
+  //   if (!colorMap.has(val)) {
+  //     colorMap.set(val, i)
+  //     i++
+  //   }
+  // }
 
   const yValMap = new Map()
   //if cpu isn't in map yet, add it & increment number
-  i = 0
+  let i = 0
   for (const cpu of cpuCol) {
     if (!yValMap.has(cpu)) {
       yValMap.set(cpu, i)
@@ -60,9 +60,9 @@ export const drawMosaic = ({
     const width = xScale(xMaxCol[i]) - x - strokePadding
     const height = yScale(yValMap.size + 1)
 
-    const colorVal = colorMap.get(valueCol[i])
+    //const colorVal = colorMap.get(valueCol[i])
 
-    const fill = fillScale(colorVal)
+    const fill = fillScale((valueCol[i] as unknown) as number)
 
     if (strokeWidth || strokeOpacity) {
       // See https://stackoverflow.com/a/45125187

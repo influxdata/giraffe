@@ -6,7 +6,7 @@ import {
   X_MAX,
   //Y_MIN,
   //Y_MAX,
-  //FILL,
+  FILL,
   //COUNT,
   SERIES,
 } from '../constants/columnKeys'
@@ -15,7 +15,7 @@ import {
   Scale,
   TooltipData,
   TooltipColumn,
-  //ColumnGroupMap,
+  ColumnGroupMap,
 } from '../types'
 
 export const findHoveredBoxes = (
@@ -62,23 +62,39 @@ export const getMosaicTooltipData = (
   boxTable: Table,
   inputTable: Table,
   xColKey: string,
-  //fillGroupMap: ColumnGroupMap,
-  //fillScale: Scale<number, string>,
+  fillGroupMap: ColumnGroupMap,
+  fillScale: Scale<number, string>,
   columnFormatter: (colKey: string) => (x: any) => string
 ): TooltipData => {
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
-  //const valCol = boxTable.getColumn(FILL, 'string')
+  const valCol = boxTable.getColumn(FILL, 'string')
   const cpuCol = boxTable.getColumn(SERIES, 'string')
   const xFormatter = columnFormatter(xColKey)
   const cpuFormatter = columnFormatter(SERIES)
-  //const colors = hoveredBoxRows.map(i => fillScale(valCol[i]))
+
+  // const colorMap = new Map()
+  // //if value isn't in map yet, add it & increment number
+  // let i = 0
+  // for (const val of valCol) {
+  //   if (!colorMap.has(val)) {
+  //     colorMap.set(val, i)
+  //     i++
+  //   }
+  // }
+  // const colorVal = new Map()
+  // for (let i = 0; i < valCol.length; i++) {
+  //   colorVal.set(colorMap.get(valCol[i]), i)
+  // }
+  const colors = hoveredBoxRows.map(i =>
+    fillScale((valCol[i] as unknown) as number)
+  )
 
   const xTooltipColumn: TooltipColumn = {
     key: xColKey,
     name: inputTable.getColumnName(xColKey),
     type: inputTable.getColumnType(xColKey),
-    colors: ['white', 'red', 'purple', 'blue'],
+    colors,
     values: hoveredBoxRows.map(i =>
       getRangeLabel(xMinCol[i], xMaxCol[i], xFormatter)
     ),
@@ -88,15 +104,17 @@ export const getMosaicTooltipData = (
     key: SERIES,
     name: 'cpu',
     type: 'string',
-    colors: ['white', 'red', 'purple', 'blue'],
+    colors,
     values: hoveredBoxRows.map(i => cpuFormatter(cpuCol[i])),
   }
+
+  console.log('columnKeys', fillGroupMap.columnKeys)
 
   // const groupTooltipColumns = fillGroupMap.columnKeys.map(key => ({
   //   key,
   //   name: inputTable.getColumnName(key),
   //   type: inputTable.getColumnType(key),
-  //   colors: ['white', 'red', 'purple', 'blue'],
+  //   colors,
   //   values: hoveredBoxRows.map(i =>
   //     columnFormatter(key)(fillGroupMap.mappings[valCol[i]][key])
   //   ),
