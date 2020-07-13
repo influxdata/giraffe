@@ -96,9 +96,9 @@ export const getMosaicTooltipData = (
   //   key,
   //   name: inputTable.getColumnName(key),
   //   type: inputTable.getColumnType(key),
-  //   colors,
+  //   colors: ['white', 'red', 'purple', 'blue'],
   //   values: hoveredBoxRows.map(i =>
-  //     columnFormatter(key)(fillGroupMap.mappings[fillCol[i]][key])
+  //     columnFormatter(key)(fillGroupMap.mappings[valCol[i]][key])
   //   ),
   // }))
 
