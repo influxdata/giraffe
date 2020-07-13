@@ -7,7 +7,7 @@ import {
   Scale,
   TooltipData,
   TooltipColumn,
-  //ColumnGroupMap,
+  ColumnGroupMap,
 } from '../types'
 
 export const findHoveredBoxes = (
