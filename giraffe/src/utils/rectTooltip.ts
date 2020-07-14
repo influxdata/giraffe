@@ -43,7 +43,7 @@ export const findHoveredRects = (
     console.log('case 2', xIndices)
     return xIndices
   }
-
+  console.log('ymin', yMinData[0], 'ymax', yMaxData[0])
   const xyIndices = xIndices.filter(
     i => yMinData[i] <= dataY && yMaxData[i] > dataY
   )

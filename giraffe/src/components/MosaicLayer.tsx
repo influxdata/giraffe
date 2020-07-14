@@ -3,7 +3,12 @@ import {useRef, FunctionComponent} from 'react'
 
 import {useCanvas} from '../utils/useCanvas'
 import {drawMosaic} from '../utils/drawMosaic'
-import {MosaicLayerConfig, MosaicLayerSpec, LayerProps} from '../types'
+import {
+  MosaicLayerConfig,
+  MosaicLayerSpec,
+  LayerProps,
+  TooltipData,
+} from '../types'
 import {findHoveredBoxes, getMosaicTooltipData} from '../utils/mosaicTooltip'
 import {Tooltip} from './Tooltip'
 //import {TooltipData} from '../types'
@@ -25,7 +30,6 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   yColumnType,
   columnFormatter,
 }) => {
-  // console.log('YSCALE', yScale)
   const hoveredRowIndices = findHoveredBoxes(
     spec.table,
     hoverX,
@@ -58,32 +62,20 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     Object.values(drawMosaicOptions)
   )
 
-  const tooltipData = getMosaicTooltipData(
-    hoveredRowIndices,
-    spec.table,
-    spec.inputTable,
-    config.x,
-    spec.columnGroupMaps.fill,
-    spec.scales.fill,
-    columnFormatter
-  )
-
-  // const tooltipData: TooltipData = [
-  //   {
-  //     colors: ['white'],
-  //     key: '',
-  //     name: 'type',
-  //     type: 'string',
-  //     values: ['Mosaic'],
-  //   },
-  //   {
-  //     colors: ['orange'],
-  //     key: '',
-  //     name: 'data',
-  //     type: 'string',
-  //     values: ['cpu'],
-  //   },
-  // ]
+  let tooltipData: TooltipData = []
+  console.log('hoveredRowIndices', hoveredRowIndices)
+  if (hoveredRowIndices.length > 0) {
+    tooltipData = getMosaicTooltipData(
+      hoveredRowIndices,
+      spec.table,
+      spec.inputTable,
+      config.x,
+      spec.columnGroupMaps.fill, //(config as any).y,
+      spec.scales.fill,
+      columnFormatter
+    )
+    console.log('tooltipData', tooltipData)
+  }
   const plotConfig = {
     layers: [],
     legendBackgroundColor: '#1c1c21',
