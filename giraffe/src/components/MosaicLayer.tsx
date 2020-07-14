@@ -25,7 +25,7 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   yColumnType,
   columnFormatter,
 }) => {
-  console.log('YSCALE', yScale)
+  // console.log('YSCALE', yScale)
   const hoveredRowIndices = findHoveredBoxes(
     spec.table,
     hoverX,

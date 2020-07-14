@@ -26,11 +26,11 @@ export const findHoveredBoxes = (
   yScale: Scale<number, number>,
   yDomain: number[]
 ): number[] => {
-  console.log('YDOMAIN', yDomain)
+  // console.log('YDOMAIN', yDomain)
   // console.log('yScale', yScale)
-  console.log('entered findHoveredRects')
+  // console.log('entered findHoveredRects')
   if (!hoverX || !hoverY) {
-    console.log('no hovers')
+    // console.log('no hovers')
     return []
   }
   const xMinData = boxTable.getColumn(X_MIN, 'number')
@@ -47,28 +47,74 @@ export const findHoveredBoxes = (
   /////////////////////////////////////////////////////
   const yValMap = new Map()
   //if cpu isn't in map yet, add it & increment number
-  for (const cpu of yDomain) {
-    //if (!yValMap.has(cpu)) {
-    const index = yDomain.indexOf(cpu)
-    const yMin = yScale(index)
-    const yMax = yScale(index + 1)
-    yValMap.set(cpu, [yMin, yMax])
-    //}
+  let seriesNum = 3
+  // for (const cpu of yDomain) {
+  //   //if (!yValMap.has(cpu)) {
+  //   const index = yDomain.indexOf(cpu)
+  //   const yMin = yScale(index)
+  //   const yMax = yScale(index + 1)
+  //   yValMap.set(seriesNum, [yMin, yMax])
+  //   // seriesNum = seriesNum - 1
+  //   //}
+  // }
+  for (let i = 0; i < yDomain[1]; i++) {
+    const yMin = yScale(i + 1)
+    const yMax = yScale(i)
+    yValMap.set(seriesNum, [yMin, yMax])
+    seriesNum--
   }
-  console.log('yValMap', yValMap)
+  // console.log('yValMap', yValMap)
   // const yVal = yValMap.get(seriesData[i])
   //console.log('y', y)
 
   /////////////////////////////////////////////////////
 
-  const xyIndices = xIndices.filter(
-    i => yValMap[yDomain[i]][0] <= dataY && yValMap[yDomain[i]][1] >= dataY
+  // const xyIndices = xIndices.filter(
+  //   i => yValMap[i][0] <= dataY && yValMap[i][1] >= dataY
     // for (const val of yDomain){
     //   if ((yValMap[val][0] <= dataY) && (yValMap[val][1] >= dataY)) {
     //     return
     //   }
     // }
-  )
+  // )
+  // console.log('XYINDICES', xyIndices)
+  console.log('XINDICES', xIndices)
+  // console.log('YVALMAP KEYS', yValMap.keys())
+  // console.log('YVALMAP', yValMap)
+  console.log('DATAY', dataY)
+  let finalXIndex
+  for (const index of yValMap.keys()) {
+    // console.log('INDEX = ', index)
+    // console.log('yValMap[index] = ', yValMap.get(index))
+    // console.log('yValMap[index][0] = ', yValMap.get(index)[0])
+    // console.log('YVAL SMALLER VALUE', yValMap.get(index)[0])
+    // console.log('YVAL BIGGER VAL', yValMap.get(index)[1])
+    // console.log('DATAY', dataY)
+    if (yValMap.get(index)[0] < dataY && yValMap.get(index)[1] >= dataY) {
+      // console.log('entered if case in yval for loop')
+      finalXIndex = index
+      break
+    }
+  }
+  let xyIndices
+  console.log('finalXIndex', finalXIndex)
+  if (xIndices) {
+    xyIndices = xIndices[finalXIndex]
+  } else {
+    xyIndices = []
+  }
+
+  // const xyIndices = xIndices.filter(i => {
+  //   console.log('inside xyIndices creation loop where i = ', i)
+  //   for (const index of yValMap.keys()) {
+  //     console.log('in for loop where index = ', index)
+  //     console.log('yValMap[index] = ', yValMap.get(index))
+  //     console.log('yValMap[index][0] = ', yValMap.get(index)[0])
+  //     if (yValMap.get(index)[0] <= dataY && yValMap.get(index)[1] >= dataY) {
+  //       return i
+  //     }
+  //   }
+  // })
   console.log('XYINDICES', xyIndices)
   return xyIndices
 
