@@ -1,3 +1,5 @@
+import {color} from 'd3-color'
+
 import {Table, Scale, ColumnType} from '../types'
 import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
 
@@ -7,6 +9,7 @@ interface DrawMosaicOptions {
   xScale: Scale<number, number>
   yScale: Scale<number, number>
   fillScale: Scale<number, string>
+  hoveredRowIndices: number[]
   strokeWidth: number
   strokePadding: number
   strokeOpacity: number
@@ -20,6 +23,7 @@ export const drawMosaic = ({
   xScale,
   yScale,
   fillScale,
+  hoveredRowIndices,
   strokeWidth,
   strokePadding,
   strokeOpacity,
@@ -62,7 +66,13 @@ export const drawMosaic = ({
 
     //const colorVal = colorMap.get(valueCol[i])
 
-    const fill = fillScale((valueCol[i] as unknown) as number)
+    let fill = fillScale((valueCol[i] as unknown) as number)
+
+    if (hoveredRowIndices && hoveredRowIndices.includes(i)) {
+      fill = color(fill)
+        .brighter(1)
+        .hex()
+    }
 
     if (strokeWidth || strokeOpacity) {
       // See https://stackoverflow.com/a/45125187

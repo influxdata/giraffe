@@ -20,6 +20,7 @@ export interface Props extends LayerProps {
 export const MosaicLayer: FunctionComponent<Props> = ({
   spec,
   config,
+  plotConfig,
   width,
   height,
   xScale,
@@ -72,15 +73,6 @@ export const MosaicLayer: FunctionComponent<Props> = ({
       spec.scales.fill,
       columnFormatter
     )
-  }
-  const plotConfig = {
-    layers: [],
-    legendBackgroundColor: '#1c1c21',
-    legendBorder: '1px solid #202028',
-    legendCrosshairColor: '#31313d',
-    legendFont: '12px sans-serif',
-    legendFontBrightColor: '#c6cad3',
-    legendFontColor: '#8e91a1',
   }
 
   return (
