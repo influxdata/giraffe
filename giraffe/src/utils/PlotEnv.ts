@@ -103,7 +103,7 @@ export class PlotEnv {
     )
   }
 
-  public get yTicks(): number[] | string[] {
+  public get yTicks(): Array<number | string> {
     const currLayerSpec = this.config.layers.map((_, i) => this.getSpec(i))[0]
     if (
       currLayerSpec &&

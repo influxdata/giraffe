@@ -24,7 +24,7 @@ interface DrawAxesOptions {
   xDomain: number[]
   yDomain: number[]
   xTicks: number[]
-  yTicks: number[] | string[]
+  yTicks: Array<number | string>
   xTickFormatter: Formatter
   yTickFormatter: Formatter
   xScale: Scale<number, number>
