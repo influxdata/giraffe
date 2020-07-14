@@ -62,6 +62,7 @@ export const RectLayer: FunctionComponent<Props> = ({
   let tooltipData: TooltipData = []
 
   if (hoveredRowIndices.length > 0 && spec.binDimension === 'xy') {
+    console.log('hoveredRowIndices', hoveredRowIndices)
     tooltipData = get2DTooltipData(
       hoveredRowIndices,
       spec.table,
