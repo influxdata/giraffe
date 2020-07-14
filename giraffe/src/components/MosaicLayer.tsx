@@ -11,7 +11,6 @@ import {
 } from '../types'
 import {findHoveredBoxes, getMosaicTooltipData} from '../utils/mosaicTooltip'
 import {Tooltip} from './Tooltip'
-//import {TooltipData} from '../types'
 
 export interface Props extends LayerProps {
   spec: MosaicLayerSpec
@@ -37,7 +36,6 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     xScale,
     yScale,
     spec.yDomain
-    //spec.binDimension
   )
 
   const drawMosaicOptions = {
@@ -63,18 +61,17 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   )
 
   let tooltipData: TooltipData = []
-  console.log('hoveredRowIndices', hoveredRowIndices)
   if (hoveredRowIndices.length > 0) {
     tooltipData = getMosaicTooltipData(
       hoveredRowIndices,
       spec.table,
       spec.inputTable,
       config.x,
-      spec.columnGroupMaps.fill, //(config as any).y,
+      config.y,
+      spec.columnGroupMaps.fill,
       spec.scales.fill,
       columnFormatter
     )
-    console.log('tooltipData', tooltipData)
   }
   const plotConfig = {
     layers: [],

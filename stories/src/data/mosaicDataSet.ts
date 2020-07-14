@@ -30,7 +30,7 @@ const CPU_VALUE_COL = [
   'maybe',
 ]
 
-const CPU_CPU_COL = [
+const CPU_COL = [
   'break0',
   'break0',
   'break0',
@@ -63,5 +63,5 @@ const CPU_HOST_COL = [
 export const SERIES = newTable(12)
   .addColumn('_time', 'time', CPU_TIME_COL)
   .addColumn('_value', 'string', CPU_VALUE_COL)
-  .addColumn('cpu', 'string', CPU_CPU_COL)
+  .addColumn('cpu', 'string', CPU_COL)
   .addColumn('host', 'string', CPU_HOST_COL)

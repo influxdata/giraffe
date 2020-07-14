@@ -23,16 +23,15 @@ export const findHoveredBoxes = (
   }
   const xMinData = boxTable.getColumn(X_MIN, 'number')
   const xMaxData = boxTable.getColumn(X_MAX, 'number')
-  //const valData = boxTable.getColumn(FILL, 'string')
   const dataX = xScale.invert(hoverX)
   const dataY = yScale.invert(hoverY)
-  // Find all bins whose x extent contain the mouse x position
+  // Find all boxes whose x extent contain the mouse x position
   const xIndices = range(0, xMinData.length).filter(
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
 
   const yValMap = new Map()
-  //if cpu isn't in map yet, add it & increment number
+  //if series isn't in map yet, add it
   for (let i = 0; i < yDomain[1]; i++) {
     const yMin = yScale(i + 1)
     const yMax = yScale(i)
@@ -56,7 +55,6 @@ export const findHoveredBoxes = (
   } else {
     xyIndices = []
   }
-
   return xyIndices
 }
 
@@ -65,6 +63,7 @@ export const getMosaicTooltipData = (
   boxTable: Table,
   inputTable: Table,
   xColKey: string,
+  yColKey: string,
   fillGroupMap: ColumnGroupMap,
   fillScale: Scale<number, string>,
   columnFormatter: (colKey: string) => (x: any) => string
@@ -72,9 +71,10 @@ export const getMosaicTooltipData = (
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
   const valCol = boxTable.getColumn(FILL, 'string')
-  const cpuCol = boxTable.getColumn(SERIES, 'string')
+  const yCol = boxTable.getColumn(SERIES, 'string')
   const xFormatter = columnFormatter(xColKey)
-  const cpuFormatter = columnFormatter(SERIES)
+  const yFormatter = columnFormatter(yColKey)
+  const valFormatter = columnFormatter(FILL)
   const colors = hoveredBoxRows.map(i =>
     fillScale((valCol[i] as unknown) as number)
   )
@@ -89,30 +89,26 @@ export const getMosaicTooltipData = (
     ),
   }
 
-  const cpuTooltipColumn: TooltipColumn = {
-    key: SERIES,
-    name: 'cpu',
-    type: 'string',
+  const yTooltipColumn: TooltipColumn = {
+    key: yColKey,
+    name: inputTable.getColumnName(yColKey),
+    type: inputTable.getColumnType(yColKey),
     colors,
-    values: hoveredBoxRows.map(i => cpuFormatter(cpuCol[i])),
+    values: hoveredBoxRows.map(i => yFormatter(yCol[i])),
   }
 
-  console.log('columnKeys', fillGroupMap.columnKeys)
-
-  // const groupTooltipColumns = fillGroupMap.columnKeys.map(key => ({
-  //   key,
-  //   name: inputTable.getColumnName(key),
-  //   type: inputTable.getColumnType(key),
-  //   colors,
-  //   values: hoveredBoxRows.map(i =>
-  //     columnFormatter(key)(fillGroupMap.mappings[valCol[i]][key])
-  //   ),
-  // }))
+  const groupTooltipColumns = fillGroupMap.columnKeys.map(key => ({
+    key,
+    name: inputTable.getColumnName(key),
+    type: inputTable.getColumnType(key),
+    colors,
+    values: hoveredBoxRows.map(i => valFormatter(valCol[i])),
+  }))
 
   const tooltipColumns = [
     xTooltipColumn,
-    cpuTooltipColumn,
-    //...groupTooltipColumns,
+    yTooltipColumn,
+    ...groupTooltipColumns,
   ]
 
   return tooltipColumns
