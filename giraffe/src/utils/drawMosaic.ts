@@ -35,16 +35,6 @@ export const drawMosaic = ({
   const cpuCol = table.getColumn(SERIES, 'string')
   context.globalAlpha = fillOpacity
 
-  // const colorMap = new Map()
-  // //if value isn't in map yet, add it & increment number
-  // let i = 0
-  // for (const val of valueCol) {
-  //   if (!colorMap.has(val)) {
-  //     colorMap.set(val, i)
-  //     i++
-  //   }
-  // }
-
   const yValMap = new Map()
   //if cpu isn't in map yet, add it & increment number
   let i = 0
@@ -63,8 +53,6 @@ export const drawMosaic = ({
 
     const width = xScale(xMaxCol[i]) - x - strokePadding
     const height = yScale(yValMap.size + 1)
-
-    //const colorVal = colorMap.get(valueCol[i])
 
     let fill = fillScale((valueCol[i] as unknown) as number)
 
