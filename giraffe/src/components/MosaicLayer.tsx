@@ -63,6 +63,8 @@ export const MosaicLayer: FunctionComponent<Props> = ({
 
   let tooltipData: TooltipData = []
   if (hoveredRowIndices.length > 0) {
+    console.log('case entered')
+    console.log('indices', hoveredRowIndices)
     tooltipData = getMosaicTooltipData(
       hoveredRowIndices,
       spec.table,

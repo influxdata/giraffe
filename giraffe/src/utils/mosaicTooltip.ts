@@ -30,11 +30,17 @@ export const findHoveredBoxes = (
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
 
+  console.log('xIndices[0]', xIndices[0])
+
   for (let i = 0; i < yDomain[1]; i++) {
     const yMin = yScale(i + 1)
     const yMax = yScale(i)
 
-    if (yMin < yScale(dataY) && yMax >= yScale(dataY)) {
+    if (
+      xIndices[i] != undefined &&
+      yMin < yScale(dataY) &&
+      yMax >= yScale(dataY)
+    ) {
       return [xIndices[i]] // isn't there some value to referring to this as xyIndices for clarity?
     }
   }
