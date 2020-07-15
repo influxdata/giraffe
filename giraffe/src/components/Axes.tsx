@@ -24,7 +24,7 @@ interface DrawAxesOptions {
   xDomain: number[]
   yDomain: number[]
   xTicks: number[]
-  yTicks: number[]
+  yTicks: Array<number | string>
   xTickFormatter: Formatter
   yTickFormatter: Formatter
   xScale: Scale<number, number>
@@ -58,7 +58,6 @@ export const drawAxes = ({
     xAxisLabel,
     yAxisLabel,
   },
-  yColumnType,
 }: DrawAxesOptions) => {
   clearCanvas(canvas, width, height)
 
@@ -100,55 +99,41 @@ export const drawAxes = ({
   context.textAlign = 'end'
   context.textBaseline = 'middle'
   const yDomainWidth = yDomain[1] - yDomain[0]
+  let count = 0
+  for (const yTick of yTicks) {
+    let y
+    if (typeof yTick === 'string') {
+      y = yScale(count) + margins.top - height / (yTicks.length * 2)
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
 
-  if (yColumnType === 'string') {
-    //TODO: implement
-  } else {
-    for (const yTick of yTicks) {
-      let y
-      if (typeof yTick === 'number') {
-        y = yScale(yTick) + margins.top
-        if (
-          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-        ) {
-          context.strokeStyle = gridColor
-          context.globalAlpha = gridOpacity
-          context.beginPath()
-          context.moveTo(margins.left, y)
-          context.lineTo(width - margins.right, y)
-          context.stroke()
-        }
-
-        context.globalAlpha = 1
-        context.fillStyle = tickFontColor
-        context.fillText(
-          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-          margins.left - TICK_PADDING_RIGHT,
-          y
-        )
-      } else {
-        y = yTick
-        if (
-          Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
-          Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
-        ) {
-          context.strokeStyle = gridColor
-          context.globalAlpha = gridOpacity
-          context.beginPath()
-          context.moveTo(margins.left, y)
-          context.lineTo(width - margins.right, y)
-          context.stroke()
-        }
-
-        context.globalAlpha = 1
-        context.fillStyle = tickFontColor
-        context.fillText(
-          yTickFormatter(yTick, {domainWidth: yDomainWidth}),
-          margins.left - TICK_PADDING_RIGHT,
-          y
-        )
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
+      count += 1
+    } else {
+      y = yScale(yTick) + margins.top
+      if (
+        Math.abs(y - margins.top) > GRID_LINE_MIN_DIST &&
+        Math.abs(y - (height - margins.bottom)) > GRID_LINE_MIN_DIST
+      ) {
+        context.strokeStyle = gridColor
+        context.globalAlpha = gridOpacity
+        context.beginPath()
+        context.moveTo(margins.left, y)
+        context.lineTo(width - margins.right, y)
+        context.stroke()
       }
+
+      context.globalAlpha = 1
+      context.fillStyle = tickFontColor
+      context.fillText(
+        yTickFormatter(yTick, {domainWidth: yDomainWidth}),
+        margins.left - TICK_PADDING_RIGHT,
+        y
+      )
     }
   }
 

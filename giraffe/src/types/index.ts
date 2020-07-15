@@ -15,7 +15,7 @@ export interface Config {
   // Ticks on the axes can be specified, or else they are calculated,
   // as well as the font, color, and the unit labels for each tick
   xTicks?: number[]
-  yTicks?: number[]
+  yTicks?: Array<number | string>
   tickFont?: string
   tickFontColor?: string
   valueFormatters?: {
@@ -255,6 +255,7 @@ export interface MosaicLayerConfig {
   strokeOpacity?: number
   fillOpacity?: number
   yColumnType: ColumnType
+  yTicks: Array<string>
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
@@ -336,6 +337,7 @@ export interface MosaicLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  yTicks: Array<string>
 }
 
 export interface LineLayerSpec {

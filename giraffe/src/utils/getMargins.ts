@@ -11,18 +11,16 @@ export const getMargins = (
   showAxes: boolean,
   xAxisLabel: string,
   yAxisLabel: string,
-  yTicks: number[],
-  yTickFormatter: (tick: number) => string,
+  yTicks: Array<string | number>,
+  yTickFormatter: (tick: number | string) => string,
   tickFont: string
 ) => {
   if (!showAxes) {
     return {top: 1, right: 1, bottom: 1, left: 1}
   }
 
-  const longestYTick = maxBy(
-    d => d.length,
-    yTicks.map(t => yTickFormatter(t))
-  )
+  const formattedYTicks = yTicks.map(t => yTickFormatter(t))
+  const longestYTick = maxBy(d => d.length, formattedYTicks)
 
   const {width: maxTextWidth, height: textHeight} = getTextMetrics(
     tickFont,
