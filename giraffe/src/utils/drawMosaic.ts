@@ -31,7 +31,10 @@ export const drawMosaic = ({
 }: DrawMosaicOptions): void => {
   const xMinCol = table.getColumn(X_MIN, 'number')
   const xMaxCol = table.getColumn(X_MAX, 'number')
-  const valueCol = table.getColumn(FILL, 'string')
+  const valueCol = (table.getColumn(FILL, 'string') as unknown) as Scale<
+    number,
+    number
+  >
   const cpuCol = table.getColumn(SERIES, 'string')
   context.globalAlpha = fillOpacity
 
@@ -53,8 +56,7 @@ export const drawMosaic = ({
 
     const width = xScale(xMaxCol[i]) - x - strokePadding
     const height = yScale(yValMap.size + 1)
-
-    let fill = fillScale((valueCol[i] as unknown) as number)
+    let fill = fillScale(valueCol[i])
 
     if (hoveredRowIndices && hoveredRowIndices.includes(i)) {
       fill = color(fill)

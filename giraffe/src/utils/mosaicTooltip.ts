@@ -30,32 +30,44 @@ export const findHoveredBoxes = (
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
 
-  const yValMap = new Map()
-  //if series isn't in map yet, add it
   for (let i = 0; i < yDomain[1]; i++) {
     const yMin = yScale(i + 1)
     const yMax = yScale(i)
-    yValMap.set(i, [yMin, yMax])
-  }
 
-  let finalXIndex
-  for (const index of yValMap.keys()) {
-    if (
-      yValMap.get(index)[0] < yScale(dataY) &&
-      yValMap.get(index)[1] >= yScale(dataY)
-    ) {
-      finalXIndex = index
-      break
+    if (yMin < yScale(dataY) && yMax >= yScale(dataY)) {
+      return [xIndices[i]] // isn't there some value to referring to this as xyIndices for clarity?
     }
   }
-  let xyIndices
+  // handles the case where the loop didn't return early.
+  return []
 
-  if (xIndices) {
-    xyIndices = [xIndices[finalXIndex]]
-  } else {
-    xyIndices = []
-  }
-  return xyIndices
+  //const yValMap = new Map()
+  //if series isn't in map yet, add it
+
+  // for (let i = 0; i < yDomain[1]; i++) {
+  //   const yMin = yScale(i + 1)
+  //   const yMax = yScale(i)
+  //   yValMap.set(i, [yMin, yMax])
+  // }
+
+  // let finalXIndex
+  // for (const index of yValMap.keys()) {
+  //   if (
+  //     yValMap.get(index)[0] < yScale(dataY) &&
+  //     yValMap.get(index)[1] >= yScale(dataY)
+  //   ) {
+  //     finalXIndex = index
+  //     break
+  //   }
+  // }
+  // let xyIndices
+
+  // if (xIndices) {
+  //   xyIndices = [xIndices[finalXIndex]]
+  // } else {
+  //   xyIndices = []
+  // }
+  // return xyIndices
 }
 
 export const getMosaicTooltipData = (
@@ -70,14 +82,15 @@ export const getMosaicTooltipData = (
 ): TooltipData => {
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
-  const valCol = boxTable.getColumn(FILL, 'string')
+  const valCol = (boxTable.getColumn(FILL, 'string') as unknown) as Scale<
+    number,
+    number
+  >
   const yCol = boxTable.getColumn(SERIES, 'string')
   const xFormatter = columnFormatter(xColKey)
   const yFormatter = columnFormatter(yColKey)
   const valFormatter = columnFormatter(FILL)
-  const colors = hoveredBoxRows.map(i =>
-    fillScale((valCol[i] as unknown) as number)
-  )
+  const colors = hoveredBoxRows.map(i => fillScale(valCol[i]))
 
   const xTooltipColumn: TooltipColumn = {
     key: xColKey,
