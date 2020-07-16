@@ -30,8 +30,6 @@ export const findHoveredBoxes = (
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
 
-  console.log('xIndices[0]', xIndices[0])
-
   for (let i = 0; i < yDomain[1]; i++) {
     const yMin = yScale(i + 1)
     const yMax = yScale(i)
@@ -46,34 +44,6 @@ export const findHoveredBoxes = (
   }
   // handles the case where the loop didn't return early.
   return []
-
-  //const yValMap = new Map()
-  //if series isn't in map yet, add it
-
-  // for (let i = 0; i < yDomain[1]; i++) {
-  //   const yMin = yScale(i + 1)
-  //   const yMax = yScale(i)
-  //   yValMap.set(i, [yMin, yMax])
-  // }
-
-  // let finalXIndex
-  // for (const index of yValMap.keys()) {
-  //   if (
-  //     yValMap.get(index)[0] < yScale(dataY) &&
-  //     yValMap.get(index)[1] >= yScale(dataY)
-  //   ) {
-  //     finalXIndex = index
-  //     break
-  //   }
-  // }
-  // let xyIndices
-
-  // if (xIndices) {
-  //   xyIndices = [xIndices[finalXIndex]]
-  // } else {
-  //   xyIndices = []
-  // }
-  // return xyIndices
 }
 
 export const getMosaicTooltipData = (
@@ -116,6 +86,16 @@ export const getMosaicTooltipData = (
     values: hoveredBoxRows.map(i => yFormatter(yCol[i])),
   }
 
+  const durationTooltipColumn: TooltipColumn = {
+    key: 'duration column',
+    name: 'Duration(s)',
+    type: 'number',
+    colors,
+    values: hoveredBoxRows.map(
+      i => (((xMaxCol[i] - xMinCol[i]) / 1000) as unknown) as string
+    ),
+  }
+
   const groupTooltipColumns = fillGroupMap.columnKeys.map(key => ({
     key,
     name: inputTable.getColumnName(key),
@@ -127,6 +107,7 @@ export const getMosaicTooltipData = (
   const tooltipColumns = [
     xTooltipColumn,
     yTooltipColumn,
+    durationTooltipColumn,
     ...groupTooltipColumns,
   ]
 
