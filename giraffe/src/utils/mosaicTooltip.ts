@@ -16,7 +16,8 @@ export const findHoveredBoxes = (
   hoverY: number | null,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
-  yDomain: number[]
+  yDomain: number[],
+  hoverDimension: string
 ): number[] => {
   if (!hoverX || !hoverY) {
     return []
@@ -29,6 +30,10 @@ export const findHoveredBoxes = (
   const xIndices = range(0, xMinData.length).filter(
     i => xMinData[i] <= dataX && xMaxData[i] > dataX
   )
+
+  if (hoverDimension === 'x') {
+    return xIndices
+  }
 
   for (let i = 0; i < yDomain[1]; i++) {
     const yMin = yScale(i + 1)
@@ -92,7 +97,7 @@ export const getMosaicTooltipData = (
     type: 'number',
     colors,
     values: hoveredBoxRows.map(
-      i => (((xMaxCol[i] - xMinCol[i]) / 1000) as unknown) as string
+      i => ((((xMaxCol[i] - xMinCol[i]) / 1000) as unknown) + ' sec') as string
     ),
   }
 

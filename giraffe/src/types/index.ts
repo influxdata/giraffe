@@ -248,6 +248,7 @@ export interface MosaicLayerConfig {
   x: string
   y: string
   fill?: string[]
+  hoverDimension?: MosaicHoverDimension | 'auto'
   colors?: string[]
   symbol?: string[]
   strokeWidth?: number
@@ -480,6 +481,8 @@ export type LinePosition = 'overlaid' | 'stacked'
 export type HistogramPosition = 'overlaid' | 'stacked'
 
 export type MosaicPosition = 'stacked'
+
+export type MosaicHoverDimension = 'x' | 'y' | 'xy'
 
 export type SymbolType =
   | 'circle'

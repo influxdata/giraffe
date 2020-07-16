@@ -36,7 +36,8 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     hoverY,
     xScale,
     yScale,
-    spec.yDomain
+    spec.yDomain,
+    config.hoverDimension
   )
 
   const drawMosaicOptions = {

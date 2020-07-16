@@ -420,8 +420,8 @@ storiesOf('XY Plot', module)
     const y = yKnob(table, 'cpu')
     const fill = ['_value']
     const symbol = symbolKnob(table, 'host')
-
     const showAxes = showAxesKnob()
+    const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
 
     const config: Config = {
       table: CPUString,
@@ -433,6 +433,7 @@ storiesOf('XY Plot', module)
           y,
           fill: fill,
           symbol: symbol,
+          hoverDimension,
           colors,
         } as LayerConfig,
       ],
