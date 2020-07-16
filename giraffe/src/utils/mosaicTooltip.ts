@@ -32,7 +32,7 @@ export const findHoveredBoxes = (
   )
 
   if (hoverDimension === 'x') {
-    return xIndices
+    return xIndices.reverse()
   }
 
   for (let i = 0; i < yDomain[1]; i++) {
@@ -44,7 +44,7 @@ export const findHoveredBoxes = (
       yMin < yScale(dataY) &&
       yMax >= yScale(dataY)
     ) {
-      return [xIndices[i]] // isn't there some value to referring to this as xyIndices for clarity?
+      return [xIndices[i]] // allows user to hover over one box at a time
     }
   }
   // handles the case where the loop didn't return early.
@@ -93,7 +93,7 @@ export const getMosaicTooltipData = (
 
   const durationTooltipColumn: TooltipColumn = {
     key: 'duration column',
-    name: 'Duration(s)',
+    name: 'Duration',
     type: 'number',
     colors,
     values: hoveredBoxRows.map(
