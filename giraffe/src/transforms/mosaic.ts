@@ -1,6 +1,6 @@
 import {newTable} from '../utils/newTable'
 import {MosaicLayerSpec, Table} from '../types'
-import {X_MIN, X_MAX, FILL, SYMBOL, SERIES} from '../constants/columnKeys'
+import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
 import {createGroupIDColumn} from './'
 import {resolveDomain} from '../utils/resolveDomain'
 import {getNominalColorScale} from './'
@@ -11,7 +11,6 @@ export const mosaicTransform = (
   yColumnKey: string,
   xDomain: number[],
   fillColKeys: string[],
-  symbolColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
@@ -19,17 +18,11 @@ export const mosaicTransform = (
     fillColKeys
   )
 
-  const [symbolColumn, symbolColumnMap] = createGroupIDColumn(
-    inputTable,
-    symbolColKeys
-  )
-
   // break up into itervals while adding to table
   const xMinData = []
   const xMaxData = []
   const fillData = []
   const seriesData = []
-  const symbolData = []
   let prevValue = ''
   let tableLength = 0
   let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
@@ -37,7 +30,6 @@ export const mosaicTransform = (
   // find all series in the data set
   const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
 
-  const valueType1 = symbolColumnMap.columnKeys[0]
   const valueType2 = fillColumnMap.columnKeys[0]
 
   // so the indices for the lists and the actual input table will be offset
@@ -46,7 +38,6 @@ export const mosaicTransform = (
   xMinData.push(inputTable.getColumn(xColumnKey, 'number')[0])
   fillData.push(fillColumnMap.mappings[fillColumn[0]][valueType2])
   seriesData.push(inputTable.getColumn(yColumnKey, 'string')[0])
-  symbolData.push(symbolColumnMap.mappings[symbolColumn[0]][valueType1])
   prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
 
   for (let i = 1; i < inputTable.length; i++) {
@@ -57,7 +48,6 @@ export const mosaicTransform = (
       xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
       fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
       seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      symbolData.push(symbolColumnMap.mappings[symbolColumn[i]][valueType1])
       prevSeries = inputTable.getColumn(yColumnKey, 'string')[i]
       tableLength += 1
     } else if (fillColumnMap.mappings[fillColumn[i]][valueType2] != prevValue) {
@@ -65,7 +55,6 @@ export const mosaicTransform = (
       xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
       fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
       seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      symbolData.push(symbolColumnMap.mappings[symbolColumn[i]][valueType1])
       tableLength += 1
     }
     // if a series isn't already in valueStrings, add it
@@ -90,7 +79,6 @@ export const mosaicTransform = (
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
     .addColumn(FILL, 'string', fillData) //values
     .addColumn(SERIES, 'string', seriesData) //cpus
-    .addColumn(SYMBOL, 'string', symbolData) //hosts
 
   const resolvedXDomain = resolveDomain(
     inputTable.getColumn(xColumnKey, 'number'),

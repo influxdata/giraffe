@@ -293,7 +293,6 @@ export class PlotEnv {
           layerConfig.y,
           this.config.xDomain,
           layerConfig.fill,
-          layerConfig.symbol,
           layerConfig.colors
         )
       }

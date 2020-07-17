@@ -248,14 +248,13 @@ export interface MosaicLayerConfig {
   x: string
   y: string
   fill?: string[]
+  hoverDimension?: MosaicHoverDimension | 'auto'
   colors?: string[]
   symbol?: string[]
   strokeWidth?: number
   strokePadding?: number
   strokeOpacity?: number
   fillOpacity?: number
-  yColumnType: ColumnType
-  yTicks: Array<string>
 }
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
@@ -480,6 +479,8 @@ export type LinePosition = 'overlaid' | 'stacked'
 export type HistogramPosition = 'overlaid' | 'stacked'
 
 export type MosaicPosition = 'stacked'
+
+export type MosaicHoverDimension = 'x' | 'y' | 'xy'
 
 export type SymbolType =
   | 'circle'

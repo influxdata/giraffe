@@ -39,11 +39,9 @@ export const findHoveredRects = (
   } else if (binDimension === 'x') {
     return xIndices
   }
-
   const xyIndices = xIndices.filter(
     i => yMinData[i] <= dataY && yMaxData[i] > dataY
   )
-
   return xyIndices
 }
 
