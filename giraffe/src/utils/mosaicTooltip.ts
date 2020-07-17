@@ -63,15 +63,14 @@ export const getMosaicTooltipData = (
 ): TooltipData => {
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
-  const valCol = (boxTable.getColumn(FILL, 'string') as unknown) as Scale<
-    number,
-    number
-  >
+  const valCol = boxTable.getColumn(FILL, 'string')
   const yCol = boxTable.getColumn(SERIES, 'string')
   const xFormatter = columnFormatter(xColKey)
   const yFormatter = columnFormatter(yColKey)
   const valFormatter = columnFormatter(FILL)
-  const colors = hoveredBoxRows.map(i => fillScale(valCol[i]))
+  const colors = hoveredBoxRows.map(i =>
+    fillScale((valCol[i] as unknown) as number)
+  )
 
   const xTooltipColumn: TooltipColumn = {
     key: xColKey,
