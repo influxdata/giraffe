@@ -1,8 +1,9 @@
+const PrettierPlugin = require('prettier-webpack-plugin')
+
 module.exports = ({config}) => {
   config.module.rules.push(
     {
       test: /\.scss$/,
-      exclude: /\.module\.scss$/,
       use: [
         {loader: 'style-loader'},
         {loader: 'css-modules-typescript-loader'},
@@ -26,6 +27,7 @@ module.exports = ({config}) => {
       ],
     }
   )
+  config.plugins.push(new PrettierPlugin())
   config.resolve.extensions.push('.ts', '.tsx', '.css', '.scss')
   return config
 }
