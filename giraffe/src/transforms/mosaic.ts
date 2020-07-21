@@ -94,7 +94,7 @@ export const mosaicTransform = (
 
   const resolvedYDomain = [0, valueStrings.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
-
+  console.log('IT WORKS')
   return {
     type: 'mosaic',
     inputTable,
