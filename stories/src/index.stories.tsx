@@ -1,7 +1,8 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
-import {CPUString} from './data/cpuString'
+// import {CPUString} from './data/cpuString'
+import {SERIES} from './data/mosaicDataSet'
 
 import {
   Config,
@@ -423,7 +424,7 @@ storiesOf('XY Plot', module)
     const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
 
     const config: Config = {
-      table: CPUString,
+      table: SERIES,
       showAxes,
       layers: [
         {
