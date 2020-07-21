@@ -13,77 +13,84 @@ export const mosaicTransform = (
   fillColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
+  const xInputCol = inputTable.getColumn(xColumnKey, 'number')
+  const yInputCol = inputTable.getColumn(yColumnKey, 'string')
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
   )
 
   // break up into itervals while adding to table
-  const xMinData = []
-  const xMaxData = []
-  const fillData = []
-  const seriesData = []
-  let prevValue = ''
+  let xMinData = []
+  let xMaxData = []
+  let fillData = []
+  let seriesData = []
   let tableLength = 0
-  let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
 
   // find all series in the data set
-  const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
+  let valueStrings = []
 
   const valueType2 = fillColumnMap.columnKeys[0]
 
   // so the indices for the lists and the actual input table will be offset
   // first add a new entry in all the lists except xMaxData
   // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
-  xMinData.push(inputTable.getColumn(xColumnKey, 'number')[0])
-  fillData.push(fillColumnMap.mappings[fillColumn[0]][valueType2])
-  seriesData.push(inputTable.getColumn(yColumnKey, 'string')[0])
-  prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
-
-  for (let i = 1; i < inputTable.length; i++) {
-    // check if the value has changed or if you've reached the end of the table
-    // if so, add a new value to all the lists
-    if (inputTable.getColumn(yColumnKey, 'string')[i] != prevSeries) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i - 1])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      prevSeries = inputTable.getColumn(yColumnKey, 'string')[i]
-      tableLength += 1
-    } else if (fillColumnMap.mappings[fillColumn[i]][valueType2] != prevValue) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      tableLength += 1
+  const data_map = {}
+  // {'cpu0': ['eenie', [], [], [], []]} prevValue, xMin, xMax, values, series
+  for (let i = 0; i < inputTable.length; i++) {
+    if (yInputCol[i] in data_map) {
+      if (
+        fillColumnMap.mappings[fillColumn[i]][valueType2] !=
+        data_map[yInputCol[i]][0]
+      ) {
+        data_map[yInputCol[i]][0] =
+          fillColumnMap.mappings[fillColumn[i]][valueType2] // prev Value
+        data_map[yInputCol[i]][1].push(xInputCol[i]) // xMin
+        data_map[yInputCol[i]][2].push(xInputCol[i]) // XMax
+        data_map[yInputCol[i]][3].push(
+          fillColumnMap.mappings[fillColumn[i]][valueType2]
+        ) // value
+        data_map[yInputCol[i]][4].push(yInputCol[i]) //series
+        tableLength += 1
+      }
+    } else {
+      data_map[yInputCol[i]] = []
+      data_map[yInputCol[i]].push(
+        fillColumnMap.mappings[fillColumn[i]][valueType2]
+      ) // prev Value
+      data_map[yInputCol[i]].push([xInputCol[i]]) //xMin
+      data_map[yInputCol[i]].push([]) //xMax
+      data_map[yInputCol[i]].push([
+        fillColumnMap.mappings[fillColumn[i]][valueType2],
+      ]) //value
+      data_map[yInputCol[i]].push([]) //series
     }
-    // if a series isn't already in valueStrings, add it
-    if (!valueStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
-      valueStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
-    prevValue = fillColumnMap.mappings[fillColumn[i]][valueType2]
   }
-  //close the last interval
-  xMaxData.push(
-    inputTable.getColumn(xColumnKey, 'number')[inputTable.length - 1]
-  )
-  tableLength += 1
 
+  //close the last interval
+  for (const key in data_map) {
+    data_map[key][2].push(xInputCol[inputTable.length - 1])
+    data_map[key][4].push(key) //series
+    xMinData = xMinData.concat(data_map[key][1])
+    xMaxData = xMaxData.concat(data_map[key][2])
+    fillData = fillData.concat(data_map[key][3])
+    seriesData = seriesData.concat(data_map[key][4])
+    tableLength += 1
+    valueStrings = valueStrings.concat(key)
+  }
   /*
     xMin (start time) | xMax (end time) | Value Category | host | cpu
     -------------------------------------------------------------------
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
+
   const table = newTable(tableLength)
     .addColumn(X_MIN, 'number', xMinData) //startTimes
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
     .addColumn(FILL, 'string', fillData) //values
     .addColumn(SERIES, 'string', seriesData) //cpus
-
-  const resolvedXDomain = resolveDomain(
-    inputTable.getColumn(xColumnKey, 'number'),
-    xDomain
-  )
+  const resolvedXDomain = resolveDomain(xInputCol, xDomain)
 
   const resolvedYDomain = [0, valueStrings.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
