@@ -23,6 +23,7 @@ A React-based visualization library powering the data visualizations in [InfluxD
    b. _Optional properties_ include customizations for
 
    - gridlines: color and opacity
+   - cursor: type of mouse cursor
    - axes: appearance, color, opacity, and scaling
    - ticks: generation, formatting and labeling, font, and color
    - legend (tooltip): labeling and styling
@@ -193,6 +194,8 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 - **height**: _number. Optional._ The height in _CSS px_ of the Plot. Includes the space below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the height of `<Plot>`'s parent element will determine the height.
 
 - **gridColor**: _string. Optional._ The _CSS color value_ of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
+
+- **cursor**: _string. Optional. Defaults to "crosshair" when excluded._ The [_CSS cursor_](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor) property when the cursor is inside the rendered area of `<Plot>`.
 
 - **gridOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
 
@@ -376,6 +379,14 @@ Giraffe comes with utility functions.
   - **strokeWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0. A high value for **strokeWidth** will completely fill the heat bin with border color at an opacity indicated by **strokeOpacity**.
 
   - **strokePadding**: _number. Optional._ The space around all four sides of each heat bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
+- **RawFluxDataTableLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _'flux data table'. **Required**._ Specifies that this LayerConfig is a flux data table.
+
+  - **files**: _array[string, ...]. **Required**._ An array of strings of comma separated values (CSV). Each CSV string can be taken from a Flux response or manually created. At least one string is required. The string cannot not be an empty string nor a string of only empty space(s).
+
+  - **disableVerticalScrolling**: _boolean. **Optional**. Recommendation: do not include. Defaults to false when excluded._ Disables the vertical scrollbar for the rendered table.
 
 - **GaugeLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
 

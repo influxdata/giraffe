@@ -38,6 +38,7 @@ export {
   LinePosition,
   Margins,
   NumericColumnData,
+  RawFluxDataTableLayerConfig,
   Scale,
   SingleStatLayerConfig,
   Table,

@@ -12,10 +12,6 @@ import {RawFluxDataTableLayerConfig} from '../types'
 
 interface Props {
   config: RawFluxDataTableLayerConfig
-  // files: string[]
-  // width: number
-  // height: number
-  // disableVerticalScrolling?: boolean
 }
 
 interface State {

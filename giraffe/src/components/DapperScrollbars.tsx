@@ -12,6 +12,7 @@ import classnames from 'classnames'
 import Scrollbar from 'react-scrollbars-custom'
 import {ScrollState} from 'react-scrollbars-custom/dist/types/types'
 
+import {InfluxColors} from '../constants/colorSchemes'
 import styles from './DapperScrollbars.scss'
 
 // Types
@@ -27,88 +28,6 @@ export interface StandardFunctionProps {
   /** Useful for overriding styles of the component and its constituent elements */
   className?: string
 }
-enum InfluxColors {
-  // Greys
-  Obsidian = '#0f0e15',
-  Raven = '#181820',
-  Kevlar = '#202028',
-  Castle = '#292933',
-  Onyx = '#31313d',
-  Pepper = '#383846',
-  Smoke = '#434453',
-  Graphite = '#545667',
-  Storm = '#676978',
-  Mountain = '#757888',
-  Wolf = '#8e91a1',
-  Sidewalk = '#999dab',
-  Forge = '#a4a8b6',
-  Mist = '#bec2cc',
-  Chromium = '#c6cad3',
-  Platinum = '#d4d7dd',
-  Pearl = '#e7e8eb',
-  Whisper = '#eeeff2',
-  Cloud = '#f6f6f8',
-  Ghost = '#fafafc',
-  White = '#ffffff',
-  // Blues
-  Abyss = '#120653',
-  Sapphire = '#0b3a8d',
-  Ocean = '#066fc5',
-  Pool = '#00a3ff',
-  Laser = '#00C9FF',
-  Hydrogen = '#6BDFFF',
-  Neutrino = '#BEF0FF',
-  Yeti = '#F0FCFF',
-  // Purples
-  Shadow = '#2b007e',
-  Void = '#5c10a0',
-  Amethyst = '#8e1fc3',
-  Star = '#be2ee4',
-  Comet = '#ce58eb',
-  Potassium = '#dd84f1',
-  Moonstone = '#ebadf8',
-  Twilight = '#fad9ff',
-  // Greens
-  Gypsy = '#003e34',
-  Emerald = '#006f49',
-  Viridian = '#009f5f',
-  Rainforest = '#34bb55',
-  Honeydew = '#67d74e',
-  Krypton = '#9bf445',
-  Wasabi = '#c6f98e',
-  Mint = '#f3ffd6',
-  // Yellows
-  Oak = '#3F241F',
-  Topaz = '#E85B1C',
-  Tiger = '#F48D38',
-  Pineapple = '#FFB94A',
-  Thunder = '#FFD255',
-  Sulfur = '#FFE480',
-  Daisy = '#FFF6B8',
-  Banana = '#FFFDDE',
-  // Reds
-  Basalt = '#2F1F29',
-  Ruby = '#BF3D5E',
-  Fire = '#DC4E58',
-  Curacao = '#F95F53',
-  Dreamsicle = '#FF8564',
-  Tungsten = '#FFB6A0',
-  Marmelade = '#FFDCCF',
-  Flan = '#FFF7F4',
-  // Brand Colors
-  Chartreuse = '#D6F622',
-  DeepPurple = '#13002D',
-  Magenta = '#BF2FE5',
-  Galaxy = '#9394FF',
-  Pulsar = '#513CC6',
-}
-
-// react-scrollbars-custom uses a highly unusual type
-// to presumably handle touch and mouse events simultaneously
-// type FusionScrollEvent = UIEvent<HTMLDivElement> & ScrollState
-// Using this custom type makes typescript happy
-// and exposes enough typing to properly interface
-// with the onScroll and onUpdate props
 
 type UIEventHandler = (event: UIEvent<HTMLDivElement>) => void
 type ScrollStateEventHandler = (

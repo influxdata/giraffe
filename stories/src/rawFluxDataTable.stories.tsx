@@ -11,17 +11,30 @@ import {fluxCSV} from './data/fluxCSV'
 storiesOf('Raw Flux Data Table', module)
   .addDecorator(withKnobs)
   .add('Raw Flux Data Table', () => {
-    const csv = text('Paste CSV here:', '')
+    const csv1 = text('Paste first CSV here:', '')
+    const csv2 = text('Paste second CSV here:', '')
+
+    const files = []
+
+    if (csv1) {
+      files.push(csv1)
+    }
+
+    if (csv2) {
+      files.push(csv2)
+    }
+
+    if (files.length < 1) {
+      files.push(fluxCSV)
+    }
 
     const config: Config = {
-      fluxResponse: csv || fluxCSV,
       showAxes: false,
+      cursor: 'auto',
       layers: [
         {
           type: 'flux data table',
-          // height: 100,
-          // width: 100,
-          disableVerticalScrolling: false,
+          files,
         } as RawFluxDataTableLayerConfig,
       ],
     }

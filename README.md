@@ -45,6 +45,7 @@ Install [Giraffe](https://www.npmjs.com/package/@influxdata/giraffe) with your p
    b. _Optional properties_ include customizations for
 
    - gridlines: color and opacity
+   - cursor: type of mouse cursor
    - axes: appearance, color, opacity, and scaling
    - ticks: generation, formatting and labeling, font, and color
    - legend (tooltip): labeling and styling

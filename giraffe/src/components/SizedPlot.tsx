@@ -76,8 +76,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const fluxResponse = config.fluxResponse ? config.fluxResponse : ''
-
   return (
     <div
       className="giraffe-plot"
@@ -97,7 +95,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           right: `${margins.right}px`,
           bottom: `${margins.bottom}px`,
           left: `${margins.left}px`,
-          cursor: 'crosshair',
+          cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
         onDoubleClick={handleResetDomains}
         {...hoverTargetProps}
@@ -111,7 +109,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   key={layerIndex}
                   config={{
                     ...layerConfig,
-                    files: [fluxResponse],
                     width: config.width,
                     height: config.height,
                   }}
