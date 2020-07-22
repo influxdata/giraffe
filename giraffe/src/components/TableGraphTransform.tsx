@@ -1,5 +1,5 @@
 // Libraries
-import {useState, FunctionComponent} from 'react'
+import {useMemo, FunctionComponent} from 'react'
 import memoizeOne from 'memoize-one'
 
 // Utils
@@ -36,10 +36,12 @@ const areFormatPropertiesEqual = (
   return propsEqual
 }
 
+const memoizedTableTransform = memoizeOne(
+  transformTableData,
+  areFormatPropertiesEqual
+)
+
 export const TableGraphTransform: FunctionComponent<Props> = (props: Props) => {
-  const [memoizedTableTransform] = useState<Function>(
-    memoizeOne(transformTableData, areFormatPropertiesEqual)
-  )
   const {properties, data, dataTypes, sortOptions} = props
   const {tableOptions, timeFormat, decimalPlaces, fieldOptions} = properties
   const fo =
@@ -49,14 +51,18 @@ export const TableGraphTransform: FunctionComponent<Props> = (props: Props) => {
       dataType: dataTypes[opts.internalName],
     }))
 
-  const transformedDataBundle = memoizedTableTransform(
-    data,
-    sortOptions,
-    fo,
-    tableOptions,
-    timeFormat,
-    decimalPlaces
+  const memoizedTableTransformValue = useMemo(
+    () =>
+      memoizedTableTransform(
+        data,
+        sortOptions,
+        fo,
+        tableOptions,
+        timeFormat,
+        decimalPlaces
+      ),
+    [data, sortOptions, fo, tableOptions, timeFormat, decimalPlaces]
   )
-
+  const transformedDataBundle = memoizedTableTransformValue
   return props.children(transformedDataBundle)
 }

@@ -9,14 +9,23 @@ import {TableSidebar} from './TableSidebar'
 import {get} from '../utils/get'
 
 // Types
-import {TableViewProperties, FluxTable, TimeZone, Theme} from '../types'
+import {
+  // TableViewProperties,
+  FluxTable,
+  // TimeZone,
+  // Theme,
+  TableLayerConfig,
+} from '../types'
+
+// import './TableGraphs.scss'
 
 interface Props {
-  tables: FluxTable[]
-  properties: TableViewProperties
-  timeZone: TimeZone
-  theme: Theme
-  setFieldOptions: Function
+  config: TableLayerConfig
+  // tables: FluxTable[]
+  // properties: TableViewProperties
+  // timeZone: TimeZone
+  // theme: Theme
+  // setFieldOptions: Function
 }
 
 const getNameOfSelectedTable = (
@@ -62,7 +71,9 @@ const getSelectedTable = (
 }
 
 export const TableGraphs: FunctionComponent<Props> = (props: Props) => {
-  const {tables, properties, timeZone, theme} = props
+  const {
+    config: {tables, properties, timeZone, tableTheme},
+  } = props
 
   const [selectedTableName, setSelectedTableName] = useState<string>(
     get(tables, '0.name', null)
@@ -75,7 +86,7 @@ export const TableGraphs: FunctionComponent<Props> = (props: Props) => {
           data={tables}
           selectedTableName={getNameOfSelectedTable(tables, selectedTableName)}
           onSelectTable={setSelectedTableName}
-          theme={theme}
+          theme={tableTheme}
         />
       )}
       {isTableVisible(tables, selectedTableName) && (
@@ -84,7 +95,7 @@ export const TableGraphs: FunctionComponent<Props> = (props: Props) => {
           table={getSelectedTable(tables, selectedTableName)}
           properties={properties}
           timeZone={timeZone}
-          theme={theme}
+          theme={tableTheme}
         />
       )}
       {!hasData(getSelectedTable(tables, selectedTableName)) && (

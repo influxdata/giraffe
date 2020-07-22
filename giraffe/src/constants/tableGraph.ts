@@ -1,4 +1,4 @@
-import {TimeField} from '../types'
+import {Color, TimeField} from '../types'
 
 export const NULL_ARRAY_INDEX = -1
 
@@ -31,4 +31,14 @@ export const FORMAT_OPTIONS: Array<{text: string}> = [
   {text: 'HH:mm:ss.sss'},
   {text: 'MMMM D, YYYY HH:mm:ss'},
   {text: 'dddd, MMMM D, YYYY HH:mm:ss'},
+]
+
+export const DEFAULT_TABLE_COLORS = [
+  {
+    id: 'base',
+    type: 'text',
+    hex: '#ffffff',
+    name: 'white',
+    value: 0,
+  } as Color,
 ]

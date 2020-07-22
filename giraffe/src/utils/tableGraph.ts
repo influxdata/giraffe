@@ -265,7 +265,7 @@ export const excludeNoisyColumns = (data: string[][]): string[][] => {
 export const transformTableData = (
   data: string[][],
   sortOptions: SortOptions,
-  RenamableFields: RenamableField[],
+  renamableFields: RenamableField[],
   tableOptions: TableOptions,
   timeFormat: string,
   decimalPlaces: DecimalPlaces
@@ -275,7 +275,7 @@ export const transformTableData = (
   const excludedData = excludeNoisyColumns(data)
 
   const resolvedRenamableFields = resolveRenamableFields(
-    RenamableFields,
+    renamableFields,
     excludedData[0]
   )
 

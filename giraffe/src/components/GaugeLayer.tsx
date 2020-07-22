@@ -24,7 +24,7 @@ export const GaugeLayer: FunctionComponent<Props> = (props: Props) => {
     decimalPlaces,
     gaugeColors,
     gaugeSize = Math.PI,
-    theme = {},
+    gaugeTheme = {},
   } = config
 
   const MAX_PI_DECIMALS = 3 // values above 3 distort Gauge styling
@@ -56,7 +56,7 @@ export const GaugeLayer: FunctionComponent<Props> = (props: Props) => {
             gaugePosition={value}
             decimalPlaces={decimalPlaces}
             gaugeSize={validGaugeSize}
-            theme={{...GAUGE_THEME_DARK, ...theme}}
+            theme={{...GAUGE_THEME_DARK, ...gaugeTheme}}
           />
         </div>
       )}

@@ -13,18 +13,10 @@ interface Props {
   children: (tables: FluxTable[]) => JSX.Element
 }
 
-const FluxTablesTransform: FunctionComponent<Props> = ({files, children}) => {
-  console.log(
-    'FluxTablesTransform: is an array',
-    Array.isArray(files),
-    'with length',
-    files.length,
-    'is',
-    files
-  )
+export const FluxTablesTransform: FunctionComponent<Props> = ({
+  files,
+  children,
+}) => {
   const tables = useMemo(() => flatMap(files, parseResponse), [files])
-  console.log('~~~ became tables', tables)
   return children(tables)
 }
-
-export default FluxTablesTransform

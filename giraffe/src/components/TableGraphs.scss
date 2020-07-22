@@ -1,0 +1,341 @@
+$table-graph--font: 12px;
+$table-graph--text-color: #999dab;
+$table-graph--text-highlight: #ffffff;
+$table-graph--cell: #0f0e15;
+$table-graph--cell-highlight: #202028;
+$table-graph--heading-text: #c6cad3;
+$table-graph--heading-text-corner: #f6f6f8;
+$table-graph--heading-sort: #00a3ff;
+$table-graph--heading-bg: #181820;
+$table-graph--heading-bg--active: #292933;
+$table-graph--border: #292933;
+
+$table-light-graph--text-color: #676978;
+$table-light-graph--text-highlight: #383846;
+$table-light-graph--cell: #ffffff;
+$table-light-graph--cell-highlight: #f6f6f8;
+$table-light-graph--heading-text: #757888;
+$table-light-graph--heading-text-corner: #434453;
+$table-light-graph--heading-sort: #00a3ff;
+$table-light-graph--heading-bg: #eeeff2;
+$table-light-graph--heading-bg--active: #e7e8eb;
+$table-light-graph--border: #e7e8eb;
+
+.time-machine-tables {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.time-machine-sidebar {
+  flex: 1 0 180px;
+  background-color: $table-graph--cell;
+  margin-right: 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 2px solid $table-graph--border;
+}
+
+.time-machine-sidebar--heading {
+  padding: 10px;
+  background: $table-graph--heading-bg--active;
+  height: 50px;
+}
+
+.time-machine-sidebar--scroll {
+  height: calc(100% - 50px) !important;
+}
+
+.time-machines-sidebar--filter.form-control.cf-input-xs {
+  font-size: 12px;
+}
+
+.time-machine-sidebar--items {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+@mixin no-user-select() {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}
+
+.time-machine-sidebar-item {
+  @include no-user-select();
+  color: $table-graph--text-color;
+  font-size: $table-graph--font;
+  font-weight: 400;
+  padding: 8px 8px;
+  transition: color 0.25s ease, background-color 0.25s ease;
+  white-space: nowrap;
+
+  > span {
+    padding-right: 2px;
+  }
+
+  > span.key,
+  > span.equals {
+    color: rgba($table-graph--text-color, 70%);
+  }
+
+  > span.value {
+    font-weight: 500;
+    padding-right: 8px;
+    color: $table-graph--text-color;
+  }
+
+  &:hover {
+    background-color: $table-graph--cell-highlight;
+    color: $table-graph--text-color;
+    cursor: pointer;
+
+    > span.key,
+    > span.equals {
+      color: $table-graph--text-color;
+    }
+
+    > span.value {
+      color: $table-graph--text-highlight;
+    }
+  }
+
+  &.active {
+    background-color: $table-graph--heading-bg--active;
+    color: $table-graph--text-highlight;
+
+    > span.key,
+    > span.equals {
+      color: $table-graph--text-highlight;
+    }
+
+    > span.value {
+      color: $table-graph--heading-sort;
+    }
+  }
+}
+
+.time-machine-table {
+  flex: 4 0 100px;
+  border: 2px solid $table-graph--border;
+  border-radius: 4px-sm;
+  overflow: hidden;
+
+  &:only-child {
+    border: 1;
+  }
+}
+
+/*
+    Table Type Graphs in Dashboards
+    ----------------------------------------------------------------------------
+*/
+
+.table-graph-cell {
+  user-select: text !important;
+  -o-user-select: text !important;
+  -moz-user-select: text !important;
+  -webkit-user-select: text !important;
+  line-height: 28px; // Cell height - 2x border width
+  padding: 0 6px;
+  font-size: $table-graph--font;
+  background-color: $table-graph--cell;
+  font-weight: 500;
+  color: $table-graph--text-color;
+  border: (2px / 2) solid $table-graph--border;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &__highlight-row {
+    color: $table-graph--text-highlight;
+    background-color: $table-graph--cell-highlight;
+  }
+  &__numerical {
+    font-family: 'IBMPlexMono', monospace;
+    text-align: right;
+  }
+  &__fixed-row,
+  &__fixed-column {
+    font-weight: 700;
+    color: $table-graph--heading-text;
+    background-color: $table-graph--heading-bg;
+  }
+  &__fixed-row {
+    border-top: 0;
+  }
+  &__fixed-column {
+    border-left: 0;
+  }
+  &__fixed-corner {
+    font-weight: 700;
+    border-top: 0;
+    border-left: 0;
+    color: $table-graph--heading-text-corner;
+    background-color: $table-graph--heading-bg--active;
+  }
+  &__field-name {
+    padding-right: 17px;
+
+    &:before {
+      font-family: 'icomoon';
+      content: '\e902';
+      font-size: 17px;
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      transform: translateY(-50%) rotate(180deg);
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    &:hover:before {
+      opacity: 1;
+    }
+  }
+  &__sort-asc,
+  &__sort-desc {
+    color: $table-graph--heading-sort;
+
+    &:before {
+      opacity: 1;
+    }
+  }
+  &__sort-asc:before {
+    transform: translateY(-50%) rotate(180deg);
+  }
+  &__sort-desc:before {
+    transform: translateY(-50%) rotate(0deg);
+  }
+}
+
+/*
+    Light Mode
+    ----------------------------------------------------------------------------
+*/
+
+.time-machine-table.time-machine-table__light-mode {
+  border-color: $table-light-graph--border;
+
+  .table-graph-cell {
+    background-color: $table-light-graph--cell;
+    color: $table-light-graph--text-color;
+    border-color: $table-light-graph--border;
+
+    &__highlight-row {
+      color: $table-light-graph--text-highlight;
+      background-color: $table-light-graph--cell-highlight;
+    }
+    &__fixed-row,
+    &__fixed-column {
+      color: $table-light-graph--heading-text;
+      background-color: $table-light-graph--heading-bg;
+    }
+    &__fixed-corner {
+      color: $table-light-graph--heading-text-corner;
+      background-color: $table-light-graph--heading-bg--active;
+    }
+    &__sort-asc,
+    &__sort-desc {
+      color: $table-light-graph--heading-sort;
+    }
+  }
+}
+
+.time-machine-sidebar.time-machine-sidebar__light {
+  background-color: $table-light-graph--cell;
+  border-color: $table-light-graph--border;
+
+  .time-machine-sidebar--heading {
+    background: $table-light-graph--heading-bg--active;
+  }
+
+  .time-machine-sidebar-item {
+    color: $table-light-graph--text-color;
+
+    > span.key,
+    > span.equals {
+      color: rgba($table-light-graph--text-color, 70%);
+    }
+
+    > span.value {
+      color: $table-light-graph--text-color;
+    }
+
+    &:hover {
+      background-color: $table-light-graph--cell-highlight;
+      color: $table-light-graph--text-color;
+
+      > span.key,
+      > span.equals {
+        color: $table-light-graph--text-color;
+      }
+
+      > span.value {
+        color: $table-light-graph--text-highlight;
+      }
+    }
+
+    &.active {
+      background-color: $table-light-graph--heading-bg--active;
+      color: $table-light-graph--text-highlight;
+
+      > span.key,
+      > span.equals {
+        color: $table-light-graph--text-highlight;
+      }
+
+      > span.value {
+        color: $table-light-graph--heading-sort;
+      }
+    }
+  }
+
+  .cf-input.time-machine-sidebar--filter > input {
+    background-color: #f6f6f8;
+    color: #545667;
+    border-color: #d4d7dd;
+
+    &::-webkit-input-placeholder {
+      color: #d4d7dd;
+    }
+    &::-moz-placeholder {
+      color: #d4d7dd;
+    }
+    &:-ms-input-placeholder {
+      color: #d4d7dd;
+    }
+    &:-moz-placeholder {
+      color: #d4d7dd;
+    }
+
+    &:focus {
+      border-color: #00a3ff;
+      background-color: #ffffff;
+    }
+  }
+  .cf-input.time-machine-sidebar--filter:hover > input {
+    background-color: #ffffff;
+    border-color: mix(#d4d7dd, #00a3ff, 50%);
+  }
+
+  .cf-input.cf-input__focused.time-machine-sidebar--filter > .cf-input-icon {
+    color: #00a3ff;
+  }
+
+  .time-machine-sidebar--scroll .cf-dapper-scrollbars--track-y {
+    background-color: #d4d7dd !important;
+  }
+}
