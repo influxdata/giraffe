@@ -8,6 +8,8 @@ export interface Config {
   gridColor?: string
   gridOpacity?: number
 
+  cursor?: string
+
   showAxes?: boolean
   axisColor?: string
   axisOpacity?: number
@@ -166,7 +168,7 @@ export interface CustomLayerRenderProps {
 }
 
 export interface RawFluxDataTableLayerConfig {
-  type: 'flux data table'
+  type: 'flux data table' // do not refactor or restrict to LayerTypes.RawFluxDataTable
   files: string[]
   width: number
   height: number
