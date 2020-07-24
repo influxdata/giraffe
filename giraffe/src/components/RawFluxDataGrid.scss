@@ -1,6 +1,6 @@
 .raw-flux-data-table--cell {
-  box-sizing: border-box;
   border: 2px solid #202028;
+  box-sizing: border-box;
 }
 
 .raw-flux-data-table--cell {
@@ -8,32 +8,32 @@
   font-size: 12px;
   z-index: 1;
   position: absolute;
-  top: 0;
   left: 0;
+  top: 0;
 
   .raw-flux-data-table--cell-bg {
-    box-sizing: border-box;
     background: #0f0e15;
+    box-sizing: border-box;
     border: 2px solid #0f0e15;
+    border-radius: 2px;
     position: absolute;
     padding: 5px;
-    border-radius: 2px;
-    width: calc(100% - 10px);
-    min-width: 100%;
     min-height: 100%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    user-select: text;
+    min-width: 100%;
+    width: calc(100% - 10px);
     cursor: text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: text;
+    white-space: nowrap;
   }
 
   &:hover {
     z-index: 2;
 
     .raw-flux-data-table--cell-bg {
-      border: 2px solid #00a3ff;
       background: #383846;
+      border: 2px solid #00a3ff;
       width: auto;
     }
   }

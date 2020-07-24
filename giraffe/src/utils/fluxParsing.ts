@@ -68,14 +68,15 @@ export const parseTables = (responseChunk: string): FluxTable[] => {
     .filter(line => line.startsWith('#'))
     .join('\n')
     .trim()
-  const nonAnnotationLines: string = lines
-    .filter(line => !line.startsWith('#'))
-    .join('\n')
-    .trim()
 
   if (!annotationLines) {
     throw new Error('Unable to extract annotation data')
   }
+
+  const nonAnnotationLines: string = lines
+    .filter(line => !line.startsWith('#'))
+    .join('\n')
+    .trim()
 
   if (!nonAnnotationLines) {
     // A response may be truncated on an arbitrary line. This guards against

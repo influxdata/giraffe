@@ -28,7 +28,7 @@ interface State {
   headerRows: number[]
 }
 
-const getCellData = (data: string[][], row, column) => {
+const getCellData = (data: string[][], row, column): string => {
   if (Array.isArray(data) && Array.isArray(data[row])) {
     return data[row][column]
   }
