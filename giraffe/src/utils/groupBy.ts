@@ -5,7 +5,7 @@ export const groupBy = (data: Array<any>, iteratee: Iteratee) => {
 
   data.forEach(value => {
     const index = iteratee(value)
-    if (!result[index]) {
+    if (!Array.isArray(result[index])) {
       result[index] = []
     }
     result[index].push(value)
