@@ -43,15 +43,31 @@ export const mosaicTransform = (
         fillColumnMap.mappings[fillColumn[i]][valueType2] !=
         data_map[yInputCol[i]][0]
       ) {
-        data_map[yInputCol[i]][0] =
-          fillColumnMap.mappings[fillColumn[i]][valueType2] // prev Value
-        data_map[yInputCol[i]][1].push(xInputCol[i]) // xMin
-        data_map[yInputCol[i]][2].push(xInputCol[i]) // XMax
-        data_map[yInputCol[i]][3].push(
-          fillColumnMap.mappings[fillColumn[i]][valueType2]
-        ) // value
-        data_map[yInputCol[i]][4].push(yInputCol[i]) //series
-        tableLength += 1
+        // this attempt was to get the length to access the last end value added
+        // and compare it to the new start value being added
+        // for some reason this gives the wrong length value (not sure why)
+        console.log('xMax column', data_map[yInputCol[i]][2])
+        const testing = data_map[yInputCol[i]][2]
+        console.log('length of xMAx', testing.length)
+        console.log('new xMin val', xInputCol[i])
+
+        // tried it by get the last value and then add it back in but for some
+        // reason this messes up the column count
+        // const last_value = data_map[yInputCol[i]][2].pop()
+        // console.log(last_value)
+        // data_map[yInputCol[i]][2].push(last_value)
+
+        // if (xInputCol[i] >= data_map[yInputCol[i]][2][testing.length - 1]) {
+          data_map[yInputCol[i]][0] =
+            fillColumnMap.mappings[fillColumn[i]][valueType2] // prev Value
+          data_map[yInputCol[i]][1].push(xInputCol[i]) // xMin
+          data_map[yInputCol[i]][2].push(xInputCol[i]) // XMax
+          data_map[yInputCol[i]][3].push(
+            fillColumnMap.mappings[fillColumn[i]][valueType2]
+          ) // value
+          data_map[yInputCol[i]][4].push(yInputCol[i]) //series
+          tableLength += 1
+        // }
       }
     } else {
       data_map[yInputCol[i]] = []
