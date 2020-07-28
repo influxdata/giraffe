@@ -36,33 +36,13 @@ export const mosaicTransform = (
   // first add a new entry in all the lists except xMaxData
   // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
   const data_map = {}
-  let inputLength = inputTable.length
   // {'cpu0': ['eenie', [], [], [], []]} prevValue, xMin, xMax, values, series
   for (let i = 0; i < inputTable.length; i++) {
-    if (xInputCol[i - 1] > xInputCol[i] && yInputCol[i] in data_map) {
-      inputLength = i
-      break
-    }
     if (yInputCol[i] in data_map) {
       if (
         fillColumnMap.mappings[fillColumn[i]][valueType2] !=
         data_map[yInputCol[i]][0]
       ) {
-        // this attempt was to get the length to access the last end value added
-        // and compare it to the new start value being added
-        // for some reason this gives the wrong length value (not sure why)
-        console.log('xMax column', data_map[yInputCol[i]][2])
-        const testing = data_map[yInputCol[i]][2]
-        console.log('length of xMAx', testing.length)
-        console.log('new xMin val', xInputCol[i])
-
-        // tried it by get the last value and then add it back in but for some
-        // reason this messes up the column count
-        // const last_value = data_map[yInputCol[i]][2].pop()
-        // console.log(last_value)
-        // data_map[yInputCol[i]][2].push(last_value)
-
-        // if (xInputCol[i] >= data_map[yInputCol[i]][2][testing.length - 1]) {
         data_map[yInputCol[i]][0] =
           fillColumnMap.mappings[fillColumn[i]][valueType2] // prev Value
         data_map[yInputCol[i]][1].push(xInputCol[i]) // xMin
@@ -72,7 +52,6 @@ export const mosaicTransform = (
         ) // value
         data_map[yInputCol[i]][4].push(yInputCol[i]) //series
         tableLength += 1
-        // }
       }
     } else {
       data_map[yInputCol[i]] = []
@@ -90,7 +69,7 @@ export const mosaicTransform = (
 
   //close the last interval
   for (const key in data_map) {
-    data_map[key][2].push(xInputCol[inputLength - 1]) //tableLength?
+    data_map[key][2].push(xInputCol[inputTable.length - 1])
     data_map[key][4].push(key) //series
     xMinData = xMinData.concat(data_map[key][1])
     xMaxData = xMaxData.concat(data_map[key][2])
