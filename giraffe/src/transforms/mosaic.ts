@@ -36,13 +36,8 @@ export const mosaicTransform = (
   // first add a new entry in all the lists except xMaxData
   // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
   const data_map = {}
-  let validData = true
   // {'cpu0': ['eenie', [], [], [], []]} prevValue, xMin, xMax, values, series
   for (let i = 0; i < inputTable.length; i++) {
-    if (xInputCol[i - 1] > xInputCol[i] && yInputCol[i] in data_map) {
-      validData = false
-      break
-    }
     if (yInputCol[i] in data_map) {
       if (
         fillColumnMap.mappings[fillColumn[i]][valueType2] !=
@@ -105,20 +100,12 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
-  let table
-  if (validData) {
-    table = newTable(tableLength)
-      .addColumn(X_MIN, 'number', xMinData) //startTimes
-      .addColumn(X_MAX, 'number', xMaxData) //endTimes
-      .addColumn(FILL, 'string', fillData) //values
-      .addColumn(SERIES, 'string', seriesData) //cpus
-  } else {
-    table = newTable(0)
-      .addColumn(X_MIN, 'number', []) //startTimes
-      .addColumn(X_MAX, 'number', []) //endTimes
-      .addColumn(FILL, 'string', []) //values
-      .addColumn(SERIES, 'string', []) //cpus
-  }
+
+  const table = newTable(tableLength)
+    .addColumn(X_MIN, 'number', xMinData) //startTimes
+    .addColumn(X_MAX, 'number', xMaxData) //endTimes
+    .addColumn(FILL, 'string', fillData) //values
+    .addColumn(SERIES, 'string', seriesData) //cpus
   const resolvedXDomain = resolveDomain(xInputCol, xDomain)
 
   const resolvedYDomain = [0, valueStrings.length]
