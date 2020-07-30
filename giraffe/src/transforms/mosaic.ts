@@ -18,6 +18,9 @@ export const mosaicTransform = (
     fillColKeys
   )
 
+  const xInputCol = inputTable.getColumn(xColumnKey, 'number')
+  const yInputCol = inputTable.getColumn(yColumnKey, 'string')
+
   // break up into itervals while adding to table
   const xMinData = []
   const xMaxData = []
@@ -41,6 +44,10 @@ export const mosaicTransform = (
   prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
 
   for (let i = 1; i < inputTable.length; i++) {
+    if (xInputCol[i - 1] > xInputCol[i] && yInputCol[i] in valueStrings) {
+      tableLength = i
+      break
+    }
     // check if the value has changed or if you've reached the end of the table
     // if so, add a new value to all the lists
     if (inputTable.getColumn(yColumnKey, 'string')[i] != prevSeries) {
