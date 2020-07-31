@@ -44,6 +44,16 @@ export const mosaicTransform = (
   prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
 
   for (let i = 1; i < inputTable.length; i++) {
+    if (yInputCol[i] in valueStrings) {
+      const lastIndex = seriesData.lastIndexOf(yInputCol[i])
+      if (xMaxData[lastIndex]) {
+        console.log('xMaxData[lastIndex] does not exist')
+        if (xInputCol[i] < xMaxData[lastIndex]) {
+          console.log('entered break case')
+          break
+        }
+      }
+    }
     if (xInputCol[i - 1] > xInputCol[i] && yInputCol[i] in valueStrings) {
       tableLength = i
       break
