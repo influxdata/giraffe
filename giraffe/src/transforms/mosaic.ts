@@ -28,61 +28,51 @@ export const mosaicTransform = (
   const seriesData = []
   let prevValue = ''
   let tableLength = 0
-  let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
+  let prevSeries = yInputCol[0]
 
   // find all series in the data set
-  const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
+  const valueStrings = [yInputCol[0]]
 
   const valueType2 = fillColumnMap.columnKeys[0]
 
   // so the indices for the lists and the actual input table will be offset
   // first add a new entry in all the lists except xMaxData
   // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
-  xMinData.push(inputTable.getColumn(xColumnKey, 'number')[0])
+  xMinData.push(xInputCol[0])
   fillData.push(fillColumnMap.mappings[fillColumn[0]][valueType2])
-  seriesData.push(inputTable.getColumn(yColumnKey, 'string')[0])
+  seriesData.push(yInputCol[0])
   prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
 
   for (let i = 1; i < inputTable.length; i++) {
-    if (yInputCol[i] in valueStrings) {
-      const lastIndex = seriesData.lastIndexOf(yInputCol[i])
-      if (xMaxData[lastIndex]) {
-        console.log('xMaxData[lastIndex] does not exist')
-        if (xInputCol[i] < xMaxData[lastIndex]) {
-          console.log('entered break case')
-          break
-        }
-      }
-    }
-    if (xInputCol[i - 1] > xInputCol[i] && yInputCol[i] in valueStrings) {
-      tableLength = i
+    // if there is overlapping data, stop collecting data
+    if (
+      xInputCol[i - 1] > xInputCol[i] &&
+      valueStrings.includes(yInputCol[i])
+    ) {
       break
     }
     // check if the value has changed or if you've reached the end of the table
     // if so, add a new value to all the lists
-    if (inputTable.getColumn(yColumnKey, 'string')[i] != prevSeries) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i - 1])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
+    if (yInputCol[i] != prevSeries) {
+      xMaxData.push(xInputCol[i - 1])
+      xMinData.push(xInputCol[i])
       fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      prevSeries = inputTable.getColumn(yColumnKey, 'string')[i]
+      seriesData.push(yInputCol[i])
+      prevSeries = yInputCol[i]
       tableLength += 1
     } else if (fillColumnMap.mappings[fillColumn[i]][valueType2] != prevValue) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
+      xMaxData.push(xInputCol[i])
+      xMinData.push(xInputCol[i])
       fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
+      seriesData.push(yInputCol[i])
       tableLength += 1
     }
     // if a series isn't already in valueStrings, add it
-    if (!valueStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
-      valueStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
+    if (!valueStrings.includes(yInputCol[i])) valueStrings.push(yInputCol[i])
     prevValue = fillColumnMap.mappings[fillColumn[i]][valueType2]
   }
   //close the last interval
-  xMaxData.push(
-    inputTable.getColumn(xColumnKey, 'number')[inputTable.length - 1]
-  )
+  xMaxData.push(xInputCol[inputTable.length - 1])
   tableLength += 1
 
   /*
