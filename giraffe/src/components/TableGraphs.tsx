@@ -9,23 +9,13 @@ import {TableSidebar} from './TableSidebar'
 import {get} from '../utils/get'
 
 // Types
-import {
-  // TableViewProperties,
-  FluxTable,
-  // TimeZone,
-  // Theme,
-  TableLayerConfig,
-} from '../types'
+import {FluxTable, TableLayerConfig} from '../types'
 
-// import './TableGraphs.scss'
+// Styles
+import styles from './TableGraphs.scss'
 
 interface Props {
   config: TableLayerConfig
-  // tables: FluxTable[]
-  // properties: TableViewProperties
-  // timeZone: TimeZone
-  // theme: Theme
-  // setFieldOptions: Function
 }
 
 const getNameOfSelectedTable = (
@@ -80,7 +70,7 @@ export const TableGraphs: FunctionComponent<Props> = (props: Props) => {
   )
 
   return (
-    <div className="time-machine-tables">
+    <div className={styles['time-machine-tables']}>
       {showSidebar(tables) && (
         <TableSidebar
           data={tables}

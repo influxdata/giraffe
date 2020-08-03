@@ -1,5 +1,4 @@
-import * as React from 'react'
-import {useCallback, FunctionComponent, CSSProperties} from 'react'
+import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
 
 import {Axes} from './Axes'
 import {
@@ -11,11 +10,9 @@ import {
   ScatterLayerConfig,
   RectLayerConfig,
   MosaicLayerConfig,
-  TableLayerConfig,
   LayerTypes,
   SpecTypes,
 } from '../types'
-import {RawFluxDataTable} from './RawFluxDataTable'
 import {GaugeLayer} from './GaugeLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -29,8 +26,6 @@ import {useMousePos} from '../utils/useMousePos'
 import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
-import {FluxTablesTransform} from './FluxTablesTransform'
-import {TableGraphs} from './TableGraphs'
 import {newTableFromConfig} from '../utils/newTable'
 import {MosaicLayer} from './MosaicLayer'
 
@@ -81,8 +76,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const fluxResponse = config.fluxResponse ? config.fluxResponse : ''
-
   return (
     <div
       className="giraffe-plot"
@@ -110,35 +103,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
-            if (layerConfig.type === LayerTypes.RawFluxDataTable) {
-              return (
-                <RawFluxDataTable
-                  key={layerIndex}
-                  config={{
-                    ...layerConfig,
-                    width: config.width,
-                    height: config.height,
-                  }}
-                />
-              )
-            }
-
-            if (layerConfig.type === LayerTypes.Table) {
-              return (
-                <FluxTablesTransform key={layerIndex} files={[fluxResponse]}>
-                  {tables => (
-                    <TableGraphs
-                      // tables={tables}
-                      // properties={properties}
-                      // timeZone={timeZone}
-                      // theme={theme}
-                      config={{...layerConfig, tables} as TableLayerConfig}
-                    />
-                  )}
-                </FluxTablesTransform>
-              )
-            }
-
             if (layerConfig.type === LayerTypes.Gauge) {
               return (
                 <LatestValueTransform

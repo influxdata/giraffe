@@ -1,10 +1,11 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, text, select} from '@storybook/addon-knobs'
+import {withKnobs, select} from '@storybook/addon-knobs'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
 import {TableLayerConfig} from '../../giraffe/src/types'
+import {HoverTimeProvider} from '../../giraffe/src/components/hoverTime'
 import {DEFAULT_TABLE_COLORS} from '../../giraffe/src'
 
 import {tableCSV} from './data/tableGraph'
@@ -12,8 +13,6 @@ import {tableCSV} from './data/tableGraph'
 storiesOf('Table Graph', module)
   .addDecorator(withKnobs)
   .add('Table Graph', () => {
-    const csv = text('Paste CSV here:', '')
-    console.log('csv', csv)
     const timeFormat = select(
       'Time Format',
       {
@@ -39,7 +38,6 @@ storiesOf('Table Graph', module)
           type: 'table',
           properties: {
             type: 'table',
-            // queries: DashboardQuery[],
             colors: DEFAULT_TABLE_COLORS,
             shape: 'chronograf-v2',
             note: '',
@@ -97,16 +95,16 @@ storiesOf('Table Graph', module)
             },
           },
           timeZone: 'Local',
-          tableTheme: 'light',
-          setFieldOptions: () => {
-            console.log('setFieldOptions called!')
-          },
+          tableTheme: 'dark',
+          setFieldOptions: () => {},
         } as TableLayerConfig,
       ],
     }
     return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
+      <HoverTimeProvider>
+        <PlotContainer>
+          <Plot config={config} />
+        </PlotContainer>
+      </HoverTimeProvider>
     )
   })

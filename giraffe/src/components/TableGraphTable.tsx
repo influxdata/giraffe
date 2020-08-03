@@ -1,7 +1,6 @@
 // Libraries
 import React, {FunctionComponent, useState, useEffect, useRef} from 'react'
 import {timeFormatter} from '../utils/formatters'
-import classnames from 'classnames'
 
 // Components
 import {ColumnSizer, SizedColumnProps} from 'react-virtualized'
@@ -31,6 +30,9 @@ import {
   Theme,
   TransformTableDataReturnType,
 } from '../types'
+
+// Styles
+import styles from './TableGraphs.scss'
 
 export interface ColumnWidths {
   totalWidths: number
@@ -358,26 +360,21 @@ const TableGraphTableComponent: FunctionComponent<Props> = (props: Props) => {
   const rowCount = columnCount === 0 ? 0 : transformedData.length
   const fixedColumnCount = fixFirstColumn && columnCount > 1 ? 1 : 0
   const {scrollToColumn, scrollToRow} = getScrollToColRow(props, state)
-  const tableClassName = classnames('time-machine-table', {
-    'time-machine-table__light-mode': theme === 'light',
-  })
 
   const handleMultiGridMount = ref => {
     multiGridRef.current = ref
     multiGridRef.current.forceUpdate()
   }
 
-  const registerMultiGridChild = (registerChild: Function) =>
-    registerChild.bind(null, multiGridRef)
-
   const handleMouseLeaveCallback = () => handleMouseLeave(props, setState)
-  const getComputedColumnCountCallback = () => getComputedColumnCount(props)
   const cellRendererCallback = cellProps =>
     cellRenderer(state, setState, props, cellProps)
 
   return (
     <div
-      className={tableClassName}
+      className={`${styles['time-machine-table']} ${
+        theme === 'light' ? styles['time-machine-table__light-mode'] : ''
+      }`}
       ref={el => setGridContainer(el)}
       onMouseLeave={handleMouseLeaveCallback}
     >
@@ -386,7 +383,7 @@ const TableGraphTableComponent: FunctionComponent<Props> = (props: Props) => {
           {({width, height}) => {
             return (
               <ColumnSizer
-                columnCount={getComputedColumnCountCallback}
+                columnCount={getComputedColumnCount(props)}
                 columnMinWidth={COLUMN_MIN_WIDTH}
                 width={width}
               >
@@ -398,7 +395,7 @@ const TableGraphTableComponent: FunctionComponent<Props> = (props: Props) => {
                   return (
                     <MultiGrid
                       height={height}
-                      ref={registerMultiGridChild(registerChild)}
+                      ref={registerChild}
                       rowCount={rowCount}
                       width={adjustedWidth}
                       rowHeight={ROW_HEIGHT}

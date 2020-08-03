@@ -21,6 +21,18 @@ $table-light-graph--heading-bg: #eeeff2;
 $table-light-graph--heading-bg--active: #e7e8eb;
 $table-light-graph--border: #e7e8eb;
 
+@font-face {
+  font-family: 'icomoon';
+  src: url('../fonts/icomoon.eot') format('embedded-opentype');
+  src: url('../fonts/icomoon.eot') format('embedded-opentype'),
+    url('../fonts/icomoon.woff2') format('woff2'),
+    url('../fonts/icomoon.ttf') format('truetype'),
+    url('../fonts/icomoon.woff') format('woff'),
+    url('../fonts/icomoon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .time-machine-tables {
   display: flex;
   align-items: stretch;
@@ -42,10 +54,12 @@ $table-light-graph--border: #e7e8eb;
   padding: 10px;
   background: $table-graph--heading-bg--active;
   height: 50px;
+  box-sizing: border-box;
 }
 
 .time-machine-sidebar--scroll {
   height: calc(100% - 50px) !important;
+  box-sizing: border-box;
 }
 
 .time-machines-sidebar--filter.form-control.cf-input-xs {
@@ -141,6 +155,7 @@ $table-light-graph--border: #e7e8eb;
 */
 
 .table-graph-cell {
+  box-sizing: border-box;
   user-select: text !important;
   -o-user-select: text !important;
   -moz-user-select: text !important;

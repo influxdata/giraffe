@@ -1,4 +1,5 @@
 import CSS from 'csstype'
+import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 
 export type SizedConfig = Config & {width: number; height: number}
@@ -735,4 +736,12 @@ export interface SchemaValues {
 
 export interface Schema {
   [measurement: string]: SchemaValues
+}
+
+export interface StandardFunctionProps {
+  id?: string
+  style?: CSSProperties
+  testID?: string
+  children?: ReactNode
+  className?: string
 }

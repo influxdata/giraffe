@@ -2,6 +2,10 @@ $dapper-scrollbars--size: 6px;
 $g0-obsidian: #0f0e15;
 $g13-mist: #bec2cc;
 
+.cf-dapper-scrollbars {
+  box-sizing: border-box;
+}
+
 .cf-dapper-scrollbars--wrapper {
   margin-right: 0 !important;
   margin-bottom: 0 !important;

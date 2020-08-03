@@ -14,6 +14,9 @@ import {defaultTo} from '../utils/defaultTo'
 import {TableViewProperties, SortOptions, RenamableField} from '../types'
 import {CellRendererProps} from './TableGraphTable'
 
+// Styles
+import styles from './TableGraphs.scss'
+
 interface Props extends CellRendererProps {
   sortOptions: SortOptions
   data: string
@@ -110,7 +113,7 @@ const getClassName = (props: Props): string => {
     hoveredRowIndex,
     hoveredColumnIndex,
   } = props
-  return classnames('table-graph-cell', {
+  const classes = classnames('table-graph-cell', {
     'table-graph-cell__fixed-row': isFixedRow(rowIndex, columnIndex),
     'table-graph-cell__fixed-column': isFixedColumn(
       isFirstColumnFixed,
@@ -142,6 +145,14 @@ const getClassName = (props: Props): string => {
       isSorted(sortOptions, data) &&
       !isAscending(sortOptions),
   })
+    .split(' ')
+    .reduce((accum, current) => {
+      if (styles[current]) {
+        return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
+      }
+      return accum ? `${accum} ${current}` : `${current}`
+    }, '')
+  return classes
 }
 
 const getContents = (props: Props): string => {
@@ -194,7 +205,7 @@ const isFieldName = (isVerticalTimeAxis, rowIndex, columnIndex): boolean =>
 
 const isHighlightedRow = (parent, rowIndex, hoveredRowIndex): boolean => {
   return (
-    rowIndex === parent.props.scrollToRow ||
+    (parent.current && rowIndex === parent.current.props.scrollToRow) ||
     (rowIndex === hoveredRowIndex && hoveredRowIndex > 0)
   )
 }

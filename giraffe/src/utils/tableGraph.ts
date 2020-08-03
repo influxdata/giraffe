@@ -229,7 +229,7 @@ export const sortTableData = (
   const dataValues = Array.isArray(data) ? data.slice(1) : [[]]
   const sortedData = [
     dataHeader,
-    orderBy<string[][]>(
+    ...orderBy<string[][]>(
       dataValues,
       row => {
         const sortedValue = row[sortIndex]

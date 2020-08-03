@@ -2,14 +2,19 @@ import * as React from 'react'
 import {FunctionComponent} from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import {Config, SizedConfig} from '../types'
+import {Config, SizedConfig, LayerTypes} from '../types'
 import {SizedPlot} from './SizedPlot'
+import {SizedTable} from './SizedTable'
+
+import {get} from '../utils/get'
 
 interface Props {
   config: Config
 }
 
 export const Plot: FunctionComponent<Props> = ({config, children}) => {
+  const graphType = get(config, 'layers.0.type')
+
   if (config.width && config.height) {
     return <SizedPlot config={config as SizedConfig}>{children}</SizedPlot>
   }
@@ -21,6 +26,16 @@ export const Plot: FunctionComponent<Props> = ({config, children}) => {
           return null
         }
 
+        if (
+          graphType === LayerTypes.Table ||
+          graphType === LayerTypes.RawFluxDataTable
+        ) {
+          return (
+            <SizedTable config={{...config, width, height}}>
+              {children}
+            </SizedTable>
+          )
+        }
         return (
           <SizedPlot config={{...config, width, height}}>{children}</SizedPlot>
         )

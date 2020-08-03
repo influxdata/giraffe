@@ -1,7 +1,25 @@
+const path = require('path')
 const PrettierPlugin = require('prettier-webpack-plugin')
 
 module.exports = ({config}) => {
   config.module.rules.push(
+    {
+      test: /\.woff(2)?(\?[a-z0-9#=&.]+)$/,
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+    },
+    {
+      test: /\.(eot|png|eot|ttf|svg)(\?[a-z0-9#=&.]+)$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: 'fonts/[name].[ext]',
+            outputPath: 'fonts/',
+          },
+        },
+      ],
+      include: path.resolve(__dirname, '../'),
+    },
     {
       test: /\.scss$/,
       use: [

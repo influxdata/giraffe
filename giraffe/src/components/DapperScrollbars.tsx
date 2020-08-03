@@ -5,30 +5,16 @@ import React, {
   useState,
   useEffect,
   UIEvent,
-  CSSProperties,
-  ReactNode,
 } from 'react'
 import classnames from 'classnames'
 import Scrollbar from 'react-scrollbars-custom'
 import {ScrollState} from 'react-scrollbars-custom/dist/types/types'
 
+import {StandardFunctionProps} from '../types'
 import {InfluxColors} from '../constants/colorSchemes'
 import styles from './DapperScrollbars.scss'
 
 // Types
-export interface StandardFunctionProps {
-  /** Unique identifier for getting an element */
-  id?: string
-  /** Useful for setting common attributes like width or height */
-  style?: CSSProperties
-  /** ID for Integration Tests */
-  testID?: string
-  /** Children */
-  children?: ReactNode
-  /** Useful for overriding styles of the component and its constituent elements */
-  className?: string
-}
-
 type UIEventHandler = (event: UIEvent<HTMLDivElement>) => void
 type ScrollStateEventHandler = (
   scrollValues: ScrollState,
@@ -106,10 +92,21 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
     setScrollLeftPos(Number(scrollLeft))
   }, [scrollTop, scrollLeft])
 
-  const dapperScrollbarsClass = classnames('cf-dapper-scrollbars', {
+  let dapperScrollbarsClasses = classnames('cf-dapper-scrollbars', {
     'cf-dapper-scrollbars--autohide': autoHide,
-    [`${className}`]: className,
   })
+    .split(' ')
+    .reduce((accum, current) => {
+      if (styles[current]) {
+        return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
+      }
+      return accum ? `${accum} ${current}` : `${current}`
+    }, '')
+
+  dapperScrollbarsClasses =
+    typeof className === 'string'
+      ? `${dapperScrollbarsClasses} ${className}`
+      : dapperScrollbarsClasses
 
   const thumbXStyle = {
     background: `linear-gradient(to right,  ${thumbStartColor} 0%,${thumbStopColor} 100%)`,
@@ -147,7 +144,7 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
       translateContentSizesToHolder={autoSize}
       translateContentSizeYToHolder={autoSizeHeight}
       translateContentSizeXToHolder={autoSizeWidth}
-      className={styles[dapperScrollbarsClass]}
+      className={dapperScrollbarsClasses}
       style={style}
       noDefaultStyles={false}
       removeTracksWhenNotUsed={removeTracksWhenNotUsed}

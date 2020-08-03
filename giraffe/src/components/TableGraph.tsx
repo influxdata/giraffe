@@ -25,44 +25,53 @@ interface Props {
   theme: Theme
 }
 
-const handleSetSort = (
-  fieldName: string,
-  sortOptions: SortOptions,
-  setSortOptions: Function
-) => {
-  const newSortOptions = {...sortOptions}
-  if (fieldName === sortOptions.field) {
-    newSortOptions.direction =
-      sortOptions.direction === ASCENDING ? DESCENDING : ASCENDING
-  } else {
-    newSortOptions.field = fieldName
-    newSortOptions.direction = DEFAULT_SORT_DIRECTION
-  }
-  setSortOptions(newSortOptions)
+interface State {
+  sortOptions: SortOptions
+}
+
+const handleSetSort = (fieldName: string, setState: Function) => {
+  setState(({sortOptions}) => {
+    const newSortOptions = {...sortOptions}
+    if (fieldName === sortOptions.field) {
+      if (sortOptions.direction === DESCENDING) {
+        newSortOptions.field = ''
+        newSortOptions.direction = DEFAULT_SORT_DIRECTION
+      } else {
+        newSortOptions.direction = DESCENDING
+      }
+    } else {
+      newSortOptions.field = fieldName
+      newSortOptions.direction = DEFAULT_SORT_DIRECTION
+    }
+    return {sortOptions: newSortOptions}
+  })
 }
 
 export const TableGraph: FunctionComponent<Props> = (props: Props) => {
   const {table, properties, timeZone, theme} = props
 
-  const [sortOptions, setSortOptions] = useState<SortOptions>({
-    field: get(properties, 'tableOptions.sortBy.internalName', null),
-    direction: ASCENDING,
+  const [state, setState] = useState<State>({
+    sortOptions: {
+      field: get(properties, 'tableOptions.sortBy.internalName', null),
+      direction: ASCENDING,
+    },
   })
 
+  const onSortCallback = (fieldName: string) => {
+    handleSetSort(fieldName, setState)
+  }
   return (
     <TableGraphTransform
       data={table.data}
       properties={properties}
       dataTypes={table.dataTypes}
-      sortOptions={sortOptions}
+      sortOptions={state.sortOptions}
     >
       {transformedDataBundle => (
         <TableGraphTable
           properties={properties}
           dataTypes={table.dataTypes}
-          onSort={(fieldName: string) =>
-            handleSetSort(fieldName, sortOptions, setSortOptions)
-          }
+          onSort={onSortCallback}
           transformedDataBundle={transformedDataBundle}
           timeZone={timeZone}
           theme={theme}

@@ -1,5 +1,5 @@
 // Libraries
-import {useMemo, FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import memoizeOne from 'memoize-one'
 
 // Utils
@@ -51,18 +51,13 @@ export const TableGraphTransform: FunctionComponent<Props> = (props: Props) => {
       dataType: dataTypes[opts.internalName],
     }))
 
-  const memoizedTableTransformValue = useMemo(
-    () =>
-      memoizedTableTransform(
-        data,
-        sortOptions,
-        fo,
-        tableOptions,
-        timeFormat,
-        decimalPlaces
-      ),
-    [data, sortOptions, fo, tableOptions, timeFormat, decimalPlaces]
+  const transformedDataBundle = memoizedTableTransform(
+    data,
+    sortOptions,
+    fo,
+    tableOptions,
+    timeFormat,
+    decimalPlaces
   )
-  const transformedDataBundle = memoizedTableTransformValue
   return props.children(transformedDataBundle)
 }
