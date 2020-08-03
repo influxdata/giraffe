@@ -38,6 +38,10 @@ export const mosaicTransform = (
   const data_map = {}
   // {'cpu0': ['eenie', [], [], [], []]} prevValue, xMin, xMax, values, series
   for (let i = 0; i < inputTable.length; i++) {
+    if (xInputCol[i - 1] > xInputCol[i] && data_map[yInputCol[i]]) {
+      console.log('entered if case')
+      break
+    }
     if (yInputCol[i] in data_map) {
       if (
         fillColumnMap.mappings[fillColumn[i]][valueType2] !=
