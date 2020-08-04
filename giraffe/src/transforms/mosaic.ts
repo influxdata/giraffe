@@ -19,65 +19,74 @@ export const mosaicTransform = (
     inputTable,
     fillColKeys
   )
+  const valueKey = fillColumnMap.columnKeys[0]
 
-  // break up into itervals while adding to table
+  let tableLength = 0
+  /*
+    This is the structure used to create and update the data map below:
+
+    dataMap[series] = [
+      prevValue: string,
+      xMin: NumericColumnData,
+      xMax: NumericColumnData,
+      values: NumericColumnData,
+      series: string[]
+    ]
+  */
+  const dataMap = {}
+
+  for (let i = 0; i < inputTable.length; i++) {
+    const isOverlappingTimestamp =
+      xInputCol[i - 1] > xInputCol[i] && dataMap[yInputCol[i]]
+    if (isOverlappingTimestamp) {
+      break
+    }
+    const seriesExistsInDataMap = yInputCol[i] in dataMap
+    if (!seriesExistsInDataMap) {
+      //create series entry in dataMap
+      dataMap[yInputCol[i]] = [
+        fillColumnMap.mappings[fillColumn[i]][valueKey],
+        [xInputCol[i]],
+        [],
+        [fillColumnMap.mappings[fillColumn[i]][valueKey]],
+        [],
+      ]
+      continue
+    }
+    const valueIntervalEnds =
+      fillColumnMap.mappings[fillColumn[i]][valueKey] !=
+      dataMap[yInputCol[i]][0]
+    if (valueIntervalEnds) {
+      //update series entry in dataMap
+      dataMap[yInputCol[i]][0] = fillColumnMap.mappings[fillColumn[i]][valueKey]
+      dataMap[yInputCol[i]][1].push(xInputCol[i])
+      dataMap[yInputCol[i]][2].push(xInputCol[i])
+      dataMap[yInputCol[i]][3].push(
+        fillColumnMap.mappings[fillColumn[i]][valueKey]
+      )
+      dataMap[yInputCol[i]][4].push(yInputCol[i])
+
+      tableLength += 1
+    }
+  }
+
   let xMinData = []
   let xMaxData = []
   let fillData = []
   let seriesData = []
-  let tableLength = 0
-
-  // find all series in the data set
   let valueStrings = []
 
-  const valueType2 = fillColumnMap.columnKeys[0]
-
-  // so the indices for the lists and the actual input table will be offset
-  // first add a new entry in all the lists except xMaxData
-  // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
-  const data_map = {}
-  // {'cpu0': ['eenie', [], [], [], []]} prevValue, xMin, xMax, values, series
-  for (let i = 0; i < inputTable.length; i++) {
-    if (xInputCol[i - 1] > xInputCol[i] && data_map[yInputCol[i]]) {
-      break
-    }
-    if (yInputCol[i] in data_map) {
-      if (
-        fillColumnMap.mappings[fillColumn[i]][valueType2] !=
-        data_map[yInputCol[i]][0]
-      ) {
-        data_map[yInputCol[i]][0] =
-          fillColumnMap.mappings[fillColumn[i]][valueType2] // prev Value
-        data_map[yInputCol[i]][1].push(xInputCol[i]) // xMin
-        data_map[yInputCol[i]][2].push(xInputCol[i]) // XMax
-        data_map[yInputCol[i]][3].push(
-          fillColumnMap.mappings[fillColumn[i]][valueType2]
-        ) // value
-        data_map[yInputCol[i]][4].push(yInputCol[i]) //series
-        tableLength += 1
-      }
-    } else {
-      data_map[yInputCol[i]] = []
-      data_map[yInputCol[i]].push(
-        fillColumnMap.mappings[fillColumn[i]][valueType2]
-      ) // prev Value
-      data_map[yInputCol[i]].push([xInputCol[i]]) //xMin
-      data_map[yInputCol[i]].push([]) //xMax
-      data_map[yInputCol[i]].push([
-        fillColumnMap.mappings[fillColumn[i]][valueType2],
-      ]) //value
-      data_map[yInputCol[i]].push([]) //series
-    }
-  }
-  //close the last interval
-  for (const key in data_map) {
-    data_map[key][2].push(xInputCol[inputTable.length - 1])
-    data_map[key][4].push(key) //series
-    xMinData = xMinData.concat(data_map[key][1])
-    xMaxData = xMaxData.concat(data_map[key][2])
-    fillData = fillData.concat(data_map[key][3])
-    seriesData = seriesData.concat(data_map[key][4])
+  //the last piece of data is a special case of updating a series entry in dataMap (see above)
+  for (const key in dataMap) {
+    dataMap[key][2].push(xInputCol[inputTable.length - 1])
+    dataMap[key][4].push(key)
     tableLength += 1
+
+    //combine all series into the proper shape
+    xMinData = xMinData.concat(dataMap[key][1])
+    xMaxData = xMaxData.concat(dataMap[key][2])
+    fillData = fillData.concat(dataMap[key][3])
+    seriesData = seriesData.concat(dataMap[key][4])
     valueStrings = valueStrings.concat(key)
   }
   /*
@@ -90,7 +99,7 @@ export const mosaicTransform = (
     .addColumn(X_MIN, 'number', xMinData) //startTimes
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
     .addColumn(FILL, 'string', fillData) //values
-    .addColumn(SERIES, 'string', seriesData) //cpus
+    .addColumn(SERIES, 'string', seriesData) //cpus (see storybook)
 
   const resolvedXDomain = resolveDomain(xInputCol, xDomain)
   const resolvedYDomain = [0, valueStrings.length]
