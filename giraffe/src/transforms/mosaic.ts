@@ -13,61 +13,82 @@ export const mosaicTransform = (
   fillColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
+  const xInputCol = inputTable.getColumn(xColumnKey, 'number')
+  const yInputCol = inputTable.getColumn(yColumnKey, 'string')
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
   )
+  const valueKey = fillColumnMap.columnKeys[0]
 
-  // break up into itervals while adding to table
-  const xMinData = []
-  const xMaxData = []
-  const fillData = []
-  const seriesData = []
-  let prevValue = ''
   let tableLength = 0
-  let prevSeries = inputTable.getColumn(yColumnKey, 'string')[0]
+  /*
+    This is the structure used to create and update the data map below:
 
-  // find all series in the data set
-  const valueStrings = [inputTable.getColumn(yColumnKey, 'string')[0]]
+    dataMap[series] = [
+      prevValue: string,
+      xMin: NumericColumnData,
+      xMax: NumericColumnData,
+      values: NumericColumnData,
+      series: string[]
+    ]
+  */
+  const dataMap = {}
 
-  const valueType2 = fillColumnMap.columnKeys[0]
+  for (let i = 0; i < inputTable.length; i++) {
+    const isOverlappingTimestamp =
+      xInputCol[i - 1] > xInputCol[i] && dataMap[yInputCol[i]]
+    if (isOverlappingTimestamp) {
+      break
+    }
+    const seriesExistsInDataMap = yInputCol[i] in dataMap
+    if (!seriesExistsInDataMap) {
+      //create series entry in dataMap
+      dataMap[yInputCol[i]] = [
+        fillColumnMap.mappings[fillColumn[i]][valueKey],
+        [xInputCol[i]],
+        [],
+        [fillColumnMap.mappings[fillColumn[i]][valueKey]],
+        [],
+      ]
+      continue
+    }
+    const valueIntervalEnds =
+      fillColumnMap.mappings[fillColumn[i]][valueKey] !=
+      dataMap[yInputCol[i]][0]
+    if (valueIntervalEnds) {
+      //update series entry in dataMap
+      dataMap[yInputCol[i]][0] = fillColumnMap.mappings[fillColumn[i]][valueKey]
+      dataMap[yInputCol[i]][1].push(xInputCol[i])
+      dataMap[yInputCol[i]][2].push(xInputCol[i])
+      dataMap[yInputCol[i]][3].push(
+        fillColumnMap.mappings[fillColumn[i]][valueKey]
+      )
+      dataMap[yInputCol[i]][4].push(yInputCol[i])
 
-  // so the indices for the lists and the actual input table will be offset
-  // first add a new entry in all the lists except xMaxData
-  // when a new value is encountered, we can add the time stamp to xMaxData and update the other lists
-  xMinData.push(inputTable.getColumn(xColumnKey, 'number')[0])
-  fillData.push(fillColumnMap.mappings[fillColumn[0]][valueType2])
-  seriesData.push(inputTable.getColumn(yColumnKey, 'string')[0])
-  prevValue = fillColumnMap.mappings[fillColumn[0]][valueType2]
-
-  for (let i = 1; i < inputTable.length; i++) {
-    // check if the value has changed or if you've reached the end of the table
-    // if so, add a new value to all the lists
-    if (inputTable.getColumn(yColumnKey, 'string')[i] != prevSeries) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i - 1])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
-      prevSeries = inputTable.getColumn(yColumnKey, 'string')[i]
-      tableLength += 1
-    } else if (fillColumnMap.mappings[fillColumn[i]][valueType2] != prevValue) {
-      xMaxData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      xMinData.push(inputTable.getColumn(xColumnKey, 'number')[i])
-      fillData.push(fillColumnMap.mappings[fillColumn[i]][valueType2])
-      seriesData.push(inputTable.getColumn(yColumnKey, 'string')[i])
       tableLength += 1
     }
-    // if a series isn't already in valueStrings, add it
-    if (!valueStrings.includes(inputTable.getColumn(yColumnKey, 'string')[i]))
-      valueStrings.push(inputTable.getColumn(yColumnKey, 'string')[i])
-    prevValue = fillColumnMap.mappings[fillColumn[i]][valueType2]
   }
-  //close the last interval
-  xMaxData.push(
-    inputTable.getColumn(xColumnKey, 'number')[inputTable.length - 1]
-  )
-  tableLength += 1
 
+  let xMinData = []
+  let xMaxData = []
+  let fillData = []
+  let seriesData = []
+  let valueStrings = []
+
+  //the last piece of data is a special case of updating a series entry in dataMap (see above)
+  for (const key in dataMap) {
+    dataMap[key][2].push(xInputCol[inputTable.length - 1])
+    dataMap[key][4].push(key)
+    tableLength += 1
+
+    //combine all series into the proper shape
+    xMinData = xMinData.concat(dataMap[key][1])
+    xMaxData = xMaxData.concat(dataMap[key][2])
+    fillData = fillData.concat(dataMap[key][3])
+    seriesData = seriesData.concat(dataMap[key][4])
+    valueStrings = valueStrings.concat(key)
+  }
   /*
     xMin (start time) | xMax (end time) | Value Category | host | cpu
     -------------------------------------------------------------------
@@ -78,16 +99,11 @@ export const mosaicTransform = (
     .addColumn(X_MIN, 'number', xMinData) //startTimes
     .addColumn(X_MAX, 'number', xMaxData) //endTimes
     .addColumn(FILL, 'string', fillData) //values
-    .addColumn(SERIES, 'string', seriesData) //cpus
+    .addColumn(SERIES, 'string', seriesData) //cpus (see storybook)
 
-  const resolvedXDomain = resolveDomain(
-    inputTable.getColumn(xColumnKey, 'number'),
-    xDomain
-  )
-
+  const resolvedXDomain = resolveDomain(xInputCol, xDomain)
   const resolvedYDomain = [0, valueStrings.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
-
   return {
     type: 'mosaic',
     inputTable,
