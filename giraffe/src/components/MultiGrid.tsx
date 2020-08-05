@@ -476,7 +476,10 @@ export interface MultiGridInputHandles {
   forceUpdate(): void
 }
 
-const useForceUpdate = () => useState()[1]
+const useForceUpdate = () => {
+  const setValue = useState<number>(0)[1]
+  return () => setValue(value => value + 1)
+}
 /**
  * Renders 1, 2, or 4 Grids depending on configuration.
  * A main (body) Grid will always be rendered.
