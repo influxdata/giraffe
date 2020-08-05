@@ -380,15 +380,72 @@ Giraffe comes with utility functions.
 
   - **strokePadding**: _number. Optional._ The space around all four sides of each heat bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
 
-- **RawFluxDataTableLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **RawFluxDataTableLayerConfig**: _Object_. Maximum one per `<Plot>`. Uses its own property called **files** as the data to be rendered. Ignores both **tables** and **fluxResponse** from `config`. Properties are:
 
   - **type**: _'flux data table'. **Required**._ Specifies that this LayerConfig is a flux data table.
 
-  - **files**: _array[string, ...]. **Required**._ An array of strings of comma separated values (CSV). Each CSV string can be taken from a Flux response or manually created. At least one string is required. The string cannot not be an empty string nor a string of only empty space(s).
+  - **files**: _array[string, ...]. **Required. The data to be rendered**._ An array of strings of comma separated values (CSV). Each CSV string can be taken from a Flux response or manually created. At least one string is required. The string cannot not be an empty string nor a string of only empty space(s).
 
   - **disableVerticalScrolling**: _boolean. **Optional**. Recommendation: do not include. Defaults to false when excluded._ Disables the vertical scrollbar for the rendered table.
 
   - **parseObjects**: _boolean. **Optional**. Defaults to false when excluded._ Enables the parsing of JSON objects in the CSV of **files** so that JSON objects are correctly interpreted when there are commas in the object, and prevents all data from being combined into a single column.
+
+- **TableGraphLayerConfig**: _Object_. Maximum one per `<Plot>`. Requires the use of a **`<HoverTimeProvider>`** component around the `<Plot>` and its parent. For example, here is how to properly wrap `<Plot>` to use render a table:
+
+  <pre>
+  <b>&#60;HoverTimeProvider&#62;</b>
+    &#60;div
+      style={{
+        width: "calc(70vw - 20px)",
+        height: "calc(70vh - 20px)",
+        margin: "40px",
+      }}
+    &#62;
+      &#60;Plot config={config} /&#62;
+    &#60;/div&#62;
+  <b>&#60;/HoverTimeProvider&#62;</b>
+  </pre>
+
+TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data to be rendered. Properties are:
+
+- **type**: _'table'. **Required**._ Specifies that this LayerConfig is a table graph.
+
+- **timeZone**: _string. **Required**._ A string representing the desired time zone. Must be an [_official IANA time zone_](https://stackoverflow.com/questions/38399465/how-to-get-list-of-all-timezones-in-javascript).
+
+- **tableTheme**: _string. **Optional**. Defaults to 'dark' when excluded._ The visual theme for the table graph. Currently, the choices are 'dark' and 'light'.
+
+- **properties**: _Object. **Required**._ An object specifying additional options for the table graph. The properties are:
+
+  - **colors**: _array[string, ...]. **Required**._ An array of _CSS color values_ used as a gradient to give rows in the table different colors based on their value. Low values will use colors in the lower indexes while higher values will use colors in the higher indexes.
+
+  - **tableOptions**: _Object. **Required**._ Customizations for the table.
+
+    - **fixFirstColumn**: _boolean. Optional. Defaults to `true` when excluded._ Determines whether the first column in the table should be hidden.
+
+    - **verticalTimeAxis**: _boolean. Optional. Defaults to `true` when excluded._ `true` sets the columns for time values to display vertically with column headings at the top in a horizontal row. `false` will display columns horizontally as rows, with column headings at the left in a vertical column. Warning: when using `false`, any time-like values may cause the entire table to display incorrectly if they are not set to `visible: false` in `fieldOptions`.
+
+    - **sortBy**: _Object. Optional._ An object that represents a column in the table that will be sorted in ascending order upon first rendering of the table. User actions may change the sort order and/or the selected column. The object contains the following properties:
+
+      - **internalName**: _string. **Required**. Read only._ The name of the column as referenced internally by Giraffe code.
+
+      - **displayName**: _string. **Required**._ The name of the column to display.
+
+      - **visible**: _boolean. **Required**._ Determine whether to show the column in the table or not. **true** has no effect, as by default all columns are shown even when not represented in **fieldOptions**. **false** will hide the column.
+
+  - **fieldOptions**: _array[Object, ...]. **Required**._ An array of objects that represent the columns in the table. By default all columns are shown with the internal name unless modified in this array. Each object contains the following properties:
+
+    - **internalName**: _string. **Required**. Read only._ The name of the column as referenced internally by Giraffe code.
+
+    - **displayName**: _string. **Required**._ The name of the column to display.
+
+    - **visible**: _boolean. **Required**._ Determine whether to show the column in the table or not. **true** has no effect, as by default all columns are shown even when not represented in **fieldOptions**. **false** will hide the column.
+
+  - **timeFormat**: _string. **Required**._ A string representing the date and time format for time values. The underlying formatter is [_intl-dateformat_](https://www.npmjs.com/package/intl-dateformat) which supports a subset of the ISO 8601 formats.
+
+  - **decimalPlaces**: _Object. **Required**._
+
+    - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
+    - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
 
 - **GaugeLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
 

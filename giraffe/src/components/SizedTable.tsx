@@ -1,10 +1,10 @@
 import React, {FunctionComponent, CSSProperties} from 'react'
 
-import {SizedConfig, TableLayerConfig, LayerTypes} from '../types'
+import {SizedConfig, TableGraphLayerConfig, LayerTypes} from '../types'
 
 import {RawFluxDataTable} from './RawFluxDataTable'
 import {FluxTablesTransform} from './FluxTablesTransform'
-import {TableGraphs} from './TableGraphs'
+import {TableGraphLayer} from './TableGraphLayer'
 
 import {usePlotEnv} from '../utils/usePlotEnv'
 
@@ -71,8 +71,10 @@ export const SizedTable: FunctionComponent<Props> = ({
                 return (
                   <FluxTablesTransform key={layerIndex} files={[fluxResponse]}>
                     {tables => (
-                      <TableGraphs
-                        config={{...layerConfig, tables} as TableLayerConfig}
+                      <TableGraphLayer
+                        config={
+                          {...layerConfig, tables} as TableGraphLayerConfig
+                        }
                       />
                     )}
                   </FluxTablesTransform>

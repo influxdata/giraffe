@@ -142,77 +142,18 @@ const handleInvalidatedGridSize = (
   }
 }
 
-const getTopGridHeight = (
-  state: State,
-  setState: Function,
-  props: PropsMultiGrid
-) => {
-  const {fixedRowCount, rowHeight} = props
-  const newState: Partial<State> = {}
-
-  if (state.topGridHeight == null) {
-    if (typeof rowHeight === 'function') {
-      let topGridHeight = 0
-
-      for (let index = 0; index < fixedRowCount; index++) {
-        topGridHeight += rowHeight({index})
-      }
-
-      newState.topGridHeight = topGridHeight
-    } else {
-      newState.topGridHeight = rowHeight * fixedRowCount
-    }
-    setState((prevState: State) => ({...prevState, ...newState}))
-  }
-
-  return state.topGridHeight
-}
-
-const getBottomGridHeight = (
-  state: State,
-  setState: Function,
-  props: PropsMultiGrid
-) => {
+const getBottomGridHeight = (state: State, props: PropsMultiGrid) => {
   const {height} = props
 
-  const topGridHeight = getTopGridHeight(state, setState, props)
+  const topGridHeight = state.topGridHeight
 
   return height - topGridHeight
 }
 
-const getLeftGridWidth = (
-  state: State,
-  setState: Function,
-  props: PropsMultiGrid
-) => {
-  const {fixedColumnCount, columnWidth} = props
-  const newState: Partial<State> = {}
-
-  if (state.leftGridWidth == null) {
-    if (typeof columnWidth === 'function') {
-      let leftGridWidth = 0
-
-      for (let index = 0; index < fixedColumnCount; index++) {
-        leftGridWidth += columnWidth({index})
-      }
-
-      newState.leftGridWidth = leftGridWidth
-    } else {
-      newState.leftGridWidth = columnWidth * fixedColumnCount
-    }
-    setState((prevState: State) => ({...prevState, ...newState}))
-  }
-  return state.leftGridWidth
-}
-
-const getRightGridWidth = (
-  state: State,
-  setState: Function,
-  props: PropsMultiGrid
-) => {
+const getRightGridWidth = (state: State, props: PropsMultiGrid) => {
   const {width} = props
 
-  const leftGridWidth = getLeftGridWidth(state, setState, props)
+  const leftGridWidth = state.leftGridWidth
   const result = width - leftGridWidth
 
   return result
@@ -337,7 +278,6 @@ const onScroll = (setState: Function, props: PropsMultiGrid, scrollInfo) => {
 
 const renderTopLeftGrid = (
   state: State,
-  setState: Function,
   props: PropsMultiGrid,
   topLeftGridRef
 ) => {
@@ -347,17 +287,22 @@ const renderTopLeftGrid = (
     return null
   }
 
+  const style = {
+    ...state.topLeftGridStyle,
+    ...props.styleTopLeftGrid,
+  }
+
   return (
     <Grid
       {...props}
       className={styles[props.classNameTopLeftGrid]}
       columnCount={fixedColumnCount}
-      height={getTopGridHeight(state, setState, props)}
+      height={state.topGridHeight}
       ref={topLeftGridRef}
       rowCount={fixedRowCount}
-      style={state.topLeftGridStyle}
+      style={{...style}}
       tabIndex={null}
-      width={getLeftGridWidth(state, setState, props)}
+      width={state.leftGridWidth}
     />
   )
 }
@@ -380,8 +325,8 @@ const renderTopRightGrid = (
     return null
   }
 
-  const width = getRightGridWidth(state, setState, props)
-  const height = getTopGridHeight(state, setState, props)
+  const width = getRightGridWidth(state, props)
+  const height = state.topGridHeight
 
   const cellRendererTopRightGridCallback = args =>
     cellRendererTopRightGrid.call(null, props, topRightGridRef, args)
@@ -390,6 +335,11 @@ const renderTopRightGrid = (
   const onScrollLeft = scrollInfo =>
     onScroll.call(null, setState, props, scrollInfo)
 
+  const style = {
+    ...state.topRightGridStyle,
+    left: state.leftGridWidth,
+    ...props.styleTopRightGrid,
+  }
   return (
     <Grid
       {...props}
@@ -403,7 +353,7 @@ const renderTopRightGrid = (
       ref={topRightGridRef}
       rowCount={fixedRowCount}
       scrollLeft={scrollLeft}
-      style={state.topRightGridStyle}
+      style={{...style}}
       tabIndex={null}
       width={width}
     />
@@ -422,8 +372,8 @@ const renderBottomLeftGrid = (
     return null
   }
 
-  const width = getLeftGridWidth(state, setState, props)
-  const height = getBottomGridHeight(state, setState, props)
+  const width = state.leftGridWidth
+  const height = getBottomGridHeight(state, props)
 
   const cellRendererBottomLeftGridCallback = args =>
     cellRendererBottomLeftGrid.call(null, props, bottomLeftGridRef, args)
@@ -432,6 +382,10 @@ const renderBottomLeftGrid = (
   const rowHeightBottomGridCallback = args =>
     rowHeightBottomGrid.call(null, state, props, args)
 
+  const style = {
+    ...state.bottomLeftGridStyle,
+    ...props.styleBottomLeftGrid,
+  }
   return (
     <Grid
       {...props}
@@ -444,9 +398,7 @@ const renderBottomLeftGrid = (
       ref={bottomLeftGridRef}
       rowCount={Math.max(0, rowCount - fixedRowCount)}
       rowHeight={rowHeightBottomGridCallback}
-      style={{
-        ...state.bottomLeftGridStyle,
-      }}
+      style={{...style}}
       tabIndex={null}
       width={width}
     />
@@ -468,8 +420,8 @@ const renderBottomRightGrid = (
     scrollToRow,
   } = props
 
-  const width = getRightGridWidth(state, setState, props)
-  const height = getBottomGridHeight(state, setState, props)
+  const width = getRightGridWidth(state, props)
+  const height = getBottomGridHeight(state, props)
 
   const cellRendererBottomRightGridCallback = args =>
     cellRendererBottomRightGrid.call(null, props, bottomRightGridRef, args)
@@ -480,6 +432,11 @@ const renderBottomRightGrid = (
   const rowHeightBottomGridCallback = args =>
     rowHeightBottomGrid.call(null, state, props, args)
 
+  const style = {
+    ...state.bottomRightGridStyle,
+    left: state.leftGridWidth,
+    ...props.styleBottomRightGrid,
+  }
   return (
     <DapperScrollbars
       style={{...state.bottomRightGridStyle, width, height}}
@@ -503,7 +460,7 @@ const renderBottomRightGrid = (
         scrollToColumn={scrollToColumn - fixedColumnCount}
         scrollToRow={scrollToRow - fixedRowCount}
         style={{
-          ...state.bottomRightGridStyle,
+          ...style,
           overflowX: false,
           overflowY: true,
           left: 0,
@@ -604,8 +561,15 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
       lastRenderedFixedColumnCount: 0,
       lastRenderedFixedRowCount: 0,
       lastRenderedRowHeight: 0,
-      bottomRightGridStyle: null,
-      topRightGridStyle: null,
+      bottomRightGridStyle: {
+        position: 'absolute',
+      },
+      topRightGridStyle: {
+        overflowX: 'hidden',
+        overflowY: 'hidden',
+        position: 'absolute',
+        top: 0,
+      },
       lastRenderedStyle: null,
       lastRenderedHeight: 0,
       lastRenderedWidth: 0,
@@ -616,8 +580,19 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
       lastRenderedStyleBottomRightGrid: null,
       lastRenderedStyleTopLeftGrid: null,
       lastRenderedStyleTopRightGrid: null,
-      bottomLeftGridStyle: null,
-      topLeftGridStyle: null,
+      bottomLeftGridStyle: {
+        left: 0,
+        overflowY: 'hidden',
+        overflowX: 'hidden',
+        position: 'absolute',
+      },
+      topLeftGridStyle: {
+        left: 0,
+        overflowX: 'hidden',
+        overflowY: 'hidden',
+        position: 'absolute',
+        top: 0,
+      },
     })
 
     useImperativeHandle(ref, () => {
@@ -651,8 +626,6 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
     const bottomLeftGridRef = useRef(null)
     const bottomRightGridRef = useRef(null)
 
-    // prepareForRender(state, setState, props)
-
     // Don't render any of our Grids if there are no cells.
     // This mirrors what Grid does,
     // And prevents us from recording inaccurage measurements when used with CellMeasurer.
@@ -667,7 +640,6 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
         <div style={state.containerTopStyle}>
           {renderTopLeftGrid(
             state,
-            setState,
             restWithDefault as PropsMultiGrid,
             topLeftGridRef
           )}

@@ -153,7 +153,7 @@ export type LayerConfig =
   | BandLayerConfig
   | ScatterLayerConfig
   | MosaicLayerConfig
-  | TableLayerConfig
+  | TableGraphLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -320,13 +320,12 @@ export interface ScatterLayerConfig {
   symbol?: string[]
 }
 
-export interface TableLayerConfig {
+export interface TableGraphLayerConfig {
   type: 'table' // do not refactor or restrict to LayerTypes.Table
   tables?: FluxTable[]
-  properties: TableViewProperties
   timeZone: TimeZone
-  tableTheme: Theme
-  setFieldOptions: Function
+  tableTheme?: Theme
+  properties: TableViewProperties
 }
 
 export interface FluxTable {
@@ -383,17 +382,17 @@ export * from './timeZones'
 export type Theme = 'light' | 'dark'
 
 export interface TableViewProperties {
-  type: 'table'
+  type?: string
+  shape?: string
+  note?: string
+  showNoteWhenEmpty?: boolean
   queries?: DashboardQuery[]
   colors: Color[]
-  shape: 'chronograf-v2'
-  note: string
-  showNoteWhenEmpty: boolean
   tableOptions: {
-    verticalTimeAxis?: boolean
-    sortBy?: RenamableField
     wrapping?: 'truncate' | 'wrap' | 'single-line'
     fixFirstColumn?: boolean
+    verticalTimeAxis?: boolean
+    sortBy?: RenamableField
   }
   fieldOptions: RenamableField[]
   timeFormat: string

@@ -9,13 +9,13 @@ import {TableSidebar} from './TableSidebar'
 import {get} from '../utils/get'
 
 // Types
-import {FluxTable, TableLayerConfig} from '../types'
+import {FluxTable, TableGraphLayerConfig} from '../types'
 
 // Styles
 import styles from './TableGraphs.scss'
 
 interface Props {
-  config: TableLayerConfig
+  config: TableGraphLayerConfig
 }
 
 const getNameOfSelectedTable = (
@@ -60,9 +60,9 @@ const getSelectedTable = (
   )
 }
 
-export const TableGraphs: FunctionComponent<Props> = (props: Props) => {
+export const TableGraphLayer: FunctionComponent<Props> = (props: Props) => {
   const {
-    config: {tables, properties, timeZone, tableTheme},
+    config: {tables, properties, timeZone, tableTheme = 'dark'},
   } = props
 
   const [selectedTableName, setSelectedTableName] = useState<string>(

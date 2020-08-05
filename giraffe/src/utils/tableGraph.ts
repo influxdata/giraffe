@@ -9,6 +9,7 @@ import {
   DEFAULT_TIME_FIELD,
   FORMAT_OPTIONS,
   DEFAULT_TIME_FORMAT,
+  DEFAULT_VERTICAL_TIME_AXIS,
 } from '../constants/tableGraph'
 
 import {
@@ -270,7 +271,7 @@ export const transformTableData = (
   timeFormat: string,
   decimalPlaces: DecimalPlaces
 ): TransformTableDataReturnType => {
-  const {verticalTimeAxis} = tableOptions
+  const {verticalTimeAxis = DEFAULT_VERTICAL_TIME_AXIS} = tableOptions
 
   const excludedData = excludeNoisyColumns(data)
 

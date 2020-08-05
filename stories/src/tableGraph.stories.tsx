@@ -1,10 +1,10 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, select} from '@storybook/addon-knobs'
+import {withKnobs, select, boolean} from '@storybook/addon-knobs'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
-import {TableLayerConfig} from '../../giraffe/src/types'
+import {TableGraphLayerConfig} from '../../giraffe/src/types'
 import {HoverTimeProvider} from '../../giraffe/src/components/hoverTime'
 import {DEFAULT_TABLE_COLORS} from '../../giraffe/src'
 
@@ -30,6 +30,8 @@ storiesOf('Table Graph', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
+    const theme = select('Theme', {dark: 'dark', light: 'light'}, 'dark')
+    const fixFirstColumn = boolean('Fix First Column', false)
     const config: Config = {
       fluxResponse: tableCSV,
       showAxes: false,
@@ -37,14 +39,10 @@ storiesOf('Table Graph', module)
         {
           type: 'table',
           properties: {
-            type: 'table',
             colors: DEFAULT_TABLE_COLORS,
-            shape: 'chronograf-v2',
-            note: '',
-            showNoteWhenEmpty: false,
             tableOptions: {
+              fixFirstColumn,
               verticalTimeAxis: true,
-              fixFirstColumn: false,
             },
             fieldOptions: [
               {
@@ -90,14 +88,13 @@ storiesOf('Table Graph', module)
             ],
             timeFormat,
             decimalPlaces: {
-              digits: 2,
+              digits: 3,
               isEnforced: true,
             },
           },
           timeZone: 'Local',
-          tableTheme: 'dark',
-          setFieldOptions: () => {},
-        } as TableLayerConfig,
+          tableTheme: theme,
+        } as TableGraphLayerConfig,
       ],
     }
     return (

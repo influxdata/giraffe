@@ -1,5 +1,6 @@
 // Components
 export {Plot} from './components/Plot'
+export {HoverTimeProvider} from './components/hoverTime'
 
 // Utils
 export {fromFlux, FromFluxResult} from './utils/fromFlux'
