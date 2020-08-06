@@ -18,6 +18,7 @@ import {
   PlotContainer,
   xKnob,
   yKnob,
+  yKnobString,
   xScaleKnob,
   yScaleKnob,
   fillKnob,
@@ -417,7 +418,7 @@ storiesOf('XY Plot', module)
     const table = tableKnob()
     const colors = colorSchemeKnob()
     const x = xKnob(table)
-    const y = yKnob(table, 'cpu')
+    const y = yKnobString(table, 'cpu')
     const fill = ['_value']
     const showAxes = showAxesKnob()
     const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
