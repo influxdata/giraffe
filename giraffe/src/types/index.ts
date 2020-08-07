@@ -133,6 +133,7 @@ export enum LayerTypes {
   Heatmap = 'heatmap',
   Histogram = 'histogram',
   Line = 'line',
+  Band = 'band',
   Scatter = 'scatter',
   Mosaic = 'mosaic',
 }
@@ -145,6 +146,7 @@ export type LayerConfig =
   | HeatmapLayerConfig
   | HistogramLayerConfig
   | LineLayerConfig
+  | BandLayerConfig
   | ScatterLayerConfig
   | MosaicLayerConfig
 
@@ -286,6 +288,22 @@ export interface LineLayerConfig {
   shadeBelowOpacity?: number
 }
 
+export interface BandLayerConfig {
+  type: 'band' // do not refactor or restrict to LayerTypes.Line
+  x: string
+  y: string
+  fill: string[]
+  position?: LinePosition
+  hoverDimension?: LineHoverDimension | 'auto'
+  maxTooltipRows?: number
+  interpolation?: LineInterpolation
+  lineWidth?: number
+  lineOpacity?: number
+  colors?: string[]
+  shadeBelow?: boolean
+  shadeBelowOpacity?: number
+}
+
 export interface ScatterLayerConfig {
   type: 'scatter' // do not refactor or restrict to LayerTypes.Scatter
   x: string
@@ -336,12 +354,14 @@ export interface FluxTable {
 */
 export type LayerSpec =
   | LineLayerSpec
+  | BandLayerSpec
   | ScatterLayerSpec
   | RectLayerSpec
   | MosaicLayerSpec
 
 export enum SpecTypes {
   Line = 'line',
+  Band = 'band',
   Scatter = 'scatter',
   Rect = 'rect',
   Mosaic = 'mosaic',
@@ -366,6 +386,28 @@ export interface MosaicLayerSpec {
 
 export interface LineLayerSpec {
   type: 'line' // do not refactor or restrict to SpecTypes.Line
+  inputTable: Table
+  table: Table // has `FILL` column added
+  lineData: LineData
+  xDomain: number[]
+  yDomain: number[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  scales: {
+    fill: Scale<number, string>
+  }
+  columnGroupMaps: {
+    fill: ColumnGroupMap
+  }
+}
+
+export interface BandLayerSpec {
+  type: 'band' // do not refactor or restrict to SpecTypes.Line
+  bandFillColors: string[]
+  bandIndexMap: BandIndexMap
+  bandName: string
   inputTable: Table
   table: Table // has `FILL` column added
   lineData: LineData
@@ -549,3 +591,23 @@ export enum DomainLabel {
 }
 
 export type AxisTicks = Date[] | number[]
+
+export interface BandBorder {
+  xs: Array<number>
+  ys: Array<number>
+  fill: string
+}
+export interface Band {
+  lineName: string
+  min: BandBorder
+  max: BandBorder
+  xs: Array<number>
+  ys: Array<number>
+  fill: string
+}
+
+export interface BandIndexMap {
+  rowIndices: number[]
+  minIndices: number[]
+  maxIndices: number[]
+}

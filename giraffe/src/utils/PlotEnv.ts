@@ -7,6 +7,7 @@ import {MemoizedFunctionCache} from './MemoizedFunctionCache'
 import {timeFormatter} from './formatters'
 import {getScale} from './getScale'
 import {lineTransform} from '../transforms/line'
+import {bandTransform} from '../transforms/band'
 import {scatterTransform} from '../transforms/scatter'
 import {histogramTransform} from '../transforms/histogram'
 import {heatmapTransform} from '../transforms/heatmap'
@@ -246,6 +247,19 @@ export class PlotEnv {
     switch (layerConfig.type) {
       case LayerTypes.Line: {
         const transform = this.fns.get(memoizedTransformKey, lineTransform)
+
+        return transform(
+          table,
+          layerConfig.x,
+          layerConfig.y,
+          layerConfig.fill,
+          layerConfig.colors,
+          layerConfig.position
+        )
+      }
+
+      case LayerTypes.Band: {
+        const transform = this.fns.get(memoizedTransformKey, bandTransform)
 
         return transform(
           table,

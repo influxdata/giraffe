@@ -61,7 +61,7 @@ storiesOf('XY Plot', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fill = fillKnob(table, 'cpu')
+    const fill = fillKnob(table, ['cpu'])
     const position = select(
       'Line Position',
       {stacked: 'stacked', overlaid: 'overlaid'},
@@ -142,7 +142,7 @@ storiesOf('XY Plot', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fill = fillKnob(table, 'cpu')
+    const fill = fillKnob(table, ['cpu'])
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
@@ -243,7 +243,7 @@ storiesOf('XY Plot', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fill = fillKnob(table, 'cpu')
+    const fill = fillKnob(table, ['cpu'])
     const position = select(
       'Line Position',
       {stacked: 'stacked', overlaid: 'overlaid'},
@@ -326,8 +326,8 @@ storiesOf('XY Plot', module)
     const y = yKnob(table)
     const xScale = xScaleKnob()
     const yScale = yScaleKnob()
-    const fill = fillKnob(table, 'cpu')
-    const symbol = symbolKnob(table, 'host')
+    const fill = fillKnob(table, ['cpu'])
+    const symbol = symbolKnob(table, ['host'])
 
     const showAxes = showAxesKnob()
 

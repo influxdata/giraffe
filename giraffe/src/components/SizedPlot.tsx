@@ -7,6 +7,7 @@ import {
   GaugeLayerConfig,
   SingleStatLayerConfig,
   LineLayerConfig,
+  BandLayerConfig,
   ScatterLayerConfig,
   RectLayerConfig,
   MosaicLayerConfig,
@@ -17,6 +18,7 @@ import {RawFluxDataTable} from './RawFluxDataTable'
 import {GaugeLayer} from './GaugeLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
+import {BandLayer} from './BandLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
 import {Brush} from './Brush'
@@ -190,6 +192,16 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as LineLayerConfig}
+                  />
+                )
+
+              case SpecTypes.Band:
+                return (
+                  <BandLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as BandLayerConfig}
                   />
                 )
 
