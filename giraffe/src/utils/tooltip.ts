@@ -11,9 +11,12 @@ import {
   FILL,
   STACKED_LINE_CUMULATIVE,
   LINE_COUNT,
+  RESULT,
+  VALUE,
 } from '../constants/columnKeys'
 
 import {getDomainDataFromLines} from './lineData'
+import {BandHoverIndices} from './getBandHoverIndices'
 
 const isVoid = (x: any) => x === null || x === undefined
 
@@ -72,8 +75,8 @@ const getTooltipGroupColumns = (
   groupColKeys: string[],
   getValueFormatter: (colKey: string) => (x: any) => string,
   rowColors: string[] | null
-): TooltipColumn[] =>
-  groupColKeys.map(key => {
+): TooltipColumn[] => {
+  return groupColKeys.map(key => {
     const colData = table.getColumn(key)
     const formatter = getValueFormatter(key)
 
@@ -87,6 +90,7 @@ const getTooltipGroupColumns = (
       ),
     }
   })
+}
 
 export const getPointsTooltipData = (
   hoveredRowIndices: number[],
@@ -183,4 +187,158 @@ export const getPointsTooltipData = (
   )
 
   return [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
+}
+
+const getTooltipBandGroupColumns = (
+  table: Table,
+  rowIndices: number[],
+  groupColKeys: string[],
+  getValueFormatter: (colKey: string) => (x: any) => string,
+  rowColors: string[] | null
+): TooltipColumn[] => {
+  return groupColKeys.reduce((accum, key) => {
+    if (key === RESULT) {
+      return accum
+    }
+    const colData = table.getColumn(key)
+    const formatter = getValueFormatter(key)
+
+    accum.push({
+      key,
+      name: table.getColumnName(key),
+      type: table.getColumnType(key),
+      colors: rowColors,
+      values: rowIndices.map(i =>
+        !isVoid(colData[i]) ? formatter(colData[i]) : null
+      ),
+    })
+    return accum
+  }, [])
+}
+
+export const getBandTooltipData = (
+  // hoveredRowIndices: number[],
+  bandHoverIndices: BandHoverIndices,
+  table: Table,
+  xColKey: string,
+  yColKey: string,
+  bandName: string,
+  getValueFormatter: (colKey: string) => (x: any) => string,
+  fillColKeys: string[],
+  colors: string[],
+  position?: LinePosition,
+  lineData?: LineData
+): TooltipData => {
+  const {
+    rowIndices: hoveredRowIndices,
+    minIndices,
+    maxIndices,
+  } = bandHoverIndices
+
+  const xColumnName =
+    xColKey === VALUE ? `${xColKey}:${bandName}` : table.getColumnName(xColKey)
+  const yColumnName =
+    yColKey === VALUE ? `${yColKey}:${bandName}` : table.getColumnName(yColKey)
+  const sortOrder = lineData
+    ? getDataSortOrder(lineData, hoveredRowIndices, position)
+    : hoveredRowIndices
+  const minOrder = lineData
+    ? getDataSortOrder(lineData, minIndices, position)
+    : minIndices
+  const maxOrder = lineData
+    ? getDataSortOrder(lineData, maxIndices, position)
+    : maxIndices
+  const xColData = table.getColumn(xColKey, 'number')
+  const yColData = table.getColumn(yColKey, 'number')
+  const xFormatter = getValueFormatter(xColKey)
+  const yFormatter = getValueFormatter(yColKey)
+
+  const tooltipXCol = {
+    key: xColKey,
+    name: xColumnName,
+    type: table.getColumnType(xColKey),
+    colors,
+    values: hoveredRowIndices.map(i => xFormatter(xColData[i])),
+  }
+
+  const tooltipYCol = {
+    key: yColKey,
+    name: yColumnName,
+    type: table.getColumnType(yColKey),
+    colors,
+    values: orderDataByValue(
+      hoveredRowIndices,
+      sortOrder,
+      hoveredRowIndices.map(i => yFormatter(yColData[i]))
+    ),
+  }
+
+  const tooltipAdditionalColumns = []
+  if (yColKey === VALUE) {
+    tooltipAdditionalColumns.push({
+      key: yColKey,
+      name: `${yColKey}:min`,
+      type: table.getColumnType(yColKey),
+      colors,
+      values: orderDataByValue(
+        minIndices,
+        minOrder,
+        minIndices.map(i => yFormatter(yColData[i]))
+      ),
+    })
+
+    tooltipAdditionalColumns.push({
+      key: yColKey,
+      name: `${yColKey}:max`,
+      type: table.getColumnType(yColKey),
+      colors,
+      values: orderDataByValue(
+        maxIndices,
+        maxOrder,
+        maxIndices.map(i => yFormatter(yColData[i]))
+      ),
+    })
+  } else {
+    tooltipAdditionalColumns.push({
+      key: xColKey,
+      name: `${xColKey}:min`,
+      type: table.getColumnType(xColKey),
+      colors,
+      values: orderDataByValue(
+        minIndices,
+        sortOrder,
+        minIndices.map(i => xFormatter(xColData[i]))
+      ),
+    })
+
+    tooltipAdditionalColumns.push({
+      key: xColKey,
+      name: `${xColKey}:max`,
+      type: table.getColumnType(xColKey),
+      colors,
+      values: orderDataByValue(
+        maxIndices,
+        sortOrder,
+        maxIndices.map(i => xFormatter(xColData[i]))
+      ),
+    })
+  }
+
+  const fillColumns = getTooltipBandGroupColumns(
+    table,
+    sortOrder,
+    fillColKeys,
+    getValueFormatter,
+    colors
+  )
+
+  if (yColKey === VALUE) {
+    return [
+      tooltipXCol,
+      ...tooltipAdditionalColumns,
+      tooltipYCol,
+      ...fillColumns,
+    ]
+  }
+  return [tooltipYCol, ...tooltipAdditionalColumns, tooltipXCol, ...fillColumns]
 }

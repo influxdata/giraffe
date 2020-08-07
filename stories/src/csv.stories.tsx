@@ -49,7 +49,7 @@ storiesOf('CSV from Flux', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fill = fillKnob(table, 'cpu')
+    const fill = fillKnob(table, ['cpu'])
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)

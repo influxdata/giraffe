@@ -22,10 +22,9 @@ export const PlotContainer = ({children}) => (
 const multiSelect = (
   label: string,
   options: string[],
-  defaultValue: string
+  defaultValues: string[]
 ): string[] => {
   const values = []
-  const defaultValues = [defaultValue]
 
   options.forEach((value: string) => {
     const checkboxLabel = `${label}: ${value}`
@@ -89,7 +88,7 @@ const findXYColumns = (table: Table) =>
     }
   }, {})
 
-const findStringColumns = (table: Table) =>
+export const findStringColumns = (table: Table) =>
   table.columnKeys.filter(k => table.getColumnType(k) === 'string')
 
 export const xKnob = (table: Table, initial?: string) =>
@@ -98,11 +97,11 @@ export const xKnob = (table: Table, initial?: string) =>
 export const yKnob = (table: Table, initial?: string) =>
   select('y', findXYColumns(table), initial || '_value' || 'cpu')
 
-export const fillKnob = (table: Table, initial?: string) =>
-  multiSelect('fill', findStringColumns(table), initial || 'cpu')
+export const fillKnob = (table: Table, initial?: string[]) =>
+  multiSelect('fill', findStringColumns(table), initial || ['cpu'])
 
-export const symbolKnob = (table: Table, initial?: string) =>
-  multiSelect('symbol', findStringColumns(table), initial || 'host')
+export const symbolKnob = (table: Table, initial?: string[]) =>
+  multiSelect('symbol', findStringColumns(table), initial || ['host'])
 
 export const interpolationKnob = () =>
   select(

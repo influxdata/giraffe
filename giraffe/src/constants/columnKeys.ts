@@ -13,3 +13,8 @@ export const SYMBOL = '__symbol'
 export const STACKED_LINE_CUMULATIVE = 'cumulative'
 export const LINE_COUNT = 'lines'
 export const SERIES = 'series'
+
+// Band Chart's most important column key
+export const RESULT = 'result'
+export const MAX = 'max'
+export const MIN = 'min'
