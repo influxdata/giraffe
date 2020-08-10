@@ -4,17 +4,13 @@ import {withKnobs, number, select, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
 import {findStringColumns} from './helpers'
-// import {bandTable} from './data/bandLayer'
-import {cpu2} from './data/bandCSV'
+import {cpu1, cpu2, mem1, mem2} from './data/bandCSV'
 
 import {
   PlotContainer,
-  // xKnob,
-  // yKnob,
   xScaleKnob,
   yScaleKnob,
   fillKnob,
-  // tableKnob,
   colorSchemeKnob,
   legendFontKnob,
   tickFontKnob,
@@ -26,6 +22,16 @@ import {
 storiesOf('Band Chart', module)
   .addDecorator(withKnobs)
   .add('Static CSV', () => {
+    const staticData = select(
+      'Static CSV',
+      {
+        cpu1,
+        cpu2,
+        mem1,
+        mem2,
+      },
+      cpu2
+    )
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -50,7 +56,7 @@ storiesOf('Band Chart', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fromFluxTable = fromFlux(cpu2).table
+    const fromFluxTable = fromFlux(staticData).table
     const fill = fillKnob(fromFluxTable, findStringColumns(fromFluxTable))
 
     const interpolation = interpolationKnob()
@@ -65,7 +71,7 @@ storiesOf('Band Chart', module)
     )
 
     const config: Config = {
-      fluxResponse: cpu2,
+      fluxResponse: staticData,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
