@@ -35,7 +35,7 @@ const getDataSortOrder = (
   hoveredRowIndices: number[],
   position: LinePosition
 ): number[] => {
-  if (position === 'overlaid') {
+  if (!position || position === 'overlaid') {
     return hoveredRowIndices
   }
   const dataMap = {}
@@ -217,7 +217,6 @@ const getTooltipBandGroupColumns = (
 }
 
 export const getBandTooltipData = (
-  // hoveredRowIndices: number[],
   bandHoverIndices: BandHoverIndices,
   table: Table,
   xColKey: string,
