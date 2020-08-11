@@ -4,12 +4,11 @@ import {
   ColumnGroupMap,
   CumulativeValuesByTime,
   LineData,
-  LinePosition,
   NumericColumnData,
   Table,
   BandIndexMap,
 } from '../types'
-import {FILL, VALUE, RESULT, MAX, MIN} from '../constants/columnKeys'
+import {FILL, RESULT, MAX, MIN} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
 
 export const getBands = (
@@ -137,28 +136,12 @@ export const mapCumulativeValuesToTimeRange = (
   return cumulativeValues
 }
 
-const getCumulativeValueAtTime = (
-  cumulativeValues: CumulativeValuesByTime,
-  time: number,
-  groupID: number
-): number => {
-  if (
-    !cumulativeValues ||
-    !cumulativeValues[time] ||
-    !cumulativeValues[time][groupID]
-  ) {
-    return 0
-  }
-  return cumulativeValues[time][groupID]
-}
-
 export const bandTransform = (
   inputTable: Table,
   xColumnKey: string,
   yColumnKey: string,
   fillColKeys: string[],
-  colors: string[],
-  position: LinePosition
+  colors: string[]
 ): BandLayerSpec => {
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
@@ -171,23 +154,6 @@ export const bandTransform = (
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const bandFillColors = []
   const lineData: LineData = {}
-  let stackedValuesByTime: CumulativeValuesByTime = {}
-
-  if (position === 'stacked') {
-    if (yColumnKey === VALUE) {
-      stackedValuesByTime = mapCumulativeValuesToTimeRange(
-        xCol,
-        yCol,
-        fillColumn
-      )
-    } else if (xColumnKey === VALUE) {
-      stackedValuesByTime = mapCumulativeValuesToTimeRange(
-        yCol,
-        xCol,
-        fillColumn
-      )
-    }
-  }
 
   let xMin = Infinity
   let xMax = -Infinity
@@ -196,21 +162,14 @@ export const bandTransform = (
 
   for (let i = 0; i < table.length; i++) {
     const groupID = fillColumn[i]
-    let x = xCol[i]
-    let y = yCol[i]
+    const x = xCol[i]
+    const y = yCol[i]
 
     if (!lineData[groupID]) {
       lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
       bandFillColors.push(fillScale(groupID))
     }
 
-    if (position === 'stacked') {
-      if (yColumnKey === VALUE) {
-        y = getCumulativeValueAtTime(stackedValuesByTime, xCol[i], groupID)
-      } else if (xColumnKey === VALUE) {
-        x = getCumulativeValueAtTime(stackedValuesByTime, yCol[i], groupID)
-      }
-    }
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
