@@ -63,7 +63,7 @@ storiesOf('Band Chart', module)
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
     const lineOpacity = number('Line Opacity', 1)
-    const shadeBelowOpacity = number('Area Opacity', 0.1)
+    const shadeOpacity = number('Area Opacity', 0.1)
     const hoverDimension = select(
       'Hover Dimension',
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
@@ -95,7 +95,7 @@ storiesOf('Band Chart', module)
           lineWidth,
           lineOpacity,
           hoverDimension,
-          shadeBelowOpacity,
+          shadeOpacity,
         },
       ],
     }
@@ -139,7 +139,7 @@ storiesOf('Band Chart', module)
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
     const lineOpacity = number('Line Opacity', 1)
-    const shadeBelowOpacity = number('Area Opacity', 0.1)
+    const shadeOpacity = number('Area Opacity', 0.1)
     const hoverDimension = select(
       'Hover Dimension',
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
@@ -171,7 +171,7 @@ storiesOf('Band Chart', module)
           lineWidth,
           lineOpacity,
           hoverDimension,
-          shadeBelowOpacity,
+          shadeOpacity,
         },
       ],
     }

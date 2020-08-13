@@ -31,7 +31,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
     lineData: simplifiedLineData,
     lineWidth: config.lineWidth,
     lineOpacity: config.lineOpacity,
-    shadeBelowOpacity: config.shadeBelowOpacity,
+    shadeOpacity: config.shadeOpacity,
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
