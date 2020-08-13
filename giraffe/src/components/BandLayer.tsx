@@ -91,7 +91,9 @@ export const BandLayer: FunctionComponent<Props> = props => {
     height
   )
 
-  const lineLength = spec.lineData[0].xs.length
+  const lineLength = spec.columnGroupMaps.fill.mappings.length
+    ? spec.table.length / spec.columnGroupMaps.fill.mappings.length
+    : 0
   const bandHoverIndices = getBandHoverIndices(
     lineLength,
     hoverRowIndices,
