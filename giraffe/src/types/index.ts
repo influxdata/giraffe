@@ -59,6 +59,7 @@ export interface Config {
   legendBorder?: string
   legendCrosshairColor?: string
   legendColumns?: string[]
+  legendMessage?: string
 
   // The type of the y-axis column
   yColumnType?: ColumnType
@@ -300,8 +301,9 @@ export interface BandLayerConfig {
   lineWidth?: number
   lineOpacity?: number
   colors?: string[]
-  shadeBelow?: boolean
-  shadeBelowOpacity?: number
+  shadeOpacity?: number
+  upperColumnName?: string
+  lowerColumnName?: string
 }
 
 export interface ScatterLayerConfig {

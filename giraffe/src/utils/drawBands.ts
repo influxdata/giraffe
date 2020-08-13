@@ -15,7 +15,7 @@ interface DrawBandsOptions {
   lineData: LineData
   lineWidth: number
   lineOpacity: number
-  shadeBelowOpacity: number
+  shadeOpacity: number
 }
 
 export const drawBands = ({
@@ -26,7 +26,7 @@ export const drawBands = ({
   lineData,
   lineWidth,
   lineOpacity,
-  shadeBelowOpacity,
+  shadeOpacity,
 }: DrawBandsOptions): void => {
   const bands = getBands(fill, lineData, bandFillColors)
 
@@ -44,7 +44,7 @@ export const drawBands = ({
         .curve(CURVES[interpolation] || curveLinear)
 
       context.fillStyle = min.fill
-      context.globalAlpha = shadeBelowOpacity
+      context.globalAlpha = shadeOpacity
       context.beginPath()
       minAreaGenerator(range(0, xs_min.length))
       context.fill()
@@ -61,7 +61,7 @@ export const drawBands = ({
         .curve(CURVES[interpolation] || curveLinear)
 
       context.fillStyle = max.fill
-      context.globalAlpha = shadeBelowOpacity
+      context.globalAlpha = shadeOpacity
       context.beginPath()
       maxAreaGenerator(range(0, xs_max.length))
       context.fill()

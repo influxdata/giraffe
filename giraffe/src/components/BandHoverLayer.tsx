@@ -38,8 +38,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     y: yColKey,
     fill: fillColKeys,
     lineWidth,
-    shadeBelow,
-    shadeBelowOpacity,
+    shadeOpacity,
   } = config
 
   const xColData = spec.table.getColumn(xColKey, 'number')
@@ -83,8 +82,8 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
         lineData: {[groupKey]: lineDatum},
         interpolation,
         lineWidth: lineWidth * 2,
-        shadeBelow,
-        shadeBelowOpacity: shadeBelowOpacity * 1.5,
+        shadeBelow: false,
+        shadeBelowOpacity: shadeOpacity * 1.5,
         shadeAboveY: height,
       })
     }
