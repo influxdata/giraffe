@@ -27,9 +27,10 @@ export const removeMinMaxHoverIndices = (
 }
 
 export const getBandHoverIndices = (
+  lineLength: number,
   hoverRowIndices: number[],
-  groupColData: NumericColumnData,
-  bandIndexMap: BandIndexMap
+  hoverGroupData: NumericColumnData,
+  bandLineIndexMap: object
 ): BandIndexMap => {
   const bandHoverIndices = {
     rowIndices: [],
@@ -38,15 +39,15 @@ export const getBandHoverIndices = (
   }
 
   if (Array.isArray(hoverRowIndices)) {
+    const bands = Object.values(bandLineIndexMap)
+
     hoverRowIndices.forEach(index => {
-      const columnId = groupColData[index]
-      if (bandIndexMap.maxIndices.includes(columnId)) {
-        bandHoverIndices.maxIndices.push(index)
-      } else if (bandIndexMap.minIndices.includes(columnId)) {
-        bandHoverIndices.minIndices.push(index)
-      } else if (bandIndexMap.rowIndices.includes(columnId)) {
-        bandHoverIndices.rowIndices.push(index)
-      }
+      const columnId = hoverGroupData[index]
+      const offset = index % lineLength
+      const hoveredBand = bands.find(band => band.row === columnId)
+      bandHoverIndices.maxIndices.push(hoveredBand.max * lineLength + offset)
+      bandHoverIndices.minIndices.push(hoveredBand.min * lineLength + offset)
+      bandHoverIndices.rowIndices.push(hoveredBand.row * lineLength + offset)
     })
   }
 

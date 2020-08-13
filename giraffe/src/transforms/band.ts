@@ -2,9 +2,7 @@ import {
   BandLayerSpec,
   Band,
   ColumnGroupMap,
-  CumulativeValuesByTime,
   LineData,
-  NumericColumnData,
   Table,
   BandIndexMap,
 } from '../types'
@@ -22,39 +20,41 @@ export const getBands = (
     ? columnKeys.filter(key => key !== RESULT)
     : []
 
-  const bands = Array.isArray(mappings)
-    ? mappings.reduce((bandLines, map, index) => {
-        const lineName = columnKeysWithoutResult.reduce((accum, current) => {
-          return `${accum}${mappings[index][current]}`
-        }, '')
-        if (!minMaxMap[lineName]) {
-          minMaxMap[lineName] = {}
-        }
-        if (map[RESULT] === MAX) {
-          if (!minMaxMap[lineName][MAX]) {
-            minMaxMap[lineName][MAX] = lineData[index]
-          }
-        } else if (map[RESULT] === MIN) {
-          if (!minMaxMap[lineName][MIN]) {
-            minMaxMap[lineName][MIN] = lineData[index]
-          }
-        } else {
-          bandLines.push({
-            ...lineData[index],
-            lineName,
-            fill: bandFillColors[bandLines.length],
-          })
-        }
-        return bandLines
-      }, [])
-    : []
+  if (!Array.isArray(mappings)) {
+    return []
+  }
 
-  bands.forEach(line => {
-    if (minMaxMap[line.lineName][MIN]) {
-      line[MIN] = {...minMaxMap[line.lineName][MIN], fill: line.fill}
+  const bands = mappings.reduce((bandLines, map, index) => {
+    const lineName = columnKeysWithoutResult.reduce((accum, current) => {
+      return `${accum}${mappings[index][current]}`
+    }, '')
+    if (!minMaxMap[lineName]) {
+      minMaxMap[lineName] = {}
     }
-    if (minMaxMap[line.lineName][MAX]) {
-      line[MAX] = {...minMaxMap[line.lineName][MAX], fill: line.fill}
+    if (map[RESULT] === MAX) {
+      if (!minMaxMap[lineName][MAX]) {
+        minMaxMap[lineName][MAX] = lineData[index]
+      }
+    } else if (map[RESULT] === MIN) {
+      if (!minMaxMap[lineName][MIN]) {
+        minMaxMap[lineName][MIN] = lineData[index]
+      }
+    } else {
+      bandLines.push({
+        ...lineData[index],
+        lineName,
+        fill: bandFillColors[bandLines.length],
+      })
+    }
+    return bandLines
+  }, [])
+
+  bands.forEach(band => {
+    if (minMaxMap[band.lineName][MIN]) {
+      band[MIN] = {...minMaxMap[band.lineName][MIN], fill: band.fill}
+    }
+    if (minMaxMap[band.lineName][MAX]) {
+      band[MAX] = {...minMaxMap[band.lineName][MAX], fill: band.fill}
     }
   })
   return bands as Band[]
@@ -84,56 +84,46 @@ export const getBandIndexMap = (
   return bandIndices
 }
 
-export const getBandLineIndices = (fillColumnMap: ColumnGroupMap): number[] => {
-  const bandLineIndices = Array.isArray(fillColumnMap.mappings)
-    ? fillColumnMap.mappings.reduce((indices, line, index) => {
-        if (line[RESULT] && line[RESULT] !== MAX && line[RESULT] !== MIN) {
-          indices.push(index)
-        }
-        return indices
-      }, [])
+export const groupLineIndicesIntoBands = (fill: ColumnGroupMap) => {
+  const {columnKeys, mappings} = fill
+  const columnKeysWithoutResult = Array.isArray(columnKeys)
+    ? columnKeys.filter(key => key !== RESULT)
     : []
+  const bandLineIndexMap = {}
 
-  return bandLineIndices as number[]
+  if (Array.isArray(mappings)) {
+    mappings.forEach((line, index) => {
+      const lineName = columnKeysWithoutResult.reduce((accum, current) => {
+        return `${accum}${line[current]}`
+      }, '')
+      if (!bandLineIndexMap[lineName]) {
+        bandLineIndexMap[lineName] = {
+          min: null,
+          max: null,
+          row: null,
+        }
+      }
+      if (line[RESULT] === MAX || line[RESULT] === MIN) {
+        bandLineIndexMap[lineName][line[RESULT]] = index
+      } else {
+        bandLineIndexMap[lineName].row = index
+      }
+    })
+  }
+
+  return bandLineIndexMap
 }
 
 export const getBandName = (fillColumnMap: ColumnGroupMap): string => {
-  return Array.isArray(fillColumnMap.mappings)
-    ? fillColumnMap.mappings.reduce((name, line) => {
-        if (!name && line[RESULT] !== MAX && line[RESULT] !== MIN) {
-          name = line[RESULT]
-        }
-        return name
-      }, '')
-    : ''
-}
-
-export const mapCumulativeValuesToTimeRange = (
-  timesCol: NumericColumnData,
-  valuesCol: NumericColumnData,
-  fillCol: NumericColumnData
-): CumulativeValuesByTime => {
-  const cumulativeValues: CumulativeValuesByTime = {}
-
-  timesCol.forEach((time, index) => {
-    if (!cumulativeValues[time]) {
-      cumulativeValues[time] = {}
+  if (!Array.isArray(fillColumnMap.mappings)) {
+    return ''
+  }
+  return fillColumnMap.mappings.reduce((name, line) => {
+    if (!name && line[RESULT] !== MAX && line[RESULT] !== MIN) {
+      name = line[RESULT]
     }
-    const maxGroup = fillCol[index]
-
-    if (!cumulativeValues[time][maxGroup - 1]) {
-      for (let i = 0; i < maxGroup; i += 1) {
-        if (!cumulativeValues[time][i]) {
-          cumulativeValues[time][i] = 0
-        }
-      }
-    }
-    cumulativeValues[time][maxGroup] =
-      maxGroup - 1 >= 0
-        ? cumulativeValues[time][maxGroup - 1] + valuesCol[index]
-        : valuesCol[index]
-  })
-  return cumulativeValues
+    return name
+  }, '')
 }
 
 export const bandTransform = (
@@ -173,21 +163,10 @@ export const bandTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
-    if (x < xMin) {
-      xMin = x
-    }
-
-    if (x > xMax) {
-      xMax = x
-    }
-
-    if (y < yMin) {
-      yMin = y
-    }
-
-    if (y > yMax) {
-      yMax = y
-    }
+    xMin = Math.min(x, xMin)
+    xMax = Math.max(x, xMax)
+    yMin = Math.min(y, yMin)
+    yMax = Math.max(y, yMax)
   }
 
   return {
