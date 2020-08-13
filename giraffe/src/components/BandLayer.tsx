@@ -16,6 +16,9 @@ export interface Props extends LayerProps {
   config: BandLayerConfig
 }
 
+const HIGHLIGHT_HOVERED_LINE = 0.4
+const NO_HIGHLIGHT = 1
+
 export const BandLayer: FunctionComponent<Props> = props => {
   const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
 
@@ -107,7 +110,10 @@ export const BandLayer: FunctionComponent<Props> = props => {
         ref={canvasRef}
         style={{
           position: 'absolute',
-          opacity: hoverDimension === 'xy' && hasHoverData ? 0.4 : 1,
+          opacity:
+            hoverDimension === 'xy' && hasHoverData
+              ? HIGHLIGHT_HOVERED_LINE
+              : NO_HIGHLIGHT,
         }}
         data-testid="giraffe-layer-band-chart"
       />
