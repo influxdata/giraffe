@@ -273,6 +273,7 @@ export const getBandTooltipData = (
   }
 
   const tooltipAdditionalColumns = []
+
   if (yColKey === VALUE) {
     tooltipAdditionalColumns.push({
       key: yColKey,
@@ -305,7 +306,7 @@ export const getBandTooltipData = (
       colors,
       values: orderDataByValue(
         minIndices,
-        sortOrder,
+        minOrder,
         minIndices.map(i => xFormatter(xColData[i]))
       ),
     })
@@ -317,7 +318,7 @@ export const getBandTooltipData = (
       colors,
       values: orderDataByValue(
         maxIndices,
-        sortOrder,
+        maxOrder,
         maxIndices.map(i => xFormatter(xColData[i]))
       ),
     })

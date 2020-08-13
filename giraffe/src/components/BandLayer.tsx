@@ -9,6 +9,7 @@ import {drawBands} from '../utils/drawBands'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
 import {FILL} from '../constants/columnKeys'
 import {getBandHoverIndices} from '../utils/getBandHoverIndices'
+import {groupLineIndicesIntoBands} from '../transforms/band'
 
 export interface Props extends LayerProps {
   spec: BandLayerSpec
@@ -57,23 +58,44 @@ export const BandLayer: FunctionComponent<Props> = props => {
   }
 
   const groupColData = spec.table.getColumn(FILL, 'number')
+  const hoverXYColumnData = {
+    xs: [],
+    ys: [],
+    groupColData: [],
+  }
+  const {rowIndices} = spec.bandIndexMap
+
+  rowIndices.forEach(rowIndex => {
+    hoverXYColumnData.xs = hoverXYColumnData.xs.concat(
+      spec.lineData[rowIndex].xs
+    )
+    hoverXYColumnData.ys = hoverXYColumnData.ys.concat(
+      spec.lineData[rowIndex].ys
+    )
+    hoverXYColumnData.groupColData = hoverXYColumnData.groupColData.concat(
+      ...groupColData.filter(index => index === rowIndex)
+    )
+  })
+
   const hoverRowIndices = useHoverPointIndices(
     hoverDimension,
     hoverX,
     hoverY,
-    spec.table.getColumn(config.x, 'number'),
-    spec.table.getColumn(config.y, 'number'),
-    groupColData,
+    hoverXYColumnData.xs,
+    hoverXYColumnData.ys,
+    hoverXYColumnData.groupColData,
     xScale,
     yScale,
     width,
     height
   )
 
+  const lineLength = spec.lineData[0].xs.length
   const bandHoverIndices = getBandHoverIndices(
+    lineLength,
     hoverRowIndices,
-    groupColData,
-    spec.bandIndexMap
+    hoverXYColumnData.groupColData,
+    groupLineIndicesIntoBands(spec.columnGroupMaps.fill)
   )
 
   const hasHoverData = hoverRowIndices && hoverRowIndices.length > 0
