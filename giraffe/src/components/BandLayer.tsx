@@ -8,7 +8,7 @@ import {useCanvas} from '../utils/useCanvas'
 import {drawBands} from '../utils/drawBands'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
 import {FILL} from '../constants/columnKeys'
-import {getBandHoverIndices} from '../utils/getBandHoverIndices'
+import {getBandHoverIndices, getLineLengths} from '../utils/getBandHoverIndices'
 import {groupLineIndicesIntoBands} from '../transforms/band'
 
 export interface Props extends LayerProps {
@@ -91,11 +91,9 @@ export const BandLayer: FunctionComponent<Props> = props => {
     height
   )
 
-  const lineLength = spec.columnGroupMaps.fill.mappings.length
-    ? spec.table.length / spec.columnGroupMaps.fill.mappings.length
-    : 0
+  const lineLengths = getLineLengths(spec.lineData)
   const bandHoverIndices = getBandHoverIndices(
-    lineLength,
+    lineLengths,
     hoverRowIndices,
     hoverXYColumnData.groupColData,
     groupLineIndicesIntoBands(spec.columnGroupMaps.fill)
