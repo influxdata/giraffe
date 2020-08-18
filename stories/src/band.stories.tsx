@@ -75,9 +75,11 @@ storiesOf('Band Chart', module)
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${
-            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
-          }`,
+          typeof val === 'number'
+            ? `${val.toFixed(2)}${
+                valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+              }`
+            : val,
       },
       xScale,
       yScale,
@@ -151,9 +153,11 @@ storiesOf('Band Chart', module)
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${
-            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
-          }`,
+          typeof val === 'number'
+            ? `${val.toFixed(2)}${
+                valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+              }`
+            : val,
       },
       xScale,
       yScale,

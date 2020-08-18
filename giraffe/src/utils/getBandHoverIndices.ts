@@ -1,9 +1,12 @@
 import {NumericColumnData, BandIndexMap, LineData} from '../types'
 
-export interface BandHoverIndices {
-  rowIndices: number[]
-  minIndices: number[]
-  maxIndices: number[]
+interface MinMaxOfBands {
+  [index: string]: {
+    maxCol: number
+    minCol: number
+    maxIndex: number
+    minIndex: number
+  }
 }
 
 interface LineLengths {
@@ -11,6 +14,52 @@ interface LineLengths {
     length: number
     startIndex: number
   }
+}
+
+export interface BandHoverIndices {
+  rowIndices: number[]
+  minIndices: number[]
+  maxIndices: number[]
+}
+
+export const getMinMaxOfBands = (
+  hoverRowIndices: number[],
+  hoverGroupData: NumericColumnData,
+  bandLineIndexMap: object
+): MinMaxOfBands => {
+  const minMaxOfBands = {}
+
+  const hoverColumnToIndexMap = {}
+
+  if (Array.isArray(hoverRowIndices)) {
+    hoverRowIndices.forEach(index => {
+      hoverColumnToIndexMap[hoverGroupData[index]] = index
+    })
+  }
+
+  const bands = Object.values(bandLineIndexMap)
+
+  bands.forEach(band => {
+    minMaxOfBands[band.row] = {
+      maxCol: null,
+      minCol: null,
+      maxIndex: null,
+      minIndex: null,
+    }
+    if (typeof band.max === 'number') {
+      minMaxOfBands[band.row].maxCol = band.max
+      if (typeof hoverColumnToIndexMap[band.max] === 'number') {
+        minMaxOfBands[band.row].maxIndex = hoverColumnToIndexMap[band.max]
+      }
+    }
+    if (typeof band.min === 'number') {
+      minMaxOfBands[band.row].minCol = band.min
+      if (typeof hoverColumnToIndexMap[band.min] === 'number') {
+        minMaxOfBands[band.row].minIndex = hoverColumnToIndexMap[band.min]
+      }
+    }
+  })
+  return minMaxOfBands
 }
 
 export const getLineLengths = (lineData: LineData): LineLengths => {
@@ -39,7 +88,7 @@ export const getBandHoverIndices = (
   lineLengths: LineLengths,
   hoverRowIndices: number[],
   hoverGroupData: NumericColumnData,
-  bandLineIndexMap: object
+  minMaxOfBands: MinMaxOfBands
 ): BandIndexMap => {
   const bandHoverIndices = {
     rowIndices: [],
@@ -48,21 +97,19 @@ export const getBandHoverIndices = (
   }
 
   if (Array.isArray(hoverRowIndices)) {
-    const bands = Object.values(bandLineIndexMap)
-
     hoverRowIndices.forEach(index => {
       const columnId = hoverGroupData[index]
-      const hoveredBand = bands.find(band => band.row === columnId)
+      const hoveredBandId = Object.keys(minMaxOfBands).find(
+        bandId => Number(bandId) === Number(columnId)
+      )
 
-      if (hoveredBand) {
-        const offset = index % lineLengths[hoveredBand.row].length
-        const maxBase = lineLengths[hoveredBand.max].startIndex
-        const minBase = lineLengths[hoveredBand.min].startIndex
-        const rowBase = lineLengths[hoveredBand.row].startIndex
+      if (minMaxOfBands[hoveredBandId]) {
+        const offset = index % lineLengths[hoveredBandId].length
+        const rowBase = lineLengths[hoveredBandId].startIndex
 
-        bandHoverIndices.maxIndices.push(maxBase + offset)
-        bandHoverIndices.minIndices.push(minBase + offset)
         bandHoverIndices.rowIndices.push(rowBase + offset)
+        bandHoverIndices.maxIndices.push(minMaxOfBands[hoveredBandId].maxIndex)
+        bandHoverIndices.minIndices.push(minMaxOfBands[hoveredBandId].minIndex)
       }
     })
   }
