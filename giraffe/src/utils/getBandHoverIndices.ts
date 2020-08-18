@@ -1,4 +1,4 @@
-import {NumericColumnData, BandIndexMap} from '../types'
+import {NumericColumnData, BandIndexMap, LineData} from '../types'
 
 export interface BandHoverIndices {
   rowIndices: number[]
@@ -6,28 +6,37 @@ export interface BandHoverIndices {
   maxIndices: number[]
 }
 
-export const removeMinMaxHoverIndices = (
-  hoverRowIndices: number[],
-  groupColData: NumericColumnData,
-  bandLineIndices: number[]
-): number[] => {
-  const updatedHoverIndices = []
+interface LineLengths {
+  [index: string]: {
+    length: number
+    startIndex: number
+  }
+}
 
-  if (Array.isArray(hoverRowIndices)) {
-    hoverRowIndices.forEach(index => {
-      const columnId = groupColData[index]
-      const isBandLine = bandLineIndices.includes(columnId)
-      if (isBandLine) {
-        updatedHoverIndices.push(index)
+export const getLineLengths = (lineData: LineData): LineLengths => {
+  const keys = Object.keys(lineData)
+
+  const lineLengths = {}
+  let total = 0
+  if (Array.isArray(keys)) {
+    keys.forEach(lineIndex => {
+      const length = Math.min(
+        lineData[lineIndex].xs.length,
+        lineData[lineIndex].ys.length
+      )
+      if (!lineLengths[lineIndex]) {
+        lineLengths[lineIndex] = {}
       }
+      lineLengths[lineIndex].length = length
+      lineLengths[lineIndex].startIndex = total
+      total += length
     })
   }
-
-  return updatedHoverIndices
+  return lineLengths
 }
 
 export const getBandHoverIndices = (
-  lineLength: number,
+  lineLengths: LineLengths,
   hoverRowIndices: number[],
   hoverGroupData: NumericColumnData,
   bandLineIndexMap: object
@@ -43,11 +52,18 @@ export const getBandHoverIndices = (
 
     hoverRowIndices.forEach(index => {
       const columnId = hoverGroupData[index]
-      const offset = index % lineLength
       const hoveredBand = bands.find(band => band.row === columnId)
-      bandHoverIndices.maxIndices.push(hoveredBand.max * lineLength + offset)
-      bandHoverIndices.minIndices.push(hoveredBand.min * lineLength + offset)
-      bandHoverIndices.rowIndices.push(hoveredBand.row * lineLength + offset)
+
+      if (hoveredBand) {
+        const offset = index % lineLengths[hoveredBand.row].length
+        const maxBase = lineLengths[hoveredBand.max].startIndex
+        const minBase = lineLengths[hoveredBand.min].startIndex
+        const rowBase = lineLengths[hoveredBand.row].startIndex
+
+        bandHoverIndices.maxIndices.push(maxBase + offset)
+        bandHoverIndices.minIndices.push(minBase + offset)
+        bandHoverIndices.rowIndices.push(rowBase + offset)
+      }
     })
   }
 
