@@ -10,7 +10,6 @@ import {
   PlotContainer,
   xScaleKnob,
   yScaleKnob,
-  fillKnob,
   colorSchemeKnob,
   legendFontKnob,
   tickFontKnob,
@@ -57,13 +56,11 @@ storiesOf('Band Chart', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fromFluxTable = fromFlux(staticData).table
-    const fill = fillKnob(fromFluxTable, findStringColumns(fromFluxTable))
-
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
-    const lineWidth = number('Line Width', 1)
-    const lineOpacity = number('Line Opacity', 1)
-    const shadeOpacity = number('Area Opacity', 0.1)
+    const lineWidth = number('Line Width', 3)
+    const lineOpacity = number('Line Opacity', 0.7)
+    const shadeOpacity = number('Shade Opacity', 0.3)
     const hoverDimension = select(
       'Hover Dimension',
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
@@ -91,7 +88,7 @@ storiesOf('Band Chart', module)
           type: 'band',
           x: '_time',
           y: '_value',
-          fill,
+          fill: findStringColumns(fromFluxTable),
           interpolation,
           colors,
           lineWidth,
@@ -135,13 +132,11 @@ storiesOf('Band Chart', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fromFluxTable = fromFlux(customCSV).table
-    const fill = fillKnob(fromFluxTable, findStringColumns(fromFluxTable))
-
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
-    const lineWidth = number('Line Width', 1)
-    const lineOpacity = number('Line Opacity', 1)
-    const shadeOpacity = number('Area Opacity', 0.1)
+    const lineWidth = number('Line Width', 3)
+    const lineOpacity = number('Line Opacity', 0.7)
+    const shadeOpacity = number('Shade Opacity', 0.3)
     const hoverDimension = select(
       'Hover Dimension',
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
@@ -169,7 +164,7 @@ storiesOf('Band Chart', module)
           type: 'band',
           x: '_time',
           y: '_value',
-          fill,
+          fill: findStringColumns(fromFluxTable),
           interpolation,
           colors,
           lineWidth,

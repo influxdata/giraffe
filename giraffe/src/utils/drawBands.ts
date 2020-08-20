@@ -36,9 +36,10 @@ export const drawBands = ({
     if (min) {
       const {xs: xs_min, ys: ys_min} = min
       const minAreaGenerator = area<number>()
-        .y0((i: any) => band.ys[i])
-        .y1((i: any) => ys_min[i])
-        .x((i: any) => xs_min[i])
+        .y1((i: any) => band.ys[i])
+        .y0((i: any) => ys_min[i])
+        .x1((i: any) => band.xs[i])
+        .x0((i: any) => xs_min[i])
         .context(context)
         .defined((i: any) => isDefined(xs_min[i]) && isDefined(ys_min[i]))
         .curve(CURVES[interpolation] || curveLinear)
@@ -53,9 +54,10 @@ export const drawBands = ({
     if (max) {
       const {xs: xs_max, ys: ys_max} = max
       const maxAreaGenerator = area<number>()
-        .y0((i: any) => ys_max[i])
-        .y1((i: any) => band.ys[i])
-        .x((i: any) => xs_max[i])
+        .y1((i: any) => ys_max[i])
+        .y0((i: any) => band.ys[i])
+        .x1((i: any) => xs_max[i])
+        .x0((i: any) => band.xs[i])
         .context(context)
         .defined((i: any) => isDefined(xs_max[i]) && isDefined(ys_max[i]))
         .curve(CURVES[interpolation] || curveLinear)

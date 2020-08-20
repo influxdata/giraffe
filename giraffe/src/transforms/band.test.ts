@@ -1,31 +1,142 @@
-import {getBands} from './band'
+import {
+  alignMinMaxWithBand,
+  getBandIndexMap,
+  getBands,
+  groupLineIndicesIntoBands,
+} from './band'
 
 describe('band transform utils', () => {
+  const columnMap = {
+    columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
+    mappings: [
+      {
+        cpu: 'cpu1',
+        host: 'localhost',
+        result: 'max',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+      {
+        cpu: 'cpu0',
+        host: 'localhost',
+        result: 'max',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+      {
+        cpu: 'cpu1',
+        host: 'localhost',
+        result: 'min',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+      {
+        cpu: 'cpu0',
+        host: 'localhost',
+        result: 'min',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+      {
+        cpu: 'cpu0',
+        host: 'localhost',
+        result: 'mean',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+      {
+        cpu: 'cpu1',
+        host: 'localhost',
+        result: 'mean',
+        _field: 'usage_system',
+        _measurement: 'cpu',
+      },
+    ],
+  }
+
+  describe('creates a map of indices by column type for all columns', () => {
+    it('creates a map with no indices when the column map is empty', () => {
+      expect(getBandIndexMap({columnKeys: null, mappings: null})).toEqual({
+        maxIndices: [],
+        minIndices: [],
+        rowIndices: [],
+      })
+      expect(
+        getBandIndexMap({columnKeys: undefined, mappings: undefined})
+      ).toEqual({
+        maxIndices: [],
+        minIndices: [],
+        rowIndices: [],
+      })
+      expect(getBandIndexMap({columnKeys: [], mappings: []})).toEqual({
+        maxIndices: [],
+        minIndices: [],
+        rowIndices: [],
+      })
+    })
+
+    it('creates a map with indices that are in the same position for the same band per column type', () => {
+      expect(getBandIndexMap(columnMap)).toEqual({
+        maxIndices: [0, 1],
+        minIndices: [2, 3],
+        rowIndices: [5, 4],
+      })
+    })
+  })
+
+  describe('creates a map of unique identifiers for the bands and indices of their data', () => {
+    it('creates no indentifiers when the column map is empty', () => {
+      expect(
+        groupLineIndicesIntoBands({columnKeys: null, mappings: null})
+      ).toEqual({})
+      expect(
+        groupLineIndicesIntoBands({columnKeys: undefined, mappings: undefined})
+      ).toEqual({})
+      expect(groupLineIndicesIntoBands({columnKeys: [], mappings: []})).toEqual(
+        {}
+      )
+    })
+
+    it('creates identifiers when given a column map', () => {
+      expect(groupLineIndicesIntoBands(columnMap)).toEqual({
+        usage_systemcpucpu0localhost: {min: 3, max: 1, row: 4},
+        usage_systemcpucpu1localhost: {min: 2, max: 0, row: 5},
+      })
+    })
+  })
+
   describe('creates the bands to be rendered', () => {
     it('creates a line with min and max when they are available in the lineData', () => {
       const fill = {
         columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
         mappings: [
           {
+            cpu: 'cpu0',
+            host: 'localhost',
             result: 'min',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu0',
-            host: 'localhost',
           },
           {
+            cpu: 'cpu0',
+            host: 'localhost',
             result: 'max',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu0',
-            host: 'localhost',
           },
           {
+            cpu: 'cpu0',
+            host: 'localhost',
             result: 'mean',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu0',
+          },
+          {
+            cpu: 'cpu1',
             host: 'localhost',
+            result: 'max',
+            _field: 'usage_system',
+            _measurement: 'cpu',
           },
         ],
       }
@@ -106,39 +217,39 @@ describe('band transform utils', () => {
         columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
         mappings: [
           {
+            cpu: 'cpu1',
+            host: 'localhost',
             result: 'min',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu1',
-            host: 'localhost',
           },
           {
+            cpu: 'cpu0',
+            host: 'localhost',
             result: 'max',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu0',
-            host: 'localhost',
           },
           {
+            cpu: 'cpu0',
+            host: 'localhost',
             result: 'mean',
             _field: 'usage_system',
             _measurement: 'cpu',
-            cpu: 'cpu0',
-            host: 'localhost',
           },
           {
-            result: 'mean',
-            _field: 'usage_system',
-            _measurement: 'cpu',
             cpu: 'cpu1',
             host: 'localhost',
-          },
-          {
             result: 'mean',
             _field: 'usage_system',
             _measurement: 'cpu',
+          },
+          {
             cpu: 'cpu2',
             host: 'localhost',
+            result: 'mean',
+            _field: 'usage_system',
+            _measurement: 'cpu',
           },
         ],
       }
@@ -257,6 +368,151 @@ describe('band transform utils', () => {
       expect(result[2].fill).toEqual(purple)
       expect(result[2].min).toBeUndefined()
       expect(result[2].max).toBeUndefined()
+    })
+  })
+
+  describe('aligns min and max columns to have same length as band', () => {
+    it('returns the line data unaltered when no row indices (no bands) are present', () => {
+      const lineData = {
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192],
+          ys: [373.73275],
+        },
+        1: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384],
+          ys: [373.73275, 304.66375],
+        },
+        2: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+      }
+      const bandIndexMap = {
+        maxIndices: [],
+        minIndices: [],
+        rowIndices: [],
+      }
+
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual(lineData)
+    })
+
+    it('returns the updated line data with same length rows when one row index is present', () => {
+      const lineData = {
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192],
+          ys: [373.73275],
+        },
+        1: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384],
+          ys: [373.73275, 304.66375],
+        },
+        2: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+      }
+      const bandIndexMap = {
+        maxIndices: [0],
+        minIndices: [1],
+        rowIndices: [2],
+      }
+
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+        1: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+        2: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+      })
+    })
+
+    it('returns the updated line data with same length rows when multiple row indices are present', () => {
+      const lineData = {
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192],
+          ys: [373.73275],
+        },
+        1: {
+          fill: 'red',
+          xs: [1, 3],
+          ys: [20, 55],
+        },
+        2: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384],
+          ys: [373.73275, 304.66375],
+        },
+        3: {
+          fill: 'green',
+          xs: [3],
+          ys: [25],
+        },
+        4: {
+          fill: 'blue',
+          xs: [1, 3, 5, 7, 9],
+          ys: [20, 40, 60, 80, 100],
+        },
+        5: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+      }
+      const bandIndexMap = {
+        maxIndices: [0, 1],
+        minIndices: [2, 3],
+        rowIndices: [5, 4],
+      }
+
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+        1: {
+          fill: 'red',
+          xs: [1, 3, 5, 7, 9],
+          ys: [20, 55, 60, 80, 100],
+        },
+        2: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+        3: {
+          fill: 'green',
+          xs: [1, 3, 5, 7, 9],
+          ys: [20, 25, 60, 80, 100],
+        },
+        4: {
+          fill: 'blue',
+          xs: [1, 3, 5, 7, 9],
+          ys: [20, 40, 60, 80, 100],
+        },
+        5: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [373.73275, 304.66375, 379.4885],
+        },
+      })
     })
   })
 })

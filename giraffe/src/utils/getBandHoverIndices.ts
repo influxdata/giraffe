@@ -1,4 +1,5 @@
 import {NumericColumnData, BandIndexMap, LineData} from '../types'
+import {isDefined} from './isDefined'
 
 interface MinMaxOfBands {
   [index: string]: {
@@ -46,15 +47,15 @@ export const getMinMaxOfBands = (
       maxIndex: null,
       minIndex: null,
     }
-    if (typeof band.max === 'number') {
+    if (isDefined(band.max)) {
       minMaxOfBands[band.row].maxCol = band.max
-      if (typeof hoverColumnToIndexMap[band.max] === 'number') {
+      if (isDefined(hoverColumnToIndexMap[band.max])) {
         minMaxOfBands[band.row].maxIndex = hoverColumnToIndexMap[band.max]
       }
     }
-    if (typeof band.min === 'number') {
+    if (isDefined(band.min)) {
       minMaxOfBands[band.row].minCol = band.min
-      if (typeof hoverColumnToIndexMap[band.min] === 'number') {
+      if (isDefined(hoverColumnToIndexMap[band.min])) {
         minMaxOfBands[band.row].minIndex = hoverColumnToIndexMap[band.min]
       }
     }

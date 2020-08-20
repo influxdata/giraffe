@@ -13,7 +13,10 @@ import {
   getLineLengths,
   getMinMaxOfBands,
 } from '../utils/getBandHoverIndices'
-import {groupLineIndicesIntoBands} from '../transforms/band'
+import {
+  groupLineIndicesIntoBands,
+  alignMinMaxWithBand,
+} from '../transforms/band'
 
 export interface Props extends LayerProps {
   spec: BandLayerSpec
@@ -27,7 +30,11 @@ export const BandLayer: FunctionComponent<Props> = props => {
   const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
 
   const simplifiedLineData = useMemo(
-    () => simplifyLineData(spec.lineData, xScale, yScale),
+    () =>
+      alignMinMaxWithBand(
+        simplifyLineData(spec.lineData, xScale, yScale),
+        spec.bandIndexMap
+      ),
     [spec.lineData, xScale, yScale]
   )
 
