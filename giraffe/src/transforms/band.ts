@@ -7,6 +7,7 @@ import {
   BandIndexMap,
 } from '../types'
 import {FILL, RESULT, MAX, MIN} from '../constants/columnKeys'
+import {isDefined} from '../utils/isDefined'
 import {createGroupIDColumn, getNominalColorScale} from './'
 
 export const getBands = (
@@ -69,15 +70,13 @@ export const getBandIndexMap = (
     maxIndices: [],
   }
 
-  if (Array.isArray(fillColumnMap.mappings)) {
-    fillColumnMap.mappings.forEach((line, index) => {
-      if (line[RESULT] === MAX) {
-        bandIndices.maxIndices.push(index)
-      } else if (line[RESULT] === MIN) {
-        bandIndices.minIndices.push(index)
-      } else {
-        bandIndices.rowIndices.push(index)
-      }
+  const bands = Object.values(groupLineIndicesIntoBands(fillColumnMap))
+
+  if (Array.isArray(bands)) {
+    bands.forEach(band => {
+      bandIndices.rowIndices.push(isDefined(band.row) ? band.row : null)
+      bandIndices.minIndices.push(isDefined(band.min) ? band.min : null)
+      bandIndices.maxIndices.push(isDefined(band.max) ? band.max : null)
     })
   }
 
@@ -124,6 +123,77 @@ export const getBandName = (fillColumnMap: ColumnGroupMap): string => {
     }
     return name
   }, '')
+}
+
+export const alignMinMaxWithBand = (
+  lineData: LineData,
+  bandIndexMap: BandIndexMap
+): LineData => {
+  const {rowIndices, maxIndices, minIndices} = bandIndexMap
+
+  for (let i = 0; i < rowIndices.length; i += 1) {
+    const bandId = rowIndices[i]
+    const minId = minIndices[i]
+    const maxId = maxIndices[i]
+
+    let bandXs = []
+    let bandYs = []
+    let maxXs = []
+    let maxYs = []
+    let minXs = []
+    let minYs = []
+
+    if (lineData[bandId]) {
+      bandXs = Array.from(lineData[bandId].xs)
+      bandYs = Array.from(lineData[bandId].ys)
+    }
+
+    if (lineData[maxId]) {
+      maxXs = Array.from(lineData[maxId].xs)
+      maxYs = Array.from(lineData[maxId].ys)
+    }
+
+    if (lineData[minId]) {
+      minXs = Array.from(lineData[minId].xs)
+      minYs = Array.from(lineData[minId].ys)
+    }
+
+    let position = 0
+
+    while (position < bandXs.length && position < bandYs.length) {
+      const bandTime = bandXs[position]
+      const bandValue = bandYs[position]
+
+      if (maxXs[position] < bandTime) {
+        bandXs.splice(position, 0, maxXs[position])
+        bandYs.splice(position, 0, maxYs[position])
+      } else if (minXs[position] < bandTime) {
+        bandXs.splice(position, 0, minXs[position])
+        bandYs.splice(position, 0, minYs[position])
+      }
+
+      if (!isDefined(maxXs[position]) || bandTime < maxXs[position]) {
+        maxXs.splice(position, 0, bandTime)
+        maxYs.splice(position, 0, bandValue)
+      }
+
+      if (!isDefined(minXs[position]) || bandTime < minXs[position]) {
+        minXs.splice(position, 0, bandTime)
+        minYs.splice(position, 0, bandValue)
+      }
+
+      position += 1
+    }
+
+    lineData[bandId].xs = bandXs
+    lineData[bandId].ys = bandYs
+    lineData[maxId].xs = maxXs
+    lineData[maxId].ys = maxYs
+    lineData[minId].xs = minXs
+    lineData[minId].ys = minYs
+  }
+
+  return lineData
 }
 
 export const bandTransform = (
