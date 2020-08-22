@@ -372,7 +372,7 @@ describe('band transform utils', () => {
   })
 
   describe('aligns min and max columns to have same length as band', () => {
-    it('returns the line data unaltered when no row indices (no bands) are present', () => {
+    it('returns an empty object when no row indices (no bands) are present', () => {
       const lineData = {
         0: {
           fill: 'rgb(49, 192, 246)',
@@ -396,7 +396,7 @@ describe('band transform utils', () => {
         rowIndices: [],
       }
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual(lineData)
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({})
     })
 
     it('returns the updated line data with same length rows when one row index is present', () => {
@@ -438,6 +438,27 @@ describe('band transform utils', () => {
           fill: 'rgb(140, 66, 177)',
           xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
           ys: [373.73275, 304.66375, 379.4885],
+        },
+      })
+
+      lineData[2].xs.unshift(0)
+      lineData[2].ys.unshift(null)
+
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [0, 16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [null, 373.73275, 304.66375, 379.4885],
+        },
+        1: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [0, 16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [null, 373.73275, 304.66375, 379.4885],
+        },
+        2: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [0, 16.422140713571192, 32.844281427142384, 49.26642214071357],
+          ys: [null, 373.73275, 304.66375, 379.4885],
         },
       })
     })
@@ -511,6 +532,44 @@ describe('band transform utils', () => {
           fill: 'rgb(140, 66, 177)',
           xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
           ys: [373.73275, 304.66375, 379.4885],
+        },
+      })
+
+      lineData[4].xs.unshift(0)
+      lineData[4].ys.unshift(null)
+      lineData[5].xs.push(50)
+      lineData[5].ys.push(null)
+
+      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+        0: {
+          fill: 'rgb(49, 192, 246)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357, 50],
+          ys: [373.73275, 304.66375, 379.4885, null],
+        },
+        1: {
+          fill: 'red',
+          xs: [0, 1, 3, 5, 7, 9],
+          ys: [null, 20, 55, 60, 80, 100],
+        },
+        2: {
+          fill: 'rgb(95, 119, 213)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357, 50],
+          ys: [373.73275, 304.66375, 379.4885, null],
+        },
+        3: {
+          fill: 'green',
+          xs: [0, 1, 3, 5, 7, 9],
+          ys: [null, 20, 25, 60, 80, 100],
+        },
+        4: {
+          fill: 'blue',
+          xs: [0, 1, 3, 5, 7, 9],
+          ys: [null, 20, 40, 60, 80, 100],
+        },
+        5: {
+          fill: 'rgb(140, 66, 177)',
+          xs: [16.422140713571192, 32.844281427142384, 49.26642214071357, 50],
+          ys: [373.73275, 304.66375, 379.4885, null],
         },
       })
     })
