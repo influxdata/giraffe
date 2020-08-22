@@ -31,9 +31,10 @@ export const BandLayer: FunctionComponent<Props> = props => {
 
   const simplifiedLineData = useMemo(
     () =>
-      alignMinMaxWithBand(
-        simplifyLineData(spec.lineData, xScale, yScale),
-        spec.bandIndexMap
+      simplifyLineData(
+        alignMinMaxWithBand(spec.lineData, spec.bandIndexMap),
+        xScale,
+        yScale
       ),
     [spec.lineData, xScale, yScale]
   )

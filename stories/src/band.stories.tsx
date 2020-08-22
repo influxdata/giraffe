@@ -139,7 +139,7 @@ storiesOf('Band Chart', module)
     const shadeOpacity = number('Shade Opacity', 0.3)
     const hoverDimension = select(
       'Hover Dimension',
-      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy', none: ''},
       'auto'
     )
 
