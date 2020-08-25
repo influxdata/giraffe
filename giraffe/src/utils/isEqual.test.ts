@@ -3,7 +3,15 @@ import {isEqual} from './isEqual'
 describe('isEqual', () => {
   it('handles basic types', () => {
     expect(isEqual(0, 0)).toEqual(true)
+    expect(isEqual(0, 1)).toEqual(false)
+    expect(isEqual(3, 1)).toEqual(false)
+    expect(isEqual(3, 0)).toEqual(false)
+    expect(isEqual(3, 3)).toEqual(true)
     expect(isEqual('', '')).toEqual(true)
+    expect(isEqual('omg', 'omg')).toEqual(true)
+    expect(isEqual('wow', 'wow')).toEqual(true)
+    expect(isEqual('owowow', `owowow`)).toEqual(true)
+    expect(isEqual('owowow', 'owen wilson')).toEqual(false)
     expect(isEqual(false, false)).toEqual(true)
     expect(isEqual()).toEqual(true)
     expect(isEqual(undefined)).toEqual(true)
