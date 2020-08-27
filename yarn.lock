@@ -12857,6 +12857,11 @@ unquote@^1.1.0, unquote@~1.1.1:
   resolved "https://registry.yarnpkg.com/unquote/-/unquote-1.1.1.tgz#8fded7324ec6e88a0ff8b905e7c098cdc086d544"
   integrity sha1-j97XMk7G6IoP+LkF58CYzcCG1UQ=
 
+unraw@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/unraw/-/unraw-2.0.0.tgz#f42e90f530706e204b4509e697a41f9c9f93b05b"
+  integrity sha512-fNpxuL92wTu4guZmjqzVX5EoCmE8pMKJxUJR/Vcg7fA6BRTwnqfCQ/cQd5CBSQsmpkIm8+FNksJqYdxwBFJHng==
+
 unset-value@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unset-value/-/unset-value-1.0.0.tgz#8376873f7d2335179ffb1e6fc3a8ed0dfc8ab559"

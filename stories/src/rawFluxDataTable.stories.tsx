@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, text} from '@storybook/addon-knobs'
+import {withKnobs, text, boolean} from '@storybook/addon-knobs'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
@@ -13,6 +13,8 @@ storiesOf('Raw Flux Data Table', module)
   .add('Raw Flux Data Table', () => {
     const csv1 = text('Paste first CSV here:', '')
     const csv2 = text('Paste second CSV here:', '')
+
+    const parseObjects = boolean('Parse objects in CSV?', true)
 
     const files = []
 
@@ -34,6 +36,7 @@ storiesOf('Raw Flux Data Table', module)
       layers: [
         {
           type: 'flux data table',
+          parseObjects,
           files,
         } as RawFluxDataTableLayerConfig,
       ],

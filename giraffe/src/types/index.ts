@@ -176,6 +176,7 @@ export interface RawFluxDataTableLayerConfig {
   width: number
   height: number
   disableVerticalScrolling?: boolean
+  parseObjects?: boolean
 }
 
 export interface GaugeLayerConfig {

@@ -388,6 +388,8 @@ Giraffe comes with utility functions.
 
   - **disableVerticalScrolling**: _boolean. **Optional**. Recommendation: do not include. Defaults to false when excluded._ Disables the vertical scrollbar for the rendered table.
 
+  - **parseObjects**: _boolean. **Optional**. Defaults to false when excluded._ Enables the parsing of JSON objects in the CSV of **files** so that JSON objects are correctly interpreted when there are commas in the object, and prevents all data from being combined into a single column.
+
 - **GaugeLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
 
   - **type**: _'gauge'. **Required**._ Specifies that this LayerConfig is a gauge layer.

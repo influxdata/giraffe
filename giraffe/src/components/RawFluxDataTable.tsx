@@ -34,10 +34,10 @@ export const RawFluxDataTable: FunctionComponent<Props> = (props: Props) => {
   }
 
   const {
-    config: {width, height, files, disableVerticalScrolling},
+    config: {width, height, files, disableVerticalScrolling, parseObjects},
   } = props
   const {scrollTop, scrollLeft} = state
-  const {data, maxColumnCount} = parseFilesMemoized(files)
+  const {data, maxColumnCount} = parseFilesMemoized(files, parseObjects)
 
   const tableWidth = width
   const tableHeight = height
