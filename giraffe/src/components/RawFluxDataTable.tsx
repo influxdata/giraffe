@@ -4,7 +4,7 @@ import memoizeOne from 'memoize-one'
 import {RawFluxDataGrid} from './RawFluxDataGrid'
 
 // Utils
-import {parseFiles} from '../utils/rawFluxDataTable'
+import {parseFiles, parseFilesWithObjects} from '../utils/rawFluxDataTable'
 import {DapperScrollbars} from './DapperScrollbars'
 
 // Types
@@ -20,6 +20,7 @@ interface State {
 }
 
 const parseFilesMemoized = memoizeOne(parseFiles)
+const parseFilesWithObjectsMemoized = memoizeOne(parseFilesWithObjects)
 
 export const RawFluxDataTable: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
@@ -37,7 +38,9 @@ export const RawFluxDataTable: FunctionComponent<Props> = (props: Props) => {
     config: {width, height, files, disableVerticalScrolling, parseObjects},
   } = props
   const {scrollTop, scrollLeft} = state
-  const {data, maxColumnCount} = parseFilesMemoized(files, parseObjects)
+  const {data, maxColumnCount} = parseObjects
+    ? parseFilesWithObjectsMemoized(files)
+    : parseFilesMemoized(files)
 
   const tableWidth = width
   const tableHeight = height
