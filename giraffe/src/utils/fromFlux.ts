@@ -1,10 +1,29 @@
 import {csvParse, csvParseRows} from 'd3-dsv'
+import Papa from 'papaparse'
+import {get, groupBy} from 'lodash'
 
 import {Table, ColumnType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 
+export interface Tag {
+  [tagName: string]: string[]
+}
+
+export interface SchemaValues {
+  fields: string[]
+  tags: Tag
+  type?: string
+}
+
+export type Measurement = string
+
+export interface Schema {
+  [measurement: string]: SchemaValues
+}
+
 export interface FromFluxResult {
+  schema: Schema
   // The single parsed `Table`
   table: Table
 
@@ -22,6 +41,52 @@ interface Columns {
   [columnKey: string]: Column
 }
 
+const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
+  const lines = chunk.split('\n')
+  const annotationLines: string = lines
+    .filter(line => line.startsWith('#'))
+    .join('\n')
+    .trim()
+  const nonAnnotationLines: string = lines
+    .filter(line => !line.startsWith('#'))
+    .join('\n')
+    .trim()
+
+  const nonAnnotationData = Papa.parse(nonAnnotationLines).data
+  const annotationD = Papa.parse(annotationLines).data
+  const headerRow = nonAnnotationData[0]
+  const tableColIndex = headerRow.findIndex(h => h === 'table')
+  interface TableGroup {
+    [tableId: string]: string[]
+  }
+  // Group rows by their table id
+  const tablesData = Object.values(
+    groupBy<TableGroup[]>(nonAnnotationData.slice(1), row => row[tableColIndex])
+  )
+
+  const groupRow = annotationD.find(row => row[0] === '#group')
+  const defaultsRow = annotationD.find(row => row[0] === '#default')
+
+  // groupRow = ['#group', 'false', 'true', 'true', 'false']
+  const groupKeyIndices = groupRow.reduce((acc, value, i) => {
+    if (value === 'true') {
+      return [...acc, i]
+    }
+
+    return acc
+  }, [])
+
+  tablesData.forEach(tableData => {
+    const dataRow = get(tableData, '0', defaultsRow)
+
+    const groupKey = groupKeyIndices.reduce((acc, i) => {
+      return {...acc, [headerRow[i]]: get(dataRow, i, '')}
+    }, {})
+
+    formatSchemaByGroupKey(groupKey, schema)
+  })
+}
+
 /*
   Convert a [Flux CSV response][0] to a `Table`.
 
@@ -31,7 +96,7 @@ interface Columns {
       long     | string   | long      <-- type
       ------------------------------
              1 |      "g" |       34
-             2 |      "f" |       58 
+             2 |      "f" |       58
              3 |      "c" |       21
 
       column_b | column_d   <-- name
@@ -40,7 +105,7 @@ interface Columns {
            1.0 |     true
            2.0 |     true
            3.0 |     true
-  
+
   This function will spread them out to a single wide table that looks like
   this instead:
 
@@ -48,7 +113,7 @@ interface Columns {
       column_a | column_b          | column_c | column_b          | column_d  <-- name
       number   | string            | number   | number            | bool      <-- type
       ---------------------------------------------------------------------
-             1 |               "g" |       34 |                   | 
+             1 |               "g" |       34 |                   |
              2 |               "f" |       58 |                   |
              3 |                   |       21 |                   |
                |                   |          |               1.0 |     true
@@ -78,7 +143,10 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 
   let tableLength = 0
 
+  const schema = {}
+
   for (const chunk of chunks) {
+    formatSchemaByChunk(chunk, schema)
     const tableText = extractTableText(chunk)
     const tableData = csvParse(tableText)
     const annotationText = extractAnnotationText(chunk)
@@ -122,13 +190,16 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const table = Object.entries(columns).reduce(
     (table, [key, {name, type, data}]) => {
       data.length = tableLength
-
       return table.addColumn(key, type, data, name)
     },
     newTable(tableLength)
   )
 
-  const result = {table, fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion)}
+  const result = {
+    schema,
+    table,
+    fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+  }
 
   return result
 }
@@ -177,6 +248,64 @@ const extractAnnotationText = (chunk: string): string => {
   )
 
   return text
+}
+
+const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
+  const measurement = groupKey['_measurement']
+  if (measurement === undefined) {
+    return {}
+  }
+  const field = groupKey['_field']
+  const tags = Object.entries(groupKey)
+    .filter(([k]) => {
+      return !(
+        k === '_start' ||
+        k === '_stop' ||
+        k === '_measurement' ||
+        k === '_field' ||
+        k === 'undefined'
+      )
+    })
+    .reduce((acc, [k, v]) => {
+      if (k !== undefined && v !== undefined) {
+        if (acc[k]) {
+          acc[k] = [...acc[k], v]
+        } else {
+          acc[k] = [v]
+        }
+      }
+      return acc
+    }, {})
+
+  if (schema[measurement]) {
+    let fields = schema[measurement].fields || []
+    if (field && !fields.includes(field)) {
+      fields = fields.concat(field)
+    }
+    const existingTags = schema[measurement].tags || {}
+    Object.entries(existingTags).forEach(([k, values]) => {
+      if (tags[k]) {
+        let tagValues = tags[k]
+        values.forEach(value => {
+          if (!tagValues.includes(value)) {
+            tagValues = tagValues.concat(value)
+          }
+        })
+        tags[k] = tagValues
+      }
+    })
+    schema[measurement] = {
+      fields,
+      tags,
+      type: 'string',
+    }
+  } else {
+    schema[measurement] = {
+      type: 'string',
+      fields: field ? [field] : [],
+      tags,
+    }
+  }
 }
 
 const parseAnnotations = (
