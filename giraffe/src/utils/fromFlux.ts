@@ -2,25 +2,9 @@ import {csvParse, csvParseRows} from 'd3-dsv'
 import Papa from 'papaparse'
 import {get, groupBy} from 'lodash'
 
-import {Table, ColumnType} from '../types'
+import {Schema, Table, ColumnType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
-
-export interface Tag {
-  [tagName: string]: string[]
-}
-
-export interface SchemaValues {
-  fields: string[]
-  tags: Tag
-  type?: string
-}
-
-export type Measurement = string
-
-export interface Schema {
-  [measurement: string]: SchemaValues
-}
 
 export interface FromFluxResult {
   schema: Schema
