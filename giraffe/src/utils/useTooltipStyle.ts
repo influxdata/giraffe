@@ -44,11 +44,14 @@ export const useTooltipStyle = (el: HTMLDivElement) => {
       dy += 0 - (y + dy)
     }
 
+    const clampedX = Math.max(x + dx, 8)
+    const clampedY = Math.max(y + dy, 8)
+
     return {
       display: 'inline',
       position: 'fixed',
-      left: `${x + dx}px`,
-      top: `${y + dy}px`,
+      left: `${clampedX}px`,
+      top: `${clampedY}px`,
     }
   })
 }
