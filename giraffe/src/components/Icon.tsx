@@ -9,6 +9,9 @@ import {IconFont} from '../types/input'
 // Styles
 import styles from './Icon.scss'
 
+// Utils
+import {styleReducer} from '../utils/styleReducer'
+
 export interface IconProps extends StandardFunctionProps {
   /** Icon to display */
   glyph: IconFont | string
@@ -23,12 +26,7 @@ export const Icon = forwardRef<IconRef, IconProps>(
       [`${className}`]: className,
     })
       .split(' ')
-      .reduce((accum, current) => {
-        if (styles[current]) {
-          return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-        }
-        return accum ? `${accum} ${current}` : `${current}`
-      }, '')
+      .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     return (
       <span

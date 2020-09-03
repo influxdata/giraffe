@@ -16,6 +16,9 @@ import {StatusIndicator} from './StatusIndicator'
 // Styles
 import styles from './Input.scss'
 
+// Utils
+import {styleReducer} from '../utils/styleReducer'
+
 // Types
 import {StandardFunctionProps} from '../types'
 import {
@@ -142,12 +145,7 @@ export const Input = forwardRef<InputRef, InputProps>(
       [`${className}`]: className,
     })
       .split(' ')
-      .reduce((accum, current) => {
-        if (styles[current]) {
-          return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-        }
-        return accum ? `${accum} ${current}` : `${current}`
-      }, '')
+      .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     const handleInputFocus = (e: ChangeEvent<HTMLInputElement>): void => {
       setFocus(true)
@@ -167,9 +165,7 @@ export const Input = forwardRef<InputRef, InputProps>(
 
     const inputCheckboxClasses = classnames('cf-input--checkbox', {checked})
       .split(' ')
-      .reduce((accum, current) => {
-        return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-      }, '')
+      .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     const correctlyTypedValue: string | number = value === value ? value : ''
     const correctType: string = value === value ? type : 'text'

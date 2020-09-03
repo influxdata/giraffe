@@ -9,6 +9,7 @@ import {ASCENDING, DEFAULT_TIME_FIELD} from '../constants/tableGraph'
 import {generateThresholdsListHexs} from '../utils/colorOperations'
 import {isString} from '../utils/isString'
 import {defaultTo} from '../utils/defaultTo'
+import {styleReducer} from '../utils/styleReducer'
 
 // Types
 import {TableViewProperties, SortOptions, RenamableField} from '../types'
@@ -35,6 +36,7 @@ interface Props extends CellRendererProps {
 
 const URL_REGEXP = /((http|https)?:\/\/[^\s]+)/g
 
+// From https://github.com/influxdata/influxdb/commit/426f076d2c27da4e67b8d60ac023d30de88f0516:
 // NOTE: rip this out if you spend time any here as per:
 // https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript/1500501#1500501
 const asLink = (str: string) => {
@@ -146,12 +148,7 @@ const getClassName = (props: Props): string => {
       !isAscending(sortOptions),
   })
     .split(' ')
-    .reduce((accum, current) => {
-      if (styles[current]) {
-        return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-      }
-      return accum ? `${accum} ${current}` : `${current}`
-    }, '')
+    .reduce((accum, current) => styleReducer(styles, accum, current), '')
   return classes
 }
 

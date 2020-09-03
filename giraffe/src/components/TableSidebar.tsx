@@ -32,8 +32,6 @@ const getFilteredData = (
   return data.filter(table => table.name.includes(searchTerm))
 }
 
-const isDataEmpty = (data: FluxTable[]): boolean => data.length === 0
-
 export const TableSidebar: FunctionComponent<Props> = (props: Props) => {
   const {data, selectedTableName, onSelectTable, theme} = props
 
@@ -45,7 +43,7 @@ export const TableSidebar: FunctionComponent<Props> = (props: Props) => {
         theme === 'light' ? styles['time-machine-sidebar__light'] : ''
       }`}
     >
-      {!isDataEmpty(data) && (
+      {data.length > 0 && (
         <div className={styles['time-machine-sidebar--heading']}>
           <Input
             icon={IconFont.Search}

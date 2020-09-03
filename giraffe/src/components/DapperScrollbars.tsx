@@ -14,6 +14,8 @@ import {StandardFunctionProps} from '../types'
 import {InfluxColors} from '../constants/colorSchemes'
 import styles from './DapperScrollbars.scss'
 
+import {styleReducer} from '../utils/styleReducer'
+
 // Types
 type UIEventHandler = (event: UIEvent<HTMLDivElement>) => void
 type ScrollStateEventHandler = (
@@ -96,12 +98,7 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
     'cf-dapper-scrollbars--autohide': autoHide,
   })
     .split(' ')
-    .reduce((accum, current) => {
-      if (styles[current]) {
-        return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-      }
-      return accum ? `${accum} ${current}` : `${current}`
-    }, '')
+    .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
   dapperScrollbarsClasses =
     typeof className === 'string'

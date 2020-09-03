@@ -14,9 +14,9 @@ interface Props {
 }
 
 const getName = (groupKey: GroupKey): JSX.Element[] => {
-  const keysIHate = ['_start', '_stop']
+  const noNameKeys = ['_start', '_stop']
   return Object.entries(groupKey)
-    .filter(([k]) => !keysIHate.includes(k))
+    .filter(([k]) => !noNameKeys.includes(k))
     .map(([k, v], i) => {
       return (
         <Fragment key={i}>

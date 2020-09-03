@@ -32,17 +32,16 @@ interface State {
 const handleSetSort = (fieldName: string, setState: Function) => {
   setState(({sortOptions}) => {
     const newSortOptions = {...sortOptions}
+    newSortOptions.direction = DEFAULT_SORT_DIRECTION
     if (fieldName === sortOptions.field) {
-      if (sortOptions.direction === DESCENDING) {
-        newSortOptions.field = ''
-        newSortOptions.direction = DEFAULT_SORT_DIRECTION
-      } else {
+      if (sortOptions.direction !== DESCENDING) {
         newSortOptions.direction = DESCENDING
+        return {sortOptions: newSortOptions}
       }
-    } else {
-      newSortOptions.field = fieldName
-      newSortOptions.direction = DEFAULT_SORT_DIRECTION
+      newSortOptions.field = ''
+      return {sortOptions: newSortOptions}
     }
+    newSortOptions.field = fieldName
     return {sortOptions: newSortOptions}
   })
 }

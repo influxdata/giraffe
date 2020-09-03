@@ -48,7 +48,6 @@ interface State {
   scrollbarSize: number
   showHorizontalScrollbar: boolean
   showVerticalScrollbar: boolean
-  // privates
   deferredInvalidateColumnIndex: number
   deferredInvalidateRowIndex: number
   bottomLeftGrid: Grid
@@ -176,13 +175,12 @@ const cellRendererTopRightGrid = (
         }}
       />
     )
-  } else {
-    return cellRenderer({
-      ...rest,
-      columnIndex: columnIndex + fixedColumnCount,
-      parent,
-    })
   }
+  return cellRenderer({
+    ...rest,
+    columnIndex: columnIndex + fixedColumnCount,
+    parent,
+  })
 }
 
 const cellRendererBottomLeftGrid = (
@@ -202,13 +200,12 @@ const cellRendererBottomLeftGrid = (
         }}
       />
     )
-  } else {
-    return cellRenderer({
-      ...rest,
-      parent,
-      rowIndex: rowIndex + fixedRowCount,
-    })
   }
+  return cellRenderer({
+    ...rest,
+    parent,
+    rowIndex: rowIndex + fixedRowCount,
+  })
 }
 
 const cellRendererBottomRightGrid = (

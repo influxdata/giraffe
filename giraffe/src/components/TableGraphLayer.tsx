@@ -40,8 +40,7 @@ const showSidebar = (tables: FluxTable[]): boolean => {
 }
 
 const hasData = (selectedTable: FluxTable): boolean => {
-  const {data} = selectedTable
-  return !!data && !!data.length
+  return Array.isArray(selectedTable.data) && selectedTable.data.length > 0
 }
 
 const isTableVisible = (

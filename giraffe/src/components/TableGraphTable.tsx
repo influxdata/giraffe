@@ -170,11 +170,15 @@ const getScrollToColRow = (
   }
 
   const hoverIndex = findHoverTimeIndex(sortedTimeVals, hoverTime)
-  const scrollToColumn = isVerticalTimeAxis(props) ? -1 : hoverIndex
-  const scrollToRow = isVerticalTimeAxis(props) ? hoverIndex : null
+  if (isVerticalTimeAxis(props)) {
+    return {
+      scrollToRow: hoverIndex,
+      scrollToColumn: -1,
+    }
+  }
   return {
-    scrollToRow,
-    scrollToColumn,
+    scrollToRow: null,
+    scrollToColumn: hoverIndex,
   }
 }
 

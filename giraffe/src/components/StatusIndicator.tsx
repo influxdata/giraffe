@@ -12,6 +12,9 @@ import {ComponentStatus, IconFont, ComponentSize} from '../types/input'
 // Styles
 import styles from './StatusIndicator.scss'
 
+// Utils
+import {styleReducer} from '../utils/styleReducer'
+
 export interface StatusIndicatorProps extends StandardFunctionProps {
   /** The status to indicate */
   status: ComponentStatus
@@ -45,12 +48,7 @@ export const StatusIndicator = forwardRef<
       [`${className}`]: className,
     })
       .split(' ')
-      .reduce((accum, current) => {
-        if (styles[current]) {
-          return accum ? `${accum} ${styles[current]}` : `${styles[current]}`
-        }
-        return accum ? `${accum} ${current}` : `${current}`
-      }, '')
+      .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     let statusElement: JSX.Element = <></>
     const shadowElement = shadow && (

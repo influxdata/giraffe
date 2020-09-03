@@ -8,20 +8,20 @@
 }
 
 .cf-input-field {
+  appearance: none;
+  background-color: #202028;
+  border-radius: 4px;
+  border: 2px solid #383846;
   box-sizing: border-box;
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  font-weight: 500;
+  color: #bec2cc;
   font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-weight: 500;
+  outline: none;
+  position: relative;
   transition: background-color 0.25s ease, border-color 0.25s ease,
     color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-  outline: none;
-  appearance: none;
-  border-radius: 4px;
-  background-color: #202028;
-  color: #bec2cc;
-  border: 2px solid #383846;
+  width: 100%;
+  z-index: 1;
 
   &:hover {
     background-color: #202028;
@@ -32,29 +32,29 @@
   &:focus {
     background-color: #202028;
     border-color: #00a3ff;
-    color: #ffffff;
     box-shadow: 0 0 6px 0 #00a3ff;
+    color: #ffffff;
   }
 
   &::-webkit-input-placeholder {
     color: #757888;
-    font-weight: 500 !important;
     font-style: italic;
+    font-weight: 500 !important;
   }
   &::-moz-placeholder {
     color: #757888;
-    font-weight: 500 !important;
     font-style: italic;
+    font-weight: 500 !important;
   }
   &:-ms-input-placeholder {
     color: #757888;
-    font-weight: 500 !important;
     font-style: italic;
+    font-weight: 500 !important;
   }
   &:-moz-placeholder {
     color: #757888;
-    font-weight: 500 !important;
     font-style: italic;
+    font-weight: 500 !important;
   }
 }
 
@@ -63,17 +63,17 @@
   ------------------------------------------------------------------------------
 */
 .cf-input-icon {
-  pointer-events: none;
-  top: 50%;
-  position: absolute;
-  z-index: 3;
-  transition: color 0.25s ease;
   font-size: 1.1em;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transition: color 0.25s ease;
+  z-index: 3;
 }
 
 .cf-input-icon {
-  transform: translate(-50%, -50%);
   color: #bec2cc;
+  transform: translate(-50%, -50%);
 }
 
 .cf-input-field:hover + .cf-input-icon {
@@ -89,28 +89,28 @@
   ------------------------------------------------------------------------------
 */
 .cf-input__has-checkbox .cf-input-field {
-  position: absolute;
   left: -9999px;
+  position: absolute;
 }
 
 .cf-input--checkbox {
-  position: relative;
   background-color: #202028;
   border-radius: 4px;
   border: 2px solid #383846;
+  position: relative;
   transition: border-color 0.25s ease, background-color 0.25s ease;
 
   &:after {
+    background: #00a3ff;
+    border-radius: 50%;
     content: '';
+    left: 50%;
+    opacity: 0;
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%) scale(1.5, 1.5);
-    border-radius: 50%;
-    background: #00a3ff;
-    z-index: 2;
-    opacity: 0;
     transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2;
   }
 
   &.checked:after {
@@ -130,13 +130,13 @@
   ------------------------------------------------------------------------------
 */
 @mixin inputSizeModifier($fontSize, $padding, $height) {
-  height: $height;
   font-size: $fontSize;
+  height: $height;
 
   .cf-input-field {
     font-size: $fontSize;
-    padding: 0 $padding;
     height: $height;
+    padding: 0 $padding;
   }
 
   &.cf-input__has-icon .cf-input-field {
@@ -153,13 +153,13 @@
   }
 
   .cf-input--checkbox {
-    width: $height - (4px + 2px);
     height: $height - (4px + 2px);
     margin: 2px 0;
+    width: $height - (4px + 2px);
 
     &:after {
-      width: ceil(($height - (4px + 2px)) * 0.4);
       height: ceil(($height - (4px + 2px)) * 0.4);
+      width: ceil(($height - (4px + 2px)) * 0.4);
     }
   }
 }
@@ -207,8 +207,8 @@
     &,
     &:hover {
       cursor: default;
-      border-color: #31313d;
       background-color: #292933;
+      border-color: #31313d;
 
       &:after {
         background-color: #757888;
@@ -219,9 +219,9 @@
 
 .cf-input-field[disabled],
 .cf-input-field[disabled]:hover {
-  cursor: default;
-  border-color: #31313d;
   background-color: #292933;
+  border-color: #31313d;
   color: #757888;
+  cursor: default;
   font-style: italic;
 }
