@@ -222,16 +222,17 @@ export const getBandTooltipData = (
   xColKey: string,
   yColKey: string,
   bandName: string,
+  lowerColumnName: string,
+  upperColumnName: string,
   getValueFormatter: (colKey: string) => (x: any) => string,
   fillColKeys: string[],
   colors: string[],
-  position?: LinePosition,
-  lineData?: LineData
+  lineData: LineData
 ): TooltipData => {
   const {
     rowIndices: hoveredRowIndices,
-    minIndices,
-    maxIndices,
+    lowerIndices,
+    upperIndices,
   } = bandHoverIndices
 
   const xColumnName =
@@ -239,14 +240,14 @@ export const getBandTooltipData = (
   const yColumnName =
     yColKey === VALUE ? `${yColKey}:${bandName}` : table.getColumnName(yColKey)
   const sortOrder = lineData
-    ? getDataSortOrder(lineData, hoveredRowIndices, position)
+    ? getDataSortOrder(lineData, hoveredRowIndices, null)
     : hoveredRowIndices
   const minOrder = lineData
-    ? getDataSortOrder(lineData, minIndices, position)
-    : minIndices
+    ? getDataSortOrder(lineData, lowerIndices, null)
+    : lowerIndices
   const maxOrder = lineData
-    ? getDataSortOrder(lineData, maxIndices, position)
-    : maxIndices
+    ? getDataSortOrder(lineData, upperIndices, null)
+    : upperIndices
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const xFormatter = getValueFormatter(xColKey)
@@ -275,53 +276,61 @@ export const getBandTooltipData = (
   const tooltipAdditionalColumns = []
 
   if (yColKey === VALUE) {
-    tooltipAdditionalColumns.push({
-      key: yColKey,
-      name: `${yColKey}:min`,
-      type: table.getColumnType(yColKey),
-      colors,
-      values: orderDataByValue(
-        minIndices,
-        minOrder,
-        minIndices.map(i => yFormatter(yColData[i]))
-      ),
-    })
+    if (lowerColumnName) {
+      tooltipAdditionalColumns.push({
+        key: yColKey,
+        name: `${yColKey}:${lowerColumnName}`,
+        type: table.getColumnType(yColKey),
+        colors,
+        values: orderDataByValue(
+          lowerIndices,
+          minOrder,
+          lowerIndices.map(i => yFormatter(yColData[i]))
+        ),
+      })
+    }
 
-    tooltipAdditionalColumns.push({
-      key: yColKey,
-      name: `${yColKey}:max`,
-      type: table.getColumnType(yColKey),
-      colors,
-      values: orderDataByValue(
-        maxIndices,
-        maxOrder,
-        maxIndices.map(i => yFormatter(yColData[i]))
-      ),
-    })
+    if (upperColumnName) {
+      tooltipAdditionalColumns.push({
+        key: yColKey,
+        name: `${yColKey}:${upperColumnName}`,
+        type: table.getColumnType(yColKey),
+        colors,
+        values: orderDataByValue(
+          upperIndices,
+          maxOrder,
+          upperIndices.map(i => yFormatter(yColData[i]))
+        ),
+      })
+    }
   } else {
-    tooltipAdditionalColumns.push({
-      key: xColKey,
-      name: `${xColKey}:min`,
-      type: table.getColumnType(xColKey),
-      colors,
-      values: orderDataByValue(
-        minIndices,
-        minOrder,
-        minIndices.map(i => xFormatter(xColData[i]))
-      ),
-    })
+    if (lowerColumnName) {
+      tooltipAdditionalColumns.push({
+        key: xColKey,
+        name: `${xColKey}:${lowerColumnName}`,
+        type: table.getColumnType(xColKey),
+        colors,
+        values: orderDataByValue(
+          lowerIndices,
+          minOrder,
+          lowerIndices.map(i => xFormatter(xColData[i]))
+        ),
+      })
+    }
 
-    tooltipAdditionalColumns.push({
-      key: xColKey,
-      name: `${xColKey}:max`,
-      type: table.getColumnType(xColKey),
-      colors,
-      values: orderDataByValue(
-        maxIndices,
-        maxOrder,
-        maxIndices.map(i => xFormatter(xColData[i]))
-      ),
-    })
+    if (upperColumnName) {
+      tooltipAdditionalColumns.push({
+        key: xColKey,
+        name: `${xColKey}:${upperColumnName}`,
+        type: table.getColumnType(xColKey),
+        colors,
+        values: orderDataByValue(
+          upperIndices,
+          maxOrder,
+          upperIndices.map(i => xFormatter(xColData[i]))
+        ),
+      })
+    }
   }
 
   const fillColumns = getTooltipBandGroupColumns(

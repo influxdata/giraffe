@@ -1,12 +1,13 @@
 import {NumericColumnData, BandIndexMap, LineData} from '../types'
+import {LOWER, UPPER} from '../constants/columnKeys'
 import {isDefined} from './isDefined'
 
-interface MinMaxOfBands {
+interface BandBoundaries {
   [index: string]: {
-    maxCol: number
-    minCol: number
-    maxIndex: number
-    minIndex: number
+    upperCol: number
+    lowerCol: number
+    upperIndex: number
+    lowerIndex: number
   }
 }
 
@@ -19,16 +20,16 @@ interface LineLengths {
 
 export interface BandHoverIndices {
   rowIndices: number[]
-  minIndices: number[]
-  maxIndices: number[]
+  lowerIndices: number[]
+  upperIndices: number[]
 }
 
-export const getMinMaxOfBands = (
+export const getBandBoundaries = (
   hoverRowIndices: number[],
   hoverGroupData: NumericColumnData,
   bandLineIndexMap: object
-): MinMaxOfBands => {
-  const minMaxOfBands = {}
+): BandBoundaries => {
+  const bandBoundaries = {}
 
   const hoverColumnToIndexMap = {}
 
@@ -41,26 +42,26 @@ export const getMinMaxOfBands = (
   const bands = Object.values(bandLineIndexMap)
 
   bands.forEach(band => {
-    minMaxOfBands[band.row] = {
-      maxCol: null,
-      minCol: null,
-      maxIndex: null,
-      minIndex: null,
+    bandBoundaries[band.row] = {
+      upperCol: null,
+      lowerCol: null,
+      upperIndex: null,
+      lowerIndex: null,
     }
-    if (isDefined(band.max)) {
-      minMaxOfBands[band.row].maxCol = band.max
-      if (isDefined(hoverColumnToIndexMap[band.max])) {
-        minMaxOfBands[band.row].maxIndex = hoverColumnToIndexMap[band.max]
+    if (isDefined(band[UPPER])) {
+      bandBoundaries[band.row].upperCol = band[UPPER]
+      if (isDefined(hoverColumnToIndexMap[band[UPPER]])) {
+        bandBoundaries[band.row].upperIndex = hoverColumnToIndexMap[band[UPPER]]
       }
     }
-    if (isDefined(band.min)) {
-      minMaxOfBands[band.row].minCol = band.min
-      if (isDefined(hoverColumnToIndexMap[band.min])) {
-        minMaxOfBands[band.row].minIndex = hoverColumnToIndexMap[band.min]
+    if (isDefined(band[LOWER])) {
+      bandBoundaries[band.row].lowerCol = band[LOWER]
+      if (isDefined(hoverColumnToIndexMap[band[LOWER]])) {
+        bandBoundaries[band.row].lowerIndex = hoverColumnToIndexMap[band[LOWER]]
       }
     }
   })
-  return minMaxOfBands
+  return bandBoundaries
 }
 
 export const getLineLengths = (lineData: LineData): LineLengths => {
@@ -89,28 +90,32 @@ export const getBandHoverIndices = (
   lineLengths: LineLengths,
   hoverRowIndices: number[],
   hoverGroupData: NumericColumnData,
-  minMaxOfBands: MinMaxOfBands
+  bandBoundaries: BandBoundaries
 ): BandIndexMap => {
   const bandHoverIndices = {
     rowIndices: [],
-    minIndices: [],
-    maxIndices: [],
+    lowerIndices: [],
+    upperIndices: [],
   }
 
   if (Array.isArray(hoverRowIndices)) {
     hoverRowIndices.forEach(index => {
       const columnId = hoverGroupData[index]
-      const hoveredBandId = Object.keys(minMaxOfBands).find(
+      const hoveredBandId = Object.keys(bandBoundaries).find(
         bandId => Number(bandId) === Number(columnId)
       )
 
-      if (minMaxOfBands[hoveredBandId]) {
+      if (bandBoundaries[hoveredBandId]) {
         const offset = index % lineLengths[hoveredBandId].length
         const rowBase = lineLengths[hoveredBandId].startIndex
 
         bandHoverIndices.rowIndices.push(rowBase + offset)
-        bandHoverIndices.maxIndices.push(minMaxOfBands[hoveredBandId].maxIndex)
-        bandHoverIndices.minIndices.push(minMaxOfBands[hoveredBandId].minIndex)
+        bandHoverIndices.upperIndices.push(
+          bandBoundaries[hoveredBandId].upperIndex
+        )
+        bandHoverIndices.lowerIndices.push(
+          bandBoundaries[hoveredBandId].lowerIndex
+        )
       }
     })
   }

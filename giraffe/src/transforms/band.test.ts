@@ -55,58 +55,115 @@ describe('band transform utils', () => {
   }
 
   describe('creates a map of indices by column type for all columns', () => {
+    it('creates a map with null indices when the named columns are not found', () => {
+      expect(getBandIndexMap(columnMap, 'lower', 'median', 'upper')).toEqual({
+        upperIndices: [null, null],
+        lowerIndices: [null, null],
+        rowIndices: [null, null],
+      })
+      expect(getBandIndexMap(columnMap, '', '', '')).toEqual({
+        upperIndices: [null, null],
+        lowerIndices: [null, null],
+        rowIndices: [null, null],
+      })
+    })
+
     it('creates a map with no indices when the column map is empty', () => {
-      expect(getBandIndexMap({columnKeys: null, mappings: null})).toEqual({
-        maxIndices: [],
-        minIndices: [],
+      expect(
+        getBandIndexMap(
+          {columnKeys: null, mappings: null},
+          'min',
+          'mean',
+          'max'
+        )
+      ).toEqual({
+        upperIndices: [],
+        lowerIndices: [],
         rowIndices: [],
       })
       expect(
-        getBandIndexMap({columnKeys: undefined, mappings: undefined})
+        getBandIndexMap(
+          {columnKeys: undefined, mappings: undefined},
+          'min',
+          'mean',
+          'max'
+        )
       ).toEqual({
-        maxIndices: [],
-        minIndices: [],
+        upperIndices: [],
+        lowerIndices: [],
         rowIndices: [],
       })
-      expect(getBandIndexMap({columnKeys: [], mappings: []})).toEqual({
-        maxIndices: [],
-        minIndices: [],
+      expect(
+        getBandIndexMap({columnKeys: [], mappings: []}, 'min', 'mean', 'max')
+      ).toEqual({
+        upperIndices: [],
+        lowerIndices: [],
         rowIndices: [],
       })
     })
 
     it('creates a map with indices that are in the same position for the same band per column type', () => {
-      expect(getBandIndexMap(columnMap)).toEqual({
-        maxIndices: [0, 1],
-        minIndices: [2, 3],
+      expect(getBandIndexMap(columnMap, 'min', 'mean', 'max')).toEqual({
+        upperIndices: [0, 1],
+        lowerIndices: [2, 3],
         rowIndices: [5, 4],
       })
     })
   })
 
   describe('creates a map of unique identifiers for the bands and indices of their data', () => {
+    it('creates indentifiers with null values when the named columns are not found', () => {
+      expect(
+        groupLineIndicesIntoBands(columnMap, 'lower', 'median', 'upper')
+      ).toEqual({
+        usage_systemcpucpu0localhost: {lower: null, upper: null, row: null},
+        usage_systemcpucpu1localhost: {lower: null, upper: null, row: null},
+      })
+      expect(groupLineIndicesIntoBands(columnMap, '', '', '')).toEqual({
+        usage_systemcpucpu0localhost: {lower: null, upper: null, row: null},
+        usage_systemcpucpu1localhost: {lower: null, upper: null, row: null},
+      })
+    })
+
     it('creates no indentifiers when the column map is empty', () => {
       expect(
-        groupLineIndicesIntoBands({columnKeys: null, mappings: null})
+        groupLineIndicesIntoBands(
+          {columnKeys: null, mappings: null},
+          'min',
+          'mean',
+          'max'
+        )
       ).toEqual({})
       expect(
-        groupLineIndicesIntoBands({columnKeys: undefined, mappings: undefined})
+        groupLineIndicesIntoBands(
+          {columnKeys: undefined, mappings: undefined},
+          'min',
+          'mean',
+          'max'
+        )
       ).toEqual({})
-      expect(groupLineIndicesIntoBands({columnKeys: [], mappings: []})).toEqual(
-        {}
-      )
+      expect(
+        groupLineIndicesIntoBands(
+          {columnKeys: [], mappings: []},
+          'min',
+          'mean',
+          'max'
+        )
+      ).toEqual({})
     })
 
     it('creates identifiers when given a column map', () => {
-      expect(groupLineIndicesIntoBands(columnMap)).toEqual({
-        usage_systemcpucpu0localhost: {min: 3, max: 1, row: 4},
-        usage_systemcpucpu1localhost: {min: 2, max: 0, row: 5},
+      expect(
+        groupLineIndicesIntoBands(columnMap, 'min', 'mean', 'max')
+      ).toEqual({
+        usage_systemcpucpu0localhost: {lower: 3, upper: 1, row: 4},
+        usage_systemcpucpu1localhost: {lower: 2, upper: 0, row: 5},
       })
     })
   })
 
   describe('creates the bands to be rendered', () => {
-    it('creates a line with min and max when they are available in the lineData', () => {
+    it('creates a line with lower and upper when they are available in the lineData', () => {
       const fill = {
         columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
         mappings: [
@@ -205,14 +262,21 @@ describe('band transform utils', () => {
         'rgb(232, 95, 70)',
         'rgb(255, 126, 39)',
       ]
-      const result = getBands(fill, lineData, bandFillColors)
+      const result = getBands(
+        fill,
+        lineData,
+        bandFillColors,
+        'min',
+        'mean',
+        'max'
+      )
       expect(Array.isArray(result)).toEqual(true)
       expect(result[0].fill).toEqual(cyan)
-      expect(result[0].min).toBeDefined()
-      expect(result[0].max).toBeDefined()
+      expect(result[0].lower).toBeDefined()
+      expect(result[0].upper).toBeDefined()
     })
 
-    it('creates a line without the min or max when corresponding min or max is missing from lineData', () => {
+    it('creates a line without the lower or upper when corresponding lower or upper is missing from lineData', () => {
       const fill = {
         columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
         mappings: [
@@ -354,20 +418,27 @@ describe('band transform utils', () => {
         'rgb(232, 95, 70)',
         'rgb(255, 126, 39)',
       ]
-      const result = getBands(fill, lineData, bandFillColors)
+      const result = getBands(
+        fill,
+        lineData,
+        bandFillColors,
+        'min',
+        'mean',
+        'max'
+      )
       expect(Array.isArray(result)).toEqual(true)
 
       expect(result[0].fill).toEqual(cyan)
-      expect(result[0].min).toBeUndefined()
-      expect(result[0].max).toBeDefined()
+      expect(result[0].lower).toBeUndefined()
+      expect(result[0].upper).toBeDefined()
 
       expect(result[1].fill).toEqual(babyBlue)
-      expect(result[1].min).toBeDefined()
-      expect(result[1].max).toBeUndefined()
+      expect(result[1].lower).toBeDefined()
+      expect(result[1].upper).toBeUndefined()
 
       expect(result[2].fill).toEqual(purple)
-      expect(result[2].min).toBeUndefined()
-      expect(result[2].max).toBeUndefined()
+      expect(result[2].lower).toBeUndefined()
+      expect(result[2].upper).toBeUndefined()
     })
   })
 
@@ -391,8 +462,8 @@ describe('band transform utils', () => {
         },
       }
       const bandIndexMap = {
-        maxIndices: [],
-        minIndices: [],
+        upperIndices: [],
+        lowerIndices: [],
         rowIndices: [],
       }
 
@@ -418,8 +489,8 @@ describe('band transform utils', () => {
         },
       }
       const bandIndexMap = {
-        maxIndices: [0],
-        minIndices: [1],
+        upperIndices: [0],
+        lowerIndices: [1],
         rowIndices: [2],
       }
 
@@ -497,8 +568,8 @@ describe('band transform utils', () => {
         },
       }
       const bandIndexMap = {
-        maxIndices: [0, 1],
-        minIndices: [2, 3],
+        upperIndices: [0, 1],
+        lowerIndices: [2, 3],
         rowIndices: [5, 4],
       }
 

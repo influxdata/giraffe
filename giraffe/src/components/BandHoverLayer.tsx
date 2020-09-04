@@ -32,13 +32,15 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
   columnFormatter,
 }) => {
   const {
-    position,
     interpolation,
     x: xColKey,
     y: yColKey,
     fill: fillColKeys,
     lineWidth,
+    lowerColumnName = '',
+    name: rowColumnName,
     shadeOpacity,
+    upperColumnName = '',
   } = config
 
   const xColData = spec.table.getColumn(xColKey, 'number')
@@ -105,11 +107,12 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     spec.table,
     config.x,
     config.y,
-    spec.bandName,
+    rowColumnName,
+    lowerColumnName,
+    upperColumnName,
     columnFormatter,
     fillColKeys,
     spec.bandFillColors,
-    position,
     spec.lineData
   )
 

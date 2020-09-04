@@ -303,6 +303,7 @@ export interface BandLayerConfig {
   lineOpacity?: number
   colors?: string[]
   shadeOpacity?: number
+  name: string
   upperColumnName?: string
   lowerColumnName?: string
 }
@@ -602,8 +603,8 @@ export interface BandBorder {
 }
 export interface Band {
   lineName: string
-  min: BandBorder
-  max: BandBorder
+  lower: BandBorder
+  upper: BandBorder
   xs: Array<number>
   ys: Array<number>
   fill: string
@@ -611,8 +612,8 @@ export interface Band {
 
 export interface BandIndexMap {
   rowIndices: number[]
-  minIndices: number[]
-  maxIndices: number[]
+  lowerIndices: number[]
+  upperIndices: number[]
 }
 
 export interface Tag {

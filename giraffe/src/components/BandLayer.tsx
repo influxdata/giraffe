@@ -7,11 +7,12 @@ import {simplifyLineData} from '../utils/lineData'
 import {useCanvas} from '../utils/useCanvas'
 import {drawBands} from '../utils/drawBands'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
+import {isDefined} from '../utils/isDefined'
 import {FILL} from '../constants/columnKeys'
 import {
   getBandHoverIndices,
   getLineLengths,
-  getMinMaxOfBands,
+  getBandBoundaries,
 } from '../utils/getBandHoverIndices'
 import {
   groupLineIndicesIntoBands,
@@ -28,6 +29,12 @@ const NO_HIGHLIGHT = 1
 
 export const BandLayer: FunctionComponent<Props> = props => {
   const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
+
+  const {
+    lowerColumnName = '',
+    name: rowColumnName,
+    upperColumnName = '',
+  } = config
 
   const simplifiedLineData = useMemo(
     () =>
@@ -46,7 +53,10 @@ export const BandLayer: FunctionComponent<Props> = props => {
     lineData: simplifiedLineData,
     lineWidth: config.lineWidth,
     lineOpacity: config.lineOpacity,
+    lowerColumnName,
+    rowColumnName,
     shadeOpacity: config.shadeOpacity,
+    upperColumnName,
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -79,15 +89,17 @@ export const BandLayer: FunctionComponent<Props> = props => {
   const {rowIndices} = spec.bandIndexMap
 
   rowIndices.forEach(rowIndex => {
-    hoverXYColumnData.xs = hoverXYColumnData.xs.concat(
-      spec.lineData[rowIndex].xs
-    )
-    hoverXYColumnData.ys = hoverXYColumnData.ys.concat(
-      spec.lineData[rowIndex].ys
-    )
-    hoverXYColumnData.groupColData = hoverXYColumnData.groupColData.concat(
-      ...groupColData.filter(index => index === rowIndex)
-    )
+    if (isDefined(rowIndex)) {
+      hoverXYColumnData.xs = hoverXYColumnData.xs.concat(
+        spec.lineData[rowIndex].xs
+      )
+      hoverXYColumnData.ys = hoverXYColumnData.ys.concat(
+        spec.lineData[rowIndex].ys
+      )
+      hoverXYColumnData.groupColData = hoverXYColumnData.groupColData.concat(
+        ...groupColData.filter(index => index === rowIndex)
+      )
+    }
   })
 
   // Get the min and max indices of the corresponding hovered line(s)
@@ -105,10 +117,15 @@ export const BandLayer: FunctionComponent<Props> = props => {
     height
   )
 
-  const minMaxOfBands = getMinMaxOfBands(
+  const bandBoundaries = getBandBoundaries(
     hoverAsXIndices,
     groupColData,
-    groupLineIndicesIntoBands(spec.columnGroupMaps.fill)
+    groupLineIndicesIntoBands(
+      spec.columnGroupMaps.fill,
+      lowerColumnName,
+      rowColumnName,
+      upperColumnName
+    )
   )
 
   const hoverRowIndices = useHoverPointIndices(
@@ -130,7 +147,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
     lineLengths,
     hoverRowIndices,
     hoverXYColumnData.groupColData,
-    minMaxOfBands
+    bandBoundaries
   )
 
   const hasHoverData = hoverRowIndices && hoverRowIndices.length > 0
