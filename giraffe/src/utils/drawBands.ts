@@ -9,9 +9,9 @@ import {isDefined} from '../utils/isDefined'
 import {getBands} from '../transforms/band'
 
 interface DrawBandsOptions {
-  bandFillColors: string[]
   context: CanvasRenderingContext2D
   fill: ColumnGroupMap
+  fillScale: Function
   interpolation: LineInterpolation
   lineData: LineData
   lineWidth: number
@@ -23,9 +23,9 @@ interface DrawBandsOptions {
 }
 
 export const drawBands = ({
-  bandFillColors,
   context,
   fill,
+  fillScale,
   interpolation,
   lineData,
   lineWidth,
@@ -38,7 +38,7 @@ export const drawBands = ({
   const bands = getBands(
     fill,
     lineData,
-    bandFillColors,
+    fillScale,
     lowerColumnName,
     rowColumnName,
     upperColumnName

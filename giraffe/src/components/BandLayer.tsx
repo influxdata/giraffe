@@ -47,8 +47,8 @@ export const BandLayer: FunctionComponent<Props> = props => {
   )
 
   const drawBandsOptions = {
-    bandFillColors: spec.bandFillColors,
     fill: spec.columnGroupMaps.fill,
+    fillScale: spec.scales.fill,
     interpolation: config.interpolation,
     lineData: simplifiedLineData,
     lineWidth: config.lineWidth,

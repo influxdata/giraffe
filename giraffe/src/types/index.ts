@@ -409,7 +409,6 @@ export interface LineLayerSpec {
 
 export interface BandLayerSpec {
   type: 'band' // do not refactor or restrict to SpecTypes.Line
-  bandFillColors: string[]
   bandIndexMap: BandIndexMap
   bandName: string
   inputTable: Table

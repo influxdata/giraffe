@@ -7,7 +7,7 @@ export const getBandHoverPoints = (
   yColKey: string,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
-  fillColors: string[]
+  fillScale: Function
 ): Array<{x: number; y: number; fill: string}> => {
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
@@ -15,6 +15,6 @@ export const getBandHoverPoints = (
   return hoverRowIndices.map((hoverIndex, index) => ({
     x: xScale(xColData[hoverIndex]),
     y: yScale(yColData[hoverIndex]),
-    fill: fillColors[index],
+    fill: fillScale(index),
   }))
 }
