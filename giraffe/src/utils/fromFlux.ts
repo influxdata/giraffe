@@ -332,7 +332,7 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
     if (field && !fields.includes(field)) {
       fields = fields.concat(field)
     }
-    const existingTags = schema[measurement].tags || new Set()
+    const existingTags = schema[measurement].tags
     Object.entries(existingTags).forEach(([k, values]) => {
       if (tags[k] && values) {
         tags[k] = new Set([...tags[k], ...values])
