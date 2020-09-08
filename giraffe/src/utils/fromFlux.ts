@@ -7,7 +7,7 @@ import {assert} from './assert'
 import {newTable} from './newTable'
 
 export interface FromFluxResult {
-  schema: Schema
+  schema?: Schema
   // The single parsed `Table`
   table: Table
 
@@ -39,7 +39,9 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
   const nonAnnotationData = Papa.parse(nonAnnotationLines).data
   const annotationD = Papa.parse(annotationLines).data
   const headerRow = nonAnnotationData[0]
+
   const tableColIndex = headerRow.findIndex(h => h === 'table')
+
   interface TableGroup {
     [tableId: string]: string[]
   }
@@ -127,7 +129,71 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 
   let tableLength = 0
 
-  const schema = {}
+  for (const chunk of chunks) {
+    const tableText = extractTableText(chunk)
+    const tableData = csvParse(tableText)
+    const annotationText = extractAnnotationText(chunk)
+    const annotationData = parseAnnotations(annotationText, tableData.columns)
+
+    for (const columnName of tableData.columns.slice(1)) {
+      const columnType = toColumnType(
+        annotationData.datatypeByColumnName[columnName]
+      )
+
+      const columnKey = `${columnName} (${columnType})`
+
+      if (!columns[columnKey]) {
+        columns[columnKey] = {
+          name: columnName,
+          type: columnType,
+          data: [],
+        } as Column
+      }
+
+      const colData = columns[columnKey].data
+      const columnDefault = annotationData.defaultByColumnName[columnName]
+
+      for (let i = 0; i < tableData.length; i++) {
+        colData[tableLength + i] = parseValue(
+          tableData[i][columnName] || columnDefault,
+          columnType
+        )
+      }
+
+      if (annotationData.groupKey.includes(columnName)) {
+        fluxGroupKeyUnion.add(columnKey)
+      }
+    }
+
+    tableLength += tableData.length
+  }
+
+  resolveNames(columns, fluxGroupKeyUnion)
+
+  const table = Object.entries(columns).reduce(
+    (table, [key, {name, type, data}]) => {
+      data.length = tableLength
+      return table.addColumn(key, type, data, name)
+    },
+    newTable(tableLength)
+  )
+
+  const result = {
+    table,
+    fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+  }
+
+  return result
+}
+
+export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
+  const columns: Columns = {}
+  const fluxGroupKeyUnion = new Set<string>()
+  const chunks = splitChunks(fluxCSV)
+
+  let tableLength = 0
+
+  const schema: Schema = {}
 
   for (const chunk of chunks) {
     formatSchemaByChunk(chunk, schema)
@@ -250,12 +316,14 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
         k === 'undefined'
       )
     })
-    .reduce((acc, [k, v]) => {
-      if (k !== undefined && v !== undefined) {
+    .reduce((acc, [k, vals]) => {
+      if (k !== undefined && vals !== undefined) {
+        const values: Set<string | number> = vals as Set<string | number>
         if (acc[k]) {
-          acc[k] = [...acc[k], v]
+          const currentValues: Set<string | number> = acc[k]
+          acc[k] = new Set([...currentValues, ...values])
         } else {
-          acc[k] = [v]
+          acc[k] = new Set(values)
         }
       }
       return acc
@@ -266,16 +334,10 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
     if (field && !fields.includes(field)) {
       fields = fields.concat(field)
     }
-    const existingTags = schema[measurement].tags || {}
+    const existingTags = schema[measurement].tags || new Set()
     Object.entries(existingTags).forEach(([k, values]) => {
-      if (tags[k]) {
-        let tagValues = tags[k]
-        values.forEach(value => {
-          if (!tagValues.includes(value)) {
-            tagValues = tagValues.concat(value)
-          }
-        })
-        tags[k] = tagValues
+      if (tags[k] && values) {
+        tags[k] = new Set([...tags[k], ...values])
       }
     })
     schema[measurement] = {

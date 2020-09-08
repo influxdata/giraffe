@@ -616,7 +616,7 @@ export interface BandIndexMap {
 }
 
 export interface Tag {
-  [tagName: string]: string[]
+  [tagName: string]: Set<string | number>
 }
 
 export interface SchemaValues {
