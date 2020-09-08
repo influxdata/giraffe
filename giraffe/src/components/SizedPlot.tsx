@@ -1,5 +1,4 @@
-import * as React from 'react'
-import {useCallback, FunctionComponent, CSSProperties} from 'react'
+import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
 
 import {Axes} from './Axes'
 import {
@@ -14,7 +13,6 @@ import {
   LayerTypes,
   SpecTypes,
 } from '../types'
-import {RawFluxDataTable} from './RawFluxDataTable'
 import {GaugeLayer} from './GaugeLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -105,19 +103,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
-            if (layerConfig.type === LayerTypes.RawFluxDataTable) {
-              return (
-                <RawFluxDataTable
-                  key={layerIndex}
-                  config={{
-                    ...layerConfig,
-                    width: config.width,
-                    height: config.height,
-                  }}
-                />
-              )
-            }
-
             if (layerConfig.type === LayerTypes.Gauge) {
               return (
                 <LatestValueTransform
@@ -205,7 +190,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   />
                 )
 
-              case SpecTypes.Scatter: {
+              case SpecTypes.Scatter:
                 return (
                   <ScatterLayer
                     key={layerIndex}
@@ -214,9 +199,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     config={layerConfig as ScatterLayerConfig}
                   />
                 )
-              }
 
-              case SpecTypes.Rect: {
+              case SpecTypes.Rect:
                 return (
                   <RectLayer
                     key={layerIndex}
@@ -225,7 +209,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     config={layerConfig as RectLayerConfig}
                   />
                 )
-              }
 
               case SpecTypes.Mosaic: {
                 return (

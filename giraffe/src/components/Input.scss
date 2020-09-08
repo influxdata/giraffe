@@ -1,0 +1,227 @@
+/*
+  Input Styles
+  ------------------------------------------------------------------------------
+*/
+
+.cf-input {
+  position: relative;
+}
+
+.cf-input-field {
+  appearance: none;
+  background-color: #202028;
+  border-radius: 4px;
+  border: 2px solid #383846;
+  box-sizing: border-box;
+  color: #bec2cc;
+  font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-weight: 500;
+  outline: none;
+  position: relative;
+  transition: background-color 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  width: 100%;
+  z-index: 1;
+
+  &:hover {
+    background-color: #202028;
+    border-color: mix(#383846, #00a3ff, 50%);
+    color: #d4d7dd;
+  }
+
+  &:focus {
+    background-color: #202028;
+    border-color: #00a3ff;
+    box-shadow: 0 0 6px 0 #00a3ff;
+    color: #ffffff;
+  }
+
+  &::-webkit-input-placeholder {
+    color: #757888;
+    font-style: italic;
+    font-weight: 500 !important;
+  }
+  &::-moz-placeholder {
+    color: #757888;
+    font-style: italic;
+    font-weight: 500 !important;
+  }
+  &:-ms-input-placeholder {
+    color: #757888;
+    font-style: italic;
+    font-weight: 500 !important;
+  }
+  &:-moz-placeholder {
+    color: #757888;
+    font-style: italic;
+    font-weight: 500 !important;
+  }
+}
+
+/*
+  Input Icons (Including Status)
+  ------------------------------------------------------------------------------
+*/
+.cf-input-icon {
+  font-size: 1.1em;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transition: color 0.25s ease;
+  z-index: 3;
+}
+
+.cf-input-icon {
+  color: #bec2cc;
+  transform: translate(-50%, -50%);
+}
+
+.cf-input-field:hover + .cf-input-icon {
+  color: #d4d7dd;
+}
+
+.cf-input-field:focus + .cf-input-icon {
+  color: #ffffff;
+}
+
+/*
+  Checkbox Type Input
+  ------------------------------------------------------------------------------
+*/
+.cf-input__has-checkbox .cf-input-field {
+  left: -9999px;
+  position: absolute;
+}
+
+.cf-input--checkbox {
+  background-color: #202028;
+  border-radius: 4px;
+  border: 2px solid #383846;
+  position: relative;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+
+  &:after {
+    background: #00a3ff;
+    border-radius: 50%;
+    content: '';
+    left: 50%;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.5, 1.5);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2;
+  }
+
+  &.checked:after {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1, 1);
+  }
+
+  &:hover {
+    background-color: #202028;
+    border-color: mix(#383846, #00a3ff, 50%);
+    cursor: pointer;
+  }
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin inputSizeModifier($fontSize, $padding, $height) {
+  font-size: $fontSize;
+  height: $height;
+
+  .cf-input-field {
+    font-size: $fontSize;
+    height: $height;
+    padding: 0 $padding;
+  }
+
+  &.cf-input__has-icon .cf-input-field {
+    padding-left: $height;
+  }
+
+  .cf-input-icon {
+    left: ($height / 2) + 2px;
+  }
+
+  .cf-input-pseudo {
+    height: $height;
+    width: $height;
+  }
+
+  .cf-input--checkbox {
+    height: $height - (4px + 2px);
+    margin: 2px 0;
+    width: $height - (4px + 2px);
+
+    &:after {
+      height: ceil(($height - (4px + 2px)) * 0.4);
+      width: ceil(($height - (4px + 2px)) * 0.4);
+    }
+  }
+}
+
+.cf-input-xs {
+  @include inputSizeModifier(12px, 8px, 22px);
+}
+.cf-input-sm {
+  @include inputSizeModifier(13px, 10px, 30px);
+}
+.cf-input-md {
+  @include inputSizeModifier(14px, 14px, 38px);
+}
+.cf-input-lg {
+  @include inputSizeModifier(17px, 18px, 46px);
+}
+
+/*
+  Error State
+  ------------------------------------------------------------------------------
+*/
+.cf-input__error {
+  .cf-input-field {
+    border-color: mix(#383846, #ff8564, 70%);
+  }
+  .cf-input-field:hover {
+    border-color: mix(#383846, #ff8564, 70%)-hover;
+  }
+  .cf-input-field:focus {
+    border-color: mix(#383846, #ff8564, 70%)-focused;
+    box-shadow: 0 0 6px 0 mix(#383846, #ff8564, 70%)-focused;
+  }
+}
+
+/*
+  Disabled State
+  ------------------------------------------------------------------------------
+*/
+.cf-input__disabled {
+  .cf-input-icon,
+  .cf-input-field:hover + .cf-input-icon {
+    color: #757888;
+  }
+  .cf-input--checkbox {
+    &,
+    &:hover {
+      cursor: default;
+      background-color: #292933;
+      border-color: #31313d;
+
+      &:after {
+        background-color: #757888;
+      }
+    }
+  }
+}
+
+.cf-input-field[disabled],
+.cf-input-field[disabled]:hover {
+  background-color: #292933;
+  border-color: #31313d;
+  color: #757888;
+  cursor: default;
+  font-style: italic;
+}

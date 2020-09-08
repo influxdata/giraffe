@@ -1,0 +1,111 @@
+/*
+  Status Indicator Styles
+  ------------------------------------------------------------------------------
+*/
+
+@mixin gradient-h($startColor, $endColor) {
+  background: $startColor;
+  background: -moz-linear-gradient(left, $startColor 0%, $endColor 100%);
+  background: -webkit-linear-gradient(left, $startColor 0%, $endColor 100%);
+  background: linear-gradient(to right, $startColor 0%, $endColor 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
+}
+
+.cf-status-indicator {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 3;
+}
+
+.cf-status-indicator--child {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.cf-status-indicator--shadow {
+  @include gradient-h(rgba(#202028, 0), #202028);
+  border-radius: 0 1px 1px 0;
+  border-right-color: #202028;
+  border-right-style: solid;
+  bottom: 2px;
+  opacity: 0;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  transition: opacity 0.25s ease;
+
+  .cf-status-indicator__valid &,
+  .cf-status-indicator__error &,
+  .cf-status-indicator__loading & {
+    opacity: 1;
+  }
+}
+
+@keyframes StatusSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.cf-status-indicator--spinner {
+  animation-duration: 0.85s;
+  animation-iteration-count: infinite;
+  animation-name: StatusSpinner;
+  animation-timing-function: linear;
+  border-radius: 50%;
+  border-style: solid;
+  border-top-color: #00a3ff;
+  border: 2px solid #383846;
+  height: 1.1em;
+  width: 1.1em;
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+@mixin statusIndicatorSizeModifier($fontSize, $dimensions) {
+  font-size: $fontSize;
+  height: $dimensions;
+  width: $dimensions;
+
+  .cf-status-indicator--shadow {
+    border-right-width: $dimensions * 0.6;
+    width: ($dimensions - 2px) + $dimensions * 0.6;
+  }
+}
+
+.cf-status-indicator__xs {
+  @include statusIndicatorSizeModifier(12px, 22px);
+}
+.cf-status-indicator__sm {
+  @include statusIndicatorSizeModifier(13px, 30px);
+}
+.cf-status-indicator__md {
+  @include statusIndicatorSizeModifier(14px, 38px);
+}
+.cf-status-indicator__lg {
+  @include statusIndicatorSizeModifier(17px, 46px);
+}
+
+/*
+  Status Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+.cf-status-indicator__valid {
+  color: #34bb55;
+}
+
+.cf-status-indicator__error {
+  color: #ff8564;
+}

@@ -1,4 +1,6 @@
 import CSS from 'csstype'
+import {CSSProperties, ReactNode} from 'react'
+import {TimeZone} from './timeZones'
 
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
@@ -137,6 +139,7 @@ export enum LayerTypes {
   Band = 'band',
   Scatter = 'scatter',
   Mosaic = 'mosaic',
+  Table = 'table',
 }
 
 export type LayerConfig =
@@ -150,6 +153,7 @@ export type LayerConfig =
   | BandLayerConfig
   | ScatterLayerConfig
   | MosaicLayerConfig
+  | TableGraphLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -188,7 +192,7 @@ export interface GaugeLayerConfig {
   decimalPlaces: DecimalPlaces
   gaugeColors: Color[]
   gaugeSize?: number
-  theme?: GaugeTheme
+  gaugeTheme?: GaugeTheme
 }
 
 export interface GaugeTheme {
@@ -316,6 +320,109 @@ export interface ScatterLayerConfig {
   symbol?: string[]
 }
 
+export interface TableGraphLayerConfig {
+  type: 'table' // do not refactor or restrict to LayerTypes.Table
+  tables?: FluxTable[]
+  timeZone: TimeZone
+  tableTheme?: Theme
+  properties: TableViewProperties
+}
+
+export interface FluxTable {
+  id: string
+  name: string
+  data: string[][]
+  result: string
+  groupKey: {
+    [columnName: string]: string
+  }
+  dataTypes: {
+    [columnName: string]: string
+  }
+}
+
+export interface DashboardQuery {
+  text?: string
+  editMode?: QueryEditMode
+  name?: string
+  builderConfig?: BuilderConfig
+}
+
+export type QueryEditMode = 'builder' | 'advanced'
+
+export interface BuilderConfig {
+  buckets?: string[]
+  tags?: BuilderTagsType[]
+  functions?: BuilderFunctionsType[]
+  aggregateWindow?: {
+    period?: string
+  }
+}
+
+export interface BuilderTagsType {
+  key?: string
+  values?: string[]
+  aggregateFunctionType?: BuilderAggregateFunctionType
+}
+
+export type BuilderAggregateFunctionType = 'filter' | 'group'
+
+export interface BuilderFunctionsType {
+  name?: string
+}
+
+export interface RenamableField {
+  readonly internalName?: string
+  displayName?: string
+  visible?: boolean
+}
+
+export * from './timeZones'
+
+export type Theme = 'light' | 'dark'
+
+export interface TableViewProperties {
+  type?: string
+  shape?: string
+  note?: string
+  showNoteWhenEmpty?: boolean
+  queries?: DashboardQuery[]
+  colors: Color[]
+  tableOptions: {
+    wrapping?: 'truncate' | 'wrap' | 'single-line'
+    fixFirstColumn?: boolean
+    verticalTimeAxis?: boolean
+    sortBy?: RenamableField
+  }
+  fieldOptions: RenamableField[]
+  timeFormat: string
+  decimalPlaces: DecimalPlaces
+}
+
+export interface ColumnWidths {
+  totalWidths: number
+  widths: {[x: string]: number}
+}
+
+export interface TransformTableDataReturnType {
+  transformedData: string[][]
+  sortedTimeVals: string[]
+  columnWidths: ColumnWidths
+  resolvedRenamableFields: RenamableField[]
+  sortOptions: SortOptions
+}
+
+export interface SortOptions {
+  field: string
+  direction: string
+}
+
+export interface TimeField {
+  internalName: string
+  displayName: string
+  visible: boolean
+}
+
 export interface FluxTable {
   id: string
   name: string
@@ -368,6 +475,7 @@ export enum SpecTypes {
   Scatter = 'scatter',
   Rect = 'rect',
   Mosaic = 'mosaic',
+  Table = 'table',
 }
 
 export interface MosaicLayerSpec {
@@ -627,4 +735,12 @@ export interface SchemaValues {
 
 export interface Schema {
   [measurement: string]: SchemaValues
+}
+
+export interface StandardFunctionProps {
+  id?: string
+  style?: CSSProperties
+  testID?: string
+  children?: ReactNode
+  className?: string
 }

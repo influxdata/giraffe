@@ -63,7 +63,7 @@ storiesOf('Gauge', module)
             {...DEFAULT_GAUGE_COLORS[1], value: gaugeMax},
           ],
           gaugeSize,
-          theme: {
+          gaugeTheme: {
             valuePositionYOffset,
             valuePositionXOffset,
             lineCount,

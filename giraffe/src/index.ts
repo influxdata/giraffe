@@ -1,5 +1,6 @@
 // Components
 export {Plot} from './components/Plot'
+export {HoverTimeProvider} from './components/hoverTime'
 
 // Utils
 export {fromFlux, fromFluxWithSchema, FromFluxResult} from './utils/fromFlux'
@@ -19,6 +20,7 @@ export {lineTransform} from './transforms/line'
 export * from './constants/colorSchemes'
 export * from './constants/singleStatStyles'
 export * from './constants/gaugeStyles'
+export {DEFAULT_TABLE_COLORS} from './constants/tableGraph'
 
 // Types
 export {
