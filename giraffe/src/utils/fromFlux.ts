@@ -39,9 +39,7 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
   const nonAnnotationData = Papa.parse(nonAnnotationLines).data
   const annotationD = Papa.parse(annotationLines).data
   const headerRow = nonAnnotationData[0]
-
   const tableColIndex = headerRow.findIndex(h => h === 'table')
-
   interface TableGroup {
     [tableId: string]: string[]
   }
