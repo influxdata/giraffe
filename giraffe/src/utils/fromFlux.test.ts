@@ -1,4 +1,4 @@
-import {fromFlux} from './fromFlux'
+import {fromFlux, fromFluxWithSchema} from './fromFlux'
 
 describe('fromFlux', () => {
   test('can parse a Flux CSV with mismatched schemas', () => {
@@ -188,7 +188,7 @@ there",5
   })
 
   it('fromFlux should return an empty object when an empty string is passed in', () => {
-    const {schema} = fromFlux('')
+    const {schema} = fromFluxWithSchema('')
     expect(schema).toStrictEqual({})
   })
   it('should return an empty object if the response has no _measurement header', () => {
@@ -201,7 +201,7 @@ there",5
 ,max,0,2018-12-10T19:00:00Z,2018-12-10T19:21:52.748859Z,2018-12-10T19:11:58Z,5115428864,active,mem,.local
   `
 
-    const {schema} = fromFlux(resp)
+    const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({})
   })
   it('should return a schema with no fields or tags if only the measurement is passed in', () => {
@@ -214,7 +214,7 @@ there",5
 ,max,0,2018-12-10T19:00:00Z,2018-12-10T19:21:52.748859Z,2018-12-10T19:11:58Z,5115428864,measurement_name
   `
 
-    const {schema} = fromFlux(resp)
+    const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
       measurement_name: {type: 'string', fields: [], tags: {}},
     })
@@ -229,9 +229,13 @@ there",5
 ,max,0,2018-12-10T19:00:00Z,2018-12-10T19:21:52.748859Z,2018-12-10T19:11:58Z,5115428864,active,mem,oox4k.local
   `
 
-    const {schema} = fromFlux(resp)
+    const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
     })
   })
   it('should return a schema without duplicates across multiple tables', () => {
@@ -252,9 +256,13 @@ there",5
 ,max,0,2018-12-10T19:00:00Z,2018-12-10T19:21:52.748859Z,2018-12-10T19:11:58Z,5115428864,active,mem,oox4k.local
 `
 
-    const {schema} = fromFlux(resp)
+    const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
     })
   })
 
@@ -276,13 +284,17 @@ there",5
 ,max,0,2018-12-10T19:00:00Z,2018-12-10T19:21:52.748859Z,2018-12-10T19:11:58Z,5115428864,field_name,measurement_name,tag_value
 `
 
-    const {schema} = fromFlux(resp)
+    const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
       measurement_name: {
         type: 'string',
         fields: ['field_name'],
-        tags: {host: ['tag_value']},
+        tags: {host: new Set(['tag_value'])},
       },
     })
   })
