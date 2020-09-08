@@ -231,7 +231,11 @@ there",5
 
     const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
     })
   })
   it('should return a schema without duplicates across multiple tables', () => {
@@ -254,7 +258,11 @@ there",5
 
     const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
     })
   })
 
@@ -278,11 +286,15 @@ there",5
 
     const {schema} = fromFluxWithSchema(resp)
     expect(schema).toStrictEqual({
-      mem: {type: 'string', fields: ['active'], tags: {host: ['oox4k.local']}},
+      mem: {
+        type: 'string',
+        fields: ['active'],
+        tags: {host: new Set(['oox4k.local'])},
+      },
       measurement_name: {
         type: 'string',
         fields: ['field_name'],
-        tags: {host: ['tag_value']},
+        tags: {host: new Set(['tag_value'])},
       },
     })
   })

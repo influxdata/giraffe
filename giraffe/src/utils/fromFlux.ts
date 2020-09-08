@@ -321,7 +321,7 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
           const currentValues: Set<string | number> = acc[k]
           acc[k] = new Set([...currentValues, ...values])
         } else {
-          acc[k] = new Set(values)
+          acc[k] = new Set([values])
         }
       }
       return acc
