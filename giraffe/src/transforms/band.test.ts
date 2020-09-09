@@ -251,25 +251,8 @@ describe('band transform utils', () => {
         },
       }
       const cyan = 'rgb(49, 192, 246)'
-      const bandFillColors = [
-        cyan,
-        'rgb(78, 145, 226)',
-        'rgb(106, 103, 205)',
-        'rgb(134, 70, 182)',
-        'rgb(161, 53, 158)',
-        'rgb(186, 54, 130)',
-        'rgb(209, 70, 101)',
-        'rgb(232, 95, 70)',
-        'rgb(255, 126, 39)',
-      ]
-      const result = getBands(
-        fill,
-        lineData,
-        bandFillColors,
-        'min',
-        'mean',
-        'max'
-      )
+      const fillScale = () => cyan
+      const result = getBands(fill, lineData, fillScale, 'min', 'mean', 'max')
       expect(Array.isArray(result)).toEqual(true)
       expect(result[0].fill).toEqual(cyan)
       expect(result[0].lower).toBeDefined()
@@ -407,25 +390,19 @@ describe('band transform utils', () => {
       const cyan = 'rgb(49, 192, 246)'
       const babyBlue = 'rgb(78, 145, 226)'
       const purple = 'rgb(106, 103, 205)'
-      const bandFillColors = [
-        cyan,
-        babyBlue,
-        purple,
-        'rgb(134, 70, 182)',
-        'rgb(161, 53, 158)',
-        'rgb(186, 54, 130)',
-        'rgb(209, 70, 101)',
-        'rgb(232, 95, 70)',
-        'rgb(255, 126, 39)',
-      ]
-      const result = getBands(
-        fill,
-        lineData,
-        bandFillColors,
-        'min',
-        'mean',
-        'max'
-      )
+      const fillScale = index => {
+        switch (index) {
+          case 0:
+            return cyan
+          case 1:
+            return babyBlue
+          case 2:
+            return purple
+          default:
+            return 'none'
+        }
+      }
+      const result = getBands(fill, lineData, fillScale, 'min', 'mean', 'max')
       expect(Array.isArray(result)).toEqual(true)
 
       expect(result[0].fill).toEqual(cyan)

@@ -39,7 +39,7 @@ export const getBandBoundaries = (
     })
   }
 
-  const bands = Object.values(bandLineIndexMap)
+  const bands = bandLineIndexMap ? Object.values(bandLineIndexMap) : []
 
   bands.forEach(band => {
     bandBoundaries[band.row] = {
@@ -61,6 +61,7 @@ export const getBandBoundaries = (
       }
     }
   })
+
   return bandBoundaries
 }
 
