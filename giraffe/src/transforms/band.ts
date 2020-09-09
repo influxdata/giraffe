@@ -229,10 +229,14 @@ export const alignMinMaxWithBand = (
         // 2. Min is not equal to the other two
         else if (bandTime === upperTime) {
           if (bandTime > lowerTime || !isDefined(bandTime)) {
-            alignedData[bandId].xs.push(lowerTime)
-            alignedData[bandId].ys.push(lowerValue)
-            alignedData[upperId].xs.push(lowerTime)
-            alignedData[upperId].ys.push(lowerValue)
+            if (isDefined(bandId)) {
+              alignedData[bandId].xs.push(lowerTime)
+              alignedData[bandId].ys.push(lowerValue)
+            }
+            if (isDefined(upperId)) {
+              alignedData[upperId].xs.push(lowerTime)
+              alignedData[upperId].ys.push(lowerValue)
+            }
             alignedData[lowerId].xs.push(lowerTime)
             alignedData[lowerId].ys.push(lowerValue)
             lowerIterator += 1
@@ -252,10 +256,14 @@ export const alignMinMaxWithBand = (
         // 3. Max is not equal to the other two
         else if (bandTime === lowerTime) {
           if (bandTime > upperTime || !isDefined(bandTime)) {
-            alignedData[bandId].xs.push(upperTime)
-            alignedData[bandId].ys.push(upperValue)
-            alignedData[lowerId].xs.push(upperTime)
-            alignedData[lowerId].ys.push(upperValue)
+            if (isDefined(bandId)) {
+              alignedData[bandId].xs.push(upperTime)
+              alignedData[bandId].ys.push(upperValue)
+            }
+            if (isDefined(lowerId)) {
+              alignedData[lowerId].xs.push(upperTime)
+              alignedData[lowerId].ys.push(upperValue)
+            }
             alignedData[upperId].xs.push(upperTime)
             alignedData[upperId].ys.push(upperValue)
             upperIterator += 1
@@ -287,8 +295,10 @@ export const alignMinMaxWithBand = (
             }
             bandIterator += 1
           } else if (upperTime < bandTime || !isDefined(bandTime)) {
-            alignedData[bandId].xs.push(upperTime)
-            alignedData[bandId].ys.push(upperValue)
+            if (isDefined(bandId)) {
+              alignedData[bandId].xs.push(upperTime)
+              alignedData[bandId].ys.push(upperValue)
+            }
             alignedData[upperId].xs.push(upperTime)
             alignedData[upperId].ys.push(upperValue)
             alignedData[lowerId].xs.push(lowerTime)
@@ -301,16 +311,20 @@ export const alignMinMaxWithBand = (
         else {
           if (!isDefined(bandTime)) {
             if (upperTime > lowerTime) {
-              alignedData[bandId].xs.push(lowerTime)
-              alignedData[bandId].ys.push(lowerValue)
+              if (isDefined(bandId)) {
+                alignedData[bandId].xs.push(lowerTime)
+                alignedData[bandId].ys.push(lowerValue)
+              }
               alignedData[upperId].xs.push(lowerTime)
               alignedData[upperId].ys.push(lowerValue)
               alignedData[lowerId].xs.push(lowerTime)
               alignedData[lowerId].ys.push(lowerValue)
               lowerIterator += 1
             } else {
-              alignedData[bandId].xs.push(upperTime)
-              alignedData[bandId].ys.push(upperValue)
+              if (isDefined(bandId)) {
+                alignedData[bandId].xs.push(upperTime)
+                alignedData[bandId].ys.push(upperValue)
+              }
               alignedData[upperId].xs.push(upperTime)
               alignedData[upperId].ys.push(upperValue)
               alignedData[lowerId].xs.push(upperTime)
@@ -321,16 +335,20 @@ export const alignMinMaxWithBand = (
             if (bandTime > lowerTime) {
               alignedData[bandId].xs.push(lowerTime)
               alignedData[bandId].ys.push(lowerValue)
-              alignedData[upperId].xs.push(lowerTime)
-              alignedData[upperId].ys.push(lowerValue)
+              if (isDefined(upperId)) {
+                alignedData[upperId].xs.push(lowerTime)
+                alignedData[upperId].ys.push(lowerValue)
+              }
               alignedData[lowerId].xs.push(lowerTime)
               alignedData[lowerId].ys.push(lowerValue)
               lowerIterator += 1
             } else {
               alignedData[bandId].xs.push(bandTime)
               alignedData[bandId].ys.push(bandValue)
-              alignedData[upperId].xs.push(bandTime)
-              alignedData[upperId].ys.push(bandValue)
+              if (isDefined(upperId)) {
+                alignedData[upperId].xs.push(bandTime)
+                alignedData[upperId].ys.push(bandValue)
+              }
               alignedData[lowerId].xs.push(bandTime)
               alignedData[lowerId].ys.push(bandValue)
               bandIterator += 1
@@ -341,16 +359,20 @@ export const alignMinMaxWithBand = (
               alignedData[bandId].ys.push(upperValue)
               alignedData[upperId].xs.push(upperTime)
               alignedData[upperId].ys.push(upperValue)
-              alignedData[lowerId].xs.push(upperTime)
-              alignedData[lowerId].ys.push(upperValue)
+              if (isDefined(lowerId)) {
+                alignedData[lowerId].xs.push(upperTime)
+                alignedData[lowerId].ys.push(upperValue)
+              }
               upperIterator += 1
             } else {
               alignedData[bandId].xs.push(bandTime)
               alignedData[bandId].ys.push(bandValue)
               alignedData[upperId].xs.push(bandTime)
               alignedData[upperId].ys.push(bandValue)
-              alignedData[lowerId].xs.push(bandTime)
-              alignedData[lowerId].ys.push(bandValue)
+              if (isDefined(lowerId)) {
+                alignedData[lowerId].xs.push(bandTime)
+                alignedData[lowerId].ys.push(bandValue)
+              }
               bandIterator += 1
             }
           } else {

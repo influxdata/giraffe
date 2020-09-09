@@ -4,7 +4,17 @@ import {withKnobs, number, select, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
 import {findStringColumns} from './helpers'
-import {cpu1, cpu2, mem1, mem2} from './data/bandCSV'
+import {
+  colors6,
+  cpu1,
+  cpu2,
+  graphEdge1,
+  hoverAlignment1,
+  hoverAlignment2,
+  mem1,
+  mem2,
+  same3,
+} from './data/bandCSV'
 
 import {
   PlotContainer,
@@ -24,10 +34,15 @@ storiesOf('Band Chart', module)
     const staticData = select(
       'Static CSV',
       {
+        colors6,
         cpu1,
         cpu2,
+        graphEdge1,
+        hoverAlignment1,
+        hoverAlignment2,
         mem1,
         mem2,
+        same3,
       },
       cpu2
     )
@@ -66,6 +81,9 @@ storiesOf('Band Chart', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
+    const upperColumnName = text('upperColumnName', 'max')
+    const name = text('name', 'mean')
+    const lowerColumnName = text('lowerColumnName', 'min')
 
     const config: Config = {
       fluxResponse: staticData,
@@ -95,6 +113,9 @@ storiesOf('Band Chart', module)
           lineOpacity,
           hoverDimension,
           shadeOpacity,
+          upperColumnName,
+          name,
+          lowerColumnName,
         },
       ],
     }
@@ -142,6 +163,9 @@ storiesOf('Band Chart', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy', none: ''},
       'auto'
     )
+    const upperColumnName = text('upperColumnName', '')
+    const name = text('name', '')
+    const lowerColumnName = text('lowerColumnName', '')
 
     const config: Config = {
       fluxResponse: customCSV,
@@ -171,6 +195,9 @@ storiesOf('Band Chart', module)
           lineOpacity,
           hoverDimension,
           shadeOpacity,
+          upperColumnName,
+          name,
+          lowerColumnName,
         },
       ],
     }
