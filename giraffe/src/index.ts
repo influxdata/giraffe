@@ -22,6 +22,7 @@ export * from './constants/gaugeStyles'
 
 // Types
 export {
+  BandLayerConfig,
   ColumnData,
   ColumnType,
   Config,
