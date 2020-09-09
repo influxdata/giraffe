@@ -108,3 +108,19 @@ export const ALL_SYMBOL_TYPES: SymbolType[] = [
   'tritip',
   'ex',
 ]
+
+/****************************************************************
+ * Band Plot uses up to 3 "lines" of data:
+ * upper, middle, lower
+ * which will have the same color when shaded.
+ *
+ * When there are multiple bands on the same plot,
+ * we want to contrast the bands to make them easily
+ * distinguishable.
+ *
+ * Allow each band to take up 3 colors on the color scale,
+ * even though only the first color is used. This is a simple way
+ * to scale the band colors, and takes up the same scale with
+ * the same number of total lines as Line Plot.
+ */
+export const BAND_COLOR_SCALE_CONSTANT = 3

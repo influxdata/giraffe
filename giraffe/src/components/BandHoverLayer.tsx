@@ -32,13 +32,15 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
   columnFormatter,
 }) => {
   const {
-    position,
     interpolation,
     x: xColKey,
     y: yColKey,
     fill: fillColKeys,
     lineWidth,
+    lowerColumnName = '',
+    name: rowColumnName,
     shadeOpacity,
+    upperColumnName = '',
   } = config
 
   const xColData = spec.table.getColumn(xColKey, 'number')
@@ -54,7 +56,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     yColKey,
     xScale,
     yScale,
-    spec.bandFillColors
+    spec.scales.fill
   )
 
   const crosshairColor = plotConfig.legendCrosshairColor
@@ -100,16 +102,23 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     })
   })
 
+  const colors = []
+  if (Array.isArray(spec.bandIndexMap.rowIndices)) {
+    for (let i = 0; i < spec.bandIndexMap.rowIndices.length; i += 1) {
+      colors.push(spec.scales.fill(i))
+    }
+  }
   const tooltipData = getBandTooltipData(
     bandHoverIndices,
     spec.table,
     config.x,
     config.y,
-    spec.bandName,
+    rowColumnName,
+    lowerColumnName,
+    upperColumnName,
     columnFormatter,
     fillColKeys,
-    spec.bandFillColors,
-    position,
+    colors,
     spec.lineData
   )
 

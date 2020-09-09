@@ -324,6 +324,40 @@ Giraffe comes with utility functions.
 
   - **shadeBelowOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shaded color below each line. No effect when **shadeBelow** is false or not included.
 
+- **BandLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"band". **Required**_. Specifies that this LayerConfig and `<Plot>` is a band chart.
+
+  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+
+  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+
+  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+
+  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+
+    - "x" means the legend will display all data points along the y-axis that have the same x-axis value
+    - "y" means the legend will display all data points along the x-axis that have the same y-axis value
+    - "xy" means the legend will display for a single data point nearest the mouse
+
+  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
+
+  - **interpolation**: _string. Optional. Defaults to "linear" when not included._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points. The options are [linear](https://github.com/d3/d3-shape#curveLinear), [natural](https://github.com/d3/d3-shape#curveNatural), [monotoneX](https://github.com/d3/d3-shape#curveMonotoneX), [monotoneY](https://github.com/d3/d3-shape#curveMonotoneY), [cubic](https://github.com/d3/d3-shape#curveBasis), [step](https://github.com/d3/d3-shape#curveStep), [stepBefore](https://github.com/d3/d3-shape#curveStepBefore), and [stepAfter](https://github.com/d3/d3-shape#curveStepAfter).
+
+  - **lineWidth**: _number. Optional._ The [CanvasRenderingContext2D lineWidth](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the middle part of each band as identified by the **name** option.
+
+  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
+
+  - **lineOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the middle part of each band as identified by the **name** option.
+
+  - **shadeOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shaded sections of each band.
+
+  - **name**: _string. Required._ A string indicating the name of the line for the middle part of each band. This **name** must match the result in the data. If no matching name with a result is found, that result will not be rendered.
+
+  - **upperColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends above the **name**d line.
+
+  - **lowerColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends below the **name**d line.
+
 - **ScatterLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
 
   - **type**: _"scatter". **Required**_. Specifies that this LayerConfig and `<Plot>` is a scatter plot.

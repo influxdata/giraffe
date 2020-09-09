@@ -24,6 +24,7 @@ export {DEFAULT_TABLE_COLORS} from './constants/tableGraph'
 
 // Types
 export {
+  BandLayerConfig,
   ColumnData,
   ColumnType,
   Config,
