@@ -104,6 +104,49 @@ describe('timeFormatter', () => {
     )
   })
 
+  test('24 hour format and UTC format without "a" should not show "24" for midnight', () => {
+    const utcFormatterWithFormat = timeFormatter({
+      timeZone: 'UTC',
+      format: 'YYYY-MM-DD HH:mm:ss ZZ',
+    })
+    const nonUTCFormatterWithFormat = timeFormatter({
+      timeZone: 'Europe/Berlin',
+      format: 'YYYY-MM-DD HH:mm:ss ZZ',
+      hour12: false,
+    })
+
+    let midnight = new Date('2019-01-01T00:00Z')
+    expect(utcFormatterWithFormat(midnight)).toEqual('2019-01-01 00:00:00 UTC')
+
+    midnight = new Date('2019-01-01T24:00Z')
+    expect(utcFormatterWithFormat(midnight)).toEqual('2019-01-02 00:00:00 UTC')
+
+    midnight = new Date('2019-01-01T23:00Z')
+    expect(nonUTCFormatterWithFormat(midnight)).toEqual(
+      '2019-01-02 00:00:00 GMT+1'
+    )
+  })
+
+  test('24 hour format and UTC format without "a" should display correctly', () => {
+    const utcFormatterWithFormat = timeFormatter({
+      timeZone: 'UTC',
+      format: 'YYYY-MM-DD HH:mm:ss ZZ',
+    })
+    const nonUTCFormatterWithFormat = timeFormatter({
+      timeZone: 'Europe/Berlin',
+      format: 'YYYY-MM-DD HH:mm:ss ZZ',
+      hour12: false,
+    })
+
+    let date = new Date('2019-01-01T15:00Z')
+    expect(utcFormatterWithFormat(date)).toEqual('2019-01-01 15:00:00 UTC')
+    expect(nonUTCFormatterWithFormat(date)).toEqual('2019-01-01 16:00:00 GMT+1')
+
+    date = new Date('2019-01-01T07:00Z')
+    expect(utcFormatterWithFormat(date)).toEqual('2019-01-01 07:00:00 UTC')
+    expect(nonUTCFormatterWithFormat(date)).toEqual('2019-01-01 08:00:00 GMT+1')
+  })
+
   test('can format times with format strings', () => {
     const tests = [
       ['YYYY-MM-DD HH:mm:ss', '2019-01-01 00:00:00'],

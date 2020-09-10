@@ -6,17 +6,17 @@ import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
 
 import {
   PlotContainer,
-  xKnob,
-  yKnob,
-  xScaleKnob,
-  yScaleKnob,
-  fillKnob,
   colorSchemeKnob,
-  legendFontKnob,
-  tickFontKnob,
-  showAxesKnob,
+  findStringColumns,
   interpolationKnob,
+  legendFontKnob,
+  showAxesKnob,
+  tickFontKnob,
   timeZoneKnob,
+  xKnob,
+  xScaleKnob,
+  yKnob,
+  yScaleKnob,
 } from './helpers'
 
 storiesOf('CSV from Flux', module)
@@ -39,7 +39,9 @@ storiesOf('CSV from Flux', module)
         'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
         'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
         'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'YYYY-MM-DD HH:mm:ss a ZZ': 'YYYY-MM-DD HH:mm:ss a ZZ',
         'hh:mm a': 'hh:mm a',
+        'hh:mm': 'hh:mm',
         'HH:mm': 'HH:mm',
         'HH:mm:ss': 'HH:mm:ss',
         'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
@@ -49,7 +51,6 @@ storiesOf('CSV from Flux', module)
       },
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
-    const fill = fillKnob(table, ['cpu'])
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
@@ -77,7 +78,7 @@ storiesOf('CSV from Flux', module)
           type: 'line',
           x,
           y,
-          fill,
+          fill: findStringColumns(table),
           interpolation,
           colors,
           lineWidth,
