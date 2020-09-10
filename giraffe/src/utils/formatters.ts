@@ -152,6 +152,9 @@ export const timeFormatter = ({
     HH: options => {
       const {hour, lhour} = options
       const hasMeridiem = / a/i
+      const is24hourFormat =
+        is24hourLocale || UTC_TIME_ZONE.test(timeZone) || hour12 === false
+
       if (hasMeridiem.test(format)) {
         if (Number(lhour) === 0) {
           return '12'
@@ -161,7 +164,7 @@ export const timeFormatter = ({
         }
         return String(Number(lhour))
       }
-      if (is24hourLocale || UTC_TIME_ZONE.test(timeZone) || hour12 === false) {
+      if (is24hourFormat) {
         const numericalHour = Number(lhour) % 24
         return numericalHour < 10 ? `0${numericalHour}` : `${numericalHour}`
       }
