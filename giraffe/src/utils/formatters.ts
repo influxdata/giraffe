@@ -130,6 +130,9 @@ export const timeFormatter = ({
   format,
   hour12,
 }: TimeFormatterFactoryOptions = {}): TimeFormatter => {
+  // RegEx to check for "UTC" case insensitive
+  const UTC_TIME_ZONE = /utc/i
+
   // this check is used to determine whether a user's locale is 24h or 12h
   const is24hourLocale = new Date(2014, 1, 1, 15, 0, 0, 0)
     .toLocaleTimeString()
@@ -141,8 +144,13 @@ export const timeFormatter = ({
   const formatStringFormatter = createDateFormatter({
     // a deliberate space in front of single digit hours keeps the tick label length
     // and the total number of ticks consistent regardless of time frame
-    hh: ({hour}) => (Number(hour) < 10 ? ` ${Number(hour)}` : String(hour)),
-    HH: ({lhour}) => {
+    hh: options => {
+      const {hour} = options
+      const numericalHour = Number(hour)
+      return numericalHour < 10 ? ` ${numericalHour}` : `${numericalHour}`
+    },
+    HH: options => {
+      const {hour, lhour} = options
       const hasMeridiem = / a/i
       if (hasMeridiem.test(format)) {
         if (Number(lhour) === 0) {
@@ -153,7 +161,11 @@ export const timeFormatter = ({
         }
         return String(Number(lhour))
       }
-      return lhour
+      if (is24hourLocale || UTC_TIME_ZONE.test(timeZone) || hour12 === false) {
+        const numericalHour = Number(lhour) % 24
+        return numericalHour < 10 ? `0${numericalHour}` : `${numericalHour}`
+      }
+      return hour
     },
     sss: (_, date) => String(date.getMilliseconds()).padStart(3, '0'),
     D: parts => String(Number(parts.day)),
