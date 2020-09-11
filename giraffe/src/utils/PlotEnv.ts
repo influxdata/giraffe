@@ -268,7 +268,7 @@ export class PlotEnv {
           layerConfig.fill,
           layerConfig.colors,
           layerConfig.lowerColumnName,
-          layerConfig.name,
+          layerConfig.mainColumnName,
           layerConfig.upperColumnName
         )
       }

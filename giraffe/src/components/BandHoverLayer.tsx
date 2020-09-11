@@ -38,7 +38,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     fill: fillColKeys,
     lineWidth,
     lowerColumnName = '',
-    name: rowColumnName,
+    mainColumnName: rowColumnName,
     shadeOpacity,
     upperColumnName = '',
   } = config

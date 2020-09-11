@@ -32,7 +32,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
 
   const {
     lowerColumnName = '',
-    name: rowColumnName,
+    mainColumnName: rowColumnName,
     upperColumnName = '',
   } = config
 

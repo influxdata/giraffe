@@ -307,7 +307,7 @@ export interface BandLayerConfig {
   lineOpacity?: number
   colors?: string[]
   shadeOpacity?: number
-  name: string
+  mainColumnName: string
   upperColumnName?: string
   lowerColumnName?: string
 }
