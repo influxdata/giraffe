@@ -82,7 +82,7 @@ storiesOf('Band Chart', module)
       'auto'
     )
     const upperColumnName = text('upperColumnName', 'max')
-    const name = text('name', 'mean')
+    const mainColumnName = text('mainColumnName', 'mean')
     const lowerColumnName = text('lowerColumnName', 'min')
 
     const config: Config = {
@@ -114,7 +114,7 @@ storiesOf('Band Chart', module)
           hoverDimension,
           shadeOpacity,
           upperColumnName,
-          name,
+          mainColumnName,
           lowerColumnName,
         },
       ],
@@ -164,7 +164,7 @@ storiesOf('Band Chart', module)
       'auto'
     )
     const upperColumnName = text('upperColumnName', '')
-    const name = text('name', '')
+    const mainColumnName = text('mainColumnName', '')
     const lowerColumnName = text('lowerColumnName', '')
 
     const config: Config = {
@@ -196,7 +196,7 @@ storiesOf('Band Chart', module)
           hoverDimension,
           shadeOpacity,
           upperColumnName,
-          name,
+          mainColumnName,
           lowerColumnName,
         },
       ],

@@ -352,11 +352,11 @@ Giraffe comes with utility functions.
 
   - **shadeOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shaded sections of each band.
 
-  - **name**: _string. Required._ A string indicating the name of the line for the middle part of each band. This **name** must match the result in the data. If no matching name with a result is found, that result will not be rendered.
+  - **mainColumnName**: _string. Required._ A string indicating the yield name of the line for the middle part of each band. This **mainColumnName** must match the result in the data. If no matching name within the data is found, that result will not be rendered. Only one yield name can be the **mainColumnName** per `<Plot>`.
 
-  - **upperColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends above the **name**d line.
+  - **upperColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends above the **mainColumnName** line.
 
-  - **lowerColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends below the **name**d line.
+  - **lowerColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends below the **mainColumnName** line.
 
 - **ScatterLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
 
