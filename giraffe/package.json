@@ -89,5 +89,16 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
+  },
+  "dependencies": {
+    "leaflet": "^1.6.0",
+    "leaflet-ant-path": "^1.3.0",
+    "leaflet.markercluster": "^1.4.1",
+    "react-leaflet": "^2.6.3",
+    "react-leaflet-ant-path": "^1.1.0",
+    "react-leaflet-control": "^2.1.2",
+    "react-leaflet-heatmap-layer": "^2.0.0",
+    "react-leaflet-markercluster": "^2.0.0",
+    "s2-geometry": "^1.2.10"
   }
 }

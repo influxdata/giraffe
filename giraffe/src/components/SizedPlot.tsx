@@ -28,6 +28,8 @@ import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
 import {MosaicLayer} from './MosaicLayer'
+import {GeoLayerConfig} from '../types/geo'
+import GeoLayer from './GeoLayer'
 
 interface Props {
   config: SizedConfig
@@ -117,6 +119,17 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     />
                   )}
                 </LatestValueTransform>
+              )
+            }
+
+            if (layerConfig.type === LayerTypes.Geo) {
+              return (
+                <GeoLayer
+                  key={layerIndex}
+                  table={newTableFromConfig(config)}
+                  config={layerConfig as GeoLayerConfig}
+                  plotConfig={config}
+                />
               )
             }
 
