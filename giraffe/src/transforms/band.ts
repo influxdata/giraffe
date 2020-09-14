@@ -8,7 +8,7 @@ import {
 } from '../types'
 import {FILL, LOWER, RESULT, UPPER} from '../constants/columnKeys'
 import {isDefined} from '../utils/isDefined'
-import {createGroupIDColumn, getNominalColorScale} from './'
+import {createGroupIDColumn, getBandColorScale} from './'
 
 import {BAND_COLOR_SCALE_CONSTANT} from '../constants'
 
@@ -430,11 +430,15 @@ export const bandTransform = (
   const table = inputTable.addColumn(FILL, 'number', fillColumn)
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')
+  const bandIndexMap = getBandIndexMap(
+    fillColumnMap,
+    lowerColumnName || '',
+    rowColumnName,
+    upperColumnName || ''
+  )
   const fillScale = range =>
-    getNominalColorScale(
-      fillColumnMap,
-      colors
-    )(range * BAND_COLOR_SCALE_CONSTANT)
+    getBandColorScale(bandIndexMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
+
   const bandFillColors = []
   const lineData: LineData = {}
 
@@ -464,12 +468,7 @@ export const bandTransform = (
 
   return {
     type: 'band',
-    bandIndexMap: getBandIndexMap(
-      fillColumnMap,
-      lowerColumnName || '',
-      rowColumnName,
-      upperColumnName || ''
-    ),
+    bandIndexMap,
     bandName: rowColumnName,
     inputTable,
     table,

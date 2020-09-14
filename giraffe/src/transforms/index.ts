@@ -9,8 +9,9 @@ import {
   Scale,
   NumericColumnData,
   SymbolType,
+  BandIndexMap,
 } from '../types'
-import {ALL_SYMBOL_TYPES} from '../constants'
+import {ALL_SYMBOL_TYPES, BAND_COLOR_SCALE_CONSTANT} from '../constants'
 
 export const createGroupIDColumn = (
   table: Table,
@@ -95,6 +96,33 @@ export const getSymbolScale = (
   const scale = scaleOrdinal<number, SymbolType>()
     .domain(domain)
     .range(ALL_SYMBOL_TYPES)
+
+  return scale
+}
+
+export const getBandColorScale = (
+  bandIndexMap: BandIndexMap,
+  colors: string[]
+): Scale<number, string> => {
+  const domain = range(
+    bandIndexMap.rowIndices.length * BAND_COLOR_SCALE_CONSTANT
+  )
+
+  let scaleRange = []
+
+  if (domain.length <= colors.length) {
+    scaleRange = colors.slice(0, domain.length)
+  } else {
+    const interpolator = interpolateRgbBasis(colors)
+
+    scaleRange = range(domain.length).map(k =>
+      interpolator(k / (domain.length - 1))
+    )
+  }
+
+  const scale = scaleOrdinal<number, string>()
+    .domain(domain)
+    .range(scaleRange)
 
   return scale
 }
