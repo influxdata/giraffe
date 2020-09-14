@@ -53,11 +53,11 @@ export const createGroupIDColumn = (
   return [groupIDColumn, columnGroupMap]
 }
 
-export const getNominalColorScale = (
-  groupMap: ColumnGroupMap,
+const createNominalColorScale = (
+  length: number,
   colors: string[]
 ): Scale<number, string> => {
-  const domain = range(groupMap.mappings.length)
+  const domain = range(length)
 
   let scaleRange = []
 
@@ -77,6 +77,21 @@ export const getNominalColorScale = (
 
   return scale
 }
+
+export const getNominalColorScale = (
+  groupMap: ColumnGroupMap,
+  colors: string[]
+): Scale<number, string> =>
+  createNominalColorScale(groupMap.mappings.length, colors)
+
+export const getBandColorScale = (
+  bandIndexMap: BandIndexMap,
+  colors: string[]
+): Scale<number, string> =>
+  createNominalColorScale(
+    bandIndexMap.rowIndices.length * BAND_COLOR_SCALE_CONSTANT,
+    colors
+  )
 
 export const getContinuousColorScale = (
   domain: [number, number],
@@ -96,33 +111,6 @@ export const getSymbolScale = (
   const scale = scaleOrdinal<number, SymbolType>()
     .domain(domain)
     .range(ALL_SYMBOL_TYPES)
-
-  return scale
-}
-
-export const getBandColorScale = (
-  bandIndexMap: BandIndexMap,
-  colors: string[]
-): Scale<number, string> => {
-  const domain = range(
-    bandIndexMap.rowIndices.length * BAND_COLOR_SCALE_CONSTANT
-  )
-
-  let scaleRange = []
-
-  if (domain.length <= colors.length) {
-    scaleRange = colors.slice(0, domain.length)
-  } else {
-    const interpolator = interpolateRgbBasis(colors)
-
-    scaleRange = range(domain.length).map(k =>
-      interpolator(k / (domain.length - 1))
-    )
-  }
-
-  const scale = scaleOrdinal<number, string>()
-    .domain(domain)
-    .range(scaleRange)
 
   return scale
 }
