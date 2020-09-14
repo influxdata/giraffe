@@ -13,6 +13,7 @@ import {
   hoverAlignment2,
   mem1,
   mem2,
+  noLowerAndUpper,
   same3,
 } from './data/bandCSV'
 
@@ -42,6 +43,7 @@ storiesOf('Band Chart', module)
         hoverAlignment2,
         mem1,
         mem2,
+        noLowerAndUpper,
         same3,
       },
       cpu2
