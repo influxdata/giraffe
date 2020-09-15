@@ -93,8 +93,8 @@ export interface Formatter {
 
 export interface Table {
   getColumn: GetColumn
-  getColumnName: (columnKey: string) => string
-  getColumnType: (columnKey: string) => ColumnType
+  getColumnName: (columnKey: string) => string | null // null if the column is not available
+  getColumnType: (columnKey: string) => ColumnType | null // null if the column is not available
   columnKeys: string[]
   length: number
   addColumn: (
