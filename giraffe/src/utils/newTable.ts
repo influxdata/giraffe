@@ -12,10 +12,20 @@ class SimpleTable implements Table {
       type: ColumnType
       data: ColumnData
     }
-  } = {}
+  }
 
-  constructor(length: number) {
+  constructor(
+    length: number,
+    columns: {
+      [colKey: string]: {
+        name: string
+        type: ColumnType
+        data: ColumnData
+      }
+    } = {}
+  ) {
     this.length = length
+    this.columns = columns
   }
 
   get columnKeys(): string[] {
@@ -113,7 +123,16 @@ class SimpleTable implements Table {
   }
 }
 
-export const newTable = (length: number): Table => new SimpleTable(length)
+export const newTable = (
+  length: number,
+  columns: {
+    [colKey: string]: {
+      name: string
+      type: ColumnType
+      data: ColumnData
+    }
+  } = {}
+): Table => new SimpleTable(length, columns)
 
 export const newTableFromConfig = (config: Config): Table => {
   if (!config) {

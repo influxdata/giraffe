@@ -12,6 +12,7 @@ export {
   timeFormatter,
 } from './utils/formatters'
 export {getDomainDataFromLines} from './utils/lineData'
+export * from './utils/queryTable'
 
 // Transforms
 export {lineTransform} from './transforms/line'
