@@ -329,19 +329,6 @@ export interface TableGraphLayerConfig {
   properties: TableViewProperties
 }
 
-export interface FluxTable {
-  id: string
-  name: string
-  data: string[][]
-  result: string
-  groupKey: {
-    [columnName: string]: string
-  }
-  dataTypes: {
-    [columnName: string]: string
-  }
-}
-
 export interface DashboardQuery {
   text?: string
   editMode?: QueryEditMode

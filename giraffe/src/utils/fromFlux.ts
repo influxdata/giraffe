@@ -5,6 +5,7 @@ import {get, groupBy} from 'lodash'
 import {Schema, Table, ColumnType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
+import {extractAnnotationText, extractNonAnnotationText, genericParser, parseChunks} from './fluxParsing'
 
 export interface FromFluxResult {
   schema?: Schema
@@ -26,15 +27,8 @@ interface Columns {
 }
 
 const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
-  const lines = chunk.split('\n')
-  const annotationLines: string = lines
-    .filter(line => line.startsWith('#'))
-    .join('\n')
-    .trim()
-  const nonAnnotationLines: string = lines
-    .filter(line => !line.startsWith('#'))
-    .join('\n')
-    .trim()
+  const annotationLines: string = extractAnnotationText(chunk)
+  const nonAnnotationLines: string = extractNonAnnotationText(chunk)
 
   const nonAnnotationData = Papa.parse(nonAnnotationLines).data
   const annotationD = Papa.parse(annotationLines).data
@@ -123,15 +117,15 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = splitChunks(fluxCSV)
+  const chunks = parseChunks(fluxCSV)
 
   let tableLength = 0
 
   for (const chunk of chunks) {
-    const tableText = extractTableText(chunk)
-    const tableData = csvParse(tableText)
-    const annotationText = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationText, tableData.columns)
+    const nonAnnotationLines = extractNonAnnotationText(chunk)
+    const tableData = csvParse(nonAnnotationLines)
+    const annotationLines = extractAnnotationText(chunk)
+    const annotationData = parseAnnotations(annotationLines, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -187,18 +181,18 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = splitChunks(fluxCSV)
+  const chunks = parseChunks(fluxCSV)
 
   let tableLength = 0
 
-  const schema: Schema = {}
+  // const schema: Schema = {}
 
   for (const chunk of chunks) {
-    formatSchemaByChunk(chunk, schema)
-    const tableText = extractTableText(chunk)
-    const tableData = csvParse(tableText)
-    const annotationText = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationText, tableData.columns)
+    // formatSchemaByChunk(chunk, schema)
+    const nonAnnotationLines = extractNonAnnotationText(chunk)
+    const tableData = csvParse(nonAnnotationLines)
+    const annotationLines = extractAnnotationText(chunk)
+    const annotationData = parseAnnotations(annotationLines, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -244,7 +238,7 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   )
 
   const result = {
-    schema,
+    // schema,
     table,
     fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
   }
@@ -258,45 +252,6 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
 
   See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
 */
-const splitChunks = (fluxCSV: string): string[] => {
-  const trimmedResponse = fluxCSV.trim()
-
-  if (trimmedResponse === '') {
-    return []
-  }
-
-  // Split the response into separate chunks whenever we encounter:
-  //
-  // 1. A newline
-  // 2. Followed by any amount of whitespace
-  // 3. Followed by a newline
-  // 4. Followed by a `#` character
-  //
-  // The last condition is [necessary][0] for handling CSV responses with
-  // values containing newlines.
-  //
-  // [0]: https://github.com/influxdata/influxdb/issues/15017
-  const chunks = trimmedResponse
-    .split(/\n\s*\n#/)
-    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
-
-  return chunks
-}
-
-const extractAnnotationText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  assert(
-    !!text,
-    'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-  )
-
-  return text
-}
 
 const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
   const measurement = groupKey['_measurement']
@@ -384,16 +339,6 @@ const parseAnnotations = (
     .reduce((acc, val, i) => ({...acc, [headerRow[i + 1]]: val}), {})
 
   return {groupKey, datatypeByColumnName, defaultByColumnName}
-}
-
-const extractTableText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => !line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  return text
 }
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
