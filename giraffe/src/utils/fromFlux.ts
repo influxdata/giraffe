@@ -1,4 +1,4 @@
-import {csvParse, csvParseRows} from 'd3-dsv'
+import {csvParse} from 'd3-dsv'
 import Papa from 'papaparse'
 import {get, groupBy} from 'lodash'
 
@@ -125,7 +125,8 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     const nonAnnotationLines = extractNonAnnotationText(chunk)
     const tableData = csvParse(nonAnnotationLines)
     const annotationLines = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationLines, tableData.columns)
+    const rows = Papa.parse(annotationLines).data
+    const annotationData = parseAnnotations(rows, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -192,7 +193,8 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
     const nonAnnotationLines = extractNonAnnotationText(chunk)
     const tableData = csvParse(nonAnnotationLines)
     const annotationLines = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationLines, tableData.columns)
+    const rows = Papa.parse(annotationLines).data
+    const annotationData = parseAnnotations(rows, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -308,15 +310,13 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
 }
 
 const parseAnnotations = (
-  annotationData: string,
+  rows: string[][],
   headerRow: string[]
 ): {
   groupKey: string[]
   datatypeByColumnName: {[columnName: string]: any}
   defaultByColumnName: {[columnName: string]: any}
 } => {
-  const rows = csvParseRows(annotationData)
-
   const groupRow = rows.find(row => row[0] === '#group')
   const datatypeRow = rows.find(row => row[0] === '#datatype')
   const defaultRow = rows.find(row => row[0] === '#default')
