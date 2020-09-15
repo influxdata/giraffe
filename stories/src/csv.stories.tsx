@@ -17,6 +17,7 @@ import {
   xScaleKnob,
   yKnob,
   yScaleKnob,
+  tooltipOrientationThresholdKnob,
 } from './helpers'
 
 import {tooltipFalsyValues} from './data/fluxCSV'
@@ -67,6 +68,7 @@ storiesOf('CSV from Flux', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -79,6 +81,7 @@ storiesOf('CSV from Flux', module)
       showAxes,
       xScale,
       yScale,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'line',
@@ -141,6 +144,7 @@ storiesOf('CSV from Flux', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: csv,
@@ -153,6 +157,7 @@ storiesOf('CSV from Flux', module)
       showAxes,
       xScale,
       yScale,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'line',
