@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {select, text, boolean} from '@storybook/addon-knobs'
+import {select, text, boolean, number} from '@storybook/addon-knobs'
 
 import {Table} from '../../giraffe/src'
 import {CPU} from './data/cpu'
@@ -151,3 +151,6 @@ export const timeZoneKnob = (initial?: string) =>
     },
     initial || 'UTC'
   )
+
+export const tooltipOrientationThresholdKnob = () =>
+  number('tooltipOrientationThreshold', 5)
