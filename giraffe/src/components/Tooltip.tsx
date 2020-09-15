@@ -153,7 +153,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
                 key={i}
                 style={columnValueStyle(i, colors)}
               >
-                {value}
+                {String(value)}
               </div>
             ))}
           </div>
