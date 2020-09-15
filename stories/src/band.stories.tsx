@@ -27,6 +27,7 @@ import {
   showAxesKnob,
   interpolationKnob,
   timeZoneKnob,
+  tooltipOrientationThresholdKnob,
 } from './helpers'
 
 storiesOf('Band Chart', module)
@@ -86,6 +87,7 @@ storiesOf('Band Chart', module)
     const upperColumnName = text('upperColumnName', 'max')
     const mainColumnName = text('mainColumnName', 'mean')
     const lowerColumnName = text('lowerColumnName', 'min')
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -103,6 +105,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'band',
@@ -168,6 +171,7 @@ storiesOf('Band Chart', module)
     const upperColumnName = text('upperColumnName', '')
     const mainColumnName = text('mainColumnName', '')
     const lowerColumnName = text('lowerColumnName', '')
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: customCSV,
@@ -185,6 +189,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'band',
