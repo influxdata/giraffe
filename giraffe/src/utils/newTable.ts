@@ -22,7 +22,7 @@ class SimpleTable implements Table {
         type: ColumnType
         data: ColumnData
       }
-    } = {}
+    }
   ) {
     this.length = length
     this.columns = columns
@@ -107,9 +107,7 @@ class SimpleTable implements Table {
       )
     }
 
-    const table = new SimpleTable(this.length)
-
-    table.columns = {
+    const table = new SimpleTable(this.length, {
       ...this.columns,
       [columnKey]: {
         name: name || columnKey,
@@ -117,7 +115,7 @@ class SimpleTable implements Table {
         type,
         data,
       },
-    }
+    })
 
     return table
   }

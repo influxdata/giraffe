@@ -1,4 +1,4 @@
-import {queryTable} from './queryTable'
+import {queryTable, DEFAULT_TABLE_OPTIONS} from './queryTable'
 // @influxdata/influxdb-client uses node transport in tests (tests run in node), therefore nock is used to mock HTTP
 import nock from 'nock'
 import {InfluxDB} from '@influxdata/influxdb-client'
@@ -183,5 +183,116 @@ there",5
       'hello\n\nthere',
       'hi',
     ])
+  })
+  describe('tableOptions', () => {
+    let defaultMaxTableLength: number | undefined
+    beforeEach(() => {
+      defaultMaxTableLength = DEFAULT_TABLE_OPTIONS.maxTableLength
+    })
+    afterEach(() => {
+      DEFAULT_TABLE_OPTIONS.maxTableLength = defaultMaxTableLength
+    })
+    ;[
+      [0, undefined],
+      [1, 1],
+      [undefined, 3],
+    ].forEach(([length, wants]) => {
+      it(`uses default maxTableLength ${length}`, async () => {
+        const CSV = `#group,false
+#datatype,long
+#default,
+,result
+,1
+,2
+,3`
+        nock(url)
+          .post(/.*/)
+          .reply(200, CSV)
+        DEFAULT_TABLE_OPTIONS.maxTableLength = length
+        const actual = await queryTable(queryApi, 'ignored')
+
+        expect(actual.getColumn('result')?.length).toEqual(wants)
+      })
+    })
+    ;[
+      [0, undefined],
+      [1, 1],
+      [undefined, 2 /* because the default is set to 2 */],
+    ].forEach(([length, wants]) => {
+      it(`uses custom maxTableLength ${length}`, async () => {
+        const CSV = `#group,false
+#datatype,long
+#default,
+,result
+,1
+,2
+,3`
+        nock(url)
+          .post(/.*/)
+          .reply(200, CSV)
+        DEFAULT_TABLE_OPTIONS.maxTableLength = 2
+        const actual = await queryTable(queryApi, 'ignored', {
+          maxTableLength: length,
+        })
+
+        expect(actual.getColumn('result')?.length).toEqual(wants)
+      })
+    })
+    it(`uses custom accept filter`, async () => {
+      const CSV = `#group,false
+#datatype,long
+#default,
+,result
+,1
+,2
+,3`
+      nock(url)
+        .post(/.*/)
+        .reply(200, CSV)
+      DEFAULT_TABLE_OPTIONS.maxTableLength = 2
+      const actual = await queryTable(queryApi, 'ignored', {
+        accept: (row: string[]) => row[0] === '2',
+      })
+
+      expect(actual.getColumn('result')).toEqual([2])
+    })
+    it(`uses custom accept filters`, async () => {
+      const CSV = `#group,false
+#datatype,long
+#default,
+,result
+,1
+,2
+,3`
+      nock(url)
+        .post(/.*/)
+        .reply(200, CSV)
+      const actual = await queryTable(queryApi, 'ignored', {
+        accept: [
+          (row: string[]) => Number(row[0]) < 3,
+          (row: string[]) => row[0] !== '1',
+        ],
+      })
+
+      expect(actual.getColumn('result')).toEqual([2])
+    })
+    it(`uses custom accept filters and maxTableLength`, async () => {
+      const CSV = `#group,false
+#datatype,long
+#default,
+,result
+,1
+,2
+,3`
+      nock(url)
+        .post(/.*/)
+        .reply(200, CSV)
+      const actual = await queryTable(queryApi, 'ignored', {
+        maxTableLength: 1,
+        accept: (row: string[]) => Number(row[0]) > 1,
+      })
+
+      expect(actual.getColumn('result')).toEqual([2])
+    })
   })
 })

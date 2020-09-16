@@ -59,21 +59,72 @@ export interface TableOptions {
   /**
    * Accept allows to accept/reject specific rows or terminate processing.
    **/
-  accept?: AcceptRowFunction
+  accept?: AcceptRowFunction | AcceptRowFunction[]
+  /**
+   * Sets maximum table length, QUERY_MAX_TABLE_LENGTH when undefined.
+   */
+  maxTableLength?: number
+
   /** column keys to collect in the table, undefined means all columns */
   columns?: string[]
 }
 
 /**
+ * DEFAULT_TABLE_OPTIONS allows to setup default maxTableLength.
+ */
+export const DEFAULT_TABLE_OPTIONS: Pick<TableOptions, 'maxTableLength'> = {
+  maxTableLength: 100_000,
+}
+
+/**
  * Create an accept function that stops processing
- * after the specified count of rows is processed.
+ * if the table reaches the specified max rows.
  * @param size maximum processed rows
  */
-export function maxTableLength(max: number): AcceptRowFunction {
+export function acceptMaxTableLength(max: number): AcceptRowFunction {
   let size = 0
   return () => {
-    if (size >= max) return undefined // stop processing
+    if (size >= max) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `queryTable: max table length ${max} reached, processing stopped`
+      )
+      return undefined
+    }
     size++
+    return true
+  }
+}
+
+/**
+ * Creates one accept function for the TableOptions supplied.
+ * @param options table options
+ * @returns accept function
+ */
+function createAcceptRowFunction(options: TableOptions): AcceptRowFunction {
+  const maxTableLength =
+    options.maxTableLength === undefined
+      ? DEFAULT_TABLE_OPTIONS.maxTableLength
+      : options.maxTableLength
+  const acceptors: AcceptRowFunction[] = []
+  if (options.accept) {
+    if (Array.isArray(options.accept)) {
+      acceptors.push(...options.accept)
+    } else {
+      acceptors.push(options.accept)
+    }
+  }
+  if (maxTableLength !== undefined) {
+    acceptors.push(acceptMaxTableLength(maxTableLength))
+  }
+
+  return (row: string[], tableMeta: FluxTableMetaData) => {
+    for (let i = 0; i < acceptors.length; i++) {
+      const retVal = acceptors[i](row, tableMeta)
+      if (retVal === undefined || retVal === false) {
+        return retVal
+      }
+    }
     return true
   }
 }
@@ -90,10 +141,11 @@ export function createFluxResultObserver(
   reject: (reason?: any) => void,
   tableOptions: TableOptions = {}
 ): FluxResultObserver<string[]> {
-  const {accept = () => true, columns: onlyColumns} = tableOptions
+  const {columns: onlyColumns} = tableOptions
+  const accept = createAcceptRowFunction(tableOptions)
   const columns: Record<string, ColumnStore> = {}
   let dataColumns: ColumnStore[]
-  let lastTableMeta: FluxTableMetaData = undefined
+  let lastTableMeta: FluxTableMetaData | undefined = undefined
   let tableSize = 0
   let cancellable: Cancellable
   return {
@@ -105,6 +157,7 @@ export function createFluxResultObserver(
           return
         default:
           cancellable.cancel()
+          return
       }
       if (tableMeta !== lastTableMeta) {
         dataColumns = []
@@ -246,6 +299,6 @@ function toGiraffeColumnType(clientType: ClientColumnType): ColumnType {
     case 'double':
       return 'number'
     default:
-      return clientType.startsWith('dateTime') ? 'time' : 'string'
+      return clientType && clientType.startsWith('dateTime') ? 'time' : 'string'
   }
 }
