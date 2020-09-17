@@ -29,108 +29,214 @@ describe('fromFlux', () => {
 `
 
     const expected = {
-      table:{
+      table: {
         length: 5,
         columns: {
-          '_value (number)': { name: '_value', type: 'number', data: [0,
-             161314315,
-             undefined,
-             976,
-             0,] },
-          '_value (string)': { name: '_value', type: 'string', data: [undefined,
-             undefined,
-             "5551e9bfb3bd722d750b94d5a843d7d56a23e1d69712828d66f75ac92039092c",
-             undefined,
-             undefined,] },
-          result: { name: 'result', type: 'string', data: ["_result","_result","_result","_result","_result",] },
-          table: { name: 'table', type: 'number', data: [0,1,2,3,4] },
-          _start: { name: '_start', type: 'time', data: [1599255750122,
-             1599255750122,
-             1599255750122,
-             1599255750122,
-             1599255750122,] },
-          _stop: { name: '_stop', type: 'time', data: [1599601350122,
-             1599601350122,
-             1599601350122,
-             1599601350122,
-             1599601350122,] },
-          _time: { name: '_time', type: 'time', data: [1599599342000,
-             1599599342000,
-             1599599342000,
-             1599599342000,
-             1599599342000,] },
-          _field: { name: '_field', type: 'string', data: ["rx_errors",
-          "usage_total",
-          "container_id",
-          "rx_bytes",
-          "tx_errors"] },
-          _measurement: { name: '_measurement', type: 'string', data: ["docker_container_net",
-           "docker_container_cpu",
-           "docker_container_cpu",
-           "docker_container_net",
-           "docker_container_net",] },
+          '_value (number)': {
+            name: '_value',
+            type: 'number',
+            data: [0, 161314315, undefined, 976, 0],
+          },
+          '_value (string)': {
+            name: '_value',
+            type: 'string',
+            data: [
+              undefined,
+              undefined,
+              '5551e9bfb3bd722d750b94d5a843d7d56a23e1d69712828d66f75ac92039092c',
+              undefined,
+              undefined,
+            ],
+          },
+          result: {
+            name: 'result',
+            type: 'string',
+            data: ['_result', '_result', '_result', '_result', '_result'],
+          },
+          table: {name: 'table', type: 'number', data: [0, 1, 2, 3, 4]},
+          _start: {
+            name: '_start',
+            type: 'time',
+            data: [
+              1599255750122,
+              1599255750122,
+              1599255750122,
+              1599255750122,
+              1599255750122,
+            ],
+          },
+          _stop: {
+            name: '_stop',
+            type: 'time',
+            data: [
+              1599601350122,
+              1599601350122,
+              1599601350122,
+              1599601350122,
+              1599601350122,
+            ],
+          },
+          _time: {
+            name: '_time',
+            type: 'time',
+            data: [
+              1599599342000,
+              1599599342000,
+              1599599342000,
+              1599599342000,
+              1599599342000,
+            ],
+          },
+          _field: {
+            name: '_field',
+            type: 'string',
+            data: [
+              'rx_errors',
+              'usage_total',
+              'container_id',
+              'rx_bytes',
+              'tx_errors',
+            ],
+          },
+          _measurement: {
+            name: '_measurement',
+            type: 'string',
+            data: [
+              'docker_container_net',
+              'docker_container_cpu',
+              'docker_container_cpu',
+              'docker_container_net',
+              'docker_container_net',
+            ],
+          },
           'com.docker.compose.config-hash': {
             name: 'com.docker.compose.config-hash',
             type: 'string',
-            data: ["45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744",
-              "45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744",
-              "45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744",
-              "45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744",
-              "45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744"]
+            data: [
+              '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
+              '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
+              '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
+              '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
+              '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
+            ],
           },
           'com.docker.compose.container-number': {
             name: 'com.docker.compose.container-number',
             type: 'string',
-            data: ["1","1","1","1","1"]
+            data: ['1', '1', '1', '1', '1'],
           },
           'com.docker.compose.oneoff': {
             name: 'com.docker.compose.oneoff',
             type: 'string',
-            data: ["False","False","False","False","False",]
+            data: ['False', 'False', 'False', 'False', 'False'],
           },
           'com.docker.compose.project': {
             name: 'com.docker.compose.project',
             type: 'string',
-            data: ["influx","influx","influx","influx","influx",]
+            data: ['influx', 'influx', 'influx', 'influx', 'influx'],
           },
           'com.docker.compose.project.config_files': {
             name: 'com.docker.compose.project.config_files',
             type: 'string',
-            data: ["compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml","compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml","compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml","compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml","compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml",]
+            data: [
+              'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
+              'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
+              'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
+              'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
+              'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
+            ],
           },
           'com.docker.compose.project.working_dir': {
             name: 'com.docker.compose.project.working_dir',
             type: 'string',
-            data: ["/Users/asalem/go/src/github.com/monitor-ci/compose","/Users/asalem/go/src/github.com/monitor-ci/compose","/Users/asalem/go/src/github.com/monitor-ci/compose","/Users/asalem/go/src/github.com/monitor-ci/compose","/Users/asalem/go/src/github.com/monitor-ci/compose",]
+            data: [
+              '/Users/asalem/go/src/github.com/monitor-ci/compose',
+              '/Users/asalem/go/src/github.com/monitor-ci/compose',
+              '/Users/asalem/go/src/github.com/monitor-ci/compose',
+              '/Users/asalem/go/src/github.com/monitor-ci/compose',
+              '/Users/asalem/go/src/github.com/monitor-ci/compose',
+            ],
           },
           'com.docker.compose.service': {
             name: 'com.docker.compose.service',
             type: 'string',
-            data: ["telegraf","telegraf","telegraf","telegraf","telegraf",]
+            data: ['telegraf', 'telegraf', 'telegraf', 'telegraf', 'telegraf'],
           },
           'com.docker.compose.version': {
             name: 'com.docker.compose.version',
             type: 'string',
-            data: ["1.25.4","1.25.4","1.25.4","1.25.4","1.25.4",]
+            data: ['1.25.4', '1.25.4', '1.25.4', '1.25.4', '1.25.4'],
           },
-          container_image: { name: 'container_image', type: 'string', data: ["influx_telegraf","influx_telegraf","influx_telegraf","influx_telegraf","influx_telegraf",] },
-          container_name: { name: 'container_name', type: 'string', data: ["influx_telegraf_1","influx_telegraf_1","influx_telegraf_1","influx_telegraf_1","influx_telegraf_1",] },
-          container_status: { name: 'container_status', type: 'string', data: ["running","running","running","running","running",] },
-          container_version: { name: 'container_version', type: 'string', data: ["unknown","unknown","unknown","unknown","unknown",] },
-          engine_host: { name: 'engine_host', type: 'string', data: ["docker-desktop","docker-desktop","docker-desktop","docker-desktop","docker-desktop",] },
-          host: { name: 'host', type: 'string', data: ["5551e9bfb3bd","5551e9bfb3bd","5551e9bfb3bd","5551e9bfb3bd","5551e9bfb3bd",] },
-          network: { name: 'network', type: 'string', data: ["eth0",
-           undefined,
-           undefined,
-           "eth0",
-           "eth0",] },
-          server_version: { name: 'server_version', type: 'string', data: ["19.03.8","19.03.8","19.03.8","19.03.8","19.03.8",] },
-          cpu: { name: 'cpu', type: 'string', data: [undefined,
-           "cpu11",
-           "cpu11",
-           undefined,
-           undefined,] }
-        }
+          container_image: {
+            name: 'container_image',
+            type: 'string',
+            data: [
+              'influx_telegraf',
+              'influx_telegraf',
+              'influx_telegraf',
+              'influx_telegraf',
+              'influx_telegraf',
+            ],
+          },
+          container_name: {
+            name: 'container_name',
+            type: 'string',
+            data: [
+              'influx_telegraf_1',
+              'influx_telegraf_1',
+              'influx_telegraf_1',
+              'influx_telegraf_1',
+              'influx_telegraf_1',
+            ],
+          },
+          container_status: {
+            name: 'container_status',
+            type: 'string',
+            data: ['running', 'running', 'running', 'running', 'running'],
+          },
+          container_version: {
+            name: 'container_version',
+            type: 'string',
+            data: ['unknown', 'unknown', 'unknown', 'unknown', 'unknown'],
+          },
+          engine_host: {
+            name: 'engine_host',
+            type: 'string',
+            data: [
+              'docker-desktop',
+              'docker-desktop',
+              'docker-desktop',
+              'docker-desktop',
+              'docker-desktop',
+            ],
+          },
+          host: {
+            name: 'host',
+            type: 'string',
+            data: [
+              '5551e9bfb3bd',
+              '5551e9bfb3bd',
+              '5551e9bfb3bd',
+              '5551e9bfb3bd',
+              '5551e9bfb3bd',
+            ],
+          },
+          network: {
+            name: 'network',
+            type: 'string',
+            data: ['eth0', undefined, undefined, 'eth0', 'eth0'],
+          },
+          server_version: {
+            name: 'server_version',
+            type: 'string',
+            data: ['19.03.8', '19.03.8', '19.03.8', '19.03.8', '19.03.8'],
+          },
+          cpu: {
+            name: 'cpu',
+            type: 'string',
+            data: [undefined, 'cpu11', 'cpu11', undefined, undefined],
+          },
+        },
       },
       fluxGroupKeyUnion: [
         '_start',
@@ -153,8 +259,8 @@ describe('fromFlux', () => {
         'host',
         'network',
         'server_version',
-        'cpu'
-      ]
+        'cpu',
+      ],
     }
     const fFlux = fromFlux(resp)
     expect(fFlux).toEqual(expected)
