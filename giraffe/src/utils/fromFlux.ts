@@ -1,11 +1,10 @@
-import {csvParse} from 'd3-dsv'
+import {csvParse, csvParseRows} from 'd3-dsv'
 import Papa from 'papaparse'
 import {get, groupBy} from 'lodash'
 
 import {Schema, Table, ColumnType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
-import {extractAnnotationText, extractNonAnnotationText, genericParser, parseChunks} from './fluxParsing'
 
 export interface FromFluxResult {
   schema?: Schema
@@ -27,8 +26,15 @@ interface Columns {
 }
 
 const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
-  const annotationLines: string = extractAnnotationText(chunk)
-  const nonAnnotationLines: string = extractNonAnnotationText(chunk)
+  const lines = chunk.split('\n')
+  const annotationLines: string = lines
+    .filter(line => line.startsWith('#'))
+    .join('\n')
+    .trim()
+  const nonAnnotationLines: string = lines
+    .filter(line => !line.startsWith('#'))
+    .join('\n')
+    .trim()
 
   const nonAnnotationData = Papa.parse(nonAnnotationLines).data
   const annotationD = Papa.parse(annotationLines).data
@@ -67,26 +73,21 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
 
 /*
   Convert a [Flux CSV response][0] to a `Table`.
-
   For example, given a series of Flux tables that look like this:
-
       column_a | column_b | column_c  <-- name
       long     | string   | long      <-- type
       ------------------------------
              1 |      "g" |       34
              2 |      "f" |       58
              3 |      "c" |       21
-
       column_b | column_d   <-- name
       double   | boolean    <-- type
       -------------------
            1.0 |     true
            2.0 |     true
            3.0 |     true
-
   This function will spread them out to a single wide table that looks like
   this instead:
-
       column_a | column_b (string) | column_c | column_b (number) | column_d  <-- key
       column_a | column_b          | column_c | column_b          | column_d  <-- name
       number   | string            | number   | number            | bool      <-- type
@@ -97,36 +98,30 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
                |                   |          |               1.0 |     true
                |                   |          |               2.0 |     true
                |                   |          |               3.0 |     true
-
-
   The `#group`, `#datatype`, and `#default` [annotations][1] are expected to be
   in the input Flux CSV.
-
   Values are coerced into appropriate JavaScript types based on the Flux
   `#datatype` annotation for the table
-
   The `Table` stores a `key` for each column which is seperate from the column
   `name`. If multiple Flux tables have the same column but with different
   types, they will be distinguished by different keys in the resulting `Table`;
   otherwise the `key` and `name` for each column in the result table will be
   identical.
-
   [0]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#csv
   [1]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#annotations
 */
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = parseChunks(fluxCSV)
+  const chunks = splitChunks(fluxCSV)
 
   let tableLength = 0
 
   for (const chunk of chunks) {
-    const nonAnnotationLines = extractNonAnnotationText(chunk)
-    const tableData = csvParse(nonAnnotationLines)
-    const annotationLines = extractAnnotationText(chunk)
-    const rows = Papa.parse(annotationLines).data
-    const annotationData = parseAnnotations(rows, tableData.columns)
+    const tableText = extractTableText(chunk)
+    const tableData = csvParse(tableText)
+    const annotationText = extractAnnotationText(chunk)
+    const annotationData = parseAnnotations(annotationText, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -182,19 +177,18 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = parseChunks(fluxCSV)
+  const chunks = splitChunks(fluxCSV)
 
   let tableLength = 0
 
-  // const schema: Schema = {}
+  const schema: Schema = {}
 
   for (const chunk of chunks) {
-    // formatSchemaByChunk(chunk, schema)
-    const nonAnnotationLines = extractNonAnnotationText(chunk)
-    const tableData = csvParse(nonAnnotationLines)
-    const annotationLines = extractAnnotationText(chunk)
-    const rows = Papa.parse(annotationLines).data
-    const annotationData = parseAnnotations(rows, tableData.columns)
+    formatSchemaByChunk(chunk, schema)
+    const tableText = extractTableText(chunk)
+    const tableData = csvParse(tableText)
+    const annotationText = extractAnnotationText(chunk)
+    const annotationData = parseAnnotations(annotationText, tableData.columns)
 
     for (const columnName of tableData.columns.slice(1)) {
       const columnType = toColumnType(
@@ -240,7 +234,7 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   )
 
   const result = {
-    // schema,
+    schema,
     table,
     fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
   }
@@ -251,9 +245,47 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
 /*
   A Flux CSV response can contain multiple CSV files each joined by a newline.
   This function splits up a CSV response into these individual CSV files.
-
   See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
 */
+const splitChunks = (fluxCSV: string): string[] => {
+  const trimmedResponse = fluxCSV.trim()
+
+  if (trimmedResponse === '') {
+    return []
+  }
+
+  // Split the response into separate chunks whenever we encounter:
+  //
+  // 1. A newline
+  // 2. Followed by any amount of whitespace
+  // 3. Followed by a newline
+  // 4. Followed by a `#` character
+  //
+  // The last condition is [necessary][0] for handling CSV responses with
+  // values containing newlines.
+  //
+  // [0]: https://github.com/influxdata/influxdb/issues/15017
+  const chunks = trimmedResponse
+    .split(/\n\s*\n#/)
+    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
+
+  return chunks
+}
+
+const extractAnnotationText = (chunk: string): string => {
+  const text = chunk
+    .split('\n')
+    .filter(line => line.startsWith('#'))
+    .join('\n')
+    .trim()
+
+  assert(
+    !!text,
+    'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+  )
+
+  return text
+}
 
 const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
   const measurement = groupKey['_measurement']
@@ -310,13 +342,15 @@ const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
 }
 
 const parseAnnotations = (
-  rows: string[][],
+  annotationData: string,
   headerRow: string[]
 ): {
   groupKey: string[]
   datatypeByColumnName: {[columnName: string]: any}
   defaultByColumnName: {[columnName: string]: any}
 } => {
+  const rows = csvParseRows(annotationData)
+
   const groupRow = rows.find(row => row[0] === '#group')
   const datatypeRow = rows.find(row => row[0] === '#datatype')
   const defaultRow = rows.find(row => row[0] === '#default')
@@ -339,6 +373,16 @@ const parseAnnotations = (
     .reduce((acc, val, i) => ({...acc, [headerRow[i + 1]]: val}), {})
 
   return {groupKey, datatypeByColumnName, defaultByColumnName}
+}
+
+const extractTableText = (chunk: string): string => {
+  const text = chunk
+    .split('\n')
+    .filter(line => !line.startsWith('#'))
+    .join('\n')
+    .trim()
+
+  return text
 }
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
@@ -402,12 +446,10 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   Each column in a parsed `Table` can only have a single type, but because we
   combine columns from multiple Flux tables into a single table, we may
   encounter conflicting types for a given column during parsing.
-
   To avoid this issue, we seperate the concept of the column _key_ and column
   _name_ in the `Table` object, where each key is unique but each name is not
   necessarily unique. We name the keys something like "foo (int)", where "foo"
   is the name and "int" is the type.
-
   But since type conflicts are rare and the public API requires referencing
   columns by key, we want to avoid unwieldy keys whenever possible. So the last
   stage of parsing is to rename all column keys from the `$NAME ($TYPE)` format
