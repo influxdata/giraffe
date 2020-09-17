@@ -33,7 +33,7 @@
     "visualization"
   ],
   "devDependencies": {
-    "@influxdata/influxdb-client": "^1.6.0",
+    "@influxdata/influxdb-client": "^1.7.0",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@types/d3-array": "^2.0.0",

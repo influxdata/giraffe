@@ -1129,10 +1129,10 @@
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
-"@influxdata/influxdb-client@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.6.0.tgz#46da50714742dd73c99c66f0e7379be9212477b0"
-  integrity sha512-1WHusKmW88P//diAiAXDuO8Fpe5ju7e4QQCKcoPRZstXCGhICYPg8mcIBmurDJMHIUTziCZZjYxR+9jlyXuNaA==
+"@influxdata/influxdb-client@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.7.0.tgz#42e5ec002eff8c59182cb52765b7f94dac382a56"
+  integrity sha512-Qa4vV5W2NroETreVA2wvVlfZV12sda5S7Z57Kn5/5J4XDhglrFo5IOWbvEne+ROgPCvZ1ufHdrdbjobm+n0BSg==
 
 "@jest/console@^24.7.1":
   version "24.7.1"
@@ -8348,6 +8348,7 @@ lodash.reduce@^4.3.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.reduce/-/lodash.reduce-4.6.0.tgz#f1ab6b839299ad48f784abbf476596f03b914d3b"
   integrity sha1-8atrg5KZrUj3hKu/R2WW8DuRTTs=
+
 lodash.set@^4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
