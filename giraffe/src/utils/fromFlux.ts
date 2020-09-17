@@ -73,26 +73,21 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
 
 /*
   Convert a [Flux CSV response][0] to a `Table`.
-
   For example, given a series of Flux tables that look like this:
-
       column_a | column_b | column_c  <-- name
       long     | string   | long      <-- type
       ------------------------------
              1 |      "g" |       34
              2 |      "f" |       58
              3 |      "c" |       21
-
       column_b | column_d   <-- name
       double   | boolean    <-- type
       -------------------
            1.0 |     true
            2.0 |     true
            3.0 |     true
-
   This function will spread them out to a single wide table that looks like
   this instead:
-
       column_a | column_b (string) | column_c | column_b (number) | column_d  <-- key
       column_a | column_b          | column_c | column_b          | column_d  <-- name
       number   | string            | number   | number            | bool      <-- type
@@ -103,20 +98,15 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
                |                   |          |               1.0 |     true
                |                   |          |               2.0 |     true
                |                   |          |               3.0 |     true
-
-
   The `#group`, `#datatype`, and `#default` [annotations][1] are expected to be
   in the input Flux CSV.
-
   Values are coerced into appropriate JavaScript types based on the Flux
   `#datatype` annotation for the table
-
   The `Table` stores a `key` for each column which is seperate from the column
   `name`. If multiple Flux tables have the same column but with different
   types, they will be distinguished by different keys in the resulting `Table`;
   otherwise the `key` and `name` for each column in the result table will be
   identical.
-
   [0]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#csv
   [1]: https://github.com/influxdata/flux/blob/master/docs/SPEC.md#annotations
 */
@@ -255,7 +245,6 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
 /*
   A Flux CSV response can contain multiple CSV files each joined by a newline.
   This function splits up a CSV response into these individual CSV files.
-
   See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
 */
 const splitChunks = (fluxCSV: string): string[] => {
@@ -457,12 +446,10 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   Each column in a parsed `Table` can only have a single type, but because we
   combine columns from multiple Flux tables into a single table, we may
   encounter conflicting types for a given column during parsing.
-
   To avoid this issue, we seperate the concept of the column _key_ and column
   _name_ in the `Table` object, where each key is unique but each name is not
   necessarily unique. We name the keys something like "foo (int)", where "foo"
   is the name and "int" is the type.
-
   But since type conflicts are rare and the public API requires referencing
   columns by key, we want to avoid unwieldy keys whenever possible. So the last
   stage of parsing is to rename all column keys from the `$NAME ($TYPE)` format

@@ -2,7 +2,6 @@ import Papa from 'papaparse'
 import uuid from 'uuid'
 
 import {FluxTable} from '../types'
-
 import {get} from './get'
 import {groupBy} from './groupBy'
 
@@ -135,7 +134,6 @@ export const parseTables = (responseChunk: string): FluxTable[] => {
       }),
       {}
     )
-
     return {
       id: uuid.v4(),
       data: [[...headerRow], ...tableData],
