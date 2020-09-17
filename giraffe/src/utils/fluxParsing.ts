@@ -61,22 +61,6 @@ export const parseResponse = (response: string): FluxTable[] => {
   return tables
 }
 
-export const genericParseResponse = (response: string): any => {
-  const chunks = parseChunks(response)
-  const mapped = chunks.map((chunk) => {
-    const {annotationData, nonAnnotationData} = genericParser(chunk)
-    return {annotationData, nonAnnotationData}
-  }, [])
-
-  const tables = mapped.reduce((acc, {annotationData, nonAnnotationData}) => {
-    const table = genericTableCreator(annotationData, nonAnnotationData)
-    return [...acc, ...table]
-  }, [])
-
-
-  return tables
-}
-
 export const parseTables = (responseChunk: string): FluxTable[] => {
   const lines = responseChunk.split('\n')
   const annotationLines: string = lines
@@ -151,108 +135,7 @@ export const parseTables = (responseChunk: string): FluxTable[] => {
       {}
     )
     return {
-      // id: uuid.v4(),
-      data: [[...headerRow], ...tableData],
-      name,
-      result,
-      groupKey,
-      dataTypes,
-    } as FluxTable
-  })
-
-  return tables
-}
-
-export const extractNonAnnotationText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => !line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  return text
-}
-
-export const extractAnnotationText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  return text
-}
-
-export const genericParser = (responseChunk: string): any => {
-  const annotationLines: string = extractAnnotationText(responseChunk)
-
-  if (!annotationLines) {
-    throw new Error('Unable to extract annotation data')
-  }
-
-  const nonAnnotationLines: string = extractNonAnnotationText(
-    responseChunk
-  )
-
-  if (!nonAnnotationLines) {
-    // A response may be truncated on an arbitrary line. This guards against
-    // the case where a response is truncated on annotation data
-    return []
-  }
-  const nonAnnotationData = Papa.parse(nonAnnotationLines).data
-  const annotationData = Papa.parse(annotationLines).data
-  return {nonAnnotationData, annotationData}
-}
-
-const genericTableCreator = (annotationData, nonAnnotationData): any => {
-  const headerRow = nonAnnotationData[0]
-  const tableColIndex = headerRow.findIndex(h => h === 'table')
-  const resultColIndex = headerRow.findIndex(h => h === 'result')
-  interface TableGroup {
-    [tableId: string]: string[]
-  }
-
-  const tableGroup: TableGroup = groupBy(
-    nonAnnotationData.slice(1),
-    row => row[tableColIndex]
-  )
-  // Group rows by their table id
-  const tablesData = Object.values(tableGroup)
-
-  const groupRow = annotationData.find(row => row[0] === '#group')
-  const defaultsRow = annotationData.find(row => row[0] === '#default')
-  const dataTypeRow = annotationData.find(row => row[0] === '#datatype')
-
-  const groupKeyIndices = groupRow.reduce((acc, value, i) => {
-    if (value === 'true') {
-      return [...acc, i]
-    }
-
-    return acc
-  }, [])
-
-  const tables = tablesData.map(tableData => {
-    const dataRow = get(tableData, '0', defaultsRow)
-    const result: string =
-      get(dataRow, resultColIndex, '') || get(defaultsRow, resultColIndex, '')
-
-    const groupKey = groupKeyIndices.reduce((acc, i) => {
-      return {...acc, [headerRow[i]]: get(dataRow, i, '')}
-    }, {})
-
-    const name = Object.entries(groupKey)
-      .filter(([k]) => !['_start', '_stop'].includes(k))
-      .map(([k, v]) => `${k}=${v}`)
-      .join(' ')
-
-    const dataTypes = dataTypeRow.reduce((acc, dataType, i) => {
-      return {
-        ...acc,
-        [headerRow[i]]: dataType,
-      }
-    }, {})
-    return {
-      // id: uuid.v4(),
+      id: uuid.v4(),
       data: [[...headerRow], ...tableData],
       name,
       result,
