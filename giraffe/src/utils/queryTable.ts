@@ -6,8 +6,9 @@ import {
   Cancellable,
   FluxResultObserver,
 } from '@influxdata/influxdb-client'
-import {Table, ColumnType, ColumnData} from '../types'
+import {ColumnType, ColumnData, Table} from '../types'
 import {newTable} from './newTable'
+import {FromFluxResult} from './fromFlux'
 
 /**
  * Stores data and metadata of a result column.
@@ -28,8 +29,8 @@ interface ColumnStore {
 }
 
 function toTableColumns(
-  columns: Record<string, ColumnStore>,
-  tableLength: number
+  tableLength: number,
+  columns: Record<string, ColumnStore>
 ): Record<string, ColumnStore> {
   return Object.keys(columns).reduce((acc, val) => {
     const col = columns[val]
@@ -39,6 +40,28 @@ function toTableColumns(
     }
     return acc
   }, {} as Record<string, ColumnStore>)
+}
+
+function createResult(
+  tableLength: number,
+  columns: Record<string, ColumnStore>,
+  computeFluxGroupKeyUnion = false
+): FromFluxResult {
+  columns = toTableColumns(tableLength, columns)
+  const table = newTable(tableLength, columns)
+  const fluxGroupKeyUnion = []
+  if (computeFluxGroupKeyUnion) {
+    Object.keys(columns).forEach((key: string) => {
+      if (columns[key].group) {
+        fluxGroupKeyUnion.push(key)
+      }
+    })
+  }
+
+  return {
+    table,
+    fluxGroupKeyUnion,
+  }
 }
 
 /**
@@ -67,6 +90,9 @@ export interface TableOptions {
 
   /** column keys to collect in the table, undefined means all columns */
   columns?: string[]
+
+  /** compute also fluxGroupKeyUnion */
+  computeFluxGroupKeyUnion?: boolean
 }
 
 /**
@@ -137,7 +163,7 @@ function createAcceptRowFunction(options: TableOptions): AcceptRowFunction {
  * @return FluxResultObserver that collects rows to a table instance
  */
 export function createFluxResultObserver(
-  resolve: (value: Table) => void,
+  resolve: (value: FromFluxResult) => void,
   reject: (reason?: any) => void,
   tableOptions: TableOptions = {}
 ): FluxResultObserver<string[]> {
@@ -198,7 +224,7 @@ export function createFluxResultObserver(
             name: metaCol.label,
             type,
             data: existingColumn ? existingColumn.data : [],
-            group: metaCol.group,
+            group: existingColumn?.group || metaCol.group,
             toValue: toValueFn(metaCol.index, type, metaCol.defaultValue),
           }
 
@@ -217,11 +243,21 @@ export function createFluxResultObserver(
       tableSize++
     },
     complete() {
-      resolve(newTable(tableSize, toTableColumns(columns, tableSize)))
+      resolve(
+        createResult(tableSize, columns, tableOptions.computeFluxGroupKeyUnion)
+      )
     },
     error(e: Error) {
       if (e?.name === 'AbortError') {
-        resolve(newTable(tableSize, toTableColumns(columns, tableSize)))
+        // eslint-disable-next-line no-console
+        console.log('queryTable: request aborted:', e)
+        resolve(
+          createResult(
+            tableSize,
+            columns,
+            tableOptions.computeFluxGroupKeyUnion
+          )
+        )
       }
       reject(e)
     },
@@ -232,7 +268,7 @@ export function createFluxResultObserver(
 }
 
 /**
- * Executes a flux query and iterrativelly collects results into a giraffe's Table depending on the TableOptions supplied.
+ * Executes a flux query and iterrativelly collects results into a giraffe's Table considering the TableOptions supplied.
  *
  * @param queryApi InfluxDB client's QueryApi instance
  * @param query query to execute
@@ -244,10 +280,37 @@ export function queryTable(
   query: string | ParameterizedQuery,
   tableOptions: TableOptions = {}
 ): Promise<Table> {
-  return new Promise<Table>((resolve, reject) => {
+  return new Promise<FromFluxResult>((resolve, reject) => {
     queryApi.queryRows(
       query,
-      createFluxResultObserver(resolve, reject, tableOptions)
+      createFluxResultObserver(resolve, reject, {
+        ...tableOptions,
+        computeFluxGroupKeyUnion: false,
+      })
+    )
+  }).then(result => result.table)
+}
+
+/**
+ * Executes a flux query and iterrativelly collects results into a giraffe's FromFluxResult considering the TableOptions supplied.
+ *
+ * @param queryApi InfluxDB client's QueryApi instance
+ * @param query query to execute
+ * @param tableOptions tableOptions allows to filter or even stop the processing of rows, or restrict the columns to collect
+ * @return Promise  with query results
+ */
+export function queryFromFluxResult(
+  queryApi: QueryApi,
+  query: string | ParameterizedQuery,
+  tableOptions: TableOptions = {}
+): Promise<FromFluxResult> {
+  return new Promise<FromFluxResult>((resolve, reject) => {
+    queryApi.queryRows(
+      query,
+      createFluxResultObserver(resolve, reject, {
+        ...tableOptions,
+        computeFluxGroupKeyUnion: true,
+      })
     )
   })
 }

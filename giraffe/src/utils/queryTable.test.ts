@@ -1,4 +1,8 @@
-import {queryTable, DEFAULT_TABLE_OPTIONS} from './queryTable'
+import {
+  queryTable,
+  DEFAULT_TABLE_OPTIONS,
+  queryFromFluxResult,
+} from './queryTable'
 // @influxdata/influxdb-client uses node transport in tests (tests run in node), therefore nock is used to mock HTTP
 import nock from 'nock'
 import {InfluxDB} from '@influxdata/influxdb-client'
@@ -294,5 +298,35 @@ there",5
 
       expect(actual.getColumn('result')).toEqual([2])
     })
+  })
+})
+
+describe('queryFromFluxResult', () => {
+  beforeEach(() => {
+    nock.disableNetConnect()
+  })
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
+  })
+  test('returns a group key union', async () => {
+    const CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,,,,
+,a,b,c,d
+,1,2,3,4
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,,,,
+,a,b,c,d
+,1,2,3,4`
+
+    nock(url)
+      .post(/.*/)
+      .reply(200, CSV)
+    typeof queryFromFluxResult === 'function'
+    const {fluxGroupKeyUnion} = await queryFromFluxResult(queryApi, 'ignored')
+    expect(fluxGroupKeyUnion).toEqual(['a', 'c', 'd'])
   })
 })
