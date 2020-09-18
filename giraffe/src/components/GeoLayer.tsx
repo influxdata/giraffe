@@ -132,6 +132,7 @@ const onAutoResize = (
     lonOnLastRender === null ? lon : lonOnLastRender,
     zoomOnLastRender === null ? zoom : zoomOnLastRender
   )
+
   return (
     <div className="geo">
       <Geo
@@ -153,7 +154,7 @@ const onAutoResize = (
   )
 }
 
-const GeoLayer: FunctionComponent<OwnProps> = props => {
+const GeoLayer: FunctionComponent<OwnProps> = React.memo(props => {
   if (props.config.tileServerConfiguration) {
     return (
       <AutoSizer>
@@ -166,6 +167,6 @@ const GeoLayer: FunctionComponent<OwnProps> = props => {
     )
   }
   return null
-}
+})
 
 export default GeoLayer
