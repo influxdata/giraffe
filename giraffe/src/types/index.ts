@@ -62,7 +62,7 @@ export interface Config {
   legendCrosshairColor?: string
   legendColumns?: string[]
   legendMessage?: string
-  // Number of series after which the legend will be displayed in "rotated" fashion
+  legendOpacity?: number
   legendOrientationThreshold?: number
 
   // The type of the y-axis column

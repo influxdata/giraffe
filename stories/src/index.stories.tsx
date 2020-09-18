@@ -78,6 +78,12 @@ storiesOf('XY Plot', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
@@ -94,6 +100,7 @@ storiesOf('XY Plot', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOpacity,
       legendOrientationThreshold,
       layers: [
         {
@@ -156,6 +163,12 @@ storiesOf('XY Plot', module)
       {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
@@ -165,6 +178,7 @@ storiesOf('XY Plot', module)
         _value: val => `${Math.round(val)}%`,
       },
       legendFont,
+      legendOpacity,
       legendOrientationThreshold,
       tickFont,
       showAxes,

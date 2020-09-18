@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {FunctionComponent} from 'react'
+import {FunctionComponent, useMemo} from 'react'
 import {createPortal} from 'react-dom'
 
 import {TooltipData, Config} from '../types'
@@ -20,8 +20,16 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
     legendColumns: columnsWhitelist,
+    legendOpacity,
     legendOrientationThreshold: orientationThreshold,
   } = config
+
+  const tooltipOpacity = useMemo(() => {
+    if (legendOpacity >= 0 && legendOpacity <= 1.0) {
+      return legendOpacity
+    }
+    return undefined
+  }, [legendOpacity])
 
   const columns = columnsWhitelist
     ? data.filter(column => columnsWhitelist.includes(column.key))
@@ -120,6 +128,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     <div
       className="giraffe-tooltip"
       style={{
+        opacity: tooltipOpacity,
         border,
         font,
         backgroundColor,
