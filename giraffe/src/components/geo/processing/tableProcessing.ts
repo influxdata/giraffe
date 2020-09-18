@@ -34,7 +34,7 @@ export const preprocessData = (
   rowLimit: number,
   autoPivoting: boolean,
   onFinalTable: (table: GeoTable) => void
-) => {
+): GeoTable => {
   if (autoPivoting && isPivotSensible(table)) {
     // don't delay rendering with data calculation
     setTimeout(() => {
