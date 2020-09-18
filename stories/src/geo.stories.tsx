@@ -256,7 +256,24 @@ const trackKnobs = () => {
   const color1 = color('Track color 1', '#0000ff')
   const color2 = color('Track color 2', '#f0f0ff')
   const randomColors = boolean('Random colors', true)
-  return {speed, trackWidth, randomColors, color1, color2}
+
+  const endStopMarkers = boolean('End stop markers', true)
+  const endStopMarkerRadius = number('End stop marker radius', 4, {
+    range: true,
+    min: 1,
+    max: 100,
+    step: 1,
+  })
+
+  return {
+    speed,
+    trackWidth,
+    randomColors,
+    color1,
+    color2,
+    endStopMarkers,
+    endStopMarkerRadius,
+  }
 }
 
 geo.add('Tracks', () => {
@@ -267,7 +284,15 @@ geo.add('Tracks', () => {
     step: 1,
   })
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
-  const {speed, trackWidth, randomColors, color1, color2} = trackKnobs()
+  const {
+    speed,
+    trackWidth,
+    randomColors,
+    color1,
+    color2,
+    endStopMarkers,
+    endStopMarkerRadius,
+  } = trackKnobs()
   const config: Config = {
     table: geoTracks(-74, 40, numberOfTracks),
     showAxes: false,
@@ -285,6 +310,8 @@ geo.add('Tracks', () => {
             speed,
             trackWidth,
             randomColors,
+            endStopMarkers,
+            endStopMarkerRadius,
             colors: randomColors
               ? undefined
               : [
@@ -306,7 +333,14 @@ geo.add('Tracks', () => {
 
 geo.add('Layering visualizations', () => {
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
-  const {speed, trackWidth, color1, color2} = trackKnobs()
+  const {
+    speed,
+    trackWidth,
+    color1,
+    color2,
+    endStopMarkers,
+    endStopMarkerRadius,
+  } = trackKnobs()
   const config: Config = {
     table: geoTracks(-74, 40),
     showAxes: false,
@@ -323,6 +357,8 @@ geo.add('Layering visualizations', () => {
             type: 'trackMap',
             speed,
             trackWidth,
+            endStopMarkers,
+            endStopMarkerRadius,
             colors: [
               {type: 'min', hex: color1},
               {type: 'max', hex: color2},

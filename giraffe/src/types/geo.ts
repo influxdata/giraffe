@@ -69,6 +69,8 @@ export type GeoTrackMapViewLayer = GeoViewLayerProperties & {
   speed?: number
   randomColors?: boolean
   colors?: DashboardColor[]
+  endStopMarkers?: boolean
+  endStopMarkerRadius?: number
 }
 
 export interface Axis {
