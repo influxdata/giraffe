@@ -13,6 +13,7 @@ import {
   hoverAlignment2,
   mem1,
   mem2,
+  noLowerAndUpper,
   same3,
 } from './data/bandCSV'
 
@@ -26,6 +27,7 @@ import {
   showAxesKnob,
   interpolationKnob,
   timeZoneKnob,
+  tooltipOrientationThresholdKnob,
 } from './helpers'
 
 storiesOf('Band Chart', module)
@@ -42,6 +44,7 @@ storiesOf('Band Chart', module)
         hoverAlignment2,
         mem1,
         mem2,
+        noLowerAndUpper,
         same3,
       },
       cpu2
@@ -82,8 +85,9 @@ storiesOf('Band Chart', module)
       'auto'
     )
     const upperColumnName = text('upperColumnName', 'max')
-    const name = text('name', 'mean')
+    const mainColumnName = text('mainColumnName', 'mean')
     const lowerColumnName = text('lowerColumnName', 'min')
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -101,6 +105,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'band',
@@ -114,7 +119,7 @@ storiesOf('Band Chart', module)
           hoverDimension,
           shadeOpacity,
           upperColumnName,
-          name,
+          mainColumnName,
           lowerColumnName,
         },
       ],
@@ -164,8 +169,9 @@ storiesOf('Band Chart', module)
       'auto'
     )
     const upperColumnName = text('upperColumnName', '')
-    const name = text('name', '')
+    const mainColumnName = text('mainColumnName', '')
     const lowerColumnName = text('lowerColumnName', '')
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
       fluxResponse: customCSV,
@@ -183,6 +189,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOrientationThreshold,
       layers: [
         {
           type: 'band',
@@ -196,7 +203,7 @@ storiesOf('Band Chart', module)
           hoverDimension,
           shadeOpacity,
           upperColumnName,
-          name,
+          mainColumnName,
           lowerColumnName,
         },
       ],

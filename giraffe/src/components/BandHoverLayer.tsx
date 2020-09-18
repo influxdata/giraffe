@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useRef, FunctionComponent} from 'react'
 
-import {BandTooltip} from './BandTooltip'
+import {Tooltip} from './Tooltip'
 import {Props as BandLayerProps} from './BandLayer'
 import {FILL} from '../constants/columnKeys'
 import {LineHoverDimension, LineData} from '../types'
@@ -38,7 +38,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     fill: fillColKeys,
     lineWidth,
     lowerColumnName = '',
-    name: rowColumnName,
+    mainColumnName: rowColumnName,
     shadeOpacity,
     upperColumnName = '',
   } = config
@@ -130,7 +130,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
         style={{position: 'absolute'}}
         data-testid="giraffe-band-hover-line"
       />
-      <BandTooltip data={tooltipData} config={plotConfig} />
+      <Tooltip data={tooltipData} config={plotConfig} />
     </>
   )
 }

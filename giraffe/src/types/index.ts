@@ -63,6 +63,8 @@ export interface Config {
   legendCrosshairColor?: string
   legendColumns?: string[]
   legendMessage?: string
+  // Number of series after which the legend will be displayed in "rotated" fashion
+  legendOrientationThreshold?: number
 
   // The type of the y-axis column
   yColumnType?: ColumnType
@@ -310,7 +312,7 @@ export interface BandLayerConfig {
   lineOpacity?: number
   colors?: string[]
   shadeOpacity?: number
-  name: string
+  mainColumnName: string
   upperColumnName?: string
   lowerColumnName?: string
 }
@@ -330,19 +332,6 @@ export interface TableGraphLayerConfig {
   timeZone: TimeZone
   tableTheme?: Theme
   properties: TableViewProperties
-}
-
-export interface FluxTable {
-  id: string
-  name: string
-  data: string[][]
-  result: string
-  groupKey: {
-    [columnName: string]: string
-  }
-  dataTypes: {
-    [columnName: string]: string
-  }
 }
 
 export interface DashboardQuery {
