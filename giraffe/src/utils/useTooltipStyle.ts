@@ -52,6 +52,7 @@ export const useTooltipStyle = (el: HTMLDivElement) => {
       position: 'fixed',
       left: `${clampedX}px`,
       top: `${clampedY}px`,
+      zIndex: 400,
     }
   })
 }
