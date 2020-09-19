@@ -28,7 +28,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     if (legendOpacity >= 0 && legendOpacity <= 1.0) {
       return legendOpacity
     }
-    return undefined
+    return 1.0
   }, [legendOpacity])
 
   const columns = columnsWhitelist
