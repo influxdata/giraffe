@@ -282,6 +282,10 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 - **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
 
+- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the entire `<Tooltip>` element (or legend). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
+
+- **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
+
 ## Utility Functions
 
 Giraffe comes with utility functions.
