@@ -4,6 +4,7 @@ import {createPortal} from 'react-dom'
 
 import {TooltipData, Config} from '../types'
 import {useTooltipElement} from '../utils/useTooltipElement'
+import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
 
 interface Props {
   data: TooltipData
@@ -25,10 +26,13 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   } = config
 
   const tooltipOpacity = useMemo(() => {
-    if (legendOpacity >= 0 && legendOpacity <= 1.0) {
+    if (
+      legendOpacity >= TOOLTIP_MINIMUM_OPACITY &&
+      legendOpacity <= TOOLTIP_MAXIMUM_OPACITY
+    ) {
       return legendOpacity
     }
-    return 1.0
+    return TOOLTIP_MAXIMUM_OPACITY
   }, [legendOpacity])
 
   const columns = columnsWhitelist
