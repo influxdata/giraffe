@@ -105,6 +105,13 @@ export interface Table {
     data: ColumnData,
     name?: string
   ) => Table
+  columns: {
+    [columnName: string]: {
+      data: ColumnData
+      name: string
+      type: ColumnType
+    }
+  }
 }
 
 export interface GetColumn {
