@@ -4,7 +4,7 @@ import {preventNegativeZero} from './preventNegativeZero'
 
 import {DecimalPlaces} from '../types'
 
-const MAX_DECIMAL_PLACES = 10
+export const MAX_DECIMAL_PLACES = 10
 
 interface FormatStatValueOptions {
   decimalPlaces?: DecimalPlaces
