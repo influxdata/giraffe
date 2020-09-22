@@ -32,6 +32,7 @@ export {
   Formatter,
   GaugeTheme,
   GaugeLayerConfig,
+  GetColumn,
   HistogramLayerConfig,
   HistogramPosition,
   LayerConfig,
