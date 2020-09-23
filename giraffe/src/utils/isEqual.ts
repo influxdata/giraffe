@@ -76,7 +76,9 @@ const deepEq = (a, b, aStack?, bStack?) => {
   bStack = bStack || []
   let length = aStack.length
   while (length--) {
-    if (aStack[length] === a) return bStack[length] === b
+    if (aStack[length] === a) {
+      return bStack[length] === b
+    }
   }
   aStack.push(a)
   bStack.push(b)
