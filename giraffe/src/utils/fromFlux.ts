@@ -16,7 +16,7 @@ export interface FromFluxResult {
 }
 
 type Column =
-  | {name: string; type: 'number'; data: number[]}
+  | {name: string; type: 'number'; data: Array<number | null>} //  parses empty numeric values as null
   | {name: string; type: 'time'; data: number[]}
   | {name: string; type: 'boolean'; data: boolean[]}
   | {name: string; type: 'string'; data: string[]}
