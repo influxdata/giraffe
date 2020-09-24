@@ -1,6 +1,6 @@
 {
   "name": "@influxdata/giraffe-stories",
-  "version": "0.31.0",
+  "version": "0.34.2",
   "license": "MIT",
   "scripts": {
     "lint": "eslint '{src,../giraffe/src}/**/*.{ts,tsx}'",
