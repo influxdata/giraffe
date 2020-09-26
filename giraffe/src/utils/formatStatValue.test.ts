@@ -223,4 +223,25 @@ describe('formatStatValue', () => {
       formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
     ).toEqual('2.000')
   })
+
+  test('has commas as separator for large numbers', () => {
+    value = 1234567
+    expect(formatStatValue(value)).toEqual('1,234,567')
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 4}})
+    ).toEqual('1,234,567.0000')
+
+    value = 1_234_567
+    expect(formatStatValue(value)).toEqual('1,234,567')
+
+    value = 1234567.0
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 4}})
+    ).toEqual('1,234,567.0000')
+
+    value = 1000000.0
+    expect(
+      formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 1}})
+    ).toEqual('1,000,000.0')
+  })
 })
