@@ -46,7 +46,6 @@ storiesOf('Gauge', module)
 
     const config: Config = {
       table: gaugeTable(gaugeMin, gaugeMax),
-      showAxes: false,
       layers: [
         {
           type: 'gauge',

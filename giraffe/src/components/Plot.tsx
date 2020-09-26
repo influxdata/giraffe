@@ -28,7 +28,8 @@ export const Plot: FunctionComponent<Props> = ({config, children}) => {
 
         if (
           graphType === LayerTypes.Table ||
-          graphType === LayerTypes.RawFluxDataTable
+          graphType === LayerTypes.RawFluxDataTable ||
+          graphType === LayerTypes.Gauge
         ) {
           return (
             <SizedTable config={{...config, width, height}}>

@@ -199,7 +199,7 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 - **gridOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
 
-- **showAxes**: _boolean. Optional. Recommendation: do not include. Defaults to true when excluded._ Indicates whether Plot axes should be visible. Applies to both x-axis and y-axis simultaneously.
+- **showAxes**: _boolean. Optional. Recommendation: do not include. Defaults to true when excluded. Exception: not configurable and always false for Gauge, RawFluxDataTable, TableGraph._ Indicates whether Plot axes should be visible. Applies to both x-axis and y-axis simultaneously.
 
 - **axisColor**: _string. Optional._ The _CSS color value_ of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 

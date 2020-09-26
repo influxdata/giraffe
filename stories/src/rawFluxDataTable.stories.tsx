@@ -31,7 +31,6 @@ storiesOf('Raw Flux Data Table', module)
     }
 
     const config: Config = {
-      showAxes: false,
       cursor: 'auto',
       layers: [
         {
