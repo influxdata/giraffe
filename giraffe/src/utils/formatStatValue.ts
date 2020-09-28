@@ -35,19 +35,16 @@ export const formatStatValue = (
   digits = Math.min(digits, MAX_DECIMAL_PLACES)
 
   if (isNumber(value)) {
-    const roundedValueAndDecimal = Number(value)
+    const [wholeNumber, fractionalNumber] = Number(value)
       .toFixed(digits)
       .split('.')
 
-    localeFormattedValue = Number(roundedValueAndDecimal[0]).toLocaleString(
-      undefined,
-      {
-        maximumFractionDigits: MAX_DECIMAL_PLACES,
-      }
-    )
+    localeFormattedValue = Number(wholeNumber).toLocaleString(undefined, {
+      maximumFractionDigits: MAX_DECIMAL_PLACES,
+    })
 
-    if (roundedValueAndDecimal.length > 1) {
-      localeFormattedValue += `.${roundedValueAndDecimal[1]}`
+    if (fractionalNumber) {
+      localeFormattedValue += `.${fractionalNumber}`
     }
   } else if (isString(value)) {
     localeFormattedValue = value
