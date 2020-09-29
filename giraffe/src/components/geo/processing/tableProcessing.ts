@@ -58,12 +58,16 @@ export const getColumnNames = (
 const getFieldColumnValues = (table: Table): string[] => {
   const fieldColumn = table.getColumn(FIELD_COLUMN, 'string')
   const valueColumn = table.getColumn(VALUE_COLUMN)
-  if (!fieldColumn) return []
+  if (!fieldColumn) {
+    return []
+  }
   const entriesCount = fieldColumn.length
   const fieldNames = {}
   for (let i = 0; i < entriesCount; i++) {
     const fieldName = fieldColumn[i]
-    if (typeof valueColumn[i] === 'number') fieldNames[fieldName] = true
+    if (typeof valueColumn[i] === 'number') {
+      fieldNames[fieldName] = true
+    }
   }
   return filterMetaColumns(keys(fieldNames))
 }

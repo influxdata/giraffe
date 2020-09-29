@@ -33,13 +33,14 @@ const formatRowInfo = (
 ) => {
   const result = []
   const timeValue = table.getTimeString(index)
-  if (timeValue)
+  if (timeValue) {
     result.push({
       key: '_time',
       name: 'Time',
       type: 'string',
       values: [timeValue],
     })
+  }
   const {colorField, radiusField} = properties
   const radiusValue = table.getValue(index, radiusField)
   const {radiusDimension} = properties
@@ -49,11 +50,15 @@ const formatRowInfo = (
     radiusValue,
     radiusDimension
   )
-  if (radiusInfo) result.push(radiusInfo)
+  if (radiusInfo) {
+    result.push(radiusInfo)
+  }
   const colorValue = table.getValue(index, colorField)
   const {colorDimension} = properties
   const colorInfo = formatValue(colorField, 'Color', colorValue, colorDimension)
-  if (colorInfo) result.push(colorInfo)
+  if (colorInfo) {
+    result.push(colorInfo)
+  }
   return result
 }
 
@@ -74,7 +79,9 @@ export const CircleMarkerLayer: FunctionComponent<Props> = props => {
   const rowCount = table.getRowCount()
   for (let i = 0; i < rowCount; i++) {
     const latLon = table.getLatLon(i)
-    if (!latLon) continue
+    if (!latLon) {
+      continue
+    }
     const {lat, lon} = latLon
     const radiusValue = table.getValue(i, radiusFieldName)
     if (radiusValue !== undefined) {

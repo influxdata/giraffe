@@ -9,13 +9,14 @@ export const formatValue = (
 ) => {
   const {label, prefix = '', suffix = ''} = dimension
   const formattedValue = `${prefix}${value}${suffix}`
-  if (value !== undefined && value !== null)
+  if (value !== undefined && value !== null) {
     return {
       key: key,
       name: label ? label : defaultLabel,
       type: 'string',
       values: [formattedValue],
     }
+  }
 }
 
 export const defineToolTipEffect = (markerRefs, setToolTip) => {

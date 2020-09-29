@@ -38,13 +38,14 @@ const formatRowInfo = (
 ) => {
   const result = []
   const timeValue = table.getTimeString(index)
-  if (timeValue)
+  if (timeValue) {
     result.push({
       key: '_time',
       name: 'Time',
       type: 'string',
       values: [timeValue],
     })
+  }
   const colorValue = table.getValue(index, properties.colorField)
   const {colorDimension} = properties
   const colorInfo = formatValue(
@@ -53,7 +54,9 @@ const formatRowInfo = (
     colorValue,
     colorDimension
   )
-  if (colorInfo) result.push(colorInfo)
+  if (colorInfo) {
+    result.push(colorInfo)
+  }
   return result
 }
 
@@ -65,7 +68,9 @@ const getClusterValues = (cluster, result: number[]): GeoPointMapViewLayer => {
   }
   for (const childCluster of cluster._childClusters) {
     const properties = getClusterValues(childCluster, result)
-    if (properties) clusterRenderingProperties = properties
+    if (properties) {
+      clusterRenderingProperties = properties
+    }
   }
   return clusterRenderingProperties
 }
@@ -88,7 +93,9 @@ const getClusterValue = (
         properties,
       }
     case ClusterAggregation.median:
-      if (values.length === 1) return {value: values[0], properties}
+      if (values.length === 1) {
+        return {value: values[0], properties}
+      }
       values.sort()
       if (values.length % 2 === 0) {
         const half = values.length / 2
@@ -139,7 +146,9 @@ export const PointMapLayer: FunctionComponent<Props> = props => {
     tooltips = []
   for (let i = 0; i < rowCount; i++) {
     const latLon = table.getLatLon(i)
-    if (!latLon) continue
+    if (!latLon) {
+      continue
+    }
     const {lat, lon} = latLon
     const colorValue = table.getValue(i, colorFieldName)
     const color = getColor(properties.colors, colorValue, false)

@@ -32,7 +32,9 @@ const getColorThresholds = (
 
 const getColorAsArray: (color: string) => Color = (color: string) => {
   const fromCache = colorCache[color]
-  if (fromCache) return fromCache
+  if (fromCache) {
+    return fromCache
+  }
   const match = color.match(/^#([0-9a-f]{6})$/i)[1]
   if (match) {
     const result = {
@@ -76,8 +78,12 @@ export const getColor = (
   value: number,
   interpolateColors: boolean
 ): string => {
-  if (!color) return DEFAULT_COLOR
-  if (value === undefined) return color[0].hex
+  if (!color) {
+    return DEFAULT_COLOR
+  }
+  if (value === undefined) {
+    return color[0].hex
+  }
   const {low, high} = getColorThresholds(color, value)
   if (!interpolateColors) {
     return value > high.value ? high.hex : low.hex
@@ -86,7 +92,9 @@ export const getColor = (
   const interpolationMin = low.value
   const interpolationMax = high.value
   const delta = interpolationMax - interpolationMin
-  if (delta === 0) return low.hex
+  if (delta === 0) {
+    return low.hex
+  }
   const index = (fittedValue - interpolationMin) / delta
   const minColor = getColorAsArray(low.hex)
   const maxColor = getColorAsArray(high.hex)
@@ -124,7 +132,9 @@ export const normalizeValue = (
   if (range) {
     const {min, max} = range
     const delta = max - min
-    if (delta === 0) return maxValue / 2
+    if (delta === 0) {
+      return maxValue / 2
+    }
     const clampedValue = Math.min(max, Math.max(min, value))
     return (maxValue * (clampedValue - min)) / delta
   } else {

@@ -39,9 +39,13 @@ const HeatmapLayer: FunctionComponent<Props> = props => {
   const points = []
   for (let i = 0; i < count; i++) {
     const latLon = table.getLatLon(i)
-    if (!latLon) continue
+    if (!latLon) {
+      continue
+    }
     const intensityValue = table.getValue(i, intensityFieldName)
-    if (!intensityValue) continue
+    if (!intensityValue) {
+      continue
+    }
     const normalizedValue = normalizeValue(
       intensityMinAndMax,
       1,

@@ -26,8 +26,12 @@ export const BingLayerObject = L.TileLayer.extend({
     for (let i = z; i > 0; i--) {
       let digit = 0
       const mask = 1 << (i - 1)
-      if ((x & mask) !== 0) digit += 1
-      if ((y & mask) !== 0) digit += 2
+      if ((x & mask) !== 0) {
+        digit += 1
+      }
+      if ((y & mask) !== 0) {
+        digit += 2
+      }
       quad = quad + digit
     }
     return quad
@@ -46,7 +50,9 @@ export const BingLayerObject = L.TileLayer.extend({
   },
 
   loadMetadata: function() {
-    if (this.metaRequested) return
+    if (this.metaRequested) {
+      return
+    }
     this.metaRequested = true
     const cbid = '_bing_metadata_' + L.Util.stamp(this)
     window[cbid] = meta => {
@@ -111,7 +117,9 @@ export const BingLayerObject = L.TileLayer.extend({
   },
 
   _update: function() {
-    if (this._url === null || !this._map) return
+    if (this._url === null || !this._map) {
+      return
+    }
     this._update_attribution()
     L.TileLayer.prototype._update.apply(this, [])
   },
@@ -126,12 +134,14 @@ export const BingLayerObject = L.TileLayer.extend({
         zoom >= p.zoomMin &&
         bounds.intersects(p.bounds)
       ) {
-        if (!p.active && this._map.attributionControl)
+        if (!p.active && this._map.attributionControl) {
           this._map.attributionControl.addAttribution(p.attrib)
+        }
         p.active = true
       } else {
-        if (p.active && this._map.attributionControl)
+        if (p.active && this._map.attributionControl) {
           this._map.attributionControl.removeAttribution(p.attrib)
+        }
         p.active = false
       }
     }

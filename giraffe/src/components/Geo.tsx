@@ -65,7 +65,9 @@ const getMinZoom = (width: number): number => {
 
 const Geo: FunctionComponent<Props> = props => {
   const {width, height} = props
-  if (width === 0 || height === 0) return null
+  if (width === 0 || height === 0) {
+    return null
+  }
   const {lat, lon, zoom, mapStyle, stylingConfig, allowPanAndZoom} = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
@@ -98,13 +100,16 @@ const Geo: FunctionComponent<Props> = props => {
         setPreprocessedTable(preprocessedTable)
       }
     )
-    if (newTable) setPreprocessedTable(newTable)
+    if (newTable) {
+      setPreprocessedTable(newTable)
+    }
   }, [table, detectCoordinateFields])
 
   const onViewportChange = (viewport: {center?: number[]; zoom?: number}) => {
     const {onViewportChange} = props
-    if (onViewportChange)
+    if (onViewportChange) {
       onViewportChange(viewport.center[0], viewport.center[1], viewport.zoom)
+    }
   }
 
   return (
@@ -158,7 +163,9 @@ const Geo: FunctionComponent<Props> = props => {
       )}
 
       {layers.map((layer, index) => {
-        if (!preprocessedTable) return
+        if (!preprocessedTable) {
+          return
+        }
         switch (layer.type) {
           case 'circleMap':
             const circleLayer = layer as GeoCircleViewLayer

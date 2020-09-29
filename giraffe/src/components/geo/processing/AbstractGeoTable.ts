@@ -53,7 +53,9 @@ export abstract class AbstractGeoTable implements GeoTable {
       }
     } else {
       const cellId = this.getS2CellID(index)
-      if (cellId === null || cellId.length > 16) return null
+      if (cellId === null || cellId.length > 16) {
+        return null
+      }
       const fixed =
         BigInt('0x' + cellId) * PRECISION_TRIMMING_TABLE[16 - cellId.length]
       const latLng = S2.idToLatLng(fixed.toString()) // S2LatLng.fromInteger(fixed)
@@ -77,7 +79,9 @@ export abstract class AbstractGeoTable implements GeoTable {
         )}`
       }
       const value = startValue || stopValue
-      if (value) return timestampToString(value)
+      if (value) {
+        return timestampToString(value)
+      }
     }
   }
 }

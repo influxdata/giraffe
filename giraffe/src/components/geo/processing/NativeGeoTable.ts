@@ -27,7 +27,9 @@ export class NativeGeoTable extends AbstractGeoTable {
 
   getValue(index: number, field: string): number {
     const column = this.table.getColumn(field)
-    if (!column) return null
+    if (!column) {
+      return null
+    }
     return column[
       index * Math.max(1, Math.floor(this.table.length / this.maxRows))
     ] as number
@@ -35,9 +37,13 @@ export class NativeGeoTable extends AbstractGeoTable {
 
   getS2CellID(index: number): string {
     const column = this.table.getColumn(GEO_HASH_COLUMN)
-    if (!column) return null
+    if (!column) {
+      return null
+    }
     const value = column[index]
-    if (typeof value !== 'string') return null
+    if (typeof value !== 'string') {
+      return null
+    }
     // this happens for geo hash only
     return value as string
   }
@@ -81,9 +87,11 @@ const getDataEncoding = (table: Table): CoordinateEncoding => {
   if (
     table.getColumn(LON_COLUMN) !== null &&
     table.getColumn(LAT_COLUMN) !== null
-  )
+  ) {
     return CoordinateEncoding.FIELDS
-  if (table.getColumn(GEO_HASH_COLUMN) !== null)
+  }
+  if (table.getColumn(GEO_HASH_COLUMN) !== null) {
     return CoordinateEncoding.GEO_HASH
+  }
   return CoordinateEncoding.GEO_HASH
 }

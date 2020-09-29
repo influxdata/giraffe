@@ -43,8 +43,12 @@ export class PivotedGeoTable extends AbstractGeoTable {
     for (let i = 0; i < entriesCount; i++) {
       const seriesKey = seriesKeyColumns.map(column => column[i]).join()
       const fieldName = fieldColumn[i]
-      if (!lonFound && fieldName === 'lon') lonFound = true
-      if (!latFound && fieldName === 'lat') latFound = true
+      if (!lonFound && fieldName === 'lon') {
+        lonFound = true
+      }
+      if (!latFound && fieldName === 'lat') {
+        latFound = true
+      }
       const point = index[seriesKey]
       const value = valueColumn[i]
       if (

@@ -30,8 +30,9 @@ const DEFAULT_END_MARKER_RADIUS = 4
 export const TrackMapLayer: FunctionComponent<Props> = props => {
   const {table, properties} = props
   let colors = properties.colors || DEFAULT_TRACK_COLOR
-  if (!properties.colors && properties.randomColors)
+  if (!properties.colors && properties.randomColors) {
     colors = DEFAULT_TRACK_PALETTE
+  }
   const endStopMarkers =
     properties.endStopMarkers === undefined || properties.endStopMarkers
   const endStopMarkerRadius =
