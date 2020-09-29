@@ -133,7 +133,10 @@ const Geo: FunctionComponent<Props> = props => {
     >
       {bingKey ? (
         <LayersControl position="topright">
-          <LayersControl.BaseLayer checked={mapStyle === 'Roads'} name="Roads">
+          <LayersControl.BaseLayer
+            checked={!mapStyle || mapStyle === 'Roads'}
+            name="Roads"
+          >
             <BingLayer minNativeZoom={3} bingkey={bingKey} type="Road" />
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer

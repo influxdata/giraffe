@@ -7,10 +7,16 @@ import {geoTable, geoTracks} from './data/geoLayer'
 import {boolean, color, number, select, withKnobs} from '@storybook/addon-knobs'
 import {ClusterAggregation} from '../../giraffe/src/types/geo'
 
-const tileServerConfiguration = {
+const osmTileServerConfiguration = {
   tileServerUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  // bingKey:
-  //   'AtqWbnKXzGMWSAsgWknAw2cgBKuGIm9XmSbaS4fSebC5U6BdDTUF3I__u5NAp_Zi',
+}
+
+const bingTileServerConfiguration = {
+  // The code here is for Giraffe demo purposes only, do not use it in your own
+  // projects. To get a bing maps API key, go to:
+  //
+  // https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
+  bingKey: 'AtqWbnKXzGMWSAsgWknAw2cgBKuGIm9XmSbaS4fSebC5U6BdDTUF3I__u5NAp_Zi',
 }
 
 const geo = storiesOf('Geo', module).addDecorator(withKnobs)
@@ -38,7 +44,7 @@ const genericKnobs = () => {
   return {allowPanAndZoom, latitude, longitude, zoom}
 }
 
-geo.add('Circle Markers', () => {
+const buildCircleMapStory = tileServerConfiguration => () => {
   const numberOfRecords = number('Circle count', 26, {
     range: true,
     min: 0,
@@ -80,7 +86,9 @@ geo.add('Circle Markers', () => {
       <Plot config={config} />
     </PlotContainer>
   )
-})
+}
+
+geo.add('Circle Markers', buildCircleMapStory(osmTileServerConfiguration))
 
 geo.add('Map Markers', () => {
   const numberOfRecords = number('Marker count', 20, {
@@ -114,7 +122,7 @@ geo.add('Map Markers', () => {
             isClustered: false,
           },
         ],
-        tileServerConfiguration,
+        tileServerConfiguration: osmTileServerConfiguration,
       },
     ],
   }
@@ -172,7 +180,7 @@ geo.add('Marker Clustering', () => {
             maxClusterRadius,
           },
         ],
-        tileServerConfiguration,
+        tileServerConfiguration: osmTileServerConfiguration,
       },
     ],
   }
@@ -228,7 +236,7 @@ geo.add('Heatmap', () => {
             intensityField: 'magnitude',
           },
         ],
-        tileServerConfiguration,
+        tileServerConfiguration: osmTileServerConfiguration,
       },
     ],
   }
@@ -320,7 +328,7 @@ geo.add('Tracks', () => {
                 ],
           },
         ],
-        tileServerConfiguration,
+        tileServerConfiguration: osmTileServerConfiguration,
       },
     ],
   }
@@ -374,7 +382,7 @@ geo.add('Layering visualizations', () => {
             ],
           },
         ],
-        tileServerConfiguration,
+        tileServerConfiguration: osmTileServerConfiguration,
       },
     ],
   }
@@ -384,3 +392,8 @@ geo.add('Layering visualizations', () => {
     </PlotContainer>
   )
 })
+
+geo.add(
+  'Bing Maps as tile server',
+  buildCircleMapStory(bingTileServerConfiguration)
+)
