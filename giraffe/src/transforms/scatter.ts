@@ -23,8 +23,8 @@ export const scatterTransform = (
   )
 
   const table = inputTable
-    .addColumn(FILL, 'number', fillColumn)
-    .addColumn(SYMBOL, 'number', symbolColumn)
+    .addColumn(FILL, 'system', 'number', fillColumn)
+    .addColumn(SYMBOL, 'system', 'number', symbolColumn)
 
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')

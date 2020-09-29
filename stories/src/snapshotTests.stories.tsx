@@ -129,8 +129,8 @@ storiesOf('Snapshot Tests', module)
   })
   .add('binary prefix formatting', () => {
     const table = newTable(4)
-      .addColumn('time', 'number', [0, 1, 2, 3])
-      .addColumn('bytes', 'number', [
+      .addColumn('time', 'system', 'number', [0, 1, 2, 3])
+      .addColumn('bytes', 'system', 'number', [
         6799245312,
         6475784192,
         6419197952,

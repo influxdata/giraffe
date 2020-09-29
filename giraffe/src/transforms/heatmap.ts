@@ -70,6 +70,16 @@ export const bin2d = (
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const xColType = table.getColumnType(xColKey) as 'time' | 'number'
+  const xOriginalColType = table.getOriginalColumnType(xColKey) as
+    | 'dateTime:RFC3339'
+    | 'long'
+    | 'double'
+    | 'unsignedLong'
+  const yOriginalColType = table.getOriginalColumnType(yColKey) as
+    | 'dateTime:RFC3339'
+    | 'long'
+    | 'double'
+    | 'unsignedLong'
   const yColType = table.getColumnType(yColKey) as 'time' | 'number'
 
   const xBinCount = Math.max(Math.floor(width / (binSize > 0 ? binSize : 1)), 1)
@@ -136,11 +146,11 @@ export const bin2d = (
   }
 
   const heatmapTable = newTable(xMinData.length)
-    .addColumn(X_MIN, xColType, xMinData)
-    .addColumn(X_MAX, xColType, xMaxData)
-    .addColumn(Y_MIN, yColType, yMinData)
-    .addColumn(Y_MAX, yColType, yMaxData)
-    .addColumn(COUNT, 'number', countData)
+    .addColumn(X_MIN, xOriginalColType, xColType, xMinData)
+    .addColumn(X_MAX, xOriginalColType, xColType, xMaxData)
+    .addColumn(Y_MIN, yOriginalColType, yColType, yMinData)
+    .addColumn(Y_MAX, yOriginalColType, yColType, yMaxData)
+    .addColumn(COUNT, 'system', 'number', countData)
 
   return heatmapTable
 }

@@ -29,6 +29,7 @@ export {
   ColumnType,
   Config,
   DomainLabel,
+  FluxDataType,
   Formatter,
   GaugeTheme,
   GaugeLayerConfig,

@@ -96,10 +96,10 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
   const table = newTable(tableLength)
-    .addColumn(X_MIN, 'number', xMinData) //startTimes
-    .addColumn(X_MAX, 'number', xMaxData) //endTimes
-    .addColumn(FILL, 'string', fillData) //values
-    .addColumn(SERIES, 'string', seriesData) //cpus (see storybook)
+    .addColumn(X_MIN, 'system', 'number', xMinData) //startTimes
+    .addColumn(X_MAX, 'system', 'number', xMaxData) //endTimes
+    .addColumn(FILL, 'string', 'string', fillData) //values
+    .addColumn(SERIES, 'string', 'string', seriesData) //cpus (see storybook)
 
   const resolvedXDomain = resolveDomain(xInputCol, xDomain)
   const resolvedYDomain = [0, valueStrings.length]

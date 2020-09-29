@@ -33,7 +33,7 @@ describe('PlotEnv', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-      const table = newTable(10).addColumn('a', 'number', aData)
+      const table = newTable(10).addColumn('a', 'long', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -66,7 +66,7 @@ describe('PlotEnv', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-      const table = newTable(10).addColumn('a', 'number', aData)
+      const table = newTable(10).addColumn('a', 'long', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -101,8 +101,8 @@ describe('PlotEnv', () => {
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
       const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
       const table = newTable(10)
-        .addColumn('a', 'number', aData)
-        .addColumn('b', 'number', bData)
+        .addColumn('a', 'long', 'number', aData)
+        .addColumn('b', 'long', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -135,7 +135,7 @@ describe('PlotEnv', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-      const table = newTable(10).addColumn('a', 'number', aData)
+      const table = newTable(10).addColumn('a', 'long', 'number', aData)
 
       const config: SizedConfig = {
         table,
@@ -168,8 +168,8 @@ describe('PlotEnv', () => {
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
       const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
       const table = newTable(10)
-        .addColumn('a', 'number', aData)
-        .addColumn('b', 'number', bData)
+        .addColumn('a', 'long', 'number', aData)
+        .addColumn('b', 'long', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -199,8 +199,8 @@ describe('PlotEnv', () => {
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
       const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
       const table = newTable(10)
-        .addColumn('a', 'number', aData)
-        .addColumn('b', 'number', bData)
+        .addColumn('a', 'long', 'number', aData)
+        .addColumn('b', 'long', 'number', bData)
 
       const config: SizedConfig = {
         table,
@@ -233,8 +233,8 @@ describe('PlotEnv', () => {
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
       const bData = [10, 10, 10, 10, 10, 10, 10, 10, 10, 19]
       const table = newTable(10)
-        .addColumn('a', 'number', aData)
-        .addColumn('b', 'number', bData)
+        .addColumn('a', 'long', 'number', aData)
+        .addColumn('b', 'long', 'number', bData)
 
       const config: SizedConfig = {
         table,

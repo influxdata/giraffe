@@ -63,14 +63,14 @@ export const createSampleTable = (options: SampleTableOptions) => {
     }
   }
   const table = newTable(numberOfRecords)
-    .addColumn('_time', 'time', TIME_COL)
-    .addColumn('_value', 'number', VALUE_COL)
+    .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
+    .addColumn('_value', 'system', 'number', VALUE_COL)
 
   if (plotType === LayerTypes.Scatter) {
     return table
-      .addColumn(POINT_KEY, 'string', DISK_COL)
-      .addColumn('__symbol', 'string', SYMBOL_COL)
-      .addColumn(HOST_KEY, 'string', HOST_COL)
+      .addColumn(POINT_KEY, 'string', 'string', DISK_COL)
+      .addColumn('__symbol', 'string', 'string', SYMBOL_COL)
+      .addColumn(HOST_KEY, 'string', 'string', HOST_COL)
   }
-  return table.addColumn(COLUMN_KEY, 'string', CPU_COL)
+  return table.addColumn(COLUMN_KEY, 'string', 'string', CPU_COL)
 }

@@ -4013,7 +4013,7 @@ const CPU_HOST_COL = [
 ]
 
 export const CPU = newTable(1000)
-  .addColumn('_time', 'time', CPU_TIME_COL)
-  .addColumn('_value', 'number', CPU_VALUE_COL)
-  .addColumn('cpu', 'string', CPU_CPU_COL)
-  .addColumn('host', 'string', CPU_HOST_COL)
+  .addColumn('_time', 'dateTime:RFC3339', 'time', CPU_TIME_COL)
+  .addColumn('_value', 'system', 'number', CPU_VALUE_COL)
+  .addColumn('cpu', 'string', 'string', CPU_CPU_COL)
+  .addColumn('host', 'string', 'string', CPU_HOST_COL)

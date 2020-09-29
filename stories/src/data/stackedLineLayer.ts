@@ -74,10 +74,10 @@ for (let i = 0; i < numberOfRecords; i += 1) {
 }
 
 export const stackedLineTable = newTable(numberOfRecords)
-  .addColumn('_time', 'time', TIME_COL)
-  .addColumn('_value', 'number', VALUE_COL)
-  .addColumn('cpu', 'string', CPU_COL)
-  .addColumn('test_col_a', 'string', TEST_COL_A)
-  .addColumn('test_col_b', 'string', TEST_COL_B)
-  .addColumn('test_col_c', 'string', TEST_COL_C)
-  .addColumn('test_col_d', 'string', TEST_COL_D)
+  .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
+  .addColumn('_value', 'system', 'number', VALUE_COL)
+  .addColumn('cpu', 'string', 'string', CPU_COL)
+  .addColumn('test_col_a', 'string', 'string', TEST_COL_A)
+  .addColumn('test_col_b', 'string', 'string', TEST_COL_B)
+  .addColumn('test_col_c', 'string', 'string', TEST_COL_C)
+  .addColumn('test_col_d', 'string', 'string', TEST_COL_D)

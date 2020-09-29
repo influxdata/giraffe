@@ -5,8 +5,8 @@ describe('heatmapTransform', () => {
   test('does not crash when passed zero-width domain', () => {
     // x domain of this table has a zero-width domain
     const table = newTable(3)
-      .addColumn('x', 'number', [1, 1, 1])
-      .addColumn('y', 'number', [0, 1, 2])
+      .addColumn('x', 'long', 'number', [1, 1, 1])
+      .addColumn('y', 'long', 'number', [0, 1, 2])
 
     expect(() => {
       heatmapTransform(table, 'x', 'y', null, null, 100, 100, 10, [
@@ -22,12 +22,12 @@ describe('heatmapTransform', () => {
     const startTime = Date.now()
     const interval = 100
     const table = newTable(3)
-      .addColumn(xColKey, 'time', [
+      .addColumn(xColKey, 'dateTime:RFC3339', 'time', [
         startTime,
         startTime + interval,
         startTime + interval * 2,
       ])
-      .addColumn(yColKey, 'number', [0, 1, 2])
+      .addColumn(yColKey, 'long', 'number', [0, 1, 2])
 
     const width = 987
     const height = 788
@@ -54,12 +54,12 @@ describe('heatmapTransform', () => {
     const startTime = Date.now()
     const interval = 100
     const table = newTable(3)
-      .addColumn(xColKey, 'time', [
+      .addColumn(xColKey, 'dateTime:RFC3339', 'time', [
         startTime,
         startTime + interval,
         startTime + interval * 2,
       ])
-      .addColumn(yColKey, 'number', [0, 1, 2])
+      .addColumn(yColKey, 'long', 'number', [0, 1, 2])
 
     const width = 987
     const height = 788

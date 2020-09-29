@@ -97,10 +97,12 @@ export interface Table {
   getColumn: GetColumn
   getColumnName: (columnKey: string) => string | null // null if the column is not available
   getColumnType: (columnKey: string) => ColumnType | null // null if the column is not available
+  getOriginalColumnType: (columnKey: string) => FluxDataType | null // null if the column is not available
   columnKeys: string[]
   length: number
   addColumn: (
     columnKey: string,
+    originalType: FluxDataType,
     type: ColumnType,
     data: ColumnData,
     name?: string
@@ -129,6 +131,15 @@ export type NumericColumnData =
 export type ColumnData = NumericColumnData | string[] | boolean[]
 
 export type ColumnType = 'number' | 'string' | 'time' | 'boolean'
+
+export type FluxDataType =
+  | 'boolean'
+  | 'unsignedLong'
+  | 'long'
+  | 'double'
+  | 'string'
+  | 'dateTime:RFC3339'
+  | 'system'
 
 export enum LayerTypes {
   RawFluxDataTable = 'flux data table',
