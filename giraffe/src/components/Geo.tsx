@@ -22,10 +22,11 @@ import {
   GeoPointMapViewLayer,
   GeoTrackMapViewLayer,
   GeoViewLayer,
-} from '../types/geo'
+} from '..'
 import {Config, Table} from '../types'
 
 // Constants
+export const LEAFLET_Z_INDEX = 399
 const ZOOM_FRACTION = 8
 
 interface Props extends Partial<GeoLayerConfig> {

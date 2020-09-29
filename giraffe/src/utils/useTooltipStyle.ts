@@ -1,5 +1,6 @@
 import {useLayoutStyle} from './useLayoutStyle'
 import {useRefMousePos} from './useMousePos'
+import {LEAFLET_Z_INDEX} from '../components/Geo'
 
 const MARGIN_X = 30
 
@@ -47,12 +48,14 @@ export const useTooltipStyle = (el: HTMLDivElement) => {
     const clampedX = Math.max(x + dx, 8)
     const clampedY = Math.max(y + dy, 8)
 
+    /* Geo widget maps are rendered with z-index: 399, we have to set it above
+       that so that tooltips are not rendered/are hidden below the map, */
     return {
       display: 'inline',
       position: 'fixed',
       left: `${clampedX}px`,
       top: `${clampedY}px`,
-      zIndex: 400,
+      zIndex: LEAFLET_Z_INDEX + 1,
     }
   })
 }
