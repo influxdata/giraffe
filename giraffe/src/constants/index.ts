@@ -124,3 +124,7 @@ export const ALL_SYMBOL_TYPES: SymbolType[] = [
  * the same number of total lines as Line Plot.
  */
 export const BAND_COLOR_SCALE_CONSTANT = 3
+
+export const TOOLTIP_MINIMUM_OPACITY = 0
+
+export const TOOLTIP_MAXIMUM_OPACITY = 1.0

@@ -3,7 +3,6 @@ import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
 import {Axes} from './Axes'
 import {
   SizedConfig,
-  GaugeLayerConfig,
   SingleStatLayerConfig,
   LineLayerConfig,
   BandLayerConfig,
@@ -13,7 +12,6 @@ import {
   LayerTypes,
   SpecTypes,
 } from '../types'
-import {GaugeLayer} from './GaugeLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
 import {BandLayer} from './BandLayer'
@@ -105,23 +103,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
-            if (layerConfig.type === LayerTypes.Gauge) {
-              return (
-                <LatestValueTransform
-                  key={layerIndex}
-                  table={newTableFromConfig(config)}
-                  allowString={true}
-                >
-                  {latestValue => (
-                    <GaugeLayer
-                      value={latestValue}
-                      config={layerConfig as GaugeLayerConfig}
-                    />
-                  )}
-                </LatestValueTransform>
-              )
-            }
-
             if (layerConfig.type === LayerTypes.Geo) {
               return (
                 <GeoLayer

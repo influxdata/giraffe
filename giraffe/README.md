@@ -199,7 +199,7 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 
 - **gridOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
 
-- **showAxes**: _boolean. Optional. Recommendation: do not include. Defaults to true when excluded._ Indicates whether Plot axes should be visible. Applies to both x-axis and y-axis simultaneously.
+- **showAxes**: _boolean. Optional. Recommendation: do not include. Defaults to true when excluded. Exception: not configurable and always false for Gauge, RawFluxDataTable, TableGraph._ Indicates whether Plot axes should be visible. Applies to both x-axis and y-axis simultaneously.
 
 - **axisColor**: _string. Optional._ The _CSS color value_ of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
@@ -281,6 +281,10 @@ Here is an example of turning a result in comma separate values (CSV) from Flux 
 - **legendCrosshairColor**: _string | Object. Optional._ The _CSS color value_ or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
 - **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
+
+- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the entire `<Tooltip>` element (or legend). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
+
+- **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
 
 ## Utility Functions
 

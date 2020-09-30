@@ -1,7 +1,15 @@
 import React, {FunctionComponent, CSSProperties} from 'react'
 
-import {SizedConfig, TableGraphLayerConfig, LayerTypes} from '../types'
+import {
+  GaugeLayerConfig,
+  SizedConfig,
+  TableGraphLayerConfig,
+  LayerTypes,
+} from '../types'
 
+import {GaugeLayer} from './GaugeLayer'
+import {LatestValueTransform} from './LatestValueTransform'
+import {newTableFromConfig} from '../utils/newTable'
 import {RawFluxDataTable} from './RawFluxDataTable'
 import {FluxTablesTransform} from './FluxTablesTransform'
 import {TableGraphLayer} from './TableGraphLayer'
@@ -21,6 +29,7 @@ export const SizedTable: FunctionComponent<Props> = ({
   const {margins, config} = env
   const {width, height} = config
 
+  config.showAxes = false
   const fullsizeStyle: CSSProperties = {
     position: 'absolute',
     top: 0,
@@ -55,6 +64,21 @@ export const SizedTable: FunctionComponent<Props> = ({
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
             switch (layerConfig.type) {
+              case LayerTypes.Gauge:
+                return (
+                  <LatestValueTransform
+                    key={layerIndex}
+                    table={newTableFromConfig(config)}
+                    allowString={true}
+                  >
+                    {latestValue => (
+                      <GaugeLayer
+                        value={latestValue}
+                        config={layerConfig as GaugeLayerConfig}
+                      />
+                    )}
+                  </LatestValueTransform>
+                )
               case LayerTypes.RawFluxDataTable:
                 return (
                   <RawFluxDataTable

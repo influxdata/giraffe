@@ -87,6 +87,12 @@ storiesOf('Band Chart', module)
     const upperColumnName = text('upperColumnName', 'max')
     const mainColumnName = text('mainColumnName', 'mean')
     const lowerColumnName = text('lowerColumnName', 'min')
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
@@ -105,6 +111,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOpacity,
       legendOrientationThreshold,
       layers: [
         {
@@ -171,6 +178,12 @@ storiesOf('Band Chart', module)
     const upperColumnName = text('upperColumnName', '')
     const mainColumnName = text('mainColumnName', '')
     const lowerColumnName = text('lowerColumnName', '')
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
@@ -189,6 +202,7 @@ storiesOf('Band Chart', module)
       legendFont,
       tickFont,
       showAxes,
+      legendOpacity,
       legendOrientationThreshold,
       layers: [
         {

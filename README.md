@@ -68,7 +68,7 @@ npm install @influxdata/giraffe
   <pre>
   // Example table and layer
 
-  const table = newTable(5)
+  const table = newTable(3)
     .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244])
     .addColumn('_value', 'number', [2.58, 7.11, 4.79])
 

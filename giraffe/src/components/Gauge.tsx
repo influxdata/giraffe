@@ -4,7 +4,7 @@ import {range} from '../utils/range'
 import {get} from '../utils/get'
 
 // Utils
-import {formatStatValue} from '../utils/formatStatValue'
+import {formatStatValue, MAX_DECIMAL_PLACES} from '../utils/formatStatValue'
 
 import {
   COLOR_TYPE_MIN,
@@ -378,9 +378,15 @@ const drawNeedle = (
 
   let needleRotation: number
 
-  const formattedGaugePosition = Number(
-    formatStatValue(gaugePosition, {decimalPlaces})
-  )
+  let digits = decimalPlaces?.isEnforced
+    ? decimalPlaces.digits
+    : gaugePosition.toString().indexOf('.') === -1
+    ? 0
+    : 2
+
+  digits = Math.min(digits, MAX_DECIMAL_PLACES)
+
+  const formattedGaugePosition = Number(gaugePosition.toFixed(digits))
 
   if (formattedGaugePosition < minValue) {
     needleRotation = 0 - overflowDelta

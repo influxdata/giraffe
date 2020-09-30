@@ -34,7 +34,6 @@ storiesOf('Table Graph', module)
     const fixFirstColumn = boolean('Fix First Column', false)
     const config: Config = {
       fluxResponse: tableCSV,
-      showAxes: false,
       layers: [
         {
           type: 'table',

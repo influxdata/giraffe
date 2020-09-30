@@ -63,7 +63,7 @@ export interface Config {
   legendCrosshairColor?: string
   legendColumns?: string[]
   legendMessage?: string
-  // Number of series after which the legend will be displayed in "rotated" fashion
+  legendOpacity?: number
   legendOrientationThreshold?: number
 
   // The type of the y-axis column
@@ -96,8 +96,8 @@ export interface Formatter {
 
 export interface Table {
   getColumn: GetColumn
-  getColumnName: (columnKey: string) => string
-  getColumnType: (columnKey: string) => ColumnType
+  getColumnName: (columnKey: string) => string | null // null if the column is not available
+  getColumnType: (columnKey: string) => ColumnType | null // null if the column is not available
   columnKeys: string[]
   length: number
   addColumn: (
