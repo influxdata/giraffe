@@ -8,7 +8,7 @@ class SimpleTable implements Table {
   private columns: {
     [colKey: string]: {
       name: string
-      originalType: FluxDataType
+      fluxDataType: FluxDataType
       type: ColumnType
       data: ColumnData
     }
@@ -77,12 +77,12 @@ class SimpleTable implements Table {
       return null
     }
 
-    return column.originalType
+    return column.fluxDataType
   }
 
   addColumn(
     columnKey: string,
-    originalType: FluxDataType,
+    fluxDataType: FluxDataType,
     type: ColumnType,
     data: ColumnData,
     name?: string
@@ -103,7 +103,7 @@ class SimpleTable implements Table {
       ...this.columns,
       [columnKey]: {
         name: name || columnKey,
-        originalType,
+        fluxDataType,
         type,
         data,
       },

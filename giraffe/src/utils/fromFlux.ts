@@ -19,12 +19,12 @@ type Column =
   | {
       name: string
       type: 'number'
-      originalType: FluxDataType
+      fluxDataType: FluxDataType
       data: Array<number | null>
     } //  parses empty numeric values as null
-  | {name: string; type: 'time'; originalType: FluxDataType; data: number[]}
-  | {name: string; type: 'boolean'; originalType: FluxDataType; data: boolean[]}
-  | {name: string; type: 'string'; originalType: FluxDataType; data: string[]}
+  | {name: string; type: 'time'; fluxDataType: FluxDataType; data: number[]}
+  | {name: string; type: 'boolean'; fluxDataType: FluxDataType; data: boolean[]}
+  | {name: string; type: 'string'; fluxDataType: FluxDataType; data: string[]}
 
 interface Columns {
   [columnKey: string]: Column
@@ -139,7 +139,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
         columns[columnKey] = {
           name: columnName,
           type: columnType,
-          originalType: annotationData.datatypeByColumnName[columnName],
+          fluxDataType: annotationData.datatypeByColumnName[columnName],
           data: [],
         } as Column
       }
@@ -165,9 +165,9 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   resolveNames(columns, fluxGroupKeyUnion)
 
   const table = Object.entries(columns).reduce(
-    (table, [key, {name, originalType, type, data}]) => {
+    (table, [key, {name, fluxDataType, type, data}]) => {
       data.length = tableLength
-      return table.addColumn(key, originalType, type, data, name)
+      return table.addColumn(key, fluxDataType, type, data, name)
     },
     newTable(tableLength)
   )
@@ -207,7 +207,7 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
         columns[columnKey] = {
           name: columnName,
           type: columnType,
-          originalType: annotationData.datatypeByColumnName[columnName],
+          fluxDataType: annotationData.datatypeByColumnName[columnName],
           data: [],
         } as Column
       }
@@ -233,9 +233,9 @@ export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   resolveNames(columns, fluxGroupKeyUnion)
 
   const table = Object.entries(columns).reduce(
-    (table, [key, {name, originalType, type, data}]) => {
+    (table, [key, {name, fluxDataType, type, data}]) => {
       data.length = tableLength
-      return table.addColumn(key, originalType, type, data, name)
+      return table.addColumn(key, fluxDataType, type, data, name)
     },
     newTable(tableLength)
   )

@@ -34,13 +34,13 @@ describe('fromFlux', () => {
         columns: {
           '_value (number)': {
             name: '_value',
-            originalType: 'long',
+            fluxDataType: 'long',
             type: 'number',
             data: [0, 161314315, undefined, 976, 0],
           },
           '_value (string)': {
             name: '_value',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               undefined,
@@ -52,19 +52,19 @@ describe('fromFlux', () => {
           },
           result: {
             name: 'result',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['_result', '_result', '_result', '_result', '_result'],
           },
           table: {
             name: 'table',
-            originalType: 'long',
+            fluxDataType: 'long',
             type: 'number',
             data: [0, 1, 2, 3, 4],
           },
           _start: {
             name: '_start',
-            originalType: 'dateTime:RFC3339',
+            fluxDataType: 'dateTime:RFC3339',
             type: 'time',
             data: [
               1599255750122,
@@ -76,7 +76,7 @@ describe('fromFlux', () => {
           },
           _stop: {
             name: '_stop',
-            originalType: 'dateTime:RFC3339',
+            fluxDataType: 'dateTime:RFC3339',
             type: 'time',
             data: [
               1599601350122,
@@ -88,7 +88,7 @@ describe('fromFlux', () => {
           },
           _time: {
             name: '_time',
-            originalType: 'dateTime:RFC3339',
+            fluxDataType: 'dateTime:RFC3339',
             type: 'time',
             data: [
               1599599342000,
@@ -100,7 +100,7 @@ describe('fromFlux', () => {
           },
           _field: {
             name: '_field',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'rx_errors',
@@ -112,7 +112,7 @@ describe('fromFlux', () => {
           },
           _measurement: {
             name: '_measurement',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'docker_container_net',
@@ -124,7 +124,7 @@ describe('fromFlux', () => {
           },
           'com.docker.compose.config-hash': {
             name: 'com.docker.compose.config-hash',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               '45fa1e93aad3798a2399d626ec9973dfcf5c15ed39a589ad8196f8e52fefd744',
@@ -136,25 +136,25 @@ describe('fromFlux', () => {
           },
           'com.docker.compose.container-number': {
             name: 'com.docker.compose.container-number',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['1', '1', '1', '1', '1'],
           },
           'com.docker.compose.oneoff': {
             name: 'com.docker.compose.oneoff',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['False', 'False', 'False', 'False', 'False'],
           },
           'com.docker.compose.project': {
             name: 'com.docker.compose.project',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['influx', 'influx', 'influx', 'influx', 'influx'],
           },
           'com.docker.compose.project.config_files': {
             name: 'com.docker.compose.project.config_files',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'compose/fig.cloud.yml,compose/fig.chronograf.yml,compose/fig.local.yml',
@@ -166,7 +166,7 @@ describe('fromFlux', () => {
           },
           'com.docker.compose.project.working_dir': {
             name: 'com.docker.compose.project.working_dir',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               '/Users/asalem/go/src/github.com/monitor-ci/compose',
@@ -178,19 +178,19 @@ describe('fromFlux', () => {
           },
           'com.docker.compose.service': {
             name: 'com.docker.compose.service',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['telegraf', 'telegraf', 'telegraf', 'telegraf', 'telegraf'],
           },
           'com.docker.compose.version': {
             name: 'com.docker.compose.version',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['1.25.4', '1.25.4', '1.25.4', '1.25.4', '1.25.4'],
           },
           container_image: {
             name: 'container_image',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'influx_telegraf',
@@ -202,7 +202,7 @@ describe('fromFlux', () => {
           },
           container_name: {
             name: 'container_name',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'influx_telegraf_1',
@@ -214,19 +214,19 @@ describe('fromFlux', () => {
           },
           container_status: {
             name: 'container_status',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['running', 'running', 'running', 'running', 'running'],
           },
           container_version: {
             name: 'container_version',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['unknown', 'unknown', 'unknown', 'unknown', 'unknown'],
           },
           engine_host: {
             name: 'engine_host',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               'docker-desktop',
@@ -238,7 +238,7 @@ describe('fromFlux', () => {
           },
           host: {
             name: 'host',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [
               '5551e9bfb3bd',
@@ -250,19 +250,19 @@ describe('fromFlux', () => {
           },
           network: {
             name: 'network',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['eth0', undefined, undefined, 'eth0', 'eth0'],
           },
           server_version: {
             name: 'server_version',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: ['19.03.8', '19.03.8', '19.03.8', '19.03.8', '19.03.8'],
           },
           cpu: {
             name: 'cpu',
-            originalType: 'string',
+            fluxDataType: 'string',
             type: 'string',
             data: [undefined, 'cpu11', 'cpu11', undefined, undefined],
           },

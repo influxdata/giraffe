@@ -102,7 +102,7 @@ export interface Table {
   length: number
   addColumn: (
     columnKey: string,
-    originalType: FluxDataType,
+    fluxDataType: FluxDataType,
     type: ColumnType,
     data: ColumnData,
     name?: string
