@@ -82,7 +82,7 @@ class SimpleTable implements Table {
 
   addColumn(
     columnKey: string,
-    fluxDataType: FluxDataType = 'system',
+    fluxDataType: FluxDataType,
     type: ColumnType,
     data: ColumnData,
     name?: string
