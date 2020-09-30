@@ -54,7 +54,7 @@ describe('getPointsTooltipData', () => {
       plotType === 'line' ? COLUMN_KEY : HOST_KEY,
     ])
     fillScale = getNominalColorScale(fillColumnMap, NINETEEN_EIGHTY_FOUR)
-    sampleTable = sampleTable.addColumn(FILL, 'number', fillColumn)
+    sampleTable = sampleTable.addColumn(FILL, 'system', 'number', fillColumn)
 
     const fillColumnFromSampleTable = sampleTable.getColumn(FILL, 'number')
     fillColumn.forEach((item, index) =>

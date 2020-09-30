@@ -61,7 +61,7 @@ const CPU_HOST_COL = [
 ]
 
 export const SERIES = newTable(12)
-  .addColumn('_time', 'time', CPU_TIME_COL)
-  .addColumn('_value', 'string', CPU_VALUE_COL)
-  .addColumn('cpu', 'string', CPU_COL)
-  .addColumn('host', 'string', CPU_HOST_COL)
+  .addColumn('_time', 'dateTime:RFC3339', 'time', CPU_TIME_COL)
+  .addColumn('_value', 'string', 'string', CPU_VALUE_COL)
+  .addColumn('cpu', 'string', 'string', CPU_COL)
+  .addColumn('host', 'string', 'string', CPU_HOST_COL)

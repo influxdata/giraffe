@@ -24,6 +24,6 @@ for (let i = 0; i < tags.length; i++) {
 }
 
 export const SIN = newTable(size * tags.length)
-  .addColumn('x', 'number', xCol)
-  .addColumn('y', 'number', yCol)
-  .addColumn('tag', 'string', tagCol)
+  .addColumn('x', 'system', 'number', xCol)
+  .addColumn('y', 'system', 'number', yCol)
+  .addColumn('tag', 'string', 'string', tagCol)

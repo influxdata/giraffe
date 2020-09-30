@@ -36,8 +36,8 @@ A React-based visualization library powering the data visualizations in [InfluxD
   // Example table and layer
 
   const table = newTable(5)
-    .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
-    .addColumn('_value', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
+    .addColumn('_time', 'dateTime:RFC3339', 'time', [1589838401244, 1589838461244, 1589838521244, 1589838581244, 1589838641244])
+    .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79, 8.89, 2.23])
 
   const lineLayer = {
     type: "line",

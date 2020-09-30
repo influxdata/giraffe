@@ -2,7 +2,7 @@
 
 A React-based visualization library powering the data visualizations in the [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
-(*This library is currently in pre-beta.*)
+(_This library is currently in pre-beta._)
 
 ## 🦒 Features
 
@@ -46,7 +46,7 @@ npm install @influxdata/giraffe
 
 2. Build the config object.
 
-   The following properties are *required*:
+   The following properties are _required_:
 
    - `table` is data built using the newTable utilty function (also built from Flux results, see [Flux example](./README.md#example-using-flux))
    - `layers` is an array of objects that describe how to render the data.
@@ -60,17 +60,17 @@ npm install @influxdata/giraffe
    - legend (tooltip): labeling and styling
 
    For details on all configuration properties, see the [configuration guide](./giraffe/README.md#config).
-   
+
    **Example**
-   
+
    Here is an example of building the config object while skipping optional properties:
 
   <pre>
   // Example table and layer
 
   const table = newTable(3)
-    .addColumn('_time', 'time', [1589838401244, 1589838461244, 1589838521244])
-    .addColumn('_value', 'number', [2.58, 7.11, 4.79])
+    .addColumn('_time', 'dateTime:RFC3339', 'time', [1589838401244, 1589838461244, 1589838521244])
+    .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79])
 
   const lineLayer = {
     type: "line",

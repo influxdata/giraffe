@@ -1,4 +1,4 @@
-import {Table, ColumnType, ColumnData, Config} from '../types'
+import {Table, ColumnType, ColumnData, Config, FluxDataType} from '../types'
 import {fromFlux} from './fromFlux'
 
 // Don't export me!
@@ -8,6 +8,7 @@ class SimpleTable implements Table {
   private columns: {
     [colKey: string]: {
       name: string
+      fluxDataType: FluxDataType
       type: ColumnType
       data: ColumnData
     }
@@ -69,8 +70,19 @@ class SimpleTable implements Table {
     return column.type
   }
 
+  getOriginalColumnType(columnKey: string): FluxDataType {
+    const column = this.columns[columnKey]
+
+    if (!column) {
+      return null
+    }
+
+    return column.fluxDataType
+  }
+
   addColumn(
     columnKey: string,
+    fluxDataType: FluxDataType,
     type: ColumnType,
     data: ColumnData,
     name?: string
@@ -91,6 +103,7 @@ class SimpleTable implements Table {
       ...this.columns,
       [columnKey]: {
         name: name || columnKey,
+        fluxDataType,
         type,
         data,
       },

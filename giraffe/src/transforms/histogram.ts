@@ -27,7 +27,7 @@ export const histogramTransform = (
   )
 
   const table = bin(
-    inputTable.addColumn(FILL, 'number', fillColumn),
+    inputTable.addColumn(FILL, 'system', 'number', fillColumn),
     xColumnKey,
     resolvedXDomain,
     binCount,
@@ -92,6 +92,10 @@ export const bin = (
 ): Table => {
   const xColData = table.getColumn(xColKey, 'number')
   const xColType = table.getColumnType(xColKey) as 'number'
+  const xOriginalColType = table.getOriginalColumnType(xColKey) as
+    | 'double'
+    | 'long'
+    | 'unsignedLong'
   const groupColData = table.getColumn(FILL, 'number')
 
   if (!binCount) {
@@ -168,12 +172,12 @@ export const bin = (
   }
 
   const binTable = newTable(binCount * groupIDs.length)
-    .addColumn(X_MIN, xColType, xMinData)
-    .addColumn(X_MAX, xColType, xMaxData)
-    .addColumn(Y_MIN, 'number', yMinData)
-    .addColumn(Y_MAX, 'number', yMaxData)
-    .addColumn(COUNT, 'number', countData)
-    .addColumn(FILL, 'number', fillData)
+    .addColumn(X_MIN, xOriginalColType, xColType, xMinData)
+    .addColumn(X_MAX, xOriginalColType, xColType, xMaxData)
+    .addColumn(Y_MIN, 'system', 'number', yMinData)
+    .addColumn(Y_MAX, 'system', 'number', yMaxData)
+    .addColumn(COUNT, 'system', 'number', countData)
+    .addColumn(FILL, 'system', 'number', fillData)
 
   return binTable
 }

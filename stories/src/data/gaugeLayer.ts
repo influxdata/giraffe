@@ -24,7 +24,7 @@ export const gaugeTable = memoizeOne(
   (minValue: number, maxValue: number): Table => {
     createColumns(minValue, maxValue)
     return newTable(numberOfRecords)
-      .addColumn('_time', 'time', TIME_COL)
-      .addColumn('_value', 'number', VALUE_COL)
+      .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
+      .addColumn('_value', 'system', 'number', VALUE_COL)
   }
 )

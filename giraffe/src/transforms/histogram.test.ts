@@ -9,8 +9,8 @@ const valueData = [70, 56, 60, 100, 76, 0, 63, 48, 79, 67]
 describe('bin', () => {
   test('with a single group', () => {
     const table = newTable(10)
-      .addColumn('_value', 'number', valueData)
-      .addColumn(FILL, 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      .addColumn('_value', 'double', 'number', valueData)
+      .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     const actual = bin(table, '_value', extent(valueData), 5, 'stacked')
 
@@ -24,8 +24,8 @@ describe('bin', () => {
 
   test('with four groups', () => {
     const table = newTable(10)
-      .addColumn('_value', 'number', valueData)
-      .addColumn(FILL, 'number', [0, 0, 0, 1, 1, 2, 2, 2, 3, 3])
+      .addColumn('_value', 'double', 'number', valueData)
+      .addColumn(FILL, 'double', 'number', [0, 0, 0, 1, 1, 2, 2, 2, 3, 3])
 
     const actual = bin(table, '_value', extent(valueData), 5, 'stacked')
 
@@ -80,8 +80,8 @@ describe('bin', () => {
 
   test('with overlaid positioning', () => {
     const table = newTable(10)
-      .addColumn('_value', 'number', valueData)
-      .addColumn(FILL, 'number', [0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+      .addColumn('_value', 'double', 'number', valueData)
+      .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
     const actual = bin(table, '_value', extent(valueData), 5, 'overlaid')
 
@@ -118,8 +118,8 @@ describe('bin', () => {
 
   test('with a widened x domain', () => {
     const table = newTable(10)
-      .addColumn('_value', 'number', valueData)
-      .addColumn(FILL, 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      .addColumn('_value', 'double', 'number', valueData)
+      .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     const actual = bin(table, '_value', [-200, 200], 10, 'stacked')
 
@@ -151,8 +151,8 @@ describe('bin', () => {
 
   test('with a narrowed x domain', () => {
     const table = newTable(10)
-      .addColumn('_value', 'number', valueData)
-      .addColumn(FILL, 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      .addColumn('_value', 'double', 'number', valueData)
+      .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     const actual = bin(table, '_value', [50, 80], 3, 'stacked')
 
@@ -168,8 +168,8 @@ describe('histogramTransform', () => {
   test('does not crash when passed zero-width domain', () => {
     // x domain of this table has a zero-width domain
     const table = newTable(3)
-      .addColumn('x', 'number', [1, 1, 1])
-      .addColumn('y', 'number', [0, 1, 2])
+      .addColumn('x', 'double', 'number', [1, 1, 1])
+      .addColumn('y', 'double', 'number', [0, 1, 2])
 
     expect(() => {
       histogramTransform(

@@ -65,7 +65,7 @@ export const lineTransform = (
     fillColKeys
   )
 
-  const table = inputTable.addColumn(FILL, 'number', fillColumn)
+  const table = inputTable.addColumn(FILL, 'system', 'number', fillColumn)
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')
   const fillScale = getNominalColorScale(fillColumnMap, colors)

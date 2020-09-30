@@ -26,8 +26,8 @@ for (let i = 0; i < numberOfRecords; i += 1) {
 }
 
 export const bandTable = newTable(numberOfRecords)
-  .addColumn('_field', 'string', FIELD_COL)
-  .addColumn('_measurement', 'string', MEASUREMENT_COL)
-  .addColumn('_time', 'time', TIME_COL)
-  .addColumn('_value', 'number', VALUE_COL)
-  .addColumn('cpu', 'string', CPU_COL)
+  .addColumn('_field', 'string', 'string', FIELD_COL)
+  .addColumn('_measurement', 'string', 'string', MEASUREMENT_COL)
+  .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
+  .addColumn('_value', 'system', 'number', VALUE_COL)
+  .addColumn('cpu', 'string', 'string', CPU_COL)

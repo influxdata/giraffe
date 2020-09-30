@@ -45,7 +45,8 @@ export const fromRows = <T extends object>(
   }
 
   const table = Object.entries(columns).reduce(
-    (table, [key, values]) => table.addColumn(key, resolvedSchema[key], values),
+    (table, [key, values]) =>
+      table.addColumn(key, 'system', resolvedSchema[key], values),
     newTable(rows.length)
   )
 
