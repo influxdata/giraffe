@@ -198,14 +198,14 @@ export interface RawFluxDataTableLayerConfig {
 
 export interface GaugeLayerConfig {
   type: 'gauge' // do not refactor or restrict to LayerTypes.Gauge
-  prefix: string
-  suffix: string
-  tickPrefix: string
-  tickSuffix: string
-  decimalPlaces: DecimalPlaces
+  prefix?: string
+  suffix?: string
+  tickPrefix?: string
+  tickSuffix?: string
+  decimalPlaces?: DecimalPlaces
   gaugeColors: Color[]
   gaugeSize?: number
-  gaugeTheme?: GaugeTheme
+  gaugeTheme?: Partial<GaugeTheme>
 }
 
 export interface GaugeTheme {

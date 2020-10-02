@@ -17,11 +17,11 @@ interface Props {
 export const GaugeLayer: FunctionComponent<Props> = (props: Props) => {
   const {value, config} = props
   const {
-    prefix,
-    suffix,
-    tickPrefix,
-    tickSuffix,
-    decimalPlaces,
+    prefix = '',
+    suffix = '',
+    tickPrefix = '',
+    tickSuffix = '',
+    decimalPlaces = {},
     gaugeColors,
     gaugeSize = Math.PI,
     gaugeTheme = {},
