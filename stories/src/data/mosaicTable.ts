@@ -4012,7 +4012,7 @@ const CPU_HOST_COL = [
   'host-B',
 ]
 
-export const CPUString = newTable(1000)
+export const cpuTable = newTable(1000)
   .addColumn('_time', 'dateTime:RFC3339', 'time', CPU_TIME_COL)
   .addColumn('_value', 'string', 'string', CPU_VALUE_COL)
   .addColumn('cpu', 'string', 'string', CPU_CPU_COL)

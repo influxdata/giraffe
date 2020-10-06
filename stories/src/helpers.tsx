@@ -3,7 +3,7 @@ import {select, text, boolean, number} from '@storybook/addon-knobs'
 
 import {Table} from '../../giraffe/src'
 import {CPU} from './data/cpu'
-import {CPUString} from './data/cpuString'
+import {cpuTable} from './data/mosaicTable'
 
 import * as giraffe from '../../giraffe/src'
 
@@ -77,7 +77,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
   )
 
 export const tableKnob = (initial?: Table) =>
-  select('Data', {CPU, CPUString}, initial || CPU)
+  select('Data', {CPU, cpuTable}, initial || CPU)
 
 /*
   Find all column keys in a table suitable for mapping to the `x` or `y`
