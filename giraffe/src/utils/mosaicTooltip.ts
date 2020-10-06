@@ -100,19 +100,25 @@ export const getMosaicTooltipData = (
     ),
   }
 
-  const groupTooltipColumns = fillGroupMap.columnKeys.map(key => ({
-    key,
-    name: inputTable.getColumnName(key),
-    type: inputTable.getColumnType(key),
-    colors,
-    values: hoveredBoxRows.map(i => valFormatter(valCol[i])),
-  }))
-
+  // Mosaic uses only one key for the fill column
+  //   By capturing this in an array, we can destructure to get
+  //   either the fill column or nothing into the tooltips
+  const fillColumns = []
+  const key = fillGroupMap.columnKeys[0]
+  if (key) {
+    fillColumns.push({
+      key,
+      name: inputTable.getColumnName(key),
+      type: inputTable.getColumnType(key),
+      colors,
+      values: hoveredBoxRows.map(i => valFormatter(valCol[i])),
+    })
+  }
   const tooltipColumns = [
     xTooltipColumn,
+    ...fillColumns,
     yTooltipColumn,
     durationTooltipColumn,
-    ...groupTooltipColumns,
   ]
 
   return tooltipColumns

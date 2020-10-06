@@ -13,8 +13,8 @@ export const mosaicTransform = (
   fillColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
-  const xInputCol = inputTable.getColumn(xColumnKey, 'number')
-  const yInputCol = inputTable.getColumn(yColumnKey, 'string')
+  const xInputCol = inputTable.getColumn(xColumnKey, 'number') || []
+  const yInputCol = inputTable.getColumn(yColumnKey, 'string') || []
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
@@ -39,7 +39,7 @@ export const mosaicTransform = (
     const isOverlappingTimestamp =
       xInputCol[i - 1] > xInputCol[i] && dataMap[yInputCol[i]]
     if (isOverlappingTimestamp) {
-      break
+      continue
     }
     const seriesExistsInDataMap = yInputCol[i] in dataMap
     if (!seriesExistsInDataMap) {
@@ -104,6 +104,7 @@ export const mosaicTransform = (
   const resolvedXDomain = resolveDomain(xInputCol, xDomain)
   const resolvedYDomain = [0, valueStrings.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
+
   return {
     type: 'mosaic',
     inputTable,

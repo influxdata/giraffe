@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
-import {CPUString} from './data/cpuString'
 
 import {
   Config,
@@ -431,38 +430,6 @@ storiesOf('XY Plot', module)
       yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
-    }
-
-    return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
-    )
-  })
-  .add('Mosaic', () => {
-    const table = tableKnob()
-    const colors = colorSchemeKnob()
-    const x = xKnob(table)
-    const y = yKnob(table, 'cpu')
-    const fill = ['_value']
-    const showAxes = showAxesKnob()
-    const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
-    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
-
-    const config: Config = {
-      table: CPUString,
-      legendOrientationThreshold,
-      showAxes,
-      layers: [
-        {
-          type: 'mosaic',
-          x,
-          y,
-          fill: fill,
-          hoverDimension,
-          colors,
-        } as LayerConfig,
-      ],
     }
 
     return (
