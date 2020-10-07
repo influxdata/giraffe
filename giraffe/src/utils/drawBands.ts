@@ -11,7 +11,6 @@ import {getBands} from '../transforms/band'
 interface DrawBandsOptions {
   context: CanvasRenderingContext2D
   fill: ColumnGroupMap
-  fillScale: Function
   interpolation: LineInterpolation
   lineData: LineData
   lineWidth: number
@@ -25,7 +24,6 @@ interface DrawBandsOptions {
 export const drawBands = ({
   context,
   fill,
-  fillScale,
   interpolation,
   lineData,
   lineWidth,
@@ -38,7 +36,6 @@ export const drawBands = ({
   const bands = getBands(
     fill,
     lineData,
-    fillScale,
     lowerColumnName,
     rowColumnName,
     upperColumnName

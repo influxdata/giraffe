@@ -11,11 +11,11 @@ import {isDefined} from '../utils/isDefined'
 import {createGroupIDColumn, getBandColorScale} from './'
 
 import {BAND_COLOR_SCALE_CONSTANT} from '../constants'
+import {isNumber} from '../utils/isNumber'
 
 export const getBands = (
   fill: ColumnGroupMap,
   lineData: LineData,
-  fillScale: Function,
   lowerColumnName: string,
   rowColumnName: string,
   upperColumnName: string
@@ -49,7 +49,6 @@ export const getBands = (
       bandLines.push({
         ...lineData[index],
         lineName,
-        fill: fillScale(bandLines.length),
       })
     }
     return bandLines
@@ -439,7 +438,6 @@ export const bandTransform = (
   const fillScale = range =>
     getBandColorScale(bandIndexMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
 
-  const bandFillColors = []
   const lineData: LineData = {}
 
   let xMin = Infinity
@@ -453,8 +451,11 @@ export const bandTransform = (
     const y = yCol[i]
 
     if (!lineData[groupID]) {
-      lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
-      bandFillColors.push(fillScale(groupID))
+      lineData[groupID] = {xs: [], ys: [], fill: `${groupID}`}
+      // 'fill' is set temporarily to the groupID
+      //    it will be updated with another loop later,
+      //    because it is faster to walk bandIndexMap once
+      //    than to search for the indices of many lines
     }
 
     lineData[groupID].xs.push(x)
@@ -465,6 +466,14 @@ export const bandTransform = (
     yMin = Math.min(y, yMin)
     yMax = Math.max(y, yMax)
   }
+
+  Object.keys(bandIndexMap).forEach(indexType => {
+    bandIndexMap[indexType].forEach((groupID, index) => {
+      if (isNumber(groupID)) {
+        lineData[groupID].fill = fillScale(index)
+      }
+    })
+  })
 
   return {
     type: 'band',
