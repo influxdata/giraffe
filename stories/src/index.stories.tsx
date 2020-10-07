@@ -21,7 +21,6 @@ import {
   xScaleKnob,
   yScaleKnob,
   fillKnob,
-  symbolKnob,
   tableKnob,
   colorSchemeKnob,
   legendFontKnob,
@@ -330,47 +329,6 @@ storiesOf('XY Plot', module)
       tickFont,
       showAxes,
       layers,
-    }
-
-    return (
-      <PlotContainer>
-        <Plot config={config} />
-      </PlotContainer>
-    )
-  })
-  .add('Scatter Plot', () => {
-    const table = tableKnob()
-    const colors = colorSchemeKnob()
-    const legendFont = legendFontKnob()
-    const tickFont = tickFontKnob()
-    const x = xKnob(table)
-    const y = yKnob(table)
-    const xScale = xScaleKnob()
-    const yScale = yScaleKnob()
-    const fill = fillKnob(table, ['cpu'])
-    const symbol = symbolKnob(table, ['host'])
-    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
-    const showAxes = showAxesKnob()
-
-    const config: Config = {
-      table,
-      valueFormatters: {_value: val => `${Math.round(val)}%`},
-      legendFont,
-      legendOrientationThreshold,
-      tickFont,
-      showAxes,
-      xScale,
-      yScale,
-      layers: [
-        {
-          type: 'scatter',
-          x,
-          y,
-          fill: fill,
-          symbol: symbol,
-          colors,
-        },
-      ],
     }
 
     return (

@@ -26,8 +26,8 @@ export const scatterTransform = (
     .addColumn(FILL, 'system', 'number', fillColumn)
     .addColumn(SYMBOL, 'system', 'number', symbolColumn)
 
-  const xCol = table.getColumn(xColumnKey, 'number')
-  const yCol = table.getColumn(yColumnKey, 'number')
+  const xCol = table.getColumn(xColumnKey, 'number') || []
+  const yCol = table.getColumn(yColumnKey, 'number') || []
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const symbolScale = getSymbolScale(symbolColumnMap)
 

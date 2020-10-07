@@ -19,10 +19,10 @@ export const ScatterLayer: FunctionComponent<Props> = props => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const drawPointsOptions = {
-    xColData: spec.table.getColumn(config.x, 'number'),
-    yColData: spec.table.getColumn(config.y, 'number'),
-    fillColData: spec.table.getColumn(FILL, 'number'),
-    symbolColData: spec.table.getColumn(SYMBOL, 'number'),
+    xColData: spec.table.getColumn(config.x, 'number') || [],
+    yColData: spec.table.getColumn(config.y, 'number') || [],
+    fillColData: spec.table.getColumn(FILL, 'number') || [],
+    symbolColData: spec.table.getColumn(SYMBOL, 'number') || [],
     xScale,
     yScale,
     fillScale: spec.scales.fill,
