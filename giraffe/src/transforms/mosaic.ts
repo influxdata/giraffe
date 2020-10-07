@@ -19,52 +19,55 @@ export const mosaicTransform = (
     inputTable,
     fillColKeys
   )
-  const valueKey = fillColumnMap.columnKeys[0]
+
+  const valueKey = fillColumnMap.columnKeys[0] // _value
 
   let tableLength = 0
   /*
     This is the structure used to create and update the data map below:
 
     dataMap[series] = [
-      prevValue: string,
       xMin: NumericColumnData,
       xMax: NumericColumnData,
       values: NumericColumnData,
       series: string[]
     ]
   */
+
   const dataMap = {}
+  let prevFillValue = fillColumnMap.mappings[fillColumn[0]][valueKey] // initialize to first value
 
   for (let i = 0; i < inputTable.length; i++) {
+    const currentY = yInputCol[i]
+    const currentX = xInputCol[i]
+    const currentFillValue = fillColumnMap.mappings[fillColumn[i]][valueKey]
+
+    const YValExistsInDataMap = currentY in dataMap
+
+    const prevX = xInputCol[i - 1]
+    const CurrentXColValueIsBackInTime = prevX > currentX // THis is definitely not the correct thing to check for
+
     const isOverlappingTimestamp =
-      xInputCol[i - 1] > xInputCol[i] && dataMap[yInputCol[i]]
+      YValExistsInDataMap && CurrentXColValueIsBackInTime
+
     if (isOverlappingTimestamp) {
-      continue
+      continue // ignore this data point
     }
-    const seriesExistsInDataMap = yInputCol[i] in dataMap
-    if (!seriesExistsInDataMap) {
+
+    if (!YValExistsInDataMap) {
       //create series entry in dataMap
-      dataMap[yInputCol[i]] = [
-        fillColumnMap.mappings[fillColumn[i]][valueKey],
-        [xInputCol[i]],
-        [],
-        [fillColumnMap.mappings[fillColumn[i]][valueKey]],
-        [],
-      ]
+      dataMap[currentY] = [[currentX], [], [currentFillValue], []]
       continue
     }
-    const valueIntervalEnds =
-      fillColumnMap.mappings[fillColumn[i]][valueKey] !=
-      dataMap[yInputCol[i]][0]
+
+    const valueIntervalEnds = currentFillValue != prevFillValue
     if (valueIntervalEnds) {
       //update series entry in dataMap
-      dataMap[yInputCol[i]][0] = fillColumnMap.mappings[fillColumn[i]][valueKey]
-      dataMap[yInputCol[i]][1].push(xInputCol[i])
-      dataMap[yInputCol[i]][2].push(xInputCol[i])
-      dataMap[yInputCol[i]][3].push(
-        fillColumnMap.mappings[fillColumn[i]][valueKey]
-      )
-      dataMap[yInputCol[i]][4].push(yInputCol[i])
+      dataMap[currentY][0].push(currentX)
+      dataMap[currentY][1].push(currentX)
+      dataMap[currentY][2].push(currentFillValue)
+      dataMap[currentY][3].push(currentY)
+      prevFillValue = currentFillValue
 
       tableLength += 1
     }
@@ -76,17 +79,17 @@ export const mosaicTransform = (
   let seriesData = []
   let valueStrings = []
 
-  //the last piece of data is a special case of updating a series entry in dataMap (see above)
+  // the last value in each series is a special case (see above)
   for (const key in dataMap) {
-    dataMap[key][2].push(xInputCol[inputTable.length - 1])
-    dataMap[key][4].push(key)
+    dataMap[key][1].push(xInputCol[inputTable.length - 1])
+    dataMap[key][3].push(key)
     tableLength += 1
 
     //combine all series into the proper shape
-    xMinData = xMinData.concat(dataMap[key][1])
-    xMaxData = xMaxData.concat(dataMap[key][2])
-    fillData = fillData.concat(dataMap[key][3])
-    seriesData = seriesData.concat(dataMap[key][4])
+    xMinData = xMinData.concat(dataMap[key][0])
+    xMaxData = xMaxData.concat(dataMap[key][1])
+    fillData = fillData.concat(dataMap[key][2])
+    seriesData = seriesData.concat(dataMap[key][3])
     valueStrings = valueStrings.concat(key)
   }
   /*
