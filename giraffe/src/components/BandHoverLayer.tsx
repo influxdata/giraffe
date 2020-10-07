@@ -56,7 +56,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     yColKey,
     xScale,
     yScale,
-    spec.scales.fill
+    spec.lineData
   )
 
   const crosshairColor = plotConfig.legendCrosshairColor
@@ -103,10 +103,9 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
   })
 
   const colors = []
-  if (Array.isArray(spec.bandIndexMap.rowIndices)) {
-    for (let i = 0; i < spec.bandIndexMap.rowIndices.length; i += 1) {
-      colors.push(spec.scales.fill(i))
-    }
+  for (let i = 0; i < rowIndices.length; i += 1) {
+    const lineIndex = groupColData[rowIndices[i]]
+    colors.push(spec.lineData[lineIndex].fill)
   }
   const tooltipData = getBandTooltipData(
     bandHoverIndices,

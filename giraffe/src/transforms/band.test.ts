@@ -250,11 +250,9 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const cyan = 'rgb(49, 192, 246)'
-      const fillScale = () => cyan
-      const result = getBands(fill, lineData, fillScale, 'min', 'mean', 'max')
+      const result = getBands(fill, lineData, 'min', 'mean', 'max')
       expect(Array.isArray(result)).toEqual(true)
-      expect(result[0].fill).toEqual(cyan)
+      expect(result[0].fill).toEqual(lineData[2].fill)
       expect(result[0].lower).toBeDefined()
       expect(result[0].upper).toBeDefined()
     })
@@ -387,33 +385,18 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const cyan = 'rgb(49, 192, 246)'
-      const babyBlue = 'rgb(78, 145, 226)'
-      const purple = 'rgb(106, 103, 205)'
-      const fillScale = index => {
-        switch (index) {
-          case 0:
-            return cyan
-          case 1:
-            return babyBlue
-          case 2:
-            return purple
-          default:
-            return 'none'
-        }
-      }
-      const result = getBands(fill, lineData, fillScale, 'min', 'mean', 'max')
+      const result = getBands(fill, lineData, 'min', 'mean', 'max')
       expect(Array.isArray(result)).toEqual(true)
 
-      expect(result[0].fill).toEqual(cyan)
+      expect(result[0].fill).toEqual(lineData[2].fill)
       expect(result[0].lower).toBeUndefined()
       expect(result[0].upper).toBeDefined()
 
-      expect(result[1].fill).toEqual(babyBlue)
+      expect(result[1].fill).toEqual(lineData[3].fill)
       expect(result[1].lower).toBeDefined()
       expect(result[1].upper).toBeUndefined()
 
-      expect(result[2].fill).toEqual(purple)
+      expect(result[2].fill).toEqual(lineData[4].fill)
       expect(result[2].lower).toBeUndefined()
       expect(result[2].upper).toBeUndefined()
     })
