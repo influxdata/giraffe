@@ -22,9 +22,9 @@ import {
   symbolKnob,
 } from './helpers'
 
-storiesOf('CSV from Flux for Scatter Plot', module)
+storiesOf('Scatter Plot', module)
   .addDecorator(withKnobs)
-  .add('Scatter Plot from static CSV', () => {
+  .add('Static CSV', () => {
     const table = tableKnob()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
@@ -65,7 +65,7 @@ storiesOf('CSV from Flux for Scatter Plot', module)
       </PlotContainer>
     )
   })
-  .add('Scatter Graph from custom CSV', () => {
+  .add('Custom CSV', () => {
     const csv = text('Paste CSV here:', '')
     let table = fromFlux(csv).table
     const colors = colorSchemeKnob()
@@ -121,7 +121,6 @@ storiesOf('CSV from Flux for Scatter Plot', module)
         },
       ],
     }
-    console.log('custom config:', config)
 
     return (
       <PlotContainer>

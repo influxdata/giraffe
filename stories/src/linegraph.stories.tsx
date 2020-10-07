@@ -22,9 +22,9 @@ import {
 
 import {tooltipFalsyValues} from './data/fluxCSV'
 
-storiesOf('CSV from Flux', module)
+storiesOf('Line Graph', module)
   .addDecorator(withKnobs)
-  .add('Line Graph from static CSV', () => {
+  .add('Static CSV', () => {
     const staticData = select(
       'Static CSV',
       {tooltipFalsyValues},
@@ -104,7 +104,7 @@ storiesOf('CSV from Flux', module)
       </PlotContainer>
     )
   })
-  .add('Line Graph from custom CSV', () => {
+  .add('Custom CSV', () => {
     const csv = text('Paste CSV here:', '')
     let table = fromFlux(csv).table
     const colors = colorSchemeKnob()
