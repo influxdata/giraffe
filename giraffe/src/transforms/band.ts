@@ -451,8 +451,8 @@ export const bandTransform = (
     const y = yCol[i]
 
     if (!lineData[groupID]) {
-      lineData[groupID] = {xs: [], ys: [], fill: `${groupID}`}
-      // 'fill' is set temporarily to the groupID
+      lineData[groupID] = {xs: [], ys: [], fill: ''}
+      // 'fill' is set temporarily to no color
       //    it will be updated with another loop later,
       //    because it is faster to walk bandIndexMap once
       //    than to search for the indices of many lines
