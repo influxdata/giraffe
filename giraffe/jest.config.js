@@ -7,4 +7,5 @@ module.exports = {
       diagnostics: false,
     },
   },
+  coverageReporters: ['json', 'html'],
 }
