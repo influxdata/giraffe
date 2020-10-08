@@ -21,7 +21,7 @@ jobs:
       - run: cd stories && yarn run lint
       - run: cd stories && yarn run typecheck
       - store_artifacts:
-          path: coverage
+          path: giraffe/coverage
       # See: https://github.com/influxdata/giraffe/issues/129
       # - run:
       #     name: chromatic
