@@ -11,6 +11,7 @@ import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
 import {useCanvas} from '../utils/useCanvas'
 import {BandHoverIndices} from '../utils/getBandHoverIndices'
+import {isNumber} from '../utils/isNumber'
 
 interface Props extends BandLayerProps {
   bandHoverIndices: BandHoverIndices
@@ -105,7 +106,10 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
   const colors = []
   for (let i = 0; i < rowIndices.length; i += 1) {
     const lineIndex = groupColData[rowIndices[i]]
-    colors.push(spec.lineData[lineIndex].fill)
+    const lineData = spec.lineData || {}
+    if (isNumber(lineIndex) && lineData[lineIndex]) {
+      colors.push(lineData[lineIndex].fill)
+    }
   }
   const tooltipData = getBandTooltipData(
     bandHoverIndices,
