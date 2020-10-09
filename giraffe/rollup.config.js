@@ -11,7 +11,7 @@ import tsc from 'typescript'
 const pkg = require('./package.json')
 
 let plugins = [
-  resolve(),
+  resolve({browser: true}),
   commonjs(),
   typescript({typescript: tsc}),
   sourceMaps(),
