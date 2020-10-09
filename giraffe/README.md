@@ -307,7 +307,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   - "linear" scaling means the same distance between ticks represents the same increase in value.
   - "log" (logarithmic) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
-- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain to set the minimum and maximum value of the x-axis. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
+- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the x-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain to set the minimum and maximum value of the x-axis. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
 - **onSetXDomain**: _function(array[min, max]). Optional._ See above regarding **xDomain**.
 
@@ -351,13 +351,13 @@ Giraffe comes with utility functions.
 
 ## LayerConfig
 
-- **LineLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **LineLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  - **type**: _"line". **Required**_. Specifies that this LayerConfig and `<Plot>` is a line graph.
+  - **type**: _"line". **Required**._ Specifies that this LayerConfig and `<Plot>` is a line graph.
 
-  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
 
   - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
@@ -381,13 +381,13 @@ Giraffe comes with utility functions.
 
   - **shadeBelowOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shaded color below each line. No effect when **shadeBelow** is false or not included.
 
-- **BandLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **BandLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  - **type**: _"band". **Required**_. Specifies that this LayerConfig and `<Plot>` is a band chart.
+  - **type**: _"band". **Required**._ Specifies that this LayerConfig and `<Plot>` is a band chart.
 
-  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
 
   - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
@@ -415,13 +415,13 @@ Giraffe comes with utility functions.
 
   - **lowerColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends below the **mainColumnName** line.
 
-- **ScatterLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **ScatterLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  - **type**: _"scatter". **Required**_. Specifies that this LayerConfig and `<Plot>` is a scatter plot.
+  - **type**: _"scatter". **Required**._ Specifies that this LayerConfig and `<Plot>` is a scatter plot.
 
-  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
 
   - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
@@ -429,11 +429,11 @@ Giraffe comes with utility functions.
 
   - **symbol**: _array[string, ...]. Optional._ An array of columm key names of column filters that should be visualized. Acts like a secondary **fill** using different symbols for the dots rather than **colors**. Limited to 6 different symbols. Symbols will repeat above limit.
 
-* **HistogramLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+* **HistogramLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  - **type**: _"histogram". **Required**_. Specifies that this LayerConfig and `<Plot>` is a [histogram](https://en.wikipedia.org/wiki/Histogram).
+  - **type**: _"histogram". **Required**._ Specifies that this LayerConfig and `<Plot>` is a [histogram](https://en.wikipedia.org/wiki/Histogram).
 
-  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis. Note: the y-axis is always the count.
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis. Note: the y-axis is always the count.
 
   - **binCount**: _number. Optional. Defaults to using [Sturges' Formula](https://en.wikipedia.org/wiki/Histogram#Sturges) when not included._ The number of buckets or bins on the x-axis. The range of values that fall into each bin depends on the scale and domain of the x-axis.
 
@@ -451,13 +451,13 @@ Giraffe comes with utility functions.
 
   - **strokePadding**: _number. Optional._ The space around all four sides of each fill column or bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
 
-- **HeatmapLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **HeatmapLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  - **type**: _"heatmap". **Required**_. Specifies that this LayerConfig and `<Plot>` is a heatmap.
+  - **type**: _"heatmap". **Required**._ Specifies that this LayerConfig and `<Plot>` is a heatmap.
 
-  - **x**: _string. **Required**_. The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**_. The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
 
   - **binSize**: _number. Optional._ The _CSS px_ size of each heat bin. [config's width](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the x-axis. [config's height](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the y-axis.
 
@@ -471,7 +471,7 @@ Giraffe comes with utility functions.
 
   - **strokePadding**: _number. Optional._ The space around all four sides of each heat bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
 
-- **RawFluxDataTableLayerConfig**: _Object_. Maximum one per `<Plot>`. Uses its own property called **files** as the data to be rendered. Ignores both **tables** and **fluxResponse** from `config`. Properties are:
+- **RawFluxDataTableLayerConfig**: _Object._ Maximum one per `<Plot>`. Uses its own property called **files** as the data to be rendered. Ignores both **tables** and **fluxResponse** from `config`. Properties are:
 
   - **type**: _'flux data table'. **Required**._ Specifies that this LayerConfig is a flux data table.
 
@@ -481,7 +481,7 @@ Giraffe comes with utility functions.
 
   - **parseObjects**: _boolean. **Optional**. Defaults to false when excluded._ Enables the parsing of JSON objects in the CSV of **files** so that JSON objects are correctly interpreted when there are commas in the object, and prevents all data from being combined into a single column.
 
-- **TableGraphLayerConfig**: _Object_. Maximum one per `<Plot>`. Requires the use of a **`<HoverTimeProvider>`** component around the `<Plot>` and its parent. For example, here is how to properly wrap `<Plot>` to use render a table:
+- **TableGraphLayerConfig**: _Object._ Maximum one per `<Plot>`. Requires the use of a **`<HoverTimeProvider>`** component around the `<Plot>` and its parent. For example, here is how to properly wrap `<Plot>` to use render a table:
 
   <pre>
   <b>&#60;HoverTimeProvider&#62;</b>
@@ -538,24 +538,24 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
     - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
     - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
 
-- **GaugeLayerConfig**: _Object_. Maximum one per `<Plot>`. Properties are:
+- **GaugeLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
   - **type**: _'gauge'. **Required**._ Specifies that this LayerConfig is a gauge layer.
 
-  - **prefix**: _string. **Required**._ The text that appears before the gauge value. Use an empty string if no text is preferred.
+  - **prefix**: _string. Optional._ The text that appears before the gauge value. Use an empty string if no text is preferred.
 
-  - **suffix**: _string. **Required**._ The text that appears after the gauge value. Use an empty string if no text is preferred.
+  - **suffix**: _string. Optional._ The text that appears after the gauge value. Use an empty string if no text is preferred.
 
-  - **tickPrefix**: _string. **Required**._ The text that appears before each tick label. Use an empty string if no text is preferred.
+  - **tickPrefix**: _string. Optional._ The text that appears before each tick label. Use an empty string if no text is preferred.
 
-  - **tickSuffix**: _string. **Required**._ The text that appears after each tick label. Use an empty string if no text is preferred.
+  - **tickSuffix**: _string. Optional._ The text that appears after each tick label. Use an empty string if no text is preferred.
 
-  - **decimalPlaces**: _Object. **Required**._
+  - **decimalPlaces**: _Object. Optional._
 
     - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
     - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
 
-  - **gaugeSize**: _number. Optional. **3.142** &#8804; gaugeSize &#8804; **6.283**._ The size of the Gauge as measured in [_radians_](https://www.mathsisfun.com/geometry/radians.html). Valid Gauge sizes range from a half circle to a full circle. Any size below &#960; is considered &#960; and any size above 2&#960; is considered 2&#960;. Rounded to 3 decimal places.
+  - **gaugeSize**: _number. Optional. Defaults to &#960; and is **3.142** &#8804; gaugeSize &#8804; **6.283**._ The size of the Gauge as measured in [_radians_](https://www.mathsisfun.com/geometry/radians.html). Valid Gauge sizes range from a half circle to a full circle. Any size below &#960; is considered &#960; and any size above 2&#960; is considered 2&#960;. Rounded to 3 decimal places.
 
   - **gaugeColors**: _Array. **Required**._ An array of objects that defines the colors of the Gauge. Each object has the following properties.
 
@@ -569,43 +569,43 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
     - **value**: _number. **Required**._ The starting gauge value associated with this color.
 
-  - **theme**: _Object. Optional._ An object controlling additional visual styling and details of the Gauge.
+  - **gaugeTheme**: _Object. Optional._ An object controlling additional visual styling and details of the Gauge.
 
-    - **lineCount**: _number. Optional._ The total number of labeled gauge lines (large ticks) not counting the first.
+    - **lineCount**: _number. Optional. Defaults to 5 when excluded._ The total number of labeled gauge lines (large ticks) not counting the first.
 
-    - **smallLineCount**: _number. Optional._ The total number of unlabeled gauge lines (small ticks) between two labeled gauge lines excluding the starting label but including the ending label.
+    - **smallLineCount**: _number. Optional. Defaults to 10 when excluded._ The total number of unlabeled gauge lines (small ticks) between two labeled gauge lines excluding the starting label but including the ending label.
 
-    - **lineColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the gauge lines (ticks).
+    - **lineColor**: _string. Optional. Defaults to dark grey (#545667) when excluded._ The [_color hex_](https://www.color-hex.com/) string for the color of the gauge lines (ticks).
 
-    - **labelColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the labels for the gauge lines.
+    - **labelColor**: _string. Optional. Defaults to grey (#8e91a1) when excluded._ The [_color hex_](https://www.color-hex.com/) string for the color of the labels for the gauge lines.
 
-    - **labelFontSize**: _number. Optional._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the gauge labels.
+    - **labelFontSize**: _number. Optional. Defaults to 13 when excluded._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the gauge labels.
 
-    - **lineStrokeSmall**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the unlabeled gauge lines (small ticks).
+    - **lineStrokeSmall**: _number. Optional. Defaults to 1 when excluded._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the unlabeled gauge lines (small ticks).
 
-    - **lineStrokeLarge**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the labeled gauge lines (large ticks).
+    - **lineStrokeLarge**: _number. Optional. Defaults to 3 when excluded._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the labeled gauge lines (large ticks).
 
-    - **tickSizeSmall**: _number. Optional._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the unlabeled gauge lines (small ticks). Use a different value than **tickSizeLarge** to visually distinguish the length of the gauge lines (ticks).
+    - **tickSizeSmall**: _number. Optional. Defaults to 9 when excluded._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the unlabeled gauge lines (small ticks). Use a different value than **tickSizeLarge** to visually distinguish the length of the gauge lines (ticks).
 
-    - **tickSizeLarge**: _number. Optional._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the labeled gauge lines (large ticks). Use a different value than **tickSizeSmall** to visually distinguish the length of the gauge lines (ticks).
+    - **tickSizeLarge**: _number. Optional. Defaults to 18 when excluded._ The [_CanvasRenderingContext2D lineTo_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) coordinate length of the labeled gauge lines (large ticks). Use a different value than **tickSizeSmall** to visually distinguish the length of the gauge lines (ticks).
 
-    - **minFontSize**: _number. Optional._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the Gauge's value. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
+    - **minFontSize**: _number. Optional. Defaults to 22 when excluded._ The [_CanvasRenderingContext2D font_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font) size of the Gauge's value. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
 
-    - **minLineWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) or thickness of the Gauge's colors. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
+    - **minLineWidth**: _number. Optional. Defaults to 24 when excluded._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) or thickness of the Gauge's colors. Values below a certain size will be ignored and defaulted to a size that is based on the current size of the Gauge.
 
-    - **valueColor**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string for the color of the Gauge's current value.
+    - **valueColor**: _string. Optional. Defaults to white (#ffffff) when excluded._ The [_color hex_](https://www.color-hex.com/) string for the color of the Gauge's current value.
 
-    - **valuePositionXOffset**: _number. Optional._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the horizontal dimension that the Gauge's value should be moved from its default position.
+    - **valuePositionXOffset**: _number. Optional. Defaults to 0 when excluded._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the horizontal dimension that the Gauge's value should be moved from its default position.
 
-    - **valuePositionYOffset**: _number. Optional._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the vertical dimension that the Gauge's value should be moved from its default position.
+    - **valuePositionYOffset**: _number. Optional. Defaults to 0.5 when excluded._ The [_CanvasRenderingContext2D fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) coordinate offset for the vertical dimension that the Gauge's value should be moved from its default position.
 
-    - **needleColor0**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string of the starting color for the color gradient of the Gauge's needle. **needleColor0** should be used in conjunction with **needleColor1**.
+    - **needleColor0**: _string. Optional. Defaults to dark grey (#434453) when excluded._ The [_color hex_](https://www.color-hex.com/) string of the starting color for the color gradient of the Gauge's needle. **needleColor0** should be used in conjunction with **needleColor1**.
 
-    - **needleColor1**: _string. Optional._ The [_color hex_](https://www.color-hex.com/) string of the ending color for the color gradient of the Gauge's needle. **needleColor1** should be used in conjunction with **needleColor0**.
+    - **needleColor1**: _string. Optional. Defaults to white (#ffffff) when excluded._ The [_color hex_](https://www.color-hex.com/) string of the ending color for the color gradient of the Gauge's needle. **needleColor1** should be used in conjunction with **needleColor0**.
 
-    - **overflowDelta**: _number. Optional._ This constant expresses how far past the gauge min or gauge max the needle should be drawn if the value for the needle is less than gauge min or greater than the gauge max. It is expressed as a percentage of the circumference of a circle, e.g. 0.5 means draw halfway around the gauge from the min or max value.
+    - **overflowDelta**: _number. Optional. Defaults to 0.03 when excluded._ This constant expresses how far past the gauge min or gauge max the needle should be drawn if the value for the needle is less than gauge min or greater than the gauge max. It is expressed as a fraction of the circumference of a circle, e.g. 0.5 means draw halfway around the gauge from the min or max value.
 
-- **SingleStatLayerConfig**: _Object_. No limit but generally one per `<Plot>`. Using more than one requires additional styling through configuration and is not recommended.
+- **SingleStatLayerConfig**: _Object._ No limit but generally one per `<Plot>`. Using more than one requires additional styling through configuration and is not recommended.
 
   <br />A Single Stat layer is a pre-defined custom layer that displays a single value on top of any other plot type, or by itself, but usually displayed on top of (single) line graphs. The displayed value is the latest value by timestamp. If more than one value has the latest timestamp, then the first value in the [table](#data-properties) with the latest timestamp will be displayed. Currently, there is no guarantee which value will be considered the first value when there are multiple values with the same timestamp.
 
@@ -652,7 +652,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **svgTextStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--text` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `fill` cannot be overridden and is controlled by the **textColor** option (see above). See the `SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
-* **CustomLayerConfig**: _Object_. No limit per `<Plot>`.
+* **CustomLayerConfig**: _Object._ No limit per `<Plot>`.
 
   A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:
 
