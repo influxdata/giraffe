@@ -27,11 +27,11 @@ export const geoTable = memoizeOne(
   (numberOfRecords = 200): Table => {
     const columns = createDataColumns(numberOfRecords)
     return newTable(numberOfRecords)
-      .addColumn('_time', 'time', columns.TIME_COL)
-      .addColumn('magnitude', 'number', columns.VALUE1_COL)
-      .addColumn('duration', 'number', columns.VALUE2_COL)
-      .addColumn('lat', 'number', columns.LAT_COL)
-      .addColumn('lon', 'number', columns.LON_COL)
+      .addColumn('_time', 'dateTime:RFC3339', 'time', columns.TIME_COL)
+      .addColumn('magnitude', 'double', 'number', columns.VALUE1_COL)
+      .addColumn('duration', 'double', 'number', columns.VALUE2_COL)
+      .addColumn('lat', 'double', 'number', columns.LAT_COL)
+      .addColumn('lon', 'double', 'number', columns.LON_COL)
   }
 )
 
@@ -56,21 +56,25 @@ export const geoTracks = memoizeOne(
     return newTable(data.length)
       .addColumn(
         '_time',
+        'dateTime:RFC3339',
         'time',
         data.map(x => x.time)
       )
       .addColumn(
         'lat',
+        'double',
         'number',
         data.map(x => x.lat)
       )
       .addColumn(
         'lon',
+        'double',
         'number',
         data.map(x => x.lon)
       )
       .addColumn(
         'table',
+        'double',
         'number',
         data.map(x => x.tid)
       )
