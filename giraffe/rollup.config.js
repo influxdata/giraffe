@@ -18,7 +18,9 @@ let plugins = [
   peerDepsExternal(),
   postcss({
     extract: false,
-    modules: true,
+    modules: {
+      globalModulePaths: ['leaflet/dist'],
+    },
     use: ['sass'],
   }),
 ]

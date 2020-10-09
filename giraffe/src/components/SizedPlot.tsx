@@ -26,6 +26,8 @@ import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
 import {MosaicLayer} from './MosaicLayer'
+import {GeoLayerConfig} from '../types/geo'
+import GeoLayer from './GeoLayer'
 
 interface Props {
   config: SizedConfig
@@ -101,6 +103,17 @@ export const SizedPlot: FunctionComponent<Props> = ({
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
           {config.layers.map((layerConfig, layerIndex) => {
+            if (layerConfig.type === LayerTypes.Geo) {
+              return (
+                <GeoLayer
+                  key={layerIndex}
+                  table={newTableFromConfig(config)}
+                  config={layerConfig as GeoLayerConfig}
+                  plotConfig={config}
+                />
+              )
+            }
+
             if (layerConfig.type === LayerTypes.Custom) {
               const renderProps = {
                 key: layerIndex,

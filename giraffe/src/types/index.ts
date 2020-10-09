@@ -1,6 +1,7 @@
 import CSS from 'csstype'
 import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
+import {GeoLayerConfig} from './geo'
 
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
@@ -153,6 +154,7 @@ export enum LayerTypes {
   Scatter = 'scatter',
   Mosaic = 'mosaic',
   Table = 'table',
+  Geo = 'geo',
 }
 
 export type LayerConfig =
@@ -167,6 +169,7 @@ export type LayerConfig =
   | ScatterLayerConfig
   | MosaicLayerConfig
   | TableGraphLayerConfig
+  | GeoLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom

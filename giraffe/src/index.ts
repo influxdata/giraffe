@@ -51,3 +51,5 @@ export {
   Table,
   Tag,
 } from './types'
+
+export * from './types/geo'
