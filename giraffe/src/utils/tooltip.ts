@@ -1,11 +1,12 @@
 import {
-  LinePosition,
+  DomainLabel,
   LineData,
-  TooltipData,
-  TooltipColumn,
+  LinePosition,
+  NumericColumnData,
   Scale,
   Table,
-  DomainLabel,
+  TooltipColumn,
+  TooltipData,
 } from '../types'
 import {
   FILL,
@@ -15,7 +16,6 @@ import {
   VALUE,
 } from '../constants/columnKeys'
 
-import {getDomainDataFromLines} from './lineData'
 import {BandHoverIndices} from './getBandHoverIndices'
 
 const isVoid = (x: any) => x === null || x === undefined
@@ -102,7 +102,8 @@ export const getPointsTooltipData = (
   fillColKeys: string[],
   fillScale: Scale<number, string>,
   position?: LinePosition,
-  lineData?: LineData
+  lineData?: LineData,
+  stackedDomainValueColumn?: NumericColumnData
 ): TooltipData => {
   const sortOrder = lineData
     ? getDataSortOrder(lineData, hoveredRowIndices, position)
@@ -140,6 +141,9 @@ export const getPointsTooltipData = (
 
   const tooltipAdditionalColumns = []
   if (position === 'stacked') {
+    const stackedDomainValues = stackedDomainValueColumn
+      ? stackedDomainValueColumn
+      : []
     tooltipAdditionalColumns.push({
       key: yColKey,
       name: STACKED_LINE_CUMULATIVE,
@@ -148,13 +152,7 @@ export const getPointsTooltipData = (
       values: orderDataByValue(
         hoveredRowIndices,
         sortOrder,
-        hoveredRowIndices.map(i => {
-          const cumulativeColData = getDomainDataFromLines(
-            lineData,
-            DomainLabel.Y
-          )
-          return yFormatter(cumulativeColData[i])
-        })
+        hoveredRowIndices.map(i => yFormatter(stackedDomainValues[i]))
       ),
     })
 

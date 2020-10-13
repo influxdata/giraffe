@@ -1,13 +1,15 @@
 import {
-  Table,
-  LineLayerSpec,
+  CumulativeValuesByTime,
+  DomainLabel,
   LineData,
+  LineLayerSpec,
   LinePosition,
   NumericColumnData,
-  CumulativeValuesByTime,
+  Table,
 } from '../types'
 import {FILL, VALUE} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
+import {getDomainDataFromLines} from '../utils/lineData'
 
 export const mapCumulativeValuesToTimeRange = (
   timesCol: NumericColumnData,
@@ -129,6 +131,14 @@ export const lineTransform = (
     }
   }
 
+  let stackedDomainValueColumn: NumericColumnData
+  if (position === 'stacked') {
+    stackedDomainValueColumn = getDomainDataFromLines(
+      lineData,
+      yColumnKey === VALUE ? DomainLabel.Y : DomainLabel.X
+    )
+  }
+
   return {
     type: 'line',
     inputTable,
@@ -142,5 +152,6 @@ export const lineTransform = (
     yColumnType: table.getColumnType(yColumnKey),
     scales: {fill: fillScale},
     columnGroupMaps: {fill: fillColumnMap},
+    stackedDomainValueColumn,
   }
 }

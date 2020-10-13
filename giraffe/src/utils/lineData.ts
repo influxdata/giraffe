@@ -1,4 +1,4 @@
-import {Table, Scale, LineData, DomainLabel, NumericColumnData} from '../types'
+import {DomainLabel, LineData, Scale, Table} from '../types'
 import {simplify} from '../utils/simplify'
 import {FILL} from '../constants/columnKeys'
 
@@ -55,11 +55,16 @@ export const simplifyLineData = (
 export const getDomainDataFromLines = (
   lineData: LineData,
   domainLabel: DomainLabel
-): NumericColumnData => {
-  let result = []
+): number[] => {
+  const result = []
   const numberOfLines = Object.keys(lineData).length
-  for (let index = 0; index < numberOfLines; index += 1) {
-    result = result.concat(lineData[index][domainLabel])
+  for (let lineIndex = 0; lineIndex < numberOfLines; lineIndex += 1) {
+    const line = lineData[lineIndex] ? lineData[lineIndex][domainLabel] : []
+    if (Array.isArray(line)) {
+      for (let domainIndex = 0; domainIndex < line.length; domainIndex += 1) {
+        result.push(line[domainIndex])
+      }
+    }
   }
   return result
 }

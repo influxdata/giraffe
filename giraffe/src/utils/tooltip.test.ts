@@ -178,7 +178,8 @@ describe('getPointsTooltipData', () => {
         [COLUMN_KEY],
         fillScale,
         'stacked',
-        lineSpec.lineData
+        lineSpec.lineData,
+        lineSpec.stackedDomainValueColumn
       )
       const singleValueColumn = result.find(column => column.name === yColKey)
       expect(singleValueColumn).toBeTruthy()
@@ -212,7 +213,8 @@ describe('getPointsTooltipData', () => {
         [COLUMN_KEY],
         fillScale,
         'stacked',
-        lineSpec.lineData
+        lineSpec.lineData,
+        lineSpec.stackedDomainValueColumn
       )
       const singleValueColumn = result.find(column => column.name === yColKey)
 
@@ -247,7 +249,8 @@ describe('getPointsTooltipData', () => {
         [COLUMN_KEY],
         fillScale,
         'stacked',
-        lineSpec.lineData
+        lineSpec.lineData,
+        lineSpec.stackedDomainValueColumn
       )
       expect(result.find(column => column.name === yColKey)).toBeTruthy()
     })
