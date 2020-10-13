@@ -18,6 +18,7 @@ import {
   yKnob,
   yScaleKnob,
   tooltipOrientationThresholdKnob,
+  zoomBrushKnobs,
 } from './helpers'
 
 import {tooltipFalsyValues} from './data/fluxCSV'
@@ -69,6 +70,7 @@ storiesOf('Line Graph', module)
       'auto'
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -96,6 +98,8 @@ storiesOf('Line Graph', module)
           shadeBelowOpacity,
         },
       ],
+      zoomBrushOpacity,
+      zoomBrushColor,
     }
 
     return (
@@ -145,6 +149,7 @@ storiesOf('Line Graph', module)
       'auto'
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       fluxResponse: csv,
@@ -172,6 +177,8 @@ storiesOf('Line Graph', module)
           shadeBelowOpacity,
         },
       ],
+      zoomBrushOpacity,
+      zoomBrushColor,
     }
 
     return (

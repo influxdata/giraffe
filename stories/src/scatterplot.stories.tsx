@@ -20,6 +20,7 @@ import {
   tableKnob,
   fillKnob,
   symbolKnob,
+  zoomBrushKnobs,
 } from './helpers'
 
 storiesOf('Scatter Plot', module)
@@ -37,6 +38,7 @@ storiesOf('Scatter Plot', module)
     const symbol = symbolKnob(table, ['host'])
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
     const showAxes = showAxesKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -57,6 +59,8 @@ storiesOf('Scatter Plot', module)
           colors,
         },
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -98,6 +102,7 @@ storiesOf('Scatter Plot', module)
     )
     const showAxes = showAxesKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -120,6 +125,8 @@ storiesOf('Scatter Plot', module)
           colors,
         },
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (

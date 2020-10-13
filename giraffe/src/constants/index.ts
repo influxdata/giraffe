@@ -52,6 +52,8 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendBackgroundColor: '#1c1c21',
   legendBorder: '1px solid #202028',
   legendCrosshairColor: '#31313d',
+  zoomBrushColor: 'aliceblue',
+  zoomBrushOpacity: 0.1,
 }
 
 export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {

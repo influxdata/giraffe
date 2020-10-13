@@ -154,3 +154,25 @@ export const timeZoneKnob = (initial?: string) =>
 
 export const tooltipOrientationThresholdKnob = () =>
   number('tooltipOrientationThreshold', 5)
+
+export const zoomBrushKnobs = () => {
+  const zoomBrushOpacity = number('Zoom brush Opacity (drag)', 0.1, {
+    range: true,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  })
+  const zoomBrushColor = select(
+    'Zoom brush color (drag)',
+    {
+      aliceblue: 'aliceblue',
+      white: 'white',
+      yellow: 'yellow',
+      green: 'green',
+      red: 'red',
+      '#003b6f': '#003b6f',
+    },
+    'aliceblue'
+  )
+  return {zoomBrushColor, zoomBrushOpacity}
+}

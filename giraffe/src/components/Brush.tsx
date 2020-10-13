@@ -11,6 +11,8 @@ interface Props {
   event: DragEvent | null
   width: number
   height: number
+  opacity: number
+  color: string
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
 }
@@ -19,6 +21,8 @@ export const Brush: FunctionComponent<Props> = ({
   event,
   width,
   height,
+  opacity,
+  color,
   onXBrushEnd,
   onYBrushEnd,
 }) => {
@@ -69,8 +73,8 @@ export const Brush: FunctionComponent<Props> = ({
     width: `${brushWidth}px`,
     top: `${y}px`,
     height: `${brushHeight}px`,
-    opacity: 0.1,
-    backgroundColor: 'aliceblue',
+    opacity,
+    backgroundColor: color,
   }
 
   return <div className="giraffe-brush-selection" style={selectionStyle} />
