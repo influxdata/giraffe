@@ -4,7 +4,22 @@ import {lineTransform} from '../transforms/line'
 
 import {largeTable, lineData} from './fixtures/line'
 
+// Baseline: one million data points within 3 seconds
+//   this seems arbitrary and will need adjusting
+const MAX_DURATION = 3000
+
 describe('line graph performance', () => {
+  let start, end
+
+  beforeEach(() => {
+    start = Date.now()
+  })
+
+  afterEach(() => {
+    end = Date.now()
+    expect(end - start).toBeLessThanOrEqual(MAX_DURATION)
+  })
+
   test('getDomainDataFromLines for 1,000,000 data points', () => {
     expect(() => {
       const result = getDomainDataFromLines(lineData, DomainLabel.Y)
