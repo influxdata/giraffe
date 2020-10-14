@@ -180,7 +180,39 @@ export const DO_ANDROIDS_DREAM = ['#8F8AF4', '#A51414', '#F4CF31']
 export const DELOREAN = ['#FD7A5D', '#5F1CF2', '#4CE09A']
 export const CTHULHU = ['#FDC44F', '#007C76', '#8983FF']
 export const ECTOPLASM = ['#DA6FF1', '#00717A', '#ACFF76']
+export const PRIMARY = ['#00A3FF', '#67D74E', '#FFD255', '#DC4E58']
+export const PRIMARY_REVERSE = ['#DC4E58', '#FFD255', '#67D74E', '#00A3FF']
 export const T_MAX_400_FILM = ['#F6F6F8', '#A4A8B6', '#545667']
+export const RAINBOW_EIGHT = [
+  '#00f8ff',
+  '#33a8ff',
+  '#784dff',
+  '#da07ff',
+  '#FF0000',
+  '#FFC200',
+  '#85F700',
+  '#00b15d',
+]
+export const RAINBOW_SIXTEEN = [
+  '#4dfaff',
+  '#00adb2',
+  '#71c2ff',
+  '#2475b2',
+  '#a183ff',
+  '#5436b2',
+  '#e552ff',
+  '#9805b2',
+  '#ff4d4d',
+  '#b20000',
+  '#ffd44d',
+  '#b28700',
+  '#aaf94d',
+  '#5dac00',
+  '#4dc98e',
+  '#007c41',
+]
+
+// Solid Colors
 export const SOLID_RED = ['#DC4E58', '#DC4E58', '#DC4E58']
 export const SOLID_YELLOW = ['#FFD255', '#FFD255', '#FFD255']
 export const SOLID_GREEN = ['#67D74E', '#67D74E', '#67D74E']
