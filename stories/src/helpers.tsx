@@ -55,7 +55,11 @@ export const colorSchemeKnob = (initial?: string[]) =>
       Delorean: giraffe.DELOREAN,
       Cthulhu: giraffe.CTHULHU,
       Ectoplasm: giraffe.ECTOPLASM,
+      Primary: giraffe.PRIMARY,
+      'Primary (Reverse)': giraffe.PRIMARY_REVERSE,
       'T Max 400 Film': giraffe.T_MAX_400_FILM,
+      'Rainbow (8)': giraffe.RAINBOW_EIGHT,
+      'Rainbow (16)': giraffe.RAINBOW_SIXTEEN,
       Viridis: giraffe.VIRIDIS,
       Magma: giraffe.MAGMA,
       Inferno: giraffe.INFERNO,
@@ -63,6 +67,11 @@ export const colorSchemeKnob = (initial?: string[]) =>
       ylOrRd: giraffe.YL_OR_RD,
       ylGnBu: giraffe.YL_GN_BU,
       buGn: giraffe.BU_GN,
+      'Solid Blue': giraffe.SOLID_BLUE,
+      'Solid Green': giraffe.SOLID_GREEN,
+      'Solid Red': giraffe.SOLID_RED,
+      'Solid Yellow': giraffe.SOLID_YELLOW,
+      'Solid Purple': giraffe.SOLID_PURPLE,
     },
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
