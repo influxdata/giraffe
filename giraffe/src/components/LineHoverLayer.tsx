@@ -48,8 +48,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
 
   const points = getLineHoverPoints(
     position,
-    spec.lineData,
-    spec.table,
+    spec,
     rowIndices,
     xColKey,
     yColKey,
@@ -111,7 +110,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     fillColKeys,
     fillScale,
     position,
-    spec.lineData
+    spec.lineData,
+    spec.stackedDomainValueColumn
   )
 
   return (

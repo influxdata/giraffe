@@ -516,6 +516,7 @@ export interface LineLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  stackedDomainValueColumn?: NumericColumnData
 }
 
 export interface BandLayerSpec {

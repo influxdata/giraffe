@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {useMemo, useRef, FunctionComponent} from 'react'
 
-import {LayerProps, LineLayerSpec, LineLayerConfig, DomainLabel} from '../types'
+import {LayerProps, LineLayerSpec, LineLayerConfig} from '../types'
 import {LineHoverLayer} from './LineHoverLayer'
-import {simplifyLineData, getDomainDataFromLines} from '../utils/lineData'
+import {simplifyLineData} from '../utils/lineData'
 import {useCanvas} from '../utils/useCanvas'
 import {drawLines} from '../utils/drawLines'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
@@ -57,7 +57,7 @@ export const LineLayer: FunctionComponent<Props> = props => {
 
   const hoverYColumnData =
     position === 'stacked'
-      ? getDomainDataFromLines(spec.lineData, DomainLabel.Y)
+      ? spec.stackedDomainValueColumn
       : spec.table.getColumn(config.y, 'number')
   const hoverRowIndices = useHoverPointIndices(
     hoverDimension,
