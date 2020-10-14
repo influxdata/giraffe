@@ -2,8 +2,8 @@ import {newTable} from '../newTable'
 
 const now = Date.now()
 const numberOfLines = 1_000
-const dataPointsPerLine = 1_000
-const numberOfRecords = numberOfLines * dataPointsPerLine
+const dataPointsPerLine = 5_000
+const dataSize = numberOfLines * dataPointsPerLine
 const maxValue = 100
 
 function getRandomNumber(max: number) {
@@ -39,9 +39,9 @@ for (let lineNumber = 0; lineNumber < numberOfLines; lineNumber += 1) {
   }
 }
 
-const largeTable = newTable(numberOfRecords)
+const largeTable = newTable(dataSize)
   .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
   .addColumn('_value', 'system', 'number', VALUE_COL)
   .addColumn('cpu', 'string', 'string', CPU_COL)
 
-export {largeTable, lineData}
+export {dataSize, largeTable, lineData}
