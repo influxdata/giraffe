@@ -174,8 +174,8 @@ export const BU_GN = [
 ]
 
 // Chronograf Colors
-export const NINETEEN_EIGHTY_FOUR = ['#31C0F6', '#A500A5', '#FF7E27']
-export const ATLANTIS = ['#74D495', '#3F3FBA', '#FF4D9E']
+export const NINETEEN_EIGHTY_FOUR = ['#31C0F6', '#BC00B8', '#FF7E27']
+export const ATLANTIS = ['#74D495', '#4949EA', '#FF4D9E']
 export const DO_ANDROIDS_DREAM = ['#8F8AF4', '#A51414', '#F4CF31']
 export const DELOREAN = ['#FD7A5D', '#5F1CF2', '#4CE09A']
 export const CTHULHU = ['#FDC44F', '#007C76', '#8983FF']
