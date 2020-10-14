@@ -47,10 +47,10 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   tickFont: '10px sans-serif',
   tickFontColor: '#8e91a1',
   legendFont: '10px monospace',
-  legendFontColor: '#8e91a1',
-  legendFontBrightColor: '#c6cad3',
-  legendBackgroundColor: '#1c1c21',
-  legendBorder: '1px solid #202028',
+  legendFontColor: '#bec2cc',
+  legendFontBrightColor: '#f6f6f8',
+  legendBackgroundColor: '#0f0e15',
+  legendBorder: '2px solid #202028',
   legendCrosshairColor: '#31313d',
 }
 
