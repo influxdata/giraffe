@@ -29,6 +29,7 @@ import {
   interpolationKnob,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
+  zoomBrushKnobs,
 } from './helpers'
 
 storiesOf('XY Plot', module)
@@ -84,6 +85,7 @@ storiesOf('XY Plot', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -116,6 +118,8 @@ storiesOf('XY Plot', module)
           shadeBelowOpacity,
         },
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -169,6 +173,7 @@ storiesOf('XY Plot', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -197,6 +202,8 @@ storiesOf('XY Plot', module)
           shadeBelowOpacity,
         },
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -278,6 +285,7 @@ storiesOf('XY Plot', module)
       'auto'
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const layers = [
       {
@@ -329,6 +337,8 @@ storiesOf('XY Plot', module)
       tickFont,
       showAxes,
       layers,
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -348,6 +358,7 @@ storiesOf('XY Plot', module)
     const yScale = yScaleKnob()
     const showAxes = showAxesKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -359,6 +370,8 @@ storiesOf('XY Plot', module)
       showAxes,
       valueFormatters: {_value: val => `${Math.round(val)}%`},
       layers: [{type: 'heatmap', x, y, colors}],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -378,6 +391,7 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
     const binCount = number('Bin Count', 10)
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table,
@@ -389,6 +403,8 @@ storiesOf('XY Plot', module)
       yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
       layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (
@@ -406,6 +422,7 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
     const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       table: CPUString,
@@ -421,6 +438,8 @@ storiesOf('XY Plot', module)
           colors,
         } as LayerConfig,
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (

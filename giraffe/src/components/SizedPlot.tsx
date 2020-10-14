@@ -225,6 +225,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
           event={dragEvent}
           width={env.innerWidth}
           height={env.innerHeight}
+          color={env.config.zoomBrushColor}
+          opacity={env.config.zoomBrushOpacity}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
         />

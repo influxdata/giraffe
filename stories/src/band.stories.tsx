@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
-import {findStringColumns} from './helpers'
+import {findStringColumns, zoomBrushKnobs} from './helpers'
 import {
   colors6,
   cpu1,
@@ -94,6 +94,7 @@ storiesOf('Band Chart', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const {zoomBrushColor, zoomBrushOpacity} = zoomBrushKnobs()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -130,6 +131,8 @@ storiesOf('Band Chart', module)
           lowerColumnName,
         },
       ],
+      zoomBrushColor,
+      zoomBrushOpacity,
     }
 
     return (

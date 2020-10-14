@@ -258,6 +258,10 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **axisOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
+- **zoomBrushColor** _string. Optional. default: 'aliceblue'_ Color of zooming brush that shows on drag. Value can be any valid CSS color
+
+- **zoomBrushOpacity** _number. Optional. default: 0.1_ Opacity of zooming brush that shows on drag. Value must be between 0 and 1.
+
 - **xTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the x-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the x-axis while keeping reasonable spacing between them.
 
 - **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the y-axis while keeping reasonable spacing between them.

@@ -66,6 +66,10 @@ export interface Config {
   legendOpacity?: number
   legendOrientationThreshold?: number
 
+  // The zoombrush is the selected area that appears when plot is dragged
+  zoomBrushColor?: string
+  zoomBrushOpacity?: number
+
   // The type of the y-axis column
   yColumnType?: ColumnType
 }
