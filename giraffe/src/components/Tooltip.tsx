@@ -116,6 +116,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
         color: colors && colors[i] ? colors[i] : fontBrightColor,
         display: 'table-cell',
         padding: '4px',
+        fontWeight: 600,
       }
     }
 
@@ -124,6 +125,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
+      fontWeight: 600,
       color: colors && colors[i] ? colors[i] : fontBrightColor,
     }
   }
