@@ -2,29 +2,16 @@ import * as React from 'react'
 import {FunctionComponent, useMemo} from 'react'
 import {createPortal} from 'react-dom'
 
-import {TooltipData, Config, ColumnType} from '../types'
+import {TooltipData, Config} from '../types'
 import {useTooltipElement} from '../utils/useTooltipElement'
 import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
+
+import {generateTooltipStyles, TooltipDotsStyles} from './TooltipStyles'
 
 interface Props {
   data: TooltipData
   config: Config
 }
-
-const tooltipColumnOrder = (name: string): number | undefined => {
-  switch (name) {
-    case '_color':
-      return 1
-    case '_time':
-      return 2
-    case '_value':
-      return 3
-    default:
-      return 99
-  }
-}
-
-const tooltipColumnGap = '12px'
 
 export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const tooltipElement = useTooltipElement()
@@ -57,90 +44,13 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
 
   const switchToVertical = columns.length > orientationThreshold
 
-  const tableStyle = (): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        display: 'table',
-      }
-    }
-
-    return {
-      flexDirection: 'row',
-      display: 'flex',
-    }
-  }
-
-  const columnStyle = (
-    name: string,
-    i: number,
-    type: ColumnType
-  ): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        width: '100%',
-        display: 'table-row',
-      }
-    }
-
-    return {
-      display: 'flex',
-      order: tooltipColumnOrder(name),
-      flexDirection: 'column',
-      marginRight: i === data.length - 1 ? 0 : tooltipColumnGap,
-      textAlign: type === 'number' ? 'right' : 'left',
-    }
-  }
-
-  const columnHeaderStyle = (): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        color: fontColor,
-        display: 'table-cell',
-        margin: '4px',
-      }
-    }
-
-    return {
-      marginBottom: '5px',
-      color: fontColor,
-    }
-  }
-
-  const columnValueStyle = (
-    i: number,
-    colors: string[]
-  ): React.CSSProperties => {
-    let color = fontBrightColor
-
-    if (colorizeRows && colors) {
-      color = colors[i]
-    }
-
-    if (switchToVertical) {
-      return {
-        maxWidth: '200px',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        color,
-        display: 'table-cell',
-        padding: '4px',
-        fontWeight: 600,
-        lineHeight: '1em',
-      }
-    }
-
-    return {
-      maxWidth: '200px',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      fontWeight: 600,
-      lineHeight: '1.125em',
-      height: '1.125em',
-      color,
-    }
-  }
+  const styles = generateTooltipStyles(
+    columns,
+    switchToVertical,
+    colorizeRows,
+    fontColor,
+    fontBrightColor
+  )
 
   return createPortal(
     <div
@@ -159,24 +69,18 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     >
       <div
         className="giraffe-tooltip-table"
-        style={tableStyle()}
+        style={styles.table}
         data-testid="giraffe-tooltip-table"
       >
-        {!colorizeRows && (
-          <TooltipDotColumn
-            switchToVertical={switchToVertical}
-            colors={columns[0].colors}
-          />
-        )}
-        {columns.map(({name, type, values, colors}, i) => (
+        {!colorizeRows && <TooltipDotColumn styles={styles.dots} />}
+        {columns.map(({name, values}, i) => (
           <TooltipColumn
             key={name}
             name={name}
             values={values}
-            colors={colors}
-            columnStyle={columnStyle(name, i, type)}
-            columnHeaderStyle={columnHeaderStyle()}
-            columnValueStyle={columnValueStyle}
+            columnStyle={styles.columns[i]}
+            columnHeaderStyle={styles.headers}
+            columnValueStyles={styles.values[i]}
           />
         ))}
       </div>
@@ -190,19 +94,17 @@ Tooltip.displayName = 'Tooltip'
 interface TooltipColumnProps {
   name: string
   values: string[]
-  colors: string[]
   columnStyle: React.CSSProperties
   columnHeaderStyle: React.CSSProperties
-  columnValueStyle: (i: number, colors: string[]) => React.CSSProperties
+  columnValueStyles: React.CSSProperties[]
 }
 
 const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
   name,
   values,
-  colors,
   columnStyle,
   columnHeaderStyle,
-  columnValueStyle,
+  columnValueStyles,
 }) => {
   return (
     <div className="giraffe-tooltip-column" style={columnStyle}>
@@ -213,7 +115,7 @@ const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
         <div
           className="giraffe-tooltip-column-value"
           key={i}
-          style={columnValueStyle(i, colors)}
+          style={columnValueStyles[i]}
         >
           {String(value)}
         </div>
@@ -225,90 +127,26 @@ const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
 TooltipColumn.displayName = 'TooltipColumn'
 
 interface TooltipDotColumnProps {
-  switchToVertical: boolean
-  colors: string[]
+  styles: TooltipDotsStyles
 }
 
 const TooltipDotColumn: FunctionComponent<TooltipDotColumnProps> = ({
-  switchToVertical,
-  colors,
+  styles,
 }) => {
-  const columnStyle = (): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        width: '100%',
-        display: 'table-row',
-      }
-    }
-
-    return {
-      display: 'flex',
-      order: tooltipColumnOrder('_color'),
-      flexDirection: 'column',
-      marginRight: '6px',
-      textAlign: 'left',
-    }
-  }
-
-  const columnHeaderStyle = (): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        display: 'table-cell',
-        margin: '4px',
-      }
-    }
-
-    return {
-      marginBottom: '5px',
-    }
-  }
-
-  const columnValueStyle = (): React.CSSProperties => {
-    if (switchToVertical) {
-      return {
-        width: 'auto',
-        display: 'table-cell',
-        verticalAlign: 'middle',
-        padding: '4px',
-      }
-    }
-
-    return {
-      width: 'auto',
-      lineHeight: '1.125em',
-      height: '1.125em',
-      display: 'flex',
-      alignItems: 'center',
-      alignContent: 'center',
-    }
-  }
+  const {column, header, value, dots} = styles
 
   return (
-    <div className="giraffe-tooltip-column" style={columnStyle()}>
-      <div
-        className="giraffe-tooltip-column-header"
-        style={columnHeaderStyle()}
-      >
+    <div className="giraffe-tooltip-column" style={column}>
+      <div className="giraffe-tooltip-column-header" style={header}>
         &nbsp;
       </div>
-      {colors.map((color, i) => (
-        <div
-          className="giraffe-tooltip-column-value"
-          key={i}
-          style={columnValueStyle()}
-        >
-          <div
-            className="giraffe-tooltip-column-dot"
-            style={{
-              width: '0.75em',
-              height: '0.75em',
-              borderRadius: '50%',
-              backgroundColor: color,
-              display: 'inline-block',
-            }}
-          />
+      {dots.map((dot, i) => (
+        <div className="giraffe-tooltip-column-value" key={i} style={value}>
+          <div className="giraffe-tooltip-column-dot" style={dot} />
         </div>
       ))}
     </div>
   )
 }
+
+TooltipDotColumn.displayName = 'TooltipDotColumn'
