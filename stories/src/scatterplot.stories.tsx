@@ -17,6 +17,7 @@ import {
   findStringColumns,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
+  tooltipColorizeRowsKnob,
   tableKnob,
   fillKnob,
   symbolKnob,
@@ -36,6 +37,7 @@ storiesOf('Scatter Plot', module)
     const fill = fillKnob(table, ['cpu'])
     const symbol = symbolKnob(table, ['host'])
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
     const showAxes = showAxesKnob()
 
     const config: Config = {
@@ -43,6 +45,7 @@ storiesOf('Scatter Plot', module)
       valueFormatters: {_value: val => `${Math.round(val)}%`},
       legendFont,
       legendOrientationThreshold,
+      legendColorizeRows,
       tickFont,
       showAxes,
       xScale,
@@ -98,6 +101,7 @@ storiesOf('Scatter Plot', module)
     )
     const showAxes = showAxesKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table,
@@ -107,6 +111,7 @@ storiesOf('Scatter Plot', module)
       },
       legendFont,
       legendOrientationThreshold,
+      legendColorizeRows,
       tickFont,
       showAxes,
       xScale,

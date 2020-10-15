@@ -65,6 +65,7 @@ export interface Config {
   legendMessage?: string
   legendOpacity?: number
   legendOrientationThreshold?: number
+  legendColorizeRows?: boolean
 
   // The type of the y-axis column
   yColumnType?: ColumnType

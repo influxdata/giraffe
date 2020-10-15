@@ -28,6 +28,7 @@ import {
   interpolationKnob,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
+  tooltipColorizeRowsKnob,
 } from './helpers'
 
 storiesOf('Band Chart', module)
@@ -94,6 +95,7 @@ storiesOf('Band Chart', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       fluxResponse: staticData,
@@ -113,6 +115,7 @@ storiesOf('Band Chart', module)
       showAxes,
       legendOpacity,
       legendOrientationThreshold,
+      legendColorizeRows,
       layers: [
         {
           type: 'band',
@@ -185,6 +188,7 @@ storiesOf('Band Chart', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       fluxResponse: customCSV,
@@ -204,6 +208,7 @@ storiesOf('Band Chart', module)
       showAxes,
       legendOpacity,
       legendOrientationThreshold,
+      legendColorizeRows,
       layers: [
         {
           type: 'band',

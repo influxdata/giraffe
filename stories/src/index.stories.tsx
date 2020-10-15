@@ -29,6 +29,7 @@ import {
   interpolationKnob,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
+  tooltipColorizeRowsKnob,
 } from './helpers'
 
 storiesOf('XY Plot', module)
@@ -84,6 +85,7 @@ storiesOf('XY Plot', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table,
@@ -101,6 +103,7 @@ storiesOf('XY Plot', module)
       showAxes,
       legendOpacity,
       legendOrientationThreshold,
+      legendColorizeRows,
       layers: [
         {
           type: 'line',
@@ -169,6 +172,7 @@ storiesOf('XY Plot', module)
       step: 0.05,
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table,
@@ -179,6 +183,7 @@ storiesOf('XY Plot', module)
       legendFont,
       legendOpacity,
       legendOrientationThreshold,
+      legendColorizeRows,
       tickFont,
       showAxes,
       xScale,
@@ -278,6 +283,7 @@ storiesOf('XY Plot', module)
       'auto'
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const layers = [
       {
@@ -326,6 +332,7 @@ storiesOf('XY Plot', module)
       yScale,
       legendFont,
       legendOrientationThreshold,
+      legendColorizeRows,
       tickFont,
       showAxes,
       layers,
@@ -348,11 +355,13 @@ storiesOf('XY Plot', module)
     const yScale = yScaleKnob()
     const showAxes = showAxesKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table,
       legendFont,
       legendOrientationThreshold,
+      legendColorizeRows,
       xScale,
       yScale,
       tickFont,
@@ -378,11 +387,13 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
     const binCount = number('Bin Count', 10)
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table,
       legendFont,
       legendOrientationThreshold,
+      legendColorizeRows,
       tickFont,
       showAxes,
       xScale,
@@ -406,10 +417,12 @@ storiesOf('XY Plot', module)
     const showAxes = showAxesKnob()
     const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       table: CPUString,
       legendOrientationThreshold,
+      legendColorizeRows,
       showAxes,
       layers: [
         {
