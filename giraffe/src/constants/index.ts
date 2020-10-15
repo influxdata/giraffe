@@ -52,6 +52,7 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendBackgroundColor: '#0f0e15',
   legendBorder: '2px solid #202028',
   legendCrosshairColor: '#31313d',
+  legendColorizeRows: true,
 }
 
 export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {

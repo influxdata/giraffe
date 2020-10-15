@@ -18,6 +18,7 @@ import {
   yKnob,
   yScaleKnob,
   tooltipOrientationThresholdKnob,
+  tooltipColorizeRowsKnob,
 } from './helpers'
 
 import {tooltipFalsyValues} from './data/fluxCSV'
@@ -70,6 +71,8 @@ storiesOf('Line Graph', module)
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+
     const config: Config = {
       fluxResponse: staticData,
       valueFormatters: {
@@ -82,6 +85,7 @@ storiesOf('Line Graph', module)
       xScale,
       yScale,
       legendOrientationThreshold,
+      legendColorizeRows,
       layers: [
         {
           type: 'line',
@@ -146,6 +150,8 @@ storiesOf('Line Graph', module)
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+
     const config: Config = {
       fluxResponse: csv,
       valueFormatters: {
@@ -158,6 +164,7 @@ storiesOf('Line Graph', module)
       xScale,
       yScale,
       legendOrientationThreshold,
+      legendColorizeRows,
       layers: [
         {
           type: 'line',
