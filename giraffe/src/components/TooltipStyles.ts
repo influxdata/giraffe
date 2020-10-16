@@ -216,7 +216,11 @@ const tooltipDotsColumnStyles = (
     }
   }
 
-  const dots = tooltipData[0].colors.map(color => ({
+  const colors =
+    tooltipData.length && Array.isArray(tooltipData[0].colors)
+      ? tooltipData[0].colors
+      : []
+  const dots = colors.map(color => ({
     width: '0.75em',
     height: '0.75em',
     borderRadius: '50%',
