@@ -21,6 +21,16 @@ export const DEFAULT_RANGE_PADDING = 0 // pixels
 export const SCATTER_POINT_SIZE = 6
 export const SCATTER_HOVER_POINT_SIZE = 12
 
+export const BRUSH_THEME_DARK = {
+  zoomBrushColor: 'aliceblue',
+  zoomBrushOpacity: 0.1,
+}
+
+export const BRUSH_THEME_LIGHT: Pick<Config, 'zoomBrushColor' & 'zoom'> = {
+  zoomBrushColor: '#A4A8B6',
+  zoomBrushOpacity: 0.34,
+}
+
 export const CURVES = {
   linear: curveLinear,
   monotoneX: curveMonotoneX,
@@ -52,8 +62,7 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendBackgroundColor: '#1c1c21',
   legendBorder: '1px solid #202028',
   legendCrosshairColor: '#31313d',
-  zoomBrushColor: 'aliceblue',
-  zoomBrushOpacity: 0.1,
+  ...BRUSH_THEME_DARK,
 }
 
 export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {

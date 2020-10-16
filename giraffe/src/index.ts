@@ -20,6 +20,7 @@ export {lineTransform} from './transforms/line'
 export * from './constants/colorSchemes'
 export * from './constants/singleStatStyles'
 export * from './constants/gaugeStyles'
+export {BRUSH_THEME_DARK, BRUSH_THEME_LIGHT} from './constants/index'
 export {DEFAULT_TABLE_COLORS} from './constants/tableGraph'
 
 // Types
