@@ -307,11 +307,15 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   - "linear" scaling means the same distance between ticks represents the same increase in value.
   - "log" (logarithmic) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
+- :warning: When using `xDomain`, `onSetXDomain` or `onResetXDomain` all three must be set or neither of them will work
+
 - **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the x-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain to set the minimum and maximum value of the x-axis. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
 - **onSetXDomain**: _function(array[min, max]). Optional._ See above regarding **xDomain**.
 
 - **onResetXDomain**: _function(). Optional._ See above regarding **xDomain**.
+
+- :warning: When using `yDomain`, `onSetYDomain` or `onResetYDomain` all three must be set or neither of them will work
 
 - **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
 

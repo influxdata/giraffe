@@ -37,9 +37,11 @@ export interface Config {
   fluxResponse?: string
   layers: LayerConfig[]
 
-  // The x domain of the plot can be explicitly set. If this option is passed,
-  // then the component is operating in a "controlled" mode, where it always
-  // uses the passed x domain. Any brush interaction with the plot that should
+  // The x domain of the plot can be explicitly set.
+  // If all 3 options (xDomain, onSetXDomain, onResetXDomain) is passed,
+  // then the component is operating in a "controlled" mode,
+  // where it always uses the passed x domain.
+  // Any brush interaction with the plot that should
   // change the x domain will call the `onSetXDomain` option when the component
   // is in controlled mode. Double clicking the plot will call
   // `onResetXDomain`. If the `xDomain` option is not passed, then the
