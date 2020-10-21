@@ -8,6 +8,7 @@ import {newTable} from './newTable'
 
 export interface FromFluxResult {
   schema?: Schema
+  error?: Error
   // The single parsed `Table`
   table: Table
 
@@ -118,135 +119,214 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = splitChunks(fluxCSV)
-
   let tableLength = 0
 
-  for (const chunk of chunks) {
-    const tableText = extractTableText(chunk)
-    const tableData = csvParse(tableText)
-    const annotationText = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationText, tableData.columns)
+  try {
+    const chunks = splitChunks(fluxCSV)
 
-    for (const columnName of tableData.columns.slice(1)) {
-      const columnType = toColumnType(
-        annotationData.datatypeByColumnName[columnName]
+    // declaring all nested variables here to reduce memory drain
+    let tableText = ''
+    let tableData: any = []
+    let annotationText = ''
+    let columnType: any = ''
+    let columnKey = ''
+    let columnDefault: any = ''
+
+    for (const chunk of chunks) {
+      tableText = chunk
+        .split('\n')
+        .filter(line => !line.startsWith('#'))
+        .join('\n')
+        .trim()
+
+      assert(
+        !!tableText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
       )
 
-      const columnKey = `${columnName} (${columnType})`
+      tableData = csvParse(tableText)
 
-      if (!columns[columnKey]) {
-        columns[columnKey] = {
-          name: columnName,
-          type: columnType,
-          fluxDataType: annotationData.datatypeByColumnName[columnName],
-          data: [],
-        } as Column
-      }
+      annotationText = chunk
+        .split('\n')
+        .filter(line => line.startsWith('#'))
+        .join('\n')
+        .trim()
 
-      const colData = columns[columnKey].data
-      const columnDefault = annotationData.defaultByColumnName[columnName]
+      assert(
+        !!annotationText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
+      const annotationData = parseAnnotations(annotationText, tableData.columns)
 
-      for (let i = 0; i < tableData.length; i++) {
-        colData[tableLength + i] = parseValue(
-          tableData[i][columnName] || columnDefault,
-          columnType
+      for (const columnName of tableData.columns.slice(1)) {
+        columnType =
+          TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
+
+        assert(
+          !!columnType,
+          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
         )
+
+        columnKey = `${columnName} (${columnType})`
+
+        if (!columns[columnKey]) {
+          columns[columnKey] = {
+            name: columnName,
+            type: columnType,
+            fluxDataType: annotationData.datatypeByColumnName[columnName],
+            data: [],
+          } as Column
+        }
+
+        columnDefault = annotationData.defaultByColumnName[columnName]
+
+        for (let i = 0; i < tableData.length; i++) {
+          columns[columnKey].data[tableLength + i] = parseValue(
+            tableData[i][columnName] || columnDefault,
+            columnType
+          )
+        }
+
+        if (annotationData.groupKey.includes(columnName)) {
+          fluxGroupKeyUnion.add(columnKey)
+        }
       }
 
-      if (annotationData.groupKey.includes(columnName)) {
-        fluxGroupKeyUnion.add(columnKey)
-      }
+      tableLength += tableData.length
     }
 
-    tableLength += tableData.length
+    resolveNames(columns, fluxGroupKeyUnion)
+
+    const table = Object.entries(columns).reduce(
+      (table, [key, {name, fluxDataType, type, data}]) => {
+        data.length = tableLength
+        return table.addColumn(key, fluxDataType, type, data, name)
+      },
+      newTable(tableLength)
+    )
+
+    const result = {
+      table,
+      fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+    }
+
+    return result
+  } catch (error) {
+    return {
+      table: newTable(0),
+      fluxGroupKeyUnion: [],
+      error,
+    }
   }
-
-  resolveNames(columns, fluxGroupKeyUnion)
-
-  const table = Object.entries(columns).reduce(
-    (table, [key, {name, fluxDataType, type, data}]) => {
-      data.length = tableLength
-      return table.addColumn(key, fluxDataType, type, data, name)
-    },
-    newTable(tableLength)
-  )
-
-  const result = {
-    table,
-    fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
-  }
-
-  return result
 }
 
 export const fromFluxWithSchema = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
-  const chunks = splitChunks(fluxCSV)
-
-  let tableLength = 0
 
   const schema: Schema = {}
+  let tableLength = 0
 
-  for (const chunk of chunks) {
-    formatSchemaByChunk(chunk, schema)
-    const tableText = extractTableText(chunk)
-    const tableData = csvParse(tableText)
-    const annotationText = extractAnnotationText(chunk)
-    const annotationData = parseAnnotations(annotationText, tableData.columns)
+  try {
+    const chunks = splitChunks(fluxCSV)
 
-    for (const columnName of tableData.columns.slice(1)) {
-      const columnType = toColumnType(
-        annotationData.datatypeByColumnName[columnName]
+    // declaring all nested variables here to reduce memory drain
+    let tableText = ''
+    let tableData: any = []
+    let annotationText = ''
+    let columnType: any = ''
+    let columnKey = ''
+    let columnDefault: any = ''
+
+    for (const chunk of chunks) {
+      formatSchemaByChunk(chunk, schema)
+      tableText = chunk
+        .split('\n')
+        .filter(line => !line.startsWith('#'))
+        .join('\n')
+        .trim()
+
+      assert(
+        !!tableText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
       )
 
-      const columnKey = `${columnName} (${columnType})`
+      tableData = csvParse(tableText)
 
-      if (!columns[columnKey]) {
-        columns[columnKey] = {
-          name: columnName,
-          type: columnType,
-          fluxDataType: annotationData.datatypeByColumnName[columnName],
-          data: [],
-        } as Column
-      }
+      annotationText = chunk
+        .split('\n')
+        .filter(line => line.startsWith('#'))
+        .join('\n')
+        .trim()
 
-      const colData = columns[columnKey].data
-      const columnDefault = annotationData.defaultByColumnName[columnName]
+      assert(
+        !!annotationText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
+      const annotationData = parseAnnotations(annotationText, tableData.columns)
 
-      for (let i = 0; i < tableData.length; i++) {
-        colData[tableLength + i] = parseValue(
-          tableData[i][columnName] || columnDefault,
-          columnType
+      for (const columnName of tableData.columns.slice(1)) {
+        columnType =
+          TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
+
+        assert(
+          !!columnType,
+          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
         )
+
+        columnKey = `${columnName} (${columnType})`
+
+        if (!columns[columnKey]) {
+          columns[columnKey] = {
+            name: columnName,
+            type: columnType,
+            fluxDataType: annotationData.datatypeByColumnName[columnName],
+            data: [],
+          } as Column
+        }
+
+        columnDefault = annotationData.defaultByColumnName[columnName]
+
+        for (let i = 0; i < tableData.length; i++) {
+          columns[columnKey].data[tableLength + i] = parseValue(
+            tableData[i][columnName] || columnDefault,
+            columnType
+          )
+        }
+
+        if (annotationData.groupKey.includes(columnName)) {
+          fluxGroupKeyUnion.add(columnKey)
+        }
       }
 
-      if (annotationData.groupKey.includes(columnName)) {
-        fluxGroupKeyUnion.add(columnKey)
-      }
+      tableLength += tableData.length
     }
 
-    tableLength += tableData.length
+    resolveNames(columns, fluxGroupKeyUnion)
+
+    const table = Object.entries(columns).reduce(
+      (table, [key, {name, fluxDataType, type, data}]) => {
+        data.length = tableLength
+        return table.addColumn(key, fluxDataType, type, data, name)
+      },
+      newTable(tableLength)
+    )
+
+    const result = {
+      table,
+      fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+      schema,
+    }
+
+    return result
+  } catch (error) {
+    return {
+      table: newTable(0),
+      fluxGroupKeyUnion: [],
+      schema,
+      error,
+    }
   }
-
-  resolveNames(columns, fluxGroupKeyUnion)
-
-  const table = Object.entries(columns).reduce(
-    (table, [key, {name, fluxDataType, type, data}]) => {
-      data.length = tableLength
-      return table.addColumn(key, fluxDataType, type, data, name)
-    },
-    newTable(tableLength)
-  )
-
-  const result = {
-    schema,
-    table,
-    fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
-  }
-
-  return result
 }
 
 /*
@@ -277,21 +357,6 @@ const splitChunks = (fluxCSV: string): string[] => {
     .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
-}
-
-const extractAnnotationText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  assert(
-    !!text,
-    'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-  )
-
-  return text
 }
 
 const formatSchemaByGroupKey = (groupKey, schema: Schema) => {
@@ -382,16 +447,6 @@ const parseAnnotations = (
   return {groupKey, datatypeByColumnName, defaultByColumnName}
 }
 
-const extractTableText = (chunk: string): string => {
-  const text = chunk
-    .split('\n')
-    .filter(line => !line.startsWith('#'))
-    .join('\n')
-    .trim()
-
-  return text
-}
-
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
   boolean: 'boolean',
   unsignedLong: 'number',
@@ -399,14 +454,6 @@ const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
   double: 'number',
   string: 'string',
   'dateTime:RFC3339': 'time',
-}
-
-const toColumnType = (fluxDataType: string): ColumnType => {
-  const columnType = TO_COLUMN_TYPE[fluxDataType]
-
-  assert(!!columnType, `encountered unknown Flux column type ${fluxDataType}`)
-
-  return columnType
 }
 
 const parseValue = (value: string | undefined, columnType: ColumnType): any => {

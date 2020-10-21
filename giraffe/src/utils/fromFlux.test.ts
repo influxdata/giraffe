@@ -400,6 +400,17 @@ describe('fromFlux', () => {
     ])
   })
 
+  test('should error out gracefully when an error is thrown in the fromFlux parser', () => {
+    const CSV =
+      '#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true'
+
+    expect(() => {
+      fromFlux(CSV)
+    }).not.toThrow()
+    const actual = fromFlux(CSV)
+    expect(actual.error).toBeTruthy()
+  })
+
   test('uses the default annotation to fill in empty values', () => {
     const CSV = `#group,false,false,true,true,true,true
 #datatype,string,long,string,string,long,long
@@ -484,6 +495,17 @@ there",5
   it('fromFlux should return an empty object when an empty string is passed in', () => {
     const {schema} = fromFluxWithSchema('')
     expect(schema).toStrictEqual({})
+  })
+
+  it('should error out gracefully when an error is thrown in the fromFluxWithSchema parser', () => {
+    const CSV =
+      '#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true'
+
+    expect(() => {
+      fromFluxWithSchema(CSV)
+    }).not.toThrow()
+    const actual = fromFlux(CSV)
+    expect(actual.error).toBeTruthy()
   })
   it('should return an empty object if the response has no _measurement header', () => {
     const resp = `#group,false,false,false,false,false,false,true,true,true
