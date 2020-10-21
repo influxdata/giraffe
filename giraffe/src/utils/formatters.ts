@@ -259,6 +259,7 @@ interface BinaryPrefixFormatterFactoryOptions {
   suffix?: string
   significantDigits?: number
   trimZeros?: boolean
+  format?: boolean
 }
 
 export const binaryPrefixFormatter = ({
@@ -266,6 +267,7 @@ export const binaryPrefixFormatter = ({
   suffix = '',
   significantDigits = 6,
   trimZeros = true,
+  format = true,
 }: BinaryPrefixFormatterFactoryOptions = {}): BinaryPrefixFormatter => {
   const formatSigFigs = d3Format(
     `.${significantDigits}${trimZeros ? '~' : ''}f`
@@ -278,6 +280,10 @@ export const binaryPrefixFormatter = ({
     const binaryPrefix = isXBig ? ' ' + BINARY_PREFIXES[i] : ''
 
     const decimalFormattedNumber = formatSigFigs(binaryFormattedNumber)
+
+    if (format != true) {
+      return `${prefix}${x}${suffix}`
+    }
 
     return `${prefix}${decimalFormattedNumber}${binaryPrefix}${suffix}`
   }
@@ -300,6 +306,7 @@ interface SIPrefixFormatterFactoryOptions {
   suffix?: string
   significantDigits?: number
   trimZeros?: boolean
+  format?: boolean
 }
 
 export const siPrefixFormatter = ({
@@ -307,13 +314,17 @@ export const siPrefixFormatter = ({
   suffix = '',
   significantDigits = 6,
   trimZeros = true,
+  format = true,
 }: SIPrefixFormatterFactoryOptions = {}): SIPrefixFormatter => {
+  let formatter
   const formatSIPrefix = d3Format(
     `.${significantDigits}${trimZeros ? '~' : ''}s`
   )
 
-  const formatter = (x: number): string =>
-    `${prefix}${formatSIPrefix(x)}${suffix}`
+  if (format != true) {
+    formatter = (x: number): string => `${prefix}${x}${suffix}`
+  }
+  formatter = (x: number): string => `${prefix}${formatSIPrefix(x)}${suffix}`
 
   formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.SIPrefix as FormatterType.SIPrefix
 
