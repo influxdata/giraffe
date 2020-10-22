@@ -258,9 +258,21 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **axisOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
-- **xTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the x-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the x-axis while keeping reasonable spacing between them.
+- **xTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the x-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When this option is included, **xTotalTicks**, **xTickStep**, **xTickStart** are ignored.
 
-- **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When excluded, Giraffe attempts to use as many ticks as possible on the y-axis while keeping reasonable spacing between them.
+- **xTotalTicks**: _number. Optional. **Ignored when xTicks is specified**._ A number representing the maximum possible number of ticks to generate on the x-axis. Uses the **xTickStep** as the tick interval if also included. Otherwise the tick interval is taken from dividing the length of the rendered domain by this number. The actual number of rendered ticks may be less than this number due to the size of the tick interval.
+
+- **xTickStep**: _number. Optional. **Ignored when xTicks is specified**._ A number representing the tick interval for the x-axis. May be negative.
+
+- **xTickStart**: _number. Optional. **Ignored when xTicks is specified**._ A number representing a value less than or equal to the first tick on the x-axis. This number will determine the placement of all subsequent ticks. It and any subsequent ticks will be rendered only if they fall within the domain. This number _is_ the value of the first tick when it is in the domain, and at least one of **xTickStep** or **xTotalTicks** is included.
+
+- **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When this option is included, **yTotalTicks**, **yTickStep**, **yTickStart** are ignored.
+
+- **yTotalTicks**: _number. Optional. **Ignored when yTicks is specified**._ A number representing the maximum possible number of ticks to generate on the y-axis. Uses the **yTickStep** as the tick interval if also included. Otherwise the tick interval is taken from dividing the length of the rendered domain by this number. The actual number of rendered ticks may be less than this number due to the size of the tick interval.
+
+- **yTickStep**: _number. Optional. **Ignored when yTicks is specified**._ A number representing the tick interval for the y-axis. May be negative.
+
+- **yTickStart**: _number. Optional. **Ignored when yTicks is specified**._ A number representing a value less than or equal to the first tick on the y-axis. This number will determine the placement of all subsequent ticks. It and any subsequent ticks will be rendered only if they fall within the domain. This number _is_ the value of the first tick when it is in the domain, and at least one of **yTickStep** or **yTotalTicks** is included.
 
 - **tickFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the tick labels and axis labels.
 
