@@ -11,6 +11,7 @@ import {TIME, VALUE} from '../constants/columnKeys'
 
 // Utils
 import {getTextMetrics} from './getTextMetrics'
+import {isFiniteNumber} from './isFiniteNumber'
 
 /*
   Minimum spacing defined as:
@@ -77,7 +78,7 @@ const getOptimalTicks = (
 }
 
 /*
-  Same as getOptimalTicks but for Date objects
+  Similar to getOptimalTicks but for Date objects
 */
 const getOptimalTimeTicks = (
   [d0, d1]: number[],
@@ -101,7 +102,8 @@ const getOptimalTimeTicks = (
   return optimalTicks
 }
 
-export const getTicks = (
+// calculateTicks adheres to spacing requirements as described in helper functions above
+export const calculateTicks = (
   domain: number[],
   rangeLength: number,
   tickSize: number,
@@ -112,20 +114,93 @@ export const getTicks = (
     : getOptimalTicks(domain, rangeLength, tickSize)
 }
 
-const getMemoizedVerticalTicks = memoizeOne(
-  (
-    domain: number[],
-    rangeLength: number,
-    tickSize: number,
-    columnKey: string
-  ) => getTicks(domain, rangeLength, tickSize, columnKey)
-)
+/*
+  generateTicks gives control to the user over placement, number, and interval of ticks
+    defers to the user's judgement on spacing (tick labels may overlap)
+*/
+export const generateTicks = (
+  domain: number[],
+  columnKey: string,
+  totalTicks: number,
+  tickStart: number,
+  tickStep: number
+): number[] => {
+  const generatedTicks = []
+  const [start, end] = domain
+  const stepStart = isFiniteNumber(tickStart) ? tickStart : start
+  const step = isFiniteNumber(tickStep)
+    ? tickStep
+    : (end - stepStart) / (totalTicks + 1)
+  const tickCountLimit = isFiniteNumber(totalTicks) ? totalTicks : Infinity
+
+  let counter = isFiniteNumber(tickStart) ? 0 : 1
+  let generatedTick = stepStart + step * counter
+
+  if (
+    tickStep !== 0 &&
+    (isFiniteNumber(totalTicks) || isFiniteNumber(tickStep))
+  ) {
+    while (
+      generatedTick >= start &&
+      generatedTick <= end &&
+      generatedTicks.length < tickCountLimit
+    ) {
+      if (columnKey === TIME) {
+        generatedTicks.push(new Date(generatedTick))
+      } else {
+        generatedTicks.push(generatedTick)
+      }
+      counter += 1
+      generatedTick = stepStart + step * counter
+    }
+  }
+  return generatedTicks
+}
+
+/*
+  ticks can be either
+    - generated: user's defined parameters and judgmenet for spacing
+    - calculated: Giraffe's determination and spacing requirements
+*/
+const getTicks = (
+  domain: number[],
+  rangeLength: number,
+  tickSize: number,
+  columnKey: string,
+  totalTicks?: number,
+  tickStart?: number,
+  tickStep?: number
+) => {
+  const [start = 0, end = 0] = domain
+  if (isFiniteNumber(totalTicks) || isFiniteNumber(tickStep)) {
+    return generateTicks(domain, columnKey, totalTicks, tickStart, tickStep)
+  }
+  if (isFiniteNumber(tickStart)) {
+    const specifiedTickStart = Math.min(Math.max(tickStart, start), end)
+    return calculateTicks(
+      [specifiedTickStart, end],
+      rangeLength,
+      tickSize,
+      columnKey
+    )
+  }
+  return calculateTicks(domain, rangeLength, tickSize, columnKey)
+}
+
+/*
+  for performance memoize both the original arguments and calculated arguments
+    keep this separate from a memoized horizontal version
+*/
+const getMemoizedVerticalTicks = memoizeOne(getTicks)
 export const getVerticalTicks = memoizeOne(
   (
     domain: number[],
     rangeLength: number,
     tickFont: string,
-    formatter: Formatter
+    formatter: Formatter,
+    totalTicks?: number,
+    tickStart?: number,
+    tickStep?: number
   ): number[] => {
     const sampleTick = formatter(domain[1])
     const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
@@ -138,24 +213,32 @@ export const getVerticalTicks = memoizeOne(
     const columnKey =
       formatter._GIRAFFE_FORMATTER_TYPE === FormatterType.Time ? TIME : VALUE
 
-    return getMemoizedVerticalTicks(domain, rangeLength, tickHeight, columnKey)
+    return getMemoizedVerticalTicks(
+      domain,
+      rangeLength,
+      tickHeight,
+      columnKey,
+      totalTicks,
+      tickStart,
+      tickStep
+    )
   }
 )
 
-const getMemoizedHorizontalTicks = memoizeOne(
-  (
-    domain: number[],
-    rangeLength: number,
-    tickSize: number,
-    columnKey: string
-  ) => getTicks(domain, rangeLength, tickSize, columnKey)
-)
+/*
+  for performance memoize both the original arguments and calculated arguments
+    keep this separate from a memoized vertical version
+*/
+const getMemoizedHorizontalTicks = memoizeOne(getTicks)
 export const getHorizontalTicks = memoizeOne(
   (
     domain: number[],
     rangeLength: number,
     tickFont: string,
-    formatter: Formatter
+    formatter: Formatter,
+    totalTicks?: number,
+    tickStart?: number,
+    tickStep?: number
   ): number[] => {
     const sampleTick = formatter(domain[1])
     const tickTextMetrics = getTextMetrics(tickFont, sampleTick)
@@ -167,7 +250,10 @@ export const getHorizontalTicks = memoizeOne(
       domain,
       rangeLength,
       tickTextMetrics.width,
-      columnKey
+      columnKey,
+      totalTicks,
+      tickStart,
+      tickStep
     )
   }
 )

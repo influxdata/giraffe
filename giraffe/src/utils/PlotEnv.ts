@@ -65,11 +65,23 @@ export class PlotEnv {
     } = this
     const getMarginsMemoized = this.fns.get('margins', getMargins)
 
+    const sampleYTicks = yTicks.length
+      ? yTicks
+      : getVerticalTicks(
+          this.yDomain,
+          this.config.height,
+          this.config.tickFont,
+          this.yTickFormatter,
+          null,
+          null,
+          null
+        )
+
     return getMarginsMemoized(
       this.config.showAxes,
       xAxisLabel,
       yAxisLabel,
-      yTicks,
+      sampleYTicks,
       this.yTickFormatter,
       tickFont
     )
@@ -100,7 +112,10 @@ export class PlotEnv {
       this.xDomain,
       this.config.width,
       this.config.tickFont,
-      this.xTickFormatter
+      this.xTickFormatter,
+      this.config.xTotalTicks,
+      this.config.xTickStart,
+      this.config.xTickStep
     )
   }
 
@@ -122,7 +137,10 @@ export class PlotEnv {
       this.yDomain,
       this.config.height,
       this.config.tickFont,
-      this.yTickFormatter
+      this.yTickFormatter,
+      this.config.yTotalTicks,
+      this.config.yTickStart,
+      this.config.yTickStep
     )
   }
 

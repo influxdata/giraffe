@@ -17,15 +17,26 @@ export interface Config {
   axisColor?: string
   axisOpacity?: number
 
-  // Ticks on the axes can be specified, or else they are calculated,
-  // as well as the font, color, and the unit labels for each tick
+  // Tick placement on the axes can be specified otherwise they are calculated,
+  //   - specified for an entire axis, or
+  //   - specified by a step interval per tick and/or a total number of ticks
   xTicks?: number[]
+  xTickStart?: number
+  xTickStep?: number
+  xTotalTicks?: number
   yTicks?: Array<number | string>
+  yTickStart?: number
+  yTickStep?: number
+  yTotalTicks?: number
+
+  // Ticks can have font, color, and be formatted for precision and labeling
   tickFont?: string
   tickFontColor?: string
   valueFormatters?: {
     [colKey: string]: Formatter
   }
+
+  // The labels on the axes
   xAxisLabel?: string
   yAxisLabel?: string
 
