@@ -264,7 +264,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **xTickStep**: _number. Optional. **Ignored when xTicks is specified**._ A number representing the tick interval for the x-axis. May be negative.
 
-- **xTickStart**: _number. Optional. **Ignored when xTicks is specified**._ A number representing the value of the first tick on the x-axis. This will determine the placement of all subsequent ticks. Must be within the domain of the x-axis, otherwise will not be rendered. Subsequent ticks may still be rendered if their placement is within the domain.
+- **xTickStart**: _number. Optional. **Ignored when xTicks is specified**._ A number representing a value less than or equal to the first tick on the x-axis. This number will determine the placement of all subsequent ticks. It and any subsequent ticks will be rendered only if they fall within the domain. This number _is_ the value of the first tick when it is in the domain, and at least one of **xTickStep** or **xTotalTicks** is included.
 
 - **yTicks**: _array[number, ...]. Optional._ An array of values representing tick marks on the y-axis. Actual data values and axis scaling may cause Plot to not render all of the given ticks, or Plot rendering may extend beyond all of the rendered ticks. When this option is included, **yTotalTicks**, **yTickStep**, **yTickStart** are ignored.
 
@@ -272,7 +272,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **yTickStep**: _number. Optional. **Ignored when yTicks is specified**._ A number representing the tick interval for the y-axis. May be negative.
 
-- **yTickStart**: _number. Optional. **Ignored when yTicks is specified**._ A number representing the value of the first tick on the y-axis. This will determine the placement of all subsequent ticks. Must be within the domain of the y-axis, otherwise will not be rendered. Subsequent ticks may still be rendered if their placement is within the domain.
+- **yTickStart**: _number. Optional. **Ignored when yTicks is specified**._ A number representing a value less than or equal to the first tick on the y-axis. This number will determine the placement of all subsequent ticks. It and any subsequent ticks will be rendered only if they fall within the domain. This number _is_ the value of the first tick when it is in the domain, and at least one of **yTickStep** or **yTotalTicks** is included.
 
 - **tickFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the tick labels and axis labels.
 
