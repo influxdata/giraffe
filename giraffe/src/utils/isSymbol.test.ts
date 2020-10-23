@@ -1,7 +1,7 @@
 import {isSymbol} from './isSymbol'
 
 describe('isSymbol', () => {
-  test('a value created from the Symbol function is a Symbol', () => {
+  it('a value created from the Symbol function is a Symbol', () => {
     expect(isSymbol(Symbol())).toEqual(true)
     expect(isSymbol(Symbol(''))).toEqual(true)
     expect(isSymbol(Symbol('yoyoyo'))).toEqual(true)
@@ -10,13 +10,13 @@ describe('isSymbol', () => {
     expect(isSymbol(Symbol(-3.14))).toEqual(true)
   })
 
-  test('an object wrapping a value created from the Symbol function is a Symbol', () => {
+  it('an object wrapping a value created from the Symbol function is a Symbol', () => {
     const symbol = Symbol('a real symbol')
     const wrapper = Object(symbol)
     expect(isSymbol(wrapper)).toEqual(true)
   })
 
-  test('anything else is not a Symbol', () => {
+  it('anything else is not a Symbol', () => {
     expect(isSymbol('is this a symbol?')).toEqual(false)
     expect(isSymbol(undefined)).toEqual(false)
     expect(isSymbol(null)).toEqual(false)

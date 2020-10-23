@@ -2,7 +2,7 @@ import {heatmapTransform, bin2d} from './heatmap'
 import {newTable} from '../utils/newTable'
 
 describe('heatmapTransform', () => {
-  test('does not crash when passed zero-width domain', () => {
+  it('does not crash when passed zero-width domain', () => {
     // x domain of this table has a zero-width domain
     const table = newTable(3)
       .addColumn('x', 'long', 'number', [1, 1, 1])
@@ -16,7 +16,7 @@ describe('heatmapTransform', () => {
     }).not.toThrow()
   })
 
-  test('does not crash when bin size is the largest among bin size, width, and height', () => {
+  it('does not crash when bin size is the largest among bin size, width, and height', () => {
     const xColKey = '_time'
     const yColKey = '_value'
     const startTime = Date.now()
@@ -48,7 +48,7 @@ describe('heatmapTransform', () => {
     }).not.toThrow()
   })
 
-  test('does not crash when bin size is negative 0, positive 0, negative, NaN, negative Infinity, or positive Infinity', () => {
+  it('does not crash when bin size is negative 0, positive 0, negative, NaN, negative Infinity, or positive Infinity', () => {
     const xColKey = '_time'
     const yColKey = '_value'
     const startTime = Date.now()

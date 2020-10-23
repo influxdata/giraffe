@@ -5,7 +5,7 @@ import {
 } from './formatters'
 
 describe('timeFormatter', () => {
-  test('defaults to 12 hour time unless timezone is UTC', () => {
+  it('defaults to 12 hour time unless timezone is UTC', () => {
     const utcFormatter = timeFormatter({timeZone: 'UTC'})
     const nonUTCFormatter = timeFormatter({timeZone: 'America/Los_Angeles'})
 
@@ -18,7 +18,7 @@ describe('timeFormatter', () => {
     expect(nonUTCFormatter(d)).toEqual('2018-12-31  4:00:00 PM PST')
   })
 
-  test('handles ante meridiem and post meridiem', () => {
+  it('handles ante meridiem and post meridiem', () => {
     let d = new Date('2019-01-01T00:00Z')
 
     let meridiemFormatter = timeFormatter({
@@ -74,7 +74,7 @@ describe('timeFormatter', () => {
     expect(meridiemFormatter(d)).toEqual('4:00 PM')
   })
 
-  test('uses AM/PM when given "a" in the format regardless of time zone or time format', () => {
+  it('uses AM/PM when given "a" in the format regardless of time zone or time format', () => {
     const utcFormatterWithFormat = timeFormatter({
       timeZone: 'UTC',
       format: 'YYYY-MM-DD HH:mm:ss a ZZ',
@@ -104,7 +104,7 @@ describe('timeFormatter', () => {
     )
   })
 
-  test('24 hour format and UTC format without "a" should not show "24" for midnight', () => {
+  it('24 hour format and UTC format without "a" should not show "24" for midnight', () => {
     const utcFormatterWithFormat = timeFormatter({
       timeZone: 'UTC',
       format: 'YYYY-MM-DD HH:mm:ss ZZ',
@@ -127,7 +127,7 @@ describe('timeFormatter', () => {
     )
   })
 
-  test('24 hour format and UTC format without "a" should display correctly', () => {
+  it('24 hour format and UTC format without "a" should display correctly', () => {
     const utcFormatterWithFormat = timeFormatter({
       timeZone: 'UTC',
       format: 'YYYY-MM-DD HH:mm:ss ZZ',
@@ -147,7 +147,7 @@ describe('timeFormatter', () => {
     expect(nonUTCFormatterWithFormat(date)).toEqual('2019-01-01 08:00:00 GMT+1')
   })
 
-  test('can format times with format strings', () => {
+  it('can format times with format strings', () => {
     const tests = [
       ['YYYY-MM-DD HH:mm:ss', '2019-01-01 00:00:00'],
       ['YYYY-MM-DD HH:mm:ss ZZ', '2019-01-01 00:00:00 UTC'],
@@ -171,7 +171,7 @@ describe('timeFormatter', () => {
     }
   })
 
-  test('it can format times with a variable level of detail', () => {
+  it('it can format times with a variable level of detail', () => {
     const formatter = timeFormatter({timeZone: 'UTC'})
 
     // Defaults to quite detailed if no domainWidth passed
@@ -188,7 +188,7 @@ describe('timeFormatter', () => {
 })
 
 describe('siPrefixFormatter', () => {
-  test('can format numbers with SI unit prefixes', () => {
+  it('can format numbers with SI unit prefixes', () => {
     const f = siPrefixFormatter({significantDigits: 6})
 
     expect(f(123456)).toEqual('123.456k')
@@ -196,19 +196,19 @@ describe('siPrefixFormatter', () => {
     expect(f(12345678912345.123456789)).toEqual('12.3457T')
   })
 
-  test('can format numbers with a unit suffix', () => {
+  it('can format numbers with a unit suffix', () => {
     const f = siPrefixFormatter({suffix: 'm'})
 
     expect(f(1000)).toEqual('1km')
   })
 
-  test('can format numbers with a prefix', () => {
+  it('can format numbers with a prefix', () => {
     const f = siPrefixFormatter({prefix: 'howdy'})
 
     expect(f(1000)).toEqual('howdy1k')
   })
 
-  test('can specify zeros are always included', () => {
+  it('can specify zeros are always included', () => {
     const f = siPrefixFormatter({trimZeros: false, significantDigits: 4})
 
     expect(f(37)).toEqual('37.00')
@@ -217,7 +217,7 @@ describe('siPrefixFormatter', () => {
 })
 
 describe('binaryPrefixFormatter', () => {
-  test('can format numbers with binary unit prefixes', () => {
+  it('can format numbers with binary unit prefixes', () => {
     const f = binaryPrefixFormatter()
 
     expect(f(2 ** 10)).toEqual('1 K')
@@ -225,32 +225,32 @@ describe('binaryPrefixFormatter', () => {
     expect(f(2 ** 30)).toEqual('1 G')
   })
 
-  test('can format negative numbers with a binary unit prefix', () => {
+  it('can format negative numbers with a binary unit prefix', () => {
     const f = binaryPrefixFormatter()
 
     expect(f(0 - 2 ** 30)).toEqual('-1 G')
   })
 
-  test('formats small numbers without unit prefixes', () => {
+  it('formats small numbers without unit prefixes', () => {
     const f = binaryPrefixFormatter()
 
     expect(f(0.551249)).toEqual('0.551249')
     expect(f(0.551249)).toEqual('0.551249')
   })
 
-  test('can add a prefix to formatted numbers', () => {
+  it('can add a prefix to formatted numbers', () => {
     const f = binaryPrefixFormatter({prefix: 'my favorite number '})
 
     expect(f(1)).toEqual('my favorite number 1')
   })
 
-  test('can add a suffix to formatted numbers', () => {
+  it('can add a suffix to formatted numbers', () => {
     const f = binaryPrefixFormatter({suffix: ' snorp'})
 
     expect(f(1)).toEqual('1 snorp')
   })
 
-  test('can configure the significant digits for formatted number', () => {
+  it('can configure the significant digits for formatted number', () => {
     const f = binaryPrefixFormatter({significantDigits: 1})
     const g = binaryPrefixFormatter({significantDigits: 8})
     const h = binaryPrefixFormatter({significantDigits: 0})

@@ -2,7 +2,7 @@ import {fromRows} from './fromRows'
 import {ColumnType} from '../types'
 
 describe('fromRows', () => {
-  test('it can infer column types', () => {
+  it('it can infer column types', () => {
     const rows = [
       {foo: 1, bar: new Date(0), baz: false, a: 'A'},
       {foo: 3, bar: new Date(1), baz: true, a: 'B'},
@@ -26,7 +26,7 @@ describe('fromRows', () => {
     expect(table.getColumnType('a')).toEqual('string')
   })
 
-  test('it can accept an explicit schema definition', () => {
+  it('it can accept an explicit schema definition', () => {
     const rows = [
       {foo: 1, bar: 0, baz: 0, a: 'A', b: '1'},
       {foo: 3, bar: 1, baz: 1, a: 'B', b: '2'},
@@ -59,7 +59,7 @@ describe('fromRows', () => {
     expect(table.getColumn('b')).toBeNull()
   })
 
-  test('with sparse data', () => {
+  it('with sparse data', () => {
     const rows = [
       {foo: 1, baz: 3},
       {foo: 3, bar: 1, baz: 7},
@@ -81,7 +81,7 @@ describe('fromRows', () => {
     ])
   })
 
-  test('throws an error when encountering a mismatched schema', () => {
+  it('throws an error when encountering a mismatched schema', () => {
     const rows = [{foo: 'bar'}, {foo: 1}]
 
     expect(() => fromRows(rows)).toThrowError(
@@ -89,7 +89,7 @@ describe('fromRows', () => {
     )
   })
 
-  test('throws an error when encountering a value of unknown ColumnType', () => {
+  it('throws an error when encountering a value of unknown ColumnType', () => {
     const rows = [{foo: {some: 'object'}}]
 
     expect(() => fromRows(rows)).toThrowError(

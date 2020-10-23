@@ -10,7 +10,7 @@ import {dataSize, largeTable, lineData} from './fixtures/line'
 const REASONABLE_LIMIT = 5_000_000
 
 describe('line graph performance', () => {
-  test('fixture should be greater than or equal to REASONABLE_LIMIT', () => {
+  it('fixture should be greater than or equal to REASONABLE_LIMIT', () => {
     expect(dataSize).toBeGreaterThanOrEqual(REASONABLE_LIMIT)
   })
 

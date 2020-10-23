@@ -29,7 +29,7 @@ describe('PlotEnv', () => {
       lineTransformSpy.mockRestore()
     })
 
-    test('updates xScale when xDomain is updated', () => {
+    it('updates xScale when xDomain is updated', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -62,7 +62,7 @@ describe('PlotEnv', () => {
       )
     })
 
-    test('runs bin stat when x domain changes', () => {
+    it('runs bin stat when x domain changes', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -95,7 +95,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
-    test('runs bin stat when histogram layer x mapping changes', () => {
+    it('runs bin stat when histogram layer x mapping changes', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -131,7 +131,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(2)
     })
 
-    test('does not run bin stat when histogram fillOpacity change', () => {
+    it('does not run bin stat when histogram fillOpacity change', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -162,7 +162,7 @@ describe('PlotEnv', () => {
       expect(histogramTransformSpy).toHaveBeenCalledTimes(1)
     })
 
-    test('updating line interpolation should not reset the x domain', () => {
+    it('updating line interpolation should not reset the x domain', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -193,7 +193,7 @@ describe('PlotEnv', () => {
       expect(plotEnv.xDomain).toEqual([12, 15])
     })
 
-    test('does not run line stat when x domain changes', () => {
+    it('does not run line stat when x domain changes', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -227,7 +227,7 @@ describe('PlotEnv', () => {
       expect(lineTransformSpy).toHaveBeenCalledTimes(1)
     })
 
-    test('resets uncontrolled domain state when x mapping changes', () => {
+    it('resets uncontrolled domain state when x mapping changes', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]

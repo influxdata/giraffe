@@ -4,7 +4,7 @@ import {NINETEEN_EIGHTY_FOUR} from '../constants/colorSchemes'
 describe('getBandColorScale', () => {
   const COLOR_TEST_LIMIT = 1000
 
-  test('uses the same color when bandIndexMap has no rowIndices', () => {
+  it('uses the same color when bandIndexMap has no rowIndices', () => {
     const scale = getBandColorScale(
       {rowIndices: [], lowerIndices: [], upperIndices: []},
       NINETEEN_EIGHTY_FOUR
@@ -23,7 +23,7 @@ describe('getBandColorScale', () => {
     expect(scale(0)).toEqual(scale(100))
   })
 
-  test('uses more than 1 color when bandIndexMap.rowIndices has length greater than 0', () => {
+  it('uses more than 1 color when bandIndexMap.rowIndices has length greater than 0', () => {
     let scale = getBandColorScale(
       {rowIndices: [0], lowerIndices: [], upperIndices: []},
       NINETEEN_EIGHTY_FOUR
@@ -64,7 +64,7 @@ describe('getBandColorScale', () => {
     expect(Object.keys(colorsTracker).length).toBeGreaterThan(1)
   })
 
-  test('upper and lower indicies have no effect on the colors when rowIndices are empty', () => {
+  it('upper and lower indicies have no effect on the colors when rowIndices are empty', () => {
     let scale = getBandColorScale(
       {rowIndices: [], lowerIndices: [0, 1], upperIndices: []},
       NINETEEN_EIGHTY_FOUR
@@ -111,7 +111,7 @@ describe('getBandColorScale', () => {
     ).toEqual(true)
   })
 
-  test('upper and lower indicies have no effect on the colors when rowIndices are not empty', () => {
+  it('upper and lower indicies have no effect on the colors when rowIndices are not empty', () => {
     let scale = getBandColorScale(
       {rowIndices: [4, 5], lowerIndices: [0, 1], upperIndices: []},
       NINETEEN_EIGHTY_FOUR

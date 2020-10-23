@@ -1,7 +1,7 @@
 import {parseFiles, parseFilesWithObjects} from './rawFluxDataTable'
 
 describe('parseFiles', () => {
-  test('can parse multi-csv response', () => {
+  it('can parse multi-csv response', () => {
     const CSV = `
 #group,false,false,false,false
 #datatype,string,long,string,long
@@ -46,7 +46,7 @@ describe('parseFiles', () => {
     expect(parseFiles([CSV])).toEqual(expected)
   })
 
-  test('can parse multi-csv response with values containing newlines', () => {
+  it('can parse multi-csv response with values containing newlines', () => {
     const CSV = `
 #group,false,false,false,false
 #datatype,string,long,string,long
@@ -97,7 +97,7 @@ there",5
 })
 
 describe('parseFilesWithObjects', () => {
-  test('can parse objects in CSV', () => {
+  it('can parse objects in CSV', () => {
     const CSV = `#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string,string,string,string,string
 #default,_result,,,,,,,,,,,,,,,,
@@ -220,7 +220,7 @@ describe('parseFilesWithObjects', () => {
     }).not.toThrow()
   })
 
-  test('can parse nested objects in CSV', () => {
+  it('can parse nested objects in CSV', () => {
     const CSV = `#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string,string,string,string,string
 #default,_result,,,,,,,,,,,,,,,,
@@ -343,7 +343,7 @@ describe('parseFilesWithObjects', () => {
     }).not.toThrow()
   })
 
-  test('can parse objects in multi-csv response', () => {
+  it('can parse objects in multi-csv response', () => {
     const CSV = `#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string,string,string,string,string
 #default,_result,,,,,,,,,,,,,,,,
