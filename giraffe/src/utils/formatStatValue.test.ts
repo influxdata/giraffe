@@ -6,7 +6,7 @@ describe('formatStatValue', () => {
   let suffix: string
 
   describe('handles bad input gracefully', () => {
-    test('does not throw an error when decimal places is greater than 100', () => {
+    it('does not throw an error when decimal places is greater than 100', () => {
       expect(() =>
         formatStatValue('2.00', {
           decimalPlaces: {isEnforced: true, digits: 101},
@@ -14,7 +14,7 @@ describe('formatStatValue', () => {
       ).not.toThrow()
     })
 
-    test('handles undefined', () => {
+    it('handles undefined', () => {
       prefix = 'LOL'
       value = undefined
       suffix = ' is funny'
@@ -28,7 +28,7 @@ describe('formatStatValue', () => {
       expect(errorResult).not.toEqual(`${prefix}${value}${suffix}`)
     })
 
-    test('handles null', () => {
+    it('handles null', () => {
       prefix = ':-('
       value = null
       suffix = ' is not funny'
@@ -43,7 +43,7 @@ describe('formatStatValue', () => {
     })
   })
 
-  test('formats NaN', () => {
+  it('formats NaN', () => {
     prefix = 'My nanny is '
     value = NaN
     suffix = ''
@@ -56,7 +56,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}${value}${suffix}`)
   })
 
-  test('formats Infinity', () => {
+  it('formats Infinity', () => {
     prefix = 'To '
     value = Infinity
     suffix = ' and beyond'
@@ -71,7 +71,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}${INFINITY_SYMBOL}${suffix}`)
   })
 
-  test('formats negative Infinity', () => {
+  it('formats negative Infinity', () => {
     prefix = 'To '
     value = -Infinity
     suffix = ' and beyond'
@@ -86,7 +86,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}-${INFINITY_SYMBOL}${suffix}`)
   })
 
-  test('formats 0 with trailing decimal 0s', () => {
+  it('formats 0 with trailing decimal 0s', () => {
     prefix = ''
     value = 0
     let trailingDecimals = 2
@@ -110,7 +110,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}0.0000000000${suffix}`)
   })
 
-  test('formats an integer value', () => {
+  it('formats an integer value', () => {
     prefix = 'we have '
     value = 123
     suffix = ' abc'
@@ -141,7 +141,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}123,456,789${suffix}`)
   })
 
-  test('formats a float value', () => {
+  it('formats a float value', () => {
     prefix = 'abc '
     value = 123.456789
     suffix = ' yoyoyo'
@@ -163,7 +163,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}-9.0123456789${suffix}`)
   })
 
-  test('formats an empty string value', () => {
+  it('formats an empty string value', () => {
     prefix = ''
     value = ''
     suffix = ''
@@ -176,7 +176,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}${value}${suffix}`)
   })
 
-  test('formats a non-empty string value', () => {
+  it('formats a non-empty string value', () => {
     prefix = 'Negative '
     value = '-666.666'
     suffix = ' is Evil'
@@ -189,7 +189,7 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}${value}${suffix}`)
   })
 
-  test('keeps trailing zeroes for the required number of decimal places only when not a string', () => {
+  it('keeps trailing zeroes for the required number of decimal places only when not a string', () => {
     value = '2.000'
     expect(
       formatStatValue(value, {decimalPlaces: {isEnforced: true, digits: 3}})
@@ -224,7 +224,7 @@ describe('formatStatValue', () => {
     ).toEqual('2.000')
   })
 
-  test('has commas as separator for large numbers', () => {
+  it('has commas as separator for large numbers', () => {
     value = 1234567
     expect(formatStatValue(value)).toEqual('1,234,567')
     expect(

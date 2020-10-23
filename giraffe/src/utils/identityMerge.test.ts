@@ -7,7 +7,7 @@ import {
 } from './identityMerge'
 
 describe('identityMerge', () => {
-  test('can merge two objects', () => {
+  it('can merge two objects', () => {
     const source = {
       key1: 'PRIMATIVE_VALUE',
       key2: 10,
@@ -48,7 +48,7 @@ describe('identityMerge', () => {
     expect(result.key4.key7.key9).toBe(source.key4.key7.key9)
   })
 
-  test('returns source when source and target are logically equal', () => {
+  it('returns source when source and target are logically equal', () => {
     const source = {foo: 'a', bar: 'b', baz: ['a', 'b', 'c']}
     const target = {foo: 'a', bar: 'b', baz: ['a', 'b', 'c']}
 
@@ -57,7 +57,7 @@ describe('identityMerge', () => {
     expect(result).toBe(source)
   })
 
-  test('can maintain reference equality of a function with a property', () => {
+  it('can maintain reference equality of a function with a property', () => {
     const f = () => 2
 
     f.someProperty = 'foo'
@@ -72,7 +72,7 @@ describe('identityMerge', () => {
 })
 
 describe('enumeratePaths', () => {
-  test('enumerates the paths in a tree according to preorder traversal', () => {
+  it('enumerates the paths in a tree according to preorder traversal', () => {
     const target = {
       root: {
         a: [4, 5, 6],
@@ -99,13 +99,13 @@ describe('enumeratePaths', () => {
 })
 
 describe('getByPath', () => {
-  test('can access existant and nonexistant properties', () => {
+  it('can access existant and nonexistant properties', () => {
     expect(getByPath({a: {b: {c: 2}}}, ['a', 'b', 'c'])).toEqual(2)
     expect(getByPath({a: false}, ['a'])).toEqual(false)
     expect(getByPath({a: false}, ['b'])).toBeUndefined()
   })
 
-  test('can safely attempt property access on null, undefined values, and primative values', () => {
+  it('can safely attempt property access on null, undefined values, and primative values', () => {
     expect(getByPath(null, ['a', 'b'])).toBeUndefined()
     expect(getByPath(undefined, ['a', 'b'])).toBeUndefined()
     expect(getByPath(1, ['a', 'b'])).toBeUndefined()
@@ -115,7 +115,7 @@ describe('getByPath', () => {
 })
 
 describe('setByPath', () => {
-  test('can set deep non-existant paths in an object', () => {
+  it('can set deep non-existant paths in an object', () => {
     const target = {a: '1'}
 
     setByPath(target, ['b', 'c'], 2)
@@ -123,7 +123,7 @@ describe('setByPath', () => {
     expect(target).toEqual({a: '1', b: {c: 2}})
   })
 
-  test('can set deep existant paths in an object', () => {
+  it('can set deep existant paths in an object', () => {
     const target = {a: '1', b: {c: 2}}
 
     setByPath(target, ['b', 'c'], 3)
@@ -131,17 +131,17 @@ describe('setByPath', () => {
     expect(target).toEqual({a: '1', b: {c: 3}})
   })
 
-  test('throws an error when attempting to set on null', () => {
+  it('throws an error when attempting to set on null', () => {
     expect(() => setByPath(null, ['a', 'b'], 2)).toThrow()
   })
 
-  test('throws an error when attempting to set an empty path', () => {
+  it('throws an error when attempting to set an empty path', () => {
     expect(() => setByPath({a: 'b'}, [], 2)).toThrow()
   })
 })
 
 describe('isEqual', () => {
-  test('checks if objects are equal according to their logical identity', () => {
+  it('checks if objects are equal according to their logical identity', () => {
     expect(isEqual('4', '4')).toBeTruthy()
     expect(isEqual('4', '5')).toBeFalsy()
     expect(isEqual('4', 4)).toBeFalsy()

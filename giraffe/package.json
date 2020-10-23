@@ -4,8 +4,8 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --maxWorkers=2",
-    "test:watch": "jest --watch --verbose false",
+    "test": "jest --collectCoverage --maxWorkers=2",
+    "test:watch": "jest --collectCoverage --watch --verbose false",
     "build": "rm -rf dist && NODE_ENV=production rollup -c",
     "start": "rollup -cw",
     "lint": "eslint '{src,../stories/src}/**/*.{ts,tsx}'",

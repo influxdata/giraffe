@@ -295,7 +295,7 @@ describe('fromFlux', () => {
     const fFlux = fromFlux(resp)
     expect(fFlux).toEqual(expected)
   })
-  test('can parse a Flux CSV with mismatched schemas', () => {
+  it('can parse a Flux CSV with mismatched schemas', () => {
     const CSV = `#group,false,false,true,true,false,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string
 #default,_result,,,,,,,,,
@@ -400,7 +400,7 @@ describe('fromFlux', () => {
     ])
   })
 
-  test('should error out gracefully when an error is thrown in the fromFlux parser', () => {
+  it('should error out gracefully when an error is thrown in the fromFlux parser', () => {
     const CSV =
       '#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true'
 
@@ -411,7 +411,7 @@ describe('fromFlux', () => {
     expect(actual.error).toBeTruthy()
   })
 
-  test('uses the default annotation to fill in empty values', () => {
+  it('uses the default annotation to fill in empty values', () => {
     const CSV = `#group,false,false,true,true,true,true
 #datatype,string,long,string,string,long,long
 #default,_result,,,cpu,,6
@@ -428,7 +428,7 @@ describe('fromFlux', () => {
     expect(actual.getColumn('d')).toEqual([6, 6])
   })
 
-  test('returns a group key union', () => {
+  it('returns a group key union', () => {
     const CSV = `#group,true,false,false,true
 #datatype,string,string,string,string
 #default,,,,
@@ -444,7 +444,7 @@ describe('fromFlux', () => {
     expect(fluxGroupKeyUnion).toEqual(['a', 'c', 'd'])
   })
 
-  test('parses empty numeric values as null', () => {
+  it('parses empty numeric values as null', () => {
     const CSV = `#group,false,false,true,true,false,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string
 #default,_result,,,,,,,,,
@@ -457,7 +457,7 @@ describe('fromFlux', () => {
     expect(table.getColumn('_value')).toEqual([10, null])
   })
 
-  test('handles newlines inside string values', () => {
+  it('handles newlines inside string values', () => {
     const CSV = `#group,false,false,false,false
 #datatype,string,long,string,long
 #default,_result,,,

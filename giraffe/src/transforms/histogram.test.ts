@@ -7,7 +7,7 @@ import {X_MIN, X_MAX, Y_MIN, Y_MAX, COUNT, FILL} from '../constants/columnKeys'
 const valueData = [70, 56, 60, 100, 76, 0, 63, 48, 79, 67]
 
 describe('bin', () => {
-  test('with a single group', () => {
+  it('with a single group', () => {
     const table = newTable(10)
       .addColumn('_value', 'double', 'number', valueData)
       .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -22,7 +22,7 @@ describe('bin', () => {
     expect(actual.getColumn(COUNT, 'number')).toEqual([1, 0, 2, 6, 1])
   })
 
-  test('with four groups', () => {
+  it('with four groups', () => {
     const table = newTable(10)
       .addColumn('_value', 'double', 'number', valueData)
       .addColumn(FILL, 'double', 'number', [0, 0, 0, 1, 1, 2, 2, 2, 3, 3])
@@ -78,7 +78,7 @@ describe('bin', () => {
     ])
   })
 
-  test('with overlaid positioning', () => {
+  it('with overlaid positioning', () => {
     const table = newTable(10)
       .addColumn('_value', 'double', 'number', valueData)
       .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
@@ -116,7 +116,7 @@ describe('bin', () => {
     ])
   })
 
-  test('with a widened x domain', () => {
+  it('with a widened x domain', () => {
     const table = newTable(10)
       .addColumn('_value', 'double', 'number', valueData)
       .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -149,7 +149,7 @@ describe('bin', () => {
     ])
   })
 
-  test('with a narrowed x domain', () => {
+  it('with a narrowed x domain', () => {
     const table = newTable(10)
       .addColumn('_value', 'double', 'number', valueData)
       .addColumn(FILL, 'double', 'number', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -165,7 +165,7 @@ describe('bin', () => {
 })
 
 describe('histogramTransform', () => {
-  test('does not crash when passed zero-width domain', () => {
+  it('does not crash when passed zero-width domain', () => {
     // x domain of this table has a zero-width domain
     const table = newTable(3)
       .addColumn('x', 'double', 'number', [1, 1, 1])

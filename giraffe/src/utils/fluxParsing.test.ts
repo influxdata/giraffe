@@ -57,13 +57,13 @@ const TRUNCATED_RESPONSE = `
 `
 
 describe('parseResponse', () => {
-  test('parseResponse into the right number of tables', () => {
+  it('parseResponse into the right number of tables', () => {
     const result = parseResponse(MULTI_SCHEMA_RESPONSE)
     expect(result).toHaveLength(4)
   })
 
   describe('result name', () => {
-    test('uses the result name from the result column if present', () => {
+    it('uses the result name from the result column if present', () => {
       const resp = `#group,false,false,false,false,false,false,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,long,string,string,string
 #default,,,,,,,,,
@@ -79,7 +79,7 @@ describe('parseResponse', () => {
       expect(actual[0].result).toBe('max')
     })
 
-    test('uses the result name from the default annotation if result columns are empty', () => {
+    it('uses the result name from the default annotation if result columns are empty', () => {
       const resp = `#group,false,false,false,false,false,false,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,long,string,string,string
 #default,max,,,,,,,,
@@ -107,20 +107,20 @@ describe('parseResponse', () => {
   })
 
   describe('headers', () => {
-    test('throws when no metadata is present', () => {
+    it('throws when no metadata is present', () => {
       expect(() => {
         parseResponse(RESPONSE_NO_METADATA)
       }).toThrow()
     })
 
-    test('can parse headers when metadata is present', () => {
+    it('can parse headers when metadata is present', () => {
       const actual = parseResponse(RESPONSE_METADATA)[0].data[0]
       expect(actual).toEqual(EXPECTED_COLUMNS)
     })
   })
 
   describe('group key', () => {
-    test('parses the group key properly', () => {
+    it('parses the group key properly', () => {
       const actual = parseResponse(MULTI_SCHEMA_RESPONSE)[0].groupKey
       const expected = {
         _field: 'usage_guest',
@@ -133,7 +133,7 @@ describe('parseResponse', () => {
   })
 
   describe('partial responses', () => {
-    test('should discard tables without any non-annotation rows', () => {
+    it('should discard tables without any non-annotation rows', () => {
       const actual = parseResponse(TRUNCATED_RESPONSE)
 
       expect(actual).toHaveLength(2)

@@ -1,21 +1,21 @@
 import {isString} from './isString'
 
 describe('isString', () => {
-  test('the value created from the String constructor is a string', () => {
+  it('the value created from the String constructor is a string', () => {
     const value = new String()
 
     expect(typeof value === 'object').toEqual(true)
     expect(isString(value)).toEqual(true)
   })
 
-  test('the value created from the String function is a string', () => {
+  it('the value created from the String function is a string', () => {
     const value = String()
 
     expect(typeof value !== 'object').toEqual(true)
     expect(isString(value)).toEqual(true)
   })
 
-  test('a literal string is a string', () => {
+  it('a literal string is a string', () => {
     expect(
       isString('@#$^@#$@ ; \n\nerer /.,.. abc one two three!!!!! #_+[]')
     ).toEqual(true)
@@ -24,7 +24,7 @@ describe('isString', () => {
     expect(isString('-4567.89')).toEqual(true)
   })
 
-  test('anything else is not a string', () => {
+  it('anything else is not a string', () => {
     expect(isString(undefined)).toEqual(false)
     expect(isString(null)).toEqual(false)
     expect(isString({})).toEqual(false)
