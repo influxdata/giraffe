@@ -333,7 +333,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 ### Legend Tooltip properties
 
-- **legendFont**: _string. Optional. Defaults '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
+- **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
 
 - **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The _CSS color value_ of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
 
