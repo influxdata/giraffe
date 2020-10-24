@@ -4,7 +4,9 @@ A React-based visualization library powering the data visualizations in the [Inf
 
 (_This library is currently in pre-beta._)
 
-## 🦒 Features
+<img src="./giraffe/chronogiraffe.png" height="100" alt="giraffe"/>
+
+## Features
 
 There are plenty of terrific visualization libraries in the JavaScript ecosystem.
 Giraffe aims to distinguish itself with several features:

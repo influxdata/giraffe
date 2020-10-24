@@ -2,6 +2,8 @@
 
 A React-based visualization library powering the data visualizations in [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
+<img src="./chronogiraffe.png" height="100" alt="giraffe"/>
+
 ## Demos
 
 [See the visualizations in action using Storybook](https://influxdata.github.io/giraffe)
