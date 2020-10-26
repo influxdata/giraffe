@@ -333,13 +333,15 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 ### Legend Tooltip properties
 
-- **legendFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
+- **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
 
-- **legendFontColor**: _string. Optional._ The _CSS color value_ of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
+- **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The _CSS color value_ of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
 
-- **legendFontBrightColor**: _string. Optional. Recommendation: do not include._ The _CSS color value_ of any text that is not a column header or in a row inside the legend (tooltip). Currently no such text exists and may be added in the future.
+- **legendFontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The _CSS color value_ of any text that is not a column header or in a row inside the legend (tooltip).
 
-- **legendBackgroundColor**: _string. Optional._ The _CSS color value_ of the background in the legend (tooltip).
+- **legendBackgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The _CSS color value_ of the background in the legend (tooltip).
+
+- **legendColorizeRows**: _boolean. Optional. Defaults to true when excluded._ Toggles the use of colors for the rows in the legend (tooltip). When _true_ the rows will use colors from the color scheme in the rendered graph. When _false_ the rows will use the **legendFontBrightColor** and include small dots of color in the color scheme of the rendered graph.
 
 - **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend (tooltip).
 
@@ -347,7 +349,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
 
-- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the entire `<Tooltip>` element (or legend). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
+- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the legend (tooltip). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
 
 - **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
 
