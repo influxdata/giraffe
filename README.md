@@ -1,10 +1,14 @@
 # Giraffe
 
+[![Slack Status](https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social)](https://www.influxdata.com/slack)
+
 A React-based visualization library powering the data visualizations in the [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
 (_This library is currently in pre-beta._)
 
-## 🦒 Features
+<img src="./giraffe/chronogiraffe.png" height="100" alt="giraffe"/>
+
+## Features
 
 There are plenty of terrific visualization libraries in the JavaScript ecosystem.
 Giraffe aims to distinguish itself with several features:
