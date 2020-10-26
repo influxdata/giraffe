@@ -1,5 +1,7 @@
 # Giraffe
 
+[![Slack Status](https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social)](https://www.influxdata.com/slack)
+
 A React-based visualization library powering the data visualizations in the [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
 (_This library is currently in pre-beta._)
