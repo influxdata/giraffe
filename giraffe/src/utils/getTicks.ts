@@ -126,11 +126,16 @@ export const generateTicks = (
   tickStep: number
 ): number[] => {
   const generatedTicks = []
-  const [start, end] = domain
+  const [start = 0, end = 0] = domain
   const stepStart = isFiniteNumber(tickStart) ? tickStart : start
-  const step = isFiniteNumber(tickStep)
-    ? tickStep
-    : (end - stepStart) / (totalTicks + 1)
+
+  let step = tickStep
+  if (!isFiniteNumber(tickStep)) {
+    const parts =
+      isFiniteNumber(totalTicks) && totalTicks !== 0 ? totalTicks : 1
+    step = (end - stepStart) / (isFiniteNumber(tickStart) ? parts : parts + 1)
+  }
+
   const tickCountLimit = isFiniteNumber(totalTicks) ? totalTicks : Infinity
 
   let counter = isFiniteNumber(tickStart) ? 0 : 1
@@ -140,15 +145,23 @@ export const generateTicks = (
     tickStep !== 0 &&
     (isFiniteNumber(totalTicks) || isFiniteNumber(tickStep))
   ) {
+    /*
+      - When 'step' marks the ticks to the right (or up) on the axis
+        it is a positive number and should stop at 'end'
+      - When 'step' marks the ticks to the left (or down) on the axis
+        it is a negative number and should stop at 'start'
+    */
     while (
-      generatedTick >= start &&
-      generatedTick <= end &&
+      ((step > 0 && generatedTick <= end) ||
+        (step < 0 && generatedTick >= start)) &&
       generatedTicks.length < tickCountLimit
     ) {
-      if (columnKey === TIME) {
-        generatedTicks.push(new Date(generatedTick))
-      } else {
-        generatedTicks.push(generatedTick)
+      if (generatedTick >= start && generatedTick <= end) {
+        if (columnKey === TIME) {
+          generatedTicks.push(new Date(generatedTick))
+        } else {
+          generatedTicks.push(generatedTick)
+        }
       }
       counter += 1
       generatedTick = stepStart + step * counter
