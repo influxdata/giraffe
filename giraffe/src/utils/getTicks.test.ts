@@ -17,6 +17,23 @@ describe('utils/getTicks', () => {
       const valueDomain = [1, 300]
       const timeDomain = [1603333737559, 1603334037559]
 
+      it('should handle unusual domain values', () => {
+        expect(generateTicks([], VALUE, NaN, NaN, NaN).length).toEqual(0)
+        expect(generateTicks([NaN, NaN], VALUE, NaN, NaN, NaN).length).toEqual(
+          0
+        )
+        expect(
+          generateTicks([null, null], VALUE, NaN, NaN, NaN).length
+        ).toEqual(0)
+
+        expect(generateTicks([100, 0], VALUE, NaN, NaN, NaN).length).toEqual(0)
+
+        expect(generateTicks([100, 99], VALUE, 1, 100, -50).length).toEqual(0)
+
+        expect(generateTicks([100, 100], VALUE, 1, 100, -50).length).toEqual(1)
+        expect(generateTicks([0, 0], VALUE, 1, 100, -0.01).length).toEqual(1)
+      })
+
       it('should generate no ticks when total ticks, tick start, and tick step are not finite numbers', () => {
         expect(generateTicks(valueDomain, VALUE, NaN, NaN, NaN).length).toEqual(
           0
@@ -282,7 +299,7 @@ describe('utils/getTicks', () => {
           tickStart,
           tickStep
         )
-        expect(result.length).toEqual(0)
+        expect(result.length).toEqual(1)
       })
     })
   })
