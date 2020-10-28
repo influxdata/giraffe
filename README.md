@@ -6,7 +6,7 @@ A React-based visualization library powering the data visualizations in the [Inf
 
 (_This library is currently in pre-beta._)
 
-<img src="./giraffe/chronogiraffe.png" height="100" alt="giraffe"/>
+<img src="https://influxdata.github.io/branding/img/mascots/chronograf.png" height="100" alt="giraffe"/>
 
 ## Features
 
