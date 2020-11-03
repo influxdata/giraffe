@@ -10,8 +10,8 @@ module.exports = {
     libraryTarget: 'umd',
     library: pkg.name,
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '',
     sourceMapFilename: '[file].map[query]',
-    libraryTarget: 'umd',
   },
   externals: {
     react: 'react',
