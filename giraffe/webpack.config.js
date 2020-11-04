@@ -1,5 +1,5 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 const pkg = require('./package.json')
 
 module.exports = {
@@ -8,13 +8,13 @@ module.exports = {
   output: {
     filename: 'index.js',
     libraryTarget: 'umd',
-    library: pkg.name,
+    library: 'Giraffe',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
     sourceMapFilename: '[file].map[query]',
   },
   externals: {
-    react: 'react',
+    react: 'React',
     'react-dom': 'react-dom',
     // lodash: 'lodash' TODO: should we externalize lodash?,
   },
@@ -30,14 +30,11 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.s?css$/i,
-        use: [
-          'css-loader',
-          'sass-loader'
-        ],
+        use: ['css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -61,6 +58,6 @@ module.exports = {
           },
         ],
       },
-    ]
+    ],
   },
-};
+}
