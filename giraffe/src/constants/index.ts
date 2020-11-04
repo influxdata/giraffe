@@ -130,4 +130,4 @@ export const TOOLTIP_MINIMUM_OPACITY = 0
 
 export const TOOLTIP_MAXIMUM_OPACITY = 1.0
 
-export const CLOCKFACE_Z_INDEX = 10000
+export const CLOCKFACE_Z_INDEX = 9599
