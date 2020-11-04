@@ -14,7 +14,12 @@ module.exports = {
     sourceMapFilename: '[file].map[query]',
   },
   externals: {
-    react: 'React',
+    react: {
+      amd: 'react',
+      commonjs: 'react',
+      commonjs2: 'react',
+      root: 'React',
+    },
     'react-dom': 'react-dom',
     // lodash: 'lodash' TODO: should we externalize lodash?,
   },
