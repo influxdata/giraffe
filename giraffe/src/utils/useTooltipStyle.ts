@@ -1,6 +1,7 @@
 import {useLayoutStyle} from './useLayoutStyle'
 import {useRefMousePos} from './useMousePos'
 import {LEAFLET_Z_INDEX} from '../components/Geo'
+import {CLOCKFACE_Z_INDEX} from '../constants'
 
 const MARGIN_X = 30
 
@@ -55,7 +56,7 @@ export const useTooltipStyle = (el: HTMLDivElement) => {
       position: 'fixed',
       left: `${clampedX}px`,
       top: `${clampedY}px`,
-      zIndex: LEAFLET_Z_INDEX + 1,
+      zIndex: CLOCKFACE_Z_INDEX + LEAFLET_Z_INDEX + 1,
     }
   })
 }
