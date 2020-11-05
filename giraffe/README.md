@@ -68,7 +68,7 @@ Giraffe can be used in a simple index.html page without any advanced configurati
     ```
 
 1. And have React render that element. Change the `ReactDOM.render` call to:
-    ```html
+    ```js
     ReactDOM.render(
       React.createElement(PlotRenderer, null, null),
       document.getElementById('root')
@@ -77,7 +77,7 @@ Giraffe can be used in a simple index.html page without any advanced configurati
     Open up `index.html`. You should see Giraffe Plot Goes Here where it used to say Hello World.
 
 1. Our last step is to create some fake data and then draw that fake data into a plot. First, we'll create a configuration object that tells Giraffe to render a line graph. In the render method of `PlotRenderer`, add the following code:
-    ```html
+    ```js
     const lineLayer = {
       type: "line",
       x: "_time",
@@ -86,14 +86,14 @@ Giraffe can be used in a simple index.html page without any advanced configurati
     ```
 
 1. Let's create the fake data. After the `lineLayer` code, add the following:
-    ```html
+    ```js
     const table = Giraffe.newTable(3)
       .addColumn('_time', 'dateTime:RFC3339', 'time', [1589838401244, 1589838461244, 1589838521244])
       .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79]);
     ```
 
 1. Now we'll combine them into a `config` object. Add this after the line that creates `table`:
-    ```html
+    ```js
     const config = {
       table,
       layers: [lineLayer]
@@ -101,7 +101,7 @@ Giraffe can be used in a simple index.html page without any advanced configurati
     ```
 
 1. Finally, let's create a `Plot` with this configuration and render it. Below the line that creates `config` in the `render` method, add the following code:
-    ```html
+    ```js
     const SimplePlot = React.createElement(Giraffe.Plot, {config}, null);
     return React.createElement('div', {style}, SimplePlot);
     ```
