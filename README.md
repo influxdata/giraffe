@@ -42,7 +42,7 @@ npm install @influxdata/giraffe
 
 #### Example
 
-See the [Quick Start Guide](./giraffe/README.md#quickstart) for an example.
+See the [Quick Start Guide](./giraffe/README.md#quick-start) for an example.
 
 ## Development
 
