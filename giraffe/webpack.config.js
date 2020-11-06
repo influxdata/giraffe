@@ -3,10 +3,12 @@ const webpack = require('webpack')
 const pkg = require('./package.json')
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: {
+    index: './src/index.ts',
+  },
   mode: 'production',
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     libraryTarget: 'umd',
     library: 'Giraffe',
     path: path.resolve(__dirname, 'dist'),
@@ -44,7 +46,15 @@ module.exports = {
       },
       {
         test: /\.s?css$/i,
+        exclude: /leaflet\.css/,
         use: ['css-loader', 'sass-loader'],
+      },
+      {
+        test: /leaflet\.css/,
+        use: [
+          {loader: 'style-loader', options: {injectType: 'lazyStyleTag'}},
+          'css-loader',
+        ],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -70,4 +80,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
+    }),
+  ],
 }

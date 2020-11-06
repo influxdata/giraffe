@@ -3,7 +3,6 @@ import React, {FunctionComponent, useEffect, useState} from 'react'
 import BingLayer from './geo/bing-maps/Bing'
 import {Map, TileLayer, LayersControl} from 'react-leaflet'
 import Control from 'react-leaflet-control'
-import 'leaflet/dist/leaflet.css'
 
 // Components
 import CircleMarkerLayer from './geo/CircleMarkerLayer'
@@ -64,7 +63,19 @@ const getMinZoom = (width: number): number => {
   return Math.ceil(Math.log2(width / 256) * ZOOM_FRACTION) / ZOOM_FRACTION
 }
 
+const loadLeafletStyles = (loaded => {
+  return () => {
+    if (!loaded) {
+      loaded = true
+      require(['leaflet/dist/leaflet.css'], result => {
+        result.default.use()
+      })
+    }
+  }
+})(false)
+
 const Geo: FunctionComponent<Props> = props => {
+  loadLeafletStyles()
   const {width, height} = props
   if (width === 0 || height === 0) {
     return null
