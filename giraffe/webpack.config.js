@@ -26,7 +26,12 @@ module.exports = {
       commonjs2: 'react-dom',
       root: 'ReactDOM',
     },
-    // lodash: 'lodash' TODO: should we externalize lodash?,
+    lodash: {
+      commonjs: 'lodash',
+      commonjs2: 'lodash',
+      amd: 'lodash',
+      root: '_',
+    },
   },
   devtool: 'source-map',
   resolve: {
