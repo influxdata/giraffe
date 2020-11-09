@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit --pretty"
   },
   "keywords": [
+    "band",
     "data",
     "gauge",
     "giraffe",
