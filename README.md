@@ -4,8 +4,6 @@
 
 A React-based visualization library powering the data visualizations in the [InfluxDB 2.0](https://github.com/influxdata/influxdb/) UI.
 
-(_This library is currently in pre-beta._)
-
 <img src="https://influxdata.github.io/branding/img/mascots/mascot-chronograf--white_png.png" height="100" alt="giraffe"/>
 
 ## Features
