@@ -8,29 +8,12 @@ const addPaddingToSampleText = (text: string): string => {
     return text
   }
 
+  const skinnyCharacters = ['-', '1', '|', 'i', 'l', 'I', 't']
   let sample = text
-
-  /* The following are considered skinny characters:
-    -
-    1
-    |
-    i
-    l
-    I
-    !
-  */
 
   for (let index = 0; index < text.length; index += 1) {
     const char = text.charAt(index)
-    if (
-      char === '-' ||
-      char === '1' ||
-      char === '|' ||
-      char === 'i' ||
-      char === 'l' ||
-      char === 'I' ||
-      char === '!'
-    ) {
+    if (skinnyCharacters.includes(char)) {
       sample += char
     }
   }
