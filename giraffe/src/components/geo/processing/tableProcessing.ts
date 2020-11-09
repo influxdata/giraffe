@@ -1,6 +1,3 @@
-// Libraries
-import {keys, indexOf} from 'lodash'
-
 // Types
 import {GeoTable} from './GeoTable'
 import {isPivotSensible, PivotedGeoTable} from './PivotedGeoTable'
@@ -69,11 +66,11 @@ const getFieldColumnValues = (table: Table): string[] => {
       fieldNames[fieldName] = true
     }
   }
-  return filterMetaColumns(keys(fieldNames))
+  return filterMetaColumns(Object.keys(fieldNames))
 }
 
 export const filterMetaColumns = (fieldNames: string[]) => {
-  return fieldNames.filter(name => indexOf(QUERY_META_COLUMNS, name) < 0)
+  return fieldNames.filter(name => QUERY_META_COLUMNS.indexOf(name) < 0)
 }
 
 const getNumericColumns = (table: Table): string[] => {
