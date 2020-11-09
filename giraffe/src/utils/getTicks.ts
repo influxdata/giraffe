@@ -8,6 +8,7 @@ import {AxisTicks, Formatter, FormatterType} from '../types'
 
 // Constants
 import {TIME, VALUE} from '../constants/columnKeys'
+import {TICK_COUNT_LIMIT} from '../constants'
 
 // Utils
 import {getTextMetrics} from './getTextMetrics'
@@ -136,7 +137,9 @@ export const generateTicks = (
     step = (end - stepStart) / (isFiniteNumber(tickStart) ? parts : parts + 1)
   }
 
-  const tickCountLimit = isFiniteNumber(totalTicks) ? totalTicks : Infinity
+  const tickCountLimit = isFiniteNumber(totalTicks)
+    ? Math.min(totalTicks, TICK_COUNT_LIMIT)
+    : TICK_COUNT_LIMIT
 
   let counter = isFiniteNumber(tickStart) ? 0 : 1
   let generatedTick = stepStart + step * counter
