@@ -11,7 +11,9 @@ A React-based visualization library powering the data visualizations in [InfluxD
 [See the visualizations in action using Storybook](https://influxdata.github.io/giraffe)
 
 ## Quick Start
-Giraffe can be used in a simple index.html page without any advanced configuration. In this quickstart, we're going to build a simple line graph using Giraffe in a single index file.
+Giraffe can be used in a simple index.html page without any advanced configuration. Even though Giraffe is designed to work with React apps, you won't need React or Node.js to do the quickstart below.
+
+In this quickstart, we're going to build a simple line graph using Giraffe in a single index file. All you'll need is a text editor.
 
 1. Set up your `index.html` file:
     ```html
