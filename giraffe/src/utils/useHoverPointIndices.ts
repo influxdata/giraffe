@@ -396,12 +396,7 @@ const lookupIndex1D = (
   if (!nearestRows.length) {
     return []
   }
-  const nearestDistance = nearestRows.reduce((acc, row) => {
-    if (row.distance < acc) {
-      return row.distance
-    }
-    return acc
-  }, Infinity)
+  const nearestDistance = nearestRows.reduce((acc, row) => Math.min(acc, row.distance), Infinity)
 
   return nearestRows.filter(d => d.distance === nearestDistance).map(d => d.i)
 }
