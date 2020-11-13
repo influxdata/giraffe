@@ -466,11 +466,12 @@ Giraffe comes with utility functions.
 
   - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
 
-  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
 
     - "x" means the legend will display all data points along the y-axis that have the same x-axis value
     - "y" means the legend will display all data points along the x-axis that have the same y-axis value
     - "xy" means the legend will display for a single data point nearest the mouse
+    - "auto" means "xy" if the legend has more than **maxTooltipRows** otherwise "auto" means "x"
 
   - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
 
@@ -494,11 +495,12 @@ Giraffe comes with utility functions.
 
   - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
-  - **hoverDimension**: _"x" | "y" | "xy". Optional. Defaults to "x" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
 
     - "x" means the legend will display all data points along the y-axis that have the same x-axis value
     - "y" means the legend will display all data points along the x-axis that have the same y-axis value
     - "xy" means the legend will display for a single data point nearest the mouse
+    - "auto" means "xy" if the legend has more than **maxTooltipRows** otherwise "auto" means "x"
 
   - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
 
