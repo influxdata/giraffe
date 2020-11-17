@@ -35,7 +35,10 @@ export {
   FluxDataType,
   Formatter,
   GaugeLayerConfig,
+<<<<<<< HEAD
   GaugeTheme,
+=======
+>>>>>>> f03fd3e (feat: gauge mini)
   GaugeMiniLayerConfig,
   GetColumn,
   HistogramLayerConfig,
