@@ -2,12 +2,14 @@ import React, {FunctionComponent, CSSProperties} from 'react'
 
 import {
   GaugeLayerConfig,
+  GaugeMiniLayerConfig,
   SizedConfig,
   TableGraphLayerConfig,
   LayerTypes,
 } from '../types'
 
 import {GaugeLayer} from './GaugeLayer'
+import {GaugeMiniLayer} from './GaugeMiniLayer'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
 import {RawFluxDataTable} from './RawFluxDataTable'
@@ -75,6 +77,21 @@ export const SizedTable: FunctionComponent<Props> = ({
                       <GaugeLayer
                         value={latestValue}
                         config={layerConfig as GaugeLayerConfig}
+                      />
+                    )}
+                  </LatestValueTransform>
+                )
+              case LayerTypes.GaugeMini:
+                return (
+                  <LatestValueTransform
+                    key={layerIndex}
+                    table={newTableFromConfig(config)}
+                    allowString={true}
+                  >
+                    {latestValue => (
+                      <GaugeMiniLayer
+                        value={latestValue}
+                        theme={layerConfig as Required<GaugeMiniLayerConfig>}
                       />
                     )}
                   </LatestValueTransform>

@@ -175,6 +175,7 @@ export type FluxDataType =
 export enum LayerTypes {
   RawFluxDataTable = 'flux data table',
   Gauge = 'gauge',
+  GaugeMini = 'gauge mini',
   Custom = 'custom',
   Annotation = 'annotation',
   SingleStat = 'single stat',
@@ -193,6 +194,7 @@ export type LayerConfig =
   | AnnotationLayerConfig
   | RawFluxDataTableLayerConfig
   | GaugeLayerConfig
+  | GaugeMiniLayerConfig
   | SingleStatLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
@@ -274,6 +276,40 @@ export interface GaugeTheme {
   needleColor0: string
   needleColor1: string
   overflowDelta: number
+}
+
+export interface GaugeMiniLayerConfig {
+  type: 'gauge mini'
+  mode?: 'progress' | 'bullet'
+  textMode?: 'follow' | 'left'
+
+  valueHeight?: number
+  gaugeHeight?: number
+  valueRounding?: number
+  gaugeRounding?: number
+  barPaddings?: number
+  sidePaddings?: number
+
+  gaugeColors?: Color[]
+  colorSecondary?: string
+
+  labelMain?: string
+  labelMainFontSize?: number
+  labelMainFontColor?: string
+
+  labelBars?: {_field: string; label: string}[]
+  labelBarsFontSize?: number
+  labelBarsFontColor?: string
+
+  valueFontSize?: number
+  valueFontColorInside?: string
+  valueFontColorOutside?: string
+  valueFormater?: (value: number) => string
+
+  axesSteps?: number | 'thresholds' | undefined | number[]
+  axesFontSize?: number
+  axesFontColor?: string
+  axesFormater: (value: number) => string
 }
 
 export interface SingleStatLayerConfig {

@@ -375,6 +375,7 @@ export class PlotEnv {
 
       case LayerTypes.RawFluxDataTable:
       case LayerTypes.Gauge:
+      case LayerTypes.GaugeMini:
       case LayerTypes.Geo:
       case LayerTypes.Custom:
       case LayerTypes.SingleStat:
