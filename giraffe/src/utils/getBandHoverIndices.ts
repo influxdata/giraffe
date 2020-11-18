@@ -1,4 +1,5 @@
 import {NumericColumnData, BandIndexMap, LineData} from '../types'
+import {isDefined} from './isDefined'
 
 interface LineLengths {
   [index: string]: {
@@ -76,15 +77,21 @@ export const getBandHoverIndices = (
 
       if (hoverGroupBoundaries[hoveredBandId]) {
         const rowBase = lineLengths[hoveredBandId].startIndex
-        const upperBase =
-          lineLengths[hoverGroupBoundaries[hoveredBandId].upper].startIndex
-        const lowerBase =
-          lineLengths[hoverGroupBoundaries[hoveredBandId].lower].startIndex
         const offset = index - hoverGroupBoundaries[hoveredBandId].startIndex
 
         bandHoverIndices.rowIndices.push(rowBase + offset)
-        bandHoverIndices.upperIndices.push(upperBase + offset)
-        bandHoverIndices.lowerIndices.push(lowerBase + offset)
+
+        if (isDefined(hoverGroupBoundaries[hoveredBandId].upper)) {
+          const upperBase =
+            lineLengths[hoverGroupBoundaries[hoveredBandId].upper].startIndex
+          bandHoverIndices.upperIndices.push(upperBase + offset)
+        }
+
+        if (isDefined(hoverGroupBoundaries[hoveredBandId].lower)) {
+          const lowerBase =
+            lineLengths[hoverGroupBoundaries[hoveredBandId].lower].startIndex
+          bandHoverIndices.lowerIndices.push(lowerBase + offset)
+        }
       }
     })
   }
