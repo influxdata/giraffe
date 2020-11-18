@@ -44,18 +44,6 @@ export const getBands = (
         result.lower = lower as BandBorder
       }
       bands.push(result)
-    } else if (upperIsFinite && lowerIsFinite) {
-      if (lowerIndex < upperIndex) {
-        bands.push({...(lower as Band)})
-        bands.push({...(upper as Band)})
-      } else {
-        bands.push({...(upper as Band)})
-        bands.push({...(lower as Band)})
-      }
-    } else if (upperIsFinite) {
-      bands.push({...(upper as Band)})
-    } else if (lowerIsFinite) {
-      bands.push({...(lower as Band)})
     }
   })
 
