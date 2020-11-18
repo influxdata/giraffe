@@ -7,7 +7,7 @@ import {simplifyLineData} from '../utils/lineData'
 import {useCanvas} from '../utils/useCanvas'
 import {drawBands} from '../utils/drawBands'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {isDefined} from '../utils/isDefined'
+import {useBandHoverColumns} from '../utils/useBandHoverColumns'
 import {FILL} from '../constants/columnKeys'
 import {getBandHoverIndices, getLineLengths} from '../utils/getBandHoverIndices'
 import {
@@ -74,27 +74,15 @@ export const BandLayer: FunctionComponent<Props> = props => {
 
   // Band Plot allows hovering on the nearest band or bands,
   // and any hoverable point should be associate with a band
-  const groupColData = spec.table.getColumn(FILL, 'number')
-  const hoverableColumnData = {
-    xs: [],
-    ys: [],
-    groupColData: [],
-  }
-  const {rowIndices} = spec.bandIndexMap
-
-  rowIndices.forEach(rowIndex => {
-    if (isDefined(rowIndex)) {
-      hoverableColumnData.xs = hoverableColumnData.xs.concat(
-        spec.lineData[rowIndex].xs
-      )
-      hoverableColumnData.ys = hoverableColumnData.ys.concat(
-        spec.lineData[rowIndex].ys
-      )
-      groupColData
-        .filter(index => index === rowIndex)
-        .forEach(value => hoverableColumnData.groupColData.push(value))
-    }
-  })
+  const hoverableColumnData = useBandHoverColumns(
+    hoverX,
+    hoverY,
+    spec.lineData,
+    spec.table.getColumn(FILL, 'number'),
+    spec.bandIndexMap,
+    width,
+    height
+  )
 
   const hoverRowIndices = useHoverPointIndices(
     hoverDimension,
