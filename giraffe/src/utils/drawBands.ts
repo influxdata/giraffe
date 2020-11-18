@@ -1,7 +1,7 @@
 import {line, curveLinear, area} from 'd3-shape'
 import {range} from 'd3-array'
 
-import {ColumnGroupMap, LineData, LineInterpolation} from '../types'
+import {BandIndexMap, LineData, LineInterpolation} from '../types'
 import {CURVES} from '../constants'
 import {LOWER, UPPER} from '../constants/columnKeys'
 import {isDefined} from '../utils/isDefined'
@@ -9,37 +9,25 @@ import {isDefined} from '../utils/isDefined'
 import {getBands} from '../transforms/band'
 
 interface DrawBandsOptions {
+  bandIndexMap: BandIndexMap
   context: CanvasRenderingContext2D
-  fill: ColumnGroupMap
   interpolation: LineInterpolation
   lineData: LineData
   lineWidth: number
   lineOpacity: number
-  lowerColumnName: string
-  rowColumnName: string
   shadeOpacity: number
-  upperColumnName: string
 }
 
 export const drawBands = ({
+  bandIndexMap,
   context,
-  fill,
   interpolation,
   lineData,
   lineWidth,
   lineOpacity,
-  lowerColumnName,
-  rowColumnName,
   shadeOpacity,
-  upperColumnName,
 }: DrawBandsOptions): void => {
-  const bands = getBands(
-    fill,
-    lineData,
-    lowerColumnName,
-    rowColumnName,
-    upperColumnName
-  )
+  const bands = getBands(lineData, bandIndexMap)
 
   // draw shading
   for (const band of bands) {
