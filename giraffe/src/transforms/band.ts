@@ -24,6 +24,9 @@ export const getBands = (
   const {upperIndices = [], rowIndices = [], lowerIndices = []} = bandIndexMap
   const bands: Band[] = []
   rowIndices.forEach((rowIndex, i) => {
+    // Each band must have a "main column" which creates a row index
+    // Any non-main column not associated with a "main" is not a band
+    // Only bands get rendered
     if (!isFiniteNumber(rowIndex)) {
       return
     }
