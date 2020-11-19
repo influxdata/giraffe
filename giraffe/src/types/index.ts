@@ -725,9 +725,8 @@ export interface BandBorder {
   fill: string
 }
 export interface Band {
-  lineName: string
-  lower: BandBorder
-  upper: BandBorder
+  lower?: BandBorder
+  upper?: BandBorder
   xs: Array<number>
   ys: Array<number>
   fill: string

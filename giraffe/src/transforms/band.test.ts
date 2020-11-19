@@ -164,39 +164,6 @@ describe('band transform utils', () => {
 
   describe('creates the bands to be rendered', () => {
     it('creates a line with lower and upper when they are available in the lineData', () => {
-      const fill = {
-        columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
-        mappings: [
-          {
-            cpu: 'cpu0',
-            host: 'localhost',
-            result: 'min',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu0',
-            host: 'localhost',
-            result: 'max',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu0',
-            host: 'localhost',
-            result: 'mean',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu1',
-            host: 'localhost',
-            result: 'max',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-        ],
-      }
       const lineData = {
         0: {
           fill: 'rgb(106, 103, 205)',
@@ -250,54 +217,20 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const result = getBands(fill, lineData, 'min', 'mean', 'max')
+      const bandIndexMap = {
+        upperIndices: [2],
+        rowIndices: [0],
+        lowerIndices: [1],
+      }
+
+      const result = getBands(lineData, bandIndexMap)
       expect(Array.isArray(result)).toEqual(true)
-      expect(result[0].fill).toEqual(lineData[2].fill)
+      expect(result[0].fill).toEqual(lineData[0].fill)
       expect(result[0].lower).toBeDefined()
       expect(result[0].upper).toBeDefined()
     })
 
     it('creates a line without the lower or upper when corresponding lower or upper is missing from lineData', () => {
-      const fill = {
-        columnKeys: ['result', '_field', '_measurement', 'cpu', 'host'],
-        mappings: [
-          {
-            cpu: 'cpu1',
-            host: 'localhost',
-            result: 'min',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu0',
-            host: 'localhost',
-            result: 'max',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu0',
-            host: 'localhost',
-            result: 'mean',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu1',
-            host: 'localhost',
-            result: 'mean',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-          {
-            cpu: 'cpu2',
-            host: 'localhost',
-            result: 'mean',
-            _field: 'usage_system',
-            _measurement: 'cpu',
-          },
-        ],
-      }
       const lineData = {
         0: {
           fill: 'rgb(106, 103, 205)',
@@ -385,18 +318,24 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const result = getBands(fill, lineData, 'min', 'mean', 'max')
+      const bandIndexMap = {
+        upperIndices: [3, null, null],
+        rowIndices: [0, 1, 2],
+        lowerIndices: [null, 4, null],
+      }
+
+      const result = getBands(lineData, bandIndexMap)
       expect(Array.isArray(result)).toEqual(true)
 
-      expect(result[0].fill).toEqual(lineData[2].fill)
+      expect(result[0].fill).toEqual(lineData[0].fill)
       expect(result[0].lower).toBeUndefined()
       expect(result[0].upper).toBeDefined()
 
-      expect(result[1].fill).toEqual(lineData[3].fill)
+      expect(result[1].fill).toEqual(lineData[1].fill)
       expect(result[1].lower).toBeDefined()
       expect(result[1].upper).toBeUndefined()
 
-      expect(result[2].fill).toEqual(lineData[4].fill)
+      expect(result[2].fill).toEqual(lineData[2].fill)
       expect(result[2].lower).toBeUndefined()
       expect(result[2].upper).toBeUndefined()
     })
