@@ -24,9 +24,10 @@ const buildColumnData = (
         ...hoverableColumnData.ys,
         ...lineData[rowIndex].ys,
       ]
-      groupColData
-        .filter(index => index === rowIndex)
-        .forEach(value => hoverableColumnData.groupColData.push(value))
+      hoverableColumnData.groupColData = [
+        ...hoverableColumnData.groupColData,
+        ...groupColData.filter(index => index === rowIndex),
+      ]
     }
   })
   return hoverableColumnData
