@@ -35,6 +35,7 @@ module.exports = ({config}) => {
         {
           loader: require.resolve('ts-loader'),
           options: {
+            ignoreDiagnostics: ['6133'],
             compilerOptions: {
               rootDir: '../../giraffe',
               outDir: null,
