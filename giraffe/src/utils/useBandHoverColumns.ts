@@ -16,12 +16,14 @@ const buildColumnData = (
 
   rowIndices.forEach(rowIndex => {
     if (isDefined(rowIndex)) {
-      hoverableColumnData.xs = hoverableColumnData.xs.concat(
-        lineData[rowIndex].xs
-      )
-      hoverableColumnData.ys = hoverableColumnData.ys.concat(
-        lineData[rowIndex].ys
-      )
+      hoverableColumnData.xs = [
+        ...hoverableColumnData.xs,
+        ...lineData[rowIndex].xs,
+      ]
+      hoverableColumnData.ys = [
+        ...hoverableColumnData.ys,
+        ...lineData[rowIndex].ys,
+      ]
       groupColData
         .filter(index => index === rowIndex)
         .forEach(value => hoverableColumnData.groupColData.push(value))

@@ -23,28 +23,29 @@ export const getBands = (
 ): Band[] => {
   const {upperIndices = [], rowIndices = [], lowerIndices = []} = bandIndexMap
   const bands: Band[] = []
-  rowIndices.forEach((rowIndex, position) => {
-    const upperIndex = upperIndices[position]
+  rowIndices.forEach((rowIndex, i) => {
+    if (!isFiniteNumber(rowIndex)) {
+      return
+    }
+    const upperIndex = upperIndices[i]
     const upperIsFinite = isFiniteNumber(upperIndex)
     const upper = upperIsFinite ? lineData[upperIndex] : {fill: ''}
 
-    const lowerIndex = lowerIndices[position]
+    const lowerIndex = lowerIndices[i]
     const lowerIsFinite = isFiniteNumber(lowerIndex)
     const lower = lowerIsFinite ? lineData[lowerIndex] : {fill: ''}
 
-    if (isFiniteNumber(rowIndex)) {
-      const row = lineData[rowIndex]
-      upper.fill = row.fill
-      lower.fill = row.fill
-      const result: Band = {...row}
-      if (upperIsFinite) {
-        result.upper = upper as BandBorder
-      }
-      if (lowerIsFinite) {
-        result.lower = lower as BandBorder
-      }
-      bands.push(result)
+    const row = lineData[rowIndex]
+    upper.fill = row.fill
+    lower.fill = row.fill
+    const result: Band = {...row}
+    if (upperIsFinite) {
+      result.upper = upper as BandBorder
     }
+    if (lowerIsFinite) {
+      result.lower = lower as BandBorder
+    }
+    bands.push(result)
   })
 
   return bands
