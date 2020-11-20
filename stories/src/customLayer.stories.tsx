@@ -11,9 +11,9 @@ storiesOf('Custom Layer', module)
   .addDecorator(withKnobs)
   .add('Highlighted Region', () => {
     const config: Config = {
-      table: CPU,
       layers: [
         {
+          table: CPU,
           type: 'scatter',
           x: '_time',
           y: '_value',
@@ -74,10 +74,10 @@ storiesOf('Custom Layer', module)
     const prefix = text('Prefix', '')
     const suffix = text('Suffix', '')
     const config: Config = {
-      table: singleStatTable,
       showAxes: false,
       layers: [
         {
+          table: singleStatTable,
           type: 'single stat',
           prefix,
           suffix,

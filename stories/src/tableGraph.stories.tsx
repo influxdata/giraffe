@@ -33,9 +33,9 @@ storiesOf('Table Graph', module)
     const theme = select('Theme', {dark: 'dark', light: 'light'}, 'dark')
     const fixFirstColumn = boolean('Fix First Column', false)
     const config: Config = {
-      fluxResponse: tableCSV,
       layers: [
         {
+          fluxResponse: tableCSV,
           type: 'table',
           properties: {
             colors: DEFAULT_TABLE_COLORS,

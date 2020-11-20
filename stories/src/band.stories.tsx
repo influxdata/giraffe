@@ -84,7 +84,6 @@ storiesOf('Band Chart', module)
     const xTotalTicks = number('xTotalTicks', 20)
 
     const config: Config = {
-      fluxResponse: hoverAlignment3,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -107,6 +106,7 @@ storiesOf('Band Chart', module)
       yTickStep,
       layers: [
         {
+          fluxResponse: hoverAlignment3,
           type: 'band',
           x: '_time',
           y: '_value',
@@ -196,7 +196,6 @@ storiesOf('Band Chart', module)
     const xTotalTicks = number('xTotalTicks', 20)
 
     const config: Config = {
-      fluxResponse: staticData,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -217,6 +216,7 @@ storiesOf('Band Chart', module)
       xTotalTicks,
       layers: [
         {
+          fluxResponse: staticData,
           type: 'band',
           x: '_time',
           y: '_value',
@@ -290,7 +290,6 @@ storiesOf('Band Chart', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      fluxResponse: customCSV,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -310,6 +309,7 @@ storiesOf('Band Chart', module)
       legendColorizeRows,
       layers: [
         {
+          fluxResponse: customCSV,
           type: 'band',
           x: '_time',
           y: '_value',

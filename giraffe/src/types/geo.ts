@@ -1,4 +1,6 @@
-export interface GeoLayerConfig {
+import {LayerConfiguration} from './index' // awesome circular dependency. thank you bonitoo.
+
+export interface GeoLayerConfig extends LayerConfiguration {
   type: 'geo'
   lat: number
   lon: number

@@ -45,9 +45,12 @@ export const tickFontKnob = (initial?: string) =>
 export const legendFontKnob = (initial?: string) =>
   text('Legend Font', initial || '12px sans-serif')
 
-export const colorSchemeKnob = (initial?: string[]) =>
+export const colorSchemeKnob = (
+  initial?: string[],
+  text: string = 'Color Scheme'
+) =>
   select(
-    'Color Scheme',
+    text,
     {
       'Nineteen Eighty Four': giraffe.NINETEEN_EIGHTY_FOUR,
       Atlantis: giraffe.ATLANTIS,

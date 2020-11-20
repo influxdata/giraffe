@@ -8,9 +8,9 @@ import {PlotContainer} from './helpers'
 
 storiesOf('Line Plot Stress Test', module).add('Line', () => {
   const config: Config = {
-    table: SIN,
     layers: [
       {
+        table: SIN,
         type: 'line',
         x: 'x',
         y: 'y',

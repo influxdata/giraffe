@@ -39,9 +39,9 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 600,
       height: 400,
-      table,
       layers: [
         {
+          table,
           type: 'line',
           x: '_time',
           y: '_value',
@@ -55,9 +55,9 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 600,
       height: 400,
-      table: CPU,
       layers: [
         {
+          table: CPU,
           type: 'line',
           x: '_time',
           y: '_value',
@@ -74,9 +74,9 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 300,
       height: 200,
-      table: CPU,
       layers: [
         {
+          table: CPU,
           type: 'line',
           x: '_time',
           y: '_value',
@@ -140,12 +140,12 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 600,
       height: 400,
-      table,
       valueFormatters: {
         bytes: binaryPrefixFormatter({significantDigits: 2, suffix: 'iB'}),
       },
       layers: [
         {
+          table,
           type: 'line',
           x: 'time',
           y: 'bytes',
@@ -183,9 +183,9 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 600,
       height: 400,
-      table,
       layers: [
         {
+          table,
           type: 'scatter',
           x: 'x',
           y: 'y',
@@ -199,10 +199,10 @@ storiesOf('Snapshot Tests', module)
     const config: Config = {
       width: 600,
       height: 400,
-      table: CPU,
       yTicks: [13, 19, 23],
       layers: [
         {
+          table: CPU,
           type: 'line',
           x: '_time',
           y: '_value',
@@ -231,12 +231,12 @@ storiesOf('Snapshot Tests', module)
     )
 
     const config: Config = {
-      table,
       width: 600,
       height: 400,
       xDomain: [5472854016, 7661821952],
       layers: [
         {
+          table,
           type: 'histogram',
           x: '_value',
           binCount: 30,

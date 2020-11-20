@@ -44,8 +44,6 @@ export interface Config {
   xScale?: string
   yScale?: string
 
-  table?: Table
-  fluxResponse?: string
   layers: LayerConfig[]
 
   // The x domain of the plot can be explicitly set. If this option is passed,
@@ -183,7 +181,13 @@ export type LayerConfig =
   | TableGraphLayerConfig
   | GeoLayerConfig
 
-export interface CustomLayerConfig {
+export interface LayerConfiguration {
+  fluxResponse?: string
+  table?: Table
+  type: string
+}
+
+export interface CustomLayerConfig extends LayerConfiguration {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
   render: (p: CustomLayerRenderProps) => JSX.Element
 }
@@ -202,7 +206,7 @@ export interface CustomLayerRenderProps {
   columnFormatter: (colKey: string) => (x: any) => string
 }
 
-export interface RawFluxDataTableLayerConfig {
+export interface RawFluxDataTableLayerConfig extends LayerConfiguration {
   type: 'flux data table' // do not refactor or restrict to LayerTypes.RawFluxDataTable
   files: string[]
   width: number
@@ -211,7 +215,7 @@ export interface RawFluxDataTableLayerConfig {
   parseObjects?: boolean
 }
 
-export interface GaugeLayerConfig {
+export interface GaugeLayerConfig extends LayerConfiguration {
   type: 'gauge' // do not refactor or restrict to LayerTypes.Gauge
   prefix?: string
   suffix?: string
@@ -243,7 +247,7 @@ export interface GaugeTheme {
   overflowDelta: number
 }
 
-export interface SingleStatLayerConfig {
+export interface SingleStatLayerConfig extends LayerConfiguration {
   type: 'single stat' // do not refactor or restrict to LayerTypes.SingleStat
   prefix: string
   suffix: string
@@ -266,7 +270,7 @@ export interface SingleStatSVGAttributes {
   [attributeName: string]: string | SingleStatSVGAttributeFunction
 }
 
-export interface HeatmapLayerConfig {
+export interface HeatmapLayerConfig extends LayerConfiguration {
   type: 'heatmap' // do not refactor or restrict to LayerTypes.Heatmap
   x: string
   y: string
@@ -278,7 +282,7 @@ export interface HeatmapLayerConfig {
   strokePadding?: number
 }
 
-export interface HistogramLayerConfig {
+export interface HistogramLayerConfig extends LayerConfiguration {
   type: 'histogram' // do not refactor or restrict to LayerTypes.Histogram
   x: string
   position?: HistogramPosition
@@ -291,7 +295,7 @@ export interface HistogramLayerConfig {
   strokePadding?: number
 }
 
-export interface MosaicLayerConfig {
+export interface MosaicLayerConfig extends LayerConfiguration {
   type: 'mosaic' // do not refactor or restrict to LayerTypes.Mosaic
   x: string
   y: string
@@ -307,7 +311,7 @@ export interface MosaicLayerConfig {
 
 export type RectLayerConfig = HeatmapLayerConfig | HistogramLayerConfig
 
-export interface LineLayerConfig {
+export interface LineLayerConfig extends LayerConfiguration {
   type: 'line' // do not refactor or restrict to LayerTypes.Line
   x: string
   y: string
@@ -322,7 +326,7 @@ export interface LineLayerConfig {
   shadeBelowOpacity?: number
 }
 
-export interface BandLayerConfig {
+export interface BandLayerConfig extends LayerConfiguration {
   type: 'band' // do not refactor or restrict to LayerTypes.Line
   x: string
   y: string
@@ -340,7 +344,7 @@ export interface BandLayerConfig {
   lowerColumnName?: string
 }
 
-export interface ScatterLayerConfig {
+export interface ScatterLayerConfig extends LayerConfiguration {
   type: 'scatter' // do not refactor or restrict to LayerTypes.Scatter
   x: string
   y: string
@@ -349,7 +353,7 @@ export interface ScatterLayerConfig {
   symbol?: string[]
 }
 
-export interface TableGraphLayerConfig {
+export interface TableGraphLayerConfig extends LayerConfiguration {
   type: 'table' // do not refactor or restrict to LayerTypes.Table
   tables?: FluxTable[]
   timeZone: TimeZone
@@ -485,6 +489,12 @@ export type LayerSpec =
   | RectLayerSpec
   | MosaicLayerSpec
 
+export interface LayerSpecification {
+  inputTable: Table
+  table: Table
+  type: 'line' | 'band' | 'scatter' | 'rect' | 'mosaic' | 'table'
+}
+
 export enum SpecTypes {
   Line = 'line',
   Band = 'band',
@@ -494,7 +504,7 @@ export enum SpecTypes {
   Table = 'table',
 }
 
-export interface MosaicLayerSpec {
+export interface MosaicLayerSpec extends LayerSpecification {
   type: 'mosaic'
   inputTable: Table
   table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column
@@ -511,7 +521,7 @@ export interface MosaicLayerSpec {
   yTicks: Array<string>
 }
 
-export interface LineLayerSpec {
+export interface LineLayerSpec extends LayerSpecification {
   type: 'line' // do not refactor or restrict to SpecTypes.Line
   inputTable: Table
   table: Table // has `FILL` column added
@@ -531,7 +541,7 @@ export interface LineLayerSpec {
   stackedDomainValueColumn?: NumericColumnData
 }
 
-export interface BandLayerSpec {
+export interface BandLayerSpec extends LayerSpecification {
   type: 'band' // do not refactor or restrict to SpecTypes.Line
   bandIndexMap: BandIndexMap
   bandName: string
@@ -552,7 +562,7 @@ export interface BandLayerSpec {
   }
 }
 
-export interface ScatterLayerSpec {
+export interface ScatterLayerSpec extends LayerSpecification {
   type: 'scatter' // do not refactor or restrict to SpecTypes.Scatter
   inputTable: Table
   table: Table // has `FILL` and `SYMBOL` columns added
@@ -572,7 +582,7 @@ export interface ScatterLayerSpec {
   }
 }
 
-export interface RectLayerSpec {
+export interface RectLayerSpec extends LayerSpecification {
   type: 'rect' // do not refactor or restrict to SpecTypes.Rect
   inputTable: Table
   table: Table // has `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, and `COUNT` columns, and maybe a `FILL` column

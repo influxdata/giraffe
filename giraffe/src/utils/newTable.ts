@@ -1,4 +1,11 @@
-import {Table, ColumnType, ColumnData, Config, FluxDataType} from '../types'
+import {
+  Table,
+  ColumnType,
+  ColumnData,
+  Config,
+  FluxDataType,
+  LayerConfiguration,
+} from '../types'
 import {fromFlux} from './fromFlux'
 
 // Don't export me!
@@ -119,11 +126,40 @@ export const newTableFromConfig = (config: Config): Table => {
   if (!config) {
     return newTable(0)
   }
-  if (config.table) {
-    return config.table
+
+  if (config.layers && config.layers[0].fluxResponse) {
+    return fromFlux(config.layers[0].fluxResponse).table
   }
-  if (config.fluxResponse) {
-    return fromFlux(config.fluxResponse).table
+
+  return getDefaultTable(config)
+}
+
+export const newTableFromLayerConfig = (
+  layerConfig: LayerConfiguration
+): Table => {
+  if (!layerConfig) {
+    return newTable(0)
   }
+
+  if (layerConfig.fluxResponse) {
+    return fromFlux(layerConfig.fluxResponse).table
+  }
+
+  if (layerConfig.table) {
+    return layerConfig.table
+  }
+
+  return newTable(0)
+}
+
+export const getDefaultTable = (config: Config): Table => {
+  if (!config) {
+    return newTable(0)
+  }
+
+  if (config.layers && config.layers[0].table) {
+    return config.layers[0].table
+  }
+
   return newTable(0)
 }

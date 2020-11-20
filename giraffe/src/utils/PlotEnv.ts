@@ -1,4 +1,4 @@
-import {newTableFromConfig} from './newTable'
+import {getDefaultTable, newTableFromConfig} from './newTable'
 import {getHorizontalTicks, getVerticalTicks} from './getTicks'
 import {getMargins} from './getMargins'
 import {extentOfExtents} from './extrema'
@@ -255,10 +255,10 @@ export class PlotEnv {
   public getSpec(layerIndex: number): LayerSpec {
     const layerConfig = this.config.layers[layerIndex]
 
-    if (!this.config.table) {
-      this.config.table = newTableFromConfig(this.config)
+    if (!layerConfig.table) {
+      layerConfig.table = newTableFromConfig(this.config)
     }
-    const table = this.config.table
+    const table = layerConfig.table
 
     const memoizedTransformKey = `${layerIndex}: ${layerConfig.type}`
 
@@ -435,7 +435,9 @@ export class PlotEnv {
   }
 
   private getColumnTypeByKey(columnKey): ColumnType {
-    const suppliedColumnType = this.config.table.getColumnType(columnKey)
+    const suppliedColumnType = getDefaultTable(this.config).getColumnType(
+      columnKey
+    )
 
     if (suppliedColumnType) {
       return suppliedColumnType
@@ -478,9 +480,9 @@ const mergeConfigs = (
     layers: applyLayerDefaults(config.layers),
     // Avoid passing the `table` to `identityMerge` since checking its identity
     // can be quite expensive if it is a large object
-    table: null,
+    // table: null,
   }),
-  table: config.table,
+  // table: getDefaultTable(config),
 })
 
 const areUncontrolledDomainsStale = (
@@ -491,8 +493,14 @@ const areUncontrolledDomainsStale = (
     return true
   }
 
-  if (config.table !== prevConfig.table) {
+  if (config.layers.length !== prevConfig.layers.length) {
     return true
+  }
+
+  for (let i = 0; i < config.layers.length; i++) {
+    if (config.layers[i].table !== prevConfig.layers[i].table) {
+      return true
+    }
   }
 
   const xyMappingsChanged = [

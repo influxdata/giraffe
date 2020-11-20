@@ -88,7 +88,6 @@ storiesOf('XY Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -106,6 +105,7 @@ storiesOf('XY Plot', module)
       legendColorizeRows,
       layers: [
         {
+          table,
           type: 'line',
           x,
           y,
@@ -175,7 +175,6 @@ storiesOf('XY Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val => `${Math.round(val)}%`,
@@ -190,6 +189,7 @@ storiesOf('XY Plot', module)
       yScale,
       layers: [
         {
+          table,
           type: 'line',
           x,
           y,
@@ -287,6 +287,7 @@ storiesOf('XY Plot', module)
 
     const layers = [
       {
+        table,
         type: 'line',
         x,
         y,
@@ -303,6 +304,7 @@ storiesOf('XY Plot', module)
 
     if (includeSingleStatLayer) {
       layers.push({
+        table,
         type: 'single stat',
         prefix,
         suffix,
@@ -320,7 +322,6 @@ storiesOf('XY Plot', module)
     }
 
     const config: Config = {
-      table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -358,7 +359,6 @@ storiesOf('XY Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       legendFont,
       legendOrientationThreshold,
       legendColorizeRows,
@@ -367,7 +367,7 @@ storiesOf('XY Plot', module)
       tickFont,
       showAxes,
       valueFormatters: {_value: val => `${Math.round(val)}%`},
-      layers: [{type: 'heatmap', x, y, colors}],
+      layers: [{type: 'heatmap', table, x, y, colors}],
     }
 
     return (
@@ -390,7 +390,6 @@ storiesOf('XY Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       legendFont,
       legendOrientationThreshold,
       legendColorizeRows,
@@ -399,7 +398,7 @@ storiesOf('XY Plot', module)
       xScale,
       yScale,
       valueFormatters: {[x]: x => `${Math.round(x)}%`},
-      layers: [{type: 'histogram', x, fill: ['cpu'], colors, binCount}],
+      layers: [{type: 'histogram', table, x, fill: ['cpu'], colors, binCount}],
     }
 
     return (
@@ -420,12 +419,12 @@ storiesOf('XY Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table: CPUString,
       legendOrientationThreshold,
       legendColorizeRows,
       showAxes,
       layers: [
         {
+          table: CPUString,
           type: 'mosaic',
           x,
           y,

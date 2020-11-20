@@ -53,10 +53,10 @@ const buildCircleMapStory = tileServerConfiguration => () => {
   })
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const config: Config = {
-    table: geoTable(numberOfRecords),
     showAxes: false,
     layers: [
       {
+        table: geoTable(numberOfRecords),
         type: 'geo',
         lat: latitude,
         lon: longitude,
@@ -99,10 +99,10 @@ geo.add('Map Markers', () => {
   })
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const config: Config = {
-    table: geoTable(numberOfRecords),
     showAxes: false,
     layers: [
       {
+        table: geoTable(numberOfRecords),
         type: 'geo',
         lat: latitude,
         lon: longitude,
@@ -153,10 +153,10 @@ geo.add('Marker Clustering', () => {
     ClusterAggregation.mean
   )
   const config: Config = {
-    table: geoTable(200),
     showAxes: false,
     layers: [
       {
+        table: geoTable(200),
         type: 'geo',
         lat: latitude,
         lon: longitude,
@@ -217,10 +217,10 @@ geo.add('Heatmap', () => {
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const {radius, blur} = heatmapKnobs()
   const config: Config = {
-    table: geoTable(numberOfPoints),
     showAxes: false,
     layers: [
       {
+        table: geoTable(numberOfPoints),
         type: 'geo',
         lat: latitude,
         lon: longitude,
@@ -302,10 +302,10 @@ geo.add('Tracks', () => {
     endStopMarkerRadius,
   } = trackKnobs()
   const config: Config = {
-    table: geoTracks(-74, 40, numberOfTracks),
     showAxes: false,
     layers: [
       {
+        table: geoTracks(-74, 40, numberOfTracks),
         type: 'geo',
         lat: latitude,
         lon: longitude,
@@ -350,10 +350,10 @@ geo.add('Layering visualizations', () => {
     endStopMarkerRadius,
   } = trackKnobs()
   const config: Config = {
-    table: geoTracks(-74, 40),
     showAxes: false,
     layers: [
       {
+        table: geoTracks(-74, 40),
         type: 'geo',
         lat: latitude,
         lon: longitude,

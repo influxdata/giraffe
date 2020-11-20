@@ -3,6 +3,11 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
+import {
+  NINETEEN_EIGHTY_FOUR,
+  SOLID_GREEN,
+  SOLID_RED,
+} from '../../giraffe/src/constants/colorSchemes'
 import {getRandomTable} from './data/randomTable'
 
 import {
@@ -26,11 +31,18 @@ import {
 import {tooltipFalsyValues} from './data/fluxCSV'
 
 const maxValue = Math.random() * Math.floor(200)
+const maxValue2 = Math.random() * Math.floor(200)
+
+// defining tables outside of .add() calls preserves the shape of the data and graphs
+
+const table = getRandomTable(maxValue)
+
+const baseLayerTable = getRandomTable(maxValue, 40, 20)
+const overlayTable = getRandomTable(maxValue, 20, 20)
 
 storiesOf('Line Graph', module)
   .addDecorator(withKnobs)
   .add('User defined ticks', () => {
-    let table = getRandomTable(maxValue)
     const xTickStart = number('xTickStart', new Date().getTime())
     const xTickStep = number('xTickStep', 200_000)
     const xTotalTicks = number('xTotalTicks', 5)
@@ -89,7 +101,6 @@ storiesOf('Line Graph', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
@@ -112,6 +123,7 @@ storiesOf('Line Graph', module)
       legendColorizeRows,
       layers: [
         {
+          table,
           type: 'line',
           x,
           y,
@@ -119,6 +131,118 @@ storiesOf('Line Graph', module)
           position,
           interpolation,
           colors,
+          lineWidth,
+          hoverDimension,
+          shadeBelow,
+          shadeBelowOpacity,
+        },
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Arbitrary graph layers', () => {
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'hh:mm a': 'hh:mm a',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'HH:mm:ss'
+    )
+    const legendFont = legendFontKnob()
+    const tickFont = tickFontKnob()
+    const valueAxisLabel = text('Value Axis Label', 'foo')
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
+
+    const timeZone = timeZoneKnob()
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
+    const interpolation = interpolationKnob()
+    const lineWidth = number('Line Width', 1)
+    const shadeBelow = boolean('Shade Area', false)
+    const shadeBelowOpacity = number('Area Opacity', 0.1)
+    const hoverDimension = select(
+      'Hover Dimension',
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      'auto'
+    )
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+
+    const fillOne = fillKnob(baseLayerTable, ['cpu'])
+    const xOne = xKnob(baseLayerTable)
+    const yOne = yKnob(baseLayerTable)
+
+    const fillTwo = fillKnob(overlayTable, ['cpu'])
+    const xTwo = xKnob(overlayTable)
+    const yTwo = yKnob(overlayTable)
+
+    const colorsOne = colorSchemeKnob(NINETEEN_EIGHTY_FOUR, 'Main Scheme')
+    const colorsTwo = colorSchemeKnob(SOLID_GREEN, 'Overlay Scheme')
+
+    const config: Config = {
+      valueFormatters: {
+        _time: timeFormatter({timeZone, format: timeFormat}),
+        _value: val =>
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          }`,
+      },
+      xScale,
+      yScale,
+      legendFont,
+      tickFont,
+      legendOpacity,
+      legendOrientationThreshold,
+      legendColorizeRows,
+      layers: [
+        {
+          table: baseLayerTable,
+          type: 'line',
+          x: xOne,
+          y: yOne,
+          fill: fillOne,
+          position,
+          interpolation,
+          colors: colorsOne,
+          lineWidth,
+          hoverDimension,
+          shadeBelow,
+          shadeBelowOpacity,
+        },
+        {
+          table: overlayTable,
+          type: 'line',
+          x: xTwo,
+          y: yTwo,
+          fill: fillTwo,
+          position,
+          interpolation,
+          colors: colorsTwo,
           lineWidth,
           hoverDimension,
           shadeBelow,
@@ -182,7 +306,6 @@ storiesOf('Line Graph', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      fluxResponse: staticData,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val => `${Math.round(val)}`,
@@ -196,6 +319,7 @@ storiesOf('Line Graph', module)
       legendColorizeRows,
       layers: [
         {
+          fluxResponse: staticData,
           type: 'line',
           x,
           y,
@@ -261,7 +385,6 @@ storiesOf('Line Graph', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      fluxResponse: csv,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val => `${Math.round(val)}`,
@@ -275,6 +398,7 @@ storiesOf('Line Graph', module)
       legendColorizeRows,
       layers: [
         {
+          fluxResponse: csv,
           type: 'line',
           x,
           y,

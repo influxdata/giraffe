@@ -41,7 +41,6 @@ storiesOf('Scatter Plot', module)
     const showAxes = showAxesKnob()
 
     const config: Config = {
-      table,
       valueFormatters: {_value: val => `${Math.round(val)}%`},
       legendFont,
       legendOrientationThreshold,
@@ -52,6 +51,7 @@ storiesOf('Scatter Plot', module)
       yScale,
       layers: [
         {
+          table,
           type: 'scatter',
           x,
           y,
@@ -104,7 +104,6 @@ storiesOf('Scatter Plot', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
-      table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val => `${Math.round(val)}`,
@@ -118,6 +117,7 @@ storiesOf('Scatter Plot', module)
       yScale,
       layers: [
         {
+          table,
           type: 'scatter',
           x,
           y,

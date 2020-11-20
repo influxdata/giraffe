@@ -45,9 +45,9 @@ storiesOf('Gauge', module)
     const tickSuffix = text('TickSuffix', '')
 
     const config: Config = {
-      table: gaugeTable(gaugeMin, gaugeMax),
       layers: [
         {
+          table: gaugeTable(gaugeMin, gaugeMax),
           type: 'gauge',
           prefix,
           suffix,
