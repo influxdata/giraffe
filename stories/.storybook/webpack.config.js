@@ -2,6 +2,7 @@ const path = require('path')
 const PrettierPlugin = require('prettier-webpack-plugin')
 
 module.exports = ({config}) => {
+  config.devtool = 'eval-cheap-module-source-map'
   config.module.rules.push(
     {
       test: /\.woff(2)?(\?[a-z0-9#=&.]+)$/,
