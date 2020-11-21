@@ -128,7 +128,6 @@ export const BAND_COLOR_SCALE_CONSTANT = 3
 
 export const TOOLTIP_MINIMUM_OPACITY = 0
 export const TOOLTIP_MAXIMUM_OPACITY = 1.0
-export const HOVER_POINTS_COUNT_LIMIT = 200
 
 export const CLOCKFACE_Z_INDEX = 9599
 
