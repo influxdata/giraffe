@@ -95,10 +95,10 @@ export const useHoverPointIndices = (
  *
  * 3. When hovering, a typical screen size (laptop or desktop) fits around 200 rows
  *    in a readable font size. Any additional rows calculated will not be viewable
- *    on the screen. Any additional calculation is useless because no useful
+ *    on the screen. So, any additional calculation is useless because no useful
  *    information for the user will be viewable due to screen size.
  *
- * 4. Therefore, any exceesively large data set does a lot of useless work and
+ * 4. Therefore, any excessively large data set does a lot of useless work and
  *    adversely affects browser performance.
  *
  * 5. Limit the total number of points in each dimension and also each bin.
