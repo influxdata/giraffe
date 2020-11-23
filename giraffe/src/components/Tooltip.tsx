@@ -17,6 +17,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const tooltipElement = useTooltipElement()
 
   const {
+    width,
     height,
     legendFont: font,
     legendFontColor: fontColor,
@@ -44,6 +45,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     : data
 
   const switchToVertical = columns.length > orientationThreshold
+  const maxLength = switchToVertical ? width : height
 
   const styles = generateTooltipStyles(
     columns,
@@ -78,7 +80,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
           <TooltipColumn
             key={name}
             name={name}
-            height={height}
+            maxLength={maxLength}
             values={values}
             columnStyle={styles.columns[i]}
             columnHeaderStyle={styles.headers}
@@ -95,7 +97,7 @@ Tooltip.displayName = 'Tooltip'
 
 interface TooltipColumnProps {
   name: string
-  height: number
+  maxLength: number
   values: string[]
   columnStyle: React.CSSProperties
   columnHeaderStyle: React.CSSProperties
@@ -104,19 +106,19 @@ interface TooltipColumnProps {
 
 const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
   name,
-  height,
+  maxLength,
   values,
   columnStyle,
   columnHeaderStyle,
   columnValueStyles,
 }) => {
-  const valuesLimitedByPlotHeight = values.slice(0, height)
+  const valuesLimitedByPlotDimensions = values.slice(0, maxLength)
   return (
     <div className="giraffe-tooltip-column" style={columnStyle}>
       <div className="giraffe-tooltip-column-header" style={columnHeaderStyle}>
         {name}
       </div>
-      {valuesLimitedByPlotHeight.map((value, i) => (
+      {valuesLimitedByPlotDimensions.map((value, i) => (
         <div
           className="giraffe-tooltip-column-value"
           key={i}
