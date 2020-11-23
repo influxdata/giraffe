@@ -45,7 +45,6 @@ export const useHoverPointIndices = (
   if (mode === 'x') {
     hoverLineIndices = lookupIndex1D(
       index.xBins,
-      index.maxCountPerXBin,
       mouseX,
       xScale.invert(mouseX),
       xColData,
@@ -55,7 +54,6 @@ export const useHoverPointIndices = (
   } else if (mode === 'y') {
     hoverLineIndices = lookupIndex1D(
       index.yBins,
-      index.maxCountPerYBin,
       mouseY,
       yScale.invert(mouseY),
       yColData,
@@ -79,37 +77,9 @@ export const useHoverPointIndices = (
   return hoverLineIndices
 }
 
-/************************************************************************
- * When calculating hovered points in a graph:
- *
- * 1. The graph is divided into sections or "bins".
- *    Bigger graphs (width, height), have more bins than smaller graphs.
- *
- * 2. All of the data points are assigned to the bins.
- *    When comparing the same set of data points:
- *     - large graphs have many bins with fewer data points per bin
- *       ex: 50 data points = 10 bins x 5 data points each
- *
- *     - small graphs have fewer bins with many data points per bin
- *       ex: 50 data points = 2 bins x 25 data points each
- *
- * 3. When hovering, a typical screen size (laptop or desktop) fits around 200 rows
- *    in a readable font size. Any additional rows calculated will not be viewable
- *    on the screen. So, any additional calculation is useless because no useful
- *    information for the user will be viewable due to screen size.
- *
- * 4. Therefore, any excessively large data set does a lot of useless work and
- *    adversely affects browser performance.
- *
- * 5. Limit the total number of points in each dimension and also each bin.
- *    Keep in mind the considerations in 2.
- */
-const TOTAL_POINTS_PER_HOVER_DIMENSION = 100_000
 const INDEX_BIN_WIDTH = 30
 
 type IndexTable = {
-  maxCountPerXBin: number
-  maxCountPerYBin: number
   xBins: number[][]
   yBins: number[][]
   xyBins: number[][][] // :-]
@@ -146,8 +116,6 @@ const buildIndex = (
   const yBinCount = Math.ceil(height / INDEX_BIN_WIDTH) + 1
 
   const indexTable = {
-    maxCountPerXBin: Math.ceil(TOTAL_POINTS_PER_HOVER_DIMENSION / xBinCount),
-    maxCountPerYBin: Math.ceil(TOTAL_POINTS_PER_HOVER_DIMENSION / yBinCount),
     xBins: range(xBinCount).map(_ => []),
     yBins: range(yBinCount).map(_ => []),
     xyBins: range(xBinCount).map(_ => range(yBinCount).map(_ => [])),
@@ -376,7 +344,6 @@ interface NearestIndexByGroup {
 */
 const lookupIndex1D = (
   bins: number[][],
-  maxCountPerBin: number,
   mouseCoord: number,
   dataCoord: number,
   colData: NumericColumnData,
@@ -408,7 +375,6 @@ const lookupIndex1D = (
 
   collectNearestIndices(
     nearestIndexByGroup,
-    maxCountPerBin,
     leftRowIndices,
     dataCoord,
     colData,
@@ -417,7 +383,6 @@ const lookupIndex1D = (
 
   collectNearestIndices(
     nearestIndexByGroup,
-    maxCountPerBin,
     rightRowIndices,
     dataCoord,
     colData,
@@ -439,21 +404,17 @@ const lookupIndex1D = (
 
 const collectNearestIndices = (
   acc: NearestIndexByGroup,
-  maxCountPerBin: number,
   rowIndices: number[],
   dataCoord: number,
   colData: NumericColumnData,
   groupColData: NumericColumnData
 ): void => {
-  let counter = 0
-  while (counter < maxCountPerBin && counter < rowIndices.length) {
-    const index = rowIndices[counter]
-    const group = groupColData[index]
-    const distance = Math.floor(Math.abs(dataCoord - colData[index]))
+  for (const i of rowIndices) {
+    const group = groupColData[i]
+    const distance = Math.floor(Math.abs(dataCoord - colData[i]))
 
     if (!acc[group] || distance < acc[group].distance) {
-      acc[group] = {i: index, distance}
+      acc[group] = {i, distance}
     }
-    counter += 1
   }
 }
