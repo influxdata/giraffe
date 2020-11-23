@@ -45,6 +45,15 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     : data
 
   const switchToVertical = columns.length > orientationThreshold
+
+  // 'switchToVertical': true
+  //   each column of data displays vertically, and
+  //   additional columns are next to the previous column, therefore,
+  //   the limit is the horizontal space (width)
+  // 'switchToVertical': false
+  //   each column of data displays horizontally, and
+  //   additional columns are stacked below the previous column, therefore,
+  //   the limit is the vertical space (height)
   const maxLength = switchToVertical ? width : height
 
   const styles = generateTooltipStyles(
