@@ -5,8 +5,6 @@ import {useLazyMemo} from './useLazyMemo'
 import {isDefined} from './isDefined'
 import {minBy} from './extrema'
 
-import {HOVER_POINTS_COUNT_LIMIT} from '../constants'
-
 export const useHoverPointIndices = (
   mode: 'x' | 'y' | 'xy',
   mouseX: number,
@@ -411,15 +409,12 @@ const collectNearestIndices = (
   colData: NumericColumnData,
   groupColData: NumericColumnData
 ): void => {
-  let counter = 0
-  while (counter < HOVER_POINTS_COUNT_LIMIT && counter < rowIndices.length) {
-    const index = rowIndices[counter]
-    const group = groupColData[index]
-    const distance = Math.floor(Math.abs(dataCoord - colData[index]))
+  for (const i of rowIndices) {
+    const group = groupColData[i]
+    const distance = Math.floor(Math.abs(dataCoord - colData[i]))
 
     if (!acc[group] || distance < acc[group].distance) {
-      acc[group] = {i: index, distance}
+      acc[group] = {i, distance}
     }
-    counter += 1
   }
 }
