@@ -698,6 +698,178 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
     - **overflowDelta**: _number. Optional. Defaults to 0.03 when excluded._ This constant expresses how far past the gauge min or gauge max the needle should be drawn if the value for the needle is less than gauge min or greater than the gauge max. It is expressed as a fraction of the circumference of a circle, e.g. 0.5 means draw halfway around the gauge from the min or max value.
 
+
+- **GaugeLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
+
+  All values (excluding **type**) are Optional and their defaults is defined in  precreated theme `GAUGE_MINI_THEME_BULLET_DARK`
+
+  - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
+  
+  - **mode**: _'progress' | 'bullet'._ 
+    - `'bullet'` backgroud bar is colored and value bar has always secondary color
+    - `'progress'` value bar is colored and backgroud bar has always secondary color
+
+  - **textMode** _'follow' | 'left'_ 
+    - `'left'` text value will stay on _left_ side of bar
+    - `'follow'` text value will _follow_ width of value bar
+
+  - **valueHeight** _number_ height of value bar
+
+  - **gaugeHeight** _number_ hegiht of backgroud bar
+
+  - **valueRounding** _number_ rounding of value bar corners
+
+  - **gaugeRounding** _number_ rounding of backgroud bar corners
+
+  - **barPaddings** _number_ vertical distance between bars, axes and label
+
+  - **sidePaddings** _number_ empty space on left/right of the bar
+
+  - **oveflowFraction** _number_ fraction number defining how much can value bar go outside of background bar. e.g. with `oveflowFraction: .1` will value bar have max length 110% of background bar for max value and will have 10% length to the left from background bar for minimal value.
+
+  - **gaugeColors** _Color[]_ An array of objects that defines the colors of the Gauge. Each object has the following properties.
+
+    - **id**: _string. **Required**._ The id for this color. Should be unique within the **gaugeColors** array.
+
+    - **type**: _'min' | 'max' | 'threshold'. **Required**._ The type of value associated with this color. _'min'_ type comes first, _'max'_ type comes last, and _'threshold'_ types are in between _'min'_ and _'max'_. **gaugeColors** must contain at least one _'min'_ type and one _'max'_ type for the Gauge-mini to have color. Only the first _'min'_ and first _'max'_ in the array are recognized for each of their respective types. The color will change as a gradient if the **gaugeColors** array contains no 'threshold' that means gradient background bar for 'bullet' mode and continuous value bar color change for 'progress' mode. The color will be segmented if any _'threshold'_ types are included in the **gaugeColors** array that means step color change background bar for 'bullet' mode and fixed color of value bar based on value change for 'progress' mode.
+
+    - **hex**: _string. **Required**._ The [_color hex_](https://www.color-hex.com/) string for this color.
+
+    - **name**: _string. **Required**._ For descriptive purposes only. The name given to this color.
+
+    - **value**: _number. **Required**._ The starting gauge value associated with this color.
+
+
+
+
+  - **colorSecondary** _string_ Secondary color used for value bar in 'bullet' mode or for background bar in 'progress' mode
+
+  Main label
+  - **labelMain** _string_ Main label text.
+
+  - **labelMainFontSize** _number_ Main label font size.
+
+  - **labelMainFontColor** _string_ Main label color.
+
+  Bar labels
+  - **labelBars** _{\_field: string; label: string}[]_ Labels for individual fields/bars.
+
+  - **labelBarsFontSize** _number_ Bar labels font size
+
+  - **labelBarsFontColor** _string_ Bar labels font color
+
+  Text value
+  - **valuePadding** _number_ Padding on sides of text (distance from value bar start/end)
+
+  - **valueFontSize** _number_ Text value font size
+
+  - **valueFontColorInside** _string_ Text value color when value bar is behind the text
+
+  - **valueFontColorOutside** _string_ Text value color when value bar is not behind the text
+
+  - **valueFormater** _(value: number) => string_ Function that defines how will be text value shown based on current value. e.g. ```valueFormater: (num: number) => `${num.toFixed(0)}%` ``` for _value=23.213_ will show text value _23%_.
+
+  Axes
+  - **axesSteps** _number | 'thresholds' | undefined | number[]_ Defines where to show axes:
+    - _number_ number of how many evenly distributed axes values will be shown between min and max value. Only min and max value will be shown when `axesSteps: 0`
+    - _'thresholds'_ axes values will be shown at threshold values.
+    - _undefined_ axes will not show.
+    - _number[]_ shows axes at given fixed values
+
+  - **axesFontSize** _number_ Axes values font size
+
+  - **axesFontColor** _string_ Color of axes values and axes lines
+
+  - **axesFormater** _(value: number) => string_ Same as **valueFormater** for axes values
+
+  **Precreated themes**
+    - `GAUGE_MINI_THEME_BULLET_DARK`
+
+```
+{
+  type: 'gauge mini',
+  mode: 'bullet',
+  textMode: 'follow',
+
+  valueHeight: 18,
+  gaugeHeight: 25,
+  valueRounding: 2,
+  gaugeRounding: 3,
+  barPaddings: 5,
+  sidePaddings: 20,
+  oveflowFraction: 0.03,
+
+  gaugeColors: [
+    {value: 0, type: 'min', hex: InfluxColors.Krypton},
+    {value: 50, type: 'threshold', hex: InfluxColors.Sulfur},
+    {value: 75, type: 'threshold', hex: InfluxColors.Topaz},
+    {value: 100, type: 'max', hex: InfluxColors.Topaz},
+  ] as Color[],
+  colorSecondary: InfluxColors.Kevlar,
+
+  labelMain: '',
+  labelMainFontSize: 13,
+  labelMainFontColor: InfluxColors.Ghost,
+
+  labelBars: [],
+  labelBarsFontSize: 11,
+  labelBarsFontColor: InfluxColors.Forge,
+
+  valuePadding: 5,
+  valueFontSize: 12,
+  valueFontColorOutside: InfluxColors.Raven,
+  valueFontColorInside: InfluxColors.Cloud,
+  valueFormater: (num: number) => num.toFixed(0),
+
+  axesSteps: 'thresholds',
+  axesFontSize: 11,
+  axesFontColor: InfluxColors.Forge,
+  axesFormater: (num: number) => num.toFixed(0),
+}
+```
+  - `GAUGE_MINI_THEME_PROGRESS_DARK`
+```
+{
+  type: 'gauge mini',
+  mode: 'progress',
+  textMode: 'follow',
+
+  valueHeight: 20,
+  gaugeHeight: 20,
+  valueRounding: 3,
+  gaugeRounding: 3,
+  barPaddings: 5,
+  sidePaddings: 20,
+  oveflowFraction: 0.03,
+
+  gaugeColors: [
+    {value: 0, type: 'min', hex: InfluxColors.Krypton},
+    {value: 100, type: 'max', hex: InfluxColors.Topaz},
+  ] as Color[],
+  colorSecondary: InfluxColors.Kevlar,
+
+  labelMain: '',
+  labelMainFontSize: 13,
+  labelMainFontColor: InfluxColors.Ghost,
+
+  labelBars: [],
+  labelBarsFontSize: 11,
+  labelBarsFontColor: InfluxColors.Forge,
+
+  valuePadding: 5,
+  valueFontSize: 18,
+  valueFontColorInside: InfluxColors.Raven,
+  valueFontColorOutside: InfluxColors.Cloud,
+  valueFormater: (val: number) => val.toFixed(0),
+
+  axesSteps: undefined as any,
+  axesFontSize: 11,
+  axesFontColor: InfluxColors.Forge,
+  axesFormater: (val: number) => val.toFixed(0),
+}
+```
+
+
 - **SingleStatLayerConfig**: _Object._ No limit but generally one per `<Plot>`. Using more than one requires additional styling through configuration and is not recommended.
 
   <br />A Single Stat layer is a pre-defined custom layer that displays a single value on top of any other plot type, or by itself, but usually displayed on top of (single) line graphs. The displayed value is the latest value by timestamp. If more than one value has the latest timestamp, then the first value in the [table](#data-properties) with the latest timestamp will be displayed. Currently, there is no guarantee which value will be considered the first value when there are multiple values with the same timestamp.
