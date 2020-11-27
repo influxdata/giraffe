@@ -5,6 +5,7 @@ export const GAUGE_MINI_THEME_BULLET_DARK: Required<GaugeMiniLayerConfig> = {
   type: 'gauge mini',
   mode: 'bullet',
   textMode: 'follow',
+  bars: [],
 
   valueHeight: 18,
   gaugeHeight: 25,
@@ -12,6 +13,7 @@ export const GAUGE_MINI_THEME_BULLET_DARK: Required<GaugeMiniLayerConfig> = {
   gaugeRounding: 3,
   barPaddings: 5,
   sidePaddings: 20,
+  oveflowFraction: 0.03,
 
   gaugeColors: [
     {value: 0, type: 'min', hex: InfluxColors.Krypton},
@@ -25,10 +27,10 @@ export const GAUGE_MINI_THEME_BULLET_DARK: Required<GaugeMiniLayerConfig> = {
   labelMainFontSize: 13,
   labelMainFontColor: InfluxColors.Ghost,
 
-  labelBars: [],
   labelBarsFontSize: 11,
   labelBarsFontColor: InfluxColors.Forge,
 
+  valuePadding: 5,
   valueFontSize: 12,
   valueFontColorOutside: InfluxColors.Raven,
   valueFontColorInside: InfluxColors.Cloud,
@@ -44,6 +46,7 @@ export const GAUGE_MINI_THEME_PROGRESS_DARK: Required<GaugeMiniLayerConfig> = {
   type: 'gauge mini',
   mode: 'progress',
   textMode: 'follow',
+  bars: [],
 
   valueHeight: 20,
   gaugeHeight: 20,
@@ -51,6 +54,7 @@ export const GAUGE_MINI_THEME_PROGRESS_DARK: Required<GaugeMiniLayerConfig> = {
   gaugeRounding: 3,
   barPaddings: 5,
   sidePaddings: 20,
+  oveflowFraction: 0.03,
 
   gaugeColors: [
     {value: 0, type: 'min', hex: InfluxColors.Krypton},
@@ -62,10 +66,10 @@ export const GAUGE_MINI_THEME_PROGRESS_DARK: Required<GaugeMiniLayerConfig> = {
   labelMainFontSize: 13,
   labelMainFontColor: InfluxColors.Ghost,
 
-  labelBars: [],
   labelBarsFontSize: 11,
   labelBarsFontColor: InfluxColors.Forge,
 
+  valuePadding: 5,
   valueFontSize: 18,
   valueFontColorInside: InfluxColors.Raven,
   valueFontColorOutside: InfluxColors.Cloud,

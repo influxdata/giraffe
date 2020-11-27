@@ -280,6 +280,7 @@ export interface GaugeTheme {
 
 export interface GaugeMiniLayerConfig {
   type: 'gauge mini'
+  bars?: {_field: string; label?: string}[]
   mode?: 'progress' | 'bullet'
   textMode?: 'follow' | 'left'
 
@@ -289,6 +290,7 @@ export interface GaugeMiniLayerConfig {
   gaugeRounding?: number
   barPaddings?: number
   sidePaddings?: number
+  oveflowFraction?: number
 
   gaugeColors?: Color[]
   colorSecondary?: string
@@ -297,10 +299,10 @@ export interface GaugeMiniLayerConfig {
   labelMainFontSize?: number
   labelMainFontColor?: string
 
-  labelBars?: {_field: string; label: string}[]
   labelBarsFontSize?: number
   labelBarsFontColor?: string
 
+  valuePadding?: number
   valueFontSize?: number
   valueFontColorInside?: string
   valueFontColorOutside?: string
@@ -309,7 +311,7 @@ export interface GaugeMiniLayerConfig {
   axesSteps?: number | 'thresholds' | undefined | number[]
   axesFontSize?: number
   axesFontColor?: string
-  axesFormater: (value: number) => string
+  axesFormater?: (value: number) => string
 }
 
 export interface SingleStatLayerConfig {

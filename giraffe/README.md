@@ -701,10 +701,21 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
 - **GaugeLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  All values (excluding **type**) are Optional and their defaults is defined in  precreated theme `GAUGE_MINI_THEME_BULLET_DARK`
+  For multiple bars values has to be passed as columns (not fields). That can be done in flux by 
+    ```
+    import "influxdata/influxdb/v1"
+    <your query> 
+      |> v1.fieldsAsCols()
+    ```
 
-  - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
+  All values (excluding **type**) are Optional and their defaults is defined by precreated theme `GAUGE_MINI_THEME_BULLET_DARK`
   
+  - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
+
+  - **bars** _{\_field: string; label?: string}[]_ per bar settings:
+    - __field_ giraffe table column name (that contains value), can be set to `'_value'` when there is only one field present
+    - _label_ optional label for bar
+
   - **mode**: _'progress' | 'bullet'._ 
     - `'bullet'` backgroud bar is colored and value bar has always secondary color
     - `'progress'` value bar is colored and backgroud bar has always secondary color
@@ -752,8 +763,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
   - **labelMainFontColor** _string_ Main label color.
 
   Bar labels
-  - **labelBars** _{\_field: string; label: string}[]_ Labels for individual fields/bars.
-
   - **labelBarsFontSize** _number_ Bar labels font size
 
   - **labelBarsFontColor** _string_ Bar labels font color
@@ -784,90 +793,89 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   **Precreated themes**
     - `GAUGE_MINI_THEME_BULLET_DARK`
+      ```
+      {
+        type: 'gauge mini',
+        mode: 'bullet',
+        textMode: 'follow',
+        bars: [],
 
-```
-{
-  type: 'gauge mini',
-  mode: 'bullet',
-  textMode: 'follow',
+        valueHeight: 18,
+        gaugeHeight: 25,
+        valueRounding: 2,
+        gaugeRounding: 3,
+        barPaddings: 5,
+        sidePaddings: 20,
+        oveflowFraction: 0.03,
 
-  valueHeight: 18,
-  gaugeHeight: 25,
-  valueRounding: 2,
-  gaugeRounding: 3,
-  barPaddings: 5,
-  sidePaddings: 20,
-  oveflowFraction: 0.03,
+        gaugeColors: [
+          {value: 0, type: 'min', hex: InfluxColors.Krypton},
+          {value: 50, type: 'threshold', hex: InfluxColors.Sulfur},
+          {value: 75, type: 'threshold', hex: InfluxColors.Topaz},
+          {value: 100, type: 'max', hex: InfluxColors.Topaz},
+        ] as Color[],
+        colorSecondary: InfluxColors.Kevlar,
 
-  gaugeColors: [
-    {value: 0, type: 'min', hex: InfluxColors.Krypton},
-    {value: 50, type: 'threshold', hex: InfluxColors.Sulfur},
-    {value: 75, type: 'threshold', hex: InfluxColors.Topaz},
-    {value: 100, type: 'max', hex: InfluxColors.Topaz},
-  ] as Color[],
-  colorSecondary: InfluxColors.Kevlar,
+        labelMain: '',
+        labelMainFontSize: 13,
+        labelMainFontColor: InfluxColors.Ghost,
 
-  labelMain: '',
-  labelMainFontSize: 13,
-  labelMainFontColor: InfluxColors.Ghost,
+        labelBarsFontSize: 11,
+        labelBarsFontColor: InfluxColors.Forge,
 
-  labelBars: [],
-  labelBarsFontSize: 11,
-  labelBarsFontColor: InfluxColors.Forge,
+        valuePadding: 5,
+        valueFontSize: 12,
+        valueFontColorOutside: InfluxColors.Raven,
+        valueFontColorInside: InfluxColors.Cloud,
+        valueFormater: (val: number) => val.toFixed(0),
 
-  valuePadding: 5,
-  valueFontSize: 12,
-  valueFontColorOutside: InfluxColors.Raven,
-  valueFontColorInside: InfluxColors.Cloud,
-  valueFormater: (num: number) => num.toFixed(0),
+        axesSteps: 'thresholds',
+        axesFontSize: 11,
+        axesFontColor: InfluxColors.Forge,
+        axesFormater: (val: number) => val.toFixed(0),
+      }
+      ```
+    - `GAUGE_MINI_THEME_PROGRESS_DARK`
+      ```
+      {
+        type: 'gauge mini',
+        mode: 'progress',
+        textMode: 'follow',
+        bars: [],
 
-  axesSteps: 'thresholds',
-  axesFontSize: 11,
-  axesFontColor: InfluxColors.Forge,
-  axesFormater: (num: number) => num.toFixed(0),
-}
-```
-  - `GAUGE_MINI_THEME_PROGRESS_DARK`
-```
-{
-  type: 'gauge mini',
-  mode: 'progress',
-  textMode: 'follow',
+        valueHeight: 20,
+        gaugeHeight: 20,
+        valueRounding: 3,
+        gaugeRounding: 3,
+        barPaddings: 5,
+        sidePaddings: 20,
+        oveflowFraction: 0.03,
 
-  valueHeight: 20,
-  gaugeHeight: 20,
-  valueRounding: 3,
-  gaugeRounding: 3,
-  barPaddings: 5,
-  sidePaddings: 20,
-  oveflowFraction: 0.03,
+        gaugeColors: [
+          {value: 0, type: 'min', hex: InfluxColors.Krypton},
+          {value: 100, type: 'max', hex: InfluxColors.Topaz},
+        ] as Color[],
+        colorSecondary: InfluxColors.Kevlar,
 
-  gaugeColors: [
-    {value: 0, type: 'min', hex: InfluxColors.Krypton},
-    {value: 100, type: 'max', hex: InfluxColors.Topaz},
-  ] as Color[],
-  colorSecondary: InfluxColors.Kevlar,
+        labelMain: '',
+        labelMainFontSize: 13,
+        labelMainFontColor: InfluxColors.Ghost,
 
-  labelMain: '',
-  labelMainFontSize: 13,
-  labelMainFontColor: InfluxColors.Ghost,
+        labelBarsFontSize: 11,
+        labelBarsFontColor: InfluxColors.Forge,
 
-  labelBars: [],
-  labelBarsFontSize: 11,
-  labelBarsFontColor: InfluxColors.Forge,
+        valuePadding: 5,
+        valueFontSize: 18,
+        valueFontColorInside: InfluxColors.Raven,
+        valueFontColorOutside: InfluxColors.Cloud,
+        valueFormater: (val: number) => val.toFixed(0),
 
-  valuePadding: 5,
-  valueFontSize: 18,
-  valueFontColorInside: InfluxColors.Raven,
-  valueFontColorOutside: InfluxColors.Cloud,
-  valueFormater: (val: number) => val.toFixed(0),
-
-  axesSteps: undefined as any,
-  axesFontSize: 11,
-  axesFontColor: InfluxColors.Forge,
-  axesFormater: (val: number) => val.toFixed(0),
-}
-```
+        axesSteps: undefined as any,
+        axesFontSize: 11,
+        axesFontColor: InfluxColors.Forge,
+        axesFormater: (val: number) => val.toFixed(0),
+      }
+      ```
 
 
 - **SingleStatLayerConfig**: _Object._ No limit but generally one per `<Plot>`. Using more than one requires additional styling through configuration and is not recommended.

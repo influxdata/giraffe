@@ -17,6 +17,7 @@ import {FluxTablesTransform} from './FluxTablesTransform'
 import {TableGraphLayer} from './TableGraphLayer'
 
 import {usePlotEnv} from '../utils/usePlotEnv'
+import {LatestMultipleValueTransform} from './LatestMultipleValueTransform'
 
 interface Props {
   config: SizedConfig
@@ -83,18 +84,18 @@ export const SizedTable: FunctionComponent<Props> = ({
                 )
               case LayerTypes.GaugeMini:
                 return (
-                  <LatestValueTransform
+                  <LatestMultipleValueTransform
                     key={layerIndex}
                     table={newTableFromConfig(config)}
                     allowString={true}
                   >
-                    {latestValue => (
+                    {latestValues => (
                       <GaugeMiniLayer
-                        value={latestValue}
+                        values={latestValues}
                         theme={layerConfig as Required<GaugeMiniLayerConfig>}
                       />
                     )}
-                  </LatestValueTransform>
+                  </LatestMultipleValueTransform>
                 )
               case LayerTypes.RawFluxDataTable:
                 return (

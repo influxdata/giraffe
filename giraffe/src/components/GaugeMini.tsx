@@ -5,21 +5,18 @@ import {scaleLinear} from 'd3-scale'
 import {range} from 'd3-array'
 import {Color, GaugeMiniLayerConfig} from '../types'
 
-// todo: remove before minigauge release
-export const t = (x: number, y: number) => ({
-  transform: `translate(${x},${y})`,
-})
-
 const throwReturn = <T extends unknown>(msg: string): T => {
   throw new Error(msg)
 }
 
-interface IProps {
+interface Props {
   width: number
   height: number
   value: number | {_field: string; value: number}[]
   theme: Required<GaugeMiniLayerConfig>
 }
+
+const barCssClass = 'gauge-mini-bar'
 
 //#region colors
 
@@ -28,31 +25,29 @@ export type Colors = {
   max: Color
   secondary: string
   thresholds: Color[]
-  // targets: Color[],
 }
 
 export const getColors = (theme: Required<GaugeMiniLayerConfig>): Colors => {
-  const {colorSecondary: secondary, gaugeColors: colorsAndTargets} = theme
+  const {colorSecondary: secondary, gaugeColors} = theme
 
-  colorsAndTargets.forEach(
+  gaugeColors.forEach(
     ({hex, name}) =>
       d3Color(hex) ??
       throwReturn(`Object "${hex}" isn"t valid color for name:${name}`)
   )
 
-  const min: Color =
-    colorsAndTargets.find(x => x.type === 'min') ??
-    throwReturn('color of type min must be defined')
-  const max: Color =
-    colorsAndTargets.find(x => x.type === 'max') ??
-    throwReturn('color of type max must be defined')
-
-  const thresholds = colorsAndTargets
-    .filter(({type}) => type === 'threshold')
-    .sort(({value: a}, {value: b}) => a - b)
-  // const targets = colorsAndTargets.filter(({ type }) => type === "target").sort(({ value: a }, { value: b }) => a - b);
-
-  return {max, min, secondary, /* targets, */ thresholds}
+  return {
+    min:
+      gaugeColors.find(x => x.type === 'min') ??
+      throwReturn('color of type min must be defined'),
+    max:
+      gaugeColors.find(x => x.type === 'max') ??
+      throwReturn('color of type max must be defined'),
+    thresholds: gaugeColors
+      .filter(({type}) => type === 'threshold')
+      .sort(({value: a}, {value: b}) => a - b),
+    secondary,
+  }
 }
 
 //#endregion colors
@@ -65,6 +60,7 @@ type TSvgTextRectProps = {
 
 /**
  * Helper component that returns rect when children changes. Usefull for calculating text box size.
+ * !onRectChanged called only when children changes!
  */
 export const SvgTextRect: React.FC<TSvgTextRectProps> = props => {
   const {onRectChanged = () => {}} = props
@@ -73,10 +69,12 @@ export const SvgTextRect: React.FC<TSvgTextRectProps> = props => {
 
   useEffect(() => {
     const rect = textRef.current?.getBBox()
-    if (!rect) return
+    if (!rect) {
+      return
+    }
 
     onRectChanged(rect)
-  }, [props.children])
+  }, [props.children, onRectChanged])
 
   return (
     <>
@@ -85,6 +83,10 @@ export const SvgTextRect: React.FC<TSvgTextRectProps> = props => {
   )
 }
 
+/**
+ * Helper component for centering content.
+ * !Doesn't react on content size changed. Recententering is done manualy by changing refreshToken!
+ */
 const AutoCenterGroup: FunctionComponent<{
   enabled?: boolean
   refreshToken?: number | string
@@ -110,14 +112,16 @@ const AutoCenterGroup: FunctionComponent<{
       | SVGGraphicsElement
       | undefined)?.getBoundingClientRect()
 
-    if (!box || !boxParent) return
+    if (!box || !boxParent) {
+      return
+    }
 
     setX((boxParent.width - box.width) / 2 - box.x)
     setY((boxParent.height - box.height) / 2 - box.y)
-  }, [refreshToken])
+  }, [refreshToken, enabled])
 
   return (
-    <g ref={ref} {...t(x, y)} {...props}>
+    <g ref={ref} transform={`translate(${x},${y})`} {...props}>
       {children}
     </g>
   )
@@ -125,15 +129,52 @@ const AutoCenterGroup: FunctionComponent<{
 
 //#endregion svg helpers
 
-const barCssClass = 'gauge-mini-bar'
+//#region subcomponents
 
-const BarBackground: FunctionComponent<{
+//#region types
+
+type BarBackgroundProps = {
   theme: Required<GaugeMiniLayerConfig>
   colors: Colors
   barWidth: number
   getFrac: (x: number) => number
   barCenter: number
-}> = ({
+}
+
+type BarValueProps = {
+  theme: Required<GaugeMiniLayerConfig>
+  barValueWidth: number
+  colors: Colors
+  value: number
+  valueFracFixed: number
+  barCenter: number
+}
+
+type TextProps = {
+  theme: Required<GaugeMiniLayerConfig>
+  barValueWidth: number
+  colors: Colors
+  value: number
+}
+
+type BarProps = {
+  value: number
+  theme: Required<GaugeMiniLayerConfig>
+  barWidth: number
+  y: number
+  getFrac: (x: number) => number
+}
+
+type AxesProps = {
+  theme: Required<GaugeMiniLayerConfig>
+  barWidth: number
+  y: number
+  getFrac: (x: number) => number
+}
+
+//#endregion types
+
+const BarBackground: FunctionComponent<BarBackgroundProps> = ({
   theme,
   colors: {max, min, secondary, thresholds},
   barWidth,
@@ -142,29 +183,31 @@ const BarBackground: FunctionComponent<{
 }) => {
   const {gaugeHeight, mode, gaugeRounding} = theme
 
-  const colors: {start: number; end: number; col: string}[] = []
-  if (mode === 'progress') {
-    colors.push({start: 0, end: 1, col: secondary})
-  } else {
-    const all = [min, ...thresholds, max]
-    let start = 0
-    for (let i = 0; i + 1 < all.length; i++) {
-      const {hex: col} = all[i]
-      const {value} = all[i + 1]
-
-      const end = getFrac(value)
-
-      colors.push({start, end, col})
-      start = end
-    }
-  }
-
   const y = barCenter - gaugeHeight / 2
-
   // todo: invalid HTML -> multiple same ID attribute possible
-  // todo: move to svg root
   const roundingDefId = `rounded-bar-${barWidth}-${gaugeHeight}`
   const gradientDefId = `gradient-${min.hex}-${max.hex}`
+
+  type Segment = {start: number; end: number; hex: string}
+  const segments: Segment[] = []
+  if (mode === 'bullet') {
+    // thresholds are already sorted by getColors
+    const allColors = [min, ...thresholds, max]
+
+    for (
+      let i = 0, start = 0, end = 0;
+      i + 1 < allColors.length;
+      i++, start = end
+    ) {
+      const {hex} = allColors[i]
+      const next = allColors[i + 1].value
+
+      end = getFrac(next)
+      segments.push({start, end, hex})
+    }
+  } else {
+    segments.push({start: 0, end: 1, hex: secondary})
+  }
 
   return (
     <>
@@ -191,31 +234,39 @@ const BarBackground: FunctionComponent<{
           y={y}
         />
       ) : (
-        colors.map(({col, end, start}) => (
-          <rect
-            height={gaugeHeight}
-            x={barWidth * start}
-            width={barWidth * (end - start)}
-            fill={col}
-            clipPath={`url(#${roundingDefId})`}
-            y={y}
-          />
-        ))
+        segments
+          .reverse()
+          .map(({hex: col, end, start}, i) => (
+            <rect
+              key={i}
+              height={gaugeHeight}
+              x={barWidth * start + (i === 0 ? 0 : -0.1)}
+              width={barWidth * (end - start) + (i === 0 ? 0 : +0.1)}
+              fill={col}
+              clipPath={`url(#${roundingDefId})`}
+              y={y}
+            />
+          ))
       )}
     </>
   )
 }
 
-const BarValue: FunctionComponent<{
-  theme: Required<GaugeMiniLayerConfig>
-  barValueWidth: number
-  colors: Colors
-  value: number
-  valueFracFixed: number
-  barCenter: number
-}> = ({colors, barValueWidth, value, theme, valueFracFixed, barCenter}) => {
-  const {valueHeight, gaugeHeight, mode, valueRounding} = theme
+const BarValue: FunctionComponent<BarValueProps> = ({
+  colors,
+  barValueWidth,
+  value,
+  theme,
+  valueFracFixed,
+  barCenter,
+}) => {
+  const {valueHeight, mode, valueRounding} = theme
   const colorModeGradient = colors.thresholds.length === 0
+
+  const x = Math.sign(valueFracFixed) === -1 ? barValueWidth : 0
+  const y = barCenter - valueHeight / 2
+
+  const className = 'value-rect'
 
   const colorValue =
     mode === 'bullet'
@@ -248,11 +299,6 @@ const BarValue: FunctionComponent<{
           ?.brighter(1)
           .hex()
 
-  const y = barCenter - valueHeight / 2
-  const x = Math.sign(valueFracFixed) === -1 ? barValueWidth : 0
-
-  const className = 'value-rect'
-
   // todo: move styling out -> styling is now multiple times inserted
   return (
     <>
@@ -278,83 +324,41 @@ const BarValue: FunctionComponent<{
   )
 }
 
-const Bar: FunctionComponent<{
-  value: number
-  theme: Required<GaugeMiniLayerConfig>
-  barWidth: number
-  y: number
-  getFrac: (x: number) => number
-}> = ({value, theme, y, barWidth, getFrac}) => {
-  const {gaugeHeight, valueHeight} = theme
-
-  const colors = getColors(theme)
-
-  const oveflowFrac = 0.03
-  // fixes fraction into -oveflowFrac <-> 1+oveflowFrac
-  const getFixedFrac = (val: number) =>
-    Math.max(-oveflowFrac, Math.min(oveflowFrac + 1, getFrac(val)))
-  const valueFracFixed = getFixedFrac(value)
-
-  const barY = y
-  const barValueWidth = barWidth * valueFracFixed
-  const maxBarHeight = Math.max(gaugeHeight, valueHeight)
-  const barCenter = maxBarHeight / 2
-
-  return (
-    <g className={barCssClass}>
-      <g {...t(0, barY)}>
-        <BarBackground {...{colors, barWidth, theme, getFrac, barCenter}} />
-        <BarValue
-          {...{colors, barValueWidth, theme, value, valueFracFixed, barCenter}}
-        />
-
-        <g {...t(0, barCenter)}>
-          <Text {...{centerY: y, colors, barValueWidth, theme, value}} />
-        </g>
-      </g>
-    </g>
-  )
-}
-
-const Text: FunctionComponent<{
-  theme: Required<GaugeMiniLayerConfig>
-  barValueWidth: number
-  colors: Colors
-  value: number
-}> = ({value, barValueWidth, theme}) => {
+const Text: FunctionComponent<TextProps> = ({value, barValueWidth, theme}) => {
   const {
     valueFontColorInside,
     valueFontColorOutside,
     textMode,
     valueFormater,
-    valueFontSize,
+    valueFontSize: fontSize,
+    valuePadding,
   } = theme
   const textValue = valueFormater(value)
+  const follow = textMode === 'follow'
 
   const [textBBox, setTextBBox] = useState<SVGRect | null>(null)
-  const padding = 5
 
-  const textInside =
-    (textBBox?.width ? textBBox?.width + padding * 2 : 0) < barValueWidth
-
-  const textAnchor = textInside && textMode === 'follow' ? 'end' : 'start'
+  const textWidth = textBBox?.width ? textBBox?.width + valuePadding * 2 : 0
+  const textInside = textWidth < barValueWidth
 
   const textColor = textInside ? valueFontColorInside : valueFontColorOutside
 
-  const x =
-    textMode === 'follow'
-      ? Math.max(barValueWidth + (textInside ? -padding : padding), padding)
-      : padding
+  const textAnchor = textInside && follow ? 'end' : 'start'
+
+  const x = follow
+    ? Math.max(
+        barValueWidth + (textInside ? -1 : +1) * valuePadding,
+        valuePadding
+      )
+    : valuePadding
 
   return (
     <>
       <SvgTextRect
+        {...{x, textAnchor, fontSize}}
         onRectChanged={setTextBBox}
-        x={x}
         fill={textColor}
-        textAnchor={textAnchor}
         alignmentBaseline="central"
-        fontSize={valueFontSize}
       >
         {textValue}
       </SvgTextRect>
@@ -362,21 +366,56 @@ const Text: FunctionComponent<{
   )
 }
 
-const Axes: FunctionComponent<{
-  theme: Required<GaugeMiniLayerConfig>
-  barWidth: number
-  y: number
-  getFrac: (x: number) => number
-}> = ({theme, barWidth, y, getFrac}) => {
-  const {axesSteps, axesFormater, axesFontColor, axesFontSize} = theme
-
-  if (axesSteps === undefined || axesSteps === null) return <></>
+const Bar: FunctionComponent<BarProps> = ({
+  value,
+  theme,
+  y,
+  barWidth,
+  getFrac,
+}) => {
+  const {gaugeHeight, valueHeight, oveflowFraction} = theme
 
   const colors = getColors(theme)
 
-  const colorLen = colors.max.value - colors.min.value
+  const valueFracFixed = Math.max(
+    -oveflowFraction,
+    Math.min(oveflowFraction + 1, getFrac(value))
+  )
 
-  const axesLineStyle = {stroke: axesFontColor, strokeWidth: 2}
+  const barValueWidth = barWidth * valueFracFixed
+  const maxBarHeight = Math.max(gaugeHeight, valueHeight)
+  const barCenter = maxBarHeight / 2
+
+  return (
+    <g className={barCssClass}>
+      <g transform={`translate(${0},${y})`}>
+        <BarBackground {...{colors, theme, barWidth, getFrac, barCenter}} />
+        <BarValue
+          {...{colors, theme, barValueWidth, value, valueFracFixed, barCenter}}
+        />
+
+        <g transform={`translate(${0},${barCenter})`}>
+          <Text {...{centerY: y, colors, barValueWidth, theme, value}} />
+        </g>
+      </g>
+    </g>
+  )
+}
+
+const Axes: FunctionComponent<AxesProps> = ({theme, barWidth, y, getFrac}) => {
+  const {axesSteps, axesFormater, axesFontColor, axesFontSize} = theme
+
+  if (axesSteps === undefined || axesSteps === null) {
+    return <></>
+  }
+
+  const colors = getColors(theme)
+  const colorLen = colors.max.value - colors.min.value
+  const axesLineStyle: React.CSSProperties = {
+    stroke: axesFontColor,
+    strokeWidth: 2,
+    strokeLinecap: 'round',
+  }
 
   const axesValuesArray = Array.isArray(axesSteps)
     ? axesSteps
@@ -396,59 +435,58 @@ const Axes: FunctionComponent<{
     anchor: string
     value: number
     lineLength: number
+    text: string
+    posX: number
   }[] = axesValuesArray
     .map(value => ({
-      anchor: 'middle',
       value,
+      anchor: 'middle',
       lineLength: 5,
     }))
     .concat([
       {
+        value: colors.min.value,
         anchor: 'start',
         lineLength: 3,
-        value: colors.min.value,
       },
       {
+        value: colors.max.value,
         anchor: 'end',
         lineLength: 3,
-        value: colors.max.value,
       },
     ])
+    .map(x => ({
+      ...x,
+      posX: getFrac(x.value) * barWidth,
+      text: axesFormater(x.value),
+    }))
 
   return (
     <>
-      <g {...t(0, y)}>
-        <line x2={barWidth} style={axesLineStyle} stroke-linecap="round" />
-        {points.map(({anchor, lineLength, value}, i) => {
-          const posX = getFrac(value) * barWidth
-          const text = axesFormater(value)
-          return (
-            <>
-              <g {...t(posX, 0)}>
-                <line
-                  y2={lineLength}
-                  style={axesLineStyle}
-                  stroke-linecap="round"
-                />
-                <text
-                  y={8}
-                  textAnchor={anchor}
-                  alignmentBaseline="hanging"
-                  fill={axesFontColor}
-                  fontSize={axesFontSize}
-                >
-                  {text}
-                </text>
-              </g>
-            </>
-          )
-        })}
+      <g transform={`translate(${0},${y})`}>
+        <line x2={barWidth} style={axesLineStyle} />
+        {points.map(({posX, lineLength, anchor, text}, i) => (
+          <g key={i} transform={`translate(${posX},${0})`}>
+            <line y2={lineLength} style={axesLineStyle} />
+            <text
+              y={8}
+              textAnchor={anchor}
+              alignmentBaseline="hanging"
+              fill={axesFontColor}
+              fontSize={axesFontSize}
+            >
+              {text}
+            </text>
+          </g>
+        ))}
       </g>
     </>
   )
 }
 
-export const GaugeMini: FunctionComponent<IProps> = ({
+//#endregion subcomponents
+
+export const GaugeMini: FunctionComponent<Props> = ({
   value,
   theme,
   width,
@@ -456,11 +494,11 @@ export const GaugeMini: FunctionComponent<IProps> = ({
 }) => {
   const {
     gaugeHeight,
-    sidePaddings: gaugePaddingSides,
+    sidePaddings,
     valueHeight,
+    bars,
     barPaddings,
     labelMain,
-    labelBars,
     labelMainFontSize,
     labelMainFontColor,
     labelBarsFontColor,
@@ -468,37 +506,29 @@ export const GaugeMini: FunctionComponent<IProps> = ({
   } = theme
   const [barLabelsWidth] = useState<number[]>([])
 
-  const valueArray = Array.isArray(value)
-    ? value
-    : [{_field: '_default', value}]
-
+  const valueArray = Array.isArray(value) ? value : [{_field: '', value}]
   const colors = getColors(theme)
   const colorLen = colors.max.value - colors.min.value
-  const centerY = height / 2
-
   const barLabelWidth = Math.max(...barLabelsWidth) || 0
-
-  const barWidth = width - gaugePaddingSides * 2 - barLabelWidth
-
+  const barWidth = width - sidePaddings * 2 - barLabelWidth
   const maxBarHeight = Math.max(gaugeHeight, valueHeight)
-
   const allBarsHeight = valueArray.length * (maxBarHeight + barPaddings)
 
   const [autocenterToken, setAutocenterToken] = useState(0)
   useEffect(() => {
-    setAutocenterToken(autocenterToken + 1)
-  }, [barLabelsWidth, gaugePaddingSides, valueHeight, width, height])
+    setAutocenterToken(x => x + 1)
+  }, [barLabelWidth, sidePaddings, valueHeight, width, height])
 
   /** return value as fraction 0->min 1->max */
   const getFrac = (val: number): number => (val - colors.min.value) / colorLen
 
   return (
-    <svg width={width} height={height} style={{fontFamily: 'Rubik, monospace'}}>
-      <AutoCenterGroup
-        enabled={true}
-        refreshToken={autocenterToken}
-        style={{userSelect: 'none'}}
-      >
+    <svg
+      width={width}
+      height={height}
+      style={{fontFamily: 'Rubik, monospace', userSelect: 'none'}}
+    >
+      <AutoCenterGroup enabled={true} refreshToken={autocenterToken}>
         {labelMain && (
           <text
             fill={labelMainFontColor}
@@ -510,7 +540,7 @@ export const GaugeMini: FunctionComponent<IProps> = ({
         )}
         {valueArray.map(({_field, value}, i) => {
           const y = 0 + i * (maxBarHeight + barPaddings)
-          const label = labelBars?.find(({_field: f}) => f === _field)?.label
+          const label = bars?.find(({_field: f}) => f === _field)?.label
 
           const textCenter = y + maxBarHeight / 2
 

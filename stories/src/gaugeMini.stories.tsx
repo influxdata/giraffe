@@ -9,11 +9,13 @@ import {
 } from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
-import {gaugeTable} from './data/gaugeLayer'
 import {
   GAUGE_MINI_THEME_BULLET_DARK,
   GAUGE_MINI_THEME_PROGRESS_DARK,
 } from '../../giraffe/src/constants/gaugeMiniStyles'
+// import {gaugeTable as gaugeMiniTable} from './data/gaugeLayer'
+import {gaugeMiniTable, gaugeMiniTableGetField} from './data/gaugeMiniLayer'
+import {range} from 'd3-array'
 
 type Theme = Required<GaugeMiniLayerConfig>
 
@@ -46,6 +48,9 @@ const editableLayer = (theme: Theme): Theme => ({
     },
     theme.textMode
   ),
+  bars: range(number('number of bars', 1)).map(x => ({
+    _field: gaugeMiniTableGetField(x),
+  })),
 
   valueHeight: number('valueHeight', theme.valueHeight),
   gaugeHeight: number('gaugeHeight', theme.gaugeHeight),
@@ -53,6 +58,7 @@ const editableLayer = (theme: Theme): Theme => ({
   gaugeRounding: number('gaugeRounding', theme.gaugeRounding),
   barPaddings: number('barPaddings', theme.barPaddings),
   sidePaddings: number('gaugePaddingSides', theme.sidePaddings),
+  oveflowFraction: number('oveflowFraction', theme.oveflowFraction),
 
   // todo: add knobs
   gaugeColors: theme.gaugeColors,
@@ -62,11 +68,10 @@ const editableLayer = (theme: Theme): Theme => ({
   labelMainFontSize: number('labelMainFontSize', theme.labelMainFontSize),
   labelMainFontColor: color('labelMainFontColor', theme.labelMainFontColor),
 
-  // todo: add knobs
-  labelBars: theme.labelBars,
   labelBarsFontSize: number('labelBarsFontSize', theme.labelBarsFontSize),
   labelBarsFontColor: color('labelBarsFontColor', theme.labelBarsFontColor),
 
+  valuePadding: number('valuePadding', theme.valuePadding),
   valueFontSize: number('valueFontSize', theme.valueFontSize),
   valueFontColorInside: color(
     'valueFontColorInside',
@@ -97,9 +102,11 @@ const editableLayer = (theme: Theme): Theme => ({
 })
 
 const createStory = (theme: Theme) => () => {
+  const layer = editableLayer(theme)
+
   const config: Config = {
-    table: gaugeTable(0, 100),
-    layers: [editableLayer(theme)],
+    table: gaugeMiniTable(0, 100, layer.bars.length),
+    layers: [layer],
   }
   return (
     <>
