@@ -532,7 +532,9 @@ export const GaugeMini: FunctionComponent<Props> = ({
   const {groupByColumns} = barsDefinitions
   const labelMapping: any = {}
   barsDefinitions?.bars?.forEach(x => {
-    if (!x.label) return
+    if (!x.label) {
+      return
+    }
     const mstring = createColsMString(groupByColumns, x.barDef)
     labelMapping[mstring] = x.label
   })
