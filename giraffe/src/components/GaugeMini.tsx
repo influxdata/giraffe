@@ -12,8 +12,23 @@ const throwReturn = <T extends unknown>(msg: string): T => {
 interface Props {
   width: number
   height: number
-  value: number | {_field: string; value: number}[]
+  values: {colsMString: string; value: number}[]
   theme: Required<GaugeMiniLayerConfig>
+}
+
+/** create merged string for given column string values. String is same for all columns with same values and unique for different ones */
+export const createColsMString = <T extends {[key: string]: true}>(
+  groupedBy: T,
+  col: {[key in keyof T]: string}
+): string => {
+  const columns = Object.keys(groupedBy).sort()
+  const columnValues = columns.map(x => col[x])
+  /**
+   * replacing - with -- will ensures that rows
+   * { a: '0-1', b: '2' } and  { a: '0', b: '1-2' }
+   * will not have same string (0-1-2 instead they will be 0--1-2 and 0-1--2)
+   */
+  return columnValues.map(x => x.split('-').join('--')).join('-')
 }
 
 const barCssClass = 'gauge-mini-bar'
@@ -185,7 +200,7 @@ const BarBackground: FunctionComponent<BarBackgroundProps> = ({
 
   const y = barCenter - gaugeHeight / 2
   // todo: invalid HTML -> multiple same ID attribute possible
-  const roundingDefId = `rounded-bar-${barWidth}-${gaugeHeight}`
+  const roundingDefId = `rounded-bar-w-${barWidth}-h-${gaugeHeight}-r-${gaugeRounding}`
   const gradientDefId = `gradient-${min.hex}-${max.hex}`
 
   type Segment = {start: number; end: number; hex: string}
@@ -209,6 +224,7 @@ const BarBackground: FunctionComponent<BarBackgroundProps> = ({
     segments.push({start: 0, end: 1, hex: secondary})
   }
 
+  // todo: dont't render def linear gradient when is not used
   return (
     <>
       <defs>
@@ -487,7 +503,7 @@ const Axes: FunctionComponent<AxesProps> = ({theme, barWidth, y, getFrac}) => {
 //#endregion subcomponents
 
 export const GaugeMini: FunctionComponent<Props> = ({
-  value,
+  values,
   theme,
   width,
   height,
@@ -496,7 +512,7 @@ export const GaugeMini: FunctionComponent<Props> = ({
     gaugeHeight,
     sidePaddings,
     valueHeight,
-    bars,
+    barsDefinitions,
     barPaddings,
     labelMain,
     labelMainFontSize,
@@ -506,13 +522,20 @@ export const GaugeMini: FunctionComponent<Props> = ({
   } = theme
   const [barLabelsWidth] = useState<number[]>([])
 
-  const valueArray = Array.isArray(value) ? value : [{_field: '', value}]
   const colors = getColors(theme)
   const colorLen = colors.max.value - colors.min.value
   const barLabelWidth = Math.max(...barLabelsWidth) || 0
   const barWidth = width - sidePaddings * 2 - barLabelWidth
   const maxBarHeight = Math.max(gaugeHeight, valueHeight)
-  const allBarsHeight = valueArray.length * (maxBarHeight + barPaddings)
+  const allBarsHeight = values.length * (maxBarHeight + barPaddings)
+
+  const {groupByColumns} = barsDefinitions
+  const labelMapping: any = {}
+  barsDefinitions?.bars?.forEach(x => {
+    if (!x.label) return
+    const mstring = createColsMString(groupByColumns, x.barDef)
+    labelMapping[mstring] = x.label
+  })
 
   const [autocenterToken, setAutocenterToken] = useState(0)
   useEffect(() => {
@@ -538,9 +561,9 @@ export const GaugeMini: FunctionComponent<Props> = ({
             {labelMain}
           </text>
         )}
-        {valueArray.map(({_field, value}, i) => {
+        {values.map(({colsMString, value}, i) => {
           const y = 0 + i * (maxBarHeight + barPaddings)
-          const label = bars?.find(({_field: f}) => f === _field)?.label
+          const label = labelMapping?.[colsMString]
 
           const textCenter = y + maxBarHeight / 2
 
@@ -567,7 +590,13 @@ export const GaugeMini: FunctionComponent<Props> = ({
           )
         })}
         <Axes
-          {...{barWidth, theme, value, y: allBarsHeight + barPaddings, getFrac}}
+          {...{
+            barWidth,
+            theme,
+            values,
+            y: allBarsHeight + barPaddings,
+            getFrac,
+          }}
         />
       </AutoCenterGroup>
     </svg>

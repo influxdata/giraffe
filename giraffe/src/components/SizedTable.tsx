@@ -87,7 +87,10 @@ export const SizedTable: FunctionComponent<Props> = ({
                   <LatestMultipleValueTransform
                     key={layerIndex}
                     table={newTableFromConfig(config)}
-                    allowString={true}
+                    columns={
+                      (layerConfig as Required<GaugeMiniLayerConfig>)
+                        .barsDefinitions.groupByColumns
+                    }
                   >
                     {latestValues => (
                       <GaugeMiniLayer

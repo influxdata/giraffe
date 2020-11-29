@@ -5,7 +5,7 @@ export const GAUGE_MINI_THEME_BULLET_DARK: Required<GaugeMiniLayerConfig> = {
   type: 'gauge mini',
   mode: 'bullet',
   textMode: 'follow',
-  bars: [],
+  barsDefinitions: {groupByColumns: {_label: true}},
 
   valueHeight: 18,
   gaugeHeight: 25,
@@ -34,19 +34,19 @@ export const GAUGE_MINI_THEME_BULLET_DARK: Required<GaugeMiniLayerConfig> = {
   valueFontSize: 12,
   valueFontColorOutside: InfluxColors.Raven,
   valueFontColorInside: InfluxColors.Cloud,
-  valueFormater: (val: number) => val.toFixed(0),
+  valueFormater: (num: number) => num.toFixed(0),
 
   axesSteps: 'thresholds',
   axesFontSize: 11,
   axesFontColor: InfluxColors.Forge,
-  axesFormater: (val: number) => val.toFixed(0),
+  axesFormater: (num: number) => num.toFixed(0),
 }
 
 export const GAUGE_MINI_THEME_PROGRESS_DARK: Required<GaugeMiniLayerConfig> = {
   type: 'gauge mini',
   mode: 'progress',
   textMode: 'follow',
-  bars: [],
+  barsDefinitions: {groupByColumns: {_label: true}},
 
   valueHeight: 20,
   gaugeHeight: 20,

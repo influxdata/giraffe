@@ -30,7 +30,7 @@ const color = (() => {
   return (label: string, ...rest: any[]) => select(label, colors, ...rest)
 })()
 
-const editableLayer = (theme: Theme): Theme => ({
+const editableLayer = (theme: Theme): Theme & {numberOfBars: number} => ({
   type: theme.type,
   mode: select(
     'Mode',
@@ -48,9 +48,10 @@ const editableLayer = (theme: Theme): Theme => ({
     },
     theme.textMode
   ),
-  bars: range(number('number of bars', 1)).map(x => ({
-    _field: gaugeMiniTableGetField(x),
-  })),
+  numberOfBars: number('number of bars', 1),
+  barsDefinitions: {
+    groupByColumns: {_field: true},
+  },
 
   valueHeight: number('valueHeight', theme.valueHeight),
   gaugeHeight: number('gaugeHeight', theme.gaugeHeight),
@@ -105,7 +106,7 @@ const createStory = (theme: Theme) => () => {
   const layer = editableLayer(theme)
 
   const config: Config = {
-    table: gaugeMiniTable(0, 100, layer.bars.length),
+    table: gaugeMiniTable(0, 100, layer.numberOfBars),
     layers: [layer],
   }
   return (
