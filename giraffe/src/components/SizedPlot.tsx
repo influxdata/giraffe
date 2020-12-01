@@ -3,6 +3,7 @@ import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
 import {Axes} from './Axes'
 import {
   SizedConfig,
+  AnnotationLayerConfig,
   SingleStatLayerConfig,
   LineLayerConfig,
   BandLayerConfig,
@@ -28,6 +29,7 @@ import {newTableFromConfig} from '../utils/newTable'
 import {MosaicLayer} from './MosaicLayer'
 import {GeoLayerConfig} from '../types/geo'
 import GeoLayer from './GeoLayer'
+import {AnnotationLayer} from './AnnotationLayer'
 
 interface Props {
   config: SizedConfig
@@ -164,6 +166,15 @@ export const SizedPlot: FunctionComponent<Props> = ({
             }
 
             switch (spec.type) {
+              case SpecTypes.Annotation:
+                return (
+                  <AnnotationLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as AnnotationLayerConfig}
+                  />
+                )
               case SpecTypes.Line:
                 return (
                   <LineLayer

@@ -19,7 +19,7 @@ export const PlotContainer = ({children}) => (
   </div>
 )
 
-const multiSelect = (
+export const multiSelect = (
   label: string,
   options: string[],
   defaultValues: string[]
