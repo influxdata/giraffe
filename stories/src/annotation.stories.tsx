@@ -21,7 +21,7 @@ import {
   tooltipColorizeRowsKnob,
 } from './helpers'
 
-import {annotationsTable, matchAnnotationsToTable} from './data/annotations'
+import {annotationsTable, matchAnnotationsToTable} from './data/annotation'
 
 storiesOf('Annotations', module)
   .addDecorator(withKnobs)

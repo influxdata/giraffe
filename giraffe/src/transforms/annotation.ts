@@ -39,16 +39,18 @@ export const annotationTransform = (
 
   const annotations: AnnotationMark[] = []
 
-  for (let i = 0; i < inputAnnotations.length; i += 1) {
-    if (
-      (inputAnnotations[i].direction === 'y' &&
-        yMin <= inputAnnotations[i].startValue &&
-        inputAnnotations[i].stopValue <= yMax) ||
-      (inputAnnotations[i].direction !== 'y' &&
-        xMin <= inputAnnotations[i].startValue &&
-        inputAnnotations[i].stopValue <= xMax)
-    ) {
-      annotations.push(inputAnnotations[i])
+  if (Array.isArray(inputAnnotations)) {
+    for (let i = 0; i < inputAnnotations.length; i += 1) {
+      if (
+        (inputAnnotations[i].direction === 'y' &&
+          yMin <= inputAnnotations[i].startValue &&
+          inputAnnotations[i].stopValue <= yMax) ||
+        (inputAnnotations[i].direction !== 'y' &&
+          xMin <= inputAnnotations[i].startValue &&
+          inputAnnotations[i].stopValue <= xMax)
+      ) {
+        annotations.push(inputAnnotations[i])
+      }
     }
   }
 

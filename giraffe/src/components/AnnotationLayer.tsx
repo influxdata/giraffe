@@ -7,12 +7,13 @@ interface AnnotationLayerProps extends LayerProps {
   config: AnnotationLayerConfig
 }
 
+const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
+  width: '100%',
+  height: '100%',
+}
+
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
   const {height, width, spec, xScale, yScale} = props
-  const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
-    width: '100%',
-    height: '100%',
-  }
   const annotationsPositions = useMemo(
     () => getAnnotationsPositions(spec.annotations, xScale, yScale),
     [spec.annotations, xScale, yScale]
