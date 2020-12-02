@@ -1,7 +1,7 @@
 import {csvParse, csvParseRows} from 'd3-dsv'
 import Papa from 'papaparse'
-import {get, groupBy} from 'lodash'
-
+import {get} from './get'
+import {groupBy} from './groupBy'
 import {Schema, Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
@@ -46,12 +46,9 @@ const formatSchemaByChunk = (chunk: string, schema: Schema): void => {
   const annotationD = Papa.parse(annotationLines).data
   const headerRow = nonAnnotationData[0]
   const tableColIndex = headerRow.findIndex(h => h === 'table')
-  interface TableGroup {
-    [tableId: string]: string[]
-  }
   // Group rows by their table id
   const tablesData = Object.values(
-    groupBy<TableGroup[]>(nonAnnotationData.slice(1), row => row[tableColIndex])
+    groupBy(nonAnnotationData.slice(1), row => row[tableColIndex])
   )
 
   const groupRow = annotationD.find(row => row[0] === '#group')

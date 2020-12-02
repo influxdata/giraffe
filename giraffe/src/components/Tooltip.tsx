@@ -17,6 +17,8 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const tooltipElement = useTooltipElement()
 
   const {
+    width,
+    height,
     legendFont: font,
     legendFontColor: fontColor,
     legendFontBrightColor: fontBrightColor,
@@ -43,6 +45,16 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     : data
 
   const switchToVertical = columns.length > orientationThreshold
+
+  // 'switchToVertical': true
+  //   each column of data displays vertically, and
+  //   additional columns are next to the previous column, therefore,
+  //   the limit is the horizontal space (width)
+  // 'switchToVertical': false
+  //   each column of data displays horizontally, and
+  //   additional columns are stacked below the previous column, therefore,
+  //   the limit is the vertical space (height)
+  const maxLength = switchToVertical ? width : height
 
   const styles = generateTooltipStyles(
     columns,
@@ -77,6 +89,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
           <TooltipColumn
             key={name}
             name={name}
+            maxLength={maxLength}
             values={values}
             columnStyle={styles.columns[i]}
             columnHeaderStyle={styles.headers}
@@ -93,6 +106,7 @@ Tooltip.displayName = 'Tooltip'
 
 interface TooltipColumnProps {
   name: string
+  maxLength: number
   values: string[]
   columnStyle: React.CSSProperties
   columnHeaderStyle: React.CSSProperties
@@ -101,17 +115,19 @@ interface TooltipColumnProps {
 
 const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
   name,
+  maxLength,
   values,
   columnStyle,
   columnHeaderStyle,
   columnValueStyles,
 }) => {
+  const valuesLimitedByPlotDimensions = values.slice(0, maxLength)
   return (
     <div className="giraffe-tooltip-column" style={columnStyle}>
       <div className="giraffe-tooltip-column-header" style={columnHeaderStyle}>
         {name}
       </div>
-      {values.map((value, i) => (
+      {valuesLimitedByPlotDimensions.map((value, i) => (
         <div
           className="giraffe-tooltip-column-value"
           key={i}

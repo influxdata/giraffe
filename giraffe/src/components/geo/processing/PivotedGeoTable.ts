@@ -1,6 +1,3 @@
-// Libraries
-import {values} from 'lodash'
-
 // Types
 import {
   FIELD_COLUMN,
@@ -39,7 +36,7 @@ export class PivotedGeoTable extends AbstractGeoTable {
       return
     }
     const entriesCount = fieldColumn.length
-    const index: {[seriesKey: string]: GeoRow} = {}
+    const mapData: {[seriesKey: string]: GeoRow} = {}
     for (let i = 0; i < entriesCount; i++) {
       const seriesKey = seriesKeyColumns.map(column => column[i]).join()
       const fieldName = fieldColumn[i]
@@ -49,7 +46,7 @@ export class PivotedGeoTable extends AbstractGeoTable {
       if (!latFound && fieldName === 'lat') {
         latFound = true
       }
-      const point = index[seriesKey]
+      const point = mapData[seriesKey]
       const value = valueColumn[i]
       if (
         typeof value === 'number' ||
@@ -58,7 +55,7 @@ export class PivotedGeoTable extends AbstractGeoTable {
         if (point) {
           point[fieldName] = value
         } else {
-          index[seriesKey] = {
+          mapData[seriesKey] = {
             [fieldName]: value,
           }
         }
@@ -70,7 +67,7 @@ export class PivotedGeoTable extends AbstractGeoTable {
         : CoordinateEncoding.GEO_HASH
     )
     this.maxRows = maxRows
-    const rows = values(index)
+    const rows = Object.values(mapData)
     if (rows.length > maxRows) {
       this.data = rows.slice(0, maxRows)
       this.truncated = true

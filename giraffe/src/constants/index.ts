@@ -127,7 +127,8 @@ export const ALL_SYMBOL_TYPES: SymbolType[] = [
 export const BAND_COLOR_SCALE_CONSTANT = 3
 
 export const TOOLTIP_MINIMUM_OPACITY = 0
-
 export const TOOLTIP_MAXIMUM_OPACITY = 1.0
 
 export const CLOCKFACE_Z_INDEX = 9599
+
+export const TICK_COUNT_LIMIT = 1000

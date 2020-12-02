@@ -44,13 +44,11 @@ export const LineLayer: FunctionComponent<Props> = props => {
 
   let hoverDimension: 'x' | 'y' | 'xy'
 
-  if (
-    config.hoverDimension === 'auto' &&
-    Object.keys(spec.lineData).length > config.maxTooltipRows
-  ) {
-    hoverDimension = 'xy'
-  } else if (config.hoverDimension === 'auto') {
+  if (config.hoverDimension === 'auto') {
     hoverDimension = 'x'
+    if (Object.keys(spec.lineData).length > config.maxTooltipRows) {
+      hoverDimension = 'xy'
+    }
   } else {
     hoverDimension = config.hoverDimension
   }

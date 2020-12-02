@@ -299,7 +299,7 @@ const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
   let y = j0
 
   while (x <= i1) {
-    closestRowIndices.push(...bins[x][y])
+    bins[x][y].forEach((index: number) => closestRowIndices.push(index))
     x++
   }
 
@@ -307,7 +307,7 @@ const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
   y++
 
   while (y <= j1) {
-    closestRowIndices.push(...bins[x][y])
+    bins[x][y].forEach((index: number) => closestRowIndices.push(index))
     y++
   }
 
@@ -315,7 +315,7 @@ const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
   x--
 
   while (x >= i0) {
-    closestRowIndices.push(...bins[x][y])
+    bins[x][y].forEach((index: number) => closestRowIndices.push(index))
     x--
   }
 
@@ -323,7 +323,7 @@ const collectClosestRowIndices = (i0, i1, j0, j1, bins): number[] => {
   y--
 
   while (y >= j0) {
-    closestRowIndices.push(...bins[x][y])
+    bins[x][y].forEach((index: number) => closestRowIndices.push(index))
     y--
   }
 
@@ -394,8 +394,10 @@ const lookupIndex1D = (
   if (!nearestRows.length) {
     return []
   }
-
-  const nearestDistance = Math.min(...nearestRows.map(d => d.distance))
+  const nearestDistance = nearestRows.reduce(
+    (acc, row) => Math.min(acc, row.distance),
+    Infinity
+  )
 
   return nearestRows.filter(d => d.distance === nearestDistance).map(d => d.i)
 }
