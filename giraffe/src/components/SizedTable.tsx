@@ -38,7 +38,9 @@ export const SizedTable: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const fluxResponse = config.fluxResponse ? config.fluxResponse : ''
+  const fluxResponse = config.layers[0].fluxResponse
+    ? config.layers[0].fluxResponse
+    : ''
 
   return (
     <div

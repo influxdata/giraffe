@@ -176,7 +176,6 @@ storiesOf('Line Graph', module)
       'overlaid'
     )
     const interpolation = interpolationKnob()
-    const lineWidth = number('Line Width', 1)
     const shadeBelow = boolean('Shade Area', false)
     const shadeBelowOpacity = number('Area Opacity', 0.1)
     const hoverDimension = select(
@@ -196,10 +195,12 @@ storiesOf('Line Graph', module)
     const fillOne = fillKnob(baseLayerTable, ['cpu'])
     const xOne = xKnob(baseLayerTable)
     const yOne = yKnob(baseLayerTable)
+    const lineWidth = number('Line Width Base', 1)
 
     const fillTwo = fillKnob(overlayTable, ['cpu'])
     const xTwo = xKnob(overlayTable)
     const yTwo = yKnob(overlayTable)
+    const lineWidthTwo = number('Line Width Overlay', 2)
 
     const colorsOne = colorSchemeKnob(NINETEEN_EIGHTY_FOUR, 'Main Scheme')
     const colorsTwo = colorSchemeKnob(SOLID_GREEN, 'Overlay Scheme')
@@ -243,7 +244,7 @@ storiesOf('Line Graph', module)
           position,
           interpolation,
           colors: colorsTwo,
-          lineWidth,
+          lineWidth: lineWidthTwo,
           hoverDimension,
           shadeBelow,
           shadeBelowOpacity,
