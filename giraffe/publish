@@ -1,6 +1,32 @@
 #!/bin/bash
 
-set -e 
+set -e
+
+# Ensure there's a version number
+if [ $# -eq 0 ]; then
+  echo "Please specify a SemVer version to publish 'X.Y.Z(-PRERELEASE)(+BUILD)'"
+  exit 1
+fi
+
+VERSION_NUMBER=$1
+
+# regex taken from: https://github.com/fsaintjacques/semver-tool/blob/master/src/semver
+NAT='0|[1-9][0-9]*'
+ALPHANUM='[0-9]*[A-Za-z-][0-9A-Za-z-]*'
+IDENT="$NAT|$ALPHANUM"
+FIELD='[0-9A-Za-z-]+'
+
+SEMVER_REGEX="\
+^[vV]?\
+($NAT)\\.($NAT)\\.($NAT)\
+(\\-(${IDENT})(\\.(${IDENT}))*)?\
+(\\+${FIELD}(\\.${FIELD})*)?$"
+
+# Make sure our version is an actual semantic version
+if [[ ! $VERSION_NUMBER =~ $SEMVER_REGEX ]]; then
+  echo "The version needs to follow a SemVer naming scheme 'X.Y.Z(-PRERELEASE)(+BUILD)'"
+  exit 1
+fi
 
 # Make sure our working dir is the dir of the publish script
 cd $(dirname ${BASH_SOURCE[0]})
@@ -29,12 +55,22 @@ yarn -s install --frozen-lockfile
 echo "Building production build"
 yarn run build
 
-RELEASE_TYPE=${1:-patch}
+echo "Giraffe built successfully!"
 
-echo "Tagging and publishing $RELEASE_TYPE release"
-yarn -s publish --$RELEASE_TYPE --access=public
+# Lifted from https://stackoverflow.com/a/3232082/92446
+read -r -p "Are you sure you want to publish the build to npm? [y/N] " response
+case "$response" in
+    [yY][eE][sS]|[yY])
+        echo "Tagging and publishing $VERSION_NUMBER release"
+        yarn -s publish --$VERSION_NUMBER --access=public
 
-echo "Pushing git commit and tag"
-git push --follow-tags
+        echo "Pushing git commit and tag"
+        git push --follow-tags
 
-echo "Publish successful!"
+        echo "Publish successful!"
+        ;;
+    *)
+        echo "Understandable, have a great day. Exiting without publishing."
+        exit 1
+        ;;
+esac
