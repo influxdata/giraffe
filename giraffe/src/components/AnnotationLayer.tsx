@@ -15,8 +15,8 @@ const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
   const {height, width, spec, xScale, yScale} = props
   const annotationsPositions = useMemo(
-    () => getAnnotationsPositions(spec.annotations, xScale, yScale),
-    [spec.annotations, xScale, yScale]
+    () => getAnnotationsPositions(spec.annotationData, xScale, yScale),
+    [spec.annotationData, xScale, yScale]
   )
 
   return (

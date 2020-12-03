@@ -37,19 +37,22 @@ export const annotationTransform = (
     }
   }
 
-  const annotations: AnnotationMark[] = []
+  const annotationData: AnnotationMark[] = []
 
   if (Array.isArray(inputAnnotations)) {
     for (let i = 0; i < inputAnnotations.length; i += 1) {
+      // Keep only the annotations within their respective domains
+      // 'y' direction annotations should be within yDomain
+      // 'x' direction annotations should be within xDomain
       if (
         (inputAnnotations[i].direction === 'y' &&
           yMin <= inputAnnotations[i].startValue &&
           inputAnnotations[i].stopValue <= yMax) ||
-        (inputAnnotations[i].direction !== 'y' &&
+        (inputAnnotations[i].direction === 'x' &&
           xMin <= inputAnnotations[i].startValue &&
           inputAnnotations[i].stopValue <= xMax)
       ) {
-        annotations.push(inputAnnotations[i])
+        annotationData.push(inputAnnotations[i])
       }
     }
   }
@@ -57,7 +60,7 @@ export const annotationTransform = (
   return {
     type: 'annotation',
     table,
-    annotations,
+    annotationData,
     xColumnKey,
     yColumnKey,
     xColumnType: table.getColumnType(xColumnKey),

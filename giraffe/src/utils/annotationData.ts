@@ -1,13 +1,13 @@
 import {AnnotationMark} from '../types'
 
 export const getAnnotationsPositions = (
-  annotations: AnnotationMark[],
+  annotationData: AnnotationMark[],
   xScale: Function,
   yScale: Function
 ): AnnotationMark[] => {
   const annotationMarks: AnnotationMark[] = []
 
-  annotations.forEach(annotation => {
+  annotationData.forEach(annotation => {
     annotationMarks.push({
       ...annotation,
       startValue:

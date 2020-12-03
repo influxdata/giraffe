@@ -16,8 +16,8 @@ describe('annotation transform', () => {
   it('creates no annotations when given no annotations', () => {
     const result = annotationTransform(table, null, TIME, VALUE, ['cpu'])
 
-    expect(Array.isArray(result.annotations)).toEqual(true)
-    expect(result.annotations.length).toEqual(0)
+    expect(Array.isArray(result.annotationData)).toEqual(true)
+    expect(result.annotationData.length).toEqual(0)
   })
 
   it('calculates the xDomain and yDomain based on the given table and column keys', () => {
@@ -91,7 +91,7 @@ describe('annotation transform', () => {
       TIME,
       VALUE,
       ['cpu']
-    ).annotations
+    ).annotationData
 
     expect(Array.isArray(annotations)).toEqual(true)
     expect(inputAnnotations.length > annotations.length).toEqual(true)

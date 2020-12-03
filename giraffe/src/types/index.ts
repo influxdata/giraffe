@@ -511,7 +511,7 @@ export enum SpecTypes {
 export interface AnnotationLayerSpec {
   type: 'annotation'
   table: Table
-  annotations: AnnotationMark[] // annotations that are renderable (within the domain)
+  annotationData: AnnotationMark[]
   xColumnKey: string
   yColumnKey: string
   xColumnType: ColumnType
