@@ -5,13 +5,14 @@
   "module": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --collectCoverage --maxWorkers=2",
-    "test:watch": "jest --collectCoverage --watch --verbose false",
     "build": "rm -rf dist && NODE_ENV=production webpack --config webpack.config.js",
-    "start": "webpack --config webpack.config.js --watch --progress",
     "lint": "eslint '{src,../stories/src}/**/*.{ts,tsx}'",
     "prettier": "prettier --config ../.prettierrc.json --check '{src,../stories/src}/**/*.{ts,tsx}'",
     "prettier:fix": "prettier --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
+    "publish": "echo 'To publish giraffe, run ./publish $version'",
+    "start": "webpack --config webpack.config.js --watch --progress",
+    "test": "jest --collectCoverage --maxWorkers=2",
+    "test:watch": "jest --collectCoverage --watch --verbose false",
     "typecheck": "tsc --noEmit --pretty"
   },
   "keywords": [

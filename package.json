@@ -4,6 +4,7 @@
   "scripts": {
     "lint": "eslint '{giraffe,stories}/src/**/*.{ts,tsx}'",
     "prettier": "prettier --config .prettierrc.json --check '{giraffe,stories}/**/*.{ts,tsx}'",
-    "prettier:fix": "prettier --config .prettierrc.json --write '{giraffe,stories}/**/*.{ts,tsx}'"
+    "prettier:fix": "prettier --config .prettierrc.json --write '{giraffe,stories}/**/*.{ts,tsx}'",
+    "publish": "echo 'To publish giraffe, run ./giraffe/publish $version'"
   }
 }
