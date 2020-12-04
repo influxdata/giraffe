@@ -158,6 +158,7 @@ export enum LayerTypes {
   RawFluxDataTable = 'flux data table',
   Gauge = 'gauge',
   Custom = 'custom',
+  Annotation = 'annotation',
   SingleStat = 'single stat',
   Heatmap = 'heatmap',
   Histogram = 'histogram',
@@ -171,6 +172,7 @@ export enum LayerTypes {
 
 export type LayerConfig =
   | CustomLayerConfig
+  | AnnotationLayerConfig
   | RawFluxDataTableLayerConfig
   | GaugeLayerConfig
   | SingleStatLayerConfig
@@ -186,6 +188,16 @@ export type LayerConfig =
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
   render: (p: CustomLayerRenderProps) => JSX.Element
+}
+
+export interface AnnotationLayerConfig {
+  type: 'annotation'
+  x: string
+  y: string
+  annotations: AnnotationMark[]
+  fill?: string[]
+  svgAttributes?: SVGAttributes
+  svgStyle?: CSS.Properties
 }
 
 export interface CustomLayerRenderProps {
@@ -254,16 +266,16 @@ export interface SingleStatLayerConfig {
   testID?: string
   style?: CSS.Properties
   resizerStyle?: CSS.Properties
-  svgAttributes?: SingleStatSVGAttributes
+  svgAttributes?: SVGAttributes
   svgStyle?: CSS.Properties
-  svgTextAttributes?: SingleStatSVGAttributes
+  svgTextAttributes?: SVGAttributes
   svgTextStyle?: CSS.Properties
 }
 
-export type SingleStatSVGAttributeFunction = (stat: string) => string
+export type SVGAttributeFunction = (stat: string) => string
 
-export interface SingleStatSVGAttributes {
-  [attributeName: string]: string | SingleStatSVGAttributeFunction
+export interface SVGAttributes {
+  [attributeName: string]: string | SVGAttributeFunction
 }
 
 export interface HeatmapLayerConfig {
@@ -479,6 +491,7 @@ export interface FluxTable {
   We call the collection of this derived data a "spec".
 */
 export type LayerSpec =
+  | AnnotationLayerSpec
   | LineLayerSpec
   | BandLayerSpec
   | ScatterLayerSpec
@@ -486,12 +499,25 @@ export type LayerSpec =
   | MosaicLayerSpec
 
 export enum SpecTypes {
+  Annotation = 'annotation',
   Line = 'line',
   Band = 'band',
   Scatter = 'scatter',
   Rect = 'rect',
   Mosaic = 'mosaic',
   Table = 'table',
+}
+
+export interface AnnotationLayerSpec {
+  type: 'annotation'
+  table: Table
+  annotationData: AnnotationMark[]
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
+  xDomain: number[]
+  yDomain: number[]
 }
 
 export interface MosaicLayerSpec {
@@ -758,4 +784,15 @@ export interface StandardFunctionProps {
   testID?: string
   children?: ReactNode
   className?: string
+}
+
+export type AnnotationDirection = 'x' | 'y'
+
+export interface AnnotationMark {
+  title: string
+  description: string
+  color: string
+  startValue: number
+  stopValue: number
+  direction?: AnnotationDirection
 }

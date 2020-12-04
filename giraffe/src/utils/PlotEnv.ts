@@ -12,6 +12,7 @@ import {scatterTransform} from '../transforms/scatter'
 import {histogramTransform} from '../transforms/histogram'
 import {heatmapTransform} from '../transforms/heatmap'
 import {mosaicTransform} from '../transforms/mosaic'
+import {annotationTransform} from '../transforms/annotation'
 
 import {
   DEFAULT_RANGE_PADDING,
@@ -344,6 +345,20 @@ export class PlotEnv {
           this.config.height,
           layerConfig.binSize,
           layerConfig.colors
+        )
+      }
+      case LayerTypes.Annotation: {
+        const transform = this.fns.get(
+          memoizedTransformKey,
+          annotationTransform
+        )
+
+        return transform(
+          table,
+          layerConfig.annotations,
+          layerConfig.x,
+          layerConfig.y,
+          layerConfig.fill
         )
       }
 
