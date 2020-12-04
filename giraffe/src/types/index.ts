@@ -795,5 +795,4 @@ export interface AnnotationMark {
   startValue: number
   stopValue: number
   direction?: AnnotationDirection
-  tags?: string[]
 }
