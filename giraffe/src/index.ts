@@ -45,11 +45,8 @@ export {
   NumericColumnData,
   RawFluxDataTableLayerConfig,
   Scale,
-  Schema,
-  SchemaValues,
   SingleStatLayerConfig,
   Table,
-  Tag,
 } from './types'
 
 export * from './types/geo'
