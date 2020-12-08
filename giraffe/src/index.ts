@@ -3,7 +3,7 @@ export {Plot} from './components/Plot'
 export {HoverTimeProvider} from './components/hoverTime'
 
 // Utils
-export {fromFlux, fromFluxWithSchema, FromFluxResult} from './utils/fromFlux'
+export {fromFlux, FromFluxResult} from './utils/fromFlux'
 export {fromRows} from './utils/fromRows'
 export {newTable} from './utils/newTable'
 export {
@@ -45,11 +45,8 @@ export {
   NumericColumnData,
   RawFluxDataTableLayerConfig,
   Scale,
-  Schema,
-  SchemaValues,
   SingleStatLayerConfig,
   Table,
-  Tag,
 } from './types'
 
 export * from './types/geo'

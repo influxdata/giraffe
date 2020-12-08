@@ -764,20 +764,6 @@ export interface BandIndexMap {
   upperIndices: number[]
 }
 
-export interface Tag {
-  [tagName: string]: Set<string | number>
-}
-
-export interface SchemaValues {
-  fields: string[]
-  tags: Tag
-  type?: string
-}
-
-export interface Schema {
-  [measurement: string]: SchemaValues
-}
-
 export interface StandardFunctionProps {
   id?: string
   style?: CSSProperties
