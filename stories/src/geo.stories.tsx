@@ -4,8 +4,16 @@ import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
 import {geoTable, geoTracks} from './data/geoLayer'
-import {boolean, color, number, select, withKnobs} from '@storybook/addon-knobs'
+import {
+  boolean,
+  color,
+  number,
+  select,
+  withKnobs,
+  text,
+} from '@storybook/addon-knobs'
 import {ClusterAggregation} from '../../giraffe/src/types/geo'
+import {fromFlux} from '../../giraffe/src'
 
 const osmTileServerConfiguration = {
   tileServerUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -90,7 +98,7 @@ const buildCircleMapStory = tileServerConfiguration => () => {
 
 geo.add('Circle Markers', buildCircleMapStory(osmTileServerConfiguration))
 
-geo.add('Map Markers', () => {
+geo.add('Map Markers Static', () => {
   const numberOfRecords = number('Marker count', 20, {
     range: true,
     min: 0,
@@ -100,6 +108,46 @@ geo.add('Map Markers', () => {
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const config: Config = {
     table: geoTable(numberOfRecords),
+    showAxes: false,
+    layers: [
+      {
+        type: 'geo',
+        lat: latitude,
+        lon: longitude,
+        zoom,
+        allowPanAndZoom,
+        detectCoordinateFields: false,
+        layers: [
+          {
+            type: 'pointMap',
+            colorDimension: {label: 'Duration'},
+            colorField: 'duration',
+            colors: [
+              {type: 'min', hex: '#ff0000'},
+              {value: 50, hex: '#343aeb'},
+              {type: 'max', hex: '#343aeb'},
+            ],
+            isClustered: false,
+          },
+        ],
+        tileServerConfiguration: osmTileServerConfiguration,
+      },
+    ],
+  }
+  return (
+    <PlotContainer>
+      <Plot config={config} />
+    </PlotContainer>
+  )
+})
+
+geo.add('Map Markers Custom CSV', () => {
+  const csv = text('Paste CSV here:', '')
+  let table = fromFlux(csv).table
+
+  const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
+  const config: Config = {
+    table: table,
     showAxes: false,
     layers: [
       {
