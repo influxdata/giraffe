@@ -113,6 +113,12 @@ const Geo: FunctionComponent<Props> = props => {
     }
   }
 
+  const latLon = preprocessedTable.getLatLon(0)
+  const mapCenter = {
+    lat: latLon ? latLon.lat : lat,
+    lon: latLon ? latLon.lon : lon,
+  }
+
   return (
     <Map
       ref={mapRef}
@@ -120,7 +126,7 @@ const Geo: FunctionComponent<Props> = props => {
         width: `${width}px`,
         height: `${height}px`,
       }}
-      center={{lat, lon}}
+      center={mapCenter}
       zoom={zoom}
       minZoom={getMinZoom(width)}
       zoomDelta={1}
