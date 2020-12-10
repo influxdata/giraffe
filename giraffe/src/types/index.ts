@@ -8,6 +8,8 @@ export interface Config {
   width?: number
   height?: number
 
+  interactionHandlers?: InteractionHandlers
+
   gridColor?: string
   gridOpacity?: number
 
@@ -80,6 +82,18 @@ export interface Config {
 
   // The type of the y-axis column
   yColumnType?: ColumnType
+}
+
+export interface InteractionHandlerArguments {
+  hoverX: number
+  hoverY: number
+  xDomain: number[]
+  yDomain: number[]
+  resetDomains: () => void
+}
+
+export interface InteractionHandlers {
+  doubleClick: (plotInteraction: InteractionHandlerArguments) => void
 }
 
 export enum FormatterType {

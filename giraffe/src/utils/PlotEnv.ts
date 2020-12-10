@@ -44,6 +44,11 @@ export class PlotEnv {
   private _yDomain: number[] | null = null
   private fns = new MemoizedFunctionCache()
 
+  constructor() {
+    this.getFormatterForColumn = this.getFormatterForColumn.bind(this)
+    this.resetDomains = this.resetDomains.bind(this)
+  }
+
   public get config(): SizedConfig | null {
     return this._config
   }
@@ -380,7 +385,7 @@ export class PlotEnv {
     }
   }
 
-  public getFormatterForColumn = (colKey: string): Formatter => {
+  public getFormatterForColumn(colKey: string): Formatter {
     const preferredFormatter = this.config.valueFormatters[colKey]
 
     if (preferredFormatter) {
@@ -397,7 +402,7 @@ export class PlotEnv {
     }
   }
 
-  public resetDomains = (): void => {
+  public resetDomains(): void {
     if (this.isXControlled) {
       this.config.onResetXDomain()
     } else {

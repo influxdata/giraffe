@@ -137,6 +137,132 @@ storiesOf('Annotations', module)
       </PlotContainer>
     )
   })
+  .add('Annotations: overridden double click behavior', () => {
+    const table = annotationsTable
+    const includeLineLayer = boolean('Line Layer', false)
+    const annotationColor = text('Annotation color string', 'green')
+    const annotationDirection = select(
+      'Annotation Direction',
+      {
+        x: 'x',
+        y: 'y',
+      },
+      'x'
+    )
+    const tickFont = tickFontKnob()
+    const valueAxisLabel = text('Value Axis Label', 'foo')
+    const x = xKnob(table)
+    const y = yKnob(table)
+    const fill = fillKnob(table, ['cpu'])
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
+    const timeZone = timeZoneKnob('America/Los_Angeles')
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'hh:mm a': 'hh:mm a',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss a': 'HH:mm:ss a',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'hh:mm a'
+    )
+    const legendFont = legendFontKnob()
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+
+    const xTotalTicks = number('X Total Ticks', 8)
+    const yTotalTicks = number('Y Total Ticks', 10)
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
+    const interpolation = interpolationKnob()
+    const colors = colorSchemeKnob()
+    const lineWidth = number('Line Width', 1)
+    const hoverDimension = select(
+      'Hover Dimension',
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      'auto'
+    )
+
+    const doubleClickHandler = plotInteraction => {
+      // eslint-disable-next-line
+      console.log(
+        'This double click function is overrdien! Returned arguments:',
+        plotInteraction
+      )
+    }
+
+    const interactionHandlers = {
+      doubleClick: doubleClickHandler,
+    }
+
+    const layers = [
+      {
+        type: 'annotation',
+        x,
+        y,
+        annotations: matchAnnotationsToTable({
+          color: annotationColor,
+          direction: annotationDirection,
+          table,
+          x,
+          y,
+        }),
+        fill,
+      },
+    ] as LayerConfig[]
+
+    if (includeLineLayer) {
+      layers.unshift({
+        type: 'line',
+        x,
+        y,
+        fill,
+        position,
+        interpolation,
+        colors,
+        lineWidth,
+        hoverDimension,
+      })
+    }
+
+    const config: Config = {
+      table,
+      valueFormatters: {
+        _time: timeFormatter({timeZone, format: timeFormat}),
+        _value: val =>
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          }`,
+      },
+      xScale,
+      yScale,
+      legendFont,
+      legendOrientationThreshold,
+      legendColorizeRows,
+      tickFont,
+      xTotalTicks,
+      yTotalTicks,
+      layers,
+      interactionHandlers,
+    }
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
   .add('Annotations: selectable marks', () => {
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', true)

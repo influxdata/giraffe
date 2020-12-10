@@ -2,15 +2,15 @@ import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
 
 import {Axes} from './Axes'
 import {
-  SizedConfig,
   AnnotationLayerConfig,
-  SingleStatLayerConfig,
-  LineLayerConfig,
   BandLayerConfig,
-  ScatterLayerConfig,
-  RectLayerConfig,
-  MosaicLayerConfig,
   LayerTypes,
+  LineLayerConfig,
+  MosaicLayerConfig,
+  RectLayerConfig,
+  ScatterLayerConfig,
+  SingleStatLayerConfig,
+  SizedConfig,
   SpecTypes,
 } from '../types'
 import {SingleStatLayer} from './SingleStatLayer'
@@ -62,13 +62,36 @@ export const SizedPlot: FunctionComponent<Props> = ({
     [env.yScale, env.innerHeight, forceUpdate]
   )
 
-  const handleResetDomains = useCallback(() => {
+  const {margins, config} = env
+  const {width, height, showAxes} = config
+
+  const resetDomains = env => {
+    env.resetDomains()
+    forceUpdate()
+  }
+
+  const memoizedResetDomains = useCallback(() => {
     env.resetDomains()
     forceUpdate()
   }, [env])
 
-  const {margins, config} = env
-  const {width, height, showAxes} = config
+  const doubleClick = config.interactionHandlers?.doubleClick
+    ? () => {
+        config.interactionHandlers.doubleClick({
+          hoverX: hoverEvent.x,
+          hoverY: hoverEvent.y,
+          xDomain: env.xDomain,
+          yDomain: env.yDomain,
+          resetDomains: () => {
+            resetDomains(env)
+          },
+        })
+      }
+    : memoizedResetDomains
+
+  const callbacks = {
+    doubleClick,
+  }
 
   const fullsizeStyle: CSSProperties = {
     position: 'absolute',
@@ -91,6 +114,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
       {showAxes && <Axes env={env} style={fullsizeStyle} />}
       <div
         className="giraffe-inner-plot"
+        data-testid="giraffe-inner-plot"
         style={{
           position: 'absolute',
           top: `${margins.top}px`,
@@ -99,7 +123,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onDoubleClick={handleResetDomains}
+        onDoubleClick={callbacks.doubleClick}
         {...hoverTargetProps}
         {...dragTargetProps}
       >
