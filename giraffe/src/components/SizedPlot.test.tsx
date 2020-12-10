@@ -73,6 +73,33 @@ describe('the SizedPlot', () => {
         expect(Object.keys(callbackArguments)).toEqual([
           'hoverX',
           'hoverY',
+          'valueX',
+          'valueY',
+          'xDomain',
+          'yDomain',
+          'resetDomains',
+        ])
+      })
+
+      it('calls a hover handler callback if one is passed in', () => {
+        const fakeHoverCallback = jest.fn()
+        const localConfig = {
+          ...config,
+          interactionHandlers: {hover: fakeHoverCallback},
+        }
+
+        render(<SizedPlot config={localConfig} />)
+
+        fireEvent.mouseOver(screen.getByTestId('giraffe-inner-plot'))
+
+        const [[callbackArguments]] = fakeHoverCallback.mock.calls
+
+        // don't care what the values are, we just care that we pass these values back
+        expect(Object.keys(callbackArguments)).toEqual([
+          'hoverX',
+          'hoverY',
+          'valueX',
+          'valueY',
           'xDomain',
           'yDomain',
           'resetDomains',
