@@ -28,6 +28,7 @@ import {
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
   tooltipColorizeRowsKnob,
+  tooltipDisableKnob,
 } from './helpers'
 
 storiesOf('XY Plot', module)
@@ -171,6 +172,7 @@ storiesOf('XY Plot', module)
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
     const legendColorizeRows = tooltipColorizeRowsKnob()
+    const legendDisable = tooltipDisableKnob()
 
     const config: Config = {
       table,
@@ -182,6 +184,7 @@ storiesOf('XY Plot', module)
       legendOpacity,
       legendOrientationThreshold,
       legendColorizeRows,
+      legendDisable,
       tickFont,
       showAxes,
       xScale,

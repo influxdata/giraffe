@@ -166,3 +166,5 @@ export const tooltipOrientationThresholdKnob = () =>
 
 export const tooltipColorizeRowsKnob = () =>
   boolean('tooltipColorizeRows', true)
+
+export const tooltipDisableKnob = () => boolean('tooltipDisable', false)
