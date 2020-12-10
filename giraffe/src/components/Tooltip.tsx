@@ -28,6 +28,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendOpacity,
     legendOrientationThreshold: orientationThreshold,
     legendColorizeRows: colorizeRows,
+    legendDisable: disableTooltip,
   } = config
 
   const tooltipOpacity = useMemo(() => {
@@ -40,9 +41,14 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     return TOOLTIP_MAXIMUM_OPACITY
   }, [legendOpacity])
 
-  const columns = columnsWhitelist
-    ? data.filter(column => columnsWhitelist.includes(column.key))
-    : data
+  let columns = []
+  if (disableTooltip != true) {
+    columns = columnsWhitelist
+      ? data.filter(column => columnsWhitelist.includes(column.key))
+      : data
+  } else {
+    return null
+  }
 
   const switchToVertical = columns.length > orientationThreshold
 

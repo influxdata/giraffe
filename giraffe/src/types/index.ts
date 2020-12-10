@@ -77,6 +77,7 @@ export interface Config {
   legendOpacity?: number
   legendOrientationThreshold?: number
   legendColorizeRows?: boolean
+  legendDisable?: boolean
 
   // The type of the y-axis column
   yColumnType?: ColumnType
