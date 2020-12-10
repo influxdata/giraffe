@@ -4,6 +4,7 @@ import {Axes} from './Axes'
 import {
   AnnotationLayerConfig,
   BandLayerConfig,
+  InteractionHandlerArguments,
   LayerTypes,
   LineLayerConfig,
   MosaicLayerConfig,
@@ -75,19 +76,27 @@ export const SizedPlot: FunctionComponent<Props> = ({
     forceUpdate()
   }, [env])
 
+  const plotInteraction: InteractionHandlerArguments = {
+    hoverX: hoverEvent.x,
+    hoverY: hoverEvent.y,
+    valueX: env.xScale.invert(hoverX),
+    valueY: env.yScale.invert(hoverY),
+    xDomain: env.xDomain,
+    yDomain: env.yDomain,
+    resetDomains: () => {
+      resetDomains(env)
+    },
+  }
+
   const doubleClick = config.interactionHandlers?.doubleClick
     ? () => {
-        config.interactionHandlers.doubleClick({
-          hoverX: hoverEvent.x,
-          hoverY: hoverEvent.y,
-          xDomain: env.xDomain,
-          yDomain: env.yDomain,
-          resetDomains: () => {
-            resetDomains(env)
-          },
-        })
+        config.interactionHandlers.doubleClick(plotInteraction)
       }
     : memoizedResetDomains
+
+  if (config.interactionHandlers?.hover) {
+    config.interactionHandlers.hover(plotInteraction)
+  }
 
   const callbacks = {
     doubleClick,

@@ -87,13 +87,16 @@ export interface Config {
 export interface InteractionHandlerArguments {
   hoverX: number
   hoverY: number
+  valueX: number | string
+  valueY: number | string
   xDomain: number[]
   yDomain: number[]
   resetDomains: () => void
 }
 
 export interface InteractionHandlers {
-  doubleClick: (plotInteraction: InteractionHandlerArguments) => void
+  doubleClick?: (plotInteraction: InteractionHandlerArguments) => void
+  hover?: (plotInteraction: InteractionHandlerArguments) => void
 }
 
 export enum FormatterType {

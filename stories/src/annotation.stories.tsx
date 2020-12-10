@@ -203,8 +203,14 @@ storiesOf('Annotations', module)
       )
     }
 
+    const hoverHandler = plotInteraction => {
+      // eslint-disable-next-line
+      console.log('hover handler:', plotInteraction)
+    }
+
     const interactionHandlers = {
       doubleClick: doubleClickHandler,
+      hover: hoverHandler,
     }
 
     const layers = [
