@@ -42,7 +42,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   }, [legendOpacity])
 
   let columns = []
-  if (disableTooltip != true) {
+  if (disableTooltip !== true) {
     columns = columnsWhitelist
       ? data.filter(column => columnsWhitelist.includes(column.key))
       : data
