@@ -213,7 +213,9 @@ export interface AnnotationLayerConfig {
   x: string
   y: string
   annotations: AnnotationMark[]
-  fill?: string[]
+  fill: string[]
+  hoverDimension?: LineHoverDimension | 'auto'
+  hoverMargin?: number
   svgAttributes?: SVGAttributes
   svgStyle?: CSS.Properties
 }
@@ -687,6 +689,25 @@ export interface TooltipColumn {
 
 export type TooltipData = TooltipColumn[]
 
+export interface TooltipPosition {
+  x: number
+  y: number
+}
+
+export interface AnnotationTooltipOptions {
+  dimension: AnnotationDimension
+  position: TooltipPosition
+  xOffset: number
+  yOffset: number
+}
+
+export interface AnnotationTooltipData {
+  title: string
+  description: string
+  fontColor: string
+  position: TooltipPosition
+}
+
 export type LineInterpolation =
   | 'linear'
   | 'monotoneX'
@@ -790,7 +811,7 @@ export interface StandardFunctionProps {
   className?: string
 }
 
-export type AnnotationDirection = 'x' | 'y'
+export type AnnotationDimension = 'x' | 'y'
 
 export interface AnnotationMark {
   title: string
@@ -798,5 +819,5 @@ export interface AnnotationMark {
   color: string
   startValue: number
   stopValue: number
-  direction?: AnnotationDirection
+  dimension: AnnotationDimension
 }

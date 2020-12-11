@@ -1,13 +1,13 @@
 import {
-  AnnotationDirection,
+  AnnotationDimension,
   AnnotationMark,
   Table,
 } from '../../../giraffe/src/types'
 import {newTable} from '../../../giraffe/src'
 
 const now = Date.now()
-const numberOfRecords = 10
-const recordsPerLine = 10
+const numberOfRecords = 20
+const recordsPerLine = 20
 const maxValue = 10
 
 const TIME_COL = []
@@ -32,7 +32,7 @@ export const annotationsTable = newTable(numberOfRecords)
 
 interface SampleAnnotationsCreatorOptions {
   color: string
-  direction: AnnotationDirection
+  dimension: AnnotationDimension
   table: Table
   x: string
   y: string
@@ -41,16 +41,16 @@ interface SampleAnnotationsCreatorOptions {
 export const matchAnnotationsToTable = (
   options: SampleAnnotationsCreatorOptions
 ): AnnotationMark[] => {
-  const {color, direction = 'x', table} = options
-  const values = table.getColumn(options[direction], 'number')
+  const {color, dimension = 'x', table} = options
+  const values = table.getColumn(options[dimension], 'number')
   const annotationMarks: AnnotationMark[] = []
 
   values.forEach((value: number, i: number) => {
     annotationMarks.push({
-      title: `annotation at index ${i}`,
-      description: `Hi, I am an annotation that starts at ${value} and ends at ${value}`,
+      title: `Hi!`,
+      description: `annotation at index ${i}`,
       color: typeof color === 'string' ? color : DEFAULT_COLOR,
-      direction,
+      dimension,
       startValue: value,
       stopValue: value,
     })
