@@ -45,10 +45,9 @@ export const annotationTransform = (
   const annotationMap = {}
   if (Array.isArray(inputAnnotations)) {
     for (let i = 0; i < inputAnnotations.length; i += 1) {
+      const uniqueKey = `${inputAnnotations[i].dimension}-${inputAnnotations[i].startValue}-${inputAnnotations[i].stopValue}`
       if (
-        !annotationMap[
-          `${inputAnnotations[i].dimension}-${inputAnnotations[i].startValue}-${inputAnnotations[i].stopValue}`
-        ] &&
+        !annotationMap[uniqueKey] &&
         ((inputAnnotations[i].dimension === 'y' &&
           yMin <= inputAnnotations[i].startValue &&
           inputAnnotations[i].stopValue <= yMax) ||
@@ -56,9 +55,7 @@ export const annotationTransform = (
             xMin <= inputAnnotations[i].startValue &&
             inputAnnotations[i].stopValue <= xMax))
       ) {
-        annotationMap[
-          `${inputAnnotations[i].dimension}-${inputAnnotations[i].startValue}-${inputAnnotations[i].stopValue}`
-        ] = inputAnnotations[i]
+        annotationMap[uniqueKey] = inputAnnotations[i]
       }
     }
   }

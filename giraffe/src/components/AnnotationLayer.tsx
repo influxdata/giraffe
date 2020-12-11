@@ -63,7 +63,6 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
         boundingReference={boundingRect}
         hoverRowIndices={hoverRowIndices}
         width={width}
-        height={height}
       />
       {annotationsPositions.map(annotationData =>
         annotationData.dimension === 'y' ? (

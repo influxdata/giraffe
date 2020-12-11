@@ -8,7 +8,6 @@ interface AnnotationHoverLayerProps extends AnnotationLayerProps {
   boundingReference: DOMRect
   hoverRowIndices: number[]
   width: number
-  height: number
 }
 
 export const AnnotationHoverLayer: FunctionComponent<AnnotationHoverLayerProps> = props => {
@@ -18,23 +17,19 @@ export const AnnotationHoverLayer: FunctionComponent<AnnotationHoverLayerProps> 
     hoverRowIndices,
     boundingReference,
     width,
-    height,
   } = props
 
-  const annotationTooltipData = annotationPositions.filter((_, i) =>
-    hoverRowIndices.includes(i)
-  )
+  const hoveredAnnotations = (_, i: number) => hoverRowIndices.includes(i)
 
   return (
     <>
-      {annotationTooltipData.map(annotationData => (
+      {annotationPositions.filter(hoveredAnnotations).map(annotationData => (
         <AnnotationTooltip
           key={`annotation-tooltip-${annotationData.dimension}-${annotationData.startValue}-${annotationData.stopValue}`}
           config={plotConfig}
           data={annotationData}
           boundingReference={boundingReference}
           width={width}
-          height={height}
         />
       ))}
     </>
