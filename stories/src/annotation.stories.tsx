@@ -37,6 +37,7 @@ storiesOf('Annotations', module)
       },
       'x'
     )
+    const annotationHoverMargin = number('Annotation Hover Margin', 10)
     const tickFont = tickFontKnob()
     const valueAxisLabel = text('Value Axis Label', 'foo')
     const x = xKnob(table)
@@ -97,6 +98,7 @@ storiesOf('Annotations', module)
         }),
         fill,
         hoverDimension,
+        hoverMargin: annotationHoverMargin,
       },
     ] as LayerConfig[]
 
@@ -150,6 +152,7 @@ storiesOf('Annotations', module)
       },
       'x'
     )
+    const annotationHoverMargin = number('Annotation Hover Margin', 10)
     const tickFont = tickFontKnob()
     const valueAxisLabel = text('Value Axis Label', 'foo')
     const x = xKnob(table)
@@ -227,6 +230,7 @@ storiesOf('Annotations', module)
         })),
         fill,
         hoverDimension,
+        hoverMargin: annotationHoverMargin,
       },
     ] as LayerConfig[]
 
@@ -280,6 +284,7 @@ storiesOf('Annotations', module)
       },
       'x'
     )
+    const annotationHoverMargin = number('Annotation Hover Margin', 10)
     const x = xKnob(table)
     const y = yKnob(table)
     const currentValue = text(
@@ -352,6 +357,7 @@ storiesOf('Annotations', module)
         })),
         fill,
         hoverDimension,
+        hoverMargin: annotationHoverMargin,
       },
     ] as LayerConfig[]
 
