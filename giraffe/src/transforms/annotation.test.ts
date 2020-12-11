@@ -102,4 +102,76 @@ describe('annotation transform', () => {
       )
     )
   })
+
+  it('removes duplicate annotations in the same dimension', () => {
+    const inputAnnotations = [
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 1606862528103,
+        stopValue: 1606862528103,
+        dimension: 'x',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 1606862528103,
+        stopValue: 1606862528103,
+        dimension: 'x',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 5,
+        stopValue: 5,
+        dimension: 'y',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 1606862628103,
+        stopValue: 1606862628103,
+        dimension: 'x',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 1606862728103,
+        stopValue: 1606862728103,
+        dimension: 'x',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 5.1,
+        stopValue: 5.1,
+        dimension: 'y',
+      },
+      {
+        title: 'Annotation!',
+        description: 'Hi, i may be an imposter',
+        color: 'green',
+        startValue: 5.1,
+        stopValue: 5.1,
+        dimension: 'y',
+      },
+    ] as AnnotationMark[]
+    const annotations = annotationTransform(
+      table,
+      inputAnnotations,
+      TIME,
+      VALUE,
+      ['cpu']
+    ).annotationData
+
+    expect(Array.isArray(annotations)).toEqual(true)
+    expect(inputAnnotations.length > annotations.length).toEqual(true)
+    expect(annotations.length).toEqual(5)
+  })
 })
