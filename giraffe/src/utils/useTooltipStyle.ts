@@ -84,7 +84,6 @@ export const useAnnotationStyle = (
   //                 |
   //                 |
   //
-  //
   // Position the tooltip to the right of the annotation for horizontal annotations, like this:
   //
   //             ┌─────────────┐
@@ -98,7 +97,7 @@ export const useAnnotationStyle = (
   // - If the tooltip does not fit above a vertical annotation due to screen size,
   //   shift it to overlay the top part of the annotation
   //
-  // - If the tooltip does not fith to the right of a horizontal annotation due to screen size,
+  // - If the tooltip does not fit to the right of a horizontal annotation due to screen size,
   //   shift it to overlay the right part of the annotation
   //
   useLayoutStyle(

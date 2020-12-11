@@ -7,20 +7,19 @@ import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../constants'
 import {useTooltipElement} from '../utils/useTooltipElement'
 
 interface Props {
+  boundingReference: DOMRect
   config: Config
   data: AnnotationMark
-  boundingReference: DOMRect
   width: number
-  height: number
 }
 
 export const AnnotationTooltip: FunctionComponent<Props> = props => {
-  const {config, data, boundingReference, width} = props
+  const {boundingReference, config, data, width} = props
   const {
-    legendFont: font,
-    legendFontColor: fontColor,
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
+    legendFont: font,
+    legendFontColor: fontColor,
   } = config
   const {dimension, startValue} = data || {}
 
