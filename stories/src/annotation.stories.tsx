@@ -29,8 +29,8 @@ storiesOf('Annotations', module)
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', false)
     const annotationColor = text('Annotation color string', 'green')
-    const annotationDirection = select(
-      'Annotation Direction',
+    const annotationDimension = select(
+      'Annotation Dimension',
       {
         x: 'x',
         y: 'y',
@@ -90,12 +90,13 @@ storiesOf('Annotations', module)
         y,
         annotations: matchAnnotationsToTable({
           color: annotationColor,
-          direction: annotationDirection,
+          dimension: annotationDimension,
           table,
           x,
           y,
         }),
         fill,
+        hoverDimension,
       },
     ] as LayerConfig[]
 
@@ -141,8 +142,8 @@ storiesOf('Annotations', module)
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', true)
     const annotationColor = text('Annotation color string', 'green')
-    const annotationDirection = select(
-      'Annotation Direction',
+    const annotationDimension = select(
+      'Annotation Dimension',
       {
         x: 'x',
         y: 'y',
@@ -197,7 +198,7 @@ storiesOf('Annotations', module)
 
     const annotations = matchAnnotationsToTable({
       color: annotationColor,
-      direction: annotationDirection,
+      dimension: annotationDimension,
       table,
       x,
       y,
@@ -205,7 +206,10 @@ storiesOf('Annotations', module)
     const annotationsSelections = multiSelect(
       'annotations',
       annotations.map(annotation => String(annotation.startValue)).sort(),
-      annotations.map(annotation => String(annotation.startValue)).sort()
+      annotations
+        .filter((_, i) => (i % 4 === 0 ? true : false))
+        .map(annotation => String(annotation.startValue))
+        .sort()
     )
 
     const layers = [
@@ -214,14 +218,15 @@ storiesOf('Annotations', module)
         x,
         y,
         annotations: annotationsSelections.map((valueString, i) => ({
-          title: `annotation at index ${i}`,
-          description: `Hi, I am an annotation that starts at ${valueString} and ends at ${valueString}`,
+          title: 'Hi!',
+          description: `value: ${valueString}`,
           color: annotationColor,
-          direction: annotationDirection,
+          dimension: annotationDimension,
           startValue: Number(valueString),
           stopValue: Number(valueString),
         })),
         fill,
+        hoverDimension,
       },
     ] as LayerConfig[]
 
@@ -267,8 +272,8 @@ storiesOf('Annotations', module)
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', true)
     const annotationColor = text('Annotation color string', 'green')
-    const annotationDirection = select(
-      'Annotation Direction',
+    const annotationDimension = select(
+      'Annotation Dimension',
       {
         x: 'x',
         y: 'y',
@@ -283,9 +288,9 @@ storiesOf('Annotations', module)
         ? String(table.getColumn(x, 'number')[0])
         : String(table.getColumn(y, 'number')[0])
     )
-    const currentTime = text('_time', String(Date.now()))
+    const currentTime = text('_time', String(Date.now() + 1000 * 60 * 6))
 
-    const columnKey = annotationDirection === 'y' ? y : x
+    const columnKey = annotationDimension === 'y' ? y : x
     const annotationsInput = columnKey === TIME ? currentTime : currentValue
 
     const tickFont = tickFontKnob()
@@ -340,14 +345,15 @@ storiesOf('Annotations', module)
         annotations: annotationsInput
           .split(',')
           .map((valueString: string, i: number) => ({
-            title: `annotation at index ${i}`,
-            description: `Hi, I am an annotation that starts at ${valueString} and ends at ${valueString}`,
+            title: 'Hi',
+            description: `value is ${valueString}`,
             color: annotationColor,
-            direction: annotationDirection,
+            dimension: annotationDimension,
             startValue: Number(valueString),
             stopValue: Number(valueString),
           })),
         fill,
+        hoverDimension,
       },
     ] as LayerConfig[]
 

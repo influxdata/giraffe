@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
-  const tooltipElement = useTooltipElement()
+  const tooltipElement = useTooltipElement('giraffe-tooltip-container')
 
   const {
     width,

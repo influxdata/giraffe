@@ -1,6 +1,8 @@
 import {useRef, useEffect} from 'react'
 
-import {useTooltipStyle} from '../utils/useTooltipStyle'
+import {AnnotationTooltipOptions} from '../types'
+import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../constants'
+import {useTooltipStyle, useAnnotationStyle} from '../utils/useTooltipStyle'
 
 /*
   Returns a DOM node that a tooltip can be rendered inside.
@@ -12,19 +14,26 @@ import {useTooltipStyle} from '../utils/useTooltipStyle'
   The returned node is intended to be used with `React.createPortal`. It is
   appended to the end of the document to circumvent z-index issues.
 */
-export const useTooltipElement = () => {
+export const useTooltipElement = (
+  className: string,
+  options?: AnnotationTooltipOptions
+) => {
   const ref = useRef<HTMLDivElement>(null)
 
   if (ref.current === null) {
     ref.current = document.createElement('div')
-    ref.current.classList.add('giraffe-tooltip-container')
+    ref.current.classList.add(className)
 
     document.body.appendChild(ref.current)
   }
 
   useEffect(() => () => document.body.removeChild(ref.current), [])
 
-  useTooltipStyle(ref.current)
+  if (className == ANNOTATION_TOOLTIP_CONTAINER_NAME) {
+    useAnnotationStyle(ref.current, options)
+  } else {
+    useTooltipStyle(ref.current)
+  }
 
   return ref.current
 }

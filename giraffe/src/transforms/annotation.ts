@@ -37,25 +37,32 @@ export const annotationTransform = (
     }
   }
 
-  const annotationData: AnnotationMark[] = []
-
+  // A hash of all input annotations is needed to:
+  // - keep only the first occurence of an annotation with the same
+  //   dimension, startValue, stopValue
+  // - ensure 'y' dimension annotations are within yDomain
+  // - ensure 'x' dimension annotations are within xDomain
+  const annotationMap = {}
   if (Array.isArray(inputAnnotations)) {
     for (let i = 0; i < inputAnnotations.length; i += 1) {
-      // Keep only the annotations within their respective domains
-      // 'y' direction annotations should be within yDomain
-      // 'x' direction annotations should be within xDomain
       if (
-        (inputAnnotations[i].direction === 'y' &&
+        !annotationMap[
+          `${inputAnnotations[i].dimension}-${inputAnnotations[i].startValue}-${inputAnnotations[i].stopValue}`
+        ] &&
+        ((inputAnnotations[i].dimension === 'y' &&
           yMin <= inputAnnotations[i].startValue &&
           inputAnnotations[i].stopValue <= yMax) ||
-        (inputAnnotations[i].direction === 'x' &&
-          xMin <= inputAnnotations[i].startValue &&
-          inputAnnotations[i].stopValue <= xMax)
+          (inputAnnotations[i].dimension === 'x' &&
+            xMin <= inputAnnotations[i].startValue &&
+            inputAnnotations[i].stopValue <= xMax))
       ) {
-        annotationData.push(inputAnnotations[i])
+        annotationMap[
+          `${inputAnnotations[i].dimension}-${inputAnnotations[i].startValue}-${inputAnnotations[i].stopValue}`
+        ] = inputAnnotations[i]
       }
     }
   }
+  const annotationData: AnnotationMark[] = Object.values(annotationMap)
 
   return {
     type: 'annotation',
