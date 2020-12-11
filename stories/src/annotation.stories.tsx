@@ -217,7 +217,7 @@ storiesOf('Annotations', module)
         type: 'annotation',
         x,
         y,
-        annotations: annotationsSelections.map((valueString, i) => ({
+        annotations: annotationsSelections.map((valueString: string) => ({
           title: 'Hi!',
           description: `value: ${valueString}`,
           color: annotationColor,
@@ -342,16 +342,14 @@ storiesOf('Annotations', module)
         type: 'annotation',
         x,
         y,
-        annotations: annotationsInput
-          .split(',')
-          .map((valueString: string, i: number) => ({
-            title: 'Hi',
-            description: `value is ${valueString}`,
-            color: annotationColor,
-            dimension: annotationDimension,
-            startValue: Number(valueString),
-            stopValue: Number(valueString),
-          })),
+        annotations: annotationsInput.split(',').map((valueString: string) => ({
+          title: 'Hi',
+          description: `value is ${valueString}`,
+          color: annotationColor,
+          dimension: annotationDimension,
+          startValue: Number(valueString),
+          stopValue: Number(valueString),
+        })),
         fill,
         hoverDimension,
       },
