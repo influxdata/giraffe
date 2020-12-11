@@ -50,7 +50,7 @@ describe('annotation transform', () => {
         color: 'green',
         startValue: 1606862528103,
         stopValue: 1606862528103,
-        direction: 'x',
+        dimension: 'x',
       },
       {
         title: 'annotation 1',
@@ -58,7 +58,7 @@ describe('annotation transform', () => {
         color: 'green',
         startValue: 1606862628103,
         stopValue: 1606862628103,
-        direction: 'x',
+        dimension: 'x',
       },
       {
         title: 'annotation 2',
@@ -66,7 +66,7 @@ describe('annotation transform', () => {
         color: 'green',
         startValue: 1606862728103,
         stopValue: 1606862728103,
-        direction: 'x',
+        dimension: 'x',
       },
       {
         title: 'annotation 3',
@@ -74,7 +74,7 @@ describe('annotation transform', () => {
         color: 'green',
         startValue: 1706862728103,
         stopValue: 1706862728103,
-        direction: 'x',
+        dimension: 'x',
       },
       {
         title: 'annotation 4',
@@ -82,7 +82,7 @@ describe('annotation transform', () => {
         color: 'green',
         startValue: 0,
         stopValue: 0,
-        direction: 'x',
+        dimension: 'x',
       },
     ] as AnnotationMark[]
     const annotations = annotationTransform(
