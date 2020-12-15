@@ -49,7 +49,15 @@ module.exports = {
       },
       {
         test: /\.s?css$/i,
+        exclude: /leaflet\.css/,
         use: ['css-loader', 'sass-loader'],
+      },
+      {
+        test: /leaflet\.css/,
+        use: [
+          {loader: 'style-loader'},
+          'css-loader',
+        ],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
