@@ -144,8 +144,8 @@ storiesOf('Annotations', module)
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', false)
     const annotationColor = text('Annotation color string', 'green')
-    const annotationDirection = select(
-      'Annotation Direction',
+    const annotationDimension = select(
+      'Annotation Dimension',
       {
         x: 'x',
         y: 'y',
@@ -223,7 +223,7 @@ storiesOf('Annotations', module)
         y,
         annotations: matchAnnotationsToTable({
           color: annotationColor,
-          direction: annotationDirection,
+          dimension: annotationDimension,
           table,
           x,
           y,
