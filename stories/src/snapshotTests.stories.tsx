@@ -101,9 +101,9 @@ storiesOf('Snapshot Tests', module)
           gridGap: '20px',
         }}
       >
-        {timeZones.map(timeZone => (
+        {timeZones.map((timeZone, i) => (
           <div
-            key={timeZone}
+            key={i}
             style={{
               display: 'flex',
               flexDirection: 'column',
