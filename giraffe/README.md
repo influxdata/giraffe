@@ -11,186 +11,157 @@ A React-based visualization library powering the data visualizations in [InfluxD
 [See the visualizations in action using Storybook](https://influxdata.github.io/giraffe)
 
 ## Quick Start
-
 Giraffe can be used in a simple index.html page without any advanced configuration. Even though Giraffe is designed to work with React apps, you won't need React or Node.js to do the quickstart below.
 
 In this quickstart, we're going to build a simple line graph using Giraffe in a single index file. All you'll need is a text editor.
 
 1. Set up your `index.html` file:
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Giraffe</title>
+    </head>
 
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="utf-8" />
-       <title>Giraffe</title>
-     </head>
-
-     <body id="home">
-       <main id="root"></main>
-     </body>
-   </html>
-   ```
-
-   Save this file as `index.html`.
+    <body id="home">
+      <main id="root"></main>
+    </body>
+    </html>
+    ```
+    Save this file as `index.html`.
 
 1. Add script imports of React, React-DOM, and Giraffe to the bottom of the `head` section.
-   ```html
-     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
-     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-     <script crossorigin src="https://unpkg.com/@influxdata/giraffe"></script>
-   </head>
-   ```
+    ```html
+      <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+      <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+      <script crossorigin src="https://unpkg.com/@influxdata/giraffe"></script>
+    </head>
+    ```
 1. Wire up a simple React element. Add a script tag under `main` in the `body` of the html document, and then render a simple element onto the page using React.
-
-   ```html
-     <main id="root"></main>
-     <script type="text/javascript">
-       ReactDOM.render(
-         React.createElement('h1', null, 'Hello World'),
-         document.getElementById('root')
-       );
-     </script>
-   </body>
-   ```
+    ```html
+      <main id="root"></main>
+      <script type="text/javascript">
+        ReactDOM.render(
+          React.createElement('h1', null, 'Hello World'),
+          document.getElementById('root')
+        );
+      </script>
+    </body>
+    ```
 
 1. Open `index.html` in a browser. You should see a header with Hello World as the text.
 
 1. Create a wrapper element for the Giraffe `Plot` we'll be rendering into. Add it to the script tag under `root`:
-
-   ```html
-   <main id="root"></main>
-     <script type="text/javascript">
-       class PlotRenderer extends React.Component {
-         render() {
-           const style = {
-             width: "calc(70vw - 20px)",
-             height: "calc(70vh - 20px)",
-             margin: "40px",
-           };
-           return React.createElement('div', {style}, 'Giraffe Plot Goes Here');
-         }
-       }
-     <script>
-   ```
+    ```html
+    <main id="root"></main>
+      <script type="text/javascript">
+        class PlotRenderer extends React.Component {
+          render() {
+            const style = {
+              width: "calc(70vw - 20px)",
+              height: "calc(70vh - 20px)",
+              margin: "40px",
+            };
+            return React.createElement('div', {style}, 'Giraffe Plot Goes Here');
+          }
+        }
+      <script>
+    ```
 
 1. And have React render that element. Change the `ReactDOM.render` call to:
-
-   ```js
-   ReactDOM.render(
-     React.createElement(PlotRenderer, null, null),
-     document.getElementById('root')
-   )
-   ```
-
-   Open up `index.html`. You should see Giraffe Plot Goes Here where it used to say Hello World.
+    ```js
+    ReactDOM.render(
+      React.createElement(PlotRenderer, null, null),
+      document.getElementById('root')
+    );
+    ```
+    Open up `index.html`. You should see Giraffe Plot Goes Here where it used to say Hello World.
 
 1. Our last step is to create some fake data and then draw that fake data into a plot. First, we'll create a configuration object that tells Giraffe to render a line graph. In the render method of `PlotRenderer`, add the following code:
-
-   ```js
-   const lineLayer = {
-     type: 'line',
-     x: '_time',
-     y: '_value',
-   }
-   ```
+    ```js
+    const lineLayer = {
+      type: "line",
+      x: "_time",
+      y: "_value"
+    };
+    ```
 
 1. Let's create the fake data. After the `lineLayer` code, add the following:
-
-   ```js
-   const table = Giraffe.newTable(3)
-     .addColumn('_time', 'dateTime:RFC3339', 'time', [
-       1589838401244,
-       1589838461244,
-       1589838521244,
-     ])
-     .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79])
-   ```
+    ```js
+    const table = Giraffe.newTable(3)
+      .addColumn('_time', 'dateTime:RFC3339', 'time', [1589838401244, 1589838461244, 1589838521244])
+      .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79]);
+    ```
 
 1. Now we'll combine them into a `config` object. Add this after the line that creates `table`:
-
-   ```js
-   const config = {
-     table,
-     layers: [lineLayer],
-   }
-   ```
+    ```js
+    const config = {
+      table,
+      layers: [lineLayer]
+    };
+    ```
 
 1. Finally, let's create a `Plot` with this configuration and render it. Below the line that creates `config` in the `render` method, add the following code:
-
-   ```js
-   const SimplePlot = React.createElement(Giraffe.Plot, {config}, null)
-   return React.createElement('div', {style}, SimplePlot)
-   ```
-
-   And there you have it.
+    ```js
+    const SimplePlot = React.createElement(Giraffe.Plot, {config}, null);
+    return React.createElement('div', {style}, SimplePlot);
+    ```
+    And there you have it.
 
 1. Here is the full `index.html` file:
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Giraffe</title>
+      <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+      <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+      <script crossorigin src="https://unpkg.com/@influxdata/giraffe"></script>
+    </head>
 
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="utf-8" />
-       <title>Giraffe</title>
-       <script
-         crossorigin
-         src="https://unpkg.com/react@17/umd/react.development.js"
-       ></script>
-       <script
-         crossorigin
-         src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
-       ></script>
-       <script crossorigin src="https://unpkg.com/@influxdata/giraffe"></script>
-     </head>
+    <body id="home">
+      <main id="root"></main>
+      <script type="text/javascript">
+        class PlotRenderer extends React.Component {
+          render() {
+            const style = {
+              width: "calc(70vw - 20px)",
+              height: "calc(70vh - 20px)",
+              margin: "40px",
+            };
 
-     <body id="home">
-       <main id="root"></main>
-       <script type="text/javascript">
-         class PlotRenderer extends React.Component {
-           render() {
-             const style = {
-               width: 'calc(70vw - 20px)',
-               height: 'calc(70vh - 20px)',
-               margin: '40px',
-             }
+            const lineLayer = {
+              type: "line",
+              x: "_time",
+              y: "_value"
+            };
 
-             const lineLayer = {
-               type: 'line',
-               x: '_time',
-               y: '_value',
-             }
+            const table = Giraffe.newTable(3)
+              .addColumn('_time', 'dateTime:RFC3339', 'time', [1589838401244, 1589838461244, 1589838521244])
+              .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79]);
 
-             const table = Giraffe.newTable(3)
-               .addColumn('_time', 'dateTime:RFC3339', 'time', [
-                 1589838401244,
-                 1589838461244,
-                 1589838521244,
-               ])
-               .addColumn('_value', 'double', 'number', [2.58, 7.11, 4.79])
+            const config = {
+              table,
+              layers: [lineLayer]
+            };
 
-             const config = {
-               table,
-               layers: [lineLayer],
-             }
+            const SimplePlot = React.createElement(Giraffe.Plot, {config}, null);
+            return React.createElement('div', {style}, SimplePlot);
+          }
+        }
 
-             const SimplePlot = React.createElement(
-               Giraffe.Plot,
-               {config},
-               null
-             )
-             return React.createElement('div', {style}, SimplePlot)
-           }
-         }
+        ReactDOM.render(
+          React.createElement(PlotRenderer),
+          document.getElementById('root')
+        );
+      </script>
+    </body>
+    </html>
 
-         ReactDOM.render(
-           React.createElement(PlotRenderer),
-           document.getElementById('root')
-         )
-       </script>
-     </body>
-   </html>
-   ```
+    ```
+
 
 #### Examples Using Flux [](#example-using-flux)
 
@@ -355,12 +326,12 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   <pre>
   const config = {
     // ...
-  
+
     valueFormatters: {
       _time: (t) => new Date(t).toLocaleTimeString(),  // ECMAScript time to human-readable time stamp
       _value: (num) => num.toFixed(2),                 // values fixed to 2 decimal places
     },
-  
+
     // ...
   }
   </pre>
