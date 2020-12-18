@@ -1,5 +1,5 @@
 // Libraries
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useState} from 'react'
 import {AutoSizer} from 'react-virtualized'
 
 // Components
@@ -36,6 +36,7 @@ interface LastRenderProperties {
   zoomOnLastRender?: number
   widthOnLastRender?: number
   heightOnLastRender?: number
+  delayedQueryTimerHandle?
 }
 
 const onViewportChange = (
@@ -75,15 +76,14 @@ const updateQuery = (
     latOnLastRender,
     lonOnLastRender,
     zoomOnLastRender,
+    delayedQueryTimerHandle,
   } = lastRenderProperties
   if (
-    width &&
-    height &&
-    (widthOnLastRender !== width ||
-      heightOnLastRender !== height ||
-      latOnLastRender !== lat ||
-      lonOnLastRender !== lon ||
-      zoomOnLastRender !== zoom)
+    widthOnLastRender !== width ||
+    heightOnLastRender !== height ||
+    latOnLastRender !== lat ||
+    lonOnLastRender !== lon ||
+    zoomOnLastRender !== zoom
   ) {
     const variableAssignment = calculateVariableAssignment(
       width,
@@ -92,13 +92,22 @@ const updateQuery = (
       lat,
       zoom
     )
-    onUpdateQuery(variableAssignment)
-    lastRenderProperties.latOnLastRender = lat
-    lastRenderProperties.lonOnLastRender = lon
-    lastRenderProperties.zoomOnLastRender = zoom
-    lastRenderProperties.widthOnLastRender = width
-    lastRenderProperties.heightOnLastRender = height
+    if (delayedQueryTimerHandle) {
+      clearInterval(lastRenderProperties.delayedQueryTimerHandle)
+    }
+    // we don't want to call query update too often (on window resize)
+    // we get decoupled from onUpdateQuery call errors
+    lastRenderProperties.delayedQueryTimerHandle = setTimeout(() => {
+      if (variableAssignment.radius > 0) {
+        onUpdateQuery(variableAssignment)
+      }
+    }, 100)
   }
+  lastRenderProperties.latOnLastRender = lat
+  lastRenderProperties.lonOnLastRender = lon
+  lastRenderProperties.zoomOnLastRender = zoom
+  lastRenderProperties.widthOnLastRender = width
+  lastRenderProperties.heightOnLastRender = height
 }
 
 const onAutoResize = (
@@ -122,17 +131,15 @@ const onAutoResize = (
     lonOnLastRender,
     zoomOnLastRender,
   } = lastRenderProperties
-
   updateQuery(
     props,
     lastRenderProperties,
     width,
     height,
-    latOnLastRender === null ? lat : latOnLastRender,
-    lonOnLastRender === null ? lon : lonOnLastRender,
-    zoomOnLastRender === null ? zoom : zoomOnLastRender
+    latOnLastRender === undefined ? lat : latOnLastRender,
+    lonOnLastRender === undefined ? lon : lonOnLastRender,
+    zoomOnLastRender === undefined ? zoom : zoomOnLastRender
   )
-
   return (
     <div className="geo">
       <Geo
@@ -155,11 +162,11 @@ const onAutoResize = (
 }
 
 const GeoLayer: FunctionComponent<OwnProps> = React.memo(props => {
+  const [lastRenderProperties] = useState({} as LastRenderProperties)
   if (props.config.tileServerConfiguration) {
     return (
       <AutoSizer>
         {(() => {
-          const lastRenderProperties: LastRenderProperties = {}
           return ({width, height}) =>
             onAutoResize(props, lastRenderProperties, width, height)
         })()}
