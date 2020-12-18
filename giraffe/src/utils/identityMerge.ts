@@ -128,7 +128,8 @@ export const setByPath = (target: any, path: Path, value: any): void => {
     currentTarget = nextTarget
   }
 
-  // never write into the input config, Object.freeze might have been applied
+  // beware writing into the currentTarget being part of the input Config passed to
+  // SizedPlot, Object.freeze might have been applied
   const oldValue = currentTarget[path[i + 1]]
   if (oldValue !== value) {
     currentTarget[path[i + 1]] = value
