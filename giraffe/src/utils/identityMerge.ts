@@ -16,7 +16,7 @@
   - function
   - `undefined`
   - `null`
-    
+
   If `a` and `b` are primitive objects, then `a` and `b` are logically
   equivalent iff `a === b`. Two non-primitive objects are logically equivalent
   iff they have logically equivalent children.
@@ -32,7 +32,7 @@
   Then `foo` and `bar` are logically equivalent even though `foo !== bar` (i.e.
   `foo` and `bar` do not have the same reference identity).  The objects `foo`
   and `baz` are neither logically nor referentially identical.
-  
+
 */
 export const identityMerge = <S extends object, T extends object>(
   source: S,
@@ -128,7 +128,12 @@ export const setByPath = (target: any, path: Path, value: any): void => {
     currentTarget = nextTarget
   }
 
-  currentTarget[path[i + 1]] = value
+  // beware writing into the currentTarget being part of the input Config passed to
+  // SizedPlot, Object.freeze might have been applied
+  const oldValue = currentTarget[path[i + 1]]
+  if (oldValue !== value) {
+    currentTarget[path[i + 1]] = value
+  }
 }
 
 export const isEqual = (a: any, b: any): boolean => {
