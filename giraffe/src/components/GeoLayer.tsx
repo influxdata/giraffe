@@ -36,7 +36,7 @@ interface LastRenderProperties {
   zoomOnLastRender?: number
   widthOnLastRender?: number
   heightOnLastRender?: number
-  delayedQueryTimerHandle?
+  delayedQueryTimerHandle?: ReturnType<typeof setTimeout>
 }
 
 const onViewportChange = (
