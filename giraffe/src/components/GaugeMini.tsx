@@ -3,6 +3,8 @@ import React, {FunctionComponent, useRef, useEffect, useState} from 'react'
 import {color as d3Color} from 'd3-color'
 import {scaleLinear} from 'd3-scale'
 import {range} from 'd3-array'
+
+// Types
 import {Color, GaugeMiniLayerConfig} from '../types'
 
 const throwReturn = <T extends unknown>(msg: string): T => {
@@ -21,7 +23,9 @@ export const createColsMString = <T extends {[key: string]: true}>(
   groupedBy: T,
   col: {[key in keyof T]: string}
 ): string => {
-  const columns = Object.keys(groupedBy).sort()
+  const columns = Object.keys(groupedBy)
+    .filter(x => groupedBy[x])
+    .sort()
   const columnValues = columns.map(x => col[x])
   /**
    * replacing - with -- will ensures that rows
