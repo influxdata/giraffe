@@ -2,6 +2,7 @@ import CSS from 'csstype'
 import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
+import {FormatStatValueOptions} from '../utils/formatStatValue'
 
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
@@ -278,6 +279,17 @@ export interface GaugeTheme {
   overflowDelta: number
 }
 
+export type ColorHexValue = {
+  value: number
+  hex: string
+}
+
+export type GaugeMiniColors = {
+  min: ColorHexValue
+  max: ColorHexValue
+  thresholds?: ColorHexValue[]
+}
+
 export interface GaugeMiniBarsDefinitions<T extends {[key: string]: true}> {
   /** Defines which columns choose as unique bar indentificator.  */
   groupByColumns: T
@@ -286,10 +298,17 @@ export interface GaugeMiniBarsDefinitions<T extends {[key: string]: true}> {
   bars?: {barDef: {[key in keyof T]: string}; label?: string}[]
 }
 
+export interface GaugeMiniBarsDefinitionsArr {
+  groupByColumns: string[]
+  bars?: {barDef: string[]; label?: string}[]
+}
+
 export interface GaugeMiniLayerConfig {
   type: 'gauge mini'
   /** Defines which columns choose as unique bar indentificator. Also bar labels can be defined here. */
-  barsDefinitions: GaugeMiniBarsDefinitions<any>
+  barsDefinitions:
+    | GaugeMiniBarsDefinitionsArr
+    | GaugeMiniBarsDefinitions<{[key: string]: true}>
   mode?: 'progress' | 'bullet'
   textMode?: 'follow' | 'left'
 
@@ -301,7 +320,7 @@ export interface GaugeMiniLayerConfig {
   sidePaddings?: number
   oveflowFraction?: number
 
-  gaugeColors?: Color[]
+  gaugeMiniColors?: Color[] | GaugeMiniColors
   colorSecondary?: string
 
   labelMain?: string
@@ -315,12 +334,12 @@ export interface GaugeMiniLayerConfig {
   valueFontSize?: number
   valueFontColorInside?: string
   valueFontColorOutside?: string
-  valueFormater?: (value: number) => string
+  valueFormater?: ((value: number) => string) | FormatStatValueOptions
 
   axesSteps?: number | 'thresholds' | undefined | number[]
   axesFontSize?: number
   axesFontColor?: string
-  axesFormater?: (value: number) => string
+  axesFormater?: ((value: number) => string) | FormatStatValueOptions
 }
 
 export interface SingleStatLayerConfig {

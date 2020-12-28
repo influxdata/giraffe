@@ -62,7 +62,7 @@ const editableLayer = (theme: Theme): Theme & {numberOfBars: number} => ({
   oveflowFraction: number('oveflowFraction', theme.oveflowFraction),
 
   // todo: add knobs
-  gaugeColors: theme.gaugeColors,
+  gaugeMiniColors: theme.gaugeMiniColors,
   colorSecondary: color('colorSecondary', theme.colorSecondary),
 
   labelMain: text('labelMain', 'Gauge-mini example'),
