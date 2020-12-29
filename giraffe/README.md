@@ -699,22 +699,19 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
     - **overflowDelta**: _number. Optional. Defaults to 0.03 when excluded._ This constant expresses how far past the gauge min or gauge max the needle should be drawn if the value for the needle is less than gauge min or greater than the gauge max. It is expressed as a fraction of the circumference of a circle, e.g. 0.5 means draw halfway around the gauge from the min or max value.
 
 
-- **GaugeLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
+- **GaugeMiniLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
-  For multiple bars values has to be passed as columns (not fields). That can be done in flux by 
-    ```
-    import "influxdata/influxdb/v1"
-    <your query> 
-      |> v1.fieldsAsCols()
-    ```
+  All values (excluding **type**) are Optional and their defaults is defined by theme `GAUGE_MINI_THEME_BULLET_DARK`
 
-  All values (excluding **type**) are Optional and their defaults is defined by precreated theme `GAUGE_MINI_THEME_BULLET_DARK`
-  
   - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
 
-  - **bars** _{\_field: string; label?: string}[]_ per bar settings:
-    - __field_ giraffe table column name (that contains value), can be set to `'_value'` when there is only one field present
-    - _label_ optional label for bar
+  - **barsDefinitions** _{groupByColumns; bars;}_ _(types of properties based on selected style)_ 
+    - Object style:
+      - **groupByColumns** _{ [key: string]: true }_ bar for each unique combination of given columns values. _(example: `{cpu: true, _field: true}`)_
+      - **bars** _{ barDef: { [key in keyof T]: string }, label?: string }[]_ where _barDef_ contains values for specific bar columns and label for this bar.
+    - _or_ Array style:
+      - **groupByColumns** _string[]_ bar for each unique combination of given columns values. _(example: `['cpu', '_field', ]`)_
+      - **bars** _{ barDef: string[], label?: string }[]_ where _barDef_ contains values for specific bar columns and label for this bar. Each barDef value belongs to key grom groupByColumns with same index.
 
   - **mode**: _'progress' | 'bullet'._ 
     - `'bullet'` backgroud bar is colored and value bar has always secondary color
@@ -738,20 +735,23 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **oveflowFraction** _number_ fraction number defining how much can value bar go outside of background bar. e.g. with `oveflowFraction: .1` will value bar have max length 110% of background bar for max value and will have 10% length to the left from background bar for minimal value.
 
-  - **gaugeColors** _Color[]_ An array of objects that defines the colors of the Gauge. Each object has the following properties.
+  - **gaugeColors** _types based on used style_
+    - giraffe style _Color[]_ An array of objects that defines the colors of the Gauge. Each object has the following properties.
 
-    - **id**: _string. **Required**._ The id for this color. Should be unique within the **gaugeColors** array.
+      - **id**: _string. **Required**._ The id for this color. Should be unique within the **gaugeColors** array.
 
-    - **type**: _'min' | 'max' | 'threshold'. **Required**._ The type of value associated with this color. _'min'_ type comes first, _'max'_ type comes last, and _'threshold'_ types are in between _'min'_ and _'max'_. **gaugeColors** must contain at least one _'min'_ type and one _'max'_ type for the Gauge-mini to have color. Only the first _'min'_ and first _'max'_ in the array are recognized for each of their respective types. The color will change as a gradient if the **gaugeColors** array contains no 'threshold' that means gradient background bar for 'bullet' mode and continuous value bar color change for 'progress' mode. The color will be segmented if any _'threshold'_ types are included in the **gaugeColors** array that means step color change background bar for 'bullet' mode and fixed color of value bar based on value change for 'progress' mode.
+      - **type**: _'min' | 'max' | 'threshold'. **Required**._ The type of value associated with this color. _'min'_ type comes first, _'max'_ type comes last, and _'threshold'_ types are in between _'min'_ and _'max'_. **gaugeColors** must contain at least one _'min'_ type and one _'max'_ type for the Gauge-mini to have color. Only the first _'min'_ and first _'max'_ in the array are recognized for each of their respective types. The color will change as a gradient if the **gaugeColors** array contains no 'threshold' that means gradient background bar for 'bullet' mode and continuous value bar color change for 'progress' mode. The color will be segmented if any _'threshold'_ types are included in the **gaugeColors** array that means step color change background bar for 'bullet' mode and fixed color of value bar based on value change for 'progress' mode.
 
-    - **hex**: _string. **Required**._ The [_color hex_](https://www.color-hex.com/) string for this color.
+      - **hex**: _string. **Required**._ The [_color hex_](https://www.color-hex.com/) string for this color.
 
-    - **name**: _string. **Required**._ For descriptive purposes only. The name given to this color.
+      - **name**: _string. **Required**._ For descriptive purposes only. The name given to this color.
 
-    - **value**: _number. **Required**._ The starting gauge value associated with this color.
-
-
-
+      - **value**: _number. **Required**._ The starting gauge value associated with this color.
+    - mini gauge style: _{min; max; thresholds; }_
+      - _ColorHexValue_ is _{ value: number; hex: string; }_ where hex is [_color hex_](https://www.color-hex.com/) adn value is where color is applied.
+      - **min** _ColorHexValue_ **Required** is minimaln value of gauge
+      - **max** _ColorHexValue_ **Required** is maximaln value of gauge
+      - **thresholds** _ColorHexValue[]_ is thresholds of gauge. The color will change as a gradient if no thresholds present, that means gradient background bar for 'bullet' mode and continuous value bar color change for 'progress' mode. The color will be segmented one or more thresholds present, that means step color change background bar for 'bullet' mode and fixed color of value bar based on value change for 'progress' mode.
 
   - **colorSecondary** _string_ Secondary color used for value bar in 'bullet' mode or for background bar in 'progress' mode
 
@@ -776,8 +776,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **valueFontColorOutside** _string_ Text value color when value bar is not behind the text
 
-  - **valueFormater** _(value: number) => string_ Function that defines how will be text value shown based on current value. e.g. ```valueFormater: (num: number) => `${num.toFixed(0)}%` ``` for _value=23.213_ will show text value _23%_.
-
   Axes
   - **axesSteps** _number | 'thresholds' | undefined | number[]_ Defines where to show axes:
     - _number_ number of how many evenly distributed axes values will be shown between min and max value. Only min and max value will be shown when `axesSteps: 0`
@@ -789,7 +787,18 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **axesFontColor** _string_ Color of axes values and axes lines
 
-  - **axesFormater** _(value: number) => string_ Same as **valueFormater** for axes values
+  - Formaters **valueFormater** and **axesFormater** _(value: number) => string_ or _FormatStatValueOptions_
+    - How will be text value on bar and axes values formated.
+    - _FormatStatValueOptions_ 
+      - **prefix**: _string. Optional._ The text that appears before the gauge value. Use an empty string if no text is preferred.
+
+      - **suffix**: _string. Optional._ The text that appears after the gauge value. Use an empty string if no text is preferred.
+
+      - **decimalPlaces**: _Object. Optional._
+
+        - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
+        - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
+    - example ```valueFormater: (num: number) => `${num.toFixed(0)}%` ``` for _value=23.213_ will show text value _23%_.
 
   **Precreated themes**
     - `GAUGE_MINI_THEME_BULLET_DARK`
@@ -798,7 +807,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         type: 'gauge mini',
         mode: 'bullet',
         textMode: 'follow',
-        bars: [],
+        barsDefinitions: {groupByColumns: ["_field"]},
 
         valueHeight: 18,
         gaugeHeight: 25,
@@ -806,9 +815,9 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         gaugeRounding: 3,
         barPaddings: 5,
         sidePaddings: 20,
-        oveflowFraction: 0.03,
+        oveflowFraction: .03,
 
-        gaugeColors: [
+        gaugeMiniColors: [
           {value: 0, type: 'min', hex: InfluxColors.Krypton},
           {value: 50, type: 'threshold', hex: InfluxColors.Sulfur},
           {value: 75, type: 'threshold', hex: InfluxColors.Topaz},
@@ -827,12 +836,12 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         valueFontSize: 12,
         valueFontColorOutside: InfluxColors.Raven,
         valueFontColorInside: InfluxColors.Cloud,
-        valueFormater: (val: number) => val.toFixed(0),
+        valueFormater: {},
 
         axesSteps: 'thresholds',
         axesFontSize: 11,
         axesFontColor: InfluxColors.Forge,
-        axesFormater: (val: number) => val.toFixed(0),
+        axesFormater: {},
       }
       ```
     - `GAUGE_MINI_THEME_PROGRESS_DARK`
@@ -841,39 +850,39 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         type: 'gauge mini',
         mode: 'progress',
         textMode: 'follow',
-        bars: [],
-
+        barsDefinitions: {groupByColumns: ['_field']},
+      
         valueHeight: 20,
         gaugeHeight: 20,
         valueRounding: 3,
         gaugeRounding: 3,
         barPaddings: 5,
         sidePaddings: 20,
-        oveflowFraction: 0.03,
-
-        gaugeColors: [
+        oveflowFraction: .03,
+      
+        gaugeMiniColors: [
           {value: 0, type: 'min', hex: InfluxColors.Krypton},
           {value: 100, type: 'max', hex: InfluxColors.Topaz},
         ] as Color[],
         colorSecondary: InfluxColors.Kevlar,
-
+      
         labelMain: '',
         labelMainFontSize: 13,
         labelMainFontColor: InfluxColors.Ghost,
-
+      
         labelBarsFontSize: 11,
         labelBarsFontColor: InfluxColors.Forge,
-
+      
         valuePadding: 5,
         valueFontSize: 18,
         valueFontColorInside: InfluxColors.Raven,
         valueFontColorOutside: InfluxColors.Cloud,
-        valueFormater: (val: number) => val.toFixed(0),
-
+        valueFormater: {},
+      
         axesSteps: undefined as any,
         axesFontSize: 11,
         axesFontColor: InfluxColors.Forge,
-        axesFormater: (val: number) => val.toFixed(0),
+        axesFormater: {},
       }
       ```
 
