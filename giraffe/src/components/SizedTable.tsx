@@ -2,7 +2,6 @@ import React, {FunctionComponent, CSSProperties} from 'react'
 
 import {
   GaugeLayerConfig,
-  GaugeMiniLayerConfig,
   SizedConfig,
   TableGraphLayerConfig,
   LayerTypes,
@@ -89,16 +88,14 @@ export const SizedTable: FunctionComponent<Props> = ({
                     key={layerIndex}
                     table={newTableFromConfig(config)}
                     columns={
-                      getGaugeMiniBarsDefinitions(
-                        (layerConfig as Required<GaugeMiniLayerConfig>)
-                          .barsDefinitions
-                      ).groupByColumns
+                      getGaugeMiniBarsDefinitions(layerConfig.barsDefinitions)
+                        .groupByColumns
                     }
                   >
                     {latestValues => (
                       <GaugeMiniLayer
                         values={latestValues}
-                        theme={layerConfig as Required<GaugeMiniLayerConfig>}
+                        theme={layerConfig}
                       />
                     )}
                   </LatestMultipleValueTransform>

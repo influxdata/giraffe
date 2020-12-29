@@ -13,9 +13,7 @@ import {
   GAUGE_MINI_THEME_BULLET_DARK,
   GAUGE_MINI_THEME_PROGRESS_DARK,
 } from '../../giraffe/src/constants/gaugeMiniStyles'
-// import {gaugeTable as gaugeMiniTable} from './data/gaugeLayer'
-import {gaugeMiniTable, gaugeMiniTableGetField} from './data/gaugeMiniLayer'
-import {range} from 'd3-array'
+import {gaugeMiniTable} from './data/gaugeMiniLayer'
 
 type Theme = Required<GaugeMiniLayerConfig>
 

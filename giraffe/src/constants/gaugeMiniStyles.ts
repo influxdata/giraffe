@@ -75,7 +75,7 @@ export const GAUGE_MINI_THEME_PROGRESS_DARK: Required<GaugeMiniLayerConfig> = {
   valueFontColorOutside: InfluxColors.Cloud,
   valueFormater: {},
 
-  axesSteps: undefined as any,
+  axesSteps: undefined,
   axesFontSize: 11,
   axesFontColor: InfluxColors.Forge,
   axesFormater: {},
