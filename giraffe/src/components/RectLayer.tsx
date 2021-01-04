@@ -1,5 +1,4 @@
-import * as React from 'react'
-import {useRef, FunctionComponent} from 'react'
+import React, {FunctionComponent, RefObject} from 'react'
 
 import {useCanvas} from '../utils/useCanvas'
 import {drawRects} from '../utils/drawRects'
@@ -14,6 +13,7 @@ import {RectLayerConfig, RectLayerSpec, LayerProps, TooltipData} from '../types'
 export interface Props extends LayerProps {
   spec: RectLayerSpec
   config: RectLayerConfig
+  canvasRef: RefObject<HTMLCanvasElement>
 }
 
 export const RectLayer: FunctionComponent<Props> = ({
@@ -27,6 +27,7 @@ export const RectLayer: FunctionComponent<Props> = ({
   hoverX,
   hoverY,
   columnFormatter,
+  canvasRef,
 }) => {
   const hoveredRowIndices = findHoveredRects(
     spec.table,
@@ -48,8 +49,6 @@ export const RectLayer: FunctionComponent<Props> = ({
     strokeOpacity: config.strokeOpacity,
     fillOpacity: config.fillOpacity,
   }
-
-  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useCanvas(
     canvasRef,

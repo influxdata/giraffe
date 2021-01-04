@@ -1,4 +1,9 @@
-import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
+import React, {
+  CSSProperties,
+  FunctionComponent,
+  RefObject,
+  useCallback,
+} from 'react'
 
 import {Axes} from './Axes'
 import {
@@ -34,11 +39,15 @@ import {AnnotationLayer} from './AnnotationLayer'
 
 interface Props {
   config: SizedConfig
+  axesCanvasRef: RefObject<HTMLCanvasElement>
+  layerCanvasRef: RefObject<HTMLCanvasElement>
 }
 
 export const SizedPlot: FunctionComponent<Props> = ({
   config: userConfig,
   children,
+  axesCanvasRef,
+  layerCanvasRef,
 }) => {
   const env = usePlotEnv(userConfig)
   const forceUpdate = useForceUpdate()
@@ -120,7 +129,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
         userSelect: 'none',
       }}
     >
-      {showAxes && <Axes env={env} style={fullsizeStyle} />}
+      {showAxes && (
+        <Axes env={env} canvasRef={axesCanvasRef} style={fullsizeStyle} />
+      )}
       <div
         className="giraffe-inner-plot"
         data-testid="giraffe-inner-plot"
@@ -211,6 +222,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               case SpecTypes.Line:
                 return (
                   <LineLayer
+                    canvasRef={layerCanvasRef}
                     key={layerIndex}
                     {...sharedProps}
                     spec={spec}
@@ -221,6 +233,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               case SpecTypes.Band:
                 return (
                   <BandLayer
+                    canvasRef={layerCanvasRef}
                     key={layerIndex}
                     {...sharedProps}
                     spec={spec}
@@ -241,6 +254,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               case SpecTypes.Rect:
                 return (
                   <RectLayer
+                    canvasRef={layerCanvasRef}
                     key={layerIndex}
                     {...sharedProps}
                     spec={spec}

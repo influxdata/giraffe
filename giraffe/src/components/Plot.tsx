@@ -1,5 +1,4 @@
-import * as React from 'react'
-import {FunctionComponent} from 'react'
+import React, {FunctionComponent, RefObject, useRef} from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import {Config, SizedConfig, LayerTypes} from '../types'
@@ -10,13 +9,28 @@ import {get} from '../utils/get'
 
 interface Props {
   config: Config
+  axesCanvasRef?: RefObject<HTMLCanvasElement>
+  layerCanvasRef?: RefObject<HTMLCanvasElement>
 }
 
-export const Plot: FunctionComponent<Props> = ({config, children}) => {
+export const Plot: FunctionComponent<Props> = ({
+  config,
+  children,
+  axesCanvasRef = useRef<HTMLCanvasElement>(null),
+  layerCanvasRef = useRef<HTMLCanvasElement>(null),
+}) => {
   const graphType = get(config, 'layers.0.type')
 
   if (config.width && config.height) {
-    return <SizedPlot config={config as SizedConfig}>{children}</SizedPlot>
+    return (
+      <SizedPlot
+        config={config as SizedConfig}
+        axesCanvasRef={axesCanvasRef}
+        layerCanvasRef={layerCanvasRef}
+      >
+        {children}
+      </SizedPlot>
+    )
   }
 
   return (
@@ -38,7 +52,13 @@ export const Plot: FunctionComponent<Props> = ({config, children}) => {
           )
         }
         return (
-          <SizedPlot config={{...config, width, height}}>{children}</SizedPlot>
+          <SizedPlot
+            config={{...config, width, height}}
+            axesCanvasRef={axesCanvasRef}
+            layerCanvasRef={layerCanvasRef}
+          >
+            {children}
+          </SizedPlot>
         )
       }}
     </AutoSizer>

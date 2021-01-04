@@ -13,6 +13,8 @@ export {
 } from './utils/formatters'
 export {getDomainDataFromLines} from './utils/lineData'
 
+export {exportImage} from './utils/exportImage'
+
 // Transforms
 export {lineTransform} from './transforms/line'
 

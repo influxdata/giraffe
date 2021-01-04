@@ -1,5 +1,9 @@
-import * as React from 'react'
-import {useRef, useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
+import React, {
+  CSSProperties,
+  FunctionComponent,
+  RefObject,
+  useLayoutEffect,
+} from 'react'
 
 import {TICK_PADDING_RIGHT, TICK_PADDING_TOP} from '../constants'
 import {clearCanvas} from '../utils/clearCanvas'
@@ -8,6 +12,7 @@ import {Margins, Scale, SizedConfig, Formatter, ColumnType} from '../types'
 import {PlotEnv} from '../utils/PlotEnv'
 
 interface Props {
+  canvasRef: RefObject<HTMLCanvasElement>
   env: PlotEnv
   style: CSSProperties
 }
@@ -186,9 +191,7 @@ export const drawAxes = ({
   }
 }
 
-export const Axes: FunctionComponent<Props> = ({env, style}) => {
-  const canvas = useRef<HTMLCanvasElement>(null)
-
+export const Axes: FunctionComponent<Props> = ({canvasRef, env, style}) => {
   const {
     innerWidth,
     innerHeight,
@@ -207,7 +210,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
 
   useLayoutEffect(() => {
     drawAxes({
-      canvas: canvas.current,
+      canvas: canvasRef.current,
       innerWidth,
       innerHeight,
       margins,
@@ -223,7 +226,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
       yColumnType,
     })
   }, [
-    canvas.current,
+    canvasRef.current,
     innerWidth,
     innerHeight,
     margins,
@@ -241,7 +244,7 @@ export const Axes: FunctionComponent<Props> = ({env, style}) => {
   return (
     <canvas
       className="giraffe-axes"
-      ref={canvas}
+      ref={canvasRef}
       style={style}
       data-testid="giraffe-axes"
     />

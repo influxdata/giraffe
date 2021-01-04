@@ -4,6 +4,8 @@ import {fireEvent, render, screen} from '@testing-library/react'
 
 import {PlotEnv} from '../utils/PlotEnv'
 
+import {LineLayerConfig, SizedConfig} from '../types'
+
 jest.mock('./Geo', () => <></>) // this component causes all sorts of loading problems
 
 import {newTable} from '../utils/newTable'
@@ -23,18 +25,22 @@ const layers = [
     type: 'line',
     x: '_time',
     y: '_value',
-  },
+    fill: [],
+  } as LineLayerConfig,
 ]
 
-const config = {
+const config: SizedConfig = {
   table,
   layers,
   showAxes: false,
-  width: '350px',
-  height: '350px',
+  width: 350,
+  height: 350,
 }
 
 const resetSpy = jest.spyOn(PlotEnv.prototype, 'resetDomains')
+
+const axesRef: React.RefObject<HTMLCanvasElement> = React.createRef()
+const layersRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
 describe('the SizedPlot', () => {
   describe('handling user interaction', () => {
@@ -44,7 +50,13 @@ describe('the SizedPlot', () => {
 
     describe('the default behavior', () => {
       it('handles double clicks', () => {
-        render(<SizedPlot config={config} />)
+        render(
+          <SizedPlot
+            config={config}
+            axesCanvasRef={axesRef}
+            layerCanvasRef={layersRef}
+          />
+        )
         fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).toHaveBeenCalled()
@@ -59,7 +71,13 @@ describe('the SizedPlot', () => {
           interactionHandlers: {doubleClick: fakeDoubleClickInteractionHandler},
         }
 
-        render(<SizedPlot config={localConfig} />)
+        render(
+          <SizedPlot
+            config={localConfig}
+            axesCanvasRef={axesRef}
+            layerCanvasRef={layersRef}
+          />
+        )
         fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).not.toHaveBeenCalled()
@@ -88,7 +106,13 @@ describe('the SizedPlot', () => {
           interactionHandlers: {hover: fakeHoverCallback},
         }
 
-        render(<SizedPlot config={localConfig} />)
+        render(
+          <SizedPlot
+            config={localConfig}
+            axesCanvasRef={axesRef}
+            layerCanvasRef={layersRef}
+          />
+        )
 
         fireEvent.mouseOver(screen.getByTestId('giraffe-inner-plot'))
 
