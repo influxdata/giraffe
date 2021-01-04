@@ -1,4 +1,6 @@
-import React, {useCallback, FunctionComponent, CSSProperties} from 'react'
+import React, {useCallback, FunctionComponent, CSSProperties, useRef} from 'react'
+
+import mergeImages from 'merge-images';
 
 import {Axes} from './Axes'
 import {
@@ -46,6 +48,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const [dragEvent, dragTargetProps] = useDragEvent()
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
+
+  const axesCanvasRef = useRef<HTMLCanvasElement>(null)
+  const layerCanvasRef = useRef<HTMLCanvasElement>(null)
 
   const handleXBrushEnd = useCallback(
     (xRange: number[]) => {
@@ -110,6 +115,20 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
+  console.log('calm down jill, gosh', env.margins.left)
+
+  if (layerCanvasRef.current) {
+    const layerPng = layerCanvasRef.current.toDataURL()
+    const axesPng = axesCanvasRef.current.toDataURL()
+
+    // console.log('layer canvas:', layerPng)
+    // console.log('axes canvas:', axesPng)
+
+    mergeImages([{src: layerPng, x: env.margins.left}, axesPng]).then((base64Image) => {
+      console.log('yeah buddy:', base64Image)
+    })
+  }
+
   return (
     <div
       className="giraffe-plot"
@@ -120,7 +139,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
         userSelect: 'none',
       }}
     >
-      {showAxes && <Axes env={env} style={fullsizeStyle} />}
+      {showAxes && <Axes env={env} canvasRef={axesCanvasRef} style={fullsizeStyle} />}
       <div
         className="giraffe-inner-plot"
         data-testid="giraffe-inner-plot"
@@ -211,6 +230,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               case SpecTypes.Line:
                 return (
                   <LineLayer
+                    canvasRef={layerCanvasRef}
                     key={layerIndex}
                     {...sharedProps}
                     spec={spec}

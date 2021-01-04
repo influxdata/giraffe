@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useMemo, useRef, FunctionComponent} from 'react'
+import {useMemo, FunctionComponent} from 'react'
 
 import {LayerProps, LineLayerSpec, LineLayerConfig} from '../types'
 import {LineHoverLayer} from './LineHoverLayer'
@@ -12,10 +12,11 @@ import {FILL} from '../constants/columnKeys'
 export interface Props extends LayerProps {
   spec: LineLayerSpec
   config: LineLayerConfig
+  canvasRef: any
 }
 
 export const LineLayer: FunctionComponent<Props> = props => {
-  const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
+  const {config, spec, width, height, xScale, yScale, hoverX, hoverY, canvasRef} = props
   const {position} = config
 
   const simplifiedLineData = useMemo(
@@ -31,8 +32,6 @@ export const LineLayer: FunctionComponent<Props> = props => {
     shadeBelowOpacity: config.shadeBelowOpacity,
     shadeAboveY: height,
   }
-
-  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useCanvas(
     canvasRef,
