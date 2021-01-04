@@ -1,6 +1,7 @@
 import React, {useCallback, FunctionComponent, CSSProperties, useRef} from 'react'
 
 import mergeImages from 'merge-images';
+import download from 'downloadjs';
 
 import {Axes} from './Axes'
 import {
@@ -115,7 +116,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  console.log('calm down jill, gosh', env.margins.left)
+  //console.log('margins: ', env.margins.left)
 
   if (layerCanvasRef.current) {
     const layerPng = layerCanvasRef.current.toDataURL()
@@ -125,7 +126,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
     // console.log('axes canvas:', axesPng)
 
     mergeImages([{src: layerPng, x: env.margins.left}, axesPng]).then((base64Image) => {
-      console.log('yeah buddy:', base64Image)
+      //console.log('yeah buddy:', base64Image)
+      download(base64Image, 'mygraph.png')
     })
   }
 

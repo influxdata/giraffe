@@ -99,13 +99,14 @@
     "uuid": "^3.2.1",
     "version-bump-prompt": "^5.0.0",
     "webpack": "^5.2.0",
-    "webpack-cli": "^4.2.0"
+    "webpack-cli": "^4.3.1"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "dependencies": {
+    "downloadjs": "^1.4.7",
     "merge-images": "^2.0.0"
   }
 }
