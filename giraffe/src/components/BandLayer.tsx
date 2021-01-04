@@ -1,5 +1,4 @@
-import * as React from 'react'
-import {useMemo, useRef, FunctionComponent} from 'react'
+import React, {FunctionComponent, RefObject, useMemo} from 'react'
 
 import {LayerProps, BandLayerSpec, BandLayerConfig} from '../types'
 import {BandHoverLayer} from './BandHoverLayer'
@@ -18,13 +17,24 @@ import {
 export interface Props extends LayerProps {
   spec: BandLayerSpec
   config: BandLayerConfig
+  canvasRef: RefObject<HTMLCanvasElement>
 }
 
 const HIGHLIGHT_HOVERED_LINE = 0.4
 const NO_HIGHLIGHT = 1
 
 export const BandLayer: FunctionComponent<Props> = props => {
-  const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
+  const {
+    canvasRef,
+    config,
+    height,
+    hoverX,
+    hoverY,
+    spec,
+    width,
+    xScale,
+    yScale,
+  } = props
 
   const {
     lowerColumnName = '',
@@ -50,8 +60,6 @@ export const BandLayer: FunctionComponent<Props> = props => {
     lineOpacity: config.lineOpacity,
     shadeOpacity: config.shadeOpacity,
   }
-
-  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useCanvas(
     canvasRef,
