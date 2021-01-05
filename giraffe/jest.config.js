@@ -11,7 +11,7 @@ module.exports = {
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    ".+\\.(css|scss)$": "jest-css-modules-transform"
+    '.+\\.(css|scss)$': 'jest-css-modules-transform',
   },
   coverageReporters: ['json', 'html'],
 }
