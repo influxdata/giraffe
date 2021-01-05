@@ -8,6 +8,8 @@ import React, {
 import mergeImages from 'merge-images'
 import download from 'downloadjs'
 
+import Button from '@material-ui/core/Button'
+
 import {Axes} from './Axes'
 import {
   AnnotationLayerConfig,
@@ -142,13 +144,11 @@ export const SizedPlot: FunctionComponent<Props> = ({
 
   return (
     <>
-      <button
-        onClick={() => {
-          exportPopUp()
-        }}
-      >
-        EXPORT
-      </button>
+      <Button
+        variant="contained"
+        onClick={() => {exportPopUp()}}>
+        Export
+      </Button>
       <div
         className="giraffe-plot"
         style={{

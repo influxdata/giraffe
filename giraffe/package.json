@@ -106,6 +106,7 @@
     "react-dom": "^16.8.0"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
     "downloadjs": "^1.4.7",
     "merge-images": "^2.0.0"
   }
