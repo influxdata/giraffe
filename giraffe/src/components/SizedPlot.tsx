@@ -121,7 +121,14 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const exportImage = () => {
+  const exportPopUp = () => {
+    const fileName = prompt('Save as:', 'Enter image name')
+    if (fileName !== null || fileName.length > 0) {
+      exportImage(fileName)
+    }
+  }
+
+  const exportImage = fileName => {
     const layerPng = layerCanvasRef.current.toDataURL()
     const axesPng = axesCanvasRef.current.toDataURL()
 
@@ -129,7 +136,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
       axesPng,
       {src: layerPng, x: 2 * env.margins.left, y: 2 * env.margins.top},
     ]).then(base64Image => {
-      download(base64Image, 'mygraph.png')
+      download(base64Image, `${fileName}.png`, 'image/png')
     })
   }
 
@@ -137,7 +144,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
     <>
       <button
         onClick={() => {
-          exportImage()
+          exportPopUp()
         }}
       >
         EXPORT
