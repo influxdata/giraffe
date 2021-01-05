@@ -7,13 +7,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default function FormDialog({ buttonText, onClose }) {
+export default function FormDialog({ buttonText, onClose, marginLeft }) {
     const [open, setOpen] = useState(false);
     const [filename, setFilename] = useState("mygraph");
 
     const handleClickOpen = () => {
         setOpen(true);
     };
+
+    const buttonStyle={marginLeft,
+                       marginBottom: 10,
+                       width: 150};
 
     const handleClose = () => {
         setOpen(false);
@@ -40,7 +44,7 @@ export default function FormDialog({ buttonText, onClose }) {
 
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button variant="contained" color="primary" onClick={handleClickOpen} style={buttonStyle}>
                 {buttonText}
             </Button>
             <Dialog
@@ -52,7 +56,7 @@ export default function FormDialog({ buttonText, onClose }) {
                 <DialogContent>
                     <DialogContentText>
                         To export this graph as an image, please enter the filename below;
-                        to accept the default just press 'Export'.
+                        to accept the default just press 'Export' or the return key.
                     </DialogContentText>
                     <TextField
                         autoFocus

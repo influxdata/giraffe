@@ -8,8 +8,6 @@ import React, {
 import mergeImages from 'merge-images'
 import download from 'downloadjs'
 
-import Button from '@material-ui/core/Button'
-
 import {Axes} from './Axes'
 import {
   AnnotationLayerConfig,
@@ -30,6 +28,7 @@ import {BandLayer} from './BandLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
 import {Brush} from './Brush'
+import ExportDialogButton from './ExportDialog'
 import {rangeToDomain} from '../utils/brush'
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {useMousePos} from '../utils/useMousePos'
@@ -123,13 +122,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const exportPopUp = () => {
-    const fileName = prompt('Save as:', 'Enter image name')
-    if (fileName !== null || fileName.length > 0) {
-      exportImage(fileName)
-    }
-  }
-
   const exportImage = fileName => {
     const layerPng = layerCanvasRef.current.toDataURL()
     const axesPng = axesCanvasRef.current.toDataURL()
@@ -144,11 +136,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={() => {exportPopUp()}}>
-        Export
-      </Button>
+      <ExportDialogButton onClose={exportImage}  marginLeft={env.margins.left} buttonText='Export Image'/>
       <div
         className="giraffe-plot"
         style={{
