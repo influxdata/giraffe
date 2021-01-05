@@ -1,7 +1,12 @@
-import React, {useCallback, FunctionComponent, CSSProperties, useRef} from 'react'
+import React, {
+  useCallback,
+  FunctionComponent,
+  CSSProperties,
+  useRef,
+} from 'react'
 
-import mergeImages from 'merge-images';
-import download from 'downloadjs';
+import mergeImages from 'merge-images'
+import download from 'downloadjs'
 
 import {Axes} from './Axes'
 import {
@@ -116,186 +121,194 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  //console.log('margins: ', env.margins.left)
-
-  if (layerCanvasRef.current) {
+  const exportImage = () => {
     const layerPng = layerCanvasRef.current.toDataURL()
     const axesPng = axesCanvasRef.current.toDataURL()
 
-    // console.log('layer canvas:', layerPng)
-    // console.log('axes canvas:', axesPng)
-
-    mergeImages([{src: layerPng, x: env.margins.left}, axesPng]).then((base64Image) => {
-      //console.log('yeah buddy:', base64Image)
+    mergeImages([
+      axesPng,
+      {src: layerPng, x: 2 * env.margins.left, y: 2 * env.margins.top},
+    ]).then(base64Image => {
       download(base64Image, 'mygraph.png')
     })
   }
 
   return (
-    <div
-      className="giraffe-plot"
-      style={{
-        position: 'relative',
-        width: `${width}px`,
-        height: `${height}px`,
-        userSelect: 'none',
-      }}
-    >
-      {showAxes && <Axes env={env} canvasRef={axesCanvasRef} style={fullsizeStyle} />}
-      <div
-        className="giraffe-inner-plot"
-        data-testid="giraffe-inner-plot"
-        style={{
-          position: 'absolute',
-          top: `${margins.top}px`,
-          right: `${margins.right}px`,
-          bottom: `${margins.bottom}px`,
-          left: `${margins.left}px`,
-          cursor: `${userConfig.cursor || 'crosshair'}`,
+    <>
+      <button
+        onClick={() => {
+          exportImage()
         }}
-        onDoubleClick={callbacks.doubleClick}
-        {...hoverTargetProps}
-        {...dragTargetProps}
       >
-        <div className="giraffe-layers" style={fullsizeStyle}>
-          {config.layers.map((layerConfig, layerIndex) => {
-            if (layerConfig.type === LayerTypes.Geo) {
-              return (
-                <GeoLayer
-                  key={layerIndex}
-                  table={newTableFromConfig(config)}
-                  config={layerConfig as GeoLayerConfig}
-                  plotConfig={config}
-                />
-              )
-            }
+        EXPORT
+      </button>
+      <div
+        className="giraffe-plot"
+        style={{
+          position: 'relative',
+          width: `${width}px`,
+          height: `${height}px`,
+          userSelect: 'none',
+        }}
+      >
+        {showAxes && (
+          <Axes env={env} canvasRef={axesCanvasRef} style={fullsizeStyle} />
+        )}
+        <div
+          className="giraffe-inner-plot"
+          data-testid="giraffe-inner-plot"
+          style={{
+            position: 'absolute',
+            top: `${margins.top}px`,
+            right: `${margins.right}px`,
+            bottom: `${margins.bottom}px`,
+            left: `${margins.left}px`,
+            cursor: `${userConfig.cursor || 'crosshair'}`,
+          }}
+          onDoubleClick={callbacks.doubleClick}
+          {...hoverTargetProps}
+          {...dragTargetProps}
+        >
+          <div className="giraffe-layers" style={fullsizeStyle}>
+            {config.layers.map((layerConfig, layerIndex) => {
+              if (layerConfig.type === LayerTypes.Geo) {
+                return (
+                  <GeoLayer
+                    key={layerIndex}
+                    table={newTableFromConfig(config)}
+                    config={layerConfig as GeoLayerConfig}
+                    plotConfig={config}
+                  />
+                )
+              }
 
-            if (layerConfig.type === LayerTypes.Custom) {
-              const renderProps = {
-                key: layerIndex,
-                width,
-                height,
-                innerWidth: env.innerWidth,
-                innerHeight: env.innerHeight,
+              if (layerConfig.type === LayerTypes.Custom) {
+                const renderProps = {
+                  key: layerIndex,
+                  width,
+                  height,
+                  innerWidth: env.innerWidth,
+                  innerHeight: env.innerHeight,
+                  xScale: env.xScale,
+                  yScale: env.yScale,
+                  xDomain: env.xDomain,
+                  yDomain: env.yDomain,
+                  columnFormatter: env.getFormatterForColumn,
+                  yColumnType: env.yColumnType,
+                }
+
+                return layerConfig.render(renderProps)
+              }
+
+              if (layerConfig.type === LayerTypes.SingleStat) {
+                return (
+                  <LatestValueTransform
+                    key={layerIndex}
+                    table={newTableFromConfig(config)}
+                    allowString={true}
+                  >
+                    {latestValue => (
+                      <SingleStatLayer
+                        stat={latestValue}
+                        config={layerConfig as SingleStatLayerConfig}
+                      />
+                    )}
+                  </LatestValueTransform>
+                )
+              }
+
+              const spec = env.getSpec(layerIndex)
+
+              const sharedProps = {
+                hoverX,
+                hoverY,
+                plotConfig: config,
                 xScale: env.xScale,
                 yScale: env.yScale,
-                xDomain: env.xDomain,
-                yDomain: env.yDomain,
+                width: env.innerWidth,
+                height: env.innerHeight,
+                yColumnType: spec.yColumnType,
                 columnFormatter: env.getFormatterForColumn,
-                yColumnType: env.yColumnType,
               }
 
-              return layerConfig.render(renderProps)
-            }
-
-            if (layerConfig.type === LayerTypes.SingleStat) {
-              return (
-                <LatestValueTransform
-                  key={layerIndex}
-                  table={newTableFromConfig(config)}
-                  allowString={true}
-                >
-                  {latestValue => (
-                    <SingleStatLayer
-                      stat={latestValue}
-                      config={layerConfig as SingleStatLayerConfig}
+              switch (spec.type) {
+                case SpecTypes.Annotation:
+                  return (
+                    <AnnotationLayer
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as AnnotationLayerConfig}
                     />
-                  )}
-                </LatestValueTransform>
-              )
-            }
+                  )
+                case SpecTypes.Line:
+                  return (
+                    <LineLayer
+                      canvasRef={layerCanvasRef}
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as LineLayerConfig}
+                    />
+                  )
 
-            const spec = env.getSpec(layerIndex)
+                case SpecTypes.Band:
+                  return (
+                    <BandLayer
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as BandLayerConfig}
+                    />
+                  )
 
-            const sharedProps = {
-              hoverX,
-              hoverY,
-              plotConfig: config,
-              xScale: env.xScale,
-              yScale: env.yScale,
-              width: env.innerWidth,
-              height: env.innerHeight,
-              yColumnType: spec.yColumnType,
-              columnFormatter: env.getFormatterForColumn,
-            }
+                case SpecTypes.Scatter:
+                  return (
+                    <ScatterLayer
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as ScatterLayerConfig}
+                    />
+                  )
 
-            switch (spec.type) {
-              case SpecTypes.Annotation:
-                return (
-                  <AnnotationLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as AnnotationLayerConfig}
-                  />
-                )
-              case SpecTypes.Line:
-                return (
-                  <LineLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as LineLayerConfig}
-                  />
-                )
+                case SpecTypes.Rect:
+                  return (
+                    <RectLayer
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as RectLayerConfig}
+                    />
+                  )
 
-              case SpecTypes.Band:
-                return (
-                  <BandLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as BandLayerConfig}
-                  />
-                )
+                case SpecTypes.Mosaic: {
+                  return (
+                    <MosaicLayer
+                      key={layerIndex}
+                      {...sharedProps}
+                      spec={spec}
+                      config={layerConfig as MosaicLayerConfig}
+                    />
+                  )
+                }
 
-              case SpecTypes.Scatter:
-                return (
-                  <ScatterLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as ScatterLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Rect:
-                return (
-                  <RectLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as RectLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Mosaic: {
-                return (
-                  <MosaicLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as MosaicLayerConfig}
-                  />
-                )
+                default:
+                  return null
               }
-
-              default:
-                return null
-            }
-          })}
-          {children && children}
+            })}
+            {children && children}
+          </div>
+          <Brush
+            event={dragEvent}
+            width={env.innerWidth}
+            height={env.innerHeight}
+            onXBrushEnd={handleXBrushEnd}
+            onYBrushEnd={handleYBrushEnd}
+          />
         </div>
-        <Brush
-          event={dragEvent}
-          width={env.innerWidth}
-          height={env.innerHeight}
-          onXBrushEnd={handleXBrushEnd}
-          onYBrushEnd={handleYBrushEnd}
-        />
       </div>
-    </div>
+    </>
   )
 }
 
