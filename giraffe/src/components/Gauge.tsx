@@ -171,9 +171,16 @@ const drawSegmentedGauge = (
   colors: Color[],
   gaugeSize: number
 ): void => {
-  const sortedColors = Array.isArray(colors)
-    ? colors.sort((color1, color2) => color1.value - color2.value)
-    : []
+  let thresholdColors = []
+  if (Array.isArray(colors)) {
+    thresholdColors = colors.filter(color => {
+      return color.value >= minValue && color.value <= maxValue
+    })
+  }
+
+  const sortedColors = thresholdColors.sort(
+    (color1, color2) => color1.value - color2.value
+  )
 
   const trueValueRange = Math.abs(maxValue - minValue)
   const totalArcLength = gaugeSize
