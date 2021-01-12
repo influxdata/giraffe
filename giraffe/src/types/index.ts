@@ -175,6 +175,7 @@ export type FluxDataType =
 
 export enum LayerTypes {
   RawFluxDataTable = 'flux data table',
+  Candlestick = 'candlestick',
   Gauge = 'gauge',
   GaugeMini = 'gauge mini',
   Custom = 'custom',
@@ -194,6 +195,7 @@ export type LayerConfig =
   | CustomLayerConfig
   | AnnotationLayerConfig
   | RawFluxDataTableLayerConfig
+  | CandlestickLayerConfig
   | GaugeLayerConfig
   | GaugeMiniLayerConfig
   | SingleStatLayerConfig
@@ -245,6 +247,34 @@ export interface RawFluxDataTableLayerConfig {
   height: number
   disableVerticalScrolling?: boolean
   parseObjects?: boolean
+}
+
+export interface CandleStyle {
+  shadowColor: string
+  shadowStrokeWidth: number
+
+  bodyColor: string
+  bodyFillOpacity: number
+  bodyStrokeWidth: number
+  bodyRounding: number
+}
+
+export interface CandlestickLayerConfig {
+  type: 'candlestick'
+  /** Defines which columns choose as unique bar indentificator. Also bar labels can be defined here. */
+  mode?: 'candles' | 'fence'
+
+  candlePadding: number
+  candleRaising: CandleStyle
+  candleDecreasing: CandleStyle
+
+  xColumnKey?: string
+  openColumnKey?: string
+  closeColumnKey?: string
+  lowColumnKey?: string
+  highColumnKey?: string
+
+  window?: number | 'detect'
 }
 
 export interface GaugeLayerConfig {
@@ -566,6 +596,7 @@ export type LayerSpec =
   | AnnotationLayerSpec
   | LineLayerSpec
   | BandLayerSpec
+  | CandlestickLayerSpec
   | ScatterLayerSpec
   | RectLayerSpec
   | MosaicLayerSpec
@@ -574,6 +605,7 @@ export enum SpecTypes {
   Annotation = 'annotation',
   Line = 'line',
   Band = 'band',
+  Candlestick = 'candlestick',
   Scatter = 'scatter',
   Rect = 'rect',
   Mosaic = 'mosaic',
@@ -649,6 +681,31 @@ export interface BandLayerSpec {
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+}
+
+export type OHLCValue = {
+  open: number
+  high: number
+  low: number
+  close: number
+}
+
+export type CandlestickLayerSpecValues = OHLCValue[]
+
+export interface CandlestickLayerSpec {
+  type: 'candlestick' // do not refactor or restrict to SpecTypes
+  inputTable: Table
+  calculatedWindow: number // distance between two values
+  values: CandlestickLayerSpecValues
+  xDomain: number[]
+  yDomain: number[]
+
+  // todo: analyze why are these properties required (use them if convinient).
+  table: Table // same as inputTable (values used instead)
+  xColumnKey: string
+  yColumnKey: string
+  xColumnType: ColumnType
+  yColumnType: ColumnType
 }
 
 export interface ScatterLayerSpec {

@@ -28,6 +28,7 @@ export {DEFAULT_TABLE_COLORS} from './constants/tableGraph'
 export {
   AnnotationLayerConfig,
   BandLayerConfig,
+  CandlestickLayerConfig,
   ColumnData,
   ColumnType,
   Config,

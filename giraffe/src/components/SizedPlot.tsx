@@ -18,6 +18,7 @@ import {
   SingleStatLayerConfig,
   SizedConfig,
   SpecTypes,
+  CandlestickLayerConfig,
 } from '../types'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -36,6 +37,7 @@ import {MosaicLayer} from './MosaicLayer'
 import {GeoLayerConfig} from '../types/geo'
 import GeoLayer from './GeoLayer'
 import {AnnotationLayer} from './AnnotationLayer'
+import {CandlestickLayer} from './CandlestickLayer'
 
 interface Props {
   config: SizedConfig
@@ -269,6 +271,17 @@ export const SizedPlot: FunctionComponent<Props> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as MosaicLayerConfig}
+                  />
+                )
+              }
+
+              case SpecTypes.Candlestick: {
+                return (
+                  <CandlestickLayer
+                    key={layerIndex}
+                    {...sharedProps}
+                    spec={spec}
+                    config={layerConfig as CandlestickLayerConfig}
                   />
                 )
               }
