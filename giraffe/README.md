@@ -719,7 +719,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column key name is from that data set. This should match the overlaid graph's same property._
 
-  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, these column key names are from that data set. This should match the overlaid graph's same property._
+  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, these column key names are from that data set. This should match the overlaid graph's same property. If the "fill" is not required in the overlaid graph, please explicitly use the overlaid graph's implicit value in AnnotationLayerConfig._
 
   - **annotations**: _array[Object, ...]. **Required**._ An array of objects that are the annotations. The array can be empty (no annotations rendered). Each object is an annotation and has the following properties:
 
