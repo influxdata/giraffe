@@ -715,9 +715,11 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **type**: _'annotation'. **Required**._ Specifies that this LayerConfig is an annotation layer.
 
-  - **x**: _string. **Required**._
+  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column key name is from that data set. This should match the overlaid graph's same property._
 
-  - **y**: _string. **Required**._
+  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column key name is from that data set. This should match the overlaid graph's same property._
+
+  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, these column key names are from that data set. This should match the overlaid graph's same property._
 
   - **annotations**: _array[Object, ...]. **Required**._ An array of objects that are the annotations. The array can be empty (no annotations rendered). Each object is an annotation and has the following properties:
 
@@ -732,8 +734,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
     - **stopValue**: _number. **Required**._ The stopping or ending value of the annotation. For example, if the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). May also be something other than time.
 
     - **dimension**: _'x' | 'y'. **Required**._ Indicates whether the annotation is vertical - **'x'** or horizontal - **'y'**.
-
-  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, the column key names are from that data set._
 
   - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates how an annotation's legend (tooltip) should be triggered during mouse hover.
 
