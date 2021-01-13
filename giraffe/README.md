@@ -289,7 +289,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **height**: _number. Optional._ The height in _CSS px_ of the Plot. Includes the space below the axes surrounding the ticks, tick labels, and axis labels. When not specified, the height of `<Plot>`'s parent element will determine the height.
 
-- **gridColor**: _string. Optional._ The _CSS color value_ of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
+- **gridColor**: _string. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the grid lines. Applies to the inner horizontal and vertical rule lines. Excludes the axes and the border around the graph.
 
 - **cursor**: _string. Optional. Defaults to "crosshair" when excluded._ The [_CSS cursor_](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor) property when the cursor is inside the rendered area of `<Plot>`.
 
@@ -297,7 +297,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **showAxes**: _boolean. Optional. Recommendation: do not include. Defaults to true when excluded. Exception: not configurable and always false for Gauge, RawFluxDataTable, TableGraph._ Indicates whether Plot axes should be visible. Applies to both x-axis and y-axis simultaneously.
 
-- **axisColor**: _string. Optional._ The _CSS color value_ of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
+- **axisColor**: _string. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
 - **axisOpacity**: _number. Optional. Recommendation: do not include. Defaults to 1 when excluded._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the axes and the border around the graph. Excludes the inner horizontal and vertical rule lines.
 
@@ -319,7 +319,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **tickFont**: _string. Optional._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the tick labels and axis labels.
 
-- **tickFontColor**: _string. Optional._ The _CSS color value_ of the tick labels and axis labels.
+- **tickFontColor**: _string. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the tick labels and axis labels.
 
 - **valueFormatters**: _object. Optional._ An object containing column keys and their corresponding functions that format data for that column type. Each function takes a data value as the first argument, and an optional second argument as an options object. Returns a formatted string for that data value. For example:
 
@@ -378,17 +378,17 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
 
-- **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The _CSS color value_ of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
+- **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
 
-- **legendFontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The _CSS color value_ of any text that is not a column header or in a row inside the legend (tooltip).
+- **legendFontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of any text that is not a column header or in a row inside the legend (tooltip).
 
-- **legendBackgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The _CSS color value_ of the background in the legend (tooltip).
+- **legendBackgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the legend (tooltip).
 
 - **legendColorizeRows**: _boolean. Optional. Defaults to true when excluded._ Toggles the use of colors for the rows in the legend (tooltip). When _true_ the rows will use colors from the color scheme in the rendered graph. When _false_ the rows will use the **legendFontBrightColor** and include small dots of color in the color scheme of the rendered graph.
 
 - **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend (tooltip).
 
-- **legendCrosshairColor**: _string | Object. Optional._ The _CSS color value_ or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
+- **legendCrosshairColor**: _string | Object. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
 - **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
 
@@ -616,7 +616,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **gaugeSize**: _number. Optional. Defaults to &#960; and is **3.142** &#8804; gaugeSize &#8804; **6.283**._ The size of the Gauge as measured in [_radians_](https://www.mathsisfun.com/geometry/radians.html). Valid Gauge sizes range from a half circle to a full circle. Any size below &#960; is considered &#960; and any size above 2&#960; is considered 2&#960;. Rounded to 3 decimal places.
 
-  - **gaugeColors**: _Array. **Required**._ An array of objects that defines the colors of the Gauge. Each object has the following properties.
+  - **gaugeColors**: _array[Object, ...]. **Required**._ An array of objects that defines the colors of the Gauge. Each object has the following properties.
 
     - **id**: _string. **Required**._ The id for this color. Should be unique within the **gaugeColors** array.
 
@@ -679,7 +679,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
     - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
     - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
 
-  - **textColor**: _string. **Required**._ The _CSS color value_ of the entire Single Stat to display including prefix, the stat value, and suffix.
+  - **textColor**: _string. **Required**._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the entire Single Stat to display including prefix, the stat value, and suffix.
 
   - **textOpacity**: _number. Optional. Defaults to 1 when not included._ A value between 0 and 1 inclusive, specifying the [opacity](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/opacity) of the entire text for the Single Stat including prefix, the stat value, and suffix. 0 is fully transparent (invisible) while 1 is fully opaque.
 
@@ -711,7 +711,45 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **svgTextStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--text` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `fill` cannot be overridden and is controlled by the **textColor** option (see above). See the `SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
-* **CustomLayerConfig**: _Object._ No limit per `<Plot>`.
+- **AnnotationLayerConfig**: _Object._ No limit but generally one per `<Plot>`. Properties are:
+
+  - **type**: _'annotation'. **Required**._ Specifies that this LayerConfig is an annotation layer.
+
+  - **x**: _string. **Required**._
+
+  - **y**: _string. **Required**._
+
+  - **annotations**: _array[Object, ...]. **Required**._ An array of objects that are the annotations. The array can be empty (no annotations rendered). Each object is an annotation and has the following properties:
+
+    - **title**: _string. **Required**._ The title of the annotation.
+
+    - **description**: _string. **Required**._ The description of the annotation.
+
+    - **color**: _string. **Required**._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the annotation.
+
+    - **startValue**: _number. **Required**._ The starting value of the annotation. For example, if the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). May also be something other than time.
+
+    - **stopValue**: _number. **Required**._ The stopping or ending value of the annotation. For example, if the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). May also be something other than time.
+
+    - **dimension**: _'x' | 'y'. **Required**._ Indicates whether the annotation is vertical - **'x'** or horizontal - **'y'**.
+
+  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, the column key names are from that data set._
+
+  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates how an annotation's legend (tooltip) should be triggered during mouse hover.
+
+    - "x" means the legend will display for all annotations that cross or are within the **hoverMargin** of the mouse's x-axis value
+    - "y" means the legend will display for all annotations that cross or are within the **hoverMargin** of the mouse's y-axis value
+    - "xy" means the legend will display for all annotations within the **hoverMargin** of the mouse in any direction
+    - "auto" means "xy" (see above)
+
+  - **hoverMargin**: _number. Optional._ The hoverable area in pixel size around the annotation that will trigger the legend (tooltip). For 'x' annotations, the **hoverMargin** extends to the left and right. For 'y' annotations, the **hoverMargin** extends to the top and bottom.
+
+  - **svgAttributes**: _Not used. Reserved for future implementation._
+
+  - **svgStyle**: _Not used. Reserved for future implementation._
+
+
+- **CustomLayerConfig**: _Object._ No limit per `<Plot>`.
 
   A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:
 
