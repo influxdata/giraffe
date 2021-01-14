@@ -218,6 +218,7 @@ export interface AnnotationLayerConfig {
   hoverMargin?: number
   svgAttributes?: SVGAttributes
   svgStyle?: CSS.Properties
+  lineWidth?: number
 }
 
 export interface CustomLayerRenderProps {
