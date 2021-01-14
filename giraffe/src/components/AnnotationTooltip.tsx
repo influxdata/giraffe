@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {CSSProperties} from 'react'
 import {FunctionComponent} from 'react'
 import {createPortal} from 'react-dom'
 
@@ -37,6 +37,50 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
       dimension,
     }
   )
+
+  let tooltipCaretStyle: CSSProperties = {
+    position: 'absolute',
+    borderWidth: '10px',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+    zIndex: 2,
+  }
+  let tooltipCaretFillStyle
+
+  if (dimension === 'x') {
+    tooltipCaretStyle = {
+      ...tooltipCaretStyle,
+      borderTopColor: data.color,
+      left: '50%',
+      top: '100%',
+      transform: 'translateX(-50%)',
+    }
+
+    tooltipCaretFillStyle = {
+      ...tooltipCaretStyle,
+      borderTopColor: backgroundColor,
+      top: 'calc(100% - 4px)',
+      zIndex: 3,
+    }
+  }
+
+  if (dimension === 'y') {
+    tooltipCaretStyle = {
+      ...tooltipCaretStyle,
+      borderRightColor: data.color,
+      top: '50%',
+      right: '100%',
+      transform: 'translateY(-50%)',
+    }
+
+    tooltipCaretFillStyle = {
+      ...tooltipCaretStyle,
+      borderRightColor: backgroundColor,
+      right: 'calc(100% - 4px)',
+      zIndex: 3,
+    }
+  }
+
   return createPortal(
     <div
       className="giraffe-annotation-tooltip"
@@ -52,6 +96,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
         padding: '10px',
       }}
     >
+      <div style={tooltipCaretStyle} />
+      <div style={tooltipCaretFillStyle} />
       <div>{data.title}</div>
       <div>{data.description}</div>
     </div>,
