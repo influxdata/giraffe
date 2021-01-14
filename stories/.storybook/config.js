@@ -1,6 +1,5 @@
 import {configure, addParameters} from '@storybook/react'
 import {create} from '@storybook/theming'
-import 'chromatic'
 
 addParameters({
   options: {
