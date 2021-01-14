@@ -43,9 +43,18 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
 
   let columns = []
   if (disableTooltip !== true) {
-    columns = columnsWhitelist
-      ? data.filter(column => columnsWhitelist.includes(column.key))
-      : data
+    // when legendColumns wasn't defined in the config.
+    if (!Array.isArray(columnsWhitelist)) {
+      columns = data
+    }
+    // when legendColumns = [] in the config
+    else if (columnsWhitelist.length == 0) {
+      return null
+    }
+    // when legendColumns is an array of requested columns
+    else {
+      columns = data.filter(column => columnsWhitelist.includes(column.key))
+    }
   } else {
     return null
   }
