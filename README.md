@@ -23,7 +23,7 @@ Giraffe aims to distinguish itself with several features:
 [See the visualizations in action using Storybook.](https://influxdata.github.io/giraffe)
 
 ## Sample Code
-[See a listing of sample projects that render different types of visualizations.](./giraffe/examples/Listing_of_giraffe_samples.md)
+[See a listing of sample projects that render different types of visualizations.](./examples/Listing_of_giraffe_samples.md)
 
 ## Getting Started [](#getting-started)
 
