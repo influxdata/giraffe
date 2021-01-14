@@ -10,6 +10,7 @@ export const getAnnotationsPositions = (
   annotationData.forEach(annotation => {
     annotationMarks.push({
       ...annotation,
+      pin: annotation.pin || 'none',
       startValue:
         annotation.dimension === 'y'
           ? yScale(annotation.startValue)

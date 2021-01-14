@@ -74,8 +74,9 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             length={width}
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
-            stroke={annotationData.color}
+            color={annotationData.color}
             strokeWidth={lineWidth}
+            pin={annotationData.pin}
           />
         ) : (
           <AnnotationLine
@@ -84,8 +85,9 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             length={height}
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
-            stroke={annotationData.color}
+            color={annotationData.color}
             strokeWidth={lineWidth}
+            pin={annotationData.pin}
           />
         )
       )}

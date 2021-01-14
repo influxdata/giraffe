@@ -814,6 +814,7 @@ export interface StandardFunctionProps {
 
 export type AnnotationDimension = 'x' | 'y'
 
+export type AnnotationPinType = 'none' | 'circle' | 'start' | 'stop'
 export interface AnnotationMark {
   title: string
   description: string
@@ -821,4 +822,5 @@ export interface AnnotationMark {
   startValue: number
   stopValue: number
   dimension: AnnotationDimension
+  pin: AnnotationPinType
 }
