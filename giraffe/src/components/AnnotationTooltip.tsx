@@ -27,6 +27,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     x: dimension === 'x' ? startValue : width,
     y: dimension === 'y' ? startValue : 0,
   } as TooltipPosition
+
   const annotationTooltipElement = useTooltipElement(
     ANNOTATION_TOOLTIP_CONTAINER_NAME,
     {
@@ -46,6 +47,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
         font,
         backgroundColor,
         color: fontColor,
+        boxShadow: `0 0 4px 0px ${data.color}`,
         borderRadius: '3px',
         padding: '10px',
       }}
