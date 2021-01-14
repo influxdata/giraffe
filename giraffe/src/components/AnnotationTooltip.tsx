@@ -28,11 +28,19 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     y: dimension === 'y' ? startValue : 0,
   } as TooltipPosition
 
+  const clampedXOffset = Math.round(
+    boundingReference ? boundingReference.x : position.x
+  )
+
+  const clampedYOffset = Math.round(
+    boundingReference ? boundingReference.y : position.y
+  )
+
   const annotationTooltipElement = useTooltipElement(
     ANNOTATION_TOOLTIP_CONTAINER_NAME,
     {
-      xOffset: Math.round(boundingReference ? boundingReference.x : position.x),
-      yOffset: Math.round(boundingReference ? boundingReference.y : position.y),
+      xOffset: clampedXOffset,
+      yOffset: clampedYOffset,
       position,
       dimension,
     }

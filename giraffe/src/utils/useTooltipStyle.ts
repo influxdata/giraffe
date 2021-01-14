@@ -126,8 +126,8 @@ export const useAnnotationStyle = (
         }
       }
 
-      const clampedX = Math.max(dx + x, x)
-      const clampedY = dy + y
+      const clampedX = Math.round(Math.max(dx + x, x))
+      const clampedY = Math.round(dy + y)
 
       /* Geo widget maps are rendered with z-index: 399, we have to set it above
        that so that tooltips are not rendered/are hidden below the map, */
