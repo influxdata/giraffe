@@ -134,7 +134,6 @@ export const useAnnotationStyle = (
       return {
         display: 'inline',
         position: 'fixed',
-        backgroundColor: 'yellow',
         left: `${clampedX}px`,
         top: `${clampedY}px`,
         zIndex: CLOCKFACE_Z_INDEX + LEAFLET_Z_INDEX + 1,
