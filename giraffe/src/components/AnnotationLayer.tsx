@@ -70,15 +70,15 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             key={`line-y-${annotationData.dimension}-${annotationData.startValue}-${annotationData.stopValue}`}
             x1="0"
             x2={width}
-            y1={annotationData.startValue}
-            y2={annotationData.startValue}
+            y1={Math.round(annotationData.startValue)}
+            y2={Math.round(annotationData.startValue)}
             stroke={annotationData.color}
           />
         ) : (
           <line
             key={`line-x-${annotationData.dimension}-${annotationData.startValue}-${annotationData.stopValue}`}
-            x1={annotationData.startValue}
-            x2={annotationData.startValue}
+            x1={Math.round(annotationData.startValue)}
+            x2={Math.round(annotationData.startValue)}
             y1="0"
             y2={height}
             stroke={annotationData.color}

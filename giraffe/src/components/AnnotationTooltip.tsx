@@ -30,8 +30,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   const annotationTooltipElement = useTooltipElement(
     ANNOTATION_TOOLTIP_CONTAINER_NAME,
     {
-      xOffset: boundingReference ? boundingReference.x : position.x,
-      yOffset: boundingReference ? boundingReference.y : position.y,
+      xOffset: Math.round(boundingReference ? boundingReference.x : position.x),
+      yOffset: Math.round(boundingReference ? boundingReference.y : position.y),
       position,
       dimension,
     }
