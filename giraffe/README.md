@@ -729,9 +729,9 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
     - **color**: _string. **Required**._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the annotation.
 
-    - **startValue**: _number. **Required**._ The starting value of the annotation. For example, if the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). May also be something other than time.
+    - **startValue**: _number. **Required**._ The starting value of the annotation. If the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). For example: 1610582880661 falls within _14 January 2021_ in UTC. This value may also be something other than time. When **startValue** is equal to **stopValue** the annotation is a single line. When they are not equal, the annotation is a range. (_Note: rendering an annotation range is not yet implemented._)
 
-    - **stopValue**: _number. **Required**._ The stopping or ending value of the annotation. For example, if the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). May also be something other than time.
+    - **stopValue**: _number. **Required**._ The stopping or ending value of the annotation. If the annotation is a point in time, then this value is in [_RFC3339 format_](https://tools.ietf.org/html/rfc3339). For example: 1610582880661 falls within _14 January 2021_ in UTC. This value may also be something other than time. When **stopValue** is equal to **startValue** the annotation is a single line. When they are not equal, the annotation is a range. (_Note: rendering an annotation range is not yet implemented._)
 
     - **dimension**: _'x' | 'y'. **Required**._ Indicates whether the annotation is vertical - **'x'** or horizontal - **'y'**.
 
@@ -742,7 +742,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
     - "xy" means the legend will display for all annotations within the **hoverMargin** of the mouse in any direction
     - "auto" means "xy" (see above)
 
-  - **hoverMargin**: _number. Optional._ The hoverable area in pixel size around the annotation that will trigger the legend (tooltip). For 'x' annotations, the **hoverMargin** extends to the left and right. For 'y' annotations, the **hoverMargin** extends to the top and bottom.
+  - **hoverMargin**: _number. Optional. Defaults to 20 when not included._ The hoverable area in pixel size around the annotation that will trigger the legend (tooltip). For 'x' annotations, the **hoverMargin** extends to the left and right. For 'y' annotations, the **hoverMargin** extends to the top and bottom.
 
   - **svgAttributes**: _Not used. Reserved for future implementation._
 
