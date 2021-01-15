@@ -27,8 +27,8 @@ export const candlestickTransform = (
   const lowCol = inputTable.getColumn(lowColumnKey, 'number')
   const closeCol = inputTable.getColumn(closeColumnKey, 'number')
 
-  let xMin = Infinity
-  let xMax = -Infinity
+  let xKeyMin = Infinity
+  let xKeyMax = -Infinity
   let yMin = Infinity
   let yMax = -Infinity
 
@@ -47,7 +47,7 @@ export const candlestickTransform = (
 
   // key is index rastered by window (value/window)
   // [x0, x1] range of candle for selecting open/close
-  const valuesObj: {
+  const valuesWithOrigX: {
     [key: number]: {
       candle: CandlestickLayerSpec['values'][0]
       xRange: [number, number]
@@ -62,17 +62,17 @@ export const candlestickTransform = (
     const low = lowCol[i]
     const close = closeCol[i]
 
-    xMin = Math.min(xMin, x)
-    xMax = Math.max(xMax, x)
+    xKeyMin = Math.min(xKeyMin, xKey)
+    xKeyMax = Math.max(xKeyMax, xKey)
     yMin = Math.min(yMin, open, high, low, close)
     yMax = Math.max(yMax, open, high, low, close)
 
     // todo: filtering NaN ?
     const candle = {open, high, low, close}
-    if (valuesObj[xKey]) {
-      const {candle: candle2, xRange: x2Range} = valuesObj[xKey]
+    if (valuesWithOrigX[xKey]) {
+      const {candle: candle2, xRange: x2Range} = valuesWithOrigX[xKey]
       // merge candles
-      valuesObj[xKey] = {
+      valuesWithOrigX[xKey] = {
         candle: {
           close: x2Range[1] >= x ? candle2.close : candle.close,
           open: x2Range[0] < x ? candle2.open : candle.open,
@@ -82,33 +82,27 @@ export const candlestickTransform = (
         xRange: [Math.min(x, ...x2Range), Math.max(x, ...x2Range)],
       }
     } else {
-      valuesObj[xKey] = {candle, xRange: [x, x]}
+      valuesWithOrigX[xKey] = {candle, xRange: [x, x]}
     }
   }
 
-  const values: CandlestickLayerSpec['values'] = []
+  const values = Object.fromEntries(
+    Object.entries(valuesWithOrigX).map(([x, y]) => [x, y.candle])
+  )
 
-  const xKeyMin = Math.floor(xMin / window)
-  const xKeyMax = Math.ceil(xMax / window)
-
-  for (let i = xKeyMin; i <= xKeyMax; i++) {
-    const val = valuesObj?.[i]
-    if (!val) {
-      values.push(undefined)
-    } else {
-      values.push(val.candle)
-    }
-  }
+  const xMin = (xKeyMin - 0.5) * window
+  const xMax = (xKeyMax + 0.5) * window
 
   // todo
   const res = {
     type: 'candlestick',
     inputTable,
-    table: inputTable,
     values,
     calculatedWindow: window,
     xDomain: [xMin, xMax],
     yDomain: [yMin, yMax],
+    xColumnKey,
+    xColumnType: inputTable.getColumnType(xColumnKey),
   } as CandlestickLayerSpec
   return res as any
 }

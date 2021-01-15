@@ -11,7 +11,7 @@ export const CANDLESTICK_THEME_DARK: Required<CandlestickLayerConfig> = {
   closeColumnKey: 'close',
   window: 'detect',
 
-  candlePadding: 5,
+  candlePadding: 10,
 
   candleRaising: {
     bodyColor: InfluxColors.Krypton,

@@ -690,7 +690,7 @@ export type OHLCValue = {
   close: number
 }
 
-export type CandlestickLayerSpecValues = OHLCValue[]
+export type CandlestickLayerSpecValues = {[key: number]: OHLCValue}
 
 export interface CandlestickLayerSpec {
   type: 'candlestick' // do not refactor or restrict to SpecTypes
