@@ -44,6 +44,7 @@ from(bucket: "my-bucket")
 */
 
 import {OHLCValue} from '../../../giraffe/src/types'
+import {getBinanceOHLC} from './ohlc_Binance_BTCUSDT_1h.csv'
 
 const dataSample1: (OHLCValue | undefined)[] = [
   {open: 50, high: 60, low: 45, close: 47},
@@ -76,27 +77,26 @@ const dataSample1: (OHLCValue | undefined)[] = [
 
 const timeWindow = 10_000
 
-const dataToCSV = (data: (OHLCValue | undefined)[]) => {
-  const now = Date.now()
-
-  const header = `\
+const header = `\
 #group,false,false,false,false,false,false,false
 #datatype,string,long,double,double,double,double,dateTime:RFC3339
 #default,_result,,,,,,
 ,result,table,open,high,low,close,_time
 `
 
+const csvRow = (candle: OHLCValue & {date: Date}) => {
+  return `,,0,${candle.open},${candle.high},${candle.low},${
+    candle.close
+  },${candle.date.toISOString()}`
+}
+
+const dataToCSV = (data: (OHLCValue | undefined)[]) => {
+  const now = Date.now()
+
   return (
     header +
     data
-      .map(
-        (x, i) =>
-          x &&
-          ',,0,' +
-            `${x.open},${x.high},${x.low},${x.close},${new Date(
-              now + timeWindow * i
-            ).toISOString()}`
-      )
+      .map((x, i) => x && csvRow({...x, date: new Date(now + timeWindow * i)}))
       .filter(x => x)
       .join('\n')
   )
@@ -107,3 +107,9 @@ export const ohlcCsvSample1 = dataToCSV(dataSample1)
 export const ohlcCsvSample1MissingCandles = dataToCSV(
   dataSample1.map(x => Math.random() > 0.2 && x)
 )
+
+export const ohlcCsvSampleBinance =
+  header +
+  getBinanceOHLC()
+    .map(csvRow)
+    .join('\n')

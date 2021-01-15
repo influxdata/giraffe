@@ -8,7 +8,11 @@ import {CANDLESTICK_THEME_DARK} from '../../giraffe/src/constants/candlestickSty
 import {CandlestickLayerConfig} from '../../giraffe/src/types'
 
 // todo: random csv
-import {ohlcCsvSample1, ohlcCsvSample1MissingCandles} from './data/ohlc'
+import {
+  ohlcCsvSample1,
+  ohlcCsvSample1MissingCandles,
+  ohlcCsvSampleBinance,
+} from './data/ohlc'
 
 type Theme = Required<CandlestickLayerConfig>
 
@@ -128,4 +132,8 @@ storiesOf('Candlestick', module)
   .add(
     'Candlestick missing candles',
     createStory(CANDLESTICK_THEME_DARK, ohlcCsvSample1MissingCandles)
+  )
+  .add(
+    'Candlestick binance BTC/USDT',
+    createStory(CANDLESTICK_THEME_DARK, ohlcCsvSampleBinance)
   )
