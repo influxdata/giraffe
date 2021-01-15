@@ -11,6 +11,7 @@ import {
 } from '../utils/annotationData'
 import {ANNOTATION_DEFAULT_HOVER_MARGIN} from '../constants/index'
 import {AnnotationHoverLayer} from './AnnotationHoverLayer'
+import {AnnotationLine} from './AnnotationLine'
 
 export interface AnnotationLayerProps extends LayerProps {
   spec: AnnotationLayerSpec
@@ -23,6 +24,7 @@ const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
 
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
   const {config, spec, width, height, hoverX, hoverY, xScale, yScale} = props
+  const lineWidth = config.lineWidth || 2
   const annotationsPositions = useMemo(
     () => getAnnotationsPositions(spec.annotationData, xScale, yScale),
     [spec.annotationData, xScale, yScale]
@@ -66,22 +68,26 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
       />
       {annotationsPositions.map(annotationData =>
         annotationData.dimension === 'y' ? (
-          <line
+          <AnnotationLine
+            dimension={annotationData.dimension}
             key={`line-y-${annotationData.dimension}-${annotationData.startValue}-${annotationData.stopValue}`}
-            x1="0"
-            x2={width}
-            y1={annotationData.startValue}
-            y2={annotationData.startValue}
-            stroke={annotationData.color}
+            length={width}
+            startValue={annotationData.startValue}
+            stopValue={annotationData.stopValue}
+            color={annotationData.color}
+            strokeWidth={lineWidth}
+            pin={annotationData.pin}
           />
         ) : (
-          <line
+          <AnnotationLine
+            dimension={annotationData.dimension}
             key={`line-x-${annotationData.dimension}-${annotationData.startValue}-${annotationData.stopValue}`}
-            x1={annotationData.startValue}
-            x2={annotationData.startValue}
-            y1="0"
-            y2={height}
-            stroke={annotationData.color}
+            length={height}
+            startValue={annotationData.startValue}
+            stopValue={annotationData.stopValue}
+            color={annotationData.color}
+            strokeWidth={lineWidth}
+            pin={annotationData.pin}
           />
         )
       )}

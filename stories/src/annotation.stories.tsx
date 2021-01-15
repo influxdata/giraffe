@@ -19,6 +19,7 @@ import {
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
   tooltipColorizeRowsKnob,
+  annotationPinKnob,
 } from './helpers'
 
 import {annotationsTable, matchAnnotationsToTable} from './data/annotation'
@@ -84,6 +85,8 @@ storiesOf('Annotations', module)
       'auto'
     )
 
+    const pin = annotationPinKnob()
+
     const layers = [
       {
         type: 'annotation',
@@ -95,6 +98,7 @@ storiesOf('Annotations', module)
           table,
           x,
           y,
+          pin,
         }),
         fill,
         hoverDimension,
@@ -216,6 +220,8 @@ storiesOf('Annotations', module)
       hover: hoverHandler,
     }
 
+    const pin = annotationPinKnob()
+
     const layers = [
       {
         type: 'annotation',
@@ -227,6 +233,7 @@ storiesOf('Annotations', module)
           table,
           x,
           y,
+          pin,
         }),
         fill,
       },
@@ -331,12 +338,15 @@ storiesOf('Annotations', module)
       'auto'
     )
 
+    const pin = annotationPinKnob()
+
     const annotations = matchAnnotationsToTable({
       color: annotationColor,
       dimension: annotationDimension,
       table,
       x,
       y,
+      pin,
     })
     const annotationsSelections = multiSelect(
       'annotations',

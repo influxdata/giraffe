@@ -168,3 +168,6 @@ export const tooltipColorizeRowsKnob = () =>
   boolean('tooltipColorizeRows', true)
 
 export const tooltipDisableKnob = () => boolean('tooltipDisable', false)
+
+export const annotationPinKnob = () =>
+  select('pin', ['none', 'circle', 'start', 'stop'], 'none')

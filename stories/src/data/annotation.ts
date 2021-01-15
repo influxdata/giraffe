@@ -1,6 +1,7 @@
 import {
   AnnotationDimension,
   AnnotationMark,
+  AnnotationPinType,
   Table,
 } from '../../../giraffe/src/types'
 import {newTable} from '../../../giraffe/src'
@@ -36,12 +37,13 @@ interface SampleAnnotationsCreatorOptions {
   table: Table
   x: string
   y: string
+  pin: AnnotationPinType
 }
 
 export const matchAnnotationsToTable = (
   options: SampleAnnotationsCreatorOptions
 ): AnnotationMark[] => {
-  const {color, dimension = 'x', table} = options
+  const {color, dimension = 'x', table, pin} = options
   const values = table.getColumn(options[dimension], 'number')
   const annotationMarks: AnnotationMark[] = []
 
@@ -53,6 +55,7 @@ export const matchAnnotationsToTable = (
       dimension,
       startValue: value,
       stopValue: value,
+      pin,
     })
   })
 
