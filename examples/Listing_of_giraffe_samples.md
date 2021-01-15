@@ -17,7 +17,7 @@ The Project Structure describes whether a client/server approach was used (Node/
 <th>Project Structure</th>
 </tr>
 <tr>
-<td>[influxdata-giraffe-demo](https://github.com/subirjolly/influxdata-giraffe-demo)
+<td>https://github.com/subirjolly/influxdata-giraffe-demo
 </td>
 <td>Gauge, Line, Scatter 
 </td>
@@ -26,16 +26,16 @@ Direct API
 </td><td> React </td> 
 </tr>
 <tr>
-<td>[giraffe-playground](https://github.com/genehynson/giraffe-playground)</td><td> Band </td><td>  InfluxDB Client</td><td> Node/React </td>
+<td>https://github.com/genehynson/giraffe-playground</td><td> Band </td><td>  InfluxDB Client</td><td> Node/React </td>
 </tr>
 <tr>
 <td> 
-[giraffe_sample](https://github.com/ShmuelLotman/giraffe_sample) </td><td>  Histogram </td><td> Direct API </td><td>  Node/React </td>
+https://github.com/ShmuelLotman/giraffe_sample </td><td>  Histogram </td><td> Direct API </td><td>  Node/React </td>
 </tr>
 <tr>
-<td>[giraffeboi](https://github.com/hoorayimhelping/giraffeboi) </td><td>  Line, Map* </td><td>  Direct API </td><td>  Node/React </td></tr>
+<td>https://github.com/hoorayimhelping/giraffeboi </td><td>  Line, Map* </td><td>  Direct API </td><td>  Node/React </td></tr>
 <tr>
-<td>[giraffeLineSample](https://github.com/jrenee42/giraffeLineSample) </td><td>  Line </td><td>  Direct API </td><td>  Node/React </td></tr>
+<td>https://github.com/jrenee42/giraffeLineSample </td><td>  Line </td><td>  Direct API </td><td>  Node/React </td></tr>
 
 
 
