@@ -6,7 +6,7 @@ import {scaleLinear} from 'd3-scale'
 // Types
 import {GaugeMiniColors, GaugeMiniLayerConfig} from '../types'
 import {
-  gaugeMiniNormalizeTheme,
+  gaugeMiniNormalizeThemeMemoized,
   GaugeMiniThemeNormalized,
 } from '../utils/gaugeMiniThemeNormalize'
 
@@ -463,7 +463,7 @@ export const GaugeMini: FunctionComponent<Props> = ({
   width,
   height,
 }) => {
-  const theme = gaugeMiniNormalizeTheme(_theme)
+  const theme = gaugeMiniNormalizeThemeMemoized(_theme)
 
   const {
     gaugeHeight,
@@ -500,9 +500,9 @@ export const GaugeMini: FunctionComponent<Props> = ({
     labelMapping[mstring] = x.label
   })
 
-  const [autocenterToken, setAutocenterToken] = useState(0)
+  const [autocenterToken, setAutocenterToken] = useState(Date.now())
   useEffect(() => {
-    setAutocenterToken(x => x + 1)
+    setAutocenterToken(Date.now())
   }, [
     width,
     height,

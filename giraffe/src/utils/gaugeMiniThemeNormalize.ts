@@ -7,6 +7,7 @@ import {
 import {GaugeMiniLayerConfig} from '..'
 import {color as d3Color} from 'd3-color'
 import {range} from 'd3-array'
+import {useMemo} from 'react'
 
 export const throwReturn = <T extends unknown>(msg: string): T => {
   throw new Error(msg)
@@ -104,9 +105,9 @@ const getAxesSteps = (
   )
 }
 
-const getColors = (theme: Required<GaugeMiniLayerConfig>): GaugeMiniColors => {
-  const {gaugeMiniColors: colors} = theme
-
+const getColors = (
+  colors: Required<GaugeMiniLayerConfig>['gaugeMiniColors']
+): GaugeMiniColors => {
   if (!Array.isArray(colors)) {
     return {
       ...colors,
@@ -136,17 +137,30 @@ const getColors = (theme: Required<GaugeMiniLayerConfig>): GaugeMiniColors => {
 }
 
 // todo: more validations
-export const gaugeMiniNormalizeTheme = (
+export const gaugeMiniNormalizeThemeMemoized = (
   theme: Required<GaugeMiniLayerConfig>
 ): Required<GaugeMiniThemeNormalized> => {
-  const colors = getColors(theme)
+  const barsDefinitions = useMemo(
+    () => getBarsDefinitions(theme.barsDefinitions),
+    [theme.barsDefinitions]
+  )
+
+  const colors = useMemo(() => getColors(theme.gaugeMiniColors), [
+    theme.gaugeMiniColors,
+  ])
+
+  const axesSteps = useMemo(() => getAxesSteps(theme.axesSteps, colors), [
+    theme.axesSteps,
+    colors,
+  ])
+
   return {
     ...theme,
-    barsDefinitions: getBarsDefinitions(theme.barsDefinitions),
+    barsDefinitions,
     colors,
     valueFormater: getFormater(theme.valueFormater),
 
-    axesSteps: getAxesSteps(theme.axesSteps, colors),
+    axesSteps,
     axesFormater: getFormater(theme.axesFormater),
   }
 }
