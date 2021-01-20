@@ -23,7 +23,7 @@ const DEFAULT_GRADIENT = {0.4: 'blue', 0.8: 'orange', 1.0: 'red'}
 
 const HeatmapLayer: FunctionComponent<Props> = props => {
   const {properties, table, intensityFieldName, radius, blur} = props
-  const {bounds} = properties.intensityDimension
+  const {bounds} = properties.intensityDimension || {bounds: [null, null]}
   const intensityMinAndMax = intensityFieldName
     ? calculateMinAndMax(bounds, table, intensityFieldName)
     : null
