@@ -18,6 +18,7 @@ type TBarsDefinitions = GaugeMiniBarsDefinitions<{[key: string]: true}>
 type RestrictedTypesProperties = {
   barsDefinitions: TBarsDefinitions
   colors?: GaugeMiniColors
+  gaugeMiniColors?: GaugeMiniColors
   valueFormater?: (value: number) => string
 
   axesSteps: undefined | number[]
@@ -136,7 +137,6 @@ const getColors = (
   }
 }
 
-// todo: more validations
 export const gaugeMiniNormalizeThemeMemoized = (
   theme: Required<GaugeMiniLayerConfig>
 ): Required<GaugeMiniThemeNormalized> => {
@@ -158,6 +158,7 @@ export const gaugeMiniNormalizeThemeMemoized = (
     ...theme,
     barsDefinitions,
     colors,
+    gaugeMiniColors: colors,
     valueFormater: getFormater(theme.valueFormater),
 
     axesSteps,

@@ -713,7 +713,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
       - **groupByColumns** _string[]_ bar for each unique combination of given columns values. _(example: `['cpu', '_field', ]`)_
       - **bars** _{ barDef: string[], label?: string }[]_ where _barDef_ contains values for specific bar columns and label for this bar. Each barDef value belongs to key grom groupByColumns with same index.
 
-  - **mode**: _'progress' | 'bullet'._ 
+  - **mode** _'progress' | 'bullet'._ 
     - `'bullet'` backgroud bar is colored and value bar has always secondary color
     - `'progress'` value bar is colored and backgroud bar has always secondary color
 
