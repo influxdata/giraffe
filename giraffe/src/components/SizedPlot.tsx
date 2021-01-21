@@ -79,8 +79,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const plotInteraction: InteractionHandlerArguments = {
     hoverX: hoverEvent.x,
     hoverY: hoverEvent.y,
-    valueX: env.xScale.invert(hoverX),
-    valueY: env.yScale.invert(hoverY),
+    valueX: env.xScale.invert(hoverEvent.x),
+    valueY: env.yScale.invert(hoverEvent.y),
     xDomain: env.xDomain,
     yDomain: env.yDomain,
     resetDomains: () => {
