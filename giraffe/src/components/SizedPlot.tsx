@@ -197,7 +197,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
               yColumnType: spec.yColumnType,
               columnFormatter: env.getFormatterForColumn,
             }
-
+            console.log(spec)
             switch (spec.type) {
               case SpecTypes.Annotation:
                 return (
@@ -239,6 +239,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                 )
 
               case SpecTypes.Rect:
+                console.log('SizedPlot, ', layerConfig.type)
                 return (
                   <RectLayer
                     key={layerIndex}

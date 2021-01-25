@@ -14,11 +14,9 @@ import {heatmapTransform} from '../transforms/heatmap'
 import {mosaicTransform} from '../transforms/mosaic'
 import {annotationTransform} from '../transforms/annotation'
 
-import {
-  DEFAULT_RANGE_PADDING,
-  LAYER_DEFAULTS,
-  CONFIG_DEFAULTS,
-} from '../constants'
+import {DEFAULT_RANGE_PADDING, CONFIG_DEFAULTS} from '../constants'
+
+import {LAYER_DEFAULTS} from '../constants/defaults'
 
 import {
   ColumnType,
