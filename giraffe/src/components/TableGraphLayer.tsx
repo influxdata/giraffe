@@ -61,7 +61,7 @@ const getSelectedTable = (
 
 export const TableGraphLayer: FunctionComponent<Props> = (props: Props) => {
   const {
-    config: {tables, properties, timeZone, tableTheme = 'dark'},
+    config: {tables, properties, timeZone, tableTheme},
   } = props
 
   const [selectedTableName, setSelectedTableName] = useState<string>(

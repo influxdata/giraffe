@@ -92,7 +92,7 @@ storiesOf('Table Graph', module)
             },
           },
           timeZone: 'Local',
-          tableTheme: theme,
+          // tableTheme: theme,
         } as TableGraphLayerConfig,
       ],
     }

@@ -67,4 +67,7 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     upperColumnName: '',
     lowerColumnName: '',
   },
+  table: {
+    tableTheme: 'dark',
+  },
 }
