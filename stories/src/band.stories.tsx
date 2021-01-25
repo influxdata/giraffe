@@ -227,9 +227,9 @@ storiesOf('Band Chart', module)
           lineOpacity,
           hoverDimension,
           shadeOpacity,
-          // upperColumnName,
+          upperColumnName,
           mainColumnName,
-          // lowerColumnName,
+          lowerColumnName,
         },
       ],
     }
