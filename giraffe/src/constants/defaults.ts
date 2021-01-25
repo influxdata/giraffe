@@ -45,4 +45,26 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     strokeOpacity: 1,
     fillOpacity: 0.75,
   },
+  gauge: {
+    prefix: '',
+    suffix: '',
+    tickPrefix: '',
+    tickSuffix: '',
+    decimalPlaces: {},
+    gaugeSize: Math.PI,
+    gaugeTheme: {},
+  },
+  annotation: {
+    hoverDimension: 'auto',
+    hoverMargin: 20,
+  },
+  band: {
+    hoverDimension: 'xy',
+    maxTooltipRows: 24,
+    interpolation: 'linear',
+    lineWidth: 1,
+    colors: DEFAULT_COLOR_SCHEME,
+    upperColumnName: '',
+    lowerColumnName: '',
+  },
 }

@@ -27,9 +27,9 @@ export const BandLayer: FunctionComponent<Props> = props => {
   const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
 
   const {
-    lowerColumnName = '',
+    lowerColumnName,
     mainColumnName: rowColumnName,
-    upperColumnName = '',
+    upperColumnName,
   } = config
 
   const simplifiedLineData = useMemo(

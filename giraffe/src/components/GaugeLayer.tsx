@@ -17,14 +17,14 @@ interface Props {
 export const GaugeLayer: FunctionComponent<Props> = (props: Props) => {
   const {value, config} = props
   const {
-    prefix = '',
-    suffix = '',
-    tickPrefix = '',
-    tickSuffix = '',
-    decimalPlaces = {},
+    prefix,
+    suffix,
+    tickPrefix,
+    tickSuffix,
+    decimalPlaces,
     gaugeColors,
-    gaugeSize = Math.PI,
-    gaugeTheme = {},
+    gaugeSize,
+    gaugeTheme,
   } = config
 
   const MAX_PI_DECIMALS = 3 // values above 3 distort Gauge styling
