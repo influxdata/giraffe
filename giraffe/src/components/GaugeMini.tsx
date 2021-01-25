@@ -5,6 +5,8 @@ import {scaleLinear} from 'd3-scale'
 
 // Types
 import {GaugeMiniColors, GaugeMiniLayerConfig} from '../types'
+import {GroupedData} from './LatestMultipleValueTransform'
+
 import {
   gaugeMiniNormalizeThemeMemoized,
   GaugeMiniThemeNormalized,
@@ -13,26 +15,8 @@ import {
 interface Props {
   width: number
   height: number
-  values: {colsMString: string; value: number}[]
+  values: GroupedData
   theme: Required<GaugeMiniLayerConfig>
-}
-
-// todo: move into gauge utils
-/** create merged string for given column string values. String is same for all columns with same values and unique for different ones */
-export const createColsMString = <T extends {[key: string]: true}>(
-  groupedBy: T,
-  col: {[key in keyof T]: string}
-): string => {
-  const columns = Object.keys(groupedBy)
-    .filter(x => groupedBy[x])
-    .sort()
-  const columnValues = columns.map(x => col[x])
-  /**
-   * replacing - with -- will ensures that rows
-   * { a: '0-1', b: '2' } and  { a: '0', b: '1-2' }
-   * will not have same string (0-1-2 instead they will be 0--1-2 and 0-1--2)
-   */
-  return columnValues.map(x => x.split('-').join('--')).join('-')
 }
 
 const barCssClass = 'gauge-mini-bar'
@@ -473,6 +457,7 @@ export const GaugeMini: FunctionComponent<Props> = ({
     labelMain,
     labelMainFontSize,
     labelMainFontColor,
+    labelBarsEnabled,
     labelBarsFontColor,
     labelBarsFontSize,
     colors,
@@ -485,20 +470,10 @@ export const GaugeMini: FunctionComponent<Props> = ({
   const barLabelWidth = Math.max(...barLabelsWidth) || 0
   const barWidth = width - sidePaddings * 2 - barLabelWidth
   const maxBarHeight = Math.max(gaugeHeight, valueHeight)
-  const allBarsHeight = values.length * (maxBarHeight + barPaddings)
-
-  const barsDefinitions = theme.barsDefinitions
+  const allBarsHeight =
+    Object.keys(values).length * (maxBarHeight + barPaddings)
 
   // create unified barsDefinition
-
-  const labelMapping: any = {}
-  barsDefinitions?.bars?.forEach(x => {
-    if (!x.label) {
-      return
-    }
-    const mstring = createColsMString(barsDefinitions.groupByColumns, x.barDef)
-    labelMapping[mstring] = x.label
-  })
 
   const [autocenterToken, setAutocenterToken] = useState(Date.now())
   useEffect(() => {
@@ -507,7 +482,6 @@ export const GaugeMini: FunctionComponent<Props> = ({
     width,
     height,
     barLabelWidth,
-    barsDefinitions,
     valueHeight,
     gaugeHeight,
     barPaddings,
@@ -536,11 +510,10 @@ export const GaugeMini: FunctionComponent<Props> = ({
             {labelMain}
           </text>
         )}
-        {values.map(({colsMString, value}, i) => {
+        {Object.entries(values).map(([group, value], i) => {
           const y = 0 + i * (maxBarHeight + barPaddings)
-          const label = labelMapping?.[colsMString]
-
           const textCenter = y + maxBarHeight / 2
+          const label = labelBarsEnabled ? group : ''
 
           // todo: no rerender ?
           const onRectChanged = (r: DOMRect) => {

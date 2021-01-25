@@ -703,15 +703,9 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   All values (excluding **type**) are Optional and their defaults is defined by theme `GAUGE_MINI_THEME_BULLET_DARK`
 
-  - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
+  gauge mini creates one bar per unique __field_ value
 
-  - **barsDefinitions** _{groupByColumns; bars;}_ _(types of properties based on selected style)_ 
-    - Object style:
-      - **groupByColumns** _{ [key: string]: true }_ bar for each unique combination of given columns values. _(example: `{cpu: true, _field: true}`)_
-      - **bars** _{ barDef: { [key in keyof T]: string }, label?: string }[]_ where _barDef_ contains values for specific bar columns and label for this bar.
-    - _or_ Array style:
-      - **groupByColumns** _string[]_ bar for each unique combination of given columns values. _(example: `['cpu', '_field', ]`)_
-      - **bars** _{ barDef: string[], label?: string }[]_ where _barDef_ contains values for specific bar columns and label for this bar. Each barDef value belongs to key grom groupByColumns with same index.
+  - **type**: _'gauge mini'. **Required**._ Specifies that this LayerConfig is a gauge mini layer.
 
   - **mode** _'progress' | 'bullet'._ 
     - `'bullet'` backgroud bar is colored and value bar has always secondary color
@@ -763,6 +757,8 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
   - **labelMainFontColor** _string_ Main label color.
 
   Bar labels
+  - **labelBarsEnabled** _boolean_ Bar labels shown if true
+
   - **labelBarsFontSize** _number_ Bar labels font size
 
   - **labelBarsFontColor** _string_ Bar labels font color
@@ -798,7 +794,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
         - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
         - **digits**: _number. Optional. Defaults to 0 when not included. Maximum 10._ When **digits** is a non-integer number, the decimal portion is ignored. Represents the number of decimal places to display in the stat value. Displayed stat value is subject to rounding.
-    - example ```valueFormater: (num: number) => `${num.toFixed(0)}%` ``` for _value=23.213_ will show text value _23%_.
+    - example ```valueFormater: (num: number) => `${((num || 0) * 100).toFixed(0)}%` ``` for _value=0.23213_ will show text value _23%_.
 
   **Precreated themes**
     - `GAUGE_MINI_THEME_BULLET_DARK`
@@ -807,7 +803,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         type: 'gauge mini',
         mode: 'bullet',
         textMode: 'follow',
-        barsDefinitions: {groupByColumns: ["_field"]},
 
         valueHeight: 18,
         gaugeHeight: 25,
@@ -829,6 +824,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         labelMainFontSize: 13,
         labelMainFontColor: InfluxColors.Ghost,
 
+        labelBarsEnabled: false,
         labelBarsFontSize: 11,
         labelBarsFontColor: InfluxColors.Forge,
 
@@ -850,7 +846,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         type: 'gauge mini',
         mode: 'progress',
         textMode: 'follow',
-        barsDefinitions: {groupByColumns: ['_field']},
       
         valueHeight: 20,
         gaugeHeight: 20,
@@ -870,6 +865,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
         labelMainFontSize: 13,
         labelMainFontColor: InfluxColors.Ghost,
       
+        labelBarsEnabled: false,
         labelBarsFontSize: 11,
         labelBarsFontColor: InfluxColors.Forge,
       

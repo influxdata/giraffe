@@ -290,25 +290,8 @@ export type GaugeMiniColors = {
   thresholds?: ColorHexValue[]
 }
 
-export interface GaugeMiniBarsDefinitions<T extends {[key: string]: true}> {
-  /** Defines which columns choose as unique bar indentificator.  */
-  groupByColumns: T
-  // todo: allow regex ?
-  /** Give label for given unique column values */
-  bars?: {barDef: {[key in keyof T]: string}; label?: string}[]
-}
-
-export interface GaugeMiniBarsDefinitionsArr {
-  groupByColumns: string[]
-  bars?: {barDef: string[]; label?: string}[]
-}
-
 export interface GaugeMiniLayerConfig {
   type: 'gauge mini'
-  /** Defines which columns choose as unique bar indentificator. Also bar labels can be defined here. */
-  barsDefinitions:
-    | GaugeMiniBarsDefinitionsArr
-    | GaugeMiniBarsDefinitions<{[key: string]: true}>
   mode?: 'progress' | 'bullet'
   textMode?: 'follow' | 'left'
 
@@ -327,6 +310,7 @@ export interface GaugeMiniLayerConfig {
   labelMainFontSize?: number
   labelMainFontColor?: string
 
+  labelBarsEnabled?: boolean
   labelBarsFontSize?: number
   labelBarsFontColor?: string
 

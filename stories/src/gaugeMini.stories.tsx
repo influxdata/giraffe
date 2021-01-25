@@ -120,9 +120,6 @@ const editableLayer = (
     knobGroups.basics
   ),
   numberOfBars: number('number of bars', 1, {}, knobGroups.basics),
-  barsDefinitions: {
-    groupByColumns: {_field: true},
-  },
 
   valueHeight: number('valueHeight', theme.valueHeight, {}, knobGroups.sizing),
   gaugeHeight: number('gaugeHeight', theme.gaugeHeight, {}, knobGroups.sizing),
@@ -215,6 +212,11 @@ const editableLayer = (
     knobGroups.labels
   ),
 
+  labelBarsEnabled: boolean(
+    'labelBarsEnabled',
+    theme.labelBarsEnabled,
+    knobGroups.labels
+  ),
   labelBarsFontSize: number(
     'labelBarsFontSize',
     theme.labelBarsFontSize,

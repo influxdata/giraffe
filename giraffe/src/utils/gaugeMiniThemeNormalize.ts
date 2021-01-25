@@ -1,22 +1,15 @@
+import {useMemo} from 'react'
 import {FormatStatValueOptions, formatStatValue} from './formatStatValue'
-import {
-  GaugeMiniBarsDefinitions,
-  GaugeMiniColors,
-  GaugeMiniBarsDefinitionsArr,
-} from '../types'
+import {GaugeMiniColors} from '../types'
 import {GaugeMiniLayerConfig} from '..'
 import {color as d3Color} from 'd3-color'
 import {range} from 'd3-array'
-import {useMemo} from 'react'
 
 export const throwReturn = <T extends unknown>(msg: string): T => {
   throw new Error(msg)
 }
 
-type TBarsDefinitions = GaugeMiniBarsDefinitions<{[key: string]: true}>
-
 type RestrictedTypesProperties = {
-  barsDefinitions: TBarsDefinitions
   colors?: GaugeMiniColors
   gaugeMiniColors?: GaugeMiniColors
   valueFormater?: (value: number) => string
@@ -37,36 +30,6 @@ const getFormater = (
   typeof formater === 'function'
     ? formater
     : (value: number) => formatStatValue(value, formater)
-
-const isBarsDefinitionsArrayStyle = (
-  barsDefinitions: GaugeMiniLayerConfig['barsDefinitions']
-): barsDefinitions is GaugeMiniBarsDefinitionsArr => {
-  return Array.isArray(barsDefinitions.groupByColumns)
-}
-
-const getBarsDefinitions = (
-  barsDefinitions: GaugeMiniLayerConfig['barsDefinitions']
-): TBarsDefinitions => {
-  if (!isBarsDefinitionsArrayStyle(barsDefinitions)) {
-    return barsDefinitions
-  }
-
-  const {groupByColumns, bars} = barsDefinitions
-
-  return {
-    groupByColumns: groupByColumns.reduce(
-      (obj, prop) => ((obj[prop] = true), obj),
-      {} as {[key: string]: true}
-    ),
-    bars: bars?.map(x => ({
-      barDef: x.barDef.reduce(
-        (obj, prop, i) => ((obj[prop] = groupByColumns[i]), obj),
-        {} as Required<TBarsDefinitions>['bars'][number]['barDef']
-      ),
-      label: x.label,
-    })),
-  }
-}
 
 const getAxesSteps = (
   axesSteps: number | 'thresholds' | undefined | number[],
@@ -140,11 +103,6 @@ const getColors = (
 export const gaugeMiniNormalizeThemeMemoized = (
   theme: Required<GaugeMiniLayerConfig>
 ): Required<GaugeMiniThemeNormalized> => {
-  const barsDefinitions = useMemo(
-    () => getBarsDefinitions(theme.barsDefinitions),
-    [theme.barsDefinitions]
-  )
-
   const colors = useMemo(() => getColors(theme.gaugeMiniColors), [
     theme.gaugeMiniColors,
   ])
@@ -156,7 +114,6 @@ export const gaugeMiniNormalizeThemeMemoized = (
 
   return {
     ...theme,
-    barsDefinitions,
     colors,
     gaugeMiniColors: colors,
     valueFormater: getFormater(theme.valueFormater),
@@ -165,5 +122,3 @@ export const gaugeMiniNormalizeThemeMemoized = (
     axesFormater: getFormater(theme.axesFormater),
   }
 }
-
-export const getGaugeMiniBarsDefinitions = getBarsDefinitions

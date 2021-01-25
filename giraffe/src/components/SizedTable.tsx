@@ -17,7 +17,6 @@ import {TableGraphLayer} from './TableGraphLayer'
 
 import {usePlotEnv} from '../utils/usePlotEnv'
 import {LatestMultipleValueTransform} from './LatestMultipleValueTransform'
-import {getGaugeMiniBarsDefinitions} from '../utils/gaugeMiniThemeNormalize'
 
 interface Props {
   config: SizedConfig
@@ -87,10 +86,6 @@ export const SizedTable: FunctionComponent<Props> = ({
                   <LatestMultipleValueTransform
                     key={layerIndex}
                     table={newTableFromConfig(config)}
-                    columns={
-                      getGaugeMiniBarsDefinitions(layerConfig.barsDefinitions)
-                        .groupByColumns
-                    }
                   >
                     {latestValues => (
                       <GaugeMiniLayer
