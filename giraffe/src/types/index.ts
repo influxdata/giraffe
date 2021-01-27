@@ -68,6 +68,12 @@ export interface Config {
   onResetYDomain?: () => void
 
   // The legend is the tooltip that appears when hovering over data points
+
+  //the orientation threshold was here first, so keeping for  backwards compatibility.
+  //if, however there is a legendOrientation ('horizontal' or 'vertical') then that overrides the threshold.
+  //it is horizontal by default.
+
+  //both orientation properties are optional.
   legendFont?: string
   legendFontColor?: string
   legendFontBrightColor?: string
@@ -78,6 +84,7 @@ export interface Config {
   legendMessage?: string
   legendOpacity?: number
   legendOrientationThreshold?: number
+  legendOrientation?: string
   legendColorizeRows?: boolean
   legendDisable?: boolean
 

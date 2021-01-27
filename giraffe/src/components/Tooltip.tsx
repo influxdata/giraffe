@@ -27,6 +27,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendColumns: columnsWhitelist,
     legendOpacity,
     legendOrientationThreshold: orientationThreshold,
+    legendOrientation: orientationFlag,
     legendColorizeRows: colorizeRows,
     legendDisable: disableTooltip,
   } = config
@@ -44,13 +45,20 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   let columns = []
   if (disableTooltip !== true) {
     columns = columnsWhitelist
-      ? data.filter(column => columnsWhitelist.includes(column.key))
+      ? data.filter((column) => columnsWhitelist.includes(column.key))
       : data
   } else {
     return null
   }
 
-  const switchToVertical = columns.length > orientationThreshold
+  const shouldSwitchToVertical = () => {
+    if (orientationFlag) {
+      return 'vertical' === orientationFlag
+    }
+    return columns.length > orientationThreshold
+  }
+
+  const switchToVertical = shouldSwitchToVertical()
 
   // 'switchToVertical': true
   //   each column of data displays vertically, and

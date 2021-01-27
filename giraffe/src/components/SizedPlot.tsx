@@ -66,7 +66,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const {margins, config} = env
   const {width, height, showAxes} = config
 
-  const resetDomains = env => {
+  const resetDomains = (env) => {
     env.resetDomains()
     forceUpdate()
   }
@@ -79,8 +79,8 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const plotInteraction: InteractionHandlerArguments = {
     hoverX: hoverEvent.x,
     hoverY: hoverEvent.y,
-    valueX: env.xScale.invert(hoverX),
-    valueY: env.yScale.invert(hoverY),
+    valueX: env.xScale.invert(hoverEvent.x),
+    valueY: env.yScale.invert(hoverEvent.y),
     xDomain: env.xDomain,
     yDomain: env.yDomain,
     resetDomains: () => {
@@ -90,6 +90,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
 
   const doubleClick = config.interactionHandlers?.doubleClick
     ? () => {
+        console.log('in doubleclick...jill2-changed')
         config.interactionHandlers.doubleClick(plotInteraction)
       }
     : memoizedResetDomains
@@ -174,7 +175,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   table={newTableFromConfig(config)}
                   allowString={true}
                 >
-                  {latestValue => (
+                  {(latestValue) => (
                     <SingleStatLayer
                       stat={latestValue}
                       config={layerConfig as SingleStatLayerConfig}
