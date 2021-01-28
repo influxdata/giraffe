@@ -5236,6 +5236,14 @@ css-modules-typescript-loader@4.0.0:
     line-diff "^2.0.1"
     loader-utils "^1.2.3"
 
+css-modules-typescript-loader@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/css-modules-typescript-loader/-/css-modules-typescript-loader-4.0.1.tgz#0b818cf647fefd8f9fb3d4469374e69ab1e72742"
+  integrity sha512-vXrUAwPGcRaopnGdg7I5oqv/NSSKQRN5L80m3f49uSGinenU5DTNsMFHS+2roh5tXqpY5+yAAKAl7A2HDvumzg==
+  dependencies:
+    line-diff "^2.0.1"
+    loader-utils "^1.2.3"
+
 css-select-base-adapter@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/css-select-base-adapter/-/css-select-base-adapter-0.1.1.tgz#3b2ff4972cc362ab88561507a95408a1432135d7"
