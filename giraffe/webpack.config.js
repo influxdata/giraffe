@@ -48,9 +48,21 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.s?css$/i,
+        test: /\.scss$/,
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-modules-typescript-loader'},
+          {loader: 'css-loader', options: {modules: true}},
+          {loader: 'sass-loader'},
+        ],
+      },
+      {
+        test: /\.css$/,
         exclude: /leaflet\.css/,
-        use: ['css-loader', 'sass-loader'],
+        use: [
+          {loader: 'style-loader'},
+          {loader: 'css-loader'},
+        ],
       },
       {
         test: /leaflet\.css/,
