@@ -7,7 +7,7 @@
     "prettier": "prettier --config ../.prettierrc.json --check '{src,../giraffe/src}/**/*.{ts,tsx}'",
     "prettier:fix": "prettier --config ../.prettierrc.json --write '{src,../giraffe/src}/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit --pretty",
-    "start": "yarn -s run storybook",
+    "start": "yarn -s run prettier:fix && yarn -s run storybook",
     "storybook": "start-storybook -p 50000",
     "publish": "storybook-to-ghpages --out=.out",
     "chromatic": "chromatic test"
