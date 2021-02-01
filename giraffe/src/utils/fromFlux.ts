@@ -269,7 +269,7 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   }
 
   if (columnType === 'time') {
-    return Date.parse(value)
+    return Date.parse(value.trim())
   }
 
   if (columnType === 'number' && value === '') {

@@ -491,4 +491,40 @@ there",5
       'hi',
     ])
   })
+
+  it('parses dateTime with a space before the value', () => {
+    const CSV = `#group,false,false,true,true,false,false,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,dateTime:RFC3339
+#default,last,,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,host,station_id,time
+,,0,2021-01-19T20:58:58.549310588Z,2021-01-21T20:58:58.549310588Z,2021-01-21T13:00:00Z,1,is_installed,baywheels,ip-192-168-1-6.ec2.internal,499, 2021-01-18T12:20:02.582Z,`
+
+    const {table} = fromFlux(CSV)
+
+    expect(table.getColumn('time')).toEqual([1610972402582])
+  })
+
+  it('parses dateTime with a space after the value', () => {
+    const CSV = `#group,false,false,true,true,false,false,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,dateTime:RFC3339
+#default,last,,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,host,station_id,time
+,,0,2021-01-19T20:58:58.549310588Z,2021-01-21T20:58:58.549310588Z,2021-01-21T13:00:00Z,1,is_installed,baywheels,ip-192-168-1-6.ec2.internal,499,2021-01-18T12:20:02.582Z ,`
+
+    const {table} = fromFlux(CSV)
+
+    expect(table.getColumn('time')).toEqual([1610972402582])
+  })
+
+  it('parses dateTime with a space before and after the value', () => {
+    const CSV = `#group,false,false,true,true,false,false,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,dateTime:RFC3339
+#default,last,,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,host,station_id,time
+,,0,2021-01-19T20:58:58.549310588Z,2021-01-21T20:58:58.549310588Z,2021-01-21T13:00:00Z,1,is_installed,baywheels,ip-192-168-1-6.ec2.internal,499, 2021-01-18T12:20:02.582Z ,`
+
+    const {table} = fromFlux(CSV)
+
+    expect(table.getColumn('time')).toEqual([1610972402582])
+  })
 })
