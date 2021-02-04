@@ -90,10 +90,11 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     fillOpacity: 0.75,
   },
   mosaic: {
+    yLabelColumns: [],
+    yLabelColumnSeparator: '',
     fill: [],
+    hoverDimension: 'auto',
     colors: DEFAULT_COLOR_SCHEME,
-    position: 'stacked',
-    binCount: null,
     strokeWidth: 1,
     strokePadding: 0.75,
     strokeOpacity: 1,

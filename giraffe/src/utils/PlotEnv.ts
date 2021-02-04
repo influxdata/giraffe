@@ -181,9 +181,9 @@ export class PlotEnv {
   }
 
   public get yColumnType(): ColumnType {
-    //added to allow the y-axis type to be a string
-    //if there are multiple layers (ex. single stat + line graph),
-    //it will pick the yColumnType of the 1st layer (so BEWARE)
+    // added to allow the y-axis type to be a string
+    // if there are multiple layers (ex. single stat + line graph),
+    // it will pick the yColumnType of the 1st layer (so BEWARE)
     for (let i = 0; i < this.config.layers.length; i++) {
       const layer: any = this.config.layers[i]
       if (layer.yColumnType) {
@@ -253,9 +253,13 @@ export class PlotEnv {
     if (!spec) {
       return DEFAULT_FORMATTER
     }
-    const firstYMapping = spec.yColumnKey
+    if (spec.type === 'mosaic') {
+      return this.getFormatterForColumn('_value')
+    }
 
-    return this.getFormatterForColumn(firstYMapping)
+    const {yColumnKey} = spec
+
+    return this.getFormatterForColumn(yColumnKey)
   }
 
   public getSpec(layerIndex: number): LayerSpec {
@@ -331,6 +335,8 @@ export class PlotEnv {
           table,
           layerConfig.x,
           layerConfig.y,
+          layerConfig.yLabelColumns,
+          layerConfig.yLabelColumnSeparator,
           this.config.xDomain,
           layerConfig.fill,
           layerConfig.colors

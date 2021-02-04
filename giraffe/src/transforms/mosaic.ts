@@ -1,6 +1,6 @@
 import {newTable} from '../utils/newTable'
 import {MosaicLayerSpec, Table} from '../types'
-import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
+import {DISPLAY_NAME, FILL, SERIES, X_MAX, X_MIN} from '../constants/columnKeys'
 import {createGroupIDColumn} from './'
 import {resolveDomain} from '../utils/resolveDomain'
 import {getNominalColorScale} from './'
@@ -8,89 +8,130 @@ import {getNominalColorScale} from './'
 export const mosaicTransform = (
   inputTable: Table,
   xColumnKey: string,
-  yColumnKey: string,
+  yColumnKeys: string[],
+  yLabelColumns: string[],
+  yLabelColumnSeparator: string,
   xDomain: number[],
   fillColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
+  let labelColumns = yLabelColumns.filter(labelColumn =>
+    yColumnKeys.includes(labelColumn)
+  )
+  if (labelColumns.length === 0) {
+    labelColumns = yColumnKeys
+  }
   const xInputCol = inputTable.getColumn(xColumnKey, 'number') || []
-  const yInputCol = inputTable.getColumn(yColumnKey, 'string') || []
+  const yInputCols = {}
+  yColumnKeys.forEach(columnKey => {
+    const column = inputTable.getColumn(columnKey, 'string')
+    yInputCols[columnKey] = column
+  })
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
   )
 
-  const valueKey = fillColumnMap.columnKeys[0] // _value
+  // Mosaic can only have one column as the fill value,
+  //   always the first fill column key
+  const valueKey = fillColumnMap.columnKeys[0]
 
-  let tableLength = 0
-  /*
-    This is the structure used to create and update the data map below:
-
-    dataMap[series] = [
-      xMin: NumericColumnData,
-      xMax: NumericColumnData,
-      values: NumericColumnData,
-      series: string[]
-    ]
-  */
-
-  const dataMap = {}
-  let prevFillValue = fillColumnMap.mappings[fillColumn[0]][valueKey] // initialize to first value
+  const timeStampMap = {}
 
   for (let i = 0; i < inputTable.length; i++) {
-    const currentY = yInputCol[i]
+    const yColumnTick = yColumnKeys.reduce((combinedValue, key) => {
+      const value = yInputCols[key][i]
+      return combinedValue + value
+    }, '')
+
+    const yTickLabel = labelColumns.reduce((combinedValue, key) => {
+      const value = yInputCols[key][i]
+      return combinedValue
+        ? `${combinedValue}${yLabelColumnSeparator}${value}`
+        : value
+    }, '')
+
     const currentX = xInputCol[i]
     const currentFillValue = fillColumnMap.mappings[fillColumn[i]][valueKey]
 
-    const YValExistsInDataMap = currentY in dataMap
-
-    const prevX = xInputCol[i - 1]
-    const CurrentXColValueIsBackInTime = prevX > currentX // THis is definitely not the correct thing to check for
-
-    const isOverlappingTimestamp =
-      YValExistsInDataMap && CurrentXColValueIsBackInTime
-
-    if (isOverlappingTimestamp) {
-      continue // ignore this data point
+    if (!timeStampMap[currentX]) {
+      timeStampMap[currentX] = []
     }
-
-    if (!YValExistsInDataMap) {
-      //create series entry in dataMap
-      dataMap[currentY] = [[currentX], [], [currentFillValue], []]
-      continue
-    }
-
-    const valueIntervalEnds = currentFillValue != prevFillValue
-    if (valueIntervalEnds) {
-      //update series entry in dataMap
-      dataMap[currentY][0].push(currentX)
-      dataMap[currentY][1].push(currentX)
-      dataMap[currentY][2].push(currentFillValue)
-      dataMap[currentY][3].push(currentY)
-      prevFillValue = currentFillValue
-
-      tableLength += 1
-    }
+    timeStampMap[currentX].push({
+      yTickLabel,
+      yColumnTick,
+      fill: currentFillValue,
+    })
   }
+
+  const sortedTimeStamps = Object.keys(timeStampMap).sort()
+  let tableLength = 0
+
+  /*
+    This is the structure used to create and update the data map below:
+
+    dataMap[series] = {
+      xMin: NumericColumnData,
+      xMax: NumericColumnData,
+      fill: NumericColumnData,
+      series: string[],
+      displayedColumns: string[],
+      yTickLabel: string,
+    }
+  */
+  const dataMap = {}
+
+  sortedTimeStamps.forEach(timeStamp => {
+    timeStampMap[timeStamp].forEach(data => {
+      if (!dataMap[data.yColumnTick]) {
+        dataMap[data.yColumnTick] = {
+          xMin: [Number(timeStamp)],
+          xMax: [Number(timeStamp)],
+          fill: [data.fill],
+          series: [data.yColumnTick],
+          displayedColumns: [data.yTickLabel],
+          yTickLabel: data.yTickLabel,
+        }
+        tableLength += 1
+      } else {
+        const prevMaxIndex = dataMap[data.yColumnTick].xMax.length - 1
+        const prevFill =
+          dataMap[data.yColumnTick].fill[
+            dataMap[data.yColumnTick].fill.length - 1
+          ]
+
+        dataMap[data.yColumnTick].xMax[prevMaxIndex] = Number(timeStamp)
+        if (prevFill !== data.fill) {
+          dataMap[data.yColumnTick].xMin.push(Number(timeStamp))
+          dataMap[data.yColumnTick].xMax.push(Number(timeStamp))
+          dataMap[data.yColumnTick].fill.push(data.fill)
+          dataMap[data.yColumnTick].series.push(data.yColumnTick)
+          dataMap[data.yColumnTick].displayedColumns.push(data.yTickLabel)
+          tableLength += 1
+        }
+      }
+    })
+  })
 
   let xMinData = []
   let xMaxData = []
   let fillData = []
   let seriesData = []
-  let valueStrings = []
+  let displayedColumnsData = []
+  const yTicks = []
+  const ySeries = []
 
-  // the last value in each series is a special case (see above)
   for (const key in dataMap) {
-    dataMap[key][1].push(xInputCol[inputTable.length - 1])
-    dataMap[key][3].push(key)
-    tableLength += 1
-
     //combine all series into the proper shape
-    xMinData = xMinData.concat(dataMap[key][0])
-    xMaxData = xMaxData.concat(dataMap[key][1])
-    fillData = fillData.concat(dataMap[key][2])
-    seriesData = seriesData.concat(dataMap[key][3])
-    valueStrings = valueStrings.concat(key)
+    xMinData = xMinData.concat(dataMap[key].xMin)
+    xMaxData = xMaxData.concat(dataMap[key].xMax)
+    fillData = fillData.concat(dataMap[key].fill)
+    seriesData = seriesData.concat(dataMap[key].series)
+    displayedColumnsData = displayedColumnsData.concat(
+      dataMap[key].displayedColumns
+    )
+    ySeries.push(key)
+    yTicks.push(dataMap[key].yTickLabel)
   }
   /*
     xMin (start time) | xMax (end time) | Value Category | host | cpu
@@ -98,14 +139,16 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
+  // const table = newTable(tableLength)
   const table = newTable(tableLength)
-    .addColumn(X_MIN, 'system', 'number', xMinData) //startTimes
-    .addColumn(X_MAX, 'system', 'number', xMaxData) //endTimes
-    .addColumn(FILL, 'string', 'string', fillData) //values
-    .addColumn(SERIES, 'string', 'string', seriesData) //cpus (see storybook)
+    .addColumn(X_MIN, 'system', 'number', xMinData)
+    .addColumn(X_MAX, 'system', 'number', xMaxData)
+    .addColumn(FILL, 'string', 'string', fillData)
+    .addColumn(SERIES, 'string', 'string', seriesData)
+    .addColumn(DISPLAY_NAME, 'string', 'string', displayedColumnsData)
 
   const resolvedXDomain = resolveDomain(xInputCol, xDomain)
-  const resolvedYDomain = [0, valueStrings.length]
+  const resolvedYDomain = [0, yTicks.length]
   const fillScale = getNominalColorScale(fillColumnMap, colors)
 
   return {
@@ -113,13 +156,13 @@ export const mosaicTransform = (
     inputTable,
     table,
     xDomain: resolvedXDomain,
-    yDomain: resolvedYDomain,
     xColumnKey,
-    yColumnKey,
     xColumnType: inputTable.getColumnType(xColumnKey),
-    yColumnType: inputTable.getColumnType(yColumnKey),
+    yDomain: resolvedYDomain,
+    yColumnType: 'string',
+    ySeries,
+    yTicks,
     scales: {fill: fillScale},
     columnGroupMaps: {fill: fillColumnMap},
-    yTicks: valueStrings,
   }
 }
