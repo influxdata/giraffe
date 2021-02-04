@@ -1,7 +1,7 @@
 import {range} from 'd3-array'
 
 import {getRangeLabel} from './tooltip'
-import {X_MIN, X_MAX, FILL, SERIES} from '../constants/columnKeys'
+import {DISPLAY_NAME, FILL, SERIES, X_MAX, X_MIN} from '../constants/columnKeys'
 import {
   Table,
   Scale,
@@ -11,48 +11,71 @@ import {
 } from '../types'
 
 export const findHoveredBoxes = (
-  boxTable: Table,
+  hoverDimension: string,
   hoverX: number | null,
   hoverY: number | null,
+  boxTable: Table,
   xScale: Scale<number, number>,
   yScale: Scale<number, number>,
   yDomain: number[],
-  hoverDimension: string
+  yTicks: string[],
+  width: number,
+  height: number
 ): number[] => {
-  if (!hoverX || !hoverY) {
+  const isActive =
+    hoverX !== undefined &&
+    hoverX !== null &&
+    hoverX >= 0 &&
+    hoverX < width &&
+    hoverY !== undefined &&
+    hoverY !== null &&
+    hoverY >= 0 &&
+    hoverY <= height
+
+  if (!isActive) {
     return []
   }
+
   const xMinData = boxTable.getColumn(X_MIN, 'number')
   const xMaxData = boxTable.getColumn(X_MAX, 'number')
+  const yTickData = boxTable.getColumn(SERIES, 'string')
+
   const dataX = xScale.invert(hoverX)
   const dataY = yScale.invert(hoverY)
-  // Find all boxes whose x extent contain the mouse x position
-  const xIndices = range(0, xMinData.length).filter(
-    i => xMinData[i] <= dataX && xMaxData[i] > dataX
-  )
+
+  const xRange = range(0, xMinData.length)
+  const hoveredYTick =
+    Math.floor(dataY) >= yDomain[0] && Math.floor(dataY) < yDomain[1]
+      ? yTicks[Math.floor(dataY)]
+      : ''
+
+  const containsHoverX = (index: number): boolean =>
+    xMinData[index] <= dataX && xMaxData[index] > dataX
+  const containsHoverY = (index: number): boolean =>
+    yTickData[index] === hoveredYTick
+
+  /****************************************************************************
+   * Mosaic hover dimensions
+   * 'xy' means a single piece at the mouse position
+   * 'x'  means all pieces with the same time value along the y-axis at mouse position
+   * 'y'  means all pieces with the same y-tick along the x-axis at mouse position
+   * 'auto' menas 'xy' see above
+   */
 
   if (hoverDimension === 'x') {
-    return xIndices.reverse()
+    return xRange.filter(containsHoverX)
   }
 
-  for (let i = 0; i < yDomain[1]; i++) {
-    const yMin = yScale(i + 1)
-    const yMax = yScale(i)
-
-    if (
-      xIndices[i] != undefined &&
-      yMin < yScale(dataY) &&
-      yMax >= yScale(dataY)
-    ) {
-      return [xIndices[i]] // allows user to hover over one box at a time
-    }
+  if (hoverDimension === 'y') {
+    return xRange.filter(containsHoverY)
   }
-  // handles the case where the loop didn't return early.
-  return []
+
+  // Otherwise treat as 'xy' regardless of what the hoverDimension is
+  return xRange.filter(i => containsHoverX(i) && containsHoverY(i))
 }
 
 export const getMosaicTooltipData = (
-  hoveredBoxRows: number[],
+  hoveredRowIndices: number[],
   boxTable: Table,
   inputTable: Table,
   xColKey: string,
@@ -64,10 +87,16 @@ export const getMosaicTooltipData = (
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
   const valCol = boxTable.getColumn(FILL, 'string')
-  const yCol = boxTable.getColumn(SERIES, 'string')
+  const yCol = boxTable.getColumn(DISPLAY_NAME, 'string')
   const xFormatter = columnFormatter(xColKey)
   const yFormatter = columnFormatter(yColKey)
   const valFormatter = columnFormatter(FILL)
+
+  // Use reverse order because
+  // Mosaic graph contents are filled in from bottom to top
+  // Mosaic tooltip contents are filled in from top to bottom
+  const hoveredBoxRows = hoveredRowIndices.reverse()
+
   const colors = hoveredBoxRows.map(i =>
     fillScale((valCol[i] as unknown) as number)
   )

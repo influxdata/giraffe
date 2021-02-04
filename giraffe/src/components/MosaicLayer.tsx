@@ -31,13 +31,16 @@ export const MosaicLayer: FunctionComponent<Props> = ({
   columnFormatter,
 }) => {
   const hoveredRowIndices = findHoveredBoxes(
-    spec.table,
+    config.hoverDimension,
     hoverX,
     hoverY,
+    spec.table,
     xScale,
     yScale,
     spec.yDomain,
-    config.hoverDimension
+    spec.ySeries,
+    width,
+    height
   )
 
   const drawMosaicOptions = {
@@ -69,7 +72,7 @@ export const MosaicLayer: FunctionComponent<Props> = ({
       spec.table,
       spec.inputTable,
       config.x,
-      config.y,
+      config.y[0],
       spec.columnGroupMaps.fill,
       spec.scales.fill,
       columnFormatter

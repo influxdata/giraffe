@@ -5,9 +5,9 @@ import {cpuTable} from './data/mosaicTable'
 
 import {
   Config,
-  fromFlux,
   LayerConfig,
   Plot,
+  fromFlux,
   timeFormatter,
 } from '../../giraffe/src'
 import {VALUE} from '../../giraffe/src/constants/columnKeys'
@@ -16,6 +16,7 @@ import {
   colorSchemeKnob,
   findStringColumns,
   legendFontKnob,
+  multiSelect,
   showAxesKnob,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
@@ -87,13 +88,21 @@ storiesOf('Mosaic', module)
         'cloudy:city': cloudy,
         'circle_ci:branch': circle_ci_example_1,
       },
-      cloudy
+      circle_ci_example_1
     )
     const table = fromFlux(csv).table
     const fillColumns = findStringColumns(table)
     const x = xKnob(table)
-    const y = text('y', '')
+    const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
     const selectedFill = select('fill', fillColumns, VALUE)
+    const yColumns = multiSelect('Data yColumns', fillColumns, [
+      'project',
+      'workflow_name',
+    ])
+    const yLabelColumns = multiSelect('Label yColumns', fillColumns, [
+      'project',
+      'workflow_name',
+    ])
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const timeZone = timeZoneKnob()
@@ -105,6 +114,7 @@ storiesOf('Mosaic', module)
         'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
         'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
         'hh:mm a': 'hh:mm a',
+        'MM/DD HH:mm:ss': 'MM/DD HH:mm:ss',
         'HH:mm': 'HH:mm',
         'HH:mm:ss': 'HH:mm:ss',
         'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
@@ -112,10 +122,14 @@ storiesOf('Mosaic', module)
         'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
         'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
       },
-      'hh:mm a'
+      'MM/DD HH:mm:ss'
     )
     const showAxes = showAxesKnob()
-    const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
+    const hoverDimension = select(
+      'Hover Dimension',
+      {x: 'x', y: 'y', xy: 'xy'},
+      'xy'
+    )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
@@ -130,7 +144,9 @@ storiesOf('Mosaic', module)
         {
           type: 'mosaic',
           x,
-          y,
+          y: yColumns,
+          yLabelColumnSeparator,
+          yLabelColumns,
           fill: [selectedFill],
           hoverDimension,
           colors,
@@ -187,7 +203,7 @@ storiesOf('Mosaic', module)
         {
           type: 'mosaic',
           x,
-          y,
+          y: [y],
           fill,
           hoverDimension,
           colors,

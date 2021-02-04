@@ -327,11 +327,12 @@ export interface HistogramLayerConfig {
 export interface MosaicLayerConfig {
   type: 'mosaic' // do not refactor or restrict to LayerTypes.Mosaic
   x: string
-  y: string
-  fill?: string[]
+  y: string[]
+  yLabelColumns?: string[]
+  yLabelColumnSeparator?: string
+  fill: string[]
   hoverDimension?: MosaicHoverDimension | 'auto'
   colors?: string[]
-  symbol?: string[]
   strokeWidth?: number
   strokePadding?: number
   strokeOpacity?: number
@@ -548,13 +549,13 @@ export interface MosaicLayerSpec {
   xDomain: number[]
   yDomain: number[]
   xColumnKey: string
-  yColumnKey: string
   xColumnType: ColumnType
   yColumnType: ColumnType
   scales: {fill: Scale<number, string>}
   columnGroupMaps: {
     fill: ColumnGroupMap
   }
+  ySeries: Array<string>
   yTicks: Array<string>
 }
 
