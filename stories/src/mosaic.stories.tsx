@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, select, text} from '@storybook/addon-knobs'
+import {select, text, withKnobs} from '@storybook/addon-knobs'
 import {cpuTable} from './data/mosaicTable'
 
 import {
@@ -18,11 +18,12 @@ import {
   legendFontKnob,
   multiSelect,
   showAxesKnob,
+  tickFontKnob,
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
   xKnob,
 } from './helpers'
-import {circle_ci_example_1, cloudy} from './data/mosaicCSV'
+import {circle_ci_branch, cloudy} from './data/mosaicCSV'
 
 storiesOf('Mosaic', module)
   .addDecorator(withKnobs)
@@ -31,8 +32,10 @@ storiesOf('Mosaic', module)
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const x = xKnob(cpuTable)
-    const y = select('y', fillColumns, 'cpu')
+    const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
     const selectedFill = select('fill', fillColumns, VALUE)
+    const yColumns = multiSelect('Data yColumns', fillColumns, ['cpu', 'host'])
+    const yLabelColumns = multiSelect('Label yColumns', fillColumns, ['cpu'])
     const timeZone = timeZoneKnob()
     const timeFormat = select(
       'Time Format',
@@ -67,7 +70,9 @@ storiesOf('Mosaic', module)
         {
           type: 'mosaic',
           x,
-          y,
+          y: yColumns,
+          yLabelColumnSeparator,
+          yLabelColumns,
           fill: [selectedFill],
           hoverDimension,
           colors,
@@ -81,16 +86,8 @@ storiesOf('Mosaic', module)
       </PlotContainer>
     )
   })
-  .add('Static Data with CSV', () => {
-    const csv = select(
-      'data',
-      {
-        'cloudy:city': cloudy,
-        'circle_ci:branch': circle_ci_example_1,
-      },
-      circle_ci_example_1
-    )
-    const table = fromFlux(csv).table
+  .add('Static Data: circle_ci:branch', () => {
+    const table = fromFlux(circle_ci_branch).table
     const fillColumns = findStringColumns(table)
     const x = xKnob(table)
     const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
@@ -133,13 +130,80 @@ storiesOf('Mosaic', module)
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const config: Config = {
-      fluxResponse: csv,
+      fluxResponse: circle_ci_branch,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
       },
       legendFont,
       legendOrientationThreshold,
       showAxes,
+      layers: [
+        {
+          type: 'mosaic',
+          x,
+          y: yColumns,
+          yLabelColumnSeparator,
+          yLabelColumns,
+          fill: [selectedFill],
+          hoverDimension,
+          colors,
+        } as LayerConfig,
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Static Data: cloudy', () => {
+    const table = fromFlux(cloudy).table
+    const fillColumns = findStringColumns(table)
+    const x = xKnob(table)
+    const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
+    const selectedFill = select('fill', fillColumns, VALUE)
+    const yColumns = multiSelect('Data yColumns', fillColumns, ['city'])
+    const yLabelColumns = multiSelect('Label yColumns', fillColumns, ['city'])
+    const colors = colorSchemeKnob()
+    const tickFont = tickFontKnob()
+    const legendFont = legendFontKnob()
+    const timeZone = timeZoneKnob()
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'hh:mm a': 'hh:mm a',
+        'MM/DD HH:mm:ss': 'MM/DD HH:mm:ss',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'MM/DD HH:mm:ss'
+    )
+    const showAxes = showAxesKnob()
+    const hoverDimension = select(
+      'Hover Dimension',
+      {x: 'x', y: 'y', xy: 'xy'},
+      'xy'
+    )
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+
+    const config: Config = {
+      fluxResponse: cloudy,
+      valueFormatters: {
+        _time: timeFormatter({timeZone, format: timeFormat}),
+      },
+      legendFont,
+      legendOrientationThreshold,
+      showAxes,
+      tickFont,
       layers: [
         {
           type: 'mosaic',
