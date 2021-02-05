@@ -1,4 +1,4 @@
-import {newTable} from '../../../giraffe/src'
+import {newTable} from '../../../giraffe/src/utils/newTable'
 
 const CPU_TIME_COL = [
   1554308748000,
