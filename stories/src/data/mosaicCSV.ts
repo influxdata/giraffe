@@ -1,4 +1,4 @@
-export const circle_ci_example_1 = `#group,false,false,true,true,false,false,false,false,true,false,false,false,false
+export const circle_ci_branch = `#group,false,false,true,true,false,false,false,false,true,false,false,false,false
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string
 #default,last,,,,,,,,,,,,
 ,result,table,_start,_stop,_time,_value,_field,_measurement,branch,job_name,project,vcs,workflow_name
