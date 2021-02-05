@@ -1,0 +1,3 @@
+# Ignore .md files and allow them to freely express anything
+*.md
+*.d.ts
