@@ -7,6 +7,7 @@ import {
   LayerProps,
 } from '../types'
 import {CANDLESTICK_THEME_DARK} from '../constants/candlestickStyles'
+import {OHLCResultEntry} from '../utils/ohlc'
 
 interface CandleValue {
   open: number
@@ -53,8 +54,8 @@ const Candle: React.FC<CandleProps> = ({
 
   const centerY = width / 2
 
-  return (
-    <>
+  const body =
+    theme.mode === 'candles' ? (
       <rect
         width={width}
         {...{y, height}}
@@ -65,6 +66,40 @@ const Candle: React.FC<CandleProps> = ({
         rx={bodyRounding}
         ry={bodyRounding}
       ></rect>
+    ) : (
+      <>
+        <line
+          stroke={bodyColor}
+          strokeWidth={bodyStrokeWidth}
+          y1={y}
+          y2={y + height}
+          x1={width / 2}
+          x2={width / 2}
+          strokeLinecap="round"
+        />
+        <line
+          stroke={bodyColor}
+          strokeWidth={bodyStrokeWidth}
+          y1={open}
+          y2={open}
+          x1={width / 2}
+          x2={0}
+          strokeLinecap="round"
+        />
+        <line
+          stroke={bodyColor}
+          strokeWidth={bodyStrokeWidth}
+          y1={close}
+          y2={close}
+          x1={width / 2}
+          x2={width}
+          strokeLinecap="round"
+        />
+      </>
+    )
+
+  const shadow = (
+    <>
       {candle.high > Math.max(candle.open, candle.close) && (
         <line
           x1={centerY}
@@ -89,6 +124,13 @@ const Candle: React.FC<CandleProps> = ({
       )}
     </>
   )
+
+  return (
+    <>
+      {body}
+      {shadow}
+    </>
+  )
 }
 
 export interface Props extends LayerProps {
@@ -109,8 +151,9 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
 
   const {values, calculatedWindow} = spec
 
-  const getXSVGCoords = (xKey: number) => xScale(xKey * calculatedWindow)
-  // (xKey: number) => ((xKey * calculatedWindow - xMin) / xLen) * width
+  // todo: naming
+  const getXSVGCoords = xScale
+  const heightPositionFormatter: CandleProps['heightPositionFormatter'] = yScale
 
   const candleWidth =
     Math.round(Math.abs((xScale(0) - xScale(calculatedWindow)) * 100)) / 100 -
@@ -118,7 +161,19 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
   // todo: style
   // const maxHeight = minHeight + hegihtRange
 
-  const heightPositionFormatter: CandleProps['heightPositionFormatter'] = yScale
+  const isCandleVisible = (candle: OHLCResultEntry) => {
+    const x = getXSVGCoords(candle.windowStart)
+    const yMin = heightPositionFormatter(candle.yRange[0])
+    const yMax = heightPositionFormatter(candle.yRange[1])
+
+    return (
+      x >= -candleWidth &&
+      x <= width + candleWidth &&
+      // svg has inversed y drawing so lower value has higher svg coords
+      yMax <= height &&
+      yMin >= 0
+    )
+  }
 
   return (
     <>
@@ -127,21 +182,19 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
         height={height}
         style={{fontFamily: 'Rubik, monospace', userSelect: 'none'}}
       >
-        {Object.entries(values)
-          .map(([xKey, candle]) => [+xKey, candle] as const)
-          .map(([xKey, candle]) => (
-            <>
-              <g
-                transform={`translate(${getXSVGCoords(xKey) -
-                  candleWidth / 2},0)`}
-              >
-                <Candle
-                  width={candleWidth}
-                  {...{heightPositionFormatter, candle, theme}}
-                />
-              </g>
-            </>
-          ))}
+        {values.filter(isCandleVisible).map(({windowStart, value: candle}) => (
+          <>
+            <g
+              transform={`translate(${getXSVGCoords(windowStart) -
+                candleWidth / 2},0)`}
+            >
+              <Candle
+                width={candleWidth}
+                {...{heightPositionFormatter, candle, theme}}
+              />
+            </g>
+          </>
+        ))}
       </svg>
     </>
   )

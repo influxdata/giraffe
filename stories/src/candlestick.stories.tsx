@@ -102,6 +102,9 @@ const editableLayer = (theme: Theme): Theme => ({
     if (detect) return 'detect'
     return number('window fixed', typeof theme.window === 'number' || 1_000)
   })(),
+  windowMax: number('windowMax', theme.windowMax),
+  // todo:
+  windowMergeStrategy: 'caping',
 })
 
 const createStory = (theme: Theme, csv: string) => () => {

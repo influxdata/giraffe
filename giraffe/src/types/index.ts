@@ -3,6 +3,7 @@ import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
 import {FormatStatValueOptions} from '../utils/formatStatValue'
+import {OHLCResultEntry} from '../utils/ohlc'
 
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
@@ -275,6 +276,8 @@ export interface CandlestickLayerConfig {
   highColumnKey?: string
 
   window?: number | 'detect'
+  windowMax?: number
+  windowMergeStrategy?: 'caping' | 'halving'
 }
 
 export interface GaugeLayerConfig {
@@ -690,13 +693,11 @@ export type OHLCValue = {
   close: number
 }
 
-export type CandlestickLayerSpecValues = {[key: number]: OHLCValue}
-
 export interface CandlestickLayerSpec {
   type: 'candlestick' // do not refactor or restrict to SpecTypes
   inputTable: Table
   calculatedWindow: number // distance between two values
-  values: CandlestickLayerSpecValues
+  values: OHLCResultEntry[]
   xDomain: number[]
   yDomain: number[]
 
