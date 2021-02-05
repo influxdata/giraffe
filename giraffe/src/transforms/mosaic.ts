@@ -15,22 +15,26 @@ export const mosaicTransform = (
   fillColKeys: string[],
   colors: string[]
 ): MosaicLayerSpec => {
-  let labelColumns = yLabelColumns.filter(labelColumn =>
-    yColumnKeys.includes(labelColumn)
-  )
-  if (labelColumns.length === 0) {
-    labelColumns = yColumnKeys
-  }
-  const xInputCol = inputTable.getColumn(xColumnKey, 'number') || []
-  const yInputCols = {}
-  yColumnKeys.forEach(columnKey => {
-    const column = inputTable.getColumn(columnKey, 'string')
-    yInputCols[columnKey] = column
-  })
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
   )
+  const xInputCol = inputTable.getColumn(xColumnKey, 'number') || []
+
+  let labelColumns = Array.isArray(yLabelColumns)
+    ? yLabelColumns.filter(labelColumn => yColumnKeys.includes(labelColumn))
+    : []
+  if (labelColumns.length === 0 && Array.isArray(yColumnKeys)) {
+    labelColumns = yColumnKeys
+  }
+
+  const yInputCols = {}
+  if (Array.isArray(yColumnKeys)) {
+    yColumnKeys.forEach(columnKey => {
+      const column = inputTable.getColumn(columnKey, 'string')
+      yInputCols[columnKey] = column
+    })
+  }
 
   // Mosaic can only have one column as the fill value,
   //   always the first fill column key
@@ -39,13 +43,21 @@ export const mosaicTransform = (
   const timeStampMap = {}
 
   for (let i = 0; i < inputTable.length; i++) {
-    const yColumnTick = yColumnKeys.reduce((combinedValue, key) => {
-      const value = yInputCols[key][i]
-      return combinedValue + value
-    }, '')
+    const yColumnTick = Array.isArray(yColumnKeys)
+      ? yColumnKeys.reduce((combinedValue, key) => {
+          let value = ''
+          if (yInputCols[key]) {
+            value = yInputCols[key][i]
+          }
+          return combinedValue + value
+        }, '')
+      : ''
 
     const yTickLabel = labelColumns.reduce((combinedValue, key) => {
-      const value = yInputCols[key][i]
+      let value = ''
+      if (yInputCols[key]) {
+        value = yInputCols[key][i]
+      }
       return combinedValue
         ? `${combinedValue}${yLabelColumnSeparator}${value}`
         : value
