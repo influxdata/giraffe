@@ -29,6 +29,7 @@ interface Props {
   decimalPlaces: DecimalPlaces
   theme: GaugeTheme
   gaugeSize: number
+  gaugeUnit: string[]
 }
 
 const resetCanvas = (
@@ -55,7 +56,7 @@ const updateCanvas = (
   canvasRef: React.MutableRefObject<HTMLCanvasElement>,
   props: Props
 ): void => {
-  const {width, height, colors, theme, gaugeSize} = props
+  const {width, height, colors, theme, gaugeSize, gaugeUnit} = props
   resetCanvas(canvasRef, width, height)
 
   const canvas = canvasRef.current
@@ -122,9 +123,17 @@ const updateCanvas = (
     theme,
     gaugeSize
   )
-  drawGaugeLabels(ctx, radius, gradientThickness, minValue, maxValue, props)
+  drawGaugeLabels(
+    ctx,
+    radius,
+    gradientThickness,
+    minValue,
+    maxValue,
+    gaugeUnit,
+    props
+  )
   drawGaugeValue(ctx, radius, labelValueFontSize, props)
-  drawNeedle(ctx, radius, minValue, maxValue, props)
+  drawNeedle(ctx, radius, minValue, maxValue, gaugeUnit, props)
 }
 
 const drawGradientGauge = (
@@ -295,55 +304,79 @@ const drawGaugeLabels = (
   gradientThickness: number,
   minValue: number,
   maxValue: number,
+  gaugeUnit: string[],
   props: Props
 ): void => {
   const {tickPrefix, tickSuffix, decimalPlaces, gaugeSize} = props
   const {lineCount, labelColor, labelFontSize} = props.theme
-
-  const tickValues = [
-    ...range(minValue, maxValue, Math.abs(maxValue - minValue) / lineCount),
-    maxValue,
-  ]
-
-  const labels = tickValues.map(tick =>
-    formatStatValue(tick, {
-      decimalPlaces,
-      prefix: tickPrefix,
-      suffix: tickSuffix,
-    })
-  )
   const startDegree = Math.PI - (gaugeSize - Math.PI) / 2
   const arcLength = gaugeSize
   const arcIncrement = arcLength / lineCount
+  let labelRadius: number
 
   // Format labels text
   ctx.font = `bold ${labelFontSize}px Rubik`
   ctx.fillStyle = labelColor
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'right'
-  let labelRadius: number
 
-  for (let i = 0; i <= lineCount; i++) {
-    labelRadius = radius + gradientThickness + 23
-    if (lineCount === 1 && i === 1) {
-      ctx.textAlign = 'left'
-    } else if (lineCount % 2 === 0 && lineCount / i === 2) {
-      ctx.textAlign = 'center'
-    } else if (i / (lineCount + 1) >= 0.5) {
-      ctx.textAlign = 'left'
+  if (gaugeUnit.toString() === 'bytes') {
+    const labels = ['0b', '1024Kb', '1024Mb', '1024Gb', '1024Tb', '1024Pb']
+    const lineCount = 5
+    for (let i = 0; i <= lineCount; i++) {
+      labelRadius = radius + gradientThickness + 23
+      if (i / (lineCount + 1) >= 0.5) {
+        ctx.textAlign = 'left'
+      }
+
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+      ctx.fillText(labels[i], 0, 0)
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(-labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
     }
+  } else {
+    const tickValues = [
+      ...range(minValue, maxValue, Math.abs(maxValue - minValue) / lineCount),
+      maxValue,
+    ]
 
-    ctx.rotate(startDegree)
-    ctx.rotate(i * arcIncrement)
-    ctx.translate(labelRadius, 0)
-    ctx.rotate(i * -arcIncrement)
-    ctx.rotate(-startDegree)
-    ctx.fillText(labels[i], 0, 0)
-    ctx.rotate(startDegree)
-    ctx.rotate(i * arcIncrement)
-    ctx.translate(-labelRadius, 0)
-    ctx.rotate(i * -arcIncrement)
-    ctx.rotate(-startDegree)
+    const labels = tickValues.map(tick =>
+      formatStatValue(tick, {
+        decimalPlaces,
+        prefix: tickPrefix,
+        suffix: tickSuffix,
+      })
+    )
+
+    for (let i = 0; i <= lineCount; i++) {
+      labelRadius = radius + gradientThickness + 23
+      if (lineCount === 1 && i === 1) {
+        ctx.textAlign = 'left'
+      } else if (lineCount % 2 === 0 && lineCount / i === 2) {
+        ctx.textAlign = 'center'
+      } else if (i / (lineCount + 1) >= 0.5) {
+        ctx.textAlign = 'left'
+      }
+
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+      ctx.fillText(labels[i], 0, 0)
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(-labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+    }
   }
 }
 
@@ -377,6 +410,7 @@ const drawNeedle = (
   radius: number,
   minValue: number,
   maxValue: number,
+  gaugeUnit: string[],
   props: Props
 ): void => {
   const {gaugePosition, gaugeSize, decimalPlaces} = props
@@ -394,6 +428,9 @@ const drawNeedle = (
   digits = Math.min(digits, MAX_DECIMAL_PLACES)
 
   const formattedGaugePosition = Number(gaugePosition.toFixed(digits))
+  if (gaugeUnit.toString() === 'bytes') {
+    maxValue = 5120
+  }
 
   if (formattedGaugePosition < minValue) {
     needleRotation = 0 - overflowDelta
