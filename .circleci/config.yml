@@ -25,20 +25,9 @@ jobs:
       - run: 
           name: chromatic
           command: |
-            cd stories
             if [ "${CIRCLE_BRANCH}" != "master" ];
             then
-              yarn run chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
+              yarn run --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
             else \
-              yarn run chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
+              yarn run --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
             fi
-
-  chromatic-deployment: 
-    docker:
-      - image: circleci/node:14
-    working_directory: ~/repo
-    steps:
-      - checkout
-      # todo cache
-      - run: yarn install
-
