@@ -11,8 +11,8 @@
     "storybook": "start-storybook -p 50000",
     "build-storybook": "build-storybook",
     "publish": "storybook-to-ghpages --out=.out",
-    "chromatic": "chromatic test --project-token=e18a79908506 --allow-console-errors",
-    "chromatic:build": "chromatic --project-token=e18a79908506"
+    "chromatic": "chromatic test --allow-console-errors",
+    "chromatic:build": "chromatic"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
