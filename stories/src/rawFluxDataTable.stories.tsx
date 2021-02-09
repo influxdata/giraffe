@@ -1,3 +1,7 @@
+// commented for chromatic testing purposes
+export default {}
+/*
+
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, text, boolean} from '@storybook/addon-knobs'
@@ -46,3 +50,5 @@ storiesOf('Raw Flux Data Table', module)
       </PlotContainer>
     )
   })
+
+*/

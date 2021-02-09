@@ -1,3 +1,7 @@
+// commented for chromatic testing purposes
+export default {}
+/*
+
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {
@@ -246,3 +250,5 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
+
+*/

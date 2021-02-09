@@ -1,3 +1,7 @@
+// commented for chromatic testing purposes
+export default {}
+/*
+
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
@@ -295,3 +299,5 @@ storiesOf('Line Graph', module)
       </PlotContainer>
     )
   })
+
+*/

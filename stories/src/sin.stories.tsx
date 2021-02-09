@@ -1,3 +1,7 @@
+// commented for chromatic testing purposes
+export default {}
+/*
+
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 
@@ -25,3 +29,5 @@ storiesOf('Line Plot Stress Test', module).add('Line', () => {
     </PlotContainer>
   )
 })
+
+*/

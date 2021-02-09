@@ -22,15 +22,22 @@ jobs:
       - run: cd stories && yarn run typecheck
       - store_artifacts:
           path: giraffe/coverage
-      # See: https://github.com/influxdata/giraffe/issues/129
-      # - run:
-      #     name: chromatic
-      #     command: |
-      #       cd stories
-      #       # See https://docs.chromaticqa.com/setup_ci
-      #       if [ "${CIRCLE_BRANCH}" != "master" ];
-      #       then
-      #         yarn run chromatic
-      #       else \
-      #         yarn run chromatic -- --auto-accept-changes
-      #       fi
+
+  chromatic-deployment: 
+    docker:
+      - image: circleci/node:12
+    working_directory: ~/repo
+    steps:
+      - checkout
+      # todo cache
+      - run: yarn install
+      - run: 
+          name: chromatic
+          command: |
+            cd stories
+            if [ "${CIRCLE_BRANCH}" != "master" ];
+            then
+              yarn run chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
+            else \
+              yarn run chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
+            fi
