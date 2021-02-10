@@ -14,21 +14,20 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
-      # - run: yarn --cwd giraffe lint
-      # - run: yarn --cwd giraffe typecheck
-      # - run: yarn --cwd giraffe test --collectCoverage
-      # - run: yarn --cwd giraffe build
-      # - run: yarn --cwd stories lint
-      # - run: yarn --cwd stories typecheck
-      # - store_artifacts:
-      #     path: giraffe/coverage
-      - run: yarn --cwd stories build-storybook
+      - run: yarn --cwd giraffe lint
+      - run: yarn --cwd giraffe typecheck
+      - run: yarn --cwd giraffe test --collectCoverage
+      - run: yarn --cwd giraffe build
+      - run: yarn --cwd stories lint
+      - run: yarn --cwd stories typecheck
+      - store_artifacts:
+          path: giraffe/coverage
       - run: 
           name: chromatic
           command: |
             if [ "${CIRCLE_BRANCH}" != "master" ];
             then
-              yarn --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
+              yarn --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --exit-zero-on-changes
             else \
               yarn --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
             fi
