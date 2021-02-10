@@ -551,6 +551,7 @@ export interface MosaicLayerSpec {
   xColumnKey: string
   xColumnType: ColumnType
   yColumnType: ColumnType
+  yColumnsName: string
   scales: {fill: Scale<number, string>}
   columnGroupMaps: {
     fill: ColumnGroupMap

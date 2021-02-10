@@ -27,7 +27,13 @@ export const mosaicTransform = (
   if (labelColumns.length === 0 && Array.isArray(yColumnKeys)) {
     labelColumns = yColumnKeys
   }
-
+  const yColumnsName = labelColumns.reduce(
+    (combinedName, columnName) =>
+      combinedName
+        ? `${combinedName}${yLabelColumnSeparator}${columnName}`
+        : columnName,
+    ''
+  )
   const yInputCols = {}
   if (Array.isArray(yColumnKeys)) {
     yColumnKeys.forEach(columnKey => {
@@ -49,7 +55,7 @@ export const mosaicTransform = (
           if (yInputCols[key]) {
             value = yInputCols[key][i]
           }
-          return combinedValue + value
+          return `${combinedValue}${value}`
         }, '')
       : ''
 
@@ -151,7 +157,6 @@ export const mosaicTransform = (
         1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
         1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
   */
-  // const table = newTable(tableLength)
   const table = newTable(tableLength)
     .addColumn(X_MIN, 'system', 'number', xMinData)
     .addColumn(X_MAX, 'system', 'number', xMaxData)
@@ -172,6 +177,7 @@ export const mosaicTransform = (
     xColumnType: inputTable.getColumnType(xColumnKey),
     yDomain: resolvedYDomain,
     yColumnType: 'string',
+    yColumnsName,
     ySeries,
     yTicks,
     scales: {fill: fillScale},
