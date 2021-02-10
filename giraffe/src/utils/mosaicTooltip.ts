@@ -113,8 +113,8 @@ export const getMosaicTooltipData = (
 
   const yTooltipColumn: TooltipColumn = {
     key: yColKey,
-    name: inputTable.getColumnName(yColKey),
-    type: inputTable.getColumnType(yColKey),
+    name: yColKey,
+    type: 'string',
     colors,
     values: hoveredBoxRows.map(i => yFormatter(yCol[i])),
   }
