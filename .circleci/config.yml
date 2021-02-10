@@ -54,6 +54,7 @@ jobs:
             - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: 
           name: chromatic
+          # all changes inside master will be automatically accepted as baseline, only other branches will be required for acceptance
           command: |
             if [ "${CIRCLE_BRANCH}" != "master" ];
             then
