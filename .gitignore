@@ -9,3 +9,4 @@ dist
 .vscode
 coverage
 /stories/storybook-static
+build-storybook.log

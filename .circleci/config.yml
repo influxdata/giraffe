@@ -22,6 +22,7 @@ jobs:
       # - run: yarn --cwd stories typecheck
       # - store_artifacts:
       #     path: giraffe/coverage
+      - run: yarn --cwd stories build-storybook
       - run: 
           name: chromatic
           command: |
