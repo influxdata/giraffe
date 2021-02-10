@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  install:
     docker:
       - image: circleci/node:lts
     working_directory: ~/repo
@@ -14,14 +14,44 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
-      - run: yarn --cwd giraffe lint
-      - run: yarn --cwd giraffe typecheck
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
+  test:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn --cwd giraffe test --collectCoverage
       - run: yarn --cwd giraffe build
+      - store_artifacts:
+          path: giraffe/coverage
+  lint:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn --cwd giraffe lint
+      - run: yarn --cwd giraffe typecheck
       - run: yarn --cwd stories lint
       - run: yarn --cwd stories typecheck
       - store_artifacts:
           path: giraffe/coverage
+  chromatic:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/repo
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: 
           name: chromatic
           command: |
@@ -31,3 +61,18 @@ jobs:
             else \
               yarn --cwd stories chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
             fi
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - chromatic:
+          requires:
+            - install
