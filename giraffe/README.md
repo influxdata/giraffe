@@ -390,7 +390,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendCrosshairColor**: _string | Object. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column key names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
+- **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
 
 - **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the legend (tooltip). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
 
@@ -412,11 +412,11 @@ Giraffe comes with utility functions.
 
   - **type**: _"line". **Required**._ Specifies that this LayerConfig and `<Plot>` is a line graph.
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column name of the column that should be visualized on the y-axis.
 
-  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+  - **fill**: _array[string, ...]. Optional._ An array of column names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
   - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
 
@@ -433,7 +433,7 @@ Giraffe comes with utility functions.
 
   - **lineWidth**: _number. Optional._ The [CanvasRenderingContext2D lineWidth](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of each graph line.
 
-  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
 
   - **shadeBelow**: _boolean. Optional._ Uses **colors**. Indicates whether the area below each line should be shaded.
 
@@ -443,11 +443,11 @@ Giraffe comes with utility functions.
 
   - **type**: _"band". **Required**._ Specifies that this LayerConfig and `<Plot>` is a band chart.
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column name of the column that should be visualized on the y-axis.
 
-  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized.
+  - **fill**: _array[string, ...]. **Required**._ An array of column names of column filters that should be visualized.
 
   - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
 
@@ -462,7 +462,7 @@ Giraffe comes with utility functions.
 
   - **lineWidth**: _number. Optional._ The [CanvasRenderingContext2D lineWidth](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the middle part of each band as identified by the **name** option.
 
-  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give multiple lines in the graph different colors based on the **fill** columns.
 
   - **lineOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the middle part of each band as identified by the **name** option.
 
@@ -478,49 +478,83 @@ Giraffe comes with utility functions.
 
   - **type**: _"scatter". **Required**._ Specifies that this LayerConfig and `<Plot>` is a scatter plot.
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column name of the column that should be visualized on the y-axis.
 
-  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+  - **fill**: _array[string, ...]. Optional._ An array of column names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
-  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give dots in the graph different colors based on the **fill** columns.
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give dots in the graph different colors based on the **fill** columns.
 
   - **symbol**: _array[string, ...]. Optional._ An array of columm key names of column filters that should be visualized. Acts like a secondary **fill** using different symbols for the dots rather than **colors**. Limited to 6 different symbols. Symbols will repeat above limit.
 
-* **HistogramLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
+- **HistogramLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
   - **type**: _"histogram". **Required**._ Specifies that this LayerConfig and `<Plot>` is a [histogram](https://en.wikipedia.org/wiki/Histogram).
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis. Note: the y-axis is always the count.
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis. Note: the y-axis is always the count.
 
   - **binCount**: _number. Optional. Defaults to using [Sturges' Formula](https://en.wikipedia.org/wiki/Histogram#Sturges) when not included._ The number of buckets or bins on the x-axis. The range of values that fall into each bin depends on the scale and domain of the x-axis.
 
-  - **fill**: _array[string, ...]. Optional._ An array of column key names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
+  - **fill**: _array[string, ...]. Optional._ An array of column names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
   - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the fill columns of different colors for the same bin should cover each other ("overlaid") or be "stacked" upon each other touching only at the borders. When "overlaid" the covering order follows the same order as found in each column of the data, with the lower indexed values covered by the higher indexed values.
 
-  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as a gradient to give bars in each bin different colors based on the **fill** columns.
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give bars in each bin different colors based on the **fill** columns.
 
   - **fillOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shading inside the bins.
 
   - **strokeOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0.
 
+  - **strokePadding**: _number. Optional._ The space around all four sides of each bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
   - **strokeWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the border of the bins. This is very hard to observe with human eyes unless the **fillOpacity** is near 0. A high value for **strokeWidth** will completely fill the bin with border color at an opacity indicated by **strokeOpacity**.
 
-  - **strokePadding**: _number. Optional._ The space around all four sides of each fill column or bin. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
+- **MosaicLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"mosaic". **Required**._ Specifies that this LayerConfig and `<Plot>` is a mosaic.
+
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis. Note: in the current implementation, this is always _\_time_.
+
+  - **y**: _array[string, ...]. **Required**._ An array of column names that groups (or filters) data for the y-axis to visualize against a state or status (**fill**, see below).
+
+  - **yLabelColumns**: _array[string, ...] **Required**._ An array of column names that are used for labeling each tick in the y-axis and the header inside the legend. This allows the y-axis labels and legend header to be less verbose than naming all of the columns that used for **y**. **Does not affect data grouping**. This property is a [_subset_](https://en.wikipedia.org/wiki/Subset) of **y** (see above). Any elements in **yLabelColumns** that do not appear in **y** are ignored. 
+
+  - **yLabelColumnSeparator**: _string. Optional. Defaults to empty string (no separator) when not included._ A string given to the [_CanvasRenderingContext2D.fillText_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText) function to use as a separator between the column names of the data for the y-axis.
+
+  - **fill**: _array[string]. **Required**._ An array with a single column name that is the state or status being visualized. This property is an array with a single element in order to remain consistent with other LayerConfigs where **fill** is always an array.
+
+  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+
+    - "x" means the legend will display all data points along the y-axis that have the same x-axis value
+    - "y" means the legend will display all data points along the x-axis that have the same y-axis value
+    - "xy" means the legend will display for a single data point nearest the mouse
+    - "auto" means "xy"
+
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give each mosaic piece in a row (y-axis tick) different colors based on the **fill** column value.
+
+  - **fillOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shading inside the mosaic pieces.
+
+  - **strokeOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the border of the mosaic pieces. This is very hard to observe with human eyes unless the **fillOpacity** is near 0.
+
+  - **strokePadding**: _number. Optional._ The space around all four sides of each mosaic piece. The amount of spacing is the _width_ and _height_ used in the [_CanvasRenderingContext2D rect_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) function.
+
+  - **strokeWidth**: _number. Optional._ The [_CanvasRenderingContext2D lineWidth_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth) of the border of the mosaic pieces. This is very hard to observe with human eyes unless the **fillOpacity** is near 0. A high value for **strokeWidth** will completely fill the mosaic piece with border color at an opacity indicated by **strokeOpacity**.
+
+
 
 - **HeatmapLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
   - **type**: _"heatmap". **Required**._ Specifies that this LayerConfig and `<Plot>` is a heatmap.
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis.
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis.
 
-  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis.
+  - **y**: _string. **Required**._ The column name of the column that should be visualized on the y-axis.
 
   - **binSize**: _number. Optional._ The _CSS px_ size of each heat bin. [config's width](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the x-axis. [config's height](#appearance-properties) divided by **binSize** will determine the total number of heat bins along the y-axis.
 
-  - **colors**: _array[string, ...]. Optional._ An array of _CSS color values_ used as the color scheme in the heatmap. The color in index 0 is used to represent the "cold" area or background of the heatmap. The higher the index, the "hotter" the color will represent on the heatmap.
+  - **colors**: _array[string, ...]. Optional._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as the color scheme in the heatmap. The color in index 0 is used to represent the "cold" area or background of the heatmap. The higher the index, the "hotter" the color will represent on the heatmap.
 
   - **fillOpacity**: _number. Optional._ A value between 0 and 1 inclusive for the [_CanvasRenderingContext2D globalAlpha_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha) of the shading inside the heat bins. Warning: low opacity is difficult to see visually and may be counterproductive for heatmaps.
 
@@ -566,7 +600,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
 - **properties**: _Object. **Required**._ An object specifying additional options for the table graph. The properties are:
 
-  - **colors**: _array[string, ...]. **Required**._ An array of _CSS color values_ used as a gradient to give rows in the table different colors based on their value. Low values will use colors in the lower indexes while higher values will use colors in the higher indexes.
+  - **colors**: _array[string, ...]. **Required**._ An array of [_CSS color values_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) used as a gradient to give rows in the table different colors based on their value. Low values will use colors in the lower indexes while higher values will use colors in the higher indexes.
 
   - **tableOptions**: _Object. **Required**._ Customizations for the table.
 
@@ -715,11 +749,11 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **type**: _'annotation'. **Required**._ Specifies that this LayerConfig is an annotation layer.
 
-  - **x**: _string. **Required**._ The column key name of the column that should be visualized on the x-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column key name is from that data set. This should match the overlaid graph's same property._
+  - **x**: _string. **Required**._ The column name of the column that should be visualized on the x-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column name is from that data set. This should match the overlaid graph's same property._
 
-  - **y**: _string. **Required**._ The column key name of the column that should be visualized on the y-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column key name is from that data set. This should match the overlaid graph's same property._
+  - **y**: _string. **Required**._ The column name of the column that should be visualized on the y-axis. _Annotations must overlay another data set, ie another graph. Therefore, this column name is from that data set. This should match the overlaid graph's same property._
 
-  - **fill**: _array[string, ...]. **Required**._ An array of column key names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, these column key names are from that data set. This should match the overlaid graph's same property. If the "fill" is not required in the overlaid graph, please explicitly use the overlaid graph's implicit value in AnnotationLayerConfig._
+  - **fill**: _array[string, ...]. **Required**._ An array of columy names of column filters that should be visualized. _Annotations must overlay another data set, ie another graph. Therefore, these column names are from that data set. This should match the overlaid graph's same property. If the "fill" is not required in the overlaid graph, please explicitly use the overlaid graph's implicit value in AnnotationLayerConfig._
 
   - **annotations**: _array[Object, ...]. **Required**._ An array of objects that are the annotations. The array can be empty (no annotations rendered). Each object is an annotation and has the following properties:
 
@@ -775,4 +809,4 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
     - **innerHeight**: _number._ The **height** (see above) without the size of the area below the x-axis.
 
-    - **columnFormatter**: _function(string)._ A function that takes a column key and returns a function that can format values for that type of column. When **columnFormatter** is called with "\_time", it returns a function that takes ECMAScript time values and returns the human-readable time stamp for that value.
+    - **columnFormatter**: _function(string)._ A function that takes a column name and returns a function that can format values for that type of column. When **columnFormatter** is called with "\_time", it returns a function that takes ECMAScript time values and returns the human-readable time stamp for that value.
