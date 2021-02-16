@@ -8,6 +8,8 @@ import {
 } from '../types'
 import {CANDLESTICK_THEME_DARK} from '../constants/candlestickStyles'
 import {OHLCResultEntry} from '../utils/ohlc'
+import {useHoverPointIndices} from '../utils/useHoverPointIndices'
+import {CandlestickHoverLayer} from './CandlestickHoverLayer'
 
 interface CandleValue {
   open: number
@@ -16,7 +18,7 @@ interface CandleValue {
   low: number
 }
 
-interface CandleProps {
+export interface CandleProps {
   theme: CandlestickLayerConfig
   candle: CandleValue
   /** width of candle */
@@ -138,9 +140,20 @@ export interface Props extends LayerProps {
   spec: CandlestickLayerSpec
 }
 
+export type CandlestickLayerProps = Props
+
 //todo: only proxies props into Candlestick ? if true -> candlestick should be implemented here
 export const CandlestickLayer: FunctionComponent<Props> = props => {
-  const {config: _theme, width, height, spec, xScale, yScale} = props
+  const {
+    config: _theme,
+    width,
+    height,
+    spec,
+    xScale,
+    yScale,
+    hoverX,
+    hoverY,
+  } = props
   // todo default values already present in _theme ?
   const theme: CandlestickLayerConfig = {
     ...CANDLESTICK_THEME_DARK,
@@ -196,6 +209,7 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
           </>
         ))}
       </svg>
+      <CandlestickHoverLayer {...props} />
     </>
   )
 }

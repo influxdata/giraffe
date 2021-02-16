@@ -47,15 +47,20 @@ export const candlestickTransform = (
   // xMax is window start but we want to show whole window
   xMax += window
 
-  const res = {
+  const yColumnKey = openColumnKey
+
+  const res: CandlestickLayerSpec = {
     type: 'candlestick',
     inputTable,
+    table: inputTable,
     values,
     calculatedWindow: window,
     xDomain: [xMin, xMax],
     yDomain: [yMin, yMax],
     xColumnKey,
     xColumnType: inputTable.getColumnType(xColumnKey),
-  } as CandlestickLayerSpec
-  return res as any
+    yColumnKey,
+    yColumnType: inputTable.getColumnType(yColumnKey),
+  }
+  return res
 }

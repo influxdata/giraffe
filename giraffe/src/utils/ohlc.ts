@@ -1,10 +1,5 @@
 import {pairs} from 'd3-array'
-import {
-  CandlestickLayerConfig,
-  NumericColumnData,
-  OHLCValue,
-  Table,
-} from '../types'
+import {NumericColumnData, OHLCValue, Table} from '../types'
 import {Sorting} from './array'
 
 const {ascending} = Sorting
