@@ -8,8 +8,10 @@ import {
 } from '../types'
 import {CANDLESTICK_THEME_DARK} from '../constants/candlestickStyles'
 import {OHLCResultEntry} from '../utils/ohlc'
-import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {CandlestickHoverLayer} from './CandlestickHoverLayer'
+import {
+  candlestickGetHoveredValueEntry,
+  CandlestickHoverTooltipLayer,
+} from './CandlestickHoverTooltipLayer'
 
 interface CandleValue {
   open: number
@@ -24,7 +26,9 @@ export interface CandleProps {
   /** width of candle */
   width: number
   /** returns height position from value */
+  // todo: use yScale
   heightPositionFormatter: (value: number) => number
+  hovered: boolean
 }
 
 const Candle: React.FC<CandleProps> = ({
@@ -32,6 +36,7 @@ const Candle: React.FC<CandleProps> = ({
   theme,
   candle,
   width,
+  hovered,
 }) => {
   const {close, high, low, open}: CandleValue = {
     close: heightPositionFormatter(candle.close),
@@ -42,6 +47,13 @@ const Candle: React.FC<CandleProps> = ({
 
   const isRaise = open >= close
 
+  const style = {
+    ...theme[isRaise ? 'candleRaising' : 'candleDecreasing'],
+    ...(hovered
+      ? theme[isRaise ? 'candleRaisingHover' : 'candleDecreasingHover']
+      : {}),
+  }
+
   const {
     bodyColor,
     bodyFillOpacity,
@@ -49,7 +61,7 @@ const Candle: React.FC<CandleProps> = ({
     bodyStrokeWidth,
     shadowColor,
     shadowStrokeWidth,
-  }: CandleStyle = theme[isRaise ? 'candleRaising' : 'candleDecreasing']
+  }: CandleStyle = style
 
   const height = Math.abs(open - close)
   const y = Math.min(open, close)
@@ -144,16 +156,7 @@ export type CandlestickLayerProps = Props
 
 //todo: only proxies props into Candlestick ? if true -> candlestick should be implemented here
 export const CandlestickLayer: FunctionComponent<Props> = props => {
-  const {
-    config: _theme,
-    width,
-    height,
-    spec,
-    xScale,
-    yScale,
-    hoverX,
-    hoverY,
-  } = props
+  const {config: _theme, width, height, spec, xScale, yScale} = props
   // todo default values already present in _theme ?
   const theme: CandlestickLayerConfig = {
     ...CANDLESTICK_THEME_DARK,
@@ -188,6 +191,8 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
     )
   }
 
+  const hoveredValue = candlestickGetHoveredValueEntry(props)
+
   return (
     <>
       <svg
@@ -203,13 +208,18 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
             >
               <Candle
                 width={candleWidth}
-                {...{heightPositionFormatter, candle, theme}}
+                {...{
+                  heightPositionFormatter,
+                  candle,
+                  theme,
+                  hovered: hoveredValue?.windowStart === windowStart,
+                }}
               />
             </g>
           </>
         ))}
       </svg>
-      <CandlestickHoverLayer {...props} />
+      <CandlestickHoverTooltipLayer {...props} />
     </>
   )
 }

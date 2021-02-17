@@ -267,7 +267,9 @@ export interface CandlestickLayerConfig {
 
   candlePadding: number
   candleRaising: CandleStyle
+  candleRaisingHover: Partial<CandleStyle>
   candleDecreasing: CandleStyle
+  candleDecreasingHover: Partial<CandleStyle>
 
   xColumnKey?: string
   openColumnKey?: string

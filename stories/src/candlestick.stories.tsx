@@ -65,7 +65,8 @@ const editableLayer = (theme: Theme): Theme => ({
       theme.candleRaising.shadowStrokeWidth
     ),
   },
-
+  // todo:
+  candleRaisingHover: theme.candleRaisingHover,
   candleDecreasing: {
     bodyColor: color(
       'candleDecreasing - bodyColor',
@@ -92,6 +93,8 @@ const editableLayer = (theme: Theme): Theme => ({
       theme.candleDecreasing.shadowStrokeWidth
     ),
   },
+  // todo:
+  candleDecreasingHover: theme.candleDecreasingHover,
   xColumnKey: text('xColumn', theme.xColumnKey),
   openColumnKey: text('openColumnKey', theme.openColumnKey),
   highColumnKey: text('highColumnKey', theme.highColumnKey),

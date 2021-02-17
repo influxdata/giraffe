@@ -24,6 +24,11 @@ export const CANDLESTICK_THEME_DARK: Required<CandlestickLayerConfig> = {
     shadowColor: InfluxColors.Krypton,
     shadowStrokeWidth: 2,
   },
+  candleRaisingHover: {
+    bodyFillOpacity: 0.9,
+    bodyStrokeWidth: 6,
+    shadowStrokeWidth: 6,
+  },
   candleDecreasing: {
     bodyColor: InfluxColors.Curacao,
     bodyFillOpacity: 0,
@@ -31,5 +36,10 @@ export const CANDLESTICK_THEME_DARK: Required<CandlestickLayerConfig> = {
     bodyStrokeWidth: 2,
     shadowColor: InfluxColors.Curacao,
     shadowStrokeWidth: 2,
+  },
+  candleDecreasingHover: {
+    bodyFillOpacity: 0.3,
+    bodyStrokeWidth: 6,
+    shadowStrokeWidth: 6,
   },
 }
