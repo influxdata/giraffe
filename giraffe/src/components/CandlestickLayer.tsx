@@ -203,8 +203,8 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
         {values.filter(isCandleVisible).map(({windowStart, value: candle}) => (
           <>
             <g
-              transform={`translate(${getXSVGCoords(windowStart) -
-                candleWidth / 2},0)`}
+              transform={`translate(${getXSVGCoords(windowStart) +
+                candlePadding / 2},0)`}
             >
               <Candle
                 width={candleWidth}

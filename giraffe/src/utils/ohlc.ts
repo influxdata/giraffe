@@ -45,7 +45,7 @@ export const getOhlcValues = (
   } = {}
   for (let i = 0; i < table.length; i++) {
     const x = xCol[i]
-    const xKey = Math.round(x / window) * window
+    const xKey = Math.floor(x / window) * window
 
     const targetArray = obj[xKey]
     if (targetArray) {
@@ -60,7 +60,7 @@ export const getOhlcValues = (
   const lowCol = table.getColumn(lowColumnKey, 'number')
   const closeCol = table.getColumn(closeColumnKey, 'number')
 
-  return Object.entries(obj)
+  const values = Object.entries(obj)
     .map(([a, b]) => [+a, b] as const)
     .map(([windowStart, entriesTableIndexes]) => {
       let close = 0
@@ -106,8 +106,9 @@ export const getOhlcValues = (
           low,
           close,
         },
-      }
+      } as OHLCResultEntry
     })
+  return values
 }
 
 export const calculateWindow = (

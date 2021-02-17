@@ -37,7 +37,8 @@ const getCandlestickHoveredValue = (
   } = props
 
   const xIndex =
-    Math.round(xScale.invert(hoverX) / calculatedWindow) * calculatedWindow
+    Math.round(xScale.invert(hoverX) / calculatedWindow - 0.5) *
+    calculatedWindow
 
   return values.find(x => x.windowStart === xIndex)
 }
