@@ -265,11 +265,11 @@ export interface CandlestickLayerConfig {
   /** Defines which columns choose as unique bar indentificator. Also bar labels can be defined here. */
   mode?: 'candles' | 'fence'
 
-  candlePadding: number
-  candleRaising: CandleStyle
-  candleRaisingHover: Partial<CandleStyle>
-  candleDecreasing: CandleStyle
-  candleDecreasingHover: Partial<CandleStyle>
+  candlePadding?: number
+  candleRaising?: CandleStyle
+  candleRaisingHover?: Partial<CandleStyle>
+  candleDecreasing?: CandleStyle
+  candleDecreasingHover?: Partial<CandleStyle>
 
   xColumnKey?: string
   openColumnKey?: string

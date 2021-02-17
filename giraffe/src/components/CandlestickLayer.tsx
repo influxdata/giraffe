@@ -5,8 +5,8 @@ import {
   CandlestickLayerSpec,
   CandleStyle,
   LayerProps,
+  Scale,
 } from '../types'
-import {CANDLESTICK_THEME_DARK} from '../constants/candlestickStyles'
 import {OHLCResultEntry} from '../utils/ohlc'
 import {
   candlestickGetHoveredValueEntry,
@@ -21,36 +21,35 @@ interface CandleValue {
 }
 
 export interface CandleProps {
-  theme: CandlestickLayerConfig
+  config: CandlestickLayerConfig
   candle: CandleValue
   /** width of candle */
   width: number
   /** returns height position from value */
-  // todo: use yScale
-  heightPositionFormatter: (value: number) => number
+  yScale: Scale<number, number>
   hovered: boolean
 }
 
 const Candle: React.FC<CandleProps> = ({
-  heightPositionFormatter,
-  theme,
+  config,
   candle,
+  yScale,
   width,
   hovered,
 }) => {
   const {close, high, low, open}: CandleValue = {
-    close: heightPositionFormatter(candle.close),
-    high: heightPositionFormatter(candle.high),
-    low: heightPositionFormatter(candle.low),
-    open: heightPositionFormatter(candle.open),
+    close: yScale(candle.close),
+    high: yScale(candle.high),
+    low: yScale(candle.low),
+    open: yScale(candle.open),
   }
 
   const isRaise = open >= close
 
   const style = {
-    ...theme[isRaise ? 'candleRaising' : 'candleDecreasing'],
+    ...config[isRaise ? 'candleRaising' : 'candleDecreasing'],
     ...(hovered
-      ? theme[isRaise ? 'candleRaisingHover' : 'candleDecreasingHover']
+      ? config[isRaise ? 'candleRaisingHover' : 'candleDecreasingHover']
       : {}),
   }
 
@@ -69,7 +68,7 @@ const Candle: React.FC<CandleProps> = ({
   const centerY = width / 2
 
   const body =
-    theme.mode === 'candles' ? (
+    config.mode === 'candles' ? (
       <rect
         width={width}
         {...{y, height}}
@@ -156,31 +155,26 @@ export type CandlestickLayerProps = Props
 
 //todo: only proxies props into Candlestick ? if true -> candlestick should be implemented here
 export const CandlestickLayer: FunctionComponent<Props> = props => {
-  const {config: _theme, width, height, spec, xScale, yScale} = props
-  // todo default values already present in _theme ?
-  const theme: CandlestickLayerConfig = {
-    ...CANDLESTICK_THEME_DARK,
-    ..._theme,
-  }
-
-  const {candlePadding} = theme
+  const {
+    config: {candlePadding},
+    config,
+    width,
+    height,
+    spec,
+    xScale,
+    yScale,
+  } = props
 
   const {values, calculatedWindow} = spec
-
-  // todo: naming
-  const getXSVGCoords = xScale
-  const heightPositionFormatter: CandleProps['heightPositionFormatter'] = yScale
 
   const candleWidth =
     Math.round(Math.abs((xScale(0) - xScale(calculatedWindow)) * 100)) / 100 -
     candlePadding
-  // todo: style
-  // const maxHeight = minHeight + hegihtRange
 
   const isCandleVisible = (candle: OHLCResultEntry) => {
-    const x = getXSVGCoords(candle.windowStart)
-    const yMin = heightPositionFormatter(candle.yRange[0])
-    const yMax = heightPositionFormatter(candle.yRange[1])
+    const x = xScale(candle.windowStart)
+    const yMin = yScale(candle.yRange[0])
+    const yMax = yScale(candle.yRange[1])
 
     return (
       x >= -candleWidth &&
@@ -203,15 +197,15 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
         {values.filter(isCandleVisible).map(({windowStart, value: candle}) => (
           <>
             <g
-              transform={`translate(${getXSVGCoords(windowStart) +
+              transform={`translate(${xScale(windowStart) +
                 candlePadding / 2},0)`}
             >
               <Candle
                 width={candleWidth}
                 {...{
-                  heightPositionFormatter,
+                  yScale,
                   candle,
-                  theme,
+                  config,
                   hovered: hoveredValue?.windowStart === windowStart,
                 }}
               />
