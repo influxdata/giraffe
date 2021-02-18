@@ -25,7 +25,6 @@ export interface CandleProps {
   candle: CandleValue
   /** width of candle */
   width: number
-  /** returns height position from value */
   yScale: Scale<number, number>
   hovered: boolean
 }
@@ -153,7 +152,6 @@ export interface Props extends LayerProps {
 
 export type CandlestickLayerProps = Props
 
-//todo: only proxies props into Candlestick ? if true -> candlestick should be implemented here
 export const CandlestickLayer: FunctionComponent<Props> = props => {
   const {
     config: {candlePadding},
@@ -173,15 +171,15 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
 
   const isCandleVisible = (candle: OHLCResultEntry) => {
     const x = xScale(candle.windowStart)
-    const yMin = yScale(candle.yRange[0])
-    const yMax = yScale(candle.yRange[1])
+    // svg has inversed y drawing so lower value has higher svg coords
+    const yMax = yScale(candle.yRange[0])
+    const yMin = yScale(candle.yRange[1])
 
     return (
       x >= -candleWidth &&
       x <= width + candleWidth &&
-      // svg has inversed y drawing so lower value has higher svg coords
-      yMax <= height &&
-      yMin >= 0
+      yMin <= height &&
+      yMax >= 0
     )
   }
 
