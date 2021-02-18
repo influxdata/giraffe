@@ -45,7 +45,9 @@ const getCandlestickHoveredValue = (
 
 export const candlestickGetHoveredValueEntry = getCandlestickHoveredValue
 
-export const CandlestickHoverTooltipLayer: FunctionComponent<CandlestickLayerProps> = props => {
+export const CandlestickHoverTooltipLayer: FunctionComponent<CandlestickLayerProps & {
+  value: OHLCResultEntry
+}> = props => {
   const {
     plotConfig,
     spec: {table},
@@ -57,13 +59,8 @@ export const CandlestickHoverTooltipLayer: FunctionComponent<CandlestickLayerPro
       closeColumnKey,
     },
     columnFormatter,
+    value,
   } = props
-
-  const value = getCandlestickHoveredValue(props)
-
-  if (!value) {
-    return null
-  }
 
   const allKeys = [
     xColumnKey,

@@ -213,7 +213,9 @@ export const CandlestickLayer: FunctionComponent<Props> = props => {
           </>
         ))}
       </svg>
-      <CandlestickHoverTooltipLayer {...props} />
+      {hoveredValue && (
+        <CandlestickHoverTooltipLayer {...props} value={hoveredValue} />
+      )}
     </>
   )
 }
