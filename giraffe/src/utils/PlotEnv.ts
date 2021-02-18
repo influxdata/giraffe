@@ -500,11 +500,9 @@ export class PlotEnv {
 const applyLayerDefaults = (
   layers: SizedConfig['layers']
 ): SizedConfig['layers'] =>
-  layers.map(layer =>
-    LAYER_DEFAULTS[layer.type]
-      ? {...LAYER_DEFAULTS[layer.type], ...layer}
-      : // todo: what is happening here ? (candlestick broke types)
-        (layer as any)
+  layers.map(
+    layer =>
+      ({...LAYER_DEFAULTS[layer.type], ...layer} as SizedConfig['layers'][0])
   )
 
 const mergeConfigs = (

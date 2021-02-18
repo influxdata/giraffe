@@ -56,7 +56,9 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendColorizeRows: true,
 }
 
-export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
+export const LAYER_DEFAULTS: {
+  [layerType in LayerConfig['type']]?: Partial<LayerConfig>
+} = {
   line: {
     lineWidth: 1,
     hoverDimension: 'auto',
