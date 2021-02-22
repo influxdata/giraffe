@@ -5,28 +5,14 @@ export const candlestickTransform = (
   inputTable: Table,
   layerConfig: Required<CandlestickLayerConfig>
 ): CandlestickLayerSpec => {
-  const {
-    xColumnKey,
-    openColumnKey,
-    highColumnKey,
-    lowColumnKey,
-    closeColumnKey,
-  } = layerConfig
-
-  const columns = {
-    xColumnKey,
-    openColumnKey,
-    highColumnKey,
-    lowColumnKey,
-    closeColumnKey,
-  }
+  const {xColumnKey, openColumnKey} = layerConfig
 
   const xCol = inputTable.getColumn(xColumnKey, 'number')
 
   // distence between two values
   const window = calculateWindow(layerConfig.window, xCol)
 
-  const values = getOhlcValues(inputTable, columns, window)
+  const values = getOhlcValues(inputTable, layerConfig, window)
 
   let xMin = values[0].windowStart
   let xMax = values[0].windowStart

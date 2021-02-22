@@ -69,7 +69,7 @@ const Candle: React.FC<CandleProps> = ({
   const body =
     config.mode === 'candles' ? (
       <rect
-        width={width}
+        width={Math.max(width, 0.01)}
         {...{y, height}}
         fill={bodyColor}
         stroke={bodyColor}
