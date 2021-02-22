@@ -278,8 +278,6 @@ export interface CandlestickLayerConfig {
   highColumnKey?: string
 
   window?: number | 'detect'
-  windowMax?: number
-  windowMergeStrategy?: 'caping' | 'halving'
 }
 
 export interface GaugeLayerConfig {

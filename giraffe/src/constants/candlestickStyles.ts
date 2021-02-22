@@ -11,8 +11,6 @@ export const CANDLESTICK_THEME_DARK: Required<CandlestickLayerConfig> = {
   closeColumnKey: 'close',
 
   window: 'detect',
-  windowMax: 100,
-  windowMergeStrategy: 'caping',
 
   candlePadding: 10,
 
