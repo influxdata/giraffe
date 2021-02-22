@@ -149,10 +149,13 @@ const createStory = (theme: Theme, csv: string) => () => {
 
 storiesOf('Candlestick', module)
   .addDecorator(withKnobs)
-  // todo: candlestick fences
   .add(
     'Candlestick simple',
     createStory(CANDLESTICK_THEME_DARK, ohlcCsvSample1)
+  )
+  .add(
+    'Candlestick simple fence',
+    createStory({...CANDLESTICK_THEME_DARK, mode: 'fence'}, ohlcCsvSample1)
   )
   .add(
     'Candlestick missing candles',
