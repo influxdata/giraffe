@@ -35,7 +35,7 @@ const color = (() => {
 const candleStyle = (
   candleName: string,
   candleDefaults: Partial<CandleStyle>,
-  candleDefaultsFallback?: CandleStyle
+  candleDefaultsFallback?: Partial<CandleStyle>
 ): CandleStyle => ({
   bodyColor: color(
     `${candleName} bodyColor`,

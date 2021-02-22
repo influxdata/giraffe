@@ -1,5 +1,6 @@
 import * as React from 'react'
 import {FunctionComponent} from 'react'
+import {CANDLESTICK_THEME_DARK} from '../constants/candlestickStyles'
 import {
   CandlestickLayerConfig,
   CandlestickLayerSpec,
@@ -45,11 +46,13 @@ const Candle: React.FC<CandleProps> = ({
 
   const isRaise = open >= close
 
+  const styleKey = isRaise ? 'candleRaising' : 'candleDecreasing'
+  const styleKeyHover = isRaise ? 'candleRaisingHover' : 'candleDecreasingHover'
+
   const style = {
-    ...config[isRaise ? 'candleRaising' : 'candleDecreasing'],
-    ...(hovered
-      ? config[isRaise ? 'candleRaisingHover' : 'candleDecreasingHover']
-      : {}),
+    ...CANDLESTICK_THEME_DARK[styleKey],
+    ...config[styleKey],
+    ...(hovered ? config[styleKeyHover] : {}),
   }
 
   const {

@@ -266,9 +266,10 @@ export interface CandlestickLayerConfig {
   mode?: 'candles' | 'fence'
 
   candlePadding?: number
-  candleRaising?: CandleStyle
+
+  candleRaising?: Partial<CandleStyle>
   candleRaisingHover?: Partial<CandleStyle>
-  candleDecreasing?: CandleStyle
+  candleDecreasing?: Partial<CandleStyle>
   candleDecreasingHover?: Partial<CandleStyle>
 
   xColumnKey?: string

@@ -1,7 +1,15 @@
 import {CandlestickLayerConfig} from '../types'
 import {InfluxColors} from './colorSchemes'
 
-export const CANDLESTICK_THEME_DARK: Required<CandlestickLayerConfig> = {
+type CandlestickLayerConfigDefault = Omit<
+  Required<CandlestickLayerConfig>,
+  'candleRaising' | 'candleDecreasing'
+> & {
+  candleRaising: Required<CandlestickLayerConfig['candleRaising']>
+  candleDecreasing: Required<CandlestickLayerConfig['candleDecreasing']>
+}
+
+export const CANDLESTICK_THEME_DARK: CandlestickLayerConfigDefault = {
   type: 'candlestick',
   mode: 'candles',
   xColumnKey: '_time',
