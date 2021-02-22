@@ -5,9 +5,8 @@ import {Config, fromFlux, InfluxColors, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
 import {CANDLESTICK_THEME_DARK} from '../../giraffe/src/constants/candlestickStyles'
-import {CandlestickLayerConfig} from '../../giraffe/src/types'
+import {CandlestickLayerConfig, CandleStyle} from '../../giraffe/src/types'
 
-// todo: random csv
 import {
   ohlcCsvSample1,
   ohlcCsvSample1MissingCandles,
@@ -16,6 +15,13 @@ import {
 
 type Theme = Required<CandlestickLayerConfig>
 
+const knobGroups = {
+  basics: 'basics',
+  sizing: 'sizing',
+  colors: 'colors',
+  table: 'table',
+}
+
 const color = (() => {
   const colors = (() => {
     const obj = {}
@@ -23,9 +29,50 @@ const color = (() => {
     return obj
   })()
 
-  // todo: type definitions
   return (label: string, ...rest: any[]) => select(label, colors, ...rest)
 })()
+
+const candleStyle = (
+  candleName: string,
+  candleDefaults: Partial<CandleStyle>,
+  candleDefaultsFallback?: CandleStyle
+): CandleStyle => ({
+  bodyColor: color(
+    `${candleName} bodyColor`,
+    candleDefaults.bodyColor ?? candleDefaultsFallback.bodyColor,
+    knobGroups.colors
+  ),
+  bodyFillOpacity: number(
+    `${candleName} bodyFillOpacity`,
+    candleDefaults.bodyFillOpacity ?? candleDefaultsFallback.bodyFillOpacity,
+    {},
+    knobGroups.colors
+  ),
+  bodyRounding: number(
+    `${candleName} bodyRounding`,
+    candleDefaults.bodyRounding ?? candleDefaultsFallback.bodyRounding,
+    {},
+    knobGroups.sizing
+  ),
+  bodyStrokeWidth: number(
+    `${candleName} bodyStrokeWidth`,
+    candleDefaults.bodyStrokeWidth ?? candleDefaultsFallback.bodyStrokeWidth,
+    {},
+    knobGroups.sizing
+  ),
+  shadowColor: color(
+    `${candleName} shadowColor`,
+    candleDefaults.shadowColor ?? candleDefaultsFallback.shadowColor,
+    knobGroups.colors
+  ),
+  shadowStrokeWidth: number(
+    `${candleName} shadowStrokeWidth`,
+    candleDefaults.shadowStrokeWidth ??
+      candleDefaultsFallback.shadowStrokeWidth,
+    {},
+    knobGroups.sizing
+  ),
+})
 
 const editableLayer = (theme: Theme): Theme => ({
   type: theme.type,
@@ -35,75 +82,50 @@ const editableLayer = (theme: Theme): Theme => ({
       candles: 'candles',
       fence: 'fence',
     },
-    theme.mode
+    theme.mode,
+    knobGroups.basics
   ),
-  candlePadding: number('padding candle', theme.candlePadding),
+  candlePadding: number(
+    'padding candle',
+    theme.candlePadding,
+    {},
+    knobGroups.sizing
+  ),
 
-  candleRaising: {
-    bodyColor: color(
-      'candleRaising - bodyColor',
-      theme.candleRaising.bodyColor
-    ),
-    bodyFillOpacity: number(
-      'candleRaising - bodyFillOpacity',
-      theme.candleRaising.bodyFillOpacity
-    ),
-    bodyRounding: number(
-      'candleRaising - bodyRounding',
-      theme.candleRaising.bodyRounding
-    ),
-    bodyStrokeWidth: number(
-      'candleRaising - bodyStrokeWidth',
-      theme.candleRaising.bodyStrokeWidth
-    ),
-    shadowColor: color(
-      'candleRaising - shadowColor',
-      theme.candleRaising.shadowColor
-    ),
-    shadowStrokeWidth: number(
-      'candleRaising - shadowStrokeWidth',
-      theme.candleRaising.shadowStrokeWidth
-    ),
-  },
-  // todo:
-  candleRaisingHover: theme.candleRaisingHover,
-  candleDecreasing: {
-    bodyColor: color(
-      'candleDecreasing - bodyColor',
-      theme.candleDecreasing.bodyColor
-    ),
-    bodyFillOpacity: number(
-      'candleDecreasing - bodyFillOpacity',
-      theme.candleDecreasing.bodyFillOpacity
-    ),
-    bodyRounding: number(
-      'candleDecreasing - bodyRounding',
-      theme.candleDecreasing.bodyRounding
-    ),
-    bodyStrokeWidth: number(
-      'candleDecreasing - bodyStrokeWidth',
-      theme.candleDecreasing.bodyStrokeWidth
-    ),
-    shadowColor: color(
-      'candleDecreasing - shadowColor',
-      theme.candleDecreasing.shadowColor
-    ),
-    shadowStrokeWidth: number(
-      'candleDecreasing - shadowStrokeWidth',
-      theme.candleDecreasing.shadowStrokeWidth
-    ),
-  },
-  // todo:
-  candleDecreasingHover: theme.candleDecreasingHover,
-  xColumnKey: text('xColumn', theme.xColumnKey),
-  openColumnKey: text('openColumnKey', theme.openColumnKey),
-  highColumnKey: text('highColumnKey', theme.highColumnKey),
-  lowColumnKey: text('lowColumnKey', theme.lowColumnKey),
-  closeColumnKey: text('closeColumnKey', theme.closeColumnKey),
+  candleRaising: candleStyle('candleRaising', theme.candleRaising),
+  candleRaisingHover: candleStyle(
+    'candleRaisingHover',
+    theme.candleRaisingHover,
+    theme.candleRaising
+  ),
+  candleDecreasing: candleStyle('candleDecreasing', theme.candleDecreasing),
+  candleDecreasingHover: candleStyle(
+    'candleDecreasingHover',
+    theme.candleDecreasingHover,
+    theme.candleDecreasing
+  ),
+  xColumnKey: text('xColumn', theme.xColumnKey, knobGroups.table),
+  openColumnKey: text('openColumnKey', theme.openColumnKey, knobGroups.table),
+  highColumnKey: text('highColumnKey', theme.highColumnKey, knobGroups.table),
+  lowColumnKey: text('lowColumnKey', theme.lowColumnKey, knobGroups.table),
+  closeColumnKey: text(
+    'closeColumnKey',
+    theme.closeColumnKey,
+    knobGroups.table
+  ),
   window: (() => {
-    const detect = boolean('window detect', theme.window === 'detect')
+    const detect = boolean(
+      'window detect',
+      theme.window === 'detect',
+      knobGroups.basics
+    )
     if (detect) return 'detect'
-    return number('window fixed', typeof theme.window === 'number' || 1_000)
+    return number(
+      'window fixed',
+      typeof theme.window === 'number' || 1_000,
+      {},
+      knobGroups.basics
+    )
   })(),
 })
 
