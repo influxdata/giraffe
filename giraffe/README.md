@@ -474,6 +474,80 @@ Giraffe comes with utility functions.
 
   - **lowerColumnName**: _string. Optional._ A string indicating the shaded portion of each band that extends below the **mainColumnName** line.
 
+
+
+- **CandlestickLayerConfig**: _Object_ Maximum one per `<Plot>`.
+  All values (excluding **type**) are Optional and their defaults is defined by theme `GAUGE_MINI_THEME_BULLET_DARK`
+  
+  - **type**: _'candlestick'_. **Required**.
+
+  Data:
+  - **xColumnKey**: _string_. defines which column of table is used for x coord
+  - **openColumnKey** , **highColumnKey** , **lowColumnKey** , **closeColumnKey**: _string_. columns of OHLC values
+  - **window**: _'detect' | number_. Defines how is data wise candle width on x. When value is `'detect'` window is selected as lowest distance between ohlc entries. If window is bigger than real distance between entries, more table rows can be merged into single candle _(all entries still will be shown in tooltip)_
+
+  Style
+  - **mode**: _'candles' | 'fence'_. Select if candle body is rectangle or lines
+  - **candlePadding**: _number_. Distance between candles.
+
+  - **candleRaising** , **candleDecreasing** , **candleRaisingHover** , **candleDecreasingHover**: _CandleStyle_. style of single candles. Depending on candle raising/decreasing _(depends on close>open)_ and if candle is hovered. If **hover** property not present, then not hovered property is used.
+    
+    ***CandleStyle:***
+    
+    | name                  | type        | function                                                       |
+    | ----                  | ----        | --------                                                       |
+    | **bodyColor**         | _hex color_ | Color applied on fill and stroke of body                       |
+    | **bodyFillOpacity**   | _number_    | Fill opacity of body _(candle mode only)_. **0 >= value >= 1** |
+    | **bodyRounding**      | _number_    | Rounding of body rect _(candle mode only)_                     |
+    | **bodyStrokeWidth**   | _number_    | Width of body rect/fence-lines                                 |
+    | **shadowColor**       | _hex color_ | Color of low/high lines                                        |
+    | **shadowStrokeWidth** | _number_    | Width of low/high lines                                        |
+
+  **Precreated themes**
+    - `GAUGE_MINI_THEME_BULLET_DARK`
+      ```
+      {
+        type: 'candlestick',
+        mode: 'candles',
+
+        xColumnKey: '_time',
+        openColumnKey: 'open',
+        highColumnKey: 'high',
+        lowColumnKey: 'low',
+        closeColumnKey: 'close',
+
+        window: 'detect',
+
+        candlePadding: 10,
+
+        candleRaising: {
+          bodyColor: InfluxColors.Krypton,
+          bodyFillOpacity: 1,
+          bodyRounding: 4,
+          bodyStrokeWidth: 2,
+          shadowColor: InfluxColors.Krypton,
+          shadowStrokeWidth: 2,
+        },
+        candleRaisingHover: {
+          bodyFillOpacity: 0.9,
+          bodyStrokeWidth: 6,
+          shadowStrokeWidth: 6,
+        },
+        candleDecreasing: {
+          bodyColor: InfluxColors.Curacao,
+          bodyFillOpacity: 0,
+          bodyRounding: 0,
+          bodyStrokeWidth: 2,
+          shadowColor: InfluxColors.Curacao,
+          shadowStrokeWidth: 2,
+        },
+        candleDecreasingHover: {
+          bodyFillOpacity: 0.3,
+          bodyStrokeWidth: 6,
+          shadowStrokeWidth: 6,
+        },
+      }
+      ```
 - **ScatterLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
   - **type**: _"scatter". **Required**._ Specifies that this LayerConfig and `<Plot>` is a scatter plot.
