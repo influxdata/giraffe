@@ -138,3 +138,6 @@ export const ANNOTATION_DEFAULT_HOVER_MARGIN = 20
 
 export const ANNOTATION_TOOLTIP_CONTAINER_NAME =
   'giraffe-annotation-tooltip-container'
+
+// Geo stuff
+export const LEAFLET_Z_INDEX = 399

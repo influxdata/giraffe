@@ -26,7 +26,6 @@ import {
 import {Config, Table} from '../types'
 
 // Constants
-export const LEAFLET_Z_INDEX = 399
 const ZOOM_FRACTION = 8
 
 interface Props extends Partial<GeoLayerConfig> {
