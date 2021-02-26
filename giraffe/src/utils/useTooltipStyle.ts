@@ -1,7 +1,6 @@
 import {useLayoutStyle} from './useLayoutStyle'
 import {useRefMousePos} from './useMousePos'
-import {LEAFLET_Z_INDEX} from '../components/Geo'
-import {CLOCKFACE_Z_INDEX} from '../constants'
+import {CLOCKFACE_Z_INDEX, LEAFLET_Z_INDEX} from '../constants'
 import {AnnotationTooltipOptions} from '../types'
 
 const MARGIN_X = 30
