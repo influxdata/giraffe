@@ -119,7 +119,9 @@ const editableLayer = (theme: Theme): Theme => ({
       theme.window === 'detect',
       knobGroups.basics
     )
-    if (detect) return 'detect'
+    if (detect) {
+      return 'detect'
+    }
     return number(
       'window fixed',
       typeof theme.window === 'number' || 1_000,
