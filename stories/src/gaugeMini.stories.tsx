@@ -39,7 +39,9 @@ const randInt: {
   (max: number): number
   (min: number, max: number): number
 } = (min: number, max?: number) => {
-  if (max === undefined) return Math.floor(Math.random() * min)
+  if (max === undefined) {
+    return Math.floor(Math.random() * min)
+  }
   return min + Math.floor(Math.random() * (max - min))
 }
 
