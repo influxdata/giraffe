@@ -97,6 +97,7 @@ export interface InteractionHandlerArguments {
 
 export interface InteractionHandlers {
   doubleClick?: (plotInteraction: InteractionHandlerArguments) => void
+  singleClick?: (plotInteraction: InteractionHandlerArguments) => void
   hover?: (plotInteraction: InteractionHandlerArguments) => void
 }
 

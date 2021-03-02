@@ -66,7 +66,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
   const {margins, config} = env
   const {width, height, showAxes} = config
 
-  const resetDomains = env => {
+  const resetDomains = (env) => {
     env.resetDomains()
     forceUpdate()
   }
@@ -88,9 +88,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
     },
   }
 
-  const doubleClick = config.interactionHandlers?.doubleClick
+  const singleClick = config.interactionHandlers?.singleClick
     ? () => {
-        config.interactionHandlers.doubleClick(plotInteraction)
+        config.interactionHandlers.singleClick(plotInteraction)
       }
     : memoizedResetDomains
 
@@ -99,7 +99,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
   }
 
   const callbacks = {
-    doubleClick,
+    singleClick,
   }
 
   const fullsizeStyle: CSSProperties = {
@@ -109,6 +109,20 @@ export const SizedPlot: FunctionComponent<Props> = ({
     right: 0,
     bottom: 0,
   }
+  //TODO:  add a single click handler here too......
+
+  // console.log('hover taregt props:', hoverTargetProps);
+  // console.log('drag target props....', dragTargetProps);
+
+  // const foobar2=() => {
+  //   console.log('just mouse up....ick!')
+  // }
+
+  //for single clicking; using mouseup, since the onClick only gets through
+  //with a double click; and the hover and drag target does not use a mouse up;
+  // they are:  hover:  mouseEnter, mousemove, mouseleav
+  //          drag target: mouseDown
+  // and every time there is a single click, the mouse goes up.  so using that instead.
 
   return (
     <div
@@ -132,7 +146,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onDoubleClick={callbacks.doubleClick}
+        onMouseUp={callbacks.singleClick}
         {...hoverTargetProps}
         {...dragTargetProps}
       >
@@ -174,7 +188,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   table={newTableFromConfig(config)}
                   allowString={true}
                 >
-                  {latestValue => (
+                  {(latestValue) => (
                     <SingleStatLayer
                       stat={latestValue}
                       config={layerConfig as SingleStatLayerConfig}
