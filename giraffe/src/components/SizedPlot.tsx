@@ -109,19 +109,11 @@ export const SizedPlot: FunctionComponent<Props> = ({
     right: 0,
     bottom: 0,
   }
-  //TODO:  add a single click handler here too......
 
-  // console.log('hover taregt props:', hoverTargetProps);
-  // console.log('drag target props....', dragTargetProps);
-
-  // const foobar2=() => {
-  //   console.log('just mouse up....ick!')
-  // }
-
-  //for single clicking; using mouseup, since the onClick only gets through
-  //with a double click; and the hover and drag target does not use a mouse up;
-  // they are:  hover:  mouseEnter, mousemove, mouseleav
-  //          drag target: mouseDown
+  // for single clicking; using mouseup, since the onClick only gets through
+  // with a double click; and the hover and drag target does not use a mouse up;
+  // they are:  hover:  mouseEnter, mousemove, mouseleave
+  //            drag target: mouseDown
   // and every time there is a single click, the mouse goes up.  so using that instead.
 
   return (
