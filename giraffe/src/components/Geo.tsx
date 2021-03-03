@@ -113,9 +113,17 @@ const Geo: FunctionComponent<Props> = props => {
   }
 
   const latLon = preprocessedTable.getLatLon(0)
-  const mapCenter = {
-    lat: latLon ? latLon.lat : lat,
-    lon: latLon ? latLon.lon : lon,
+  //  const mapCenter = {
+  //    lat: latLon ? latLon.lat : lat,
+  //    lon: latLon ? latLon.lon : lon,
+  //  }
+
+  let mapCenter
+
+  if (lat > 90.0 || lat < -90.0 || lon > 180.0 || lon < -180.0) {
+    mapCenter = {lat: latLon.lat, lon: latLon.lon}
+  } else {
+    mapCenter = {lat: lat, lon: lon}
   }
 
   return (
