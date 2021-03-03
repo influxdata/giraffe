@@ -97,9 +97,9 @@ export const SizedPlot: FunctionComponent<Props> = ({
     },
   }
 
-  const doubleClick = config.interactionHandlers?.doubleClick
+  const singleClick = config.interactionHandlers?.singleClick
     ? () => {
-        config.interactionHandlers.doubleClick(plotInteraction)
+        config.interactionHandlers.singleClick(plotInteraction)
       }
     : memoizedResetDomains
 
@@ -108,7 +108,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
   }
 
   const callbacks = {
-    doubleClick,
+    singleClick,
   }
 
   const fullsizeStyle: CSSProperties = {
@@ -118,6 +118,12 @@ export const SizedPlot: FunctionComponent<Props> = ({
     right: 0,
     bottom: 0,
   }
+
+  // for single clicking; using mouseup, since the onClick only gets through
+  // with a double click; and the hover and drag target does not use a mouse up;
+  // they are:  hover:  mouseEnter, mousemove, mouseleave
+  //            drag target: mouseDown
+  // and every time there is a single click, the mouse goes up.  so using that instead.
 
   return (
     <div
@@ -143,7 +149,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onDoubleClick={callbacks.doubleClick}
+        onMouseUp={callbacks.singleClick}
         {...hoverTargetProps}
         {...dragTargetProps}
       >
