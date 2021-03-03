@@ -57,18 +57,22 @@ describe('the SizedPlot', () => {
             layerCanvasRef={layersRef}
           />
         )
-        fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
+
+        // when the user (for real) does a single click, then a mouse up happens.
+        // chose mouse up because the single click listener wasn't triggering except on
+        // double clicks
+        fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).toHaveBeenCalled()
       })
     })
 
     describe('the ability to override default behavior', () => {
-      it('handles double clicks', () => {
-        const fakeDoubleClickInteractionHandler = jest.fn()
+      it('handles single clicks', () => {
+        const fakeSingleClickInteractionHandler = jest.fn()
         const localConfig = {
           ...config,
-          interactionHandlers: {doubleClick: fakeDoubleClickInteractionHandler},
+          interactionHandlers: {singleClick: fakeSingleClickInteractionHandler},
         }
 
         render(
@@ -78,14 +82,17 @@ describe('the SizedPlot', () => {
             layerCanvasRef={layersRef}
           />
         )
-        fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
+        // when the user (for real) does a single click, then a mouse up happens.
+        // chose mouse up because the single click listener wasn't triggering except on
+        // double clicks
+        fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).not.toHaveBeenCalled()
-        expect(fakeDoubleClickInteractionHandler).toHaveBeenCalled()
+        expect(fakeSingleClickInteractionHandler).toHaveBeenCalled()
 
         const [
           [callbackArguments],
-        ] = fakeDoubleClickInteractionHandler.mock.calls
+        ] = fakeSingleClickInteractionHandler.mock.calls
 
         // don't care what the values are, we just care that we pass these values back
         expect(Object.keys(callbackArguments)).toEqual([
