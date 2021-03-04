@@ -102,7 +102,7 @@ interface TimeFormatter extends Formatter {
   _GIRAFFE_FORMATTER_TYPE: FormatterType.Time
 }
 
-interface TimeFormatterFactoryOptions {
+export interface TimeFormatterFactoryOptions {
   // BCP 47 language tag or "default"
   locale?: string
 

@@ -10,6 +10,7 @@ export {
   binaryPrefixFormatter,
   siPrefixFormatter,
   timeFormatter,
+  TimeFormatterFactoryOptions,
 } from './utils/formatters'
 export {getDomainDataFromLines} from './utils/lineData'
 
