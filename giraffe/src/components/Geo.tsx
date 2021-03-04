@@ -68,7 +68,15 @@ const Geo: FunctionComponent<Props> = props => {
   if (width === 0 || height === 0) {
     return null
   }
-  const {lat, lon, zoom, mapStyle, stylingConfig, allowPanAndZoom} = props
+  const {
+    lat,
+    lon,
+    zoom,
+    mapStyle,
+    stylingConfig,
+    allowPanAndZoom,
+    centerMethod,
+  } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
   const mapRef = React.createRef()
@@ -112,18 +120,46 @@ const Geo: FunctionComponent<Props> = props => {
     }
   }
 
-  const latLon = preprocessedTable.getLatLon(0)
-  //  const mapCenter = {
-  //    lat: latLon ? latLon.lat : lat,
-  //    lon: latLon ? latLon.lon : lon,
-  //  }
+  const cMeth = centerMethod ? centerMethod : 'fixed'
+  let mapCenter = {lat: lat, lon: lon}
 
-  let mapCenter
-
-  if (lat > 90.0 || lat < -90.0 || lon > 180.0 || lon < -180.0) {
-    mapCenter = {lat: latLon.lat, lon: latLon.lon}
-  } else {
-    mapCenter = {lat: lat, lon: lon}
+  if (preprocessedTable.getRowCount() > 0) {
+    switch (cMeth) {
+      case 'first':
+        const latLon = preprocessedTable.getLatLon(0)
+        mapCenter = {lat: latLon.lat, lon: latLon.lon}
+        break
+      case 'fixed':
+        break
+      case 'center':
+        if (
+          table.length > 0 &&
+          table.getColumn('lat') &&
+          table.getColumn('lon')
+        ) {
+          const lats = (table.getColumn('lat') as any).map(el => parseFloat(el))
+          const lons = (table.getColumn('lon') as any).map(el => parseFloat(el))
+          const latMax = lats.reduce((a, b) => Math.max(a, b))
+          const latMin = lats.reduce((a, b) => Math.min(a, b))
+          const lonMax = lons.reduce((a, b) => Math.max(a, b))
+          const lonMin = lons.reduce((a, b) => Math.min(a, b))
+          const clat = (latMax + latMin) / 2
+          const clon = (lonMax + lonMin) / 2
+          mapCenter = {lat: clat, lon: clon}
+        }
+        break
+      default:
+        if (typeof cMeth === 'number') {
+          const index = cMeth >= 0 && cMeth < table.length - 1 ? cMeth : 0
+          const latLon = preprocessedTable.getLatLon(index)
+          mapCenter = {lat: latLon.lat, lon: latLon.lon}
+        } else {
+          console.warn(
+            `unhandled centerMethod ${cMeth} using default fixed coordinates ${lat},${lon}`
+          )
+        }
+        break
+    }
   }
 
   return (

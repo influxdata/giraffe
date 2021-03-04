@@ -116,6 +116,7 @@ const onAutoResize = (
     allowPanAndZoom,
     detectCoordinateFields,
     mapStyle,
+    centerMethod,
   } = config
   const {
     latOnLastRender,
@@ -149,6 +150,7 @@ const onAutoResize = (
         onViewportChange={onViewportChange(props, lastRenderProperties)}
         allowPanAndZoom={allowPanAndZoom}
         tileServerConfiguration={config.tileServerConfiguration}
+        centerMethod={centerMethod}
       />
     </div>
   )

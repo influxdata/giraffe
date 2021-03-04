@@ -6,6 +6,7 @@ export interface GeoLayerConfig {
   allowPanAndZoom: boolean
   mapStyle?: string
   detectCoordinateFields: boolean
+  centerMethod?: 'center' | 'first' | 'fixed' | number
 
   onViewportChange?: (lat: number, lon: number, zoom: number) => void
   onUpdateViewport?: (lat: number, lon: number, zoom: number) => void
