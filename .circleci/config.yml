@@ -14,14 +14,15 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
-      - run: cd giraffe && yarn run lint
-      - run: cd giraffe && yarn run typecheck
-      - run: cd giraffe && yarn run test --collectCoverage
-      - run: cd giraffe && yarn run build
-      - run: cd stories && yarn run lint
-      - run: cd stories && yarn run typecheck
+      - run: yarn lint
+      - run: yarn --cwd giraffe test --collectCoverage
+      - run: yarn --cwd giraffe build
+      # todo: stories-test runs lint too (lint runs two multiple times)
+      - run: yarn --cwd stories test
       - store_artifacts:
           path: giraffe/coverage
+      - store_artifacts:
+          path: stories/cypress/snapshots/**/__diff_output__
       # See: https://github.com/influxdata/giraffe/issues/129
       # - run:
       #     name: chromatic

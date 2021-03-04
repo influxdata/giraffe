@@ -2,7 +2,15 @@
   "compilerOptions": {
     "target": "es5",
     "module": "es2015",
-    "lib": ["es5", "es2015", "es2016", "es2017", "es2018", "esnext", "dom"],
+    "lib": [
+      "es5",
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018",
+      "esnext",
+      "dom"
+    ],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
@@ -16,5 +24,8 @@
     "strictNullChecks": false,
     "downlevelIteration": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "./stories/cypress"
+  ]
 }

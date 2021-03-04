@@ -2,9 +2,13 @@
   "private": true,
   "workspaces": ["giraffe", "stories"],
   "scripts": {
-    "lint": "eslint '{giraffe,stories}/src/**/*.{ts,tsx}'",
-    "prettier": "prettier --config .prettierrc.json --check '{giraffe,stories}/**/*.{ts,tsx}'",
-    "prettier:fix": "prettier --config .prettierrc.json --write '{giraffe,stories}/**/*.{ts,tsx}'",
-    "publish": "echo 'To publish giraffe, run ./giraffe/publish $version'"
+    "lint": "run-s typecheck eslint prettier",
+    "lint:fix": "run-s typecheck eslint:fix prettier:fix",
+    "typecheck": "tsc --noEmit --pretty",
+    "eslint": "eslint \"{giraffe,stories}/{src,cypress}/**/*.{ts,tsx}\"",
+    "eslint:fix": "eslint \"{giraffe,stories}/{src,cypress}/**/*.{ts,tsx}\" --fix",
+    "prettier": "prettier --config .prettierrc.json --check \"{giraffe,stories}/{src,cypress}/**/*.{ts,tsx}\"",
+    "prettier:fix": "prettier --config .prettierrc.json --write \"{giraffe,stories}/{src,cypress}/**/*.{ts,tsx}\"",
+    "publish": "echo \"To publish giraffe, run ./giraffe/publish $version\""
   }
 }
