@@ -28,8 +28,8 @@ If you're reading this before committing, bump the package version before runnin
 
 While the script is running, head over to https://github.com/influxdata/giraffe/releases. Click `Draft a New Release`.
 
-![screen shot showing which button to click to draft a new release](../docs/publish_1.png)
+![screen shot showing which button to click to draft a new release](./docs/publish_1.png)
 
 The next page will let you draft a release. Enter the tag number - it should correspond to the version you published in the script, but have a `v` in front of it. So if you ran `./publish 2.5.0`, the tag would be `v2.5.0`. The release title should match the tag, including the `v` (`v2.5.0`). In the description, enter the kind of explanation you'd like to see if you were looking over a release of a library you're using and trying to decide if you should upgrade or not.
 
-![screen shot of editing a giraffe release](../docs/publish_2.png)
+![screen shot of editing a giraffe release](./docs/publish_2.png)
