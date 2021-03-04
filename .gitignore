@@ -8,3 +8,7 @@ dist
 .env
 .vscode
 coverage
+
+__diff_output__
+videos
+screenshots
