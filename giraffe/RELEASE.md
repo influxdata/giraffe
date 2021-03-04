@@ -22,7 +22,7 @@ This script will build Giraffe, publish the changes to npm, then update the `pac
 
 ### Building Tips
 
-If you're reading this before committing, bump the package version before running publish. That way, when publishing a release on Github, the commit points to the entire commit, and not the bumped package version. To see this in action, click the following releases then click the git commit hash on the left hand side. [Good.](https://github.com/influxdata/giraffe/releases/tag/2.4.0). [Not as good.](https://github.com/influxdata/giraffe/releases/tag/2.4.0)
+If you're reading this before committing, bump the package version before running publish. That way, when publishing a release on Github, the commit points to the entire commit, and not the bumped package version. To see this in action, click the following releases then click the git commit hash on the left hand side. [Good.](https://github.com/influxdata/giraffe/releases/tag/2.4.0) [Not as good.](https://github.com/influxdata/giraffe/releases/tag/2.4.0)
 
 ## Drafting a Github Release
 
