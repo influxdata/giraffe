@@ -61,6 +61,7 @@ const specialKnobs = () => {
     first: 'first',
     fixed: 'fixed',
     center: 'center',
+    last: 'last',
     '1': 1,
     '2': 2,
     '3': 3,
