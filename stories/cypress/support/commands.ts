@@ -1,5 +1,5 @@
-import {addMatchImageSnapshotCommand} from 'cypress-image-snapshot/command'
-import {Options as ImageSnapshotOptions} from 'cypress-image-snapshot'
+import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
+import { Options as ImageSnapshotOptions } from 'cypress-image-snapshot'
 
 addMatchImageSnapshotCommand()
 
@@ -67,6 +67,37 @@ export const snapshotComponent = (
   cy.wait(1_000)
 }
 
+export const inputKnobs: {
+  (label: string, value: number, range?: true): void
+  (label: string, value: string): void
+} = (label: string, value: number | string, range: boolean = false) => {
+  const valueStr = typeof value === 'number' ? value.toString() : value
+  const escapeSpaces = (str: string) => str.replace(/ /, '\\ ')
+  if (!range) {
+    cy.get(`#${escapeSpaces(label)}`)
+      .clear()
+      .type(valueStr)
+  } else {
+    throw new Error('Range input not implemented');
+    // todo: input - range
+    cy.get(`[name='${escapeSpaces(label)}']`)
+      // .then(x => {
+      //   x.first().trigger("change", {value})
+      // })
+      // .invoke('val', value)
+      // .invoke('attr', 'value', value)
+      // .trigger('input', { force: true, data: value })
+      // .trigger('change', { force: true, value })
+      // .invoke('mouseup')
+      // .trigger('blur')
+      // .type(100)
+      // .trigger('mousedown', { which: 1 })
+      // .trigger('mousemove', { clientX: 0, clientY: 100 })
+      // .trigger('mouseup', {force: true})
+    cy.wait(1000)
+  }
+}
+
 /* eslint-disable */
 
 // getters
@@ -76,8 +107,9 @@ Cypress.Commands.add('getByInputValue', getByInputValue)
 Cypress.Commands.add('getByTitle', getByTitle)
 Cypress.Commands.add('getByTestIDSubStr', getByTestIDSubStr)
 
-// helpers
+// storybook helpers
 Cypress.Commands.add('visitTest', visitTest)
 Cypress.Commands.add('snapshotComponent', snapshotComponent)
+Cypress.Commands.add('inputKnobs', inputKnobs)
 
 /* eslint-enable */

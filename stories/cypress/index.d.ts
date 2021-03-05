@@ -9,6 +9,7 @@ import {
   getByTestIDSubStr,
   visitTest,
   snapshotComponent,
+  inputKnobs,
 } from './support/commands'
 
 declare global {
@@ -22,6 +23,7 @@ declare global {
       getByTestIDSubStr: typeof getByTestIDSubStr
       visitTest: typeof visitTest
       snapshotComponent: typeof snapshotComponent
+      inputKnobs: typeof inputKnobs
     }
   }
 }
