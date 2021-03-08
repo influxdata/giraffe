@@ -1,4 +1,9 @@
 describe('testing test', () => {
+  it.only('should make snapsot of band chart', () => {
+    cy.visitTest('Band Chart', 'Static: groupBy applied')
+    cy.inputKnobs('Time Format', 'HH:mm', 'select')
+  })
+
   it('should make snapshot of gauge', () => {
     cy.visitTest('Gauge', 'Gauge')
 

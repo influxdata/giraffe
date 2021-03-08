@@ -36,8 +36,8 @@ export const visitTest = (name: string, storyname: string) => {
   /** format string to stories url format */
   const f = (str: string) =>
     str
-      .replace(' ', '-')
-      .replace(':', '')
+      .replace(/ /g, '-')
+      .replace(/:/g, '')
       .toLowerCase()
   cy.visit(`${f(name)}--${f(storyname)}`)
 }
@@ -68,19 +68,26 @@ export const snapshotComponent = (
 }
 
 export const inputKnobs: {
-  (label: string, value: number, range?: true): void
   (label: string, value: string): void
-} = (label: string, value: number | string, range: boolean = false) => {
-  const valueStr = typeof value === 'number' ? value.toString() : value
+  (label: string, value: string, type: 'select'): void
+} = (label: string, value: number | string, type: 'range' | 'select' | 'number' | 'text' = 'text') => {
   const escapeSpaces = (str: string) => str.replace(/ /, '\\ ')
-  if (!range) {
-    cy.get(`#${escapeSpaces(label)}, [name='${label}']`)
-      .clear({force: true})
-      .type(valueStr, {force: true})
-  } else {
-    throw new Error('Range input not implemented');
-    // todo: input - range
-    cy.get(`[name='${escapeSpaces(label)}']`)
+  const selector = `#${escapeSpaces(label)}, [name='${label}']`;
+  switch (type) {
+    case 'text':
+      const valueStr = typeof value === 'number' ? value.toString() : value
+      cy.get(selector)
+        .clear({ force: true })
+        .type(valueStr, { force: true })
+      break
+    case 'select':
+      cy.get(selector)
+        .select(value as string)
+      break
+    case 'range':
+      throw new Error(`Input knobs of type ${type} not implemented`)
+      // todo: input - range
+      cy.get(`[name='${escapeSpaces(label)}']`)
       // .then(x => {
       //   x.first().trigger("change", {value})
       // })
@@ -94,7 +101,10 @@ export const inputKnobs: {
       // .trigger('mousedown', { which: 1 })
       // .trigger('mousemove', { clientX: 0, clientY: 100 })
       // .trigger('mouseup', {force: true})
-    cy.wait(1000)
+      cy.wait(1000)
+      break
+    default:
+      throw new Error(`Input knobs of type ${type} not implemented`)
   }
 }
 
