@@ -70,12 +70,14 @@ export const snapshotComponent = (
 export const inputKnobs: {
   (label: string, value: string): void
   (label: string, value: string, type: 'select'): void
-} = (label: string, value: number | string, type: 'range' | 'select' | 'number' | 'text' = 'text') => {
+  (label: string, value: number, type: 'number'): void
+  (label: string, value: boolean, type: 'boolean'): void
+} = (label: string, value: number | string | boolean, type: 'range' | 'select' | 'number' | 'text' | 'boolean' = 'text') => {
   const escapeSpaces = (str: string) => str.replace(/ /, '\\ ')
-  const selector = `#${escapeSpaces(label)}, [name='${label}']`;
+  const selector = `#${escapeSpaces(label)}, [name='${label}']`
   switch (type) {
     case 'text':
-      const valueStr = typeof value === 'number' ? value.toString() : value
+      const valueStr = value as string
       cy.get(selector)
         .clear({ force: true })
         .type(valueStr, { force: true })
@@ -83,6 +85,10 @@ export const inputKnobs: {
     case 'select':
       cy.get(selector)
         .select(value as string)
+      break
+    case 'boolean':
+      cy.get(selector + ' input')
+        [value ? 'check' : 'uncheck']()
       break
     case 'range':
       throw new Error(`Input knobs of type ${type} not implemented`)
