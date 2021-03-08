@@ -16,7 +16,7 @@
     "storybook": "start-storybook -p 50000",
     "publish": "storybook-to-ghpages --out=.out",
     "chromatic": "chromatic test",
-    "cy": "cypress open",
+    "cy": "cypress open --env failOnSnapshotDiff=false",
     "cy:ci": "wait-on http://localhost:50000/ && cypress run",
     "cy:update": "cypress run --env updateSnapshots=true",
     "cy:gen-diff": "cypress run --env failOnSnapshotDiff=false"
