@@ -10,6 +10,7 @@ import {
 } from 'd3-shape'
 
 import {Config, LayerConfig, SymbolType} from '../types'
+import {CANDLESTICK_THEME_DARK} from './candlestickStyles'
 import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
 
 // TODO: Make configurable
@@ -55,7 +56,9 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendColorizeRows: true,
 }
 
-export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
+export const LAYER_DEFAULTS: {
+  [layerType in LayerConfig['type']]?: Partial<LayerConfig>
+} = {
   line: {
     lineWidth: 1,
     hoverDimension: 'auto',
@@ -100,6 +103,7 @@ export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
     strokeOpacity: 1,
     fillOpacity: 0.75,
   },
+  candlestick: CANDLESTICK_THEME_DARK,
 }
 
 export const ALL_SYMBOL_TYPES: SymbolType[] = [

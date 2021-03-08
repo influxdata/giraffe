@@ -21,6 +21,7 @@ import {
 } from '../constants'
 
 import {
+  CandlestickLayerConfig,
   ColumnType,
   Formatter,
   LayerSpec,
@@ -30,6 +31,7 @@ import {
   Scale,
   SizedConfig,
 } from '../types'
+import {candlestickTransform} from '../transforms/candlestick'
 
 const X_DOMAIN_AESTHETICS = ['x', 'xMin', 'xMax']
 const Y_DOMAIN_AESTHETICS = ['y', 'yMin', 'yMax']
@@ -301,6 +303,15 @@ export class PlotEnv {
         )
       }
 
+      case LayerTypes.Candlestick: {
+        const transform = this.fns.get(
+          memoizedTransformKey,
+          candlestickTransform
+        )
+
+        return transform(table, layerConfig as Required<CandlestickLayerConfig>)
+      }
+
       case LayerTypes.Scatter: {
         const transform = this.fns.get(memoizedTransformKey, scatterTransform)
 
@@ -375,6 +386,7 @@ export class PlotEnv {
 
       case LayerTypes.RawFluxDataTable:
       case LayerTypes.Gauge:
+      case LayerTypes.GaugeMini:
       case LayerTypes.Geo:
       case LayerTypes.Custom:
       case LayerTypes.SingleStat:
@@ -488,10 +500,9 @@ export class PlotEnv {
 const applyLayerDefaults = (
   layers: SizedConfig['layers']
 ): SizedConfig['layers'] =>
-  layers.map(layer =>
-    LAYER_DEFAULTS[layer.type]
-      ? {...LAYER_DEFAULTS[layer.type], ...layer}
-      : layer
+  layers.map(
+    layer =>
+      ({...LAYER_DEFAULTS[layer.type], ...layer} as SizedConfig['layers'][0])
   )
 
 const mergeConfigs = (

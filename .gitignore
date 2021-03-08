@@ -8,3 +8,4 @@ dist
 .env
 .vscode
 coverage
+debug.log
