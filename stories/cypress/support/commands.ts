@@ -86,6 +86,11 @@ export const inputKnobs: {
         .clear({force: true})
         .type(valueStr, {force: true})
       break
+    case 'number':
+      cy.get(selector)
+        .clear({force: true})
+        .type((value as number).toString(), {force: true})
+      break
     case 'select':
       cy.get(selector).select(value as string)
       break
