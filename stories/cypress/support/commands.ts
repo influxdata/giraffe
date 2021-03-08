@@ -74,9 +74,9 @@ export const inputKnobs: {
   const valueStr = typeof value === 'number' ? value.toString() : value
   const escapeSpaces = (str: string) => str.replace(/ /, '\\ ')
   if (!range) {
-    cy.get(`#${escapeSpaces(label)}`)
-      .clear()
-      .type(valueStr)
+    cy.get(`#${escapeSpaces(label)}, [name='${label}']`)
+      .clear({force: true})
+      .type(valueStr, {force: true})
   } else {
     throw new Error('Range input not implemented');
     // todo: input - range
