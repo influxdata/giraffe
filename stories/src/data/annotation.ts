@@ -5,7 +5,7 @@ import {
   Table,
 } from '../../../giraffe/src/types'
 import {newTable} from '../../../giraffe/src'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const numberOfRecords = 20
 const recordsPerLine = 20

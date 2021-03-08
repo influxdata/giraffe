@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { storiesOf } from '@storybook/react'
-import { boolean, number, select, text, withKnobs } from '@storybook/addon-knobs'
-import { Config, Plot, LayerConfig, timeFormatter } from '../../giraffe/src'
-import { TIME, VALUE } from '../../giraffe/src/constants/columnKeys'
+import {storiesOf} from '@storybook/react'
+import {boolean, number, select, text, withKnobs} from '@storybook/addon-knobs'
+import {Config, Plot, LayerConfig, timeFormatter} from '../../giraffe/src'
+import {TIME, VALUE} from '../../giraffe/src/constants/columnKeys'
 
 import {
   PlotContainer,
@@ -22,7 +22,7 @@ import {
   annotationPinKnob,
 } from './helpers'
 
-import { matchAnnotationsToTable, getAnnotationsTable } from './data/annotation'
+import {matchAnnotationsToTable, getAnnotationsTable} from './data/annotation'
 
 storiesOf('Annotations', module)
   .addDecorator(withKnobs)
@@ -73,7 +73,7 @@ storiesOf('Annotations', module)
     const yTotalTicks = number('Y Total Ticks', 10)
     const position = select(
       'Line Position',
-      { stacked: 'stacked', overlaid: 'overlaid' },
+      {stacked: 'stacked', overlaid: 'overlaid'},
       'overlaid'
     )
     const interpolation = interpolationKnob()
@@ -81,7 +81,7 @@ storiesOf('Annotations', module)
     const lineWidth = number('Line Width', 1)
     const hoverDimension = select(
       'Hover Dimension',
-      { auto: 'auto', x: 'x', y: 'y', xy: 'xy' },
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
 
@@ -122,9 +122,10 @@ storiesOf('Annotations', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({ timeZone, format: timeFormat }),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
           }`,
       },
       xScale,
@@ -189,7 +190,7 @@ storiesOf('Annotations', module)
     const yTotalTicks = number('Y Total Ticks', 10)
     const position = select(
       'Line Position',
-      { stacked: 'stacked', overlaid: 'overlaid' },
+      {stacked: 'stacked', overlaid: 'overlaid'},
       'overlaid'
     )
     const interpolation = interpolationKnob()
@@ -197,7 +198,7 @@ storiesOf('Annotations', module)
     const lineWidth = number('Line Width', 1)
     const hoverDimension = select(
       'Hover Dimension',
-      { auto: 'auto', x: 'x', y: 'y', xy: 'xy' },
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
 
@@ -255,9 +256,10 @@ storiesOf('Annotations', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({ timeZone, format: timeFormat }),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
           }`,
       },
       xScale,
@@ -324,7 +326,7 @@ storiesOf('Annotations', module)
     const yTotalTicks = number('Y Total Ticks', 10)
     const position = select(
       'Line Position',
-      { stacked: 'stacked', overlaid: 'overlaid' },
+      {stacked: 'stacked', overlaid: 'overlaid'},
       'overlaid'
     )
     const interpolation = interpolationKnob()
@@ -332,7 +334,7 @@ storiesOf('Annotations', module)
     const lineWidth = number('Line Width', 1)
     const hoverDimension = select(
       'Hover Dimension',
-      { auto: 'auto', x: 'x', y: 'y', xy: 'xy' },
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
 
@@ -390,9 +392,10 @@ storiesOf('Annotations', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({ timeZone, format: timeFormat }),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
           }`,
       },
       xScale,
@@ -469,7 +472,7 @@ storiesOf('Annotations', module)
     const yTotalTicks = number('Y Total Ticks', 10)
     const position = select(
       'Line Position',
-      { stacked: 'stacked', overlaid: 'overlaid' },
+      {stacked: 'stacked', overlaid: 'overlaid'},
       'overlaid'
     )
     const interpolation = interpolationKnob()
@@ -477,7 +480,7 @@ storiesOf('Annotations', module)
     const lineWidth = number('Line Width', 1)
     const hoverDimension = select(
       'Hover Dimension',
-      { auto: 'auto', x: 'x', y: 'y', xy: 'xy' },
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
       'auto'
     )
 
@@ -516,9 +519,10 @@ storiesOf('Annotations', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({ timeZone, format: timeFormat }),
+        _time: timeFormatter({timeZone, format: timeFormat}),
         _value: val =>
-          `${val.toFixed(2)}${valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          `${val.toFixed(2)}${
+            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
           }`,
       },
       xScale,

@@ -1,6 +1,6 @@
-import { newTable, Table } from '../../../giraffe/src'
+import {newTable, Table} from '../../../giraffe/src'
 import memoizeOne from 'memoize-one'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 export const getGeoTable = (fixed: boolean, numberOfRecords = 200) => {
   const TIME_COL = []
@@ -32,7 +32,7 @@ const addTrack = (fixed: boolean, data, startLat: number, startLon: number) => {
     const time = nowOrFixed(fixed) + i * 1000 * 60
     lat += Math.random() * 1.5
     lon += Math.random() * 1.5
-    data.push({ time, lat, lon, tid })
+    data.push({time, lat, lon, tid})
   }
 }
 

@@ -1,5 +1,5 @@
-import { newTable } from '../../../giraffe/src'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {newTable} from '../../../giraffe/src'
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const numberOfRecords = 20
 const recordsPerLine = 20
@@ -20,5 +20,4 @@ export const getSingleStatTable = (fixed: boolean) => {
     .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
     .addColumn('_value', 'system', 'number', VALUE_COL)
     .addColumn('cpu', 'string', 'string', CPU_COL)
-
 }

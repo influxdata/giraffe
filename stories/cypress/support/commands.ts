@@ -1,5 +1,5 @@
-import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
-import { Options as ImageSnapshotOptions } from 'cypress-image-snapshot'
+import {addMatchImageSnapshotCommand} from 'cypress-image-snapshot/command'
+import {Options as ImageSnapshotOptions} from 'cypress-image-snapshot'
 
 addMatchImageSnapshotCommand()
 
@@ -72,43 +72,45 @@ export const inputKnobs: {
   (label: string, value: string, type: 'select'): void
   (label: string, value: number, type: 'number'): void
   (label: string, value: boolean, type: 'boolean'): void
-} = (label: string, value: number | string | boolean, type: 'range' | 'select' | 'number' | 'text' | 'boolean' = 'text') => {
+} = (
+  label: string,
+  value: number | string | boolean,
+  type: 'range' | 'select' | 'number' | 'text' | 'boolean' = 'text'
+) => {
   const escapeSpaces = (str: string) => str.replace(/ /, '\\ ')
   const selector = `#${escapeSpaces(label)}, [name='${label}']`
   switch (type) {
     case 'text':
       const valueStr = value as string
       cy.get(selector)
-        .clear({ force: true })
-        .type(valueStr, { force: true })
+        .clear({force: true})
+        .type(valueStr, {force: true})
       break
     case 'select':
-      cy.get(selector)
-        .select(value as string)
+      cy.get(selector).select(value as string)
       break
     case 'boolean':
-      cy.get(selector + ' input')
-        [value ? 'check' : 'uncheck']()
+      cy.get(selector + ' input')[value ? 'check' : 'uncheck']()
       break
     case 'range':
       throw new Error(`Input knobs of type ${type} not implemented`)
-      // todo: input - range
-      cy.get(`[name='${escapeSpaces(label)}']`)
-      // .then(x => {
-      //   x.first().trigger("change", {value})
-      // })
-      // .invoke('val', value)
-      // .invoke('attr', 'value', value)
-      // .trigger('input', { force: true, data: value })
-      // .trigger('change', { force: true, value })
-      // .invoke('mouseup')
-      // .trigger('blur')
-      // .type(100)
-      // .trigger('mousedown', { which: 1 })
-      // .trigger('mousemove', { clientX: 0, clientY: 100 })
-      // .trigger('mouseup', {force: true})
-      cy.wait(1000)
-      break
+    // todo: input - range
+    // cy.get(`[name='${escapeSpaces(label)}']`)
+    // // .then(x => {
+    // //   x.first().trigger("change", {value})
+    // // })
+    // // .invoke('val', value)
+    // // .invoke('attr', 'value', value)
+    // // .trigger('input', { force: true, data: value })
+    // // .trigger('change', { force: true, value })
+    // // .invoke('mouseup')
+    // // .trigger('blur')
+    // // .type(100)
+    // // .trigger('mousedown', { which: 1 })
+    // // .trigger('mousemove', { clientX: 0, clientY: 100 })
+    // // .trigger('mouseup', {force: true})
+    // cy.wait(1000)
+    // break
     default:
       throw new Error(`Input knobs of type ${type} not implemented`)
   }

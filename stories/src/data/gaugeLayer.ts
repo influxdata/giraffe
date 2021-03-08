@@ -1,10 +1,14 @@
-import { newTable, Table } from '../../../giraffe/src'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {newTable} from '../../../giraffe/src'
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const numberOfRecords = 20
 const recordsPerLine = 20
 
-export const getGaugeTable = (fixed: boolean, minValue: number, maxValue: number) => {
+export const getGaugeTable = (
+  fixed: boolean,
+  minValue: number,
+  maxValue: number
+) => {
   const TIME_COL: Array<number> = []
   const VALUE_COL: Array<number> = []
 

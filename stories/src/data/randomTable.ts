@@ -1,6 +1,6 @@
-import { newTable } from '../../../giraffe/src/utils/newTable'
+import {newTable} from '../../../giraffe/src/utils/newTable'
 import memoizeOne from 'memoize-one'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const defaultNumberOfRecords = 80
 const defaultRecordsPerLine = 20

@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { storiesOf } from '@storybook/react'
-import { withKnobs, number, text, boolean } from '@storybook/addon-knobs'
-import { Config, Plot, GaugeTheme } from '../../giraffe/src'
-import { DEFAULT_GAUGE_COLORS } from '../../giraffe/src'
+import {storiesOf} from '@storybook/react'
+import {withKnobs, number, text, boolean} from '@storybook/addon-knobs'
+import {Config, Plot, GaugeTheme} from '../../giraffe/src'
+import {DEFAULT_GAUGE_COLORS} from '../../giraffe/src'
 
-import { PlotContainer } from './helpers'
-import { getGaugeTable } from './data/gaugeLayer'
+import {PlotContainer} from './helpers'
+import {getGaugeTable} from './data/gaugeLayer'
 
 storiesOf('Gauge', module)
   .addDecorator(withKnobs)
@@ -59,8 +59,8 @@ storiesOf('Gauge', module)
             digits: decimalPlaces,
           },
           gaugeColors: [
-            { ...DEFAULT_GAUGE_COLORS[0], value: gaugeMin },
-            { ...DEFAULT_GAUGE_COLORS[1], value: gaugeMax },
+            {...DEFAULT_GAUGE_COLORS[0], value: gaugeMin},
+            {...DEFAULT_GAUGE_COLORS[1], value: gaugeMax},
           ],
           gaugeSize,
           gaugeTheme: {

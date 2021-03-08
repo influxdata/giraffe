@@ -1,5 +1,5 @@
-import { newTable } from '../../../giraffe/src'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {newTable} from '../../../giraffe/src'
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const numberOfRecords = 80
 const recordsPerLine = 20
@@ -37,7 +37,9 @@ const alphabet = [
 
 function getRandomString(fixed: boolean, i: number) {
   function getRandomAlphabetChar(ii: number) {
-    const index = Math.floor(getRandomOrFixed(fixed, ii + i, alphabet.length - 1))
+    const index = Math.floor(
+      getRandomOrFixed(fixed, ii + i, alphabet.length - 1)
+    )
     return alphabet[index]
   }
 
@@ -78,5 +80,4 @@ export const getStackedLineTable = (fixed: boolean) => {
     .addColumn('test_col_b', 'string', 'string', TEST_COL_B)
     .addColumn('test_col_c', 'string', 'string', TEST_COL_C)
     .addColumn('test_col_d', 'string', 'string', TEST_COL_D)
-
 }

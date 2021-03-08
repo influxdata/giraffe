@@ -1,5 +1,5 @@
-import { newTable } from '../../../giraffe/src'
-import { getRandomOrFixed, nowOrFixed } from "./utils"
+import {newTable} from '../../../giraffe/src'
+import {getRandomOrFixed, nowOrFixed} from './utils'
 
 const numberOfRecords = 40
 const recordsPerLine = 20

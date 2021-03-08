@@ -9,7 +9,7 @@ export const getRandomOrFixed: {
   }
 
   if (fixed) {
-    return (((Math.sin(index) + 1) / 2)) * (maxValue - minValue) + minValue
+    return ((Math.sin(index) + 1) / 2) * (maxValue - minValue) + minValue
   } else {
     return Math.random() * (maxValue - minValue) + minValue
   }
