@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
-import {geoTable, geoTracks} from './data/geoLayer'
+import {getGeoTable, geoTracks} from './data/geoLayer'
 import {
   boolean,
   color,
@@ -53,6 +53,7 @@ const genericKnobs = () => {
 }
 
 const buildCircleMapStory = tileServerConfiguration => () => {
+  const fixed = boolean('Fixed data', false)
   const numberOfRecords = number('Circle count', 26, {
     range: true,
     min: 0,
@@ -61,7 +62,7 @@ const buildCircleMapStory = tileServerConfiguration => () => {
   })
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const config: Config = {
-    table: geoTable(numberOfRecords),
+    table: getGeoTable(fixed, numberOfRecords),
     showAxes: false,
     layers: [
       {
@@ -99,6 +100,7 @@ const buildCircleMapStory = tileServerConfiguration => () => {
 geo.add('Circle Markers', buildCircleMapStory(osmTileServerConfiguration))
 
 geo.add('Map Markers Static', () => {
+  const fixed = boolean('Fixed data', false)
   const numberOfRecords = number('Marker count', 20, {
     range: true,
     min: 0,
@@ -107,7 +109,7 @@ geo.add('Map Markers Static', () => {
   })
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const config: Config = {
-    table: geoTable(numberOfRecords),
+    table: getGeoTable(fixed, numberOfRecords),
     showAxes: false,
     layers: [
       {
@@ -182,6 +184,7 @@ geo.add('Map Markers Custom CSV', () => {
 })
 
 geo.add('Marker Clustering', () => {
+  const fixed = boolean('Fixed data', false)
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const maxClusterRadius = number('Maximum Cluster Radius', 50, {
     range: true,
@@ -201,7 +204,7 @@ geo.add('Marker Clustering', () => {
     ClusterAggregation.mean
   )
   const config: Config = {
-    table: geoTable(200),
+    table: getGeoTable(fixed, 200),
     showAxes: false,
     layers: [
       {
@@ -256,6 +259,7 @@ const heatmapKnobs = () => {
 }
 
 geo.add('Heatmap', () => {
+  const fixed = boolean('Fixed data', false)
   const numberOfPoints = number('Data point count', 200, {
     range: true,
     min: 0,
@@ -265,7 +269,7 @@ geo.add('Heatmap', () => {
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const {radius, blur} = heatmapKnobs()
   const config: Config = {
-    table: geoTable(numberOfPoints),
+    table: getGeoTable(fixed, numberOfPoints),
     showAxes: false,
     layers: [
       {
@@ -333,6 +337,7 @@ const trackKnobs = () => {
 }
 
 geo.add('Tracks', () => {
+  const fixed = boolean('Fixed data', false)
   const numberOfTracks = number('Track count', 3, {
     range: true,
     min: 0,
@@ -350,7 +355,7 @@ geo.add('Tracks', () => {
     endStopMarkerRadius,
   } = trackKnobs()
   const config: Config = {
-    table: geoTracks(-74, 40, numberOfTracks),
+    table: geoTracks(fixed, -74, 40, numberOfTracks),
     showAxes: false,
     layers: [
       {
@@ -388,6 +393,7 @@ geo.add('Tracks', () => {
 })
 
 geo.add('Layering visualizations', () => {
+  const fixed = boolean('Fixed data', false)
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const {
     speed,
@@ -398,7 +404,7 @@ geo.add('Layering visualizations', () => {
     endStopMarkerRadius,
   } = trackKnobs()
   const config: Config = {
-    table: geoTracks(-74, 40),
+    table: geoTracks(fixed, -74, 40),
     showAxes: false,
     layers: [
       {

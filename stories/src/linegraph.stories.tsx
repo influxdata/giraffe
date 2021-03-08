@@ -25,12 +25,10 @@ import {
 
 import {tooltipFalsyValues} from './data/fluxCSV'
 
-const maxValue = Math.random() * Math.floor(200)
-
 storiesOf('Line Graph', module)
   .addDecorator(withKnobs)
   .add('User defined ticks', () => {
-    let table = getRandomTable(maxValue)
+    let table = getRandomTable(boolean('Fixed data', false))
     const xTickStart = number('xTickStart', new Date().getTime())
     const xTickStep = number('xTickStep', 200_000)
     const xTotalTicks = number('xTotalTicks', 5)

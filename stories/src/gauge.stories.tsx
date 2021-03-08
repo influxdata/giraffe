@@ -1,15 +1,16 @@
 import * as React from 'react'
-import {storiesOf} from '@storybook/react'
-import {withKnobs, number, text} from '@storybook/addon-knobs'
-import {Config, Plot, GaugeTheme} from '../../giraffe/src'
-import {DEFAULT_GAUGE_COLORS} from '../../giraffe/src'
+import { storiesOf } from '@storybook/react'
+import { withKnobs, number, text, boolean } from '@storybook/addon-knobs'
+import { Config, Plot, GaugeTheme } from '../../giraffe/src'
+import { DEFAULT_GAUGE_COLORS } from '../../giraffe/src'
 
-import {PlotContainer} from './helpers'
-import {gaugeTable} from './data/gaugeLayer'
+import { PlotContainer } from './helpers'
+import { getGaugeTable } from './data/gaugeLayer'
 
 storiesOf('Gauge', module)
   .addDecorator(withKnobs)
   .add('Gauge', () => {
+    const fixed = boolean('Fixed data', false)
     const decimalPlaces = Number(text('Decimal Places', '4'))
     const lineCount = Number(text('Gauge Lines', '6'))
     const smallLineCount = Number(text('Ticks between lines', '10'))
@@ -37,7 +38,7 @@ storiesOf('Gauge', module)
       max: 200,
       step: 1,
     })
-    const gaugeMin = Number(text('Gauge Min', '0'))
+    const gaugeMin = number('Gauge Min', 0)
     const gaugeMax = Number(text('Gauge Max', '100'))
     const prefix = text('Prefix', '')
     const suffix = text('Suffix', '')
@@ -45,7 +46,7 @@ storiesOf('Gauge', module)
     const tickSuffix = text('TickSuffix', '')
 
     const config: Config = {
-      table: gaugeTable(gaugeMin, gaugeMax),
+      table: getGaugeTable(fixed, gaugeMin, gaugeMax),
       layers: [
         {
           type: 'gauge',
@@ -58,8 +59,8 @@ storiesOf('Gauge', module)
             digits: decimalPlaces,
           },
           gaugeColors: [
-            {...DEFAULT_GAUGE_COLORS[0], value: gaugeMin},
-            {...DEFAULT_GAUGE_COLORS[1], value: gaugeMax},
+            { ...DEFAULT_GAUGE_COLORS[0], value: gaugeMin },
+            { ...DEFAULT_GAUGE_COLORS[1], value: gaugeMax },
           ],
           gaugeSize,
           gaugeTheme: {

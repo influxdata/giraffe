@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, MAGMA, timeFormatter} from '../../giraffe/src'
-import {stackedLineTable} from './data/stackedLineLayer'
+import {getStackedLineTable} from './data/stackedLineLayer'
 
 import {
   PlotContainer,
@@ -27,7 +27,8 @@ import {
 storiesOf('XY Plot', module)
   .addDecorator(withKnobs)
   .add('Stacked Line Layer', () => {
-    const table = tableKnob(stackedLineTable)
+    const baseTable = getStackedLineTable(boolean('Fixed data', false))
+    const table = tableKnob(baseTable)
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()

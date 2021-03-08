@@ -1,17 +1,14 @@
-import {newTable} from '../../../giraffe/src/utils/newTable'
+import { newTable } from '../../../giraffe/src/utils/newTable'
 import memoizeOne from 'memoize-one'
+import { getRandomOrFixed, nowOrFixed } from "./utils"
 
-const now = Date.now()
 const defaultNumberOfRecords = 80
 const defaultRecordsPerLine = 20
 
-function getRandomNumber(max) {
-  return Math.random() * Math.floor(max) - max / 2
-}
-
 export const getRandomTable = memoizeOne(
   (
-    maxValue: number,
+    fixed: boolean,
+    maxValue: number = 200,
     numberOfRecords: number = defaultNumberOfRecords,
     recordsPerLine: number = defaultRecordsPerLine
   ) => {
@@ -20,9 +17,9 @@ export const getRandomTable = memoizeOne(
     const cpuColumn = []
 
     for (let i = 0; i < numberOfRecords; i += 1) {
-      valueColumn.push(getRandomNumber(maxValue))
+      valueColumn.push(getRandomOrFixed(fixed, i, maxValue))
       cpuColumn.push(`cpu${Math.floor(i / recordsPerLine)}`)
-      timeColumn.push(now + (i % recordsPerLine) * 1000 * 60)
+      timeColumn.push(nowOrFixed(fixed) + (i % recordsPerLine) * 1000 * 60)
     }
 
     return newTable(numberOfRecords)

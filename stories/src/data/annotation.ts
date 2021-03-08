@@ -5,31 +5,30 @@ import {
   Table,
 } from '../../../giraffe/src/types'
 import {newTable} from '../../../giraffe/src'
+import { getRandomOrFixed, nowOrFixed } from "./utils"
 
-const now = Date.now()
 const numberOfRecords = 20
 const recordsPerLine = 20
 const maxValue = 10
 
-const TIME_COL = []
-const VALUE_COL = []
-const CPU_COL = []
-
 const DEFAULT_COLOR = 'green'
 
-function getRandomNumber(max) {
-  return Math.random() * Math.floor(max)
-}
-for (let i = 0; i < numberOfRecords; i += 1) {
-  VALUE_COL.push(getRandomNumber(maxValue))
-  CPU_COL.push(`cpu${Math.floor(i / recordsPerLine)}`)
-  TIME_COL.push(now + (i % recordsPerLine) * 1000 * 60)
-}
+export const getAnnotationsTable = (fixed: boolean) => {
+  const TIME_COL = []
+  const VALUE_COL = []
+  const CPU_COL = []
 
-export const annotationsTable = newTable(numberOfRecords)
-  .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
-  .addColumn('_value', 'system', 'number', VALUE_COL)
-  .addColumn('cpu', 'string', 'string', CPU_COL)
+  for (let i = 0; i < numberOfRecords; i += 1) {
+    VALUE_COL.push(getRandomOrFixed(fixed, i, maxValue))
+    CPU_COL.push(`cpu${Math.floor(i / recordsPerLine)}`)
+    TIME_COL.push(nowOrFixed(fixed) + (i % recordsPerLine) * 1000 * 60)
+  }
+
+  return newTable(numberOfRecords)
+    .addColumn('_time', 'dateTime:RFC3339', 'time', TIME_COL)
+    .addColumn('_value', 'system', 'number', VALUE_COL)
+    .addColumn('cpu', 'string', 'string', CPU_COL)
+}
 
 interface SampleAnnotationsCreatorOptions {
   color: string

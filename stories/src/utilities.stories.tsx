@@ -10,7 +10,7 @@ import {
   fromFlux,
   timeFormatter,
 } from '../../giraffe/src'
-import {stackedLineTable} from './data/stackedLineLayer'
+import {getStackedLineTable} from './data/stackedLineLayer'
 
 import {PlotEnv} from '../../giraffe/src/utils/PlotEnv'
 
@@ -51,7 +51,8 @@ import {
 storiesOf('Utilities', module)
   .addDecorator(withKnobs)
   .add('Screenshot A Stacked Line Layer', () => {
-    const table = tableKnob(stackedLineTable)
+    const baseTable = getStackedLineTable(boolean('fixed data', false))
+    const table = tableKnob(baseTable)
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {storiesOf} from '@storybook/react'
-import {boolean, number, select, text, withKnobs} from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
+import { boolean, number, select, text, withKnobs } from '@storybook/addon-knobs'
 import {
   Config,
   Plot,
@@ -26,8 +26,8 @@ import {
   tooltipColorizeRowsKnob,
 } from './helpers'
 
-import {CPU} from './data/cpu'
-import {singleStatTable} from './data/singleStatLayer'
+import { CPU } from './data/cpu'
+import { getSingleStatTable } from './data/singleStatLayer'
 
 storiesOf('Custom Layer', module)
   .addDecorator(withKnobs)
@@ -42,7 +42,7 @@ storiesOf('Custom Layer', module)
         },
         {
           type: 'custom',
-          render: ({key, yScale}) => {
+          render: ({ key, yScale }) => {
             return (
               <div
                 key={key}
@@ -68,6 +68,8 @@ storiesOf('Custom Layer', module)
     )
   })
   .add('Single Stat', () => {
+    const fixed = boolean('Fixed data', false)
+    const singleStatTable = getSingleStatTable(fixed)
     const decimalPlaces = Number(text('Decimal Places', '4'))
     const textOpacity = number('Single Stat Opacity', 1, {
       range: true,
@@ -123,6 +125,8 @@ storiesOf('Custom Layer', module)
     )
   })
   .add('Single Stat on top of Line Layer', () => {
+    const fixed = boolean('Fixed data', false)
+    const singleStatTable = getSingleStatTable(fixed)
     const includeSingleStatLayer = boolean('Single Stat', true)
     const decimalPlaces = Number(text('Decimal Places', '2'))
     const textOpacity = number('Single Stat Opacity', 1, {
@@ -181,7 +185,7 @@ storiesOf('Custom Layer', module)
     const fill = fillKnob(table, ['cpu'])
     const position = select(
       'Line Position',
-      {stacked: 'stacked', overlaid: 'overlaid'},
+      { stacked: 'stacked', overlaid: 'overlaid' },
       'overlaid'
     )
     const interpolation = interpolationKnob()
@@ -191,7 +195,7 @@ storiesOf('Custom Layer', module)
     const shadeBelowOpacity = number('Area Opacity', 0.1)
     const hoverDimension = select(
       'Hover Dimension',
-      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      { auto: 'auto', x: 'x', y: 'y', xy: 'xy' },
       'auto'
     )
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
@@ -234,10 +238,9 @@ storiesOf('Custom Layer', module)
     const config: Config = {
       table,
       valueFormatters: {
-        _time: timeFormatter({timeZone, format: timeFormat}),
+        _time: timeFormatter({ timeZone, format: timeFormat }),
         _value: val =>
-          `${val.toFixed(2)}${
-            valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+          `${val.toFixed(2)}${valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
           }`,
       },
       xScale,
