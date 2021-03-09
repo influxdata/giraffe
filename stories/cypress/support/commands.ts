@@ -69,6 +69,7 @@ export const snapshotComponent = (
 
 export const inputKnobs: {
   (label: string, value: string): void
+  (label: string, value: string, type: 'text'): void
   (label: string, value: string, type: 'select'): void
   (label: string, value: number, type: 'number'): void
   (label: string, value: boolean, type: 'boolean'): void

@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node:lts
     working_directory: ~/repo
@@ -35,3 +35,26 @@ jobs:
       #       else \
       #         yarn run chromatic -- --auto-accept-changes
       #       fi
+  update-snapshots:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn --cwd stories cy:update
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+      - update-snapshots:
+          type: approval
+          requires:
+            - test
+          
