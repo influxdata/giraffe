@@ -40,6 +40,8 @@ https://github.com/ShmuelLotman/giraffe_sample </td><td>  Histogram </td><td> Di
 <td>https://github.com/ChitlangeSahas/influxdata-giraffe-demo </td><td>  Table </td><td>  Direct API </td><td> React </td></tr>
 <tr>
 <td>https://github.com/influxdata/influxdb-client-js/blob/master/examples/giraffe.html </td><td>  Line </td><td>  InfluxDB Client </td><td> HTML </td></tr>
+<tr>
+<td>https://github.com/genehynson/telegraf-giraffe-iss </td><td> Map </td><td> InfluxDB Client </td><td> Node/React </td></tr>
 
 
 
