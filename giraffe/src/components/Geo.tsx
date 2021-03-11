@@ -120,13 +120,6 @@ const Geo: FunctionComponent<Props> = props => {
     }
   }
 
-  const calcDataCenter = (lats: number[], lons: number[]) => {
-    const latMax = lats.reduce((a, b) => Math.max(a, b))
-    const latMin = lats.reduce((a, b) => Math.min(a, b))
-    const lonMax = lons.reduce((a, b) => Math.max(a, b))
-    const lonMin = lons.reduce((a, b) => Math.min(a, b))
-    return {lat: (latMax + latMin) / 2, lon: (lonMax + lonMin) / 2}
-  }
   const cMeth = centerMethod ? centerMethod : 'fixed'
   let mapCenter = {lat: lat, lon: lon}
 
@@ -146,26 +139,8 @@ const Geo: FunctionComponent<Props> = props => {
       case 'fixed':
         break
       case 'center':
-        if (
-          table.length > 0 &&
-          table.getColumn('lat') &&
-          table.getColumn('lon')
-        ) {
-          const lats = (table.getColumn('lat') as any).map(el => parseFloat(el))
-          const lons = (table.getColumn('lon') as any).map(el => parseFloat(el))
-          latLon = calcDataCenter(lats, lons)
-          mapCenter = {lat: latLon.lat, lon: latLon.lon}
-        } else if (table.length > 0 && table.getColumn('s2_cell_id')) {
-          const lats = []
-          const lons = []
-          for (let i = 0; i < preprocessedTable.getRowCount(); i++) {
-            const ltln = preprocessedTable.getLatLon(i)
-            lats.push(ltln.lat)
-            lons.push(ltln.lon)
-          }
-          latLon = calcDataCenter(lats, lons)
-          mapCenter = {lat: latLon.lat, lon: latLon.lon}
-        }
+        latLon = preprocessedTable.getCenterPoint()
+        mapCenter = {lat: latLon.lat, lon: latLon.lon}
         break
       default:
         if (typeof cMeth === 'number') {

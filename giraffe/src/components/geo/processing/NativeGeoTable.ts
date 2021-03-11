@@ -19,6 +19,9 @@ export class NativeGeoTable extends AbstractGeoTable {
     super(getDataEncoding(table))
     this.table = table
     this.maxRows = maxRows
+    if (this.table.getColumn(LAT_COLUMN) && this.table.getColumn(LON_COLUMN)) {
+      this.latLonToNumber()
+    }
   }
 
   getRowCount() {
@@ -33,6 +36,20 @@ export class NativeGeoTable extends AbstractGeoTable {
     return column[
       index * Math.max(1, Math.floor(this.table.length / this.maxRows))
     ] as number
+  }
+
+  colToNumber(colName: string) {
+    const column = this.table.getColumn(colName)
+    if (column && typeof column[0] !== 'number') {
+      for (let i = 0; i < column.length; i++) {
+        column[i] = parseFloat(column[i] as string)
+      }
+    }
+  }
+
+  latLonToNumber() {
+    this.colToNumber(LAT_COLUMN)
+    this.colToNumber(LON_COLUMN)
   }
 
   getS2CellID(index: number): string {

@@ -16,7 +16,7 @@ import {
 } from './tableProcessing'
 
 // Types
-import {GeoTable, LatLon, Track} from './GeoTable'
+import {GeoTable, LatLon, Track, getMinAndMax, MinAndMax} from './GeoTable'
 
 export enum CoordinateEncoding {
   GEO_HASH,
@@ -83,6 +83,50 @@ export abstract class AbstractGeoTable implements GeoTable {
         return timestampToString(value)
       }
     }
+  }
+
+  crossesDateLine(
+    centerPoint: LatLon = null,
+    lonMinMax: MinAndMax = null
+  ): boolean {
+    lonMinMax = lonMinMax ? lonMinMax : getMinAndMax(this, LON_COLUMN)
+    centerPoint = centerPoint ? centerPoint : this.getCenterPoint()
+
+    const dif2Max = Math.abs(lonMinMax.max - centerPoint.lon)
+    const dif2Min = Math.abs(centerPoint.lon - lonMinMax.min)
+    const opDif2Max = Math.abs(lonMinMax.max - (centerPoint.lon + 180))
+    const opDif2Min = Math.abs(centerPoint.lon - 180 - lonMinMax.min)
+
+    return opDif2Max < dif2Max && opDif2Min < dif2Min
+  }
+
+  getCenterPoint(): LatLon {
+    let lonMinMax
+    let latMinMax
+    if (this.coordinateEncoding === CoordinateEncoding.FIELDS) {
+      lonMinMax = getMinAndMax(this, LON_COLUMN)
+      latMinMax = getMinAndMax(this, LAT_COLUMN)
+    } else if (this.coordinateEncoding === CoordinateEncoding.GEO_HASH) {
+      lonMinMax = {max: -180, min: 180}
+      latMinMax = {max: -90, min: 90}
+      for (let i = 0; i < this.getRowCount(); i++) {
+        const latLon = this.getLatLon(i)
+        lonMinMax.max = latLon.lon > lonMinMax.max ? latLon.lon : lonMinMax.max
+        lonMinMax.min = latLon.lon < lonMinMax.min ? latLon.lon : lonMinMax.min
+        latMinMax.max = latLon.lat > latMinMax.max ? latLon.lat : latMinMax.max
+        latMinMax.min = latLon.lat < latMinMax.min ? latLon.lat : latMinMax.min
+      }
+    } else {
+      throw `Unknown coordinateEncoding ${this.coordinateEncoding} center cannot be calculated`
+    }
+    const result = {
+      lat: (latMinMax.max + latMinMax.min) / 2,
+      lon: (lonMinMax.max + lonMinMax.min) / 2,
+    }
+    result.lon = this.crossesDateLine(result, lonMinMax)
+      ? result.lon + 180
+      : result.lon
+    return result
   }
 }
 
