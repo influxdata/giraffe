@@ -6,7 +6,7 @@ import {DecimalPlaces} from '../types'
 
 export const MAX_DECIMAL_PLACES = 10
 
-interface FormatStatValueOptions {
+export interface FormatStatValueOptions {
   decimalPlaces?: DecimalPlaces
   prefix?: string
   suffix?: string

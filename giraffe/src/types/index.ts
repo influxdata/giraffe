@@ -2,6 +2,7 @@ import CSS from 'csstype'
 import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
+import {FormatStatValueOptions} from '../utils/formatStatValue'
 
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
@@ -176,6 +177,7 @@ export type FluxDataType =
 export enum LayerTypes {
   RawFluxDataTable = 'flux data table',
   Gauge = 'gauge',
+  GaugeMini = 'gauge mini',
   Custom = 'custom',
   Annotation = 'annotation',
   SingleStat = 'single stat',
@@ -194,6 +196,7 @@ export type LayerConfig =
   | AnnotationLayerConfig
   | RawFluxDataTableLayerConfig
   | GaugeLayerConfig
+  | GaugeMiniLayerConfig
   | SingleStatLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
@@ -275,6 +278,53 @@ export interface GaugeTheme {
   needleColor0: string
   needleColor1: string
   overflowDelta: number
+}
+
+export type ColorHexValue = {
+  value: number
+  hex: string
+}
+
+export type GaugeMiniColors = {
+  min: ColorHexValue
+  max: ColorHexValue
+  thresholds?: ColorHexValue[]
+}
+
+export interface GaugeMiniLayerConfig {
+  type: 'gauge mini'
+  mode?: 'progress' | 'bullet'
+  textMode?: 'follow' | 'left'
+
+  valueHeight?: number
+  gaugeHeight?: number
+  valueRounding?: number
+  gaugeRounding?: number
+  barPaddings?: number
+  sidePaddings?: number
+  oveflowFraction?: number
+
+  gaugeMiniColors?: Color[] | GaugeMiniColors
+  colorSecondary?: string
+
+  labelMain?: string
+  labelMainFontSize?: number
+  labelMainFontColor?: string
+
+  labelBarsEnabled?: boolean
+  labelBarsFontSize?: number
+  labelBarsFontColor?: string
+
+  valuePadding?: number
+  valueFontSize?: number
+  valueFontColorInside?: string
+  valueFontColorOutside?: string
+  valueFormater?: ((value: number) => string) | FormatStatValueOptions
+
+  axesSteps?: number | 'thresholds' | undefined | number[]
+  axesFontSize?: number
+  axesFontColor?: string
+  axesFormater?: ((value: number) => string) | FormatStatValueOptions
 }
 
 export interface SingleStatLayerConfig {
