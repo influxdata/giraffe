@@ -37,7 +37,6 @@ module.exports = ({config}) => {
           options: {
             ignoreDiagnostics: ['6133'],
             compilerOptions: {
-              rootDir: '../../giraffe',
               outDir: null,
               declaration: false,
             },
