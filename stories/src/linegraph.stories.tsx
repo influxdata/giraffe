@@ -217,7 +217,29 @@ storiesOf('Line Graph', module)
     )
   })
   .add('Custom CSV', () => {
-    const csv = text('Paste CSV here:', '')
+       const actualCsv = '#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string\n' +
+           '#group,false,false,true,true,false,false,true,true,true,true\n' +
+           '#default,mean,,,,,,,,,\n' +
+           ',result,table,_start,_stop,_time,_value,_field,_measurement,cpu,host\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:52:30Z,5.791184067994435,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:52:45Z,5.516193249379137,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:53:00Z,5.719526429881602,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:53:15Z,5.707094266278153,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:53:30Z,5.753356124405617,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:53:45Z,7.2708333333332575,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:54:00Z,6.407799350054487,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:54:15Z,5.941666666666757,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:54:30Z,5.4851617205731715,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:54:45Z,5.583350348959434,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:55:00Z,6.25,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:55:15Z,5.283442590359115,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:55:30Z,5.164945018327348,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:55:45Z,5.258982453946938,usage_user,cpu,cpu-total,jills-mbp.lan\n' +
+           ',,0,2021-03-09T17:52:17.3873255Z,2021-03-09T19:52:17.3873255Z,2021-03-09T17:56:00Z,15.554444722152628,usage_user,cpu,cpu-total,jills-mbp.lan\n'
+
+
+
+    const csv = text('paste csv here', '')
     let table = fromFlux(csv).table
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
@@ -259,7 +281,7 @@ storiesOf('Line Graph', module)
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
 
     const legendColorizeRows = tooltipColorizeRowsKnob()
-
+      const fill = fillKnob(table)
     const config: Config = {
       fluxResponse: csv,
       valueFormatters: {
@@ -278,7 +300,7 @@ storiesOf('Line Graph', module)
           type: 'line',
           x,
           y,
-          fill: findStringColumns(table),
+          fill: fill,
           interpolation,
           colors,
           lineWidth,

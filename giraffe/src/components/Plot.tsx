@@ -23,6 +23,7 @@ export const Plot: FunctionComponent<Props> = ({
 
   if (config.width && config.height) {
     return (
+        <div>
       <SizedPlot
         config={config as SizedConfig}
         axesCanvasRef={axesCanvasRef}
@@ -30,6 +31,10 @@ export const Plot: FunctionComponent<Props> = ({
       >
         {children}
       </SizedPlot>
+          <div style={{width:'90%', height: 100}}>
+            hi there from jill!
+          </div>
+        </div>
     )
   }
 
@@ -52,6 +57,7 @@ export const Plot: FunctionComponent<Props> = ({
           )
         }
         return (
+            <div>
           <SizedPlot
             config={{...config, width, height}}
             axesCanvasRef={axesCanvasRef}
@@ -59,6 +65,8 @@ export const Plot: FunctionComponent<Props> = ({
           >
             {children}
           </SizedPlot>
+              <div style={{width:'90%', height: 100}}> hi from jill---again! </div>
+            </div>
         )
       }}
     </AutoSizer>

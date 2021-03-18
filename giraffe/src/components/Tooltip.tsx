@@ -31,6 +31,9 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendDisable: disableTooltip,
   } = config
 
+  //console.log('using a tooltip here....(jill-a)', config)
+  console.log("data for tooltip...(jill-a)", data)
+
   const tooltipOpacity = useMemo(() => {
     if (
       legendOpacity >= TOOLTIP_MINIMUM_OPACITY &&

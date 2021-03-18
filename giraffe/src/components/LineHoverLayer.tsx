@@ -114,6 +114,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     spec.stackedDomainValueColumn
   )
 
+  console.log('got tooltip data...jill-443--again', tooltipData);
   return (
     <>
       <canvas

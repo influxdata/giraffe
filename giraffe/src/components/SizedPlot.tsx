@@ -226,6 +226,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
                   />
                 )
               case SpecTypes.Line:
+                console.log("hi! I am a line graph here (jill-b)")
                 return (
                   <LineLayer
                     canvasRef={layerCanvasRef}
