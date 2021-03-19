@@ -16,6 +16,9 @@ export {getDomainDataFromLines} from './utils/lineData'
 
 export {exportImage} from './utils/exportImage'
 
+export {getLatestValues} from './utils/getLatestValues'
+export {formatStatValue} from './utils/formatStatValue'
+
 // Transforms
 export {lineTransform} from './transforms/line'
 
