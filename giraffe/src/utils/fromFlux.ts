@@ -277,6 +277,13 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   }
 
   if (columnType === 'number') {
+    if (value === '+Inf') {
+      return '+Inf'
+    }
+
+    if (value === '-Inf') {
+      return '-Inf'
+    }
     return Number(value)
   }
 
