@@ -109,7 +109,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   return createPortal(
     <div
       className="giraffe-annotation-tooltip"
-      data-testid="giraffe-annotation-tooltip"
+      data-testid="giraffe-anntation-tooltip"
       style={{
         border,
         borderColor: data.color,
