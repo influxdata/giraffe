@@ -41,6 +41,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
               PIN_TRIANGLE_HEIGHT / 2},${clampedStart +
               PIN_TRIANGLE_WIDTH} ${length},${clampedStart}`,
             fill: color,
+            onClick: () => {console.log("thing clicked")}
           })}
         {pin === 'stop' &&
           createElement('polygon', {
