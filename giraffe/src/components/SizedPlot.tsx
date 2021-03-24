@@ -101,7 +101,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
     ? () => {
         config.interactionHandlers.singleClick(plotInteraction)
       }
-    : memoizedResetDomains
+    : () => {}
 
   if (config.interactionHandlers?.hover) {
     config.interactionHandlers.hover(plotInteraction)
@@ -150,6 +150,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
         onMouseUp={callbacks.singleClick}
+        onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
         {...dragTargetProps}
       >
