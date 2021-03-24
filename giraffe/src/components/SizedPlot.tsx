@@ -97,11 +97,12 @@ export const SizedPlot: FunctionComponent<Props> = ({
     },
   }
 
+  const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
     ? () => {
         config.interactionHandlers.singleClick(plotInteraction)
       }
-    : () => {}
+    : noOp
 
   if (config.interactionHandlers?.hover) {
     config.interactionHandlers.hover(plotInteraction)
