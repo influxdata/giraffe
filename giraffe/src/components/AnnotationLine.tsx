@@ -72,9 +72,9 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         })}
       {pin === 'start' &&
         createElement('polygon', {
-          points: `${clampedStart},0 ${clampedStart +
-            PIN_TRIANGLE_WIDTH},${PIN_TRIANGLE_HEIGHT /
-            2} ${clampedStart},${PIN_TRIANGLE_HEIGHT}`,
+          points: `${clampedStart - PIN_TRIANGLE_WIDTH},0
+          ${clampedStart + PIN_TRIANGLE_WIDTH},0 
+          ${clampedStart},${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
         })}
       {pin === 'stop' &&
