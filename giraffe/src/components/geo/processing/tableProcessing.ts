@@ -4,9 +4,6 @@ import {isPivotSensible, PivotedGeoTable} from './PivotedGeoTable'
 import {NativeGeoTable} from './NativeGeoTable'
 import {Table} from '../../../types'
 
-// Utils
-import {EmptyGeoTable} from './EmptyGeoTable'
-
 // Constants
 export const FIELD_COLUMN = '_field'
 export const VALUE_COLUMN = '_value'
@@ -29,15 +26,11 @@ export const GEO_HASH_COLUMN = 's2_cell_id'
 export const preprocessData = (
   table: Table,
   rowLimit: number,
-  autoPivoting: boolean,
-  onFinalTable: (table: GeoTable) => void
+  autoPivoting: boolean
 ): GeoTable => {
   if (autoPivoting && isPivotSensible(table)) {
     // don't delay rendering with data calculation
-    setTimeout(() => {
-      onFinalTable(new PivotedGeoTable(table, rowLimit))
-    }, 0)
-    return new EmptyGeoTable()
+    return new PivotedGeoTable(table, rowLimit)
   }
   return new NativeGeoTable(table, rowLimit)
 }
