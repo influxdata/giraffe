@@ -23,7 +23,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   } = config
   const {dimension, startValue} = data || {}
 
-  // move this sucker 15 pixels up to get out of the way of the annotation click target
+  // move this 15 pixels up to get out of the way of the annotation click target
   const yAxisTooltipOffset = -15
 
   const position = {
