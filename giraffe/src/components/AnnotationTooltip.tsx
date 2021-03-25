@@ -25,7 +25,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
 
   const position = {
     x: dimension === 'x' ? startValue : width,
-    y: dimension === 'y' ? startValue : 0,
+    y: dimension === 'y' ? startValue : -10,
   } as TooltipPosition
 
   const clampedXOffset = Math.round(
