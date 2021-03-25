@@ -54,6 +54,7 @@ export {
   RawFluxDataTableLayerConfig,
   Scale,
   SingleStatLayerConfig,
+  StaticLegend,
   Table,
 } from './types'
 
