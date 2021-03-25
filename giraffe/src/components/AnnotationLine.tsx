@@ -14,8 +14,8 @@ interface AnnotationLineProps {
 
 // These could become configurable values
 const PIN_CIRCLE_RADIUS = 4
-const PIN_TRIANGLE_HEIGHT = 10
-const PIN_TRIANGLE_WIDTH = 6
+const PIN_TRIANGLE_HEIGHT = 18
+const PIN_TRIANGLE_WIDTH = 11
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {dimension, color, strokeWidth, startValue, length, pin} = props
