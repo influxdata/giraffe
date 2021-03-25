@@ -54,7 +54,9 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
   }
 
   const handleClick = event => {
-    config.handleAnnotationClick(event.currentTarget.id)
+    if (config.handleAnnotationClick) {
+      config.handleAnnotationClick(event.currentTarget.id)
+    }
   }
 
   return (
