@@ -80,14 +80,7 @@ const Geo: FunctionComponent<Props> = props => {
   const {table, detectCoordinateFields} = props
   const [preprocessedTable, setPreprocessedTable] = useState(
     table
-      ? preprocessData(
-          table,
-          getRowLimit(props.layers),
-          detectCoordinateFields,
-          preprocessedTable => {
-            setPreprocessedTable(preprocessedTable)
-          }
-        )
+      ? preprocessData(table, getRowLimit(props.layers), detectCoordinateFields)
       : null
   )
 
@@ -95,14 +88,9 @@ const Geo: FunctionComponent<Props> = props => {
     const newTable = preprocessData(
       props.table,
       getRowLimit(props.layers),
-      props.detectCoordinateFields,
-      preprocessedTable => {
-        setPreprocessedTable(preprocessedTable)
-      }
+      props.detectCoordinateFields
     )
-    if (newTable) {
-      setPreprocessedTable(newTable)
-    }
+    setPreprocessedTable(newTable)
   }, [table, detectCoordinateFields])
 
   const onViewportChange = (viewport: {center?: number[]; zoom?: number}) => {

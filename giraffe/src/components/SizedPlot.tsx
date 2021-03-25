@@ -97,6 +97,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
     },
   }
 
+  const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
     ? event => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
@@ -110,7 +111,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
 
         config.interactionHandlers.singleClick(plotInteraction)
       }
-    : memoizedResetDomains
+    : noOp
 
   if (config.interactionHandlers?.hover) {
     config.interactionHandlers.hover(plotInteraction)
@@ -159,6 +160,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
         onMouseUp={callbacks.singleClick}
+        onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
         {...dragTargetProps}
       >

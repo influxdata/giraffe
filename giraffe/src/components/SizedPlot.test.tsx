@@ -58,10 +58,7 @@ describe('the SizedPlot', () => {
           />
         )
 
-        // when the user (for real) does a single click, then a mouse up happens.
-        // chose mouse up because the single click listener wasn't triggering except on
-        // double clicks
-        fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
+        fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).toHaveBeenCalled()
       })
@@ -83,7 +80,7 @@ describe('the SizedPlot', () => {
           />
         )
         // when the user (for real) does a single click, then a mouse up happens.
-        // chose mouse up because the single click listener wasn't triggering except on
+        // choose mouse up because the single click listener wasn't triggering except on
         // double clicks
         fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
 
