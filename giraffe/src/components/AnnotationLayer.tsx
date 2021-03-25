@@ -3,12 +3,14 @@ import {
   AnnotationLayerConfig,
   AnnotationLayerSpec,
   LayerProps,
+  LineHoverDimension,
 } from '../types'
 import {
+  getAnnotationHoverIndices,
   getAnnotationsPositions,
 } from '../utils/annotationData'
-// import {ANNOTATION_DEFAULT_HOVER_MARGIN} from '../constants/index'
-// import {AnnotationHoverLayer} from './AnnotationHoverLayer'
+import {ANNOTATION_DEFAULT_HOVER_MARGIN} from '../constants/index'
+import {AnnotationHoverLayer} from './AnnotationHoverLayer'
 import {AnnotationLine} from './AnnotationLine'
 
 export interface AnnotationLayerProps extends LayerProps {
@@ -21,7 +23,7 @@ const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
 } as CSSProperties
 
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
-  const {config, spec, width, height, xScale, yScale} = props
+  const {config, spec, width, height, xScale, yScale, hoverX, hoverY} = props
   const lineWidth = config.lineWidth || 2
   const annotationsPositions = useMemo(
     () => getAnnotationsPositions(spec.annotationData, xScale, yScale),
@@ -29,41 +31,46 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
   )
   const svgRef = useRef<SVGSVGElement>(null)
 
-  // let hoverDimension = 'xy' as LineHoverDimension
-  // if (config.hoverDimension === 'x' || config.hoverDimension === 'y') {
-  //   hoverDimension = config.hoverDimension
-  // }
-  //
-  // const hoverMargin = config.hoverMargin
-  //   ? config.hoverMargin
-  //   : ANNOTATION_DEFAULT_HOVER_MARGIN
-  //
-  // const hoverRowIndices = getAnnotationHoverIndices(
-  //   hoverDimension,
-  //   hoverMargin,
-  //   annotationsPositions,
-  //   hoverX,
-  //   hoverY
-  // )
-  //
-  // let boundingRect: DOMRect
-  // if (svgRef.current) {
-  //   boundingRect = svgRef.current.getBoundingClientRect()
-  // }
+  let hoverDimension = 'xy' as LineHoverDimension
+  if (config.hoverDimension === 'x' || config.hoverDimension === 'y') {
+    hoverDimension = config.hoverDimension
+  }
+
+  const hoverMargin = config.hoverMargin
+    ? config.hoverMargin
+    : ANNOTATION_DEFAULT_HOVER_MARGIN
+
+  const hoverRowIndices = getAnnotationHoverIndices(
+    hoverDimension,
+    hoverMargin,
+    annotationsPositions,
+    hoverX,
+    hoverY
+  )
+
+  let boundingRect: DOMRect
+  if (svgRef.current) {
+    boundingRect = svgRef.current.getBoundingClientRect()
+  }
+
+  const handleClick = event => {
+    config.handleAnnotationClick(event.currentTarget.id)
+  }
 
   return (
     <svg
       className="giraffe-layer giraffe-layer-annotation"
       ref={svgRef}
       style={{...ANNOTATION_OVERLAY_DEFAULT_STYLE, width, height}}
+      onClick={handleClick}
     >
-      {/*<AnnotationHoverLayer*/}
-      {/*  {...props}*/}
-      {/*  annotationPositions={annotationsPositions}*/}
-      {/*  boundingReference={boundingRect}*/}
-      {/*  hoverRowIndices={hoverRowIndices}*/}
-      {/*  width={width}*/}
-      {/*/>*/}
+      <AnnotationHoverLayer
+        {...props}
+        annotationPositions={annotationsPositions}
+        boundingReference={boundingRect}
+        hoverRowIndices={hoverRowIndices}
+        width={width}
+      />
       {annotationsPositions.map(annotationData =>
         annotationData.dimension === 'y' ? (
           <AnnotationLine
@@ -75,6 +82,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             color={annotationData.color}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
+            id={annotationData.id}
           />
         ) : (
           <AnnotationLine
@@ -86,6 +94,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             color={annotationData.color}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
+            id={annotationData.id}
           />
         )
       )}

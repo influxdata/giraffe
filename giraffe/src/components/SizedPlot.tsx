@@ -98,12 +98,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
   }
 
   const singleClick = config.interactionHandlers?.singleClick
-    ? (event) => {
-    console.log(config.layers)
-    console.log(env.xScale.invert(event.clientX))
-    console.log(env.xScale.invert(config.layers[1]['annotations'][0].startValue))
-    // const annotation = config.layers[1].annotations[0].startValue
-    //     console.log(annotation)
+    ? () => {
         config.interactionHandlers.singleClick(plotInteraction)
       }
     : memoizedResetDomains

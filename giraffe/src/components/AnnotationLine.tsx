@@ -9,6 +9,7 @@ interface AnnotationLineProps {
   stopValue: number
   length: number
   pin: AnnotationPinType
+  id: string
 }
 
 // These could become configurable values
@@ -75,10 +76,9 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           points: `${clampedStart - PIN_TRIANGLE_WIDTH},0
           ${clampedStart + PIN_TRIANGLE_WIDTH},0 
           ${clampedStart},${PIN_TRIANGLE_HEIGHT}`,
-          onClick: (event) => {
-            event.nativeEvent.stopImmediatePropagation();
-            console.log("thing clicked")},
           fill: color,
+          style: {cursor: 'pointer'},
+          id: props.id,
         })}
       {pin === 'stop' &&
         createElement('polygon', {
