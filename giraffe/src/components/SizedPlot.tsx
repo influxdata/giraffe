@@ -120,12 +120,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  // for single clicking; using mouseup, since the onClick only gets through
-  // with a double click; and the hover and drag target does not use a mouse up;
-  // they are:  hover:  mouseEnter, mousemove, mouseleave
-  //            drag target: mouseDown
-  // and every time there is a single click, the mouse goes up.  so using that instead.
-
   return (
     <div
       className="giraffe-plot"
@@ -150,7 +144,7 @@ export const SizedPlot: FunctionComponent<Props> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onMouseUp={callbacks.singleClick}
+        onClick={callbacks.singleClick}
         onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
         {...dragTargetProps}
