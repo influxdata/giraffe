@@ -38,16 +38,19 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           })}
         {pin === 'start' &&
           createElement('polygon', {
-            points: `${length - PIN_TRIANGLE_HEIGHT},${clampedStart} ${length -
-              PIN_TRIANGLE_HEIGHT / 2},${clampedStart +
-              PIN_TRIANGLE_WIDTH} ${length},${clampedStart}`,
+            points: `${length - PIN_TRIANGLE_HEIGHT}, ${clampedStart} ${length -
+              PIN_TRIANGLE_HEIGHT / 2}, ${clampedStart +
+              PIN_TRIANGLE_WIDTH} ${length}, ${clampedStart}`,
             fill: color,
+            style: {cursor: 'pointer'},
+            id: props.id,
+            className: 'giraffe-annotation-click-target',
           })}
         {pin === 'stop' &&
           createElement('polygon', {
-            points: `${length - PIN_TRIANGLE_HEIGHT},${clampedStart} ${length -
-              PIN_TRIANGLE_HEIGHT / 2},${clampedStart -
-              PIN_TRIANGLE_WIDTH} ${length},${clampedStart}`,
+            points: `${length - PIN_TRIANGLE_HEIGHT}, ${clampedStart} ${length -
+              PIN_TRIANGLE_HEIGHT / 2}, ${clampedStart -
+              PIN_TRIANGLE_WIDTH} ${length}, ${clampedStart}`,
             fill: color,
           })}
         <line
@@ -73,18 +76,19 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         })}
       {pin === 'start' &&
         createElement('polygon', {
-          points: `${clampedStart - PIN_TRIANGLE_WIDTH},0
-          ${clampedStart + PIN_TRIANGLE_WIDTH},0 
-          ${clampedStart},${PIN_TRIANGLE_HEIGHT}`,
+          points: `${clampedStart - PIN_TRIANGLE_WIDTH}, 0
+          ${clampedStart + PIN_TRIANGLE_WIDTH}, 0
+          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
           style: {cursor: 'pointer'},
           id: props.id,
+          className: 'giraffe-annotation-click-target',
         })}
       {pin === 'stop' &&
         createElement('polygon', {
-          points: `${clampedStart},0 ${clampedStart -
-            PIN_TRIANGLE_WIDTH},${PIN_TRIANGLE_HEIGHT /
-            2} ${clampedStart},${PIN_TRIANGLE_HEIGHT}`,
+          points: `${clampedStart}, 0 ${clampedStart -
+            PIN_TRIANGLE_WIDTH}, ${PIN_TRIANGLE_HEIGHT /
+            2} ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
         })}
       <line
@@ -94,6 +98,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         y2={length}
         stroke={color}
         strokeWidth={strokeWidth}
+        className="giraffe-annotation-line"
       />
     </>
   )
