@@ -29,13 +29,12 @@ export const GEO_HASH_COLUMN = 's2_cell_id'
 export const preprocessData = (
   table: Table,
   rowLimit: number,
-  autoPivoting: boolean,
-  onFinalTable: (table: GeoTable) => void
+  autoPivoting: boolean
 ): GeoTable => {
   if (autoPivoting && isPivotSensible(table)) {
     // don't delay rendering with data calculation
     setTimeout(() => {
-      onFinalTable(new PivotedGeoTable(table, rowLimit))
+      new PivotedGeoTable(table, rowLimit)
     }, 0)
     return new EmptyGeoTable()
   }
