@@ -827,5 +827,5 @@ export interface AnnotationMark {
   stopValue: number
   dimension: AnnotationDimension
   pin: AnnotationPinType
-  id: string
+  id?: string
 }
