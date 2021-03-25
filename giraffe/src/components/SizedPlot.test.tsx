@@ -79,9 +79,6 @@ describe('the SizedPlot', () => {
             layerCanvasRef={layersRef}
           />
         )
-        // when the user (for real) does a single click, then a mouse up happens.
-        // choose mouse up because the single click listener wasn't triggering except on
-        // double clicks
         fireEvent.click(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).not.toHaveBeenCalled()
