@@ -274,7 +274,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - [appearance](#appearance-properties) customization for sizing and framing
 - [data](#data-properties) store, getters and setters, and plot-type specific options
-- [legend (tooltip)](#legend-tooltip-properties) customization
+- [legend and tooltip](#legend-tooltip-properties) customization
 
 <pre>
   const config = {
@@ -374,27 +374,61 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **onResetYDomain**: _function(). Optional._ See above regarding **yDomain**.
 
-### Legend Tooltip properties
+### Legend and Tooltip properties
 
-- **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend (tooltip).
+- **legendBackgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the legend and tooltip. May be overriden.
 
-- **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the column headers in the legend (tooltip). The rest of the legend will use the color scheme set by the `LayerConfig`'s `colors` options.
+- **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend and tooltip. May be overriden.
 
-- **legendFontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of any text that is not a column header or in a row inside the legend (tooltip).
+- **legendColorizeRows**: _boolean. Optional. Defaults to true when excluded._ Toggles the use of colors for the rows in the legend and tooltip. When _true_ the rows will use colors from the color scheme in the rendered graph. When _false_ the rows will use the **legendFontBrightColor** and include small dots of color in the color scheme of the rendered graph. May be overriden.
 
-- **legendBackgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the legend (tooltip).
-
-- **legendColorizeRows**: _boolean. Optional. Defaults to true when excluded._ Toggles the use of colors for the rows in the legend (tooltip). When _true_ the rows will use colors from the color scheme in the rendered graph. When _false_ the rows will use the **legendFontBrightColor** and include small dots of color in the color scheme of the rendered graph.
-
-- **legendBorder**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the legend (tooltip).
+- **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the legend and tooltip. If this option is included as an empty array, the legend and tooltip will be empty. May be overriden.
 
 - **legendCrosshairColor**: _string | Object. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendColumns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the legend (tooltip). If this option is included as an empty array, the legend will be empty.
+- **legendDisable**: _boolean. Optional. Defaults to false when not included._ _true_ means the legend and tooltip will not be rendered. _false_ means the legend and tooltip will be rendered. May be overriden.
 
-- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the legend (tooltip). 0 means the legend is invisible, while 1.0 means the legend covers anything underneath.
+- **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend and tooltip. May be overriden.
 
-- **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
+- **legendFontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of any text that is not a column header or in a row inside the legend or tooltip. May be overriden.
+
+- **legendFontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the column headers in the legend or tooltip. The rest of the content will use the color scheme set by the `LayerConfig`'s `colors` options. May be overriden.
+
+- **legendMessage**: _string. Not used. Reserved for future implementation._ A string to display in the legend and tooltip. Does not affect the renderable content in a legend or tooltip, such as column names and data. May be overriden.
+
+- **legendOpacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the legend and tooltip. 0 means the legend and tooltip are invisible, while 1.0 means the legend and tooltip are solid and their content may cover anything underneath. May be overriden.
+
+- **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically. May be overriden.
+
+- **staticLegend**: _Object. Optional._ An object with properties that override the **legend** properties and apply only to the static legend that is always visible. Has a few properties that are unique to the static legend. Properties are:
+
+  - **backgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the static legend.
+
+  - **border**: _string. Optional._ The [_CSS border_](https://developer.mozilla.org/en-US/docs/Web/CSS/border) value for the styling of the border around the static legend.
+
+  - **colorizeRows**: _boolean. Optional. Defaults to true when excluded._ Toggles the use of colors for the rows in the static legend. When _true_ the rows will use colors from the color scheme in the rendered graph. When _false_ the rows will use the **fontBrightColor** and include small dots of color in the color scheme of the rendered graph.
+
+  - **columns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the static legend. If this option is included as an empty array, the static legend will be empty.
+
+  - **cursor**: _string | Object. Optional._ The [_CSS cursor property_](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor) of the mouse when inside the area of the static legend.
+
+  - **disable**: _boolean. Optional. Defaults to false when not included._ _true_ means the static legend will not be rendered. _false_ means the static legend will be rendered.
+
+  - **font**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the static legend.
+
+  - **fontBrightColor**: _string. Optional. Defaults to #f6f6f8 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of any text that is not a column header or in a row inside the static legend.
+
+  - **fontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the column headers in the static legend. The rest of the static legend will use the color scheme set by the `LayerConfig`'s `colors` options.
+
+  - **heightRatio**: _number. Optional. Defaults to 0 when not included._ A fraction expressed as a decimal to indicate the height of the static legend which is a retangular box directly beneath the graph and axes. Must be between 0 and 1 inclusive. Values outside of this range are considered 0.
+
+  - **message**: _string. Not used. Reserved for future implementation._ A string to display in the static legend. Does not affect the renderable content in the static legend, such as column names and data.
+
+  - **opacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the static legend.
+
+  - **orientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
+
+  - **widthRatio**: _number. Optional. Defaults to 0 when not included._ A fraction expressed as a decimal to indicate the width of the static legend which is a retangular box directly beneath the graph and axes. Must be between 0 and 1 inclusive. Values outside of this range are considered 0.
 
 ## Utility Functions
 
@@ -420,14 +454,14 @@ Giraffe comes with utility functions.
 
   - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
 
-  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the tooltip should display all data points along an entire axis during mouse hover.
 
     - "x" means the legend will display all data points along the y-axis that have the same x-axis value
     - "y" means the legend will display all data points along the x-axis that have the same y-axis value
     - "xy" means the legend will display for a single data point nearest the mouse
     - "auto" means "xy" if the legend has more than **maxTooltipRows** otherwise "auto" means "x"
 
-  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
+  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the tooltip. Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
 
   - **interpolation**: _string. Optional. Defaults to "linear" when not included._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points. The options are [linear](https://github.com/d3/d3-shape#curveLinear), [natural](https://github.com/d3/d3-shape#curveNatural), [monotoneX](https://github.com/d3/d3-shape#curveMonotoneX), [monotoneY](https://github.com/d3/d3-shape#curveMonotoneY), [cubic](https://github.com/d3/d3-shape#curveBasis), [step](https://github.com/d3/d3-shape#curveStep), [stepBefore](https://github.com/d3/d3-shape#curveStepBefore), and [stepAfter](https://github.com/d3/d3-shape#curveStepAfter).
 
@@ -449,14 +483,14 @@ Giraffe comes with utility functions.
 
   - **fill**: _array[string, ...]. **Required**._ An array of column names of column filters that should be visualized.
 
-  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+  - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates whether the tooltip should display all data points along an entire axis during mouse hover.
 
     - "x" means the legend will display all data points along the y-axis that have the same x-axis value
     - "y" means the legend will display all data points along the x-axis that have the same y-axis value
     - "xy" means the legend will display for a single data point nearest the mouse
     - "auto" means "xy" if the legend has more than **maxTooltipRows** otherwise "auto" means "x"
 
-  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the legend (tooltip). Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
+  - **maxTooltipRows**: _number. Optional. Defaults to 24 when not included._ The maximum number of data rows to display in the tooltip. Subject to screen size limitations and is not responsive or adaptive. Scrolling not implemented.
 
   - **interpolation**: _string. Optional. Defaults to "linear" when not included._ The style of the path between two data points on the same line. For example, "linear" is a straight path between two data points. The options are [linear](https://github.com/d3/d3-shape#curveLinear), [natural](https://github.com/d3/d3-shape#curveNatural), [monotoneX](https://github.com/d3/d3-shape#curveMonotoneX), [monotoneY](https://github.com/d3/d3-shape#curveMonotoneY), [cubic](https://github.com/d3/d3-shape#curveBasis), [step](https://github.com/d3/d3-shape#curveStep), [stepBefore](https://github.com/d3/d3-shape#curveStepBefore), and [stepAfter](https://github.com/d3/d3-shape#curveStepAfter).
 
@@ -525,7 +559,7 @@ Giraffe comes with utility functions.
 
   - **fill**: _array[string]. **Required**._ An array with a single column name that is the state or status being visualized. This property is an array with a single element in order to remain consistent with other LayerConfigs where **fill** is always an array.
 
-  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the legend (tooltip) should display all data points along an entire axis during mouse hover.
+  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the tooltip should display all data points along an entire axis during mouse hover.
 
     - "x" means the legend will display all data points along the y-axis that have the same x-axis value
     - "y" means the legend will display all data points along the x-axis that have the same y-axis value
@@ -769,14 +803,14 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
     - **dimension**: _'x' | 'y'. **Required**._ Indicates whether the annotation is vertical - **'x'** or horizontal - **'y'**.
 
-  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates how an annotation's legend (tooltip) should be triggered during mouse hover.
+  - **hoverDimension**?: _"x" | "y" | "xy" | "auto". Optional. Defaults to "xy" when not included._ Indicates how an annotation's tooltip should be triggered during mouse hover.
 
-    - "x" means the legend will display for all annotations that cross or are within the **hoverMargin** of the mouse's x-axis value
-    - "y" means the legend will display for all annotations that cross or are within the **hoverMargin** of the mouse's y-axis value
-    - "xy" means the legend will display for all annotations within the **hoverMargin** of the mouse in any direction
+    - "x" means the tooltip will display for all annotations that cross or are within the **hoverMargin** of the mouse's x-axis value
+    - "y" means the tooltip will display for all annotations that cross or are within the **hoverMargin** of the mouse's y-axis value
+    - "xy" means the tooltip will display for all annotations within the **hoverMargin** of the mouse in any direction
     - "auto" means "xy" (see above)
 
-  - **hoverMargin**: _number. Optional. Defaults to 20 when not included._ The hoverable area in pixel size around the annotation that will trigger the legend (tooltip). For 'x' annotations, the **hoverMargin** extends to the left and right. For 'y' annotations, the **hoverMargin** extends to the top and bottom.
+  - **hoverMargin**: _number. Optional. Defaults to 20 when not included._ The hoverable area in pixel size around the annotation that will trigger the tooltip. For 'x' annotations, the **hoverMargin** extends to the left and right. For 'y' annotations, the **hoverMargin** extends to the top and bottom.
 
   - **svgAttributes**: _Not used. Reserved for future implementation._
 
