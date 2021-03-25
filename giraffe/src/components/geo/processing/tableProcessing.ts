@@ -30,7 +30,7 @@ export const preprocessData = (
 ): GeoTable => {
   if (autoPivoting && isPivotSensible(table)) {
     // don't delay rendering with data calculation
-      return new PivotedGeoTable(table, rowLimit)
+    return new PivotedGeoTable(table, rowLimit)
   }
   return new NativeGeoTable(table, rowLimit)
 }
