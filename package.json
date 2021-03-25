@@ -1,6 +1,9 @@
 {
   "private": true,
-  "workspaces": ["giraffe", "stories"],
+  "workspaces": [
+    "giraffe",
+    "stories"
+  ],
   "scripts": {
     "lint": "eslint '{giraffe,stories}/src/**/*.{ts,tsx}'",
     "prettier": "prettier --config .prettierrc.json --check '{giraffe,stories}/**/*.{ts,tsx}'",

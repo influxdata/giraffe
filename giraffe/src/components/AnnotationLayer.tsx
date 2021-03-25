@@ -53,11 +53,18 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
     boundingRect = svgRef.current.getBoundingClientRect()
   }
 
+  const handleClick = event => {
+    if (config.handleAnnotationClick && event.target.id) {
+      config.handleAnnotationClick(event.target.id)
+    }
+  }
+
   return (
     <svg
       className="giraffe-layer giraffe-layer-annotation"
       ref={svgRef}
       style={{...ANNOTATION_OVERLAY_DEFAULT_STYLE, width, height}}
+      onClick={handleClick}
     >
       <AnnotationHoverLayer
         {...props}
@@ -77,6 +84,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             color={annotationData.color}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
+            id={annotationData.id}
           />
         ) : (
           <AnnotationLine
@@ -88,6 +96,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             color={annotationData.color}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
+            id={annotationData.id}
           />
         )
       )}

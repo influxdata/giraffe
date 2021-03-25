@@ -99,7 +99,16 @@ export const SizedPlot: FunctionComponent<Props> = ({
 
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
-    ? () => {
+    ? event => {
+        // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
+        // There's already an annotation-specific handler for this, that'll handle this.
+        if (
+          event.target.classList.contains('giraffe-annotation-click-target') ||
+          event.target.classList.contains('giraffe-annotation-line')
+        ) {
+          return
+        }
+
         config.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp

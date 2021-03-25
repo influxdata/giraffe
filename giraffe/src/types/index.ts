@@ -220,6 +220,7 @@ export interface AnnotationLayerConfig {
   svgAttributes?: SVGAttributes
   svgStyle?: CSS.Properties
   lineWidth?: number
+  handleAnnotationClick?: (id: string) => void
 }
 
 export interface CustomLayerRenderProps {
@@ -826,4 +827,5 @@ export interface AnnotationMark {
   stopValue: number
   dimension: AnnotationDimension
   pin: AnnotationPinType
+  id?: string
 }

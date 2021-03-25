@@ -23,9 +23,12 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   } = config
   const {dimension, startValue} = data || {}
 
+  // move this 15 pixels up to get out of the way of the annotation click target
+  const yAxisTooltipOffset = -15
+
   const position = {
     x: dimension === 'x' ? startValue : width,
-    y: dimension === 'y' ? startValue : 0,
+    y: dimension === 'y' ? startValue : yAxisTooltipOffset,
   } as TooltipPosition
 
   const clampedXOffset = Math.round(
