@@ -66,6 +66,13 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
       style={{...ANNOTATION_OVERLAY_DEFAULT_STYLE, width, height}}
       onClick={handleClick}
     >
+      <AnnotationHoverLayer
+        {...props}
+        annotationPositions={annotationsPositions}
+        boundingReference={boundingRect}
+        hoverRowIndices={hoverRowIndices}
+        width={width}
+      />
       {annotationsPositions.map(annotationData =>
         annotationData.dimension === 'y' ? (
           <AnnotationLine
@@ -93,13 +100,6 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
           />
         )
       )}
-      <AnnotationHoverLayer
-        {...props}
-        annotationPositions={annotationsPositions}
-        boundingReference={boundingRect}
-        hoverRowIndices={hoverRowIndices}
-        width={width}
-      />
     </svg>
   )
 }
