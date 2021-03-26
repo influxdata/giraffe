@@ -15,6 +15,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   return (
     <div
+      className="giraffe-static-legend"
       style={{
         position: 'absolute',
         top: `${top}px`,
