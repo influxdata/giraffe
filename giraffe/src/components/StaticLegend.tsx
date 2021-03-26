@@ -11,7 +11,6 @@ interface StaticLegendBoxProps extends StaticLegend {
 
 export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
   const {border, fontBrightColor, height, top, width} = props
-  console.log('Static Legend Box: props: width:', width, 'height:', height)
 
   return (
     <div
