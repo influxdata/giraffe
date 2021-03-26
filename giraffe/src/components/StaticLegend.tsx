@@ -3,36 +3,25 @@ import React, {FunctionComponent} from 'react'
 // Types
 import {StaticLegend} from '../types'
 
-// Utils
-import {resizePlotWithStaticLegend} from '../utils/resizePlot'
-
 interface StaticLegendBoxProps extends StaticLegend {
   height: number
+  top: number
   width: number
 }
 
 export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
-  const {
-    border,
-    fontBrightColor,
-    height,
-    width,
-    heightRatio,
-    widthRatio,
-  } = props
+  const {border, fontBrightColor, height, top, width} = props
+  console.log('Static Legend Box: props: width:', width, 'height:', height)
 
-  const plotSize = resizePlotWithStaticLegend(height, width, {
-    heightRatio,
-    widthRatio,
-  })
-
-  const staticLegendHeight = height - plotSize.height
   return (
     <div
       style={{
         position: 'absolute',
-        top: `${plotSize.height}px`,
-        height: `${staticLegendHeight}px`,
+        top: `${top}px`,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: `${height}px`,
         width: `${width}px`,
         color: fontBrightColor,
         border,

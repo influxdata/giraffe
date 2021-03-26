@@ -3,6 +3,11 @@ import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
 
+export interface PlotDimensions {
+  height: number
+  width: number
+}
+
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
   width?: number

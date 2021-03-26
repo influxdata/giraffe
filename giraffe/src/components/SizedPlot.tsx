@@ -19,7 +19,6 @@ import {
   SizedConfig,
   SpecTypes,
 } from '../types'
-import {resizePlotWithStaticLegend} from '../utils/resizePlot'
 
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
@@ -38,31 +37,20 @@ import {MosaicLayer} from './MosaicLayer'
 import {GeoLayerConfig} from '../types/geo'
 import GeoLayer from './GeoLayer'
 import {AnnotationLayer} from './AnnotationLayer'
-import {StaticLegendBox} from './StaticLegend'
 
-interface Props {
+export interface SizedPlotProps {
   config: SizedConfig
   axesCanvasRef: RefObject<HTMLCanvasElement>
   layerCanvasRef: RefObject<HTMLCanvasElement>
 }
 
-export const SizedPlot: FunctionComponent<Props> = ({
+export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   config: userConfig,
   children,
   axesCanvasRef,
   layerCanvasRef,
 }) => {
-  const {staticLegend} = userConfig
-  const resized = resizePlotWithStaticLegend(
-    userConfig.height,
-    userConfig.width,
-    staticLegend
-  )
-  const env = usePlotEnv({
-    ...userConfig,
-    height: resized.height,
-    width: resized.width,
-  })
+  const env = usePlotEnv(userConfig)
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()
@@ -308,13 +296,6 @@ export const SizedPlot: FunctionComponent<Props> = ({
           onYBrushEnd={handleYBrushEnd}
         />
       </div>
-      {staticLegend && (
-        <StaticLegendBox
-          height={userConfig.height}
-          width={userConfig.width}
-          {...staticLegend}
-        />
-      )}
     </div>
   )
 }
