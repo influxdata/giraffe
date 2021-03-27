@@ -1,0 +1,11 @@
+/*
+  Annotation Line Styles
+  ------------------------------------------------------------------------------
+*/
+
+.giraffe-annotation-line{
+  cursor: pointer;
+  &:hover {
+    opacity: 80%;
+  }
+}
