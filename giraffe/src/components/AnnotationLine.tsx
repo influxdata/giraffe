@@ -39,7 +39,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           stroke={color}
           strokeWidth={strokeWidth}
           id={props.id}
-          className={`${styles['giraffe-annotation-line']}`}
+          className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
         />
         {pin === 'circle' &&
           createElement('circle', {
@@ -79,7 +79,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         stroke={color}
         strokeWidth={strokeWidth}
         id={props.id}
-        className={`${styles['giraffe-annotation-line']}`}
+        className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
       />
       {pin === 'circle' &&
         createElement('circle', {
