@@ -1,6 +1,8 @@
 import React, {FunctionComponent, createElement} from 'react'
 import {AnnotationDimension, AnnotationPinType} from '../types'
 
+import styles from './AnnotationLine.scss'
+
 interface AnnotationLineProps {
   dimension: AnnotationDimension
   color: string
@@ -36,6 +38,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           y2={clampedStart}
           stroke={color}
           strokeWidth={strokeWidth}
+          id={props.id}
+          className={`${styles['giraffe-annotation-line']}`}
         />
         {pin === 'circle' &&
           createElement('circle', {
@@ -74,7 +78,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         y2={length}
         stroke={color}
         strokeWidth={strokeWidth}
-        className="giraffe-annotation-line"
+        id={props.id}
+        className={`${styles['giraffe-annotation-line']}`}
       />
       {pin === 'circle' &&
         createElement('circle', {
