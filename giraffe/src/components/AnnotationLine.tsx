@@ -1,6 +1,8 @@
 import React, {FunctionComponent, createElement} from 'react'
 import {AnnotationDimension, AnnotationPinType} from '../types'
 
+import styles from './AnnotationLine.scss'
+
 interface AnnotationLineProps {
   dimension: AnnotationDimension
   color: string
@@ -29,6 +31,16 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   if (dimension === 'y') {
     return (
       <>
+        <line
+          x1="0"
+          x2={length}
+          y1={clampedStart}
+          y2={clampedStart}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          id={props.id}
+          className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
+        />
         {pin === 'circle' &&
           createElement('circle', {
             r: PIN_CIRCLE_RADIUS,
@@ -53,20 +65,22 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
               PIN_TRIANGLE_WIDTH} ${length}, ${clampedStart}`,
             fill: color,
           })}
-        <line
-          x1="0"
-          x2={length}
-          y1={clampedStart}
-          y2={clampedStart}
-          stroke={color}
-          strokeWidth={strokeWidth}
-        />
       </>
     )
   }
 
   return (
     <>
+      <line
+        x1={clampedStart}
+        x2={clampedStart}
+        y1="0"
+        y2={length}
+        stroke={color}
+        strokeWidth={strokeWidth}
+        id={props.id}
+        className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
+      />
       {pin === 'circle' &&
         createElement('circle', {
           r: PIN_CIRCLE_RADIUS,
@@ -91,15 +105,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
             2} ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
         })}
-      <line
-        x1={clampedStart}
-        x2={clampedStart}
-        y1="0"
-        y2={length}
-        stroke={color}
-        strokeWidth={strokeWidth}
-        className="giraffe-annotation-line"
-      />
     </>
   )
 }

@@ -51,7 +51,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
 
   let tooltipCaretStyle: CSSProperties = {
     position: 'absolute',
-    borderWidth: '10px',
+    borderWidth: '7px',
     borderStyle: 'solid',
     borderColor: 'transparent',
     zIndex: 2,
