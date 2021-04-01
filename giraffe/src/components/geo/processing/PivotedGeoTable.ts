@@ -8,6 +8,7 @@ import {
 import {Table} from '../../../types'
 import {getLatLonMixin, getTimeStringMixin} from './mixins'
 import {CoordinateEncoding, GeoTable, Track} from './GeoTable'
+import {LatLonColumns} from '../../../types/geo'
 
 interface GeoRow {
   [key: string]: number | string
@@ -24,8 +25,9 @@ export class PivotedGeoTable implements GeoTable {
   data: GeoRow[]
   truncated: boolean
   maxRows: number
+  latLonColumns: LatLonColumns
 
-  constructor(table: Table, maxRows) {
+  constructor(table: Table, maxRows, latLonColumns) {
     const seriesKeyNames = filterMetaColumns(table.columnKeys)
     const seriesKeyColumns = seriesKeyNames.map(key => table.getColumn(key))
     const fieldColumn = table.getColumn(FIELD_COLUMN, 'string')
@@ -42,10 +44,10 @@ export class PivotedGeoTable implements GeoTable {
     for (let i = 0; i < entriesCount; i++) {
       const seriesKey = seriesKeyColumns.map(column => column[i]).join()
       const fieldName = fieldColumn[i]
-      if (!lonFound && fieldName === 'lon') {
+      if (!lonFound && fieldName === latLonColumns.lon.column) {
         lonFound = true
       }
-      if (!latFound && fieldName === 'lat') {
+      if (!latFound && fieldName === latLonColumns.lat.column) {
         latFound = true
       }
       const point = mapData[seriesKey]

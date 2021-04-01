@@ -1,19 +1,19 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
+import {boolean, color, number, select, withKnobs} from '@storybook/addon-knobs'
+
 import {Config, Plot} from '../../giraffe/src'
 
-import {PlotContainer} from './helpers'
-import {geoTable, geoTracks} from './data/geoLayer'
 import {
-  boolean,
-  color,
-  number,
-  select,
-  withKnobs,
-  text,
-} from '@storybook/addon-knobs'
+  PlotContainer,
+  lattitudeKnob,
+  longitudeKnob,
+  s2GeoHashKnob,
+} from './helpers'
+import {geoTable, geoTracks} from './data/geoLayer'
 import {ClusterAggregation} from '../../giraffe/src/types/geo'
 import {fromFlux} from '../../giraffe/src'
+import {geoCSV} from './data/geo'
 
 const osmTileServerConfiguration = {
   tileServerUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -49,7 +49,9 @@ const genericKnobs = () => {
     step: 1,
   })
   const allowPanAndZoom = boolean('Allow pan and zoom', true)
-  return {allowPanAndZoom, latitude, longitude, zoom}
+  const useS2CellID = boolean('Use S2 Cell ID', true)
+
+  return {allowPanAndZoom, latitude, longitude, zoom, useS2CellID}
 }
 
 const buildCircleMapStory = tileServerConfiguration => () => {
@@ -142,10 +144,26 @@ geo.add('Map Markers Static', () => {
 })
 
 geo.add('Map Markers Custom CSV', () => {
-  const csv = text('Paste CSV here:', '')
-  let table = fromFlux(csv).table
+  // const csv = text('Paste CSV here:', '')
+  let table = fromFlux(geoCSV).table
 
-  const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
+  const {
+    allowPanAndZoom,
+    latitude,
+    longitude,
+    zoom,
+    useS2CellID,
+  } = genericKnobs()
+
+  let lattitudeSelection, longitudeSelection, s2GeoHash
+
+  if (!useS2CellID) {
+    lattitudeSelection = lattitudeKnob(table, {key: 'field', column: 'lat'})
+    longitudeSelection = longitudeKnob(table, {key: 'field', column: 'lon'})
+  } else {
+    s2GeoHash = s2GeoHashKnob(table, 's2_cell_id')
+  }
+
   const config: Config = {
     table: table,
     showAxes: false,
@@ -157,6 +175,9 @@ geo.add('Map Markers Custom CSV', () => {
         zoom,
         allowPanAndZoom,
         detectCoordinateFields: false,
+        useS2CellID,
+        s2Column: s2GeoHash,
+        latLonColumns: {lat: lattitudeSelection, lon: longitudeSelection},
         layers: [
           {
             type: 'pointMap',

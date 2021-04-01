@@ -28,7 +28,16 @@ const Geo: FunctionComponent<Props> = props => {
   if (width === 0 || height === 0) {
     return null
   }
-  const {lat, lon, zoom, mapStyle, stylingConfig, allowPanAndZoom} = props
+  const {
+    lat,
+    lon,
+    zoom,
+    mapStyle,
+    stylingConfig,
+    allowPanAndZoom,
+    useS2CellID,
+    latLonColumns,
+  } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
   const mapRef = React.createRef()
@@ -40,7 +49,12 @@ const Geo: FunctionComponent<Props> = props => {
   const {table, detectCoordinateFields} = props
   const [preprocessedTable, setPreprocessedTable] = useState(
     table
-      ? preprocessData(table, getRowLimit(props.layers), detectCoordinateFields)
+      ? preprocessData(
+          table,
+          getRowLimit(props.layers),
+          useS2CellID,
+          latLonColumns
+        )
       : null
   )
 
@@ -48,7 +62,8 @@ const Geo: FunctionComponent<Props> = props => {
     const newTable = preprocessData(
       props.table,
       getRowLimit(props.layers),
-      props.detectCoordinateFields
+      useS2CellID,
+      latLonColumns
     )
     setPreprocessedTable(newTable)
   }, [table, detectCoordinateFields])

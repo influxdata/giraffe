@@ -135,6 +135,9 @@ const onAutoResize = (
         onViewportChange={onViewportChange(props, lastRenderProperties)}
         allowPanAndZoom={allowPanAndZoom}
         tileServerConfiguration={config.tileServerConfiguration}
+        useS2CellID={config.useS2CellID}
+        s2Column={config.s2Column}
+        latLonColumns={config.latLonColumns}
       />
     </div>
   )
