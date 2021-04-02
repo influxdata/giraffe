@@ -121,6 +121,76 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     bottom: 0,
   }
 
+  function makeGraphLayer(spec, layerIndex: number, sharedProps, layerConfig) {
+    switch (spec.type) {
+      case SpecTypes.Annotation:
+        return (
+            <AnnotationLayer
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as AnnotationLayerConfig}
+            />
+        )
+      case SpecTypes.Line:
+        return (
+            <LineLayer
+                canvasRef={layerCanvasRef}
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as LineLayerConfig}
+            />
+        )
+
+      case SpecTypes.Band:
+        return (
+            <BandLayer
+                canvasRef={layerCanvasRef}
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as BandLayerConfig}
+            />
+        )
+
+      case SpecTypes.Scatter:
+        return (
+            <ScatterLayer
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as ScatterLayerConfig}
+            />
+        )
+
+      case SpecTypes.Rect:
+        return (
+            <RectLayer
+                canvasRef={layerCanvasRef}
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as RectLayerConfig}
+            />
+        )
+
+      case SpecTypes.Mosaic: {
+        return (
+            <MosaicLayer
+                key={layerIndex}
+                {...sharedProps}
+                spec={spec}
+                config={layerConfig as MosaicLayerConfig}
+            />
+        )
+      }
+
+      default:
+        return null
+    }
+  }
+
   // for single clicking; using mouseup, since the onClick only gets through
   // with a double click; and the hover and drag target does not use a mouse up;
   // they are:  hover:  mouseEnter, mousemove, mouseleave
@@ -217,74 +287,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
               yColumnType: spec.yColumnType,
               columnFormatter: env.getFormatterForColumn,
             }
-
-            switch (spec.type) {
-              case SpecTypes.Annotation:
-                return (
-                  <AnnotationLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as AnnotationLayerConfig}
-                  />
-                )
-              case SpecTypes.Line:
-                return (
-                  <LineLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as LineLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Band:
-                return (
-                  <BandLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as BandLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Scatter:
-                return (
-                  <ScatterLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as ScatterLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Rect:
-                return (
-                  <RectLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as RectLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Mosaic: {
-                return (
-                  <MosaicLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as MosaicLayerConfig}
-                  />
-                )
-              }
-
-              default:
-                return null
-            }
+            return makeGraphLayer(spec, layerIndex, sharedProps, layerConfig);
           })}
           {children && children}
         </div>

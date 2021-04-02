@@ -28,6 +28,8 @@ export const LineLayer: FunctionComponent<Props> = props => {
   } = props
   const {position} = config
 
+  console.log("in line layer, props:", props)
+
   const simplifiedLineData = useMemo(
     () => simplifyLineData(spec.lineData, xScale, yScale),
     [spec.lineData, xScale, yScale]

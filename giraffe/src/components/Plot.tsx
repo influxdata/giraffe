@@ -72,7 +72,7 @@ export const Plot: FunctionComponent<Props> = ({
             </SizedTable>
           )
         }
-        if (config.staticLegend) {
+        if (true) {
           resized = resizePlotWithStaticLegend(
             height,
             width,

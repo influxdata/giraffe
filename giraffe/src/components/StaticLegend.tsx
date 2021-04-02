@@ -27,7 +27,12 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         border,
       }}
     >
+        <div>
       Static Legend content goes here
+
+        </div>
+        <div>second line here</div>
+        <div>third line here</div>
     </div>
   )
 }

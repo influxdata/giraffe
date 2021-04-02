@@ -9,6 +9,8 @@ interface Props extends SizedPlotProps {
 
 export const SizedPlotWithLegend: FC<Props> = props => {
   const {axesCanvasRef, children, config, layerCanvasRef, resized} = props
+
+    console.log("here...in props...(jill-fa-1)", props)
   return (
     <>
       <SizedPlot
