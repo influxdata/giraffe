@@ -341,6 +341,48 @@ const drawGaugeLabels = (
       ctx.rotate(i * -arcIncrement)
       ctx.rotate(-startDegree)
     }
+  } else if (gaugeUnit.toString() === 'time') {
+    const labels = ['0', '60s', '60m', '24h', '30d']
+    const lineCount = 5
+    for (let i = 0; i <= lineCount; i++) {
+      labelRadius = radius + gradientThickness + 23
+      if (i / (lineCount + 1) >= 0.5) {
+        ctx.textAlign = 'left'
+      }
+
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+      ctx.fillText(labels[i], 0, 0)
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(-labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+    }
+  } else if (gaugeUnit.toString() === 'USD') {
+    const labels = ['0', '60s', '60m', '24h', '30d']
+    const lineCount = 5
+    for (let i = 0; i <= lineCount; i++) {
+      labelRadius = radius + gradientThickness + 23
+      if (i / (lineCount + 1) >= 0.5) {
+        ctx.textAlign = 'left'
+      }
+
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+      ctx.fillText(labels[i], 0, 0)
+      ctx.rotate(startDegree)
+      ctx.rotate(i * arcIncrement)
+      ctx.translate(-labelRadius, 0)
+      ctx.rotate(i * -arcIncrement)
+      ctx.rotate(-startDegree)
+    }
   } else {
     const tickValues = [
       ...range(minValue, maxValue, Math.abs(maxValue - minValue) / lineCount),

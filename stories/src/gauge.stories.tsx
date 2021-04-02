@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, number, text, select} from '@storybook/addon-knobs'
+import {boolean, withKnobs, number, text, select} from '@storybook/addon-knobs'
 import {Config, Plot, GaugeTheme} from '../../giraffe/src'
 import {DEFAULT_GAUGE_COLORS} from '../../giraffe/src'
 
@@ -43,7 +43,11 @@ storiesOf('Gauge', module)
     const suffix = text('Suffix', '')
     const tickPrefix = text('TickPrefix', '')
     const tickSuffix = text('TickSuffix', '')
-    const gaugeUnit = select('Unit', {bytes: 'bytes', none: ''}, '')
+    const gaugeUnit = select(
+      'Unit',
+      {bytes: 'bytes', time: 'time', usd: 'USD', none: ''},
+      ''
+    )
 
     const config: Config = {
       table: gaugeTable(gaugeMin, gaugeMax),
