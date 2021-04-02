@@ -121,7 +121,41 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     bottom: 0,
   }
 
-  function makeGraphLayer(spec, layerIndex: number, sharedProps, layerConfig) {
+  function renderCustomLayer(layerIndex: number, layerConfig, width, height) {
+    const renderProps = {
+      key: layerIndex,
+      width,
+      height,
+      innerWidth: env.innerWidth,
+      innerHeight: env.innerHeight,
+      xScale: env.xScale,
+      yScale: env.yScale,
+      xDomain: env.xDomain,
+      yDomain: env.yDomain,
+      columnFormatter: env.getFormatterForColumn,
+      yColumnType: env.yColumnType,
+    }
+
+    return layerConfig.render(renderProps)
+  }
+
+
+  function makeGraphLayer(layerIndex: number,  layerConfig) {
+
+    const spec = env.getSpec(layerIndex)
+
+    const sharedProps = {
+      hoverX,
+      hoverY,
+      plotConfig: config,
+      xScale: env.xScale,
+      yScale: env.yScale,
+      width: env.innerWidth,
+      height: env.innerHeight,
+      yColumnType: spec.yColumnType,
+      columnFormatter: env.getFormatterForColumn,
+    }
+
     switch (spec.type) {
       case SpecTypes.Annotation:
         return (
@@ -240,21 +274,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
             }
 
             if (layerConfig.type === LayerTypes.Custom) {
-              const renderProps = {
-                key: layerIndex,
-                width,
-                height,
-                innerWidth: env.innerWidth,
-                innerHeight: env.innerHeight,
-                xScale: env.xScale,
-                yScale: env.yScale,
-                xDomain: env.xDomain,
-                yDomain: env.yDomain,
-                columnFormatter: env.getFormatterForColumn,
-                yColumnType: env.yColumnType,
-              }
-
-              return layerConfig.render(renderProps)
+              return renderCustomLayer(layerIndex, layerConfig, width, height)
             }
 
             if (layerConfig.type === LayerTypes.SingleStat) {
@@ -274,20 +294,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
               )
             }
 
-            const spec = env.getSpec(layerIndex)
-
-            const sharedProps = {
-              hoverX,
-              hoverY,
-              plotConfig: config,
-              xScale: env.xScale,
-              yScale: env.yScale,
-              width: env.innerWidth,
-              height: env.innerHeight,
-              yColumnType: spec.yColumnType,
-              columnFormatter: env.getFormatterForColumn,
-            }
-            return makeGraphLayer(spec, layerIndex, sharedProps, layerConfig);
+            return makeGraphLayer(layerIndex, layerConfig);
           })}
           {children && children}
         </div>
