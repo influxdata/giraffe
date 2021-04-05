@@ -31,6 +31,12 @@ storiesOf('Static Legend', module)
     const lines = number('Number of graph lines', 4)
     const fillColumnsCount = number('Number of fill columns', 5)
     const fillColumnNameLength = number('Length of fill column names', 4)
+    const staticLegendHeightRatio = number('Static Legend Height', 0.2, {
+      range: true,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    })
     const table = getRandomTable(
       maxValue,
       lines * 20,
@@ -89,12 +95,6 @@ storiesOf('Static Legend', module)
     const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
-    const staticLegendHeightRatio = number('Static Legend Height', 0.2, {
-      range: true,
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
     const config: Config = {
       table,
       valueFormatters: {
