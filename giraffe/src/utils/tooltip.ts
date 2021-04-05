@@ -110,7 +110,11 @@ export const getPointsTooltipData = (
     : hoveredRowIndices
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
+  console.log('getting tooltip data...xxy-jill1')
+
   const groupColData = table.getColumn(groupColKey, 'number')
+  //console.log('groupColData: (xxy-2)', groupColData)
+
   const colors = orderDataByValue(
     hoveredRowIndices,
     sortOrder,
@@ -183,6 +187,11 @@ export const getPointsTooltipData = (
     getValueFormatter,
     colors
   )
+
+  console.log("yy: tooltipXCol", tooltipXCol)
+  console.log('yy-1: ycol', tooltipYCol)
+  console.log("additional colums (yy-2)", tooltipAdditionalColumns)
+  console.log('fillcols...(yy-3)', fillColumns)
 
   return [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
 }

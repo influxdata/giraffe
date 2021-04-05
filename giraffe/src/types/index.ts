@@ -8,6 +8,7 @@ export interface PlotDimensions {
   width: number
 }
 
+//todo:  change the 'any' in static legend
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
   width?: number

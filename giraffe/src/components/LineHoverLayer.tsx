@@ -102,6 +102,15 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     })
   })
 
+  //console.log("fillscale?? xxy-22", fillScale);
+  //console.log('fill col keys? xxy-22a', fillColKeys)
+  //console.log('row indices?? xxy-22b', rowIndices)
+
+  //TODO:  make into object; too many args!
+  /**
+   * config.x:  xcolKey
+   * fillcolKeys: the 'config.fill' prop
+   * */
   const tooltipData = getPointsTooltipData(
     rowIndices,
     spec.table,

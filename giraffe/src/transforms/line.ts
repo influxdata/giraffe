@@ -62,6 +62,8 @@ export const lineTransform = (
   colors: string[],
   position: LinePosition
 ): LineLayerSpec => {
+
+  //this is where the lines are being separated
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys

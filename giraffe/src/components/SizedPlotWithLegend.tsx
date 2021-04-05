@@ -30,14 +30,11 @@ export const SizedPlotWithLegend: FC<Props> = props => {
             setLegendInfo(info);
             return;
         }
-
-
-        if (info.length !== legendInfo.length){
+        if (info.length === legendInfo.length){
             return;
         }
 
         //get each list of keys:
-
         const origKeys = legendInfo.map(one =>
         one.key)
 
