@@ -15,6 +15,7 @@ interface Props extends LineLayerProps {
   rowIndices: number[] | null
   dimension: LineHoverDimension
   simplifiedLineData: LineData
+  onLegendChange: any
 }
 
 export const LineHoverLayer: FunctionComponent<Props> = ({
@@ -29,6 +30,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   xScale,
   yScale,
   columnFormatter,
+    onLegendChange,
 }) => {
   const {
     position,
@@ -113,6 +115,9 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     spec.lineData,
     spec.stackedDomainValueColumn
   )
+
+  console.log('about to call onLegendChange with data...', tooltipData)
+  onLegendChange(tooltipData)
 
   return (
     <>

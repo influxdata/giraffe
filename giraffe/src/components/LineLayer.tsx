@@ -12,6 +12,7 @@ export interface Props extends LayerProps {
   spec: LineLayerSpec
   config: LineLayerConfig
   canvasRef: RefObject<HTMLCanvasElement>
+  onLegendChange: any
 }
 
 export const LineLayer: FunctionComponent<Props> = props => {
@@ -25,6 +26,7 @@ export const LineLayer: FunctionComponent<Props> = props => {
     hoverX,
     hoverY,
     canvasRef,
+      onLegendChange,
   } = props
   const {position} = config
 
@@ -99,6 +101,7 @@ export const LineLayer: FunctionComponent<Props> = props => {
           rowIndices={hoverRowIndices}
           dimension={hoverDimension}
           simplifiedLineData={simplifiedLineData}
+          onLegendChange={onLegendChange}
         />
       )}
     </>

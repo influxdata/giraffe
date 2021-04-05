@@ -7,11 +7,13 @@ interface StaticLegendBoxProps extends StaticLegend {
   height: number
   top: number
   width: number
+    legendInfo: any
 }
 
 export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
-  const {border, fontBrightColor, height, top, width} = props
+  const {legendInfo, border, fontBrightColor, height, top, width} = props
 
+    console.log("in static legend...got info??",legendInfo)
   return (
     <div
       className="giraffe-static-legend"

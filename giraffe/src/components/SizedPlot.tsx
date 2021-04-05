@@ -42,6 +42,7 @@ export interface SizedPlotProps {
   config: SizedConfig
   axesCanvasRef: RefObject<HTMLCanvasElement>
   layerCanvasRef: RefObject<HTMLCanvasElement>
+  onLegendChange?: any
 }
 
 export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
@@ -49,6 +50,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   children,
   axesCanvasRef,
   layerCanvasRef,
+    onLegendChange,
 }) => {
   const env = usePlotEnv(userConfig)
   const forceUpdate = useForceUpdate()
@@ -174,6 +176,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
                 {...sharedProps}
                 spec={spec}
                 config={layerConfig as LineLayerConfig}
+                onLegendChange={onLegendChange}
             />
         )
 
