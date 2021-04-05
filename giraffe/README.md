@@ -400,7 +400,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically. May be overriden.
 
-- **staticLegend**: _Object. Optional._ An object with properties that override the **legend** properties and apply only to the static legend that is always visible. Has a few properties that are unique to the static legend. Properties are:
+- **staticLegend**: _Object. Optional. Must be included to show a static legend._ An object with properties that override the **legend** properties and apply only to the static legend that is always visible. Has a few properties that are unique to the static legend, such as **heightRatio** which sets the height of the static legend. Properties are:
 
   - **backgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the static legend.
 
@@ -420,7 +420,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **fontColor**: _string. Optional. Defaults to #bec2cc when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the column headers in the static legend. The rest of the static legend will use the color scheme set by the `LayerConfig`'s `colors` options.
 
-  - **heightRatio**: _number. Optional. Defaults to 0 when not included._ A fraction expressed as a decimal to indicate the height of the static legend which is a retangular box directly beneath the graph and axes. Must be between 0 and 1 inclusive. Values outside of this range are considered 0.
+  - **heightRatio**: _number. Optional. Defaults to 0.2 when not included._ A fraction expressed as a decimal to indicate the height of the static legend which is a retangular box directly beneath the graph and axes. May be between 0 and 1 _**non-inclusive**_. Values outside of this range are considered 0. Must be non-zero for static legend to be visible (have height).
 
   - **message**: _string. Not used. Reserved for future implementation._ A string to display in the static legend. Does not affect the renderable content in the static legend, such as column names and data.
 
@@ -428,7 +428,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **orientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
 
-  - **widthRatio**: _number. Optional. Defaults to 0 when not included._ A fraction expressed as a decimal to indicate the width of the static legend which is a retangular box directly beneath the graph and axes. Must be between 0 and 1 inclusive. Values outside of this range are considered 0.
+  - **widthRatio**: _number. Optional. Defaults to full width when not included. **Generally not used and only reserved for future feature implementation.**_ A fraction expressed as a decimal to indicate the width of the static legend which is a retangular box directly beneath the graph and axes. May be between 0 and 1 _**non-inclusive**_. Values outside of this range are considered 0. Must be non-zero for static legend to have less than full width of the `<Plot>`.
 
 ## Utility Functions
 
