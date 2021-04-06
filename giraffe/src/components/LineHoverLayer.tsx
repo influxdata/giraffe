@@ -30,7 +30,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
   xScale,
   yScale,
   columnFormatter,
-    onLegendChange,
+  onLegendChange,
 }) => {
   const {
     position,

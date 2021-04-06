@@ -26,11 +26,11 @@ export const LineLayer: FunctionComponent<Props> = props => {
     hoverX,
     hoverY,
     canvasRef,
-      onLegendChange,
+    onLegendChange,
   } = props
   const {position} = config
 
-  console.log("in line layer, props:", props)
+  console.log('in line layer, props:', props)
 
   const simplifiedLineData = useMemo(
     () => simplifyLineData(spec.lineData, xScale, yScale),

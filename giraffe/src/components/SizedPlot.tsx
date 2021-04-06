@@ -50,7 +50,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   children,
   axesCanvasRef,
   layerCanvasRef,
-    onLegendChange,
+  onLegendChange,
 }) => {
   const env = usePlotEnv(userConfig)
   const forceUpdate = useForceUpdate()
@@ -141,10 +141,10 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     return layerConfig.render(renderProps)
   }
 
-
-  function makeGraphLayer(layerIndex: number,  layerConfig) {
-
+  function makeGraphLayer(layerIndex: number, layerConfig) {
     const spec = env.getSpec(layerIndex)
+
+    console.log('just made spec: ', spec)
 
     const sharedProps = {
       hoverX,
@@ -161,65 +161,65 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     switch (spec.type) {
       case SpecTypes.Annotation:
         return (
-            <AnnotationLayer
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as AnnotationLayerConfig}
-            />
+          <AnnotationLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as AnnotationLayerConfig}
+          />
         )
       case SpecTypes.Line:
         return (
-            <LineLayer
-                canvasRef={layerCanvasRef}
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as LineLayerConfig}
-                onLegendChange={onLegendChange}
-            />
+          <LineLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as LineLayerConfig}
+            onLegendChange={onLegendChange}
+          />
         )
 
       case SpecTypes.Band:
         return (
-            <BandLayer
-                canvasRef={layerCanvasRef}
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as BandLayerConfig}
-            />
+          <BandLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as BandLayerConfig}
+          />
         )
 
       case SpecTypes.Scatter:
         return (
-            <ScatterLayer
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as ScatterLayerConfig}
-            />
+          <ScatterLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as ScatterLayerConfig}
+          />
         )
 
       case SpecTypes.Rect:
         return (
-            <RectLayer
-                canvasRef={layerCanvasRef}
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as RectLayerConfig}
-            />
+          <RectLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as RectLayerConfig}
+          />
         )
 
       case SpecTypes.Mosaic: {
         return (
-            <MosaicLayer
-                key={layerIndex}
-                {...sharedProps}
-                spec={spec}
-                config={layerConfig as MosaicLayerConfig}
-            />
+          <MosaicLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as MosaicLayerConfig}
+          />
         )
       }
 
@@ -297,7 +297,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
               )
             }
 
-            return makeGraphLayer(layerIndex, layerConfig);
+            return makeGraphLayer(layerIndex, layerConfig)
           })}
           {children && children}
         </div>

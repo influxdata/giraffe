@@ -188,9 +188,9 @@ export const getPointsTooltipData = (
     colors
   )
 
-  console.log("yy: tooltipXCol", tooltipXCol)
+  console.log('yy: tooltipXCol', tooltipXCol)
   console.log('yy-1: ycol', tooltipYCol)
-  console.log("additional colums (yy-2)", tooltipAdditionalColumns)
+  console.log('additional colums (yy-2)', tooltipAdditionalColumns)
   console.log('fillcols...(yy-3)', fillColumns)
 
   return [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
