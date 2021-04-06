@@ -12,6 +12,7 @@ import {
   InteractionHandlerArguments,
   LayerTypes,
   LineLayerConfig,
+    LineData,
   MosaicLayerConfig,
   RectLayerConfig,
   ScatterLayerConfig,
@@ -98,6 +99,52 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
+  const convertLineSpec = (spec) => {
+    const mappings = spec?.columnGroupMaps?.fill?.mappings;
+
+    //this is MESSED up.  lineData isn't an array, it's an object with keys from 0->n
+    const lineData:LineData = spec?.lineData
+ //const colors = [];
+
+    // Object.values(lineData).forEach(value:any => {
+    //   colors.push(value.fill)
+    // })
+
+    //const colors = Object.values(lineData).map(value=>
+    //value.fill)
+     Object.values(lineData).forEach(value=>
+    {console.log('got value?? ', value?.fill)})
+
+    const colors =  Object.values(lineData).map(value=>
+   value?.fill)
+
+
+    //const colors = spec?.lineData.map(one => one.fill)
+
+//assume all keys are the same
+
+    let objKeys = Object.keys(mappings[0]);
+
+    let result = objKeys.map(key => {
+
+          const values = mappings.map(dataLine =>
+              dataLine[key]
+          )
+
+          return {
+            colors,
+            key,
+            name: key,
+            type: 'string',
+            values
+          }
+
+        }
+    )
+
+    return result
+  }
+
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
     ? event => {
@@ -128,6 +175,115 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     left: 0,
     right: 0,
     bottom: 0,
+  }
+
+  function renderCustomLayer(layerIndex: number, layerConfig, width, height) {
+    const renderProps = {
+      key: layerIndex,
+      width,
+      height,
+      innerWidth: env.innerWidth,
+      innerHeight: env.innerHeight,
+      xScale: env.xScale,
+      yScale: env.yScale,
+      xDomain: env.xDomain,
+      yDomain: env.yDomain,
+      columnFormatter: env.getFormatterForColumn,
+      yColumnType: env.yColumnType,
+    }
+
+    return layerConfig.render(renderProps)
+  }
+
+  function makeGraphLayer(layerIndex: number, layerConfig) {
+    const spec = env.getSpec(layerIndex)
+
+    console.log('just made spec: ', spec)
+
+
+    const sharedProps = {
+      hoverX,
+      hoverY,
+      plotConfig: config,
+      xScale: env.xScale,
+      yScale: env.yScale,
+      width: env.innerWidth,
+      height: env.innerHeight,
+      yColumnType: spec.yColumnType,
+      columnFormatter: env.getFormatterForColumn,
+    }
+
+    switch (spec.type) {
+      case SpecTypes.Annotation:
+        return (
+          <AnnotationLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as AnnotationLayerConfig}
+          />
+        )
+      case SpecTypes.Line:
+
+        //convert it here:
+          const staticTooltipData = convertLineSpec(spec)
+          console.log('got line spec: (converted (1))', staticTooltipData)
+        return (
+          <LineLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as LineLayerConfig}
+          />
+        )
+
+      case SpecTypes.Band:
+        return (
+          <BandLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as BandLayerConfig}
+          />
+        )
+
+      case SpecTypes.Scatter:
+        return (
+          <ScatterLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as ScatterLayerConfig}
+          />
+        )
+
+      case SpecTypes.Rect:
+        return (
+          <RectLayer
+            canvasRef={layerCanvasRef}
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as RectLayerConfig}
+          />
+        )
+
+      case SpecTypes.Mosaic: {
+        return (
+          <MosaicLayer
+            key={layerIndex}
+            {...sharedProps}
+            spec={spec}
+            config={layerConfig as MosaicLayerConfig}
+          />
+        )
+      }
+
+      default:
+        return null
+    }
   }
 
   // for single clicking; using mouseup, since the onClick only gets through
@@ -179,21 +335,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
             }
 
             if (layerConfig.type === LayerTypes.Custom) {
-              const renderProps = {
-                key: layerIndex,
-                width,
-                height,
-                innerWidth: env.innerWidth,
-                innerHeight: env.innerHeight,
-                xScale: env.xScale,
-                yScale: env.yScale,
-                xDomain: env.xDomain,
-                yDomain: env.yDomain,
-                columnFormatter: env.getFormatterForColumn,
-                yColumnType: env.yColumnType,
-              }
-
-              return layerConfig.render(renderProps)
+              return renderCustomLayer(layerIndex, layerConfig, width, height)
             }
 
             if (layerConfig.type === LayerTypes.SingleStat) {
@@ -213,87 +355,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
               )
             }
 
-            const spec = env.getSpec(layerIndex)
-
-            const sharedProps = {
-              hoverX,
-              hoverY,
-              plotConfig: config,
-              xScale: env.xScale,
-              yScale: env.yScale,
-              width: env.innerWidth,
-              height: env.innerHeight,
-              yColumnType: spec.yColumnType,
-              columnFormatter: env.getFormatterForColumn,
-            }
-
-            switch (spec.type) {
-              case SpecTypes.Annotation:
-                return (
-                  <AnnotationLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as AnnotationLayerConfig}
-                  />
-                )
-              case SpecTypes.Line:
-                return (
-                  <LineLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as LineLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Band:
-                return (
-                  <BandLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as BandLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Scatter:
-                return (
-                  <ScatterLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as ScatterLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Rect:
-                return (
-                  <RectLayer
-                    canvasRef={layerCanvasRef}
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as RectLayerConfig}
-                  />
-                )
-
-              case SpecTypes.Mosaic: {
-                return (
-                  <MosaicLayer
-                    key={layerIndex}
-                    {...sharedProps}
-                    spec={spec}
-                    config={layerConfig as MosaicLayerConfig}
-                  />
-                )
-              }
-
-              default:
-                return null
-            }
+            return makeGraphLayer(layerIndex, layerConfig)
           })}
           {children && children}
         </div>

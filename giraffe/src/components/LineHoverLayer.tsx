@@ -114,6 +114,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     spec.stackedDomainValueColumn
   )
 
+  console.log('line hover layer tooltip data:', tooltipData)
+
   return (
     <>
       <canvas
