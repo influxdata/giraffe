@@ -104,6 +104,7 @@ export interface StaticLegend {
   fontBrightColor?: string
   fontColor?: string
   heightRatio?: number // no corresponding legend property, unique to static legend
+  layer?: number // no corresponding legend property, unique to static legend
   message?: string
   opacity?: number
   orientationThreshold?: number

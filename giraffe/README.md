@@ -422,6 +422,8 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **heightRatio**: _number. Optional. Defaults to 0.2 when not included._ A fraction expressed as a decimal to indicate the height of the static legend which is a retangular box directly beneath the graph and axes. May be between 0 and 1 _**non-inclusive**_. Values outside of this range are considered 0. Must be non-zero for static legend to be visible (have height).
 
+  - **layer**: _number. Optional. Defaults to 0 (the first layer) when not included._ The index of the layer in the **layers** array that will be displayed in the static legend. The static legend will only display data for a single layer.
+
   - **message**: _string. Not used. Reserved for future implementation._ A string to display in the static legend. Does not affect the renderable content in the static legend, such as column names and data.
 
   - **opacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the static legend.
