@@ -2,6 +2,7 @@ import React, {FC} from 'react'
 import {SizedPlot, SizedPlotProps} from './SizedPlot'
 import {StaticLegendBox} from './StaticLegend'
 import {PlotDimensions, SizedConfig} from '../types'
+import {usePlotEnv} from "../utils/usePlotEnv";
 
 interface Props extends SizedPlotProps {
   resized: PlotDimensions
@@ -9,6 +10,10 @@ interface Props extends SizedPlotProps {
 
 export const SizedPlotWithLegend: FC<Props> = props => {
   const {axesCanvasRef, children, config, layerCanvasRef, resized} = props
+
+    const env = usePlotEnv(config)
+    const spec = env.getSpec(0)
+
   return (
     <>
       <SizedPlot
@@ -19,6 +24,8 @@ export const SizedPlotWithLegend: FC<Props> = props => {
           width: resized.width,
         }}
         layerCanvasRef={layerCanvasRef}
+        env={env}
+        spec={spec}
       >
         {children}
       </SizedPlot>

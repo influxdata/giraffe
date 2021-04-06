@@ -10,6 +10,7 @@ import {
   AnnotationLayerConfig,
   BandLayerConfig,
   InteractionHandlerArguments,
+    LayerSpec,
   LayerTypes,
   LineLayerConfig,
     LineData,
@@ -38,11 +39,14 @@ import {MosaicLayer} from './MosaicLayer'
 import {GeoLayerConfig} from '../types/geo'
 import GeoLayer from './GeoLayer'
 import {AnnotationLayer} from './AnnotationLayer'
+import {PlotEnv} from "../utils/PlotEnv";
 
 export interface SizedPlotProps {
   config: SizedConfig
   axesCanvasRef: RefObject<HTMLCanvasElement>
   layerCanvasRef: RefObject<HTMLCanvasElement>
+  env?:PlotEnv
+  spec?:LayerSpec
 }
 
 export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
