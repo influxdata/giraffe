@@ -400,7 +400,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendOrientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically. May be overriden.
 
-- **staticLegend**: _Object. Optional. Must be included to show a static legend._ An object with properties that override the **legend** properties and apply only to the static legend that is always visible. Has a few properties that are unique to the static legend, such as **heightRatio** which sets the height of the static legend. Properties are:
+- **staticLegend**: _Object. Optional. Must be included to show a static legend. May be an empty object._ An object with properties that override the **legend** properties and apply only to the static legend that is always visible. Has a few properties that are unique to the static legend, such as **heightRatio** which sets the height of the static legend. Properties are:
 
   - **backgroundColor**: _string. Optional. Defaults to #0f0e15 when excluded._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) of the background in the static legend.
 
