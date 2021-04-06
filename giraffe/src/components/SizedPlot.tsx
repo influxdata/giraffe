@@ -54,8 +54,14 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   children,
   axesCanvasRef,
   layerCanvasRef,
+    env:defaultEnv,
 }) => {
-  const env = usePlotEnv(userConfig)
+  console.log("got env????", defaultEnv)
+
+  //const env = usePlotEnv(userConfig)
+
+  //console.log("manu....env", env)
+  const env = defaultEnv
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()
