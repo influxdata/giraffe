@@ -99,36 +99,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
-  const convertLineSpec = spec => {
-    const mappings = spec?.columnGroupMaps?.fill?.mappings
-
-    // this is an object; lineData isn't an array, it's an object with keys from 0->n
-    const lineData: LineData = spec?.lineData
-
-    Object.values(lineData).forEach(value => {
-      console.log('got value?? ', value?.fill)
-    })
-
-    const colors = Object.values(lineData).map(value => value?.fill)
-
-    // assume all keys are the same
-    let objKeys = Object.keys(mappings[0])
-
-    let result = objKeys.map(key => {
-      const values = mappings.map(dataLine => dataLine[key])
-
-      return {
-        colors,
-        key,
-        name: key,
-        type: 'string',
-        values,
-      }
-    })
-
-    return result
-  }
-
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
     ? event => {

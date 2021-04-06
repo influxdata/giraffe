@@ -7,6 +7,7 @@ interface StaticLegendBoxProps extends StaticLegend {
   height: number
   top: number
   width: number
+    tooltipdata: object
 }
 
 export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
@@ -27,7 +28,8 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         border,
       }}
     >
-      Static Legend content goes here
+
+
     </div>
   )
 }
