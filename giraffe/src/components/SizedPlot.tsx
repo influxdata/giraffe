@@ -12,7 +12,7 @@ import {
   InteractionHandlerArguments,
   LayerTypes,
   LineLayerConfig,
-    LineData,
+  LineData,
   MosaicLayerConfig,
   RectLayerConfig,
   ScatterLayerConfig,
@@ -99,48 +99,32 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
-  const convertLineSpec = (spec) => {
-    const mappings = spec?.columnGroupMaps?.fill?.mappings;
+  const convertLineSpec = spec => {
+    const mappings = spec?.columnGroupMaps?.fill?.mappings
 
-    //this is MESSED up.  lineData isn't an array, it's an object with keys from 0->n
-    const lineData:LineData = spec?.lineData
- //const colors = [];
+    // this is an object; lineData isn't an array, it's an object with keys from 0->n
+    const lineData: LineData = spec?.lineData
 
-    // Object.values(lineData).forEach(value:any => {
-    //   colors.push(value.fill)
-    // })
+    Object.values(lineData).forEach(value => {
+      console.log('got value?? ', value?.fill)
+    })
 
-    //const colors = Object.values(lineData).map(value=>
-    //value.fill)
-     Object.values(lineData).forEach(value=>
-    {console.log('got value?? ', value?.fill)})
+    const colors = Object.values(lineData).map(value => value?.fill)
 
-    const colors =  Object.values(lineData).map(value=>
-   value?.fill)
-
-
-    //const colors = spec?.lineData.map(one => one.fill)
-
-//assume all keys are the same
-
-    let objKeys = Object.keys(mappings[0]);
+    // assume all keys are the same
+    let objKeys = Object.keys(mappings[0])
 
     let result = objKeys.map(key => {
+      const values = mappings.map(dataLine => dataLine[key])
 
-          const values = mappings.map(dataLine =>
-              dataLine[key]
-          )
-
-          return {
-            colors,
-            key,
-            name: key,
-            type: 'string',
-            values
-          }
-
-        }
-    )
+      return {
+        colors,
+        key,
+        name: key,
+        type: 'string',
+        values,
+      }
+    })
 
     return result
   }
@@ -200,7 +184,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
     console.log('just made spec: ', spec)
 
-
     const sharedProps = {
       hoverX,
       hoverY,
@@ -224,10 +207,9 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           />
         )
       case SpecTypes.Line:
-
         //convert it here:
-          const staticTooltipData = convertLineSpec(spec)
-          console.log('got line spec: (converted (1))', staticTooltipData)
+        const staticTooltipData = convertLineSpec(spec)
+        console.log('got line spec: (converted (1))', staticTooltipData)
         return (
           <LineLayer
             canvasRef={layerCanvasRef}
