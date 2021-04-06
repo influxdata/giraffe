@@ -3,6 +3,11 @@ import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
 
+export interface PlotDimensions {
+  height: number
+  width: number
+}
+
 export type SizedConfig = Config & {width: number; height: number}
 export interface Config {
   width?: number
@@ -67,22 +72,43 @@ export interface Config {
   onSetYDomain?: (yDomain: number[]) => void
   onResetYDomain?: () => void
 
-  // The legend is the tooltip that appears when hovering over data points
-  legendFont?: string
-  legendFontColor?: string
-  legendFontBrightColor?: string
+  // legend properties apply to both the static legend and the tooltip
   legendBackgroundColor?: string
   legendBorder?: string
-  legendCrosshairColor?: string
+  legendColorizeRows?: boolean
   legendColumns?: string[]
+  legendCrosshairColor?: string
+  legendDisable?: boolean
+  legendFont?: string
+  legendFontBrightColor?: string
+  legendFontColor?: string
   legendMessage?: string
   legendOpacity?: number
   legendOrientationThreshold?: number
-  legendColorizeRows?: boolean
-  legendDisable?: boolean
+
+  // applies only to the static legend, overrides "legend" properties above
+  staticLegend?: StaticLegend
 
   // The type of the y-axis column
   yColumnType?: ColumnType
+}
+
+export interface StaticLegend {
+  backgroundColor?: string
+  border?: string
+  colorizeRows?: boolean
+  columns?: string[]
+  cursor?: string // no corresponding legend property, unique to static legend
+  disable?: boolean
+  font?: string
+  fontBrightColor?: string
+  fontColor?: string
+  heightRatio?: number // no corresponding legend property, unique to static legend
+  layer?: number // no corresponding legend property, unique to static legend
+  message?: string
+  opacity?: number
+  orientationThreshold?: number
+  widthRatio?: number // no corresponding legend property, unique to static legend
 }
 
 export interface InteractionHandlerArguments {

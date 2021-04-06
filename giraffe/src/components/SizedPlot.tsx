@@ -19,6 +19,7 @@ import {
   SizedConfig,
   SpecTypes,
 } from '../types'
+
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
 import {BandLayer} from './BandLayer'
@@ -37,13 +38,13 @@ import {GeoLayerConfig} from '../types/geo'
 import GeoLayer from './GeoLayer'
 import {AnnotationLayer} from './AnnotationLayer'
 
-interface Props {
+export interface SizedPlotProps {
   config: SizedConfig
   axesCanvasRef: RefObject<HTMLCanvasElement>
   layerCanvasRef: RefObject<HTMLCanvasElement>
 }
 
-export const SizedPlot: FunctionComponent<Props> = ({
+export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   config: userConfig,
   children,
   axesCanvasRef,

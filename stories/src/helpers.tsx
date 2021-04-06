@@ -161,8 +161,9 @@ export const timeZoneKnob = (initial?: string) =>
     initial || 'UTC'
   )
 
-export const tooltipOrientationThresholdKnob = () =>
-  number('tooltipOrientationThreshold', 5)
+export const tooltipOrientationThresholdKnob = (threshold: number = 5) => {
+  return number('tooltipOrientationThreshold', threshold)
+}
 
 export const tooltipColorizeRowsKnob = () =>
   boolean('tooltipColorizeRows', true)
