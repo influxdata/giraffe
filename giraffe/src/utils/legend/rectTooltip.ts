@@ -1,14 +1,21 @@
 import {range} from 'd3-array'
 
 import {getRangeLabel} from './tooltip'
-import {X_MIN, X_MAX, Y_MIN, Y_MAX, FILL, COUNT} from '../constants/columnKeys'
+import {
+  X_MIN,
+  X_MAX,
+  Y_MIN,
+  Y_MAX,
+  FILL,
+  COUNT,
+} from '../../constants/columnKeys'
 import {
   Table,
   Scale,
   TooltipData,
   TooltipColumn,
   ColumnGroupMap,
-} from '../types'
+} from '../../types'
 
 export const findHoveredRects = (
   rectTable: Table,

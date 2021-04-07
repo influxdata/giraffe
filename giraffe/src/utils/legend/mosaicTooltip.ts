@@ -1,14 +1,20 @@
 import {range} from 'd3-array'
 
 import {getRangeLabel} from './tooltip'
-import {DISPLAY_NAME, FILL, SERIES, X_MAX, X_MIN} from '../constants/columnKeys'
+import {
+  DISPLAY_NAME,
+  FILL,
+  SERIES,
+  X_MAX,
+  X_MIN,
+} from '../../constants/columnKeys'
 import {
   Table,
   Scale,
   TooltipData,
   TooltipColumn,
   ColumnGroupMap,
-} from '../types'
+} from '../../types'
 
 export const findHoveredBoxes = (
   hoverDimension: string,

@@ -7,7 +7,7 @@ import {SizedPlotWithLegend} from './SizedPlotWithLegend'
 import {SizedTable} from './SizedTable'
 
 import {get} from '../utils/get'
-import {resizePlotWithStaticLegend} from '../utils/resizePlot'
+import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
 
 interface Props {
   config: Config

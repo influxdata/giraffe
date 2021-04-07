@@ -9,7 +9,10 @@ import {
   LayerProps,
   TooltipData,
 } from '../types'
-import {findHoveredBoxes, getMosaicTooltipData} from '../utils/mosaicTooltip'
+import {
+  findHoveredBoxes,
+  getMosaicTooltipData,
+} from '../utils/legend/mosaicTooltip'
 import {Tooltip} from './Tooltip'
 
 export interface Props extends LayerProps {

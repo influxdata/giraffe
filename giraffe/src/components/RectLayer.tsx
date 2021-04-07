@@ -6,7 +6,7 @@ import {
   findHoveredRects,
   get1DTooltipData,
   get2DTooltipData,
-} from '../utils/rectTooltip'
+} from '../utils/legend/rectTooltip'
 import {Tooltip} from './Tooltip'
 import {RectLayerConfig, RectLayerSpec, LayerProps, TooltipData} from '../types'
 

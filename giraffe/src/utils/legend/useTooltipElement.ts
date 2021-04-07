@@ -1,8 +1,8 @@
 import {useRef, useEffect} from 'react'
 
-import {AnnotationTooltipOptions} from '../types'
-import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../constants'
-import {useTooltipStyle, useAnnotationStyle} from '../utils/useTooltipStyle'
+import {AnnotationTooltipOptions} from '../../types'
+import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../../constants'
+import {useTooltipStyle, useAnnotationStyle} from './useTooltipStyle'
 
 /*
   Returns a DOM node that a tooltip can be rendered inside.

@@ -7,16 +7,16 @@ import {
   Table,
   TooltipColumn,
   TooltipData,
-} from '../types'
+} from '../../types'
 import {
   FILL,
   STACKED_LINE_CUMULATIVE,
   LINE_COUNT,
   RESULT,
   VALUE,
-} from '../constants/columnKeys'
+} from '../../constants/columnKeys'
 
-import {BandHoverIndices} from './getBandHoverIndices'
+import {BandHoverIndices} from '../bandHover'
 
 const isVoid = (x: any) => x === null || x === undefined
 

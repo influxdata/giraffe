@@ -1,4 +1,4 @@
-import {StaticLegend} from '../types'
+import {StaticLegend} from '../../types'
 import {
   STATIC_LEGEND_DEFAULT_HEIGHT_RATIO,
   STATIC_LEGEND_DEFAULT_WIDTH_RATIO,
@@ -6,7 +6,7 @@ import {
   STATIC_LEGEND_MAXIMUM_WIDTH_RATIO,
   STATIC_LEGEND_MINIMUM_HEIGHT_RATIO,
   STATIC_LEGEND_MINIMUM_WIDTH_RATIO,
-} from '../constants'
+} from '../../constants'
 
 interface ResizedPlotDimensions {
   height: number

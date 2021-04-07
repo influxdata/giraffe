@@ -1,7 +1,7 @@
-import {useLayoutStyle} from './useLayoutStyle'
-import {useRefMousePos} from './useMousePos'
-import {CLOCKFACE_Z_INDEX, LEAFLET_Z_INDEX} from '../constants'
-import {AnnotationTooltipOptions} from '../types'
+import {useLayoutStyle} from '../useLayoutStyle'
+import {useRefMousePos} from '../useMousePos'
+import {CLOCKFACE_Z_INDEX, LEAFLET_Z_INDEX} from '../../constants'
+import {AnnotationTooltipOptions} from '../../types'
 
 const MARGIN_X = 30
 

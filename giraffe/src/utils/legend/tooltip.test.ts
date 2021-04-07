@@ -1,19 +1,19 @@
 import {getPointsTooltipData} from './tooltip'
-import {NINETEEN_EIGHTY_FOUR} from '../constants/colorSchemes'
+import {NINETEEN_EIGHTY_FOUR} from '../../constants/colorSchemes'
 import {
   FILL,
   STACKED_LINE_CUMULATIVE,
   LINE_COUNT,
-} from '../constants/columnKeys'
-import {getNominalColorScale, createGroupIDColumn} from '../transforms'
-import {lineTransform} from '../transforms/line'
+} from '../../constants/columnKeys'
+import {getNominalColorScale, createGroupIDColumn} from '../../transforms'
+import {lineTransform} from '../../transforms/line'
 import {
   createSampleTable,
   COLUMN_KEY,
   POINT_KEY,
   HOST_KEY,
-} from './fixtures/tooltip'
-import {LayerTypes, LineLayerSpec, ScatterLayerSpec} from '../types'
+} from '../fixtures/tooltip'
+import {LayerTypes, LineLayerSpec, ScatterLayerSpec} from '../../types'
 
 describe('getPointsTooltipData', () => {
   let sampleTable
