@@ -12,8 +12,8 @@ import {
 import {
   Table,
   Scale,
-  TooltipData,
-  TooltipColumn,
+  LegendData,
+  LegendColumn,
   ColumnGroupMap,
 } from '../../types'
 
@@ -60,7 +60,7 @@ export const get1DTooltipData = (
   fillGroupMap: ColumnGroupMap,
   fillScale: Scale<number, string>,
   columnFormatter: (colKey: string) => (x: any) => string
-): TooltipData => {
+): LegendData => {
   const xMinCol = rectTable.getColumn(X_MIN, 'number')
   const xMaxCol = rectTable.getColumn(X_MAX, 'number')
   const countCol = rectTable.getColumn(COUNT, 'number')
@@ -69,7 +69,7 @@ export const get1DTooltipData = (
   const countFormatter = columnFormatter(COUNT)
   const colors = hoveredRectRows.map(i => fillScale(fillCol[i]))
 
-  const xTooltipColumn: TooltipColumn = {
+  const xTooltipColumn: LegendColumn = {
     key: xColKey,
     name: inputTable.getColumnName(xColKey),
     type: inputTable.getColumnType(xColKey),
@@ -79,7 +79,7 @@ export const get1DTooltipData = (
     ),
   }
 
-  const countTooltipColumn: TooltipColumn = {
+  const countTooltipColumn: LegendColumn = {
     key: COUNT,
     name: 'count',
     type: 'number',
@@ -113,7 +113,7 @@ export const get2DTooltipData = (
   xColKey: string,
   yColKey: string,
   columnFormatter: (colKey: string) => (x: any) => string
-): TooltipData => {
+): LegendData => {
   const xMinCol = rectTable.getColumn(X_MIN, 'number')
   const xMaxCol = rectTable.getColumn(X_MAX, 'number')
   const yMinCol = rectTable.getColumn(Y_MIN, 'number')
@@ -123,7 +123,7 @@ export const get2DTooltipData = (
   const yFormatter = columnFormatter(yColKey)
   const countFormatter = columnFormatter(COUNT)
 
-  const xTooltipColumn: TooltipColumn = {
+  const xTooltipColumn: LegendColumn = {
     key: xColKey,
     name: inputTable.getColumnName(xColKey),
     type: inputTable.getColumnType(xColKey),
@@ -133,7 +133,7 @@ export const get2DTooltipData = (
     ),
   }
 
-  const countTooltipColumn: TooltipColumn = {
+  const countTooltipColumn: LegendColumn = {
     key: COUNT,
     name: 'count',
     type: 'number',
@@ -141,7 +141,7 @@ export const get2DTooltipData = (
     values: hoveredRectRows.map(i => countFormatter(countCol[i])),
   }
 
-  const yTooltipColumn: TooltipColumn = {
+  const yTooltipColumn: LegendColumn = {
     key: yColKey,
     name: inputTable.getColumnName(yColKey),
     type: inputTable.getColumnType(yColKey),

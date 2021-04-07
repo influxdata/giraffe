@@ -7,7 +7,7 @@ import {
   MosaicLayerConfig,
   MosaicLayerSpec,
   LayerProps,
-  TooltipData,
+  LegendData,
 } from '../types'
 import {
   findHoveredBoxes,
@@ -68,7 +68,7 @@ export const MosaicLayer: FunctionComponent<Props> = ({
     Object.values(drawMosaicOptions)
   )
 
-  let tooltipData: TooltipData = []
+  let tooltipData: LegendData = []
   if (hoveredRowIndices.length > 0) {
     tooltipData = getMosaicTooltipData(
       hoveredRowIndices,

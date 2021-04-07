@@ -1,5 +1,5 @@
 import {CSSProperties} from 'react'
-import {TooltipData, ColumnType} from '../types'
+import {LegendData, ColumnType} from '../types'
 
 // Style Constants
 const tooltipColumnGap = '12px'
@@ -36,7 +36,7 @@ export interface TooltipStyles {
 }
 
 export const generateTooltipStyles = (
-  tooltipData: TooltipData,
+  tooltipData: LegendData,
   switchToVertical: boolean,
   colorizeRows: boolean,
   fontColor: string,
@@ -174,7 +174,7 @@ const tooltipColumnValueStyle = (
 
 const tooltipDotsColumnStyles = (
   switchToVertical: boolean,
-  tooltipData: TooltipData
+  tooltipData: LegendData
 ): TooltipDotsStyles => {
   let column: CSSProperties = {
     display: 'flex',

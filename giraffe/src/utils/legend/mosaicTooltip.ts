@@ -11,8 +11,8 @@ import {
 import {
   Table,
   Scale,
-  TooltipData,
-  TooltipColumn,
+  LegendData,
+  LegendColumn,
   ColumnGroupMap,
 } from '../../types'
 
@@ -89,7 +89,7 @@ export const getMosaicTooltipData = (
   fillGroupMap: ColumnGroupMap,
   fillScale: Scale<number, string>,
   columnFormatter: (colKey: string) => (x: any) => string
-): TooltipData => {
+): LegendData => {
   const xMinCol = boxTable.getColumn(X_MIN, 'number')
   const xMaxCol = boxTable.getColumn(X_MAX, 'number')
   const valCol = boxTable.getColumn(FILL, 'string')
@@ -107,7 +107,7 @@ export const getMosaicTooltipData = (
     fillScale((valCol[i] as unknown) as number)
   )
 
-  const xTooltipColumn: TooltipColumn = {
+  const xTooltipColumn: LegendColumn = {
     key: xColKey,
     name: inputTable.getColumnName(xColKey),
     type: inputTable.getColumnType(xColKey),
@@ -117,7 +117,7 @@ export const getMosaicTooltipData = (
     ),
   }
 
-  const yTooltipColumn: TooltipColumn = {
+  const yTooltipColumn: LegendColumn = {
     key: yColKey,
     name: yColKey,
     type: 'string',
@@ -125,7 +125,7 @@ export const getMosaicTooltipData = (
     values: hoveredBoxRows.map(i => yFormatter(yCol[i])),
   }
 
-  const durationTooltipColumn: TooltipColumn = {
+  const durationTooltipColumn: LegendColumn = {
     key: 'duration column',
     name: 'Duration',
     type: 'number',

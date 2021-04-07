@@ -5,8 +5,8 @@ import {
   NumericColumnData,
   Scale,
   Table,
-  TooltipColumn,
-  TooltipData,
+  LegendColumn,
+  LegendData,
 } from '../../types'
 import {
   FILL,
@@ -75,7 +75,7 @@ const getTooltipGroupColumns = (
   groupColKeys: string[],
   getValueFormatter: (colKey: string) => (x: any) => string,
   rowColors: string[] | null
-): TooltipColumn[] => {
+): LegendColumn[] => {
   return groupColKeys.map(key => {
     const colData = table.getColumn(key)
     const formatter = getValueFormatter(key)
@@ -104,7 +104,7 @@ export const getPointsTooltipData = (
   position?: LinePosition,
   lineData?: LineData,
   stackedDomainValueColumn?: NumericColumnData
-): TooltipData => {
+): LegendData => {
   const sortOrder = lineData
     ? getDataSortOrder(lineData, hoveredRowIndices, position)
     : hoveredRowIndices
@@ -193,7 +193,7 @@ const getTooltipBandGroupColumns = (
   groupColKeys: string[],
   getValueFormatter: (colKey: string) => (x: any) => string,
   rowColors: string[] | null
-): TooltipColumn[] => {
+): LegendColumn[] => {
   return groupColKeys.reduce((accum, key) => {
     if (key === RESULT) {
       return accum
@@ -226,7 +226,7 @@ export const getBandTooltipData = (
   fillColKeys: string[],
   colors: string[],
   lineData: LineData
-): TooltipData => {
+): LegendData => {
   const {
     rowIndices: hoveredRowIndices,
     lowerIndices,
