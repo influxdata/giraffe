@@ -23,16 +23,14 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     width,
     height,
     legendFont: font,
-    legendFontColor: fontColor,
     legendFontBrightColor: fontBrightColor,
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
-    legendColumns: columnsWhitelist,
     legendOpacity,
-    legendOrientationThreshold: orientationThreshold,
-    legendColorizeRows: colorizeRows,
-    legendDisable: disableTooltip,
   } = config
+
+  console.log('got width (3)', width)
+  console.log('got height??(3)', height)
 
   const tooltipOpacity = useMemo(() => {
     if (
@@ -43,6 +41,50 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     }
     return TOOLTIP_MAXIMUM_OPACITY
   }, [legendOpacity])
+
+
+
+const tooltipContents =  <ActualTooltip data={data} config={config}/>
+
+  return createPortal(
+    <div
+      className="giraffe-tooltip"
+      style={{
+        opacity: tooltipOpacity,
+        border,
+        font,
+        backgroundColor,
+        color: fontBrightColor,
+        borderRadius: '3px',
+        padding: '10px',
+        cursor: 'crosshair',
+      }}
+      data-testid="giraffe-tooltip"
+    >
+      {tooltipContents}
+    </div>,
+    tooltipElement
+  )
+} //end tooltip component
+
+ export const ActualTooltip: FunctionComponent<Props> = ({data, config}) => {
+
+  console.log('in (actual) tooltip component.....', data)
+
+
+  const {
+    width,
+    height,
+    legendFontColor: fontColor,
+    legendFontBrightColor: fontBrightColor,
+    legendColumns: columnsWhitelist,
+    legendOrientationThreshold: orientationThreshold,
+    legendColorizeRows: colorizeRows,
+    legendDisable: disableTooltip,
+  } = config
+
+  console.log('got width (3)', width)
+  console.log('got height??(3)', height)
 
   let columns = []
   if (disableTooltip !== true) {
@@ -75,36 +117,21 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const maxLength = switchToVertical ? width : height
 
   const styles = generateTooltipStyles(
-    columns,
-    switchToVertical,
-    colorizeRows,
-    fontColor,
-    fontBrightColor
+      columns,
+      switchToVertical,
+      colorizeRows,
+      fontColor,
+      fontBrightColor
   )
 
-  return createPortal(
-    <div
-      className="giraffe-tooltip"
-      style={{
-        opacity: tooltipOpacity,
-        border,
-        font,
-        backgroundColor,
-        color: fontBrightColor,
-        borderRadius: '3px',
-        padding: '10px',
-        cursor: 'crosshair',
-      }}
-      data-testid="giraffe-tooltip"
-    >
-      <div
-        className="giraffe-tooltip-table"
-        style={styles.table}
-        data-testid="giraffe-tooltip-table"
-      >
-        {!colorizeRows && <TooltipDotColumn styles={styles.dots} />}
-        {columns.map(({name, values}, i) => (
-          <TooltipColumn
+ return <div
+      className="giraffe-tooltip-table"
+      style={styles.table}
+      data-testid="giraffe-tooltip-table"
+  >
+    {!colorizeRows && <TooltipDotColumn styles={styles.dots} />}
+    {columns.map(({name, values}, i) => (
+        <TooltipColumn
             key={name}
             name={name}
             maxLength={maxLength}
@@ -112,13 +139,13 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
             columnStyle={styles.columns[i]}
             columnHeaderStyle={styles.headers}
             columnValueStyles={styles.values[i]}
-          />
-        ))}
-      </div>
-    </div>,
-    tooltipElement
-  )
-}
+        />
+    ))}
+  </div>
+
+} //end actualTooltip component
+
+
 
 Tooltip.displayName = 'Tooltip'
 

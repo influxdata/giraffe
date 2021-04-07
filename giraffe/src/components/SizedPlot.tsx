@@ -178,8 +178,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
         )
       case SpecTypes.Line:
         //convert it here:
-        const staticTooltipData = convertLineSpec(spec)
-        console.log('got line spec: (converted (1))', staticTooltipData)
+        //const staticTooltipData = convertLineSpec(spec)
+
         return (
           <LineLayer
             canvasRef={layerCanvasRef}

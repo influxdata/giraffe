@@ -1,14 +1,14 @@
 import React, {FC} from 'react'
 import {SizedPlot, SizedPlotProps} from './SizedPlot'
 import {StaticLegendBox} from './StaticLegend'
-import {LineData, PlotDimensions, SizedConfig} from '../types'
+import {ColumnType, LineData, PlotDimensions, SizedConfig, TooltipData} from '../types'
 import {usePlotEnv} from "../utils/usePlotEnv";
 
 interface Props extends SizedPlotProps {
   resized: PlotDimensions
 }
 
-const convertLineSpec = spec => {
+const convertLineSpec = (spec):TooltipData =>  {
     const mappings = spec?.columnGroupMaps?.fill?.mappings
 
     // this is an object; lineData isn't an array, it's an object with keys from 0->n
@@ -20,14 +20,14 @@ const convertLineSpec = spec => {
     let objKeys = Object.keys(mappings[0])
 
     let result = objKeys.map(key => {
-        const values = mappings.map(dataLine => dataLine[key])
+        const values: string[] = mappings.map(dataLine => dataLine[key])
 
         return {
-            colors,
             key,
             name: key,
-            type: 'string',
+            type: 'string' as ColumnType,
             values,
+            colors,
         }
     })
 
@@ -41,6 +41,9 @@ export const SizedPlotWithLegend: FC<Props> = props => {
     const spec = env.getSpec(0)
 
     const tooltipData = convertLineSpec(spec)
+    console.log('got line spec: (converted (1))', tooltipData)
+    console.log('static legend config.....(1)', config.staticLegend)
+    console.log("entire config....(1)", config)
 
   return (
     <>
@@ -60,7 +63,8 @@ export const SizedPlotWithLegend: FC<Props> = props => {
         top={resized.height}
         width={resized.width}
         {...config.staticLegend}
-          tooltipdata={tooltipData}
+          tooltipData={tooltipData}
+        config={config}
       />
     </>
   )
