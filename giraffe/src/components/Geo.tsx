@@ -226,7 +226,7 @@ const Geo: FunctionComponent<Props> = props => {
           >
             Results are truncated.
             <a
-              href="https://docs.influxdata.com/chronograf/latest/guides/geo-widget#data-downsampling"
+              href="https://docs.influxdata.com/influxdb/cloud/visualize-data/visualization-types/map/"
               target="_blank"
             >
               More...
