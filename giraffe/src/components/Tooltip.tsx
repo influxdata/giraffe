@@ -6,7 +6,7 @@ import {TooltipData, Config} from '../types'
 import {useTooltipElement} from '../utils/useTooltipElement'
 import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
 
-import {generateTooltipStyles, TooltipDotsStyles} from './TooltipStyles'
+import {generateTooltipStyles, TooltipPillsStyles} from './TooltipStyles'
 
 interface Props {
   data: TooltipData
@@ -129,7 +129,7 @@ const tooltipContents =  <ActualTooltip data={data} config={config}/>
       style={styles.table}
       data-testid="giraffe-tooltip-table"
   >
-    {!colorizeRows && <TooltipDotColumn styles={styles.dots} />}
+    {!colorizeRows && <TooltipPillColumn styles={styles.pills} />}
     {columns.map(({name, values}, i) => (
         <TooltipColumn
             key={name}
@@ -187,27 +187,27 @@ const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
 
 TooltipColumn.displayName = 'TooltipColumn'
 
-interface TooltipDotColumnProps {
-  styles: TooltipDotsStyles
+interface TooltipPillColumnProps {
+  styles: TooltipPillsStyles
 }
 
-const TooltipDotColumn: FunctionComponent<TooltipDotColumnProps> = ({
+const TooltipPillColumn: FunctionComponent<TooltipPillColumnProps> = ({
   styles,
 }) => {
-  const {column, header, value, dots} = styles
+  const {column, header, value, pills} = styles
 
   return (
     <div className="giraffe-tooltip-column" style={column}>
       <div className="giraffe-tooltip-column-header" style={header}>
         &nbsp;
       </div>
-      {dots.map((dot, i) => (
+      {pills.map((pill, i) => (
         <div className="giraffe-tooltip-column-value" key={i} style={value}>
-          <div className="giraffe-tooltip-column-dot" style={dot} />
+          <div className="giraffe-tooltip-column-pill" style={pill} />
         </div>
       ))}
     </div>
   )
 }
 
-TooltipDotColumn.displayName = 'TooltipDotColumn'
+TooltipPillColumn.displayName = 'TooltipPillColumn'
