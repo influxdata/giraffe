@@ -50,7 +50,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   )
 
   let tooltipCaretStyle: CSSProperties = {
-    position: 'absolute',
+    position: 'fixed',
     borderWidth: '7px',
     borderStyle: 'solid',
     borderColor: 'transparent',
@@ -62,15 +62,15 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     tooltipCaretStyle = {
       ...tooltipCaretStyle,
       borderTopColor: data.color,
-      left: '50%',
-      top: '100%',
+      left: `${clampedXOffset + position.x}px`,
+      top: `${clampedYOffset + position.y}px`,
       transform: 'translateX(-50%)',
     }
 
     tooltipCaretFillStyle = {
       ...tooltipCaretStyle,
       borderTopColor: backgroundColor,
-      top: 'calc(100% - 4px)',
+      top: `calc(${clampedYOffset + position.y}px - 4px)`,
       zIndex: 3,
     }
   }
@@ -78,6 +78,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
   if (dimension === 'y') {
     tooltipCaretStyle = {
       ...tooltipCaretStyle,
+      position: 'absolute',
       borderRightColor: data.color,
       top: '50%',
       right: '100%',
