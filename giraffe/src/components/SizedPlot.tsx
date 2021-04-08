@@ -27,7 +27,7 @@ import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'
-import {usePlotEnv} from '../utils/usePlotEnv'
+import {PlotEnv} from '../utils/PlotEnv'
 import {useMousePos} from '../utils/useMousePos'
 import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
@@ -39,18 +39,19 @@ import GeoLayer from './GeoLayer'
 import {AnnotationLayer} from './AnnotationLayer'
 
 export interface SizedPlotProps {
-  config: SizedConfig
   axesCanvasRef: RefObject<HTMLCanvasElement>
+  config: SizedConfig
+  env?: PlotEnv
   layerCanvasRef: RefObject<HTMLCanvasElement>
 }
 
 export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
-  config: userConfig,
-  children,
   axesCanvasRef,
+  children,
+  config: userConfig,
+  env,
   layerCanvasRef,
 }) => {
-  const env = usePlotEnv(userConfig)
   const forceUpdate = useForceUpdate()
   const [hoverEvent, hoverTargetProps] = useMousePos()
   const [dragEvent, dragTargetProps] = useDragEvent()

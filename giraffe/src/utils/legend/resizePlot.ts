@@ -19,8 +19,8 @@ export const resizePlotWithStaticLegend = (
   staticLegendProperties?: StaticLegend
 ): ResizedPlotDimensions => {
   const resizedPlotDimensions = {
-    height,
-    width,
+    height: height || 0,
+    width: width || 0,
   } as ResizedPlotDimensions
 
   if (staticLegendProperties) {
