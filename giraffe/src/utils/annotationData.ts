@@ -1,4 +1,5 @@
 import {AnnotationMark, LineHoverDimension, Scale} from '../types'
+import {min} from 'd3-array'
 
 export const getAnnotationsPositions = (
   annotationData: AnnotationMark[],
@@ -33,6 +34,10 @@ const isWithinHoverableArea = (
   return (
     startValue - margin <= hoverPosition && stopValue + margin >= hoverPosition
   )
+}
+
+const distanceToMousePointer = (annotationMark: AnnotationMark, hoverPosition: number) => {
+  return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
 /***********************************************************************************
@@ -75,6 +80,19 @@ export const getAnnotationHoverIndices = (
             ))
         ) {
           result.push(i)
+
+          if (result.length > 1) {
+            const distances = []
+            result.forEach(i => {
+              const dist = distanceToMousePointer(
+                annotationData[i],
+                dimension === 'x' ? hoverX : hoverY
+              )
+              distances.push(dist)
+            })
+            const closestAnnotation = result[distances.indexOf(min(distances))]
+            result = [closestAnnotation]
+          }
         }
         return result
       }, [])
