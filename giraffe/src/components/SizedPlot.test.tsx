@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {FC} from 'react'
 
 import {fireEvent, render, screen} from '@testing-library/react'
 
 import {PlotEnv} from '../utils/PlotEnv'
+import {usePlotEnv} from '../utils/usePlotEnv'
 
 import {LineLayerConfig, SizedConfig} from '../types'
 
@@ -37,6 +38,18 @@ const config: SizedConfig = {
   height: 350,
 }
 
+interface MockComponentProps {
+  children: (env: PlotEnv) => JSX.Element
+  config: SizedConfig
+}
+
+const MockComponent: FC<MockComponentProps> = props => {
+  const {children, config} = props
+  const env = usePlotEnv(config)
+
+  return children(env)
+}
+
 const resetSpy = jest.spyOn(PlotEnv.prototype, 'resetDomains')
 
 const axesRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -51,11 +64,16 @@ describe('the SizedPlot', () => {
     describe('the default behavior', () => {
       it('handles double clicks', () => {
         render(
-          <SizedPlot
-            config={config}
-            axesCanvasRef={axesRef}
-            layerCanvasRef={layersRef}
-          />
+          <MockComponent config={config}>
+            {env => (
+              <SizedPlot
+                config={config}
+                axesCanvasRef={axesRef}
+                layerCanvasRef={layersRef}
+                env={env}
+              />
+            )}
+          </MockComponent>
         )
 
         fireEvent.doubleClick(screen.getByTestId('giraffe-inner-plot'))
@@ -73,11 +91,16 @@ describe('the SizedPlot', () => {
         }
 
         render(
-          <SizedPlot
-            config={localConfig}
-            axesCanvasRef={axesRef}
-            layerCanvasRef={layersRef}
-          />
+          <MockComponent config={localConfig}>
+            {env => (
+              <SizedPlot
+                config={localConfig}
+                axesCanvasRef={axesRef}
+                layerCanvasRef={layersRef}
+                env={env}
+              />
+            )}
+          </MockComponent>
         )
         // when the user (for real) does a single click, then a mouse up happens.
         // choose mouse up because the single click listener wasn't triggering except on
@@ -111,11 +134,16 @@ describe('the SizedPlot', () => {
         }
 
         render(
-          <SizedPlot
-            config={localConfig}
-            axesCanvasRef={axesRef}
-            layerCanvasRef={layersRef}
-          />
+          <MockComponent config={localConfig}>
+            {env => (
+              <SizedPlot
+                config={localConfig}
+                axesCanvasRef={axesRef}
+                layerCanvasRef={layersRef}
+                env={env}
+              />
+            )}
+          </MockComponent>
         )
 
         fireEvent.mouseOver(screen.getByTestId('giraffe-inner-plot'))

@@ -710,7 +710,7 @@ export interface Color {
   value: number
 }
 
-export interface TooltipColumn {
+export interface LegendColumn {
   key: string
   name: string
   type: ColumnType
@@ -718,7 +718,7 @@ export interface TooltipColumn {
   colors: string[] | null
 }
 
-export type TooltipData = TooltipColumn[]
+export type LegendData = LegendColumn[]
 
 export interface TooltipPosition {
   x: number

@@ -2,14 +2,14 @@ import * as React from 'react'
 import {FunctionComponent, useMemo} from 'react'
 import {createPortal} from 'react-dom'
 
-import {TooltipData, Config} from '../types'
-import {useTooltipElement} from '../utils/useTooltipElement'
+import {LegendData, Config} from '../types'
+import {useTooltipElement} from '../utils/legend/useTooltipElement'
 import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
 
 import {generateTooltipStyles, TooltipDotsStyles} from './TooltipStyles'
 
 interface Props {
-  data: TooltipData
+  data: LegendData
   config: Config
 }
 

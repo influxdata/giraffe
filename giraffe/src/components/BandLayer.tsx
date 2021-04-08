@@ -6,9 +6,9 @@ import {simplifyLineData} from '../utils/lineData'
 import {useCanvas} from '../utils/useCanvas'
 import {drawBands} from '../utils/drawBands'
 import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {useBandHoverColumns} from '../utils/useBandHoverColumns'
+import {useBandHoverColumns} from '../utils/useBandHover'
 import {FILL} from '../constants/columnKeys'
-import {getBandHoverIndices, getLineLengths} from '../utils/getBandHoverIndices'
+import {getBandHoverIndices, getLineLengths} from '../utils/bandHover'
 import {
   groupLineIndicesIntoBands,
   alignMinMaxWithBand,

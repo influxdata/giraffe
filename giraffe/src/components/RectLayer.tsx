@@ -6,9 +6,9 @@ import {
   findHoveredRects,
   get1DTooltipData,
   get2DTooltipData,
-} from '../utils/rectTooltip'
+} from '../utils/legend/rectTooltip'
 import {Tooltip} from './Tooltip'
-import {RectLayerConfig, RectLayerSpec, LayerProps, TooltipData} from '../types'
+import {RectLayerConfig, RectLayerSpec, LayerProps, LegendData} from '../types'
 
 export interface Props extends LayerProps {
   spec: RectLayerSpec
@@ -58,7 +58,7 @@ export const RectLayer: FunctionComponent<Props> = ({
     Object.values(drawRectsOptions)
   )
 
-  let tooltipData: TooltipData = []
+  let tooltipData: LegendData = []
 
   if (hoveredRowIndices.length > 0 && spec.binDimension === 'xy') {
     tooltipData = get2DTooltipData(

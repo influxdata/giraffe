@@ -1,4 +1,4 @@
-import {getLineLengths, getBandHoverIndices} from './getBandHoverIndices'
+import {getLineLengths, getBandHoverIndices} from './bandHover'
 
 describe('getBandHoverIndices utils', () => {
   describe('getLineLengths', () => {

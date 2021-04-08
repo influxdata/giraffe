@@ -7,7 +7,7 @@ import {
   ANNOTATION_TOOLTIP_CONTAINER_NAME,
   ANNOTATION_DEFAULT_MAX_WIDTH,
 } from '../constants'
-import {useTooltipElement} from '../utils/useTooltipElement'
+import {useTooltipElement} from '../utils/legend/useTooltipElement'
 
 interface Props {
   boundingReference: DOMRect

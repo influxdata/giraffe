@@ -37,6 +37,13 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
+    const fixedWidth = number('Fixed Width')
+    const fixedHeight = number('Fixed Height')
+    const fixedPlotSize = {}
+    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+      fixedPlotSize['height'] = fixedHeight
+      fixedPlotSize['width'] = fixedWidth
+    }
     const table = getRandomTable(
       maxValue,
       lines * 20,
@@ -96,6 +103,7 @@ storiesOf('Static Legend', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
+      ...fixedPlotSize,
       table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
@@ -150,6 +158,13 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
+    const fixedWidth = number('Fixed Width')
+    const fixedHeight = number('Fixed Height')
+    const fixedPlotSize = {}
+    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+      fixedPlotSize['height'] = fixedHeight
+      fixedPlotSize['width'] = fixedWidth
+    }
     const table = getRandomTable(maxValue, 20 * lines, 20, fillColumnNames)
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
@@ -203,6 +218,7 @@ storiesOf('Static Legend', module)
     const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
+      ...fixedPlotSize,
       table,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
