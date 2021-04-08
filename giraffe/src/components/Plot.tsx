@@ -17,13 +17,15 @@ export const Plot: FunctionComponent<PlotProps> = ({
 }) => {
   if (config.width && config.height) {
     return (
-      <PlotResizer
-        axesCanvasRef={axesCanvasRef}
-        config={config as SizedConfig}
-        height={config.height}
-        layerCanvasRef={layerCanvasRef}
-        width={config.width}
-      />
+      <div className="giraffe-fixedsizer" style={{position: 'relative'}}>
+        <PlotResizer
+          axesCanvasRef={axesCanvasRef}
+          config={config as SizedConfig}
+          height={config.height}
+          layerCanvasRef={layerCanvasRef}
+          width={config.width}
+        />
+      </div>
     )
   }
 
