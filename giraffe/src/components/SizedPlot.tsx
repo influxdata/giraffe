@@ -41,7 +41,7 @@ import {AnnotationLayer} from './AnnotationLayer'
 export interface SizedPlotProps {
   axesCanvasRef: RefObject<HTMLCanvasElement>
   config: SizedConfig
-  env?: PlotEnv
+  env: PlotEnv
   layerCanvasRef: RefObject<HTMLCanvasElement>
 }
 
