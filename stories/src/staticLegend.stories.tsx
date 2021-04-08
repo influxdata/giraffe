@@ -37,8 +37,8 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
-    const fixedHeight = number('Fixed Height')
     const fixedWidth = number('Fixed Width')
+    const fixedHeight = number('Fixed Height')
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight
@@ -158,8 +158,8 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
-    const fixedHeight = number('Fixed Height')
     const fixedWidth = number('Fixed Width')
+    const fixedHeight = number('Fixed Height')
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight

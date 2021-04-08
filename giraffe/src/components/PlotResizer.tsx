@@ -10,7 +10,7 @@ import {SizedPlot} from './SizedPlot'
 import {StaticLegendBox} from './StaticLegend'
 import {SizedTable} from './SizedTable'
 
-interface AutoSizedPlotProps {
+interface PlotResizerProps {
   axesCanvasRef?: RefObject<HTMLCanvasElement>
   config: SizedConfig
   height: number
@@ -18,7 +18,7 @@ interface AutoSizedPlotProps {
   width: number
 }
 
-export const AutoSizedPlot: FC<AutoSizedPlotProps> = props => {
+export const PlotResizer: FC<PlotResizerProps> = props => {
   const {axesCanvasRef, children, config, height, layerCanvasRef, width} = props
   const resized: PlotDimensions = resizePlotWithStaticLegend(
     height,
