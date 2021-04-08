@@ -3,7 +3,10 @@ import {FunctionComponent} from 'react'
 import {createPortal} from 'react-dom'
 
 import {Config, AnnotationMark, TooltipPosition} from '../types'
-import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../constants'
+import {
+  ANNOTATION_TOOLTIP_CONTAINER_NAME,
+  ANNOTATION_DEFAULT_MAX_WIDTH,
+} from '../constants'
 import {useTooltipElement} from '../utils/useTooltipElement'
 
 interface Props {
@@ -106,6 +109,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
         boxShadow: `0 0 4px 0px ${data.color}`,
         borderRadius: '3px',
         padding: '10px',
+        display: 'inline-block',
+        maxWidth: `${ANNOTATION_DEFAULT_MAX_WIDTH}px`,
       }}
     >
       <div style={tooltipCaretStyle} />
