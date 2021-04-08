@@ -26,7 +26,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
     config.staticLegend
   )
 
-  const sizedConfig = useMemo(
+  const sizedConfig: SizedConfig = useMemo(
     () => ({
       ...config,
       height: resized.height,
