@@ -40,6 +40,24 @@ const distanceToMousePointer = (
   annotationMark: AnnotationMark,
   hoverPosition: number
 ) => {
+  // check if the Annotation is a range type
+  if (annotationMark.startValue !== annotationMark.stopValue) {
+    if (
+      annotationMark.startValue <= hoverPosition &&
+      hoverPosition <= annotationMark.stopValue
+    ) {
+      // hover position is in the range, effective distance is 0
+      return 0
+    } else {
+      const distanceToStartLine = Math.abs(
+        hoverPosition - annotationMark.startValue
+      )
+      const distanceToStopLine = Math.abs(
+        hoverPosition - annotationMark.stopValue
+      )
+      return Math.min(distanceToStartLine, distanceToStopLine)
+    }
+  }
   return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
