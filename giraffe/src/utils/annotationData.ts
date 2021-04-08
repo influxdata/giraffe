@@ -36,7 +36,10 @@ const isWithinHoverableArea = (
   )
 }
 
-const distanceToMousePointer = (annotationMark: AnnotationMark, hoverPosition: number) => {
+const distanceToMousePointer = (
+  annotationMark: AnnotationMark,
+  hoverPosition: number
+) => {
   return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
