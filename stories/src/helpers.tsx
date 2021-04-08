@@ -11,8 +11,8 @@ export const PlotContainer = ({children}) => (
   <div
     style={{
       width: 'calc(100vw - 100px)',
-      height: 'calc(100vh - 100px)',
-      margin: '50px',
+      height: 'calc(100vh - 125px)',
+      margin: '75px 50px 50px 50px',
     }}
   >
     {children}
