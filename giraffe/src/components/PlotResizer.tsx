@@ -15,7 +15,7 @@ import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
 import {usePlotEnv} from '../utils/usePlotEnv'
 
 import {SizedPlot} from './SizedPlot'
-import {StaticLegendBox} from './StaticLegend'
+import {StaticLegendBox} from './StaticLegendBox'
 import {SizedTable} from './SizedTable'
 
 interface PlotResizerProps {
