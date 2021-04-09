@@ -48,18 +48,17 @@ const distanceToMousePointer = (
     ) {
       // hover position is in the range, effective distance is 0
       return 0
-    } else {
-      // distance is the shortest of:
-      // the distance between hoverPosition and annotation.startValue,
-      // and the distance between hoverPosition and annotation.stopValue
-      const distanceToStartLine = Math.abs(
-        hoverPosition - annotationMark.startValue
-      )
-      const distanceToStopLine = Math.abs(
-        hoverPosition - annotationMark.stopValue
-      )
-      return Math.min(distanceToStartLine, distanceToStopLine)
     }
+    // distance is the shortest of:
+    // the distance between hoverPosition and annotation.startValue,
+    // and the distance between hoverPosition and annotation.stopValue
+    const distanceToStartLine = Math.abs(
+      hoverPosition - annotationMark.startValue
+    )
+    const distanceToStopLine = Math.abs(
+      hoverPosition - annotationMark.stopValue
+    )
+    return Math.min(distanceToStartLine, distanceToStopLine)
   }
   return Math.abs(hoverPosition - annotationMark.startValue)
 }
