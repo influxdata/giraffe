@@ -1,13 +1,14 @@
 import React, {FC, RefObject, useMemo} from 'react'
 
 import {
-  ColumnType,
   LayerTypes,
   LegendData,
   LineData,
   PlotDimensions,
   SizedConfig,
 } from '../types'
+
+import {FILL} from '../constants/columnKeys'
 
 import {get} from '../utils/get'
 import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
@@ -26,6 +27,8 @@ interface PlotResizerProps {
 }
 
 const convertLineSpec = (spec): LegendData => {
+  console.log('about to do conversion: (jilla)', spec)
+
   const mappings = spec?.columnGroupMaps?.fill?.mappings
 
   // this is an object; lineData isn't an array, it's an object with keys from 0->n
@@ -42,7 +45,7 @@ const convertLineSpec = (spec): LegendData => {
     return {
       key,
       name: key,
-      type: 'string' as ColumnType,
+      type: spec.table.getColumnType(FILL),
       values,
       colors,
     }
