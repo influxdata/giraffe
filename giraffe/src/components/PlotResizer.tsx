@@ -37,9 +37,13 @@ const convertLineSpec = (spec): LegendData => {
   const colors = Object.values(lineData).map(value => value?.fill)
 
   // assume all keys are the same
-  let objKeys = Object.keys(mappings[0])
+  const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
 
-  let result = objKeys.map(key => {
+  if (!objKeys) {
+    return null
+  }
+
+  const result = objKeys.map(key => {
     const values: string[] = mappings.map(dataLine => dataLine[key])
 
     return {
@@ -51,6 +55,7 @@ const convertLineSpec = (spec): LegendData => {
     }
   })
 
+  console.log('result of convert line spec: ', result)
   return result
 }
 
