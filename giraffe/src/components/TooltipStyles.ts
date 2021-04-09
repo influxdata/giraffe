@@ -20,11 +20,11 @@ const tooltipColumnOrder = (name: string): number | undefined => {
 }
 
 // Tooltip Styles
-export interface TooltipDotsStyles {
+export interface TooltipPillsStyles {
   column: CSSProperties
   header: CSSProperties
   value: CSSProperties
-  dots: CSSProperties[]
+  pills: CSSProperties[]
 }
 
 export interface TooltipStyles {
@@ -32,7 +32,7 @@ export interface TooltipStyles {
   columns: CSSProperties[]
   headers: CSSProperties
   values: CSSProperties[][]
-  dots: TooltipDotsStyles
+  pills: TooltipPillsStyles
 }
 
 export const generateTooltipStyles = (
@@ -67,15 +67,15 @@ export const generateTooltipStyles = (
     )
   })
 
-  // Special "Dots" Column Styles
-  const dots = tooltipDotsColumnStyles(switchToVertical, tooltipData)
+  // Special "pills" Column Styles
+  const pills = TooltipPillsColumnStyles(switchToVertical, tooltipData)
 
   return {
     table,
     columns,
     headers,
     values,
-    dots,
+    pills,
   }
 }
 
@@ -172,10 +172,10 @@ const tooltipColumnValueStyle = (
   }
 }
 
-const tooltipDotsColumnStyles = (
+const TooltipPillsColumnStyles = (
   switchToVertical: boolean,
   tooltipData: LegendData
-): TooltipDotsStyles => {
+): TooltipPillsStyles => {
   let column: CSSProperties = {
     display: 'flex',
     order: tooltipColumnOrder('_color'),
@@ -220,10 +220,10 @@ const tooltipDotsColumnStyles = (
     tooltipData.length && Array.isArray(tooltipData[0].colors)
       ? tooltipData[0].colors
       : []
-  const dots = colors.map(color => ({
-    width: '0.75em',
-    height: '0.75em',
-    borderRadius: '50%',
+  const pills = colors.map(color => ({
+    width: '.875em',
+    height: '.25em',
+    borderRadius: '.125em',
     backgroundColor: color,
     display: 'inline-block',
   }))
@@ -232,6 +232,6 @@ const tooltipDotsColumnStyles = (
     column,
     header,
     value,
-    dots,
+    pills,
   }
 }
