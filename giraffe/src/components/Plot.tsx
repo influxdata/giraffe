@@ -11,6 +11,7 @@ interface PlotProps {
 }
 
 export const Plot: FunctionComponent<PlotProps> = ({
+  children,
   config,
   axesCanvasRef = useRef<HTMLCanvasElement>(null),
   layerCanvasRef = useRef<HTMLCanvasElement>(null),
@@ -24,7 +25,9 @@ export const Plot: FunctionComponent<PlotProps> = ({
           height={config.height}
           layerCanvasRef={layerCanvasRef}
           width={config.width}
-        />
+        >
+          {children}
+        </PlotResizer>
       </div>
     )
   }
@@ -38,7 +41,9 @@ export const Plot: FunctionComponent<PlotProps> = ({
           height={height}
           layerCanvasRef={layerCanvasRef}
           width={width}
-        />
+        >
+          {children}
+        </PlotResizer>
       )}
     </AutoSizer>
   )
