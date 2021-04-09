@@ -35,6 +35,8 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         height: `${height}px`,
         width: `${width}px`,
         color: fontBrightColor,
+        padding: 10,
+        overflow: 'auto',
         border,
       }}
     >
