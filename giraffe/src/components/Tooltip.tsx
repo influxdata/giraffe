@@ -6,7 +6,7 @@ import {LegendData, Config} from '../types'
 import {useTooltipElement} from '../utils/legend/useTooltipElement'
 import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
 
-import {generateTooltipStyles, TooltipDotsStyles} from './TooltipStyles'
+import {generateTooltipStyles, TooltipPillsStyles} from './TooltipStyles'
 
 interface Props {
   data: LegendData
@@ -17,18 +17,11 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
   const tooltipElement = useTooltipElement('giraffe-tooltip-container')
 
   const {
-    width,
-    height,
     legendFont: font,
-    legendFontColor: fontColor,
     legendFontBrightColor: fontBrightColor,
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
-    legendColumns: columnsWhitelist,
     legendOpacity,
-    legendOrientationThreshold: orientationThreshold,
-    legendColorizeRows: colorizeRows,
-    legendDisable: disableTooltip,
   } = config
 
   const tooltipOpacity = useMemo(() => {
@@ -40,6 +33,41 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     }
     return TOOLTIP_MAXIMUM_OPACITY
   }, [legendOpacity])
+
+  const tooltipContents = <ActualLegend data={data} config={config} />
+
+  return createPortal(
+    <div
+      className="giraffe-tooltip"
+      style={{
+        opacity: tooltipOpacity,
+        border,
+        font,
+        backgroundColor,
+        color: fontBrightColor,
+        borderRadius: '3px',
+        padding: '10px',
+        cursor: 'crosshair',
+      }}
+      data-testid="giraffe-tooltip"
+    >
+      {tooltipContents}
+    </div>,
+    tooltipElement
+  )
+} //end tooltip component
+
+export const ActualLegend: FunctionComponent<Props> = ({data, config}) => {
+  const {
+    width,
+    height,
+    legendFontColor: fontColor,
+    legendFontBrightColor: fontBrightColor,
+    legendColumns: columnsWhitelist,
+    legendOrientationThreshold: orientationThreshold,
+    legendColorizeRows: colorizeRows,
+    legendDisable: disableTooltip,
+  } = config
 
   let columns = []
   if (disableTooltip !== true) {
@@ -79,43 +107,27 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     fontBrightColor
   )
 
-  return createPortal(
+  return (
     <div
-      className="giraffe-tooltip"
-      style={{
-        opacity: tooltipOpacity,
-        border,
-        font,
-        backgroundColor,
-        color: fontBrightColor,
-        borderRadius: '3px',
-        padding: '10px',
-        cursor: 'crosshair',
-      }}
-      data-testid="giraffe-tooltip"
+      className="giraffe-tooltip-table"
+      style={styles.table}
+      data-testid="giraffe-tooltip-table"
     >
-      <div
-        className="giraffe-tooltip-table"
-        style={styles.table}
-        data-testid="giraffe-tooltip-table"
-      >
-        {!colorizeRows && <TooltipDotColumn styles={styles.dots} />}
-        {columns.map(({name, values}, i) => (
-          <TooltipColumn
-            key={name}
-            name={name}
-            maxLength={maxLength}
-            values={values}
-            columnStyle={styles.columns[i]}
-            columnHeaderStyle={styles.headers}
-            columnValueStyles={styles.values[i]}
-          />
-        ))}
-      </div>
-    </div>,
-    tooltipElement
+      {!colorizeRows && <TooltipPillColumn styles={styles.pills} />}
+      {columns.map(({name, values}, i) => (
+        <TooltipColumn
+          key={name}
+          name={name}
+          maxLength={maxLength}
+          values={values}
+          columnStyle={styles.columns[i]}
+          columnHeaderStyle={styles.headers}
+          columnValueStyles={styles.values[i]}
+        />
+      ))}
+    </div>
   )
-}
+} //end ActualLegend component
 
 Tooltip.displayName = 'Tooltip'
 
@@ -157,27 +169,27 @@ const TooltipColumn: FunctionComponent<TooltipColumnProps> = ({
 
 TooltipColumn.displayName = 'TooltipColumn'
 
-interface TooltipDotColumnProps {
-  styles: TooltipDotsStyles
+interface TooltipPillColumnProps {
+  styles: TooltipPillsStyles
 }
 
-const TooltipDotColumn: FunctionComponent<TooltipDotColumnProps> = ({
+const TooltipPillColumn: FunctionComponent<TooltipPillColumnProps> = ({
   styles,
 }) => {
-  const {column, header, value, dots} = styles
+  const {column, header, value, pills} = styles
 
   return (
     <div className="giraffe-tooltip-column" style={column}>
       <div className="giraffe-tooltip-column-header" style={header}>
         &nbsp;
       </div>
-      {dots.map((dot, i) => (
+      {pills.map((pill, i) => (
         <div className="giraffe-tooltip-column-value" key={i} style={value}>
-          <div className="giraffe-tooltip-column-dot" style={dot} />
+          <div className="giraffe-tooltip-column-pill" style={pill} />
         </div>
       ))}
     </div>
   )
 }
 
-TooltipDotColumn.displayName = 'TooltipDotColumn'
+TooltipPillColumn.displayName = 'TooltipPillColumn'

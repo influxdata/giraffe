@@ -1,6 +1,13 @@
 import React, {FC, RefObject, useMemo} from 'react'
 
-import {ColumnType, LayerTypes, LegendData, LineData, PlotDimensions, SizedConfig} from '../types'
+import {
+  ColumnType,
+  LayerTypes,
+  LegendData,
+  LineData,
+  PlotDimensions,
+  SizedConfig,
+} from '../types'
 
 import {get} from '../utils/get'
 import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
@@ -19,30 +26,30 @@ interface PlotResizerProps {
 }
 
 const convertLineSpec = (spec): LegendData => {
-    const mappings = spec?.columnGroupMaps?.fill?.mappings
+  const mappings = spec?.columnGroupMaps?.fill?.mappings
 
-    // this is an object; lineData isn't an array, it's an object with keys from 0->n
-    const lineData: LineData = spec?.lineData
+  // this is an object; lineData isn't an array, it's an object with keys from 0->n
+  const lineData: LineData = spec?.lineData
 
-    const colors = Object.values(lineData).map(value => value?.fill)
+  const colors = Object.values(lineData).map(value => value?.fill)
 
-    // assume all keys are the same
-    let objKeys = Object.keys(mappings[0])
+  // assume all keys are the same
+  let objKeys = Object.keys(mappings[0])
 
-    let result = objKeys.map(key => {
-        const values: string[] = mappings.map(dataLine => dataLine[key])
+  let result = objKeys.map(key => {
+    const values: string[] = mappings.map(dataLine => dataLine[key])
 
-        return {
-            key,
-            name: key,
-            type: 'string' as ColumnType,
-            values,
-            colors,
-        }
-    })
+    return {
+      key,
+      name: key,
+      type: 'string' as ColumnType,
+      values,
+      colors,
+    }
+  })
 
-    return result
-};
+  return result
+}
 
 export const PlotResizer: FC<PlotResizerProps> = props => {
   const {axesCanvasRef, children, config, height, layerCanvasRef, width} = props
