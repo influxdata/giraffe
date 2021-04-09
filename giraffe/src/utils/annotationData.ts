@@ -1,4 +1,5 @@
 import {AnnotationMark, LineHoverDimension, Scale} from '../types'
+import {min} from 'd3-array'
 
 export const getAnnotationsPositions = (
   annotationData: AnnotationMark[],
@@ -33,6 +34,33 @@ const isWithinHoverableArea = (
   return (
     startValue - margin <= hoverPosition && stopValue + margin >= hoverPosition
   )
+}
+
+const distanceToMousePointer = (
+  annotationMark: AnnotationMark,
+  hoverPosition: number
+) => {
+  // check if the Annotation is a range type
+  if (annotationMark.startValue !== annotationMark.stopValue) {
+    if (
+      annotationMark.startValue <= hoverPosition &&
+      hoverPosition <= annotationMark.stopValue
+    ) {
+      // hover position is in the range, effective distance is 0
+      return 0
+    }
+    // distance is the shortest of:
+    // the distance between hoverPosition and annotation.startValue,
+    // and the distance between hoverPosition and annotation.stopValue
+    const distanceToStartLine = Math.abs(
+      hoverPosition - annotationMark.startValue
+    )
+    const distanceToStopLine = Math.abs(
+      hoverPosition - annotationMark.stopValue
+    )
+    return Math.min(distanceToStartLine, distanceToStopLine)
+  }
+  return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
 /***********************************************************************************
@@ -75,6 +103,19 @@ export const getAnnotationHoverIndices = (
             ))
         ) {
           result.push(i)
+
+          if (result.length > 1) {
+            const distances = []
+            result.forEach(i => {
+              const dist = distanceToMousePointer(
+                annotationData[i],
+                dimension === 'x' ? hoverX : hoverY
+              )
+              distances.push(dist)
+            })
+            const closestAnnotation = result[distances.indexOf(min(distances))]
+            result = [closestAnnotation]
+          }
         }
         return result
       }, [])
