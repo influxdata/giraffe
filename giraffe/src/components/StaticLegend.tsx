@@ -1,12 +1,14 @@
 import React, {FunctionComponent} from 'react'
 
 // Types
-import {StaticLegend} from '../types'
+import {LegendData, StaticLegend, SizedConfig} from '../types'
 
 interface StaticLegendBoxProps extends StaticLegend {
   height: number
   top: number
   width: number
+    legendData: LegendData
+    config: SizedConfig
 }
 
 export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
@@ -28,6 +30,8 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       }}
     >
       Static Legend content goes here
+        <ActualTooltip data={legendData} config={config} />
+
     </div>
   )
 }
