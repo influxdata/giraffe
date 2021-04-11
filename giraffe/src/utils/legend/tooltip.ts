@@ -35,9 +35,13 @@ const getDataSortOrder = (
   hoveredRowIndices: number[],
   position: LinePosition
 ): number[] => {
+
+  //overlaid is standard for linegraphs
   if (!position || position === 'overlaid') {
     return hoveredRowIndices
   }
+
+  //rest is for stacked line layer
   const dataMap = {}
   const measurementValues = Object.keys(lineData).reduce(
     (accumulator, id) => accumulator.concat(lineData[id][DomainLabel.Y]),

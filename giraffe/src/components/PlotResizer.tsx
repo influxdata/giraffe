@@ -28,6 +28,7 @@ interface PlotResizerProps {
 
 const convertLineSpec = (spec): LegendData => {
   console.log('about to do conversion: (jilla)', spec)
+  //console.log("config obj....(foo-b)", config)
 
   const mappings = spec?.columnGroupMaps?.fill?.mappings
 
