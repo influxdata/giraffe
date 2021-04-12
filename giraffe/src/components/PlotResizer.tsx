@@ -28,19 +28,12 @@ interface PlotResizerProps {
   width: number
 }
 
-/** for static legend config:
-// todo:  add 'valueColumn' which defaults to 'y' if not present, valid values are 'y' or 'x'
-// todo:  add 'layer' which defaults to 0 if not present, can be a number (0->n where n is the number of layers).
- */
-
-
-// putting here so we can parameterize/change this later
-const valueColumn = 'y'
-
 const convertLineSpec = (env, config): LegendData => {
   const staticLegendConfig = config.staticLegend;
   const tooltipLayer = staticLegendConfig.layer ?? 0
   const layerConfig = config.layers[tooltipLayer]
+
+  const valueColumn = staticLegendConfig.valueColumn ?? 'y'
 
   const spec = env.getSpec(tooltipLayer)
 
@@ -64,7 +57,7 @@ const convertLineSpec = (env, config): LegendData => {
     return 0
   }
 
-  const dimension = valueColumn === 'y' ? 'ys' : 'xs'
+  const dimension = valueColumn === 'x' ? 'xs' : 'ys'
 
   const values = Object.values(lineData).map(line =>
     valueFormatter(peek(line[dimension]))
