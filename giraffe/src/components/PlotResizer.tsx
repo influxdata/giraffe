@@ -28,14 +28,20 @@ interface PlotResizerProps {
   width: number
 }
 
+/** for static legend config:
+// todo:  add 'valueColumn' which defaults to 'y' if not present, valid values are 'y' or 'x'
+// todo:  add 'layer' which defaults to 0 if not present, can be a number (0->n where n is the number of layers).
+ */
+
 // use the first layer for the tooltip.
 // putting here so we can parameterize/change this later
 const tooltipLayer = 0
+const valueColumn = 'y'
 
 const convertLineSpec = (env, config): LegendData => {
   const spec = env.getSpec(tooltipLayer)
 
-  const valueKey = config.y
+  const valueKey = config[valueColumn]
   const valueFormatter = env.getFormatterForColumn(valueKey)
 
   console.log('about to do conversion: (jilla)', spec)
@@ -57,9 +63,10 @@ const convertLineSpec = (env, config): LegendData => {
     return 0
   }
 
-  //const values = Object.values(lineData).map(line => valueFormatter(line.ys.slice(-1)))
+  const dimension = valueColumn === 'y' ? 'ys' : 'xs'
+
   const values = Object.values(lineData).map(line =>
-    valueFormatter(peek(line.ys))
+    valueFormatter(peek(line[dimension]))
   )
 
   console.log('got values??? ick-i', values)
@@ -84,14 +91,12 @@ const convertLineSpec = (env, config): LegendData => {
     }
   })
 
-  //todo:  type should be:  table.getColumnType(valueKey),
-  // but need to import/get the table over here too!
   const valueLine = {
     key: valueKey,
     name: `Latest ${valueKey}`,
-    type: 'number',
+    type: spec.table.getColumnType(valueKey),
     colors,
-    values
+    values,
   }
 
   const result = [valueLine, ...legendLines]
