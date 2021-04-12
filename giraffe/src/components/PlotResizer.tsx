@@ -33,19 +33,21 @@ interface PlotResizerProps {
 // todo:  add 'layer' which defaults to 0 if not present, can be a number (0->n where n is the number of layers).
  */
 
-// use the first layer for the tooltip.
+
 // putting here so we can parameterize/change this later
-const tooltipLayer = 0
 const valueColumn = 'y'
 
 const convertLineSpec = (env, config): LegendData => {
+  const staticLegendConfig = config.staticLegend;
+  const tooltipLayer = staticLegendConfig.layer ?? 0
+  const layerConfig = config.layers[tooltipLayer]
+
   const spec = env.getSpec(tooltipLayer)
 
-  const valueKey = config[valueColumn]
+  const valueKey = layerConfig[valueColumn]
   const valueFormatter = env.getFormatterForColumn(valueKey)
 
   console.log('about to do conversion: (jilla)', spec)
-  //console.log("config obj....(foo-b)", config)
 
   const mappings = spec?.columnGroupMaps?.fill?.mappings
 
@@ -54,7 +56,6 @@ const convertLineSpec = (env, config): LegendData => {
 
   const colors = Object.values(lineData).map(value => value?.fill)
 
-  // todo: add ability to specify the x instead of the y for the values
   const peek = (arr: number[]): number => {
     const len = arr.length
     if (len >= 1) {
@@ -68,9 +69,6 @@ const convertLineSpec = (env, config): LegendData => {
   const values = Object.values(lineData).map(line =>
     valueFormatter(peek(line[dimension]))
   )
-
-  console.log('got values??? ick-i', values)
-  console.log('config??? ick-i-2', config)
 
   // assume all keys are the same
   const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
@@ -153,7 +151,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
           top={resized.height}
           width={resized.width}
           {...config.staticLegend}
-          legendData={convertLineSpec(env, config.layers[tooltipLayer])}
+          legendData={convertLineSpec(env, config)}
           config={config}
         />
       ) : null}
