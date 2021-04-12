@@ -18,6 +18,8 @@ import {SizedPlot} from './SizedPlot'
 import {StaticLegendBox} from './StaticLegendBox'
 import {SizedTable} from './SizedTable'
 
+// note: the config here is for the ENTIRE plot; not for each layer.
+// those are inside config.layerConfig
 interface PlotResizerProps {
   axesCanvasRef?: RefObject<HTMLCanvasElement>
   config: SizedConfig
@@ -26,9 +28,13 @@ interface PlotResizerProps {
   width: number
 }
 
-const convertLineSpec = (env): LegendData => {
-  const spec = env.getSpec(0);
-  const valueFormatter = env.getFormatterForColumn('_value');
+// use the first layer for the tooltip.
+// putting here so we can parameterize/change this later
+const tooltipLayer = 0
+
+const convertLineSpec = (env, config): LegendData => {
+  const spec = env.getSpec(tooltipLayer);
+  const valueFormatter = env.getFormatterForColumn(config.y);
 
   console.log('about to do conversion: (jilla)', spec)
   //console.log("config obj....(foo-b)", config)
@@ -41,8 +47,6 @@ const convertLineSpec = (env): LegendData => {
   const colors = Object.values(lineData).map(value => value?.fill)
 
   // todo: add ability to specify the x instead of the y for the values
-  //getValueFormatter(yColKey)
-
   const peek = (arr:number[]):number => {
     const len = arr.length
     if (len >=1) {
@@ -55,7 +59,7 @@ const convertLineSpec = (env): LegendData => {
   const values = Object.values(lineData).map(line => valueFormatter(peek(line.ys)))
 
   console.log('got values??? ick-i', values)
-
+  console.log('config??? ick-i-2', config)
 
   // assume all keys are the same
   const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
@@ -128,7 +132,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
           top={resized.height}
           width={resized.width}
           {...config.staticLegend}
-          legendData={convertLineSpec(env)}
+          legendData={convertLineSpec(env, config.layers[tooltipLayer])}
           config={config}
         />
       ) : null}
