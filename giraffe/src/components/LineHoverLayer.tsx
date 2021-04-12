@@ -100,7 +100,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     })
   })
 
-  console.log('ack! row indices:', rowIndices)
+  //console.log('ack! row indices:', rowIndices)
 
   const tooltipData = getPointsTooltipData(
     rowIndices,
