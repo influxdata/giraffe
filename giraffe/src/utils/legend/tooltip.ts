@@ -196,7 +196,10 @@ export const getPointsTooltipData = (
     colors
   )
 
-  return [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
+  const result =  [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
+  console.log('tooltip data!!! ack-5:', result);
+
+  return result;
 }
 
 const getTooltipBandGroupColumns = (

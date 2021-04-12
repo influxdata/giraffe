@@ -392,6 +392,8 @@ export class PlotEnv {
   }
 
   public getFormatterForColumn(colKey: string): Formatter {
+    //console.log("ick:  called getFormatterForColumn;", colKey);
+
     const preferredFormatter = this.config.valueFormatters[colKey]
 
     if (preferredFormatter) {

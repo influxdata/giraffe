@@ -26,7 +26,10 @@ interface PlotResizerProps {
   width: number
 }
 
-const convertLineSpec = (spec): LegendData => {
+const convertLineSpec = (env): LegendData => {
+  const spec = env.getSpec(0);
+  const valueFormatter = env.getFormatterForColumn('_value');
+
   console.log('about to do conversion: (jilla)', spec)
   //console.log("config obj....(foo-b)", config)
 
@@ -36,6 +39,23 @@ const convertLineSpec = (spec): LegendData => {
   const lineData: LineData = spec?.lineData
 
   const colors = Object.values(lineData).map(value => value?.fill)
+
+  // todo: add ability to specify the x instead of the y for the values
+  //getValueFormatter(yColKey)
+
+  const peek = (arr:number[]):number => {
+    const len = arr.length
+    if (len >=1) {
+      return arr[len - 1]
+    }
+    return 0
+  }
+
+  //const values = Object.values(lineData).map(line => valueFormatter(line.ys.slice(-1)))
+  const values = Object.values(lineData).map(line => valueFormatter(peek(line.ys)))
+
+  console.log('got values??? ick-i', values)
+
 
   // assume all keys are the same
   const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
@@ -108,7 +128,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
           top={resized.height}
           width={resized.width}
           {...config.staticLegend}
-          legendData={convertLineSpec(env.getSpec(0))}
+          legendData={convertLineSpec(env)}
           config={config}
         />
       ) : null}
