@@ -35,7 +35,6 @@ const getDataSortOrder = (
   hoveredRowIndices: number[],
   position: LinePosition
 ): number[] => {
-
   //overlaid is standard for linegraphs
   if (!position || position === 'overlaid') {
     return hoveredRowIndices
@@ -196,10 +195,15 @@ export const getPointsTooltipData = (
     colors
   )
 
-  const result =  [tooltipXCol, tooltipYCol, ...tooltipAdditionalColumns, ...fillColumns]
-  console.log('tooltip data!!! ack-5:', result);
+  const result = [
+    tooltipXCol,
+    tooltipYCol,
+    ...tooltipAdditionalColumns,
+    ...fillColumns,
+  ]
+  console.log('tooltip data!!! ack-5:', result)
 
-  return result;
+  return result
 }
 
 const getTooltipBandGroupColumns = (

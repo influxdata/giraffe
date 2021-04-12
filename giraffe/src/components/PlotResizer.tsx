@@ -33,8 +33,10 @@ interface PlotResizerProps {
 const tooltipLayer = 0
 
 const convertLineSpec = (env, config): LegendData => {
-  const spec = env.getSpec(tooltipLayer);
-  const valueFormatter = env.getFormatterForColumn(config.y);
+  const spec = env.getSpec(tooltipLayer)
+
+  const valueKey = config.y
+  const valueFormatter = env.getFormatterForColumn(valueKey)
 
   console.log('about to do conversion: (jilla)', spec)
   //console.log("config obj....(foo-b)", config)
@@ -47,16 +49,18 @@ const convertLineSpec = (env, config): LegendData => {
   const colors = Object.values(lineData).map(value => value?.fill)
 
   // todo: add ability to specify the x instead of the y for the values
-  const peek = (arr:number[]):number => {
+  const peek = (arr: number[]): number => {
     const len = arr.length
-    if (len >=1) {
+    if (len >= 1) {
       return arr[len - 1]
     }
     return 0
   }
 
   //const values = Object.values(lineData).map(line => valueFormatter(line.ys.slice(-1)))
-  const values = Object.values(lineData).map(line => valueFormatter(peek(line.ys)))
+  const values = Object.values(lineData).map(line =>
+    valueFormatter(peek(line.ys))
+  )
 
   console.log('got values??? ick-i', values)
   console.log('config??? ick-i-2', config)
@@ -68,7 +72,7 @@ const convertLineSpec = (env, config): LegendData => {
     return null
   }
 
-  const result = objKeys.map(key => {
+  const legendLines = objKeys.map(key => {
     const values: string[] = mappings.map(dataLine => dataLine[key])
 
     return {
@@ -79,6 +83,18 @@ const convertLineSpec = (env, config): LegendData => {
       colors,
     }
   })
+
+  //todo:  type should be:  table.getColumnType(valueKey),
+  // but need to import/get the table over here too!
+  const valueLine = {
+    key: valueKey,
+    name: `Latest ${valueKey}`,
+    type: 'number',
+    colors,
+    values
+  }
+
+  const result = [valueLine, ...legendLines]
 
   console.log('result of convert line spec: ', result)
   return result
