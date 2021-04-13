@@ -138,7 +138,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       >
         {children}
       </SizedPlot>
-      {(config.staticLegend && !config.staticLegend.hide) ? (
+      {config.staticLegend && !config.staticLegend.hide ? (
         <StaticLegendBox
           height={height - resized.height}
           top={resized.height}
