@@ -424,7 +424,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **layer**: _number. Optional. Defaults to 0 (the first layer) when not included._ The index of the layer in the **layers** array that will be displayed in the static legend. The static legend will only display data for a single layer.
 
-  - **valueColumn**: _string. Optional. Defaults to 'y' when not included.  Valid values are either 'x' or 'y'.  This is to set where the 'values' that are displayed in the tooltip come from (which axis, x or y)
+  - **valueAxis**: _string. Optional. Defaults to 'y' when not included.  Valid values are either 'x' or 'y'.  This is to set where the 'values' that are displayed in the tooltip come from (which axis, x or y)
   
   - **message**: _string. Not used. Reserved for future implementation._ A string to display in the static legend. Does not affect the renderable content in the static legend, such as column names and data.
 

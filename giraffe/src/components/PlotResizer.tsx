@@ -33,11 +33,11 @@ const convertLineSpec = (env, config): LegendData => {
   const tooltipLayer = staticLegendConfig.layer ?? 0
   const layerConfig = config.layers[tooltipLayer]
 
-  const valueColumn = staticLegendConfig.valueColumn ?? 'y'
+  const valueAxis = staticLegendConfig.valueAxis ?? 'y'
 
   const spec = env.getSpec(tooltipLayer)
 
-  const valueKey = layerConfig[valueColumn]
+  const valueKey = layerConfig[valueAxis]
   const valueFormatter = env.getFormatterForColumn(valueKey)
 
   console.log('about to do conversion: (jilla)', spec)
@@ -57,7 +57,7 @@ const convertLineSpec = (env, config): LegendData => {
     return 0
   }
 
-  const dimension = valueColumn === 'x' ? 'xs' : 'ys'
+  const dimension = valueAxis === 'x' ? 'xs' : 'ys'
 
   const values = Object.values(lineData).map(line =>
     valueFormatter(peek(line[dimension]))
