@@ -363,7 +363,7 @@ const drawGaugeLabels = (
       ctx.rotate(-startDegree)
     }
   } else if (gaugeUnit.toString() === 'USD') {
-    const labels = ['0', '60s', '60m', '24h', '30d']
+    const labels = ['0', '1000', '1000m', '1000b', '1000t']
     const lineCount = 5
     for (let i = 0; i <= lineCount; i++) {
       labelRadius = radius + gradientThickness + 23
