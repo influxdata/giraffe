@@ -99,15 +99,16 @@ export interface StaticLegend {
   colorizeRows?: boolean
   columns?: string[]
   cursor?: string // no corresponding legend property, unique to static legend
-  disable?: boolean
   font?: string
   fontBrightColor?: string
   fontColor?: string
   heightRatio?: number // no corresponding legend property, unique to static legend
+  hide?: boolean
   layer?: number // no corresponding legend property, unique to static legend
   message?: string
   opacity?: number
   orientationThreshold?: number
+  valueAxis?: 'x' | 'y'
   widthRatio?: number // no corresponding legend property, unique to static legend
 }
 

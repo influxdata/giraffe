@@ -139,6 +139,7 @@ export const lineTransform = (
     )
   }
 
+  //todo:  look at stackdomainvalue column for stacked data for static legend
   return {
     type: 'line',
     inputTable,
