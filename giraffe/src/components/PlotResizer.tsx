@@ -29,7 +29,7 @@ interface PlotResizerProps {
 }
 
 const convertLineSpec = (env, config): LegendData => {
-  const staticLegendConfig = config.staticLegend;
+  const staticLegendConfig = config.staticLegend
   const tooltipLayer = staticLegendConfig.layer ?? 0
   const layerConfig = config.layers[tooltipLayer]
 
