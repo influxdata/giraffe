@@ -1,6 +1,6 @@
 import {useLayoutStyle} from '../useLayoutStyle'
 import {useRefMousePos} from '../useMousePos'
-import {CLOCKFACE_Z_INDEX, LEAFLET_Z_INDEX} from '../../constants'
+import {ANNOTATION_DEFAULT_MAX_WIDTH, CLOCKFACE_Z_INDEX, LEAFLET_Z_INDEX} from '../../constants'
 import {AnnotationTooltipOptions} from '../../types'
 
 const MARGIN_X = 30
@@ -107,9 +107,12 @@ export const useAnnotationStyle = (
           display: 'none',
         }
       }
-
+      // xOffset : start x-coordinate value of the plot layer
+      // yOffset : start y-coordinate value of the plot layer
+      // (xOffset, yOffset) is the origin of this plot
+      // dx      : the distance to the middle of the tooltip from the parent plot container left edge
       let dx = xOffset - tooltipWidth / 2
-      if (dx + x + tooltipWidth > window.innerWidth) {
+      if (dx + tooltipWidth > window.innerWidth) {
         dx = 0 - tooltipWidth / 2 + window.innerWidth - (x + xOffset)
       }
       let dy = Math.max(yOffset - tooltipHeight, 0)
@@ -125,16 +128,23 @@ export const useAnnotationStyle = (
         }
       }
 
-      const clampedX = Math.round(Math.max(dx + x, x))
+      let clampedX = Math.round(x + dx)
       const clampedY = Math.round(dy + y)
+
+      // When the annotation is in the far edge of the screen, the position.left value
+      // overrides the width of the tooltip and makes its width smaller than its max-width.
+      // Fix the left value so that the tooltip is at its max width.
+      if (window.innerWidth - clampedX < ANNOTATION_DEFAULT_MAX_WIDTH) {
+        clampedX = window.innerWidth - ANNOTATION_DEFAULT_MAX_WIDTH
+      }
 
       /* Geo widget maps are rendered with z-index: 399, we have to set it above
        that so that tooltips are not rendered/are hidden below the map, */
       return {
-        display: 'inline',
+        display: 'inline-block',
         position: 'fixed',
-        left: `${clampedX}px`,
         top: `${clampedY}px`,
+        left: `${clampedX}px`,
         zIndex: CLOCKFACE_Z_INDEX + LEAFLET_Z_INDEX + 1,
       }
     }
