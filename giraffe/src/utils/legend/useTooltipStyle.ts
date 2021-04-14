@@ -137,7 +137,7 @@ export const useAnnotationStyle = (
 
       // When the annotation is in the far edge of the screen, the position.left value
       // overrides the width of the tooltip and makes its width smaller than its max-width.
-      // Fix the left value so that the tooltip is at its max width.
+      // Position the left edge of the tooltip such that the tooltip occupies its max width.
       if (
         window.innerWidth - clampedX < ANNOTATION_DEFAULT_MAX_WIDTH &&
         tooltipWidth >= ANNOTATION_DEFAULT_MAX_WIDTH
