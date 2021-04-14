@@ -143,7 +143,7 @@ export const CLOCKFACE_Z_INDEX = 9599
 export const TICK_COUNT_LIMIT = 1000
 
 export const ANNOTATION_DEFAULT_HOVER_MARGIN = 20
-export const ANNOTATION_DEFAULT_MAX_WIDTH = 200
+export const ANNOTATION_DEFAULT_MAX_WIDTH = 250
 
 export const ANNOTATION_TOOLTIP_CONTAINER_NAME =
   'giraffe-annotation-tooltip-container'
