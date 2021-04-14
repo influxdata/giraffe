@@ -16,8 +16,8 @@ interface AnnotationLineProps {
 
 // These could become configurable values
 const PIN_CIRCLE_RADIUS = 4
-const PIN_TRIANGLE_HEIGHT = 18
-const PIN_TRIANGLE_WIDTH = 11
+const PIN_TRIANGLE_HEIGHT = 8
+const PIN_TRIANGLE_WIDTH = 6
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {dimension, color, strokeWidth, startValue, length, pin} = props
@@ -70,7 +70,21 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   }
 
   return (
+    // a separate line layer on the annotation line is required on top,
+    // because the dashed line doesnt allow for a continuous click-able target
+    // this top layer has an opacity of 0 so is not visible.
     <>
+      <line
+        x1={clampedStart}
+        x2={clampedStart}
+        y1="0"
+        y2={length}
+        stroke={color}
+        strokeOpacity={0}
+        strokeWidth={strokeWidth}
+        id={props.id}
+        className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
+      />
       <line
         x1={clampedStart}
         x2={clampedStart}
@@ -80,6 +94,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         strokeWidth={strokeWidth}
         id={props.id}
         className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
+        strokeDasharray={'4'}
       />
       {pin === 'circle' &&
         createElement('circle', {
