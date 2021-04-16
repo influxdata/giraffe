@@ -96,6 +96,10 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     }
   }
 
+  const textContainerStyle: CSSProperties = {
+    overflowWrap: 'break-word',
+  }
+
   return createPortal(
     <div
       className="giraffe-annotation-tooltip"
@@ -115,8 +119,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     >
       <div style={tooltipCaretStyle} />
       <div style={tooltipCaretFillStyle} />
-      <div>{data.title}</div>
-      <div>{data.description}</div>
+      <div style={textContainerStyle}>{data.title}</div>
+      <div style={textContainerStyle}>{data.description}</div>
     </div>,
     annotationTooltipElement
   )
