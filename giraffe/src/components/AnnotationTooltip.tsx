@@ -115,8 +115,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     >
       <div style={tooltipCaretStyle} />
       <div style={tooltipCaretFillStyle} />
-      <div>{data.title}</div>
-      <div>{data.description}</div>
+      <div style={{overflowWrap: 'break-word'}}>{data.title}</div>
+      <div style={{overflowWrap: 'break-word'}}>{data.description}</div>
     </div>,
     annotationTooltipElement
   )
