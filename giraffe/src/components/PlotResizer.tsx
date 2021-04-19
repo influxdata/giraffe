@@ -40,8 +40,6 @@ const convertLineSpec = (env, config): LegendData => {
   const valueKey = layerConfig[valueAxis]
   const valueFormatter = env.getFormatterForColumn(valueKey)
 
-  console.log('about to do conversion: (jilla)', spec)
-
   const mappings = spec?.columnGroupMaps?.fill?.mappings
 
   // this is an object; lineData isn't an array, it's an object with keys from 0->n
@@ -92,7 +90,6 @@ const convertLineSpec = (env, config): LegendData => {
 
   const result = [valueLine, ...legendLines]
 
-  console.log('result of convert line spec: ', result)
   return result
 }
 

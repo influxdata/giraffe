@@ -115,18 +115,12 @@ export const getPointsTooltipData = (
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(groupColKey, 'number')
 
-  // console.log('ack-i: lineData', lineData)
-  // console.log('ack-i: about to arder data by value: ', hoveredRowIndices)
-  // console.log('ack-i: sortorder?', sortOrder)
-  // console.log('ack-i: fillscale???,', fillScale)
-
   const colors = orderDataByValue(
     hoveredRowIndices,
     sortOrder,
     hoveredRowIndices.map(i => fillScale(groupColData[i]))
   )
 
-  //console.log('ack-i: got colors:', colors)
   const xFormatter = getValueFormatter(xColKey)
   const yFormatter = getValueFormatter(yColKey)
 
@@ -201,7 +195,6 @@ export const getPointsTooltipData = (
     ...tooltipAdditionalColumns,
     ...fillColumns,
   ]
-  console.log('tooltip data!!! ack-5:', result)
 
   return result
 }
