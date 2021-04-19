@@ -1,14 +1,6 @@
 import React, {FC, RefObject, useMemo} from 'react'
 
-import {
-  LayerTypes,
-  LegendData,
-  LineData,
-  PlotDimensions,
-  SizedConfig,
-} from '../types'
-
-import {FILL} from '../constants/columnKeys'
+import {LayerTypes, PlotDimensions, SizedConfig} from '../types'
 
 import {get} from '../utils/get'
 import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
@@ -26,71 +18,6 @@ interface PlotResizerProps {
   height: number
   layerCanvasRef?: RefObject<HTMLCanvasElement>
   width: number
-}
-
-const convertLineSpec = (env, config): LegendData => {
-  const staticLegendConfig = config.staticLegend
-  const tooltipLayer = staticLegendConfig.layer ?? 0
-  const layerConfig = config.layers[tooltipLayer]
-
-  const valueAxis = staticLegendConfig.valueAxis ?? 'y'
-
-  const spec = env.getSpec(tooltipLayer)
-
-  const valueKey = layerConfig[valueAxis]
-  const valueFormatter = env.getFormatterForColumn(valueKey)
-
-  const mappings = spec?.columnGroupMaps?.fill?.mappings
-
-  // this is an object; lineData isn't an array, it's an object with keys from 0->n
-  const lineData: LineData = spec?.lineData
-
-  const colors = Object.values(lineData).map(value => value?.fill)
-
-  const peek = (arr: number[]): number => {
-    const len = arr.length
-    if (len >= 1) {
-      return arr[len - 1]
-    }
-    return 0
-  }
-
-  const dimension = valueAxis === 'x' ? 'xs' : 'ys'
-
-  const values = Object.values(lineData).map(line =>
-    valueFormatter(peek(line[dimension]))
-  )
-
-  // assume all keys are the same
-  const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
-
-  if (!objKeys) {
-    return null
-  }
-
-  const legendLines = objKeys.map(key => {
-    const values: string[] = mappings.map(dataLine => dataLine[key])
-
-    return {
-      key,
-      name: key,
-      type: spec.table.getColumnType(FILL),
-      values,
-      colors,
-    }
-  })
-
-  const valueLine = {
-    key: valueKey,
-    name: `Latest ${valueKey}`,
-    type: spec.table.getColumnType(valueKey),
-    colors,
-    values,
-  }
-
-  const result = [valueLine, ...legendLines]
-
-  return result
 }
 
 export const PlotResizer: FC<PlotResizerProps> = props => {
@@ -111,6 +38,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
   )
 
   const env = usePlotEnv(sizedConfig)
+  const spec = env.getSpec(0)
   const graphType = get(config, 'layers.0.type')
 
   if (width === 0 || height === 0) {
@@ -137,12 +65,13 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       </SizedPlot>
       {config.staticLegend && !config.staticLegend.hide ? (
         <StaticLegendBox
+          columnFormatter={env.getFormatterForColumn}
+          {...config.staticLegend}
+          config={config}
           height={height - resized.height}
+          spec={spec}
           top={resized.height}
           width={resized.width}
-          {...config.staticLegend}
-          legendData={convertLineSpec(env, config)}
-          config={config}
         />
       ) : null}
     </>

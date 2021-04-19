@@ -2,11 +2,11 @@ import {CSSProperties} from 'react'
 import {LegendData, ColumnType} from '../types'
 
 // Style Constants
-const tooltipColumnGap = '12px'
-const tooltipColumnMaxWidth = '200px'
-const tooltipTablePadding = '4px'
+const legendColumnGap = '12px'
+const legendColumnMaxWidth = '200px'
+const legendTablePadding = '4px'
 
-const tooltipColumnOrder = (name: string): number | undefined => {
+const legendColumnOrder = (name: string): number | undefined => {
   switch (name) {
     case '_color':
       return 1
@@ -19,34 +19,34 @@ const tooltipColumnOrder = (name: string): number | undefined => {
   }
 }
 
-// Tooltip Styles
-export interface TooltipPillsStyles {
+// Legend Styles
+export interface LegendPillsStyles {
   column: CSSProperties
   header: CSSProperties
   value: CSSProperties
   pills: CSSProperties[]
 }
 
-export interface TooltipStyles {
+export interface LegendStyles {
   table: CSSProperties
   columns: CSSProperties[]
   headers: CSSProperties
   values: CSSProperties[][]
-  pills: TooltipPillsStyles
+  pills: LegendPillsStyles
 }
 
-export const generateTooltipStyles = (
-  tooltipData: LegendData,
+export const generateLegendStyles = (
+  legendData: LegendData,
   switchToVertical: boolean,
   colorizeRows: boolean,
   fontColor: string,
   fontBrightColor: string
-): TooltipStyles => {
-  // Regular Tooltip Styles
-  const columnCount = tooltipData.length - 1
-  const table = tooltipTableStyle(switchToVertical)
-  const columns = tooltipData.map((column, i) =>
-    tooltipColumnStyle(
+): LegendStyles => {
+  // Regular Legend Styles
+  const columnCount = legendData.length - 1
+  const table = legendTableStyle(switchToVertical)
+  const columns = legendData.map((column, i) =>
+    legendColumnStyle(
       column.name,
       i,
       column.type,
@@ -54,10 +54,10 @@ export const generateTooltipStyles = (
       columnCount
     )
   )
-  const headers = tooltipColumnHeaderStyle(switchToVertical, fontColor)
-  const values = tooltipData.map(column => {
+  const headers = legendColumnHeaderStyle(switchToVertical, fontColor)
+  const values = legendData.map(column => {
     return column.values.map((_, i) =>
-      tooltipColumnValueStyle(
+      legendColumnValueStyle(
         i,
         column.colors,
         colorizeRows,
@@ -68,7 +68,7 @@ export const generateTooltipStyles = (
   })
 
   // Special "pills" Column Styles
-  const pills = TooltipPillsColumnStyles(switchToVertical, tooltipData)
+  const pills = LegendPillsColumnStyles(switchToVertical, legendData)
 
   return {
     table,
@@ -79,7 +79,7 @@ export const generateTooltipStyles = (
   }
 }
 
-const tooltipTableStyle = (switchToVertical: boolean): CSSProperties => {
+const legendTableStyle = (switchToVertical: boolean): CSSProperties => {
   if (switchToVertical) {
     return {
       display: 'table',
@@ -92,7 +92,7 @@ const tooltipTableStyle = (switchToVertical: boolean): CSSProperties => {
   }
 }
 
-const tooltipColumnStyle = (
+const legendColumnStyle = (
   name: string,
   i: number,
   type: ColumnType,
@@ -108,14 +108,14 @@ const tooltipColumnStyle = (
 
   return {
     display: 'flex',
-    order: tooltipColumnOrder(name),
+    order: legendColumnOrder(name),
     flexDirection: 'column',
-    marginRight: i === columnCount ? 0 : tooltipColumnGap,
+    marginRight: i === columnCount ? 0 : legendColumnGap,
     textAlign: type === 'number' ? 'right' : 'left',
   }
 }
 
-const tooltipColumnHeaderStyle = (
+const legendColumnHeaderStyle = (
   switchToVertical: boolean,
   fontColor: string
 ): React.CSSProperties => {
@@ -123,17 +123,17 @@ const tooltipColumnHeaderStyle = (
     return {
       color: fontColor,
       display: 'table-cell',
-      margin: tooltipTablePadding,
+      margin: legendTablePadding,
     }
   }
 
   return {
-    marginBottom: tooltipTablePadding,
+    marginBottom: legendTablePadding,
     color: fontColor,
   }
 }
 
-const tooltipColumnValueStyle = (
+const legendColumnValueStyle = (
   i: number,
   colors: string[],
   colorizeRows: boolean,
@@ -148,20 +148,20 @@ const tooltipColumnValueStyle = (
 
   if (switchToVertical) {
     return {
-      maxWidth: tooltipColumnMaxWidth,
+      maxWidth: legendColumnMaxWidth,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       color,
       display: 'table-cell',
-      padding: tooltipTablePadding,
+      padding: legendTablePadding,
       fontWeight: 600,
       lineHeight: '1em',
     }
   }
 
   return {
-    maxWidth: tooltipColumnMaxWidth,
+    maxWidth: legendColumnMaxWidth,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -172,13 +172,13 @@ const tooltipColumnValueStyle = (
   }
 }
 
-const TooltipPillsColumnStyles = (
+const LegendPillsColumnStyles = (
   switchToVertical: boolean,
-  tooltipData: LegendData
-): TooltipPillsStyles => {
+  legendData: LegendData
+): LegendPillsStyles => {
   let column: CSSProperties = {
     display: 'flex',
-    order: tooltipColumnOrder('_color'),
+    order: legendColumnOrder('_color'),
     flexDirection: 'column',
     marginRight: '6px',
     textAlign: 'left',
@@ -205,20 +205,20 @@ const TooltipPillsColumnStyles = (
 
     header = {
       display: 'table-cell',
-      margin: tooltipTablePadding,
+      margin: legendTablePadding,
     }
 
     value = {
       width: 'auto',
       display: 'table-cell',
       verticalAlign: 'middle',
-      padding: tooltipTablePadding,
+      padding: legendTablePadding,
     }
   }
 
   const colors =
-    tooltipData.length && Array.isArray(tooltipData[0].colors)
-      ? tooltipData[0].colors
+    legendData.length && Array.isArray(legendData[0].colors)
+      ? legendData[0].colors
       : []
   const pills = colors.map(color => ({
     width: '.875em',
