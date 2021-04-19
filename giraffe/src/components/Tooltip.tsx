@@ -66,11 +66,11 @@ export const ActualLegend: FunctionComponent<Props> = ({data, config}) => {
     legendColumns: columnsWhitelist,
     legendOrientationThreshold: orientationThreshold,
     legendColorizeRows: colorizeRows,
-    legendDisable: disableTooltip,
+    legendHide: hideTooltip,
   } = config
 
   let columns = []
-  if (disableTooltip !== true) {
+  if (hideTooltip !== true) {
     // when legendColumns wasn't defined in the config.
     if (!Array.isArray(columnsWhitelist)) {
       columns = data

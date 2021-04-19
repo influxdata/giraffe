@@ -78,7 +78,7 @@ export interface Config {
   legendColorizeRows?: boolean
   legendColumns?: string[]
   legendCrosshairColor?: string
-  legendDisable?: boolean
+  legendHide?: boolean
   legendFont?: string
   legendFontBrightColor?: string
   legendFontColor?: string

@@ -386,7 +386,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendCrosshairColor**: _string | Object. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendDisable**: _boolean. Optional. Defaults to false when not included._ _true_ means the legend and tooltip will not be rendered. _false_ means the legend and tooltip will be rendered. May be overriden.
+- **legendHide**: _boolean. Optional. Defaults to false when not included._ _true_ means the legend and tooltip will not be rendered. _false_ means the legend and tooltip will be rendered. May be overriden.
 
 - **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend and tooltip. May be overriden.
 

@@ -167,7 +167,7 @@ export const tooltipOrientationThresholdKnob = (threshold: number = 5) => {
 export const tooltipColorizeRowsKnob = () =>
   boolean('tooltipColorizeRows', true)
 
-export const tooltipDisableKnob = () => boolean('tooltipDisable', false)
+export const tooltipHideKnob = () => boolean('tooltipDisable', false)
 
 export const annotationPinKnob = () =>
   select('pin', ['none', 'circle', 'start', 'stop'], 'none')
