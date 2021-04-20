@@ -524,6 +524,32 @@ Giraffe comes with utility functions.
 
   - **symbol**: _array[string, ...]. Optional._ An array of columm key names of column filters that should be visualized. Acts like a secondary **fill** using different symbols for the dots rather than **colors**. Limited to 6 different symbols. Symbols will repeat above limit.
 
+- **GeoLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
+
+  - **type**: _"geo". **Required**._ Specifies that this LayerConfig and `<Plot>` is a geo plot.
+
+  - **lat**: _number. **Required**._ The column name or field that should be used to visualize the data point on the map.
+
+  - **lon**: _string. **Required**._ The column name or field that should be used to visualize the data point on the map.
+
+  - **zoom**: _number. **Required**._ The number that will determine the zoom of the map.
+
+  - **allowPanAndZoom**: _boolean. **Required**._ A boolean field that will display or not display the zoom in/out controls on the map.
+
+  - **mapStyle**: _string. Optional._ The string will determine the style of the map to use to display the data points.
+
+  - **detectCoordinateFields**: _boolean. **Required**._ The boolean is conditioned whether the lat/lon are given as or given as fields. If the lat/lon exist in the `_field`, then this prop will be `true` in order to read the lat/lon properly.
+
+  - **onViewportChange**: _function(number, number, number). Optional._ The library we use to render the map, React leaflet, provides a nice `onViewportChanged` callback that captures center and zoom changes when using the map.
+
+  - **onUpdateViewport**: _function(number, number, number). Optional._ This function is passed in if we want to update the viewport when we want to update using the zoom controls on the map.
+
+  - **onUpdateQuery**: _function(Object). Optional._ This function is used if we want to update the map's sizing based on when the window resizing happens.
+
+  - **layers**: _array[Object]. **Required**._ This function is used if we want to update the map's sizing based on when the window resizing happens.
+
+  - **tileServerConfiguration**: _Object. **Required**._ Property that allows us to pass in the proper configuration of displaying maps. The configuration includes of the map service url and the key/token.
+
 - **HistogramLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
 
   - **type**: _"histogram". **Required**._ Specifies that this LayerConfig and `<Plot>` is a [histogram](https://en.wikipedia.org/wiki/Histogram).
