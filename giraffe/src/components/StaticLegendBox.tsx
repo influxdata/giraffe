@@ -28,16 +28,8 @@ const overrideLegendConfig = (
   config: SizedConfig,
   staticLegend: StaticLegend
 ): LegendOptionsOverridden => {
-  const configWithDefaults = Object.assign(
-    {} as SizedConfig,
-    CONFIG_DEFAULTS,
-    config
-  )
-  const staticLegendWithDefaults = Object.assign(
-    {} as StaticLegend,
-    STATIC_LEGEND_DEFAULTS,
-    staticLegend
-  )
+  const configWithDefaults = {...CONFIG_DEFAULTS, ...config}
+  const staticLegendWithDefaults = {...STATIC_LEGEND_DEFAULTS, ...staticLegend}
 
   for (const property in staticLegendWithDefaults) {
     if (property in LegendPropertyNames) {
@@ -92,6 +84,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         top: `${top}px`,
         width: `${width}px`,
       }}
+      data-testid="giraffe-static-legend"
     >
       <Legend data={legendData} config={configOverride} />
     </div>
