@@ -1,6 +1,8 @@
 import * as React from 'react'
 import {select, text, boolean, number} from '@storybook/addon-knobs'
 import {Table} from '../../giraffe/src'
+import {CPU} from './data/cpu'
+import {cpuTable} from './data/mosaicTable'
 
 import * as giraffe from '../../giraffe/src'
 
@@ -73,8 +75,8 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
-export const tableKnob = (initial?: string) =>
-  select('Data', {CPU: 'CPU', cpuTable: 'cpuTable', initial}, initial || 'CPU')
+export const tableKnob = (initial?) =>
+  select('Data', {CPU, cpuTable}, initial || CPU)
 
 /*
   Find all column keys in a table suitable for mapping to the `x` or `y`
