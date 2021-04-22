@@ -37,8 +37,10 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight
@@ -158,8 +160,10 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight

@@ -27,7 +27,8 @@ import {
 storiesOf('XY Plot', module)
   .addDecorator(withKnobs)
   .add('Stacked Line Layer', () => {
-    const table = tableKnob(stackedLineTable)
+    const tableSelection = tableKnob(stackedLineTable)
+    const table = 
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
