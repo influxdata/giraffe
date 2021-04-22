@@ -12,7 +12,7 @@ import {
   COLUMN_KEY,
   POINT_KEY,
   HOST_KEY,
-} from '../fixtures/tooltip'
+} from '../fixtures/legend'
 import {LayerTypes, LineLayerSpec, ScatterLayerSpec} from '../../types'
 
 describe('getPointsTooltipData', () => {

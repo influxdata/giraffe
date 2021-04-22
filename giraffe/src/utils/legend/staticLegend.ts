@@ -62,7 +62,5 @@ export const convertLineSpec = (
     }
   })
 
-  const result = [valueColumn, ...legendColumns]
-
-  return result
+  return [valueColumn, ...legendColumns]
 }
