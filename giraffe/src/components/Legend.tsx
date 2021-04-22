@@ -18,25 +18,16 @@ export const Legend: FunctionComponent<Props> = ({data, config}) => {
     legendColumns: columnsWhitelist,
     legendOrientationThreshold: orientationThreshold,
     legendColorizeRows: colorizeRows,
-    legendHide: hide,
   } = config
 
   let columns = []
-  if (hide !== true) {
-    // when legendColumns wasn't defined in the config.
-    if (!Array.isArray(columnsWhitelist)) {
-      columns = data
-    }
-    // when legendColumns = [] in the config
-    else if (columnsWhitelist.length == 0) {
+  if (Array.isArray(columnsWhitelist)) {
+    if (columnsWhitelist.length === 0) {
       return null
     }
-    // when legendColumns is an array of requested columns
-    else {
-      columns = data.filter(column => columnsWhitelist.includes(column.key))
-    }
+    columns = data.filter(column => columnsWhitelist.includes(column.key))
   } else {
-    return null
+    columns = data
   }
 
   const switchToVertical = columns.length > orientationThreshold

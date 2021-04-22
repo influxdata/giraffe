@@ -66,7 +66,6 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       {config.staticLegend && !config.staticLegend.hide ? (
         <StaticLegendBox
           columnFormatter={env.getFormatterForColumn}
-          {...config.staticLegend}
           config={config}
           height={height - resized.height}
           spec={spec}

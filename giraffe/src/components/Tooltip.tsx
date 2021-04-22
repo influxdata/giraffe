@@ -13,15 +13,17 @@ interface Props {
 }
 
 export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
-  const tooltipElement = useTooltipElement('giraffe-tooltip-container')
-
   const {
-    legendFont: font,
-    legendFontBrightColor: fontBrightColor,
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
+    legendColumns,
+    legendFont: font,
+    legendFontBrightColor: fontBrightColor,
+    legendHide: isHidden,
     legendOpacity,
   } = config
+
+  const tooltipElement = useTooltipElement('giraffe-tooltip-container')
 
   const tooltipOpacity = useMemo(() => {
     if (
@@ -33,20 +35,29 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     return TOOLTIP_MAXIMUM_OPACITY
   }, [legendOpacity])
 
+  let isTooltipHidden = Boolean(isHidden)
+  if (Array.isArray(legendColumns) && legendColumns.length === 0) {
+    isTooltipHidden = true
+  }
+
+  if (isTooltipHidden) {
+    return null
+  }
+
   const tooltipContents = <Legend data={data} config={config} />
 
   return createPortal(
     <div
       className="giraffe-tooltip"
       style={{
-        opacity: tooltipOpacity,
-        border,
-        font,
         backgroundColor,
-        color: fontBrightColor,
+        border,
         borderRadius: '3px',
-        padding: '10px',
+        color: fontBrightColor,
         cursor: 'crosshair',
+        font,
+        opacity: tooltipOpacity,
+        padding: '10px',
       }}
       data-testid="giraffe-tooltip"
     >

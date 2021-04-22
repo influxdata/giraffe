@@ -410,6 +410,8 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **columns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the static legend. If this option is included as an empty array, the static legend will be empty.
 
+  - **crosshairColor**: _string | Object. Optional. Generally not used, unless **legendCrosshairColor** is missing, then this property has the same effect._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
+
   - **cursor**: _string | Object. Optional._ The [_CSS cursor property_](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor) of the mouse when inside the area of the static legend.
 
   - **hide**: _boolean. Optional. Defaults to false when not included._ _true_ means the static legend will not be rendered. _false_ means the static legend will be rendered.

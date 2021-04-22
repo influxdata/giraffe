@@ -1,63 +1,68 @@
-import {LegendData, LineData} from '../../types'
-import {FILL} from '../../constants/columnKeys'
+import {
+  Formatter,
+  LegendData,
+  LineLayerSpec,
+  LineData,
+  StaticLegend,
+} from '../../types'
 
-export const convertLineSpec = (config, spec, columnFormatter): LegendData => {
-  const staticLegendConfig = config.staticLegend
-  const tooltipLayer = staticLegendConfig.layer ?? 0
-  const layerConfig = config.layers[tooltipLayer]
+const peek = (arr: number[]): number => {
+  if (Array.isArray(arr) && arr.length >= 1) {
+    return arr[arr.length - 1]
+  }
+  return NaN
+}
 
-  const valueAxis = staticLegendConfig.valueAxis ?? 'y'
-
-  const valueKey = layerConfig[valueAxis]
-  const valueFormatter = columnFormatter(valueKey)
-
+export const convertLineSpec = (
+  staticLegend: StaticLegend,
+  spec: LineLayerSpec,
+  getColumnFormatter: (colKey: string) => Formatter,
+  valueColumnKey: string
+): LegendData => {
+  const {valueAxis} = staticLegend
+  const valueFormatter = getColumnFormatter(valueColumnKey)
   const mappings = spec?.columnGroupMaps?.fill?.mappings
-
   const lineData: LineData = spec?.lineData
 
-  const colors = Object.values(lineData).map(value => value?.fill)
+  const colors = Object.values(lineData).map(line => line.fill)
 
-  const peek = (arr: number[]): number => {
-    const len = arr.length
-    if (len >= 1) {
-      return arr[len - 1]
+  const propertyName = valueAxis === 'x' ? 'xs' : 'ys'
+
+  const values = Object.values(lineData).map(line => {
+    const latestValue = peek(line[propertyName])
+    if (latestValue === latestValue) {
+      return valueFormatter(latestValue)
     }
-    return 0
-  }
+    return ''
+  })
 
-  const dimension = valueAxis === 'x' ? 'xs' : 'ys'
-
-  const values = Object.values(lineData).map(line =>
-    valueFormatter(peek(line[dimension]))
-  )
-
-  const objKeys = spec?.columnGroupMaps?.fill?.columnKeys
-
-  if (!objKeys) {
+  const {columnKeys} = spec.columnGroupMaps.fill
+  if (!Array.isArray(columnKeys)) {
     return null
   }
 
-  const legendLines = objKeys.map(key => {
-    const values: string[] = mappings.map(dataLine => dataLine[key])
-
-    return {
-      key,
-      name: key,
-      type: spec.table.getColumnType(FILL),
-      values,
-      colors,
-    }
-  })
-
-  const valueLine = {
-    key: valueKey,
-    name: `Latest ${valueKey}`,
-    type: spec.table.getColumnType(valueKey),
+  const valueColumn = {
+    key: valueColumnKey,
+    name: `Latest ${valueColumnKey}`,
+    type: spec.table.getColumnType(valueColumnKey),
     colors,
     values,
   }
 
-  const result = [valueLine, ...legendLines]
+  const legendColumns = columnKeys.map(key => {
+    // TODO: should be using formatter from config
+    const column: string[] = mappings.map(fillColumn => fillColumn[key])
+
+    return {
+      key,
+      name: key,
+      type: spec.table.getColumnType(key),
+      values: column,
+      colors,
+    }
+  })
+
+  const result = [valueColumn, ...legendColumns]
 
   return result
 }

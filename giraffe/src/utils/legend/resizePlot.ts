@@ -1,7 +1,6 @@
 import {StaticLegend} from '../../types'
 import {
-  STATIC_LEGEND_DEFAULT_HEIGHT_RATIO,
-  STATIC_LEGEND_DEFAULT_WIDTH_RATIO,
+  STATIC_LEGEND_DEFAULTS,
   STATIC_LEGEND_MAXIMUM_HEIGHT_RATIO,
   STATIC_LEGEND_MAXIMUM_WIDTH_RATIO,
   STATIC_LEGEND_MINIMUM_HEIGHT_RATIO,
@@ -23,10 +22,10 @@ export const resizePlotWithStaticLegend = (
     width: width || 0,
   } as ResizedPlotDimensions
 
-  if (staticLegendProperties) {
+  if (staticLegendProperties && !staticLegendProperties.hide) {
     const {
-      heightRatio = STATIC_LEGEND_DEFAULT_HEIGHT_RATIO,
-      widthRatio = STATIC_LEGEND_DEFAULT_WIDTH_RATIO,
+      heightRatio = STATIC_LEGEND_DEFAULTS.heightRatio,
+      widthRatio = STATIC_LEGEND_DEFAULTS.widthRatio,
     } = staticLegendProperties
 
     if (

@@ -1,5 +1,13 @@
 import React, {FunctionComponent} from 'react'
-import {Formatter, LayerSpec, StaticLegend, SizedConfig} from '../types'
+import {
+  Formatter,
+  LayerSpec,
+  LegendPropertyNames,
+  LineLayerSpec,
+  SizedConfig,
+  StaticLegend,
+} from '../types'
+import {CONFIG_DEFAULTS, STATIC_LEGEND_DEFAULTS} from '../constants/index'
 import {Legend} from './Legend'
 import {convertLineSpec} from '../utils/legend/staticLegend'
 
@@ -12,37 +20,80 @@ interface StaticLegendBoxProps extends StaticLegend {
   width: number
 }
 
-export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
-  const {
-    border,
-    config,
-    fontBrightColor,
-    columnFormatter,
-    height,
-    spec,
-    top,
-    width,
-  } = props
+interface LegendOptionsOverridden {
+  config: SizedConfig
+  staticLegend: StaticLegend
+}
+const overrideLegendConfig = (
+  config: SizedConfig,
+  staticLegend: StaticLegend
+): LegendOptionsOverridden => {
+  const configWithDefaults = Object.assign(
+    {} as SizedConfig,
+    CONFIG_DEFAULTS,
+    config
+  )
+  const staticLegendWithDefaults = Object.assign(
+    {} as StaticLegend,
+    STATIC_LEGEND_DEFAULTS,
+    staticLegend
+  )
 
-  const legendData = convertLineSpec(config, spec, columnFormatter)
+  for (const property in staticLegendWithDefaults) {
+    if (property in LegendPropertyNames) {
+      configWithDefaults[LegendPropertyNames[property]] =
+        staticLegendWithDefaults[property]
+    }
+  }
+
+  return {config: configWithDefaults, staticLegend: staticLegendWithDefaults}
+}
+
+export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props => {
+  const {config, columnFormatter, height, spec, top, width} = props
+  const {staticLegend} = config
+
+  const {
+    config: configOverride,
+    staticLegend: staticLegendOverride,
+  } = overrideLegendConfig(config, staticLegend)
+
+  const layerConfig = configOverride.layers[staticLegendOverride.layer]
+  const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
+
+  const legendData = convertLineSpec(
+    staticLegendOverride,
+    spec as LineLayerSpec,
+    columnFormatter,
+    valueColumnKey
+  )
+  const {
+    legendBackgroundColor: backgroundColor,
+    legendBorder: border,
+    legendFont: font,
+    legendFontBrightColor: fontBrightColor,
+  } = configOverride
   return (
     <div
       className="giraffe-static-legend"
       style={{
-        position: 'absolute',
-        top: `${top}px`,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: `${height}px`,
-        width: `${width}px`,
-        color: fontBrightColor,
-        padding: 10,
-        overflow: 'auto',
+        backgroundColor,
         border,
+        bottom: 0,
+        color: fontBrightColor,
+        cursor: staticLegendOverride.cursor,
+        font,
+        height: `${height}px`,
+        left: 0,
+        overflow: 'auto',
+        padding: 10,
+        position: 'absolute',
+        right: 0,
+        top: `${top}px`,
+        width: `${width}px`,
       }}
     >
-      <Legend data={legendData} config={config} />
+      <Legend data={legendData} config={configOverride} />
     </div>
   )
 }

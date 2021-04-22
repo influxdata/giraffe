@@ -41,6 +41,8 @@ storiesOf('Static Legend', module)
     const fixedHeightText = text('Fixed Height', '')
     const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
     const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
+    const legendHide = boolean('Hide Tooltip?', false)
+    const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight
@@ -54,7 +56,23 @@ storiesOf('Static Legend', module)
       fillColumnNameLength
     )
     const colors = colorSchemeKnob()
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
+    const staticLegendOrientationThreshold = number(
+      'Static Legend Orientation Threshold',
+      20
+    )
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+    const staticLegendColorizeRows = boolean(
+      'Static Legend Colorize Rows?',
+      true
+    )
     const legendFont = legendFontKnob()
+    const staticLegendFont = text('Static Legend Font', '12px sans-serif')
+    const staticLegendBorder = text('Static Legend Border', '1px solid orange')
+    const staticLegendBackgroundColor = text(
+      'Static Legend Background Color',
+      'transparent'
+    )
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
@@ -101,8 +119,6 @@ storiesOf('Static Legend', module)
       max: 1.0,
       step: 0.05,
     })
-    const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
-    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       ...fixedPlotSize,
@@ -116,16 +132,21 @@ storiesOf('Static Legend', module)
       },
       xScale,
       yScale,
-      legendFont,
       tickFont,
       showAxes,
+      legendColorizeRows,
+      legendFont,
+      legendHide,
       legendOpacity,
       legendOrientationThreshold,
-      legendColorizeRows,
       staticLegend: {
+        backgroundColor: staticLegendBackgroundColor,
+        border: staticLegendBorder,
+        colorizeRows: staticLegendColorizeRows,
+        font: staticLegendFont || legendFont,
         heightRatio: staticLegendHeightRatio,
-        border: '1px solid orange',
-        fontBrightColor: 'yellow',
+        hide: staticLegendHide,
+        orientationThreshold: staticLegendOrientationThreshold,
       },
       layers: [
         {
@@ -164,6 +185,8 @@ storiesOf('Static Legend', module)
     const fixedHeightText = text('Fixed Height', '')
     const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
     const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
+    const legendHide = boolean('Hide Tooltip?', false)
+    const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight
@@ -171,7 +194,23 @@ storiesOf('Static Legend', module)
     }
     const table = getRandomTable(maxValue, 20 * lines, 20, fillColumnNames)
     const colors = colorSchemeKnob()
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
+    const staticLegendOrientationThreshold = number(
+      'Static Legend Orientation Threshold',
+      20
+    )
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+    const staticLegendColorizeRows = boolean(
+      'Static Legend Colorize Rows?',
+      true
+    )
     const legendFont = legendFontKnob()
+    const staticLegendFont = text('Static Legend Font', '12px sans-serif')
+    const staticLegendBorder = text('Static Legend Border', '1px solid orange')
+    const staticLegendBackgroundColor = text(
+      'Static Legend Background Color',
+      'transparent'
+    )
     const tickFont = tickFontKnob()
     const x = xKnob(table)
     const y = yKnob(table)
@@ -218,8 +257,6 @@ storiesOf('Static Legend', module)
       max: 1.0,
       step: 0.05,
     })
-    const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
-    const legendColorizeRows = tooltipColorizeRowsKnob()
 
     const config: Config = {
       ...fixedPlotSize,
@@ -233,16 +270,21 @@ storiesOf('Static Legend', module)
       },
       xScale,
       yScale,
-      legendFont,
       tickFont,
       showAxes,
+      legendColorizeRows,
+      legendFont,
+      legendHide,
       legendOpacity,
       legendOrientationThreshold,
-      legendColorizeRows,
       staticLegend: {
+        backgroundColor: staticLegendBackgroundColor,
+        border: staticLegendBorder,
+        colorizeRows: staticLegendColorizeRows,
+        font: staticLegendFont || legendFont,
         heightRatio: staticLegendHeightRatio,
-        border: '1px solid orange',
-        fontBrightColor: 'yellow',
+        hide: staticLegendHide,
+        orientationThreshold: staticLegendOrientationThreshold,
       },
       layers: [
         {
