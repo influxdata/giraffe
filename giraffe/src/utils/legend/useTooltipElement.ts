@@ -27,7 +27,12 @@ export const useTooltipElement = (
     document.body.appendChild(ref.current)
   }
 
-  useEffect(() => () => document.body.removeChild(ref.current), [])
+  useEffect(
+    () => () => {
+      document.body.removeChild(ref.current)
+    },
+    []
+  )
 
   if (className == ANNOTATION_TOOLTIP_CONTAINER_NAME) {
     useAnnotationStyle(ref.current, options)
