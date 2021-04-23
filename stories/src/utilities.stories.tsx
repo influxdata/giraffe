@@ -26,7 +26,7 @@ import {
   tickFontKnob,
   timeZoneKnob,
   tooltipColorizeRowsKnob,
-  tooltipDisableKnob,
+  tooltipHideKnob,
   tooltipOrientationThresholdKnob,
   xKnob,
   xScaleKnob,
@@ -210,7 +210,7 @@ storiesOf('Utilities', module)
     })
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
     const legendColorizeRows = tooltipColorizeRowsKnob()
-    const legendDisable = tooltipDisableKnob()
+    const legendHide = tooltipHideKnob()
 
     const config: Config = {
       table,
@@ -222,7 +222,7 @@ storiesOf('Utilities', module)
       legendOpacity,
       legendOrientationThreshold,
       legendColorizeRows,
-      legendDisable,
+      legendHide,
       tickFont,
       showAxes,
       xScale,

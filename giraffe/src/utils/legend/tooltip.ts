@@ -38,6 +38,7 @@ const getDataSortOrder = (
   if (!position || position === 'overlaid') {
     return hoveredRowIndices
   }
+
   const dataMap = {}
   const measurementValues = Object.keys(lineData).reduce(
     (accumulator, id) => accumulator.concat(lineData[id][DomainLabel.Y]),
@@ -111,11 +112,13 @@ export const getPointsTooltipData = (
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(groupColKey, 'number')
+
   const colors = orderDataByValue(
     hoveredRowIndices,
     sortOrder,
     hoveredRowIndices.map(i => fillScale(groupColData[i]))
   )
+
   const xFormatter = getValueFormatter(xColKey)
   const yFormatter = getValueFormatter(yColKey)
 

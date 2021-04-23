@@ -78,10 +78,10 @@ export interface Config {
   legendColorizeRows?: boolean
   legendColumns?: string[]
   legendCrosshairColor?: string
-  legendDisable?: boolean
   legendFont?: string
   legendFontBrightColor?: string
   legendFontColor?: string
+  legendHide?: boolean
   legendMessage?: string
   legendOpacity?: number
   legendOrientationThreshold?: number
@@ -93,21 +93,38 @@ export interface Config {
   yColumnType?: ColumnType
 }
 
+export enum LegendPropertyNames {
+  backgroundColor = 'legendBackgroundColor',
+  border = 'legendBorder',
+  colorizeRows = 'legendColorizeRows',
+  columns = 'legendColumns',
+  crosshairColor = 'legendCrosshairColor',
+  font = 'legendFont',
+  fontBrightColor = 'legendFontBrightColor',
+  fontColor = 'legendFontColor',
+  hide = 'legendHide',
+  message = 'legendMessage',
+  opacity = 'legendOpacity',
+  orientationThreshold = 'legendOrientationThreshold',
+}
+
 export interface StaticLegend {
   backgroundColor?: string
   border?: string
   colorizeRows?: boolean
   columns?: string[]
+  crosshairColor?: string
   cursor?: string // no corresponding legend property, unique to static legend
-  disable?: boolean
   font?: string
   fontBrightColor?: string
   fontColor?: string
   heightRatio?: number // no corresponding legend property, unique to static legend
+  hide?: boolean
   layer?: number // no corresponding legend property, unique to static legend
   message?: string
   opacity?: number
   orientationThreshold?: number
+  valueAxis?: 'x' | 'y' // no corresponding legend property, unique to static legend
   widthRatio?: number // no corresponding legend property, unique to static legend
 }
 

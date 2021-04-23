@@ -9,7 +9,7 @@ import {
   curveNatural,
 } from 'd3-shape'
 
-import {Config, LayerConfig, SymbolType} from '../types'
+import {Config, LayerConfig, StaticLegend, SymbolType} from '../types'
 import {NINETEEN_EIGHTY_FOUR as DEFAULT_COLOR_SCHEME} from './colorSchemes'
 
 // TODO: Make configurable
@@ -53,6 +53,15 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendBorder: '2px solid #202028',
   legendCrosshairColor: '#31313d',
   legendColorizeRows: true,
+}
+
+export const STATIC_LEGEND_DEFAULTS: Partial<StaticLegend> = {
+  cursor: 'auto',
+  heightRatio: 0.2,
+  layer: 0,
+  opacity: 1,
+  valueAxis: 'y',
+  widthRatio: 1.0,
 }
 
 export const LAYER_DEFAULTS: {[layerType: string]: Partial<LayerConfig>} = {
@@ -127,11 +136,9 @@ export const ALL_SYMBOL_TYPES: SymbolType[] = [
  */
 export const BAND_COLOR_SCALE_CONSTANT = 3
 
-export const STATIC_LEGEND_DEFAULT_HEIGHT_RATIO = 0.2
 export const STATIC_LEGEND_MAXIMUM_HEIGHT_RATIO = 1.0
 export const STATIC_LEGEND_MINIMUM_HEIGHT_RATIO = 0
 
-export const STATIC_LEGEND_DEFAULT_WIDTH_RATIO = 1.0
 export const STATIC_LEGEND_MAXIMUM_WIDTH_RATIO = 1.0
 export const STATIC_LEGEND_MINIMUM_WIDTH_RATIO = 0
 

@@ -386,7 +386,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 - **legendCrosshairColor**: _string | Object. Optional._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
 
-- **legendDisable**: _boolean. Optional. Defaults to false when not included._ _true_ means the legend and tooltip will not be rendered. _false_ means the legend and tooltip will be rendered. May be overriden.
+- **legendHide**: _boolean. Optional. Defaults to false when not included._ _true_ means the legend and tooltip will not be rendered. _false_ means the legend and tooltip will be rendered. May be overriden.
 
 - **legendFont**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the legend and tooltip. May be overriden.
 
@@ -410,9 +410,11 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **columns**: _array[string, ...]. Optional._ When included, this array will determine which column names that should be included in the static legend. If this option is included as an empty array, the static legend will be empty.
 
+  - **crosshairColor**: _string | Object. Optional. Generally not used, unless **legendCrosshairColor** is missing, then this property has the same effect._ The [_CSS color value_](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) or styling of the vertical crosshair line through the Plot at where the mouse is hovering, defined as a [_CanvasRenderingContext2D strokeStyle_](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle).
+
   - **cursor**: _string | Object. Optional._ The [_CSS cursor property_](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor) of the mouse when inside the area of the static legend.
 
-  - **disable**: _boolean. Optional. Defaults to false when not included._ _true_ means the static legend will not be rendered. _false_ means the static legend will be rendered.
+  - **hide**: _boolean. Optional. Defaults to false when not included._ _true_ means the static legend will not be rendered. _false_ means the static legend will be rendered.
 
   - **font**: _string. Optional. Defaults to '10px monospace' when excluded._ The [_CSS font_](https://developer.mozilla.org/en-US/docs/Web/CSS/font) value for the styling of the static legend.
 
@@ -423,12 +425,14 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   - **heightRatio**: _number. Optional. Defaults to 0.2 when not included._ A fraction expressed as a decimal to indicate the height of the static legend which is a retangular box directly beneath the graph and axes. May be between 0 and 1 _**non-inclusive**_. Values outside of this range are considered 0. Must be non-zero for static legend to be visible (have height).
 
   - **layer**: _number. Optional. Defaults to 0 (the first layer) when not included._ The index of the layer in the **layers** array that will be displayed in the static legend. The static legend will only display data for a single layer.
-
+  
   - **message**: _string. Not used. Reserved for future implementation._ A string to display in the static legend. Does not affect the renderable content in the static legend, such as column names and data.
 
   - **opacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the static legend.
 
   - **orientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
+  
+  - **valueAxis**: _string. Optional. Defaults to 'y' when not included.  Valid values are either 'x' or 'y'.  This is to set where the 'values' that are displayed in the tooltip come from (which axis, x or y)
 
   - **widthRatio**: _number. Optional. Defaults to full width when not included. **Generally not used and only reserved for future feature implementation.**_ A fraction expressed as a decimal to indicate the width of the static legend which is a retangular box directly beneath the graph and axes. May be between 0 and 1 _**non-inclusive**_. Values outside of this range are considered 0. Must be non-zero for static legend to have less than full width of the `<Plot>`.
 

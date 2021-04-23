@@ -7,9 +7,11 @@ import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
 import {usePlotEnv} from '../utils/usePlotEnv'
 
 import {SizedPlot} from './SizedPlot'
-import {StaticLegendBox} from './StaticLegend'
+import {StaticLegendBox} from './StaticLegendBox'
 import {SizedTable} from './SizedTable'
 
+// note: the config here is for the ENTIRE plot; not for each layer.
+// those are inside config.layerConfig
 interface PlotResizerProps {
   axesCanvasRef?: RefObject<HTMLCanvasElement>
   config: SizedConfig
@@ -36,6 +38,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
   )
 
   const env = usePlotEnv(sizedConfig)
+  const spec = env.getSpec(0)
   const graphType = get(config, 'layers.0.type')
 
   if (width === 0 || height === 0) {
@@ -60,12 +63,14 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       >
         {children}
       </SizedPlot>
-      {config.staticLegend ? (
+      {config.staticLegend && !config.staticLegend.hide ? (
         <StaticLegendBox
+          columnFormatter={env.getFormatterForColumn}
+          config={config}
           height={height - resized.height}
+          spec={spec}
           top={resized.height}
           width={resized.width}
-          {...config.staticLegend}
         />
       ) : null}
     </>
