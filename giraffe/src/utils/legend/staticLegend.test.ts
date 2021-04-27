@@ -20,7 +20,7 @@ describe('convertLineSpec', () => {
     fillColumnKeys
   )
 
-  it('overlaid line graphs have certain columns', () => {
+  it('creates certain columns for overlaid line graphs', () => {
     const position = 'overlaid'
     const lineSpec = lineTransform(
       sampleTable,
@@ -50,7 +50,7 @@ describe('convertLineSpec', () => {
     })
   })
 
-  it('stacked line graphs have certain columns', () => {
+  it('creates ertain columns for stacked line graphs', () => {
     const position = 'stacked'
     const addtionalColumKeys = ['cumulative', 'lines']
     const lineSpec = lineTransform(
