@@ -129,6 +129,7 @@ export interface StaticLegend {
 }
 
 export interface InteractionHandlerArguments {
+  clampedValueX: number
   hoverX: number
   hoverY: number
   valueX: number | string
