@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter} from '../../giraffe/src'
-import {getRandomTable} from '../../giraffe/src/utils/randomTable'
+import {getRandomTable} from '../../giraffe/src/utils/fixtures/randomTable'
 
 import {
   PlotContainer,

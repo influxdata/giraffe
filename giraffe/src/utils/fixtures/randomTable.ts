@@ -1,5 +1,5 @@
-import {newTable} from './newTable'
-import {LayerTypes} from '../types'
+import {newTable} from '../newTable'
+import {LayerTypes} from '../../types'
 import memoizeOne from 'memoize-one'
 
 const getRandomNumber = (

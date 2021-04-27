@@ -2,7 +2,7 @@ import {convertLineSpec} from './staticLegend'
 import {NINETEEN_EIGHTY_FOUR} from '../../constants/colorSchemes'
 import {STATIC_LEGEND_DEFAULTS} from '../../constants/index'
 import {lineTransform} from '../../transforms/line'
-import {getRandomTable} from '../randomTable'
+import {getRandomTable} from '../fixtures/randomTable'
 
 describe('convertLineSpec', () => {
   const xColKey = '_time'

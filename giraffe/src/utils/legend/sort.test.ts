@@ -1,5 +1,5 @@
 import {getDataSortOrder} from './sort'
-import {getRandomTable} from '../randomTable'
+import {getRandomTable} from '../fixtures/randomTable'
 import {lineTransform} from '../../transforms/line'
 import {NINETEEN_EIGHTY_FOUR} from '../../constants/colorSchemes'
 import {DomainLabel} from '../../types'
