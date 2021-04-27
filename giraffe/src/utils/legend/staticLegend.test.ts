@@ -5,28 +5,30 @@ import {lineTransform} from '../../transforms/line'
 import {getRandomTable} from '../randomTable'
 
 describe('convertLineSpec', () => {
-  it('convertLineSpec', () => {
-    const xColKey = '_time'
-    const yColKey = '_value'
-    const getColumnFormatter = () => (x: string) => x
-    const maxValue = 100
-    const numberOfRecords = 20
-    const recordsPerLine = 5
-    const fillColumnKeys = ['cpu', 'host', 'machine']
-    const sampleTable = getRandomTable(
-      maxValue,
-      false,
-      numberOfRecords,
-      recordsPerLine,
-      fillColumnKeys
-    )
+  const xColKey = '_time'
+  const yColKey = '_value'
+  const getColumnFormatter = () => (x: string) => x
+  const maxValue = 100
+  const numberOfRecords = 20
+  const recordsPerLine = 5
+  const fillColumnKeys = ['cpu', 'host', 'machine']
+  const sampleTable = getRandomTable(
+    maxValue,
+    false,
+    numberOfRecords,
+    recordsPerLine,
+    fillColumnKeys
+  )
+
+  it('overlaid line graphs have certain columns', () => {
+    const position = 'overlaid'
     const lineSpec = lineTransform(
       sampleTable,
       xColKey,
       yColKey,
       fillColumnKeys,
       NINETEEN_EIGHTY_FOUR,
-      'overlaid'
+      position
     )
 
     const result = convertLineSpec(
@@ -34,13 +36,46 @@ describe('convertLineSpec', () => {
       lineSpec,
       getColumnFormatter,
       yColKey,
-      'overlaid'
+      position
     )
 
     expect(result.length).toEqual(fillColumnKeys.length + 1)
     result.forEach(legendColumn => {
       expect(
-        [...fillColumnKeys, '_value'].indexOf(legendColumn.key)
+        [...fillColumnKeys, yColKey].indexOf(legendColumn.key)
+      ).toBeGreaterThanOrEqual(0)
+      expect(legendColumn.values.length).toEqual(
+        numberOfRecords / recordsPerLine
+      )
+    })
+  })
+
+  it('stacked line graphs have certain columns', () => {
+    const position = 'stacked'
+    const addtionalColumKeys = ['cumulative', 'lines']
+    const lineSpec = lineTransform(
+      sampleTable,
+      xColKey,
+      yColKey,
+      fillColumnKeys,
+      NINETEEN_EIGHTY_FOUR,
+      position
+    )
+
+    const result = convertLineSpec(
+      STATIC_LEGEND_DEFAULTS,
+      lineSpec,
+      getColumnFormatter,
+      yColKey,
+      position
+    )
+
+    expect(result.length).toEqual(fillColumnKeys.length + 3)
+    result.forEach(legendColumn => {
+      expect(
+        [...fillColumnKeys, ...addtionalColumKeys, `Latest ${yColKey}`].indexOf(
+          legendColumn.name
+        )
       ).toBeGreaterThanOrEqual(0)
       expect(legendColumn.values.length).toEqual(
         numberOfRecords / recordsPerLine

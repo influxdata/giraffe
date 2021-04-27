@@ -11,7 +11,6 @@ import {
   FILL,
   LINE_COUNT,
   STACKED_LINE_CUMULATIVE,
-  VALUE,
 } from '../../constants/columnKeys'
 
 import {getDataSortOrder} from './sort'
@@ -65,9 +64,9 @@ export const convertLineSpec = (
   if (position === 'stacked') {
     const stackedDomainValues = spec.stackedDomainValueColumn ?? []
     additionalColumns.push({
-      key: VALUE,
+      key: valueColumnKey,
       name: STACKED_LINE_CUMULATIVE,
-      type: spec.table.getColumnType(VALUE),
+      type: spec.table.getColumnType(valueColumnKey),
       colors,
       values: sortOrder.map(index =>
         valueFormatter(stackedDomainValues[index])
@@ -82,9 +81,9 @@ export const convertLineSpec = (
         lineCountByGroupId[`${groupId}`] = key + 1
       })
     additionalColumns.push({
-      key: VALUE,
+      key: valueColumnKey,
       name: LINE_COUNT,
-      type: spec.table.getColumnType(VALUE),
+      type: spec.table.getColumnType(valueColumnKey),
       colors,
       values: sortOrder.map(
         index => lineCountByGroupId[`${fillIndices[index]}`]
