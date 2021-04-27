@@ -20,11 +20,15 @@ import {
   SpecTypes,
 } from '../types'
 
+import {AnnotationLayer} from './AnnotationLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './LineLayer'
 import {BandLayer} from './BandLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
+import {MosaicLayer} from './MosaicLayer'
+import GeoLayer from './GeoLayer'
+
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'
 import {PlotEnv} from '../utils/PlotEnv'
@@ -33,10 +37,8 @@ import {useDragEvent} from '../utils/useDragEvent'
 import {useForceUpdate} from '../utils/useForceUpdate'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
-import {MosaicLayer} from './MosaicLayer'
 import {GeoLayerConfig} from '../types/geo'
-import GeoLayer from './GeoLayer'
-import {AnnotationLayer} from './AnnotationLayer'
+import {nearestTimestamp} from '../utils/nearestTimestamp'
 
 export interface SizedPlotProps {
   axesCanvasRef: RefObject<HTMLCanvasElement>
@@ -87,10 +89,23 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     forceUpdate()
   }, [env])
 
+  const defaultSpec = env.getSpec(0)
+
+  const valueX = env.xScale.invert(hoverEvent.x)
+  let clampedValueX = NaN
+  if (
+    valueX &&
+    (defaultSpec.type === SpecTypes.Band || defaultSpec.type === SpecTypes.Line)
+  ) {
+    const timestamps = defaultSpec?.lineData[0]?.xs ?? []
+    clampedValueX = nearestTimestamp(timestamps, valueX)
+  }
+
   const plotInteraction: InteractionHandlerArguments = {
+    clampedValueX,
     hoverX: hoverEvent.x,
     hoverY: hoverEvent.y,
-    valueX: env.xScale.invert(hoverEvent.x),
+    valueX,
     valueY: env.yScale.invert(hoverEvent.y),
     xDomain: env.xDomain,
     yDomain: env.yDomain,

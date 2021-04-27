@@ -116,6 +116,7 @@ describe('the SizedPlot', () => {
 
         // don't care what the values are, we just care that we pass these values back
         expect(Object.keys(callbackArguments)).toEqual([
+          'clampedValueX',
           'hoverX',
           'hoverY',
           'valueX',
@@ -152,6 +153,7 @@ describe('the SizedPlot', () => {
 
         // don't care what the values are, we just care that we pass these values back
         expect(Object.keys(callbackArguments)).toEqual([
+          'clampedValueX',
           'hoverX',
           'hoverY',
           'valueX',
