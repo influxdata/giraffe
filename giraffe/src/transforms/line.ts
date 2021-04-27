@@ -1,7 +1,7 @@
 import {
   CumulativeValuesByTime,
   DomainLabel,
-  LatestValueIndexMap,
+  LatestIndexMap,
   LineData,
   LineLayerSpec,
   LinePosition,
@@ -74,7 +74,10 @@ export const lineTransform = (
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const lineData: LineData = {}
   let stackedValuesByTime: CumulativeValuesByTime = {}
-  const latestValueIndices: LatestValueIndexMap = {}
+  const latestIndices: LatestIndexMap = {
+    xs: {},
+    ys: {},
+  }
 
   if (position === 'stacked') {
     if (yColumnKey === VALUE) {
@@ -115,13 +118,8 @@ export const lineTransform = (
     }
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
-
-    if (
-      (yColumnKey === VALUE && y === y) ||
-      (xColumnKey === VALUE && x === x)
-    ) {
-      latestValueIndices[groupID] = i
-    }
+    latestIndices.xs[groupID] = i
+    latestIndices.ys[groupID] = i
 
     if (x < xMin) {
       xMin = x
@@ -160,7 +158,7 @@ export const lineTransform = (
     xColumnType: table.getColumnType(xColumnKey),
     yColumnType: table.getColumnType(yColumnKey),
     scales: {fill: fillScale},
-    columnGroupMaps: {fill: fillColumnMap, latestValueIndices},
+    columnGroupMaps: {fill: fillColumnMap, latestIndices},
     stackedDomainValueColumn,
   }
 }

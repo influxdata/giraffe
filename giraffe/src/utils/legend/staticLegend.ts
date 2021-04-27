@@ -26,7 +26,7 @@ export const convertLineSpec = (
   const {valueAxis} = staticLegend
   const valueFormatter = getColumnFormatter(valueColumnKey)
   const mappings = spec?.columnGroupMaps?.fill?.mappings
-  const latestValueIndices = spec?.columnGroupMaps?.latestValueIndices
+  const latestValueIndices = spec?.columnGroupMaps?.latestIndices
   const lineValues = spec.table.getColumn(valueColumnKey)
   const fillIndices = spec.table.getColumn(FILL)
   const lineData: LineData = spec?.lineData
@@ -34,7 +34,7 @@ export const convertLineSpec = (
   const domainLabel = valueAxis === 'x' ? DomainLabel.X : DomainLabel.Y
   const sortOrder = getDataSortOrder(
     lineData,
-    Object.values(latestValueIndices),
+    Object.values(latestValueIndices[domainLabel]),
     position,
     domainLabel
   )
