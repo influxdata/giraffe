@@ -622,6 +622,7 @@ export interface LineLayerSpec {
   }
   columnGroupMaps: {
     fill: ColumnGroupMap
+    latestValueIndices: LatestValueIndexMap
   }
   stackedDomainValueColumn?: NumericColumnData
 }
@@ -805,6 +806,10 @@ export interface ColumnGroupMap {
   // A group ID `i` takes on the values specified by `mappings[i]` for the
   // column keys that specify the grouping
   mappings: Array<{[columnKey: string]: any}>
+}
+
+export interface LatestValueIndexMap {
+  [columnKey: string]: number
 }
 
 export type LineData = {
