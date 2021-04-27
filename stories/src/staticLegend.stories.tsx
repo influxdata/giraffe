@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter} from '../../giraffe/src'
-import {getRandomTable} from './data/randomTable'
+import {getRandomTable} from '../../giraffe/src/utils/randomTable'
 
 import {
   PlotContainer,
@@ -50,6 +50,7 @@ storiesOf('Static Legend', module)
     }
     const table = getRandomTable(
       maxValue,
+      true,
       lines * 20,
       20,
       fillColumnsCount,
@@ -191,7 +192,13 @@ storiesOf('Static Legend', module)
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
-    const table = getRandomTable(maxValue, 20 * lines, 20, fillColumnNames)
+    const table = getRandomTable(
+      maxValue,
+      true,
+      20 * lines,
+      20,
+      fillColumnNames
+    )
     const colors = colorSchemeKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
     const staticLegendOrientationThreshold = number(

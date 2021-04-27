@@ -2,7 +2,7 @@ import {convertLineSpec} from './staticLegend'
 import {NINETEEN_EIGHTY_FOUR} from '../../constants/colorSchemes'
 import {STATIC_LEGEND_DEFAULTS} from '../../constants/index'
 import {lineTransform} from '../../transforms/line'
-import {getRandomTable} from '../fixtures/legend'
+import {getRandomTable} from '../randomTable'
 
 describe('convertLineSpec', () => {
   it('convertLineSpec', () => {
@@ -15,6 +15,7 @@ describe('convertLineSpec', () => {
     const fillColumnKeys = ['cpu', 'host', 'machine']
     const sampleTable = getRandomTable(
       maxValue,
+      false,
       numberOfRecords,
       recordsPerLine,
       fillColumnKeys
@@ -32,7 +33,8 @@ describe('convertLineSpec', () => {
       STATIC_LEGEND_DEFAULTS,
       lineSpec,
       getColumnFormatter,
-      yColKey
+      yColKey,
+      'overlaid'
     )
 
     expect(result.length).toEqual(fillColumnKeys.length + 1)
