@@ -48,9 +48,15 @@ storiesOf('Static Legend', module)
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
+    const includeNegativeNumbers = boolean('Include negative numbers ?', false)
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
     const table = getRandomTable(
       maxValue,
-      true,
+      includeNegativeNumbers,
       lines * 20,
       20,
       fillColumnsCount,
@@ -99,11 +105,6 @@ storiesOf('Static Legend', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, findStringColumns(table))
-    const position = select(
-      'Line Position',
-      {stacked: 'stacked', overlaid: 'overlaid'},
-      'overlaid'
-    )
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
@@ -192,9 +193,15 @@ storiesOf('Static Legend', module)
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
+    const includeNegativeNumbers = boolean('Include negative numbers ?', false)
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
     const table = getRandomTable(
       maxValue,
-      true,
+      includeNegativeNumbers,
       20 * lines,
       20,
       fillColumnNames
@@ -242,11 +249,6 @@ storiesOf('Static Legend', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, findStringColumns(table))
-    const position = select(
-      'Line Position',
-      {stacked: 'stacked', overlaid: 'overlaid'},
-      'overlaid'
-    )
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
