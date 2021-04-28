@@ -8,9 +8,10 @@ import {
   NumericColumnData,
   Table,
 } from '../types'
-import {FILL, VALUE} from '../constants/columnKeys'
+import {FILL, TIME, VALUE} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
 import {getDomainDataFromLines} from '../utils/lineData'
+import {isDefined} from '../utils/isDefined'
 
 export const mapCumulativeValuesToTimeRange = (
   timesCol: NumericColumnData,
@@ -118,8 +119,21 @@ export const lineTransform = (
     }
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
-    latestIndices.xs[groupID] = i
-    latestIndices.ys[groupID] = i
+
+    if (
+      yColumnKey === TIME &&
+      (!isDefined(latestIndices.ys[groupID]) ||
+        y > yCol[latestIndices.ys[groupID]])
+    ) {
+      latestIndices.ys[groupID] = i
+      latestIndices.xs[groupID] = i
+    } else if (
+      !isDefined(latestIndices.xs[groupID]) ||
+      x > xCol[latestIndices.xs[groupID]]
+    ) {
+      latestIndices.xs[groupID] = i
+      latestIndices.ys[groupID] = i
+    }
 
     if (x < xMin) {
       xMin = x

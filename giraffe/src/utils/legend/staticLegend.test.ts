@@ -50,7 +50,7 @@ describe('convertLineSpec', () => {
     })
   })
 
-  it('creates ertain columns for stacked line graphs', () => {
+  it('creates certain columns for stacked line graphs', () => {
     const position = 'stacked'
     const addtionalColumKeys = ['cumulative', 'lines']
     const lineSpec = lineTransform(
