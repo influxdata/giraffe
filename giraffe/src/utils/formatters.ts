@@ -22,9 +22,9 @@ import {createDateFormatter} from 'intl-dateformat'
 import {Formatter, FormatterType} from '../types'
 
 const DEFAULT_TIME_FORMATS = {
-  local12: 'YYYY-MM-DD hh:mm:ss A',
+  local12: 'YYYY-MM-DD hh:mm:ss a',
   local24: 'YYYY-MM-DD HH:mm:ss ZZ',
-  zoned12: 'YYYY-MM-DD hh:mm:ss A ZZ',
+  zoned12: 'YYYY-MM-DD hh:mm:ss a ZZ',
   zoned24: 'YYYY-MM-DD HH:mm:ss ZZ',
 }
 
@@ -37,33 +37,33 @@ const TIME_FORMATS_BY_GRANULARITY = [
   {
     minWidth: 0,
     maxWidth: 1 * MINUTE,
-    local12: 'hh:mm:ss.sss A',
+    local12: 'hh:mm:ss.sss a',
     local24: 'HH:mm:ss.sss ZZ',
-    zoned12: 'hh:mm:ss.sss A ZZ',
+    zoned12: 'hh:mm:ss.sss a ZZ',
     zoned24: 'HH:mm:ss.sss ZZ',
   },
   {
     minWidth: 1 * MINUTE,
     maxWidth: 1 * HOUR,
-    local12: 'hh:mm:ss A',
+    local12: 'hh:mm:ss a',
     local24: 'HH:mm:ss ZZ',
-    zoned12: 'hh:mm:ss A ZZ',
+    zoned12: 'hh:mm:ss a ZZ',
     zoned24: 'HH:mm:ss ZZ',
   },
   {
     minWidth: 1 * HOUR,
     maxWidth: 1 * DAY,
-    local12: 'hh:mm A',
+    local12: 'hh:mm a',
     local24: 'HH:mm ZZ',
-    zoned12: 'hh:mm A ZZ',
+    zoned12: 'hh:mm a ZZ',
     zoned24: 'HH:mm ZZ',
   },
   {
     minWidth: 1 * DAY,
     maxWidth: 2 * WEEK,
-    local12: 'MMM DD, hh:mm A',
+    local12: 'MMM DD, hh:mm a',
     local24: 'MMM DD, HH:mm ZZ',
-    zoned12: 'MMM DD, hh:mm A ZZ',
+    zoned12: 'MMM DD, hh:mm a ZZ',
     zoned24: 'MMM DD, HH:mm ZZ',
   },
   {
@@ -193,6 +193,7 @@ export const timeFormatter = ({
   }
 
   if (format) {
+    console.log("found a format, using it here....ACK! 11")
     // If a `format` string is passed, we simply use it
     formatter = (timestamp: number) =>
       formatStringFormatter(getValidDate(timestamp), format, {
@@ -200,6 +201,7 @@ export const timeFormatter = ({
         timezone: timeZone,
       })
   } else {
+    console.log("no formatter found!  rando one chosen....ACK! 12")
     // Otherwise we will return a formatter that will vary the output format
     // based on an optional `domainWidth` argument (e.g. we will show more
     // detail in a formatted timestamp if a user is viewing data in a short
@@ -232,6 +234,8 @@ export const timeFormatter = ({
       } else {
         timeFormat = timeFormats.local12
       }
+
+      console.log('time format chosen: (ACK! 13)', timeFormat)
 
       return formatStringFormatter(getValidDate(timestamp), timeFormat, {
         timezone: timeZone,
