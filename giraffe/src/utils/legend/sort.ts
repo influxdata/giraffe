@@ -12,19 +12,20 @@ export const getDataSortOrder = (
 
   const domainLabelName = domainLabel || DomainLabel.Y
 
-  const dataMap = {}
-  const measurementValues = Object.keys(lineData).reduce(
-    (accumulator, id) => accumulator.concat(lineData[id][domainLabelName]),
+  const numberMap = {}
+  const numericalValues = Object.keys(lineData).reduce(
+    (combinedNumericalValues, id) =>
+      combinedNumericalValues.concat(lineData[id][domainLabelName]),
     []
   )
   const sortable = []
-  rowIndices.forEach(hoveredRowIndex => {
-    if (!dataMap[measurementValues[hoveredRowIndex]]) {
-      dataMap[measurementValues[hoveredRowIndex]] = []
+  rowIndices.forEach(rowIndex => {
+    if (!numberMap[numericalValues[rowIndex]]) {
+      numberMap[numericalValues[rowIndex]] = []
     }
-    dataMap[measurementValues[hoveredRowIndex]].push(hoveredRowIndex)
-    sortable.push(measurementValues[hoveredRowIndex])
+    numberMap[numericalValues[rowIndex]].push(rowIndex)
+    sortable.push(numericalValues[rowIndex])
   })
   sortable.sort((first, second) => second - first)
-  return sortable.map(measurement => dataMap[measurement].shift())
+  return sortable.map(numericalValue => numberMap[numericalValue].shift())
 }
