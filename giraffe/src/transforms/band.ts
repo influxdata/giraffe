@@ -189,8 +189,19 @@ export const alignMinMaxWithBand = (
       const lowerTime = lowerXs[lowerIterator]
       const lowerValue = lowerYs[lowerIterator]
 
+      // Skip all values that are null, undefined, or NaN
+      // because mathematical operations cannot be performed on them,
+      // but will need to be performed on them elsewhere
+      if (!isDefined(bandValue) && bandIterator < bandXs.length) {
+        bandIterator += 1
+      } else if (!isDefined(upperValue) && upperIterator < upperXs.length) {
+        upperIterator += 1
+      } else if (!isDefined(lowerValue) && lowerIterator < lowerXs.length) {
+        lowerIterator += 1
+      }
+      // Check the time values of each section of the band for all scenarios
       // 1. All three are equal
-      if (bandTime === upperTime && bandTime === lowerTime) {
+      else if (bandTime === upperTime && bandTime === lowerTime) {
         if (isDefined(bandTime)) {
           alignedData[bandId].xs.push(bandTime)
           alignedData[bandId].ys.push(bandValue)
