@@ -33,7 +33,7 @@ export const convertLineSpec = (
   const domainLabel = valueAxis === 'x' ? DomainLabel.X : DomainLabel.Y
   const sortOrder = getDataSortOrder(
     lineData,
-    Object.values(latestValueIndices[domainLabel]),
+    Object.values(latestValueIndices),
     position,
     domainLabel
   )

@@ -30,9 +30,7 @@ describe('getDataSortOrder', () => {
       lineOption
     )
 
-    const latestIndices = Object.values(
-      lineSpec.columnGroupMaps.latestIndices.ys
-    )
+    const latestIndices = Object.values(lineSpec.columnGroupMaps.latestIndices)
     const sortOrder = getDataSortOrder(
       lineSpec.lineData,
       latestIndices,
@@ -54,9 +52,7 @@ describe('getDataSortOrder', () => {
     )
     const {stackedDomainValueColumn} = lineSpec
 
-    const latestIndices = Object.values(
-      lineSpec.columnGroupMaps.latestIndices.ys
-    )
+    const latestIndices = Object.values(lineSpec.columnGroupMaps.latestIndices)
     const sortOrder = getDataSortOrder(
       lineSpec.lineData,
       latestIndices,

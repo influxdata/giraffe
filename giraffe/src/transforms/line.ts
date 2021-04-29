@@ -75,10 +75,7 @@ export const lineTransform = (
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const lineData: LineData = {}
   let stackedValuesByTime: CumulativeValuesByTime = {}
-  const latestIndices: LatestIndexMap = {
-    xs: {},
-    ys: {},
-  }
+  const latestIndices: LatestIndexMap = {}
 
   if (position === 'stacked') {
     if (yColumnKey === VALUE) {
@@ -120,19 +117,14 @@ export const lineTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
-    if (
-      yColumnKey === TIME &&
-      (!isDefined(latestIndices.ys[groupID]) ||
-        y > yCol[latestIndices.ys[groupID]])
-    ) {
-      latestIndices.ys[groupID] = i
-      latestIndices.xs[groupID] = i
-    } else if (
-      !isDefined(latestIndices.xs[groupID]) ||
-      x > xCol[latestIndices.xs[groupID]]
-    ) {
-      latestIndices.xs[groupID] = i
-      latestIndices.ys[groupID] = i
+    if (!isDefined(latestIndices[groupID])) {
+      latestIndices[groupID] = i
+    } else if (yColumnKey === TIME) {
+      if (y > yCol[latestIndices[groupID]]) {
+        latestIndices[groupID] = i
+      }
+    } else if (x > xCol[latestIndices[groupID]]) {
+      latestIndices[groupID] = i
     }
 
     if (x < xMin) {
