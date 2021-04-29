@@ -181,17 +181,11 @@ storiesOf('Static Legend', module)
       max: 1,
       step: 0.01,
     })
-<<<<<<< HEAD
-    const fixedWidthText = text('Fixed Width', '')
-    const fixedHeightText = text('Fixed Height', '')
-    const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
-    const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
-    const legendHide = boolean('Hide Tooltip?', false)
-    const staticLegendHide = boolean('Hide Static Legend?', false)
-=======
+
     const fixedWidth = number('Fixed Width')
     const fixedHeight = number('Fixed Height')
->>>>>>> parent of d2963a9 (Fix: upgrade all libraries (#550))
+    const legendHide = boolean('Hide Tooltip?', false)
+    const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
     if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
       fixedPlotSize['height'] = fixedHeight
