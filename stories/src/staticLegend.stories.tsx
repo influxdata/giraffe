@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter} from '../../giraffe/src'
-import {getRandomTable} from './data/randomTable'
+import {getRandomTable} from '../../giraffe/src/utils/fixtures/randomTable'
 
 import {
   PlotContainer,
@@ -48,8 +48,15 @@ storiesOf('Static Legend', module)
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
+    const includeNegativeNumbers = boolean('Include negative numbers ?', false)
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
     const table = getRandomTable(
       maxValue,
+      includeNegativeNumbers,
       lines * 20,
       20,
       fillColumnsCount,
@@ -98,11 +105,6 @@ storiesOf('Static Legend', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, findStringColumns(table))
-    const position = select(
-      'Line Position',
-      {stacked: 'stacked', overlaid: 'overlaid'},
-      'overlaid'
-    )
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)
@@ -191,7 +193,19 @@ storiesOf('Static Legend', module)
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
-    const table = getRandomTable(maxValue, 20 * lines, 20, fillColumnNames)
+    const includeNegativeNumbers = boolean('Include negative numbers ?', false)
+    const position = select(
+      'Line Position',
+      {stacked: 'stacked', overlaid: 'overlaid'},
+      'overlaid'
+    )
+    const table = getRandomTable(
+      maxValue,
+      includeNegativeNumbers,
+      20 * lines,
+      20,
+      fillColumnNames
+    )
     const colors = colorSchemeKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
     const staticLegendOrientationThreshold = number(
@@ -235,11 +249,6 @@ storiesOf('Static Legend', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const fill = fillKnob(table, findStringColumns(table))
-    const position = select(
-      'Line Position',
-      {stacked: 'stacked', overlaid: 'overlaid'},
-      'overlaid'
-    )
     const interpolation = interpolationKnob()
     const showAxes = showAxesKnob()
     const lineWidth = number('Line Width', 1)

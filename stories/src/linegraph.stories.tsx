@@ -3,7 +3,7 @@ import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
 import {Config, Plot, timeFormatter, fromFlux} from '../../giraffe/src'
-import {getRandomTable} from './data/randomTable'
+import {getRandomTable} from '../../giraffe/src/utils/fixtures/randomTable'
 
 import {
   PlotContainer,
@@ -30,7 +30,7 @@ const maxValue = Math.random() * Math.floor(200)
 storiesOf('Line Graph', module)
   .addDecorator(withKnobs)
   .add('User defined ticks', () => {
-    let table = getRandomTable(maxValue)
+    let table = getRandomTable(maxValue, false)
     const xTickStart = number('xTickStart', new Date().getTime())
     const xTickStep = number('xTickStep', 200_000)
     const xTotalTicks = number('xTotalTicks', 5)

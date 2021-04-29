@@ -53,11 +53,17 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   const layerConfig = configOverride.layers[staticLegendOverride.layer]
   const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
 
+  const position = Array.isArray(
+    (spec as LineLayerSpec).stackedDomainValueColumn
+  )
+    ? 'stacked'
+    : 'overlaid'
   const legendData = convertLineSpec(
     staticLegendOverride,
     spec as LineLayerSpec,
     columnFormatter,
-    valueColumnKey
+    valueColumnKey,
+    position
   )
   const {
     legendBackgroundColor: backgroundColor,

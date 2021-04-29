@@ -1,5 +1,4 @@
 import {
-  DomainLabel,
   LineData,
   LinePosition,
   NumericColumnData,
@@ -17,6 +16,7 @@ import {
 } from '../../constants/columnKeys'
 
 import {BandHoverIndices} from '../bandHover'
+import {getDataSortOrder} from './sort'
 
 const isVoid = (x: any) => x === null || x === undefined
 
@@ -28,32 +28,6 @@ const orderDataByValue = (
   const dataMap = {}
   originalOrder.forEach((place, index) => (dataMap[place] = data[index]))
   return nextOrder.map(place => dataMap[place])
-}
-
-const getDataSortOrder = (
-  lineData: LineData,
-  hoveredRowIndices: number[],
-  position: LinePosition
-): number[] => {
-  if (!position || position === 'overlaid') {
-    return hoveredRowIndices
-  }
-
-  const dataMap = {}
-  const measurementValues = Object.keys(lineData).reduce(
-    (accumulator, id) => accumulator.concat(lineData[id][DomainLabel.Y]),
-    []
-  )
-  const sortable = []
-  hoveredRowIndices.forEach(hoveredRowIndex => {
-    if (!dataMap[measurementValues[hoveredRowIndex]]) {
-      dataMap[measurementValues[hoveredRowIndex]] = []
-    }
-    dataMap[measurementValues[hoveredRowIndex]].push(hoveredRowIndex)
-    sortable.push(measurementValues[hoveredRowIndex])
-  })
-  sortable.sort((first, second) => second - first)
-  return sortable.map(measurement => dataMap[measurement].shift())
 }
 
 export const getRangeLabel = (min: number, max: number, formatter): string => {
@@ -109,6 +83,7 @@ export const getPointsTooltipData = (
   const sortOrder = lineData
     ? getDataSortOrder(lineData, hoveredRowIndices, position)
     : hoveredRowIndices
+
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(groupColKey, 'number')
