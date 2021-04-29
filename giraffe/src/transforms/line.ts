@@ -117,13 +117,20 @@ export const lineTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
+    // remember the latest (most recent) index for each group
     if (!isDefined(latestIndices[groupID])) {
       latestIndices[groupID] = i
     } else if (yColumnKey === TIME) {
-      if (y > yCol[latestIndices[groupID]]) {
+      if (
+        y > yCol[latestIndices[groupID]] ||
+        !isDefined(yCol[latestIndices[groupID]])
+      ) {
         latestIndices[groupID] = i
       }
-    } else if (x > xCol[latestIndices[groupID]]) {
+    } else if (
+      x > xCol[latestIndices[groupID]] ||
+      !isDefined(xCol[latestIndices[groupID]])
+    ) {
       latestIndices[groupID] = i
     }
 
