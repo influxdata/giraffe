@@ -93,9 +93,11 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const valueX = env.xScale.invert(hoverEvent.x)
   let clampedValueX = NaN
+
   if (
     valueX &&
-    (defaultSpec.type === SpecTypes.Band || defaultSpec.type === SpecTypes.Line)
+    (defaultSpec?.type === SpecTypes.Band ||
+      defaultSpec?.type === SpecTypes.Line)
   ) {
     const timestamps = defaultSpec?.lineData[0]?.xs ?? []
     clampedValueX = nearestTimestamp(timestamps, valueX)
