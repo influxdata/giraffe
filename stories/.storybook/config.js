@@ -14,6 +14,7 @@ addParameters({
     }),
     panelPosition: 'right',
   },
+  layout: 'fullscreen',
 })
 
 function loadStories() {

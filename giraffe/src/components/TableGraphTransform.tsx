@@ -21,7 +21,10 @@ interface Props {
   children: (transformedDataBundle: TransformTableDataReturnType) => JSX.Element
 }
 
-const areFormatPropertiesEqual = (prevProperties, newProperties) => {
+const areFormatPropertiesEqual = (
+  prevProperties: Props,
+  newProperties: Props
+) => {
   const formatProps = ['tableOptions', 'fieldOptions', 'timeFormat', 'sort']
   if (!prevProperties.properties) {
     return false

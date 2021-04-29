@@ -129,6 +129,7 @@ export interface StaticLegend {
 }
 
 export interface InteractionHandlerArguments {
+  clampedValueX: number
   hoverX: number
   hoverY: number
   valueX: number | string
@@ -621,6 +622,7 @@ export interface LineLayerSpec {
   }
   columnGroupMaps: {
     fill: ColumnGroupMap
+    latestIndices: LatestIndexMap
   }
   stackedDomainValueColumn?: NumericColumnData
 }
@@ -804,6 +806,15 @@ export interface ColumnGroupMap {
   // A group ID `i` takes on the values specified by `mappings[i]` for the
   // column keys that specify the grouping
   mappings: Array<{[columnKey: string]: any}>
+}
+
+export interface LatestIndexMap {
+  // each Column in a Table contains a single array even when there are multiple series
+  //   for example, a line graph has multiple lines (series), but each Column has only one array
+  // Static Legend needs to know where each line (series) ends, to render the "latest"
+  //   - "latest" is the timestamp with the highest value in each line (series)
+  //   - Keep a map of the highest timestamp's index for each series
+  [columnKey: string]: number
 }
 
 export type LineData = {

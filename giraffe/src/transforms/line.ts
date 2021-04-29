@@ -1,15 +1,17 @@
 import {
   CumulativeValuesByTime,
   DomainLabel,
+  LatestIndexMap,
   LineData,
   LineLayerSpec,
   LinePosition,
   NumericColumnData,
   Table,
 } from '../types'
-import {FILL, VALUE} from '../constants/columnKeys'
+import {FILL, TIME, VALUE} from '../constants/columnKeys'
 import {createGroupIDColumn, getNominalColorScale} from './'
 import {getDomainDataFromLines} from '../utils/lineData'
+import {isDefined} from '../utils/isDefined'
 
 export const mapCumulativeValuesToTimeRange = (
   timesCol: NumericColumnData,
@@ -73,6 +75,7 @@ export const lineTransform = (
   const fillScale = getNominalColorScale(fillColumnMap, colors)
   const lineData: LineData = {}
   let stackedValuesByTime: CumulativeValuesByTime = {}
+  const latestIndices: LatestIndexMap = {}
 
   if (position === 'stacked') {
     if (yColumnKey === VALUE) {
@@ -114,6 +117,23 @@ export const lineTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
+    // remember the latest (most recent) index for each group
+    if (!isDefined(latestIndices[groupID])) {
+      latestIndices[groupID] = i
+    } else if (yColumnKey === TIME) {
+      if (
+        y > yCol[latestIndices[groupID]] ||
+        !isDefined(yCol[latestIndices[groupID]])
+      ) {
+        latestIndices[groupID] = i
+      }
+    } else if (
+      x > xCol[latestIndices[groupID]] ||
+      !isDefined(xCol[latestIndices[groupID]])
+    ) {
+      latestIndices[groupID] = i
+    }
+
     if (x < xMin) {
       xMin = x
     }
@@ -139,7 +159,6 @@ export const lineTransform = (
     )
   }
 
-  //todo:  look at stackdomainvalue column for stacked data for static legend
   return {
     type: 'line',
     inputTable,
@@ -152,7 +171,7 @@ export const lineTransform = (
     xColumnType: table.getColumnType(xColumnKey),
     yColumnType: table.getColumnType(yColumnKey),
     scales: {fill: fillScale},
-    columnGroupMaps: {fill: fillColumnMap},
+    columnGroupMaps: {fill: fillColumnMap, latestIndices},
     stackedDomainValueColumn,
   }
 }

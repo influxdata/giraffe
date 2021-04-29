@@ -1,5 +1,6 @@
 import * as React from 'react'
 import {select, text, boolean, number} from '@storybook/addon-knobs'
+
 import {Table} from '../../giraffe/src'
 import {CPU} from './data/cpu'
 import {cpuTable} from './data/mosaicTable'
@@ -75,7 +76,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
-export const tableKnob = (initial?) =>
+export const tableKnob = (initial?: Table) =>
   select('Data', {CPU, cpuTable}, initial || CPU)
 
 /*
