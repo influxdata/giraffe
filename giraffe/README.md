@@ -446,6 +446,12 @@ Giraffe comes with utility functions.
 
 - **newTable**: _function(number)._ The argument is a length for a newly created `Table` with no initial data that allows only columns equal to that length to be added. Returns the created `Table`.
 
+- **timeFormatter**: _function(object)._ Takes the optional params of locale, format, and hour12. And the required param of timeZone.
+TimeZone is an option for which timezone you would like the time formatter to return, examples are UTC, or America/Los_Angeles. It will default 24 hour when using UTC, and 12 hours for all others. A full list of compatible time zones (#IANA website).
+Format is for formatting for the standard Date and time formats. Ex: YYYY-MM-DD HH:mm:ss ZZ, or HH:mm a. 
+Hour12 is a boolean value on wether you are in military time(false) or am/pm(true).
+
+
 ## LayerConfig
 
 - **LineLayerConfig**: _Object._ Maximum one per `<Plot>`. Properties are:
