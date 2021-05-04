@@ -77,6 +77,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
     <div
       className="giraffe-static-legend"
       style={{
+        padding: 10, // overridable, must be at the top
         ...style,
         backgroundColor,
         border,
@@ -86,8 +87,8 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         font,
         height: `${height}px`,
         left: 0,
+        opacity: staticLegendOverride.opacity,
         overflow: 'auto',
-        padding: 10,
         position: 'absolute',
         right: 0,
         top: `${top}px`,
