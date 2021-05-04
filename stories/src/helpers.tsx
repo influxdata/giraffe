@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {CSSProperties, FC} from 'react'
 import {select, text, boolean, number} from '@storybook/addon-knobs'
 
 import {Table} from '../../giraffe/src'
@@ -7,17 +7,21 @@ import {cpuTable} from './data/mosaicTable'
 
 import * as giraffe from '../../giraffe/src'
 
-export const PlotContainer = ({children}) => (
-  <div
-    style={{
-      width: 'calc(100vw - 100px)',
-      height: 'calc(100vh - 125px)',
-      margin: '75px 50px 50px 50px',
-    }}
-  >
-    {children}
-  </div>
-)
+export interface PlotContainerProps {
+  style?: CSSProperties
+}
+
+export const PlotContainer: FC<PlotContainerProps> = props => {
+  const {style = {}, children} = props
+
+  const defaultPlotStyle = {
+    width: 'calc(100vw - 100px)',
+    height: 'calc(100vh - 125px)',
+    margin: '50px',
+  }
+
+  return <div style={{...defaultPlotStyle, ...style}}>{children}</div>
+}
 
 export const multiSelect = (
   label: string,
