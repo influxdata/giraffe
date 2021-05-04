@@ -50,6 +50,8 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
     staticLegend: staticLegendOverride,
   } = overrideLegendConfig(config, staticLegend)
 
+  const {style = {}} = staticLegendOverride
+
   const layerConfig = configOverride.layers[staticLegendOverride.layer]
   const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
 
@@ -75,6 +77,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
     <div
       className="giraffe-static-legend"
       style={{
+        ...style,
         backgroundColor,
         border,
         bottom: 0,
