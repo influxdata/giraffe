@@ -431,6 +431,8 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   - **opacity**: _number. Optional. Defaults to 1.0 when excluded._ The [_CSS opacity_](https://developer.mozilla.org/en-US/docs/Web/CSS/opacity) of the static legend.
 
   - **orientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
+
+  - **style**: _Object. Optional._ An object containing the key-value pairs used for inline styling the class `.giraffe-static-legend` by using the [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). Primarily used for adjusting `margin` and `padding`. May be used to add additional styling to Static Legend, but does not affect the following styles: `backgroundColor`, `border`, `bottom`, `color`, `cursor`, `font`, `height`, `left`, `opacity`, `overflow`, `position`, `right`, `top`, `width`.
   
   - **valueAxis**: _string. Optional. Defaults to 'y' when not included.  Valid values are either 'x' or 'y'.  This is to set where the 'values' that are displayed in the tooltip come from (which axis, x or y)
 
