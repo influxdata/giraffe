@@ -81,7 +81,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
-export const tableKnob = (initial?: Table) =>
+export const tableKnob = (initial?) =>
   select('Data', {CPU, cpuTable}, initial || CPU)
 
 /*
