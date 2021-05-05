@@ -41,8 +41,8 @@ export const simplifyLineData = (
 
   for (const [k, {xs, ys, fill}] of Object.entries(lineData)) {
     const [simplifedXs, simplifiedYs] = simplify(
-      xs.map(x => xScale(x)),
-      ys.map(y => yScale(y)),
+      xs.map(x => xScale(x || 0)),
+      ys.map(y => yScale(y || 0)),
       0.5
     )
 
