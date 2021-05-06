@@ -28,11 +28,12 @@ export const preprocessData = (
   table: Table,
   rowLimit: number,
   isS2Present: boolean,
-  latLonColumns: LatLonColumns
+  latLonColumns: LatLonColumns,
+  s2Column: string
 ): GeoTable => {
   const isLatLonAsTags = latLonAsTags(isS2Present, latLonColumns)
   if (isS2Present || isLatLonAsTags) {
-    return new NativeGeoTable(table, rowLimit)
+    return new NativeGeoTable(table, rowLimit, latLonColumns, s2Column)
   }
   // don't delay rendering with data calculation
   return new PivotedGeoTable(table, rowLimit, latLonColumns)

@@ -34,6 +34,9 @@ export class PivotedGeoTable implements GeoTable {
     const valueColumn = table.getColumn(VALUE_COLUMN)
     let lonFound = false,
       latFound = false
+    // TODO: Palak: do we need this check here?
+    // If user selects lat/lon as fields:
+    // Should we move it out to UI and fail gracefully ?
     if (!fieldColumn || !valueColumn) {
       this.coordinateEncoding = CoordinateEncoding.GEO_HASH
       this.data = []
@@ -54,7 +57,7 @@ export class PivotedGeoTable implements GeoTable {
       const value = valueColumn[i]
       if (
         typeof value === 'number' ||
-        (typeof value === 'string' && fieldName === GEO_HASH_COLUMN)
+        (typeof value === 'string' && fieldName === GEO_HASH_COLUMN) // TODO: Palak: when s2 is provided as a field name
       ) {
         if (point) {
           point[fieldName] = value

@@ -37,6 +37,7 @@ const Geo: FunctionComponent<Props> = props => {
     allowPanAndZoom,
     useS2CellID,
     latLonColumns,
+    s2Column,
   } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
@@ -53,7 +54,8 @@ const Geo: FunctionComponent<Props> = props => {
           table,
           getRowLimit(props.layers),
           useS2CellID,
-          latLonColumns
+          latLonColumns,
+          s2Column
         )
       : null
   )
@@ -63,7 +65,8 @@ const Geo: FunctionComponent<Props> = props => {
       props.table,
       getRowLimit(props.layers),
       useS2CellID,
-      latLonColumns
+      latLonColumns,
+      s2Column
     )
     setPreprocessedTable(newTable)
   }, [table, detectCoordinateFields])
