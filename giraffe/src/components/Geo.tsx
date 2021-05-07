@@ -1,66 +1,26 @@
 // Libraries
 import React, {FunctionComponent, useEffect, useState} from 'react'
-import BingLayer from './geo/bing-maps/Bing'
-import {Map, TileLayer, LayersControl} from 'react-leaflet'
+import {Map, TileLayer} from 'react-leaflet'
 import Control from 'react-leaflet-control'
 import 'leaflet/dist/leaflet.css'
 
 // Components
-import CircleMarkerLayer from './geo/CircleMarkerLayer'
-import HeatmapLayer from './geo/HeatmapLayer'
-import PointMapLayer from './geo/PointMapLayer'
-import TrackMapLayer from './geo/TrackMapLayer'
+import {BingMap} from './geo/bing-maps/BingMap'
+import {LayerSwitcher} from './geo/LayerSwitcher'
 
 // Utils
 import {preprocessData} from './geo/processing/tableProcessing'
+import {ZOOM_FRACTION, getMinZoom, getRowLimit} from '../utils/geo'
 
 // Types
-import {
-  GeoCircleViewLayer,
-  GeoHeatMapViewLayer,
-  GeoLayerConfig,
-  GeoPointMapViewLayer,
-  GeoTrackMapViewLayer,
-  GeoViewLayer,
-} from '..'
+import {GeoLayerConfig} from '..'
 import {Config, Table} from '../types'
-
-// Constants
-const ZOOM_FRACTION = 8
 
 interface Props extends Partial<GeoLayerConfig> {
   width: number
   height: number
   table: Table
   stylingConfig: Partial<Config>
-}
-
-const getRowLimit = (layers: GeoViewLayer[]) => {
-  return Math.min.apply(
-    null,
-    layers.map(l => {
-      switch (l.type) {
-        case 'circleMap':
-          return 5000
-        case 'heatmap':
-          return 100000
-        case 'pointMap':
-          return 2000
-        case 'trackMap':
-          return 2000
-      }
-    })
-  )
-}
-
-const getMinZoom = (width: number): number => {
-  // Math.max(Math.log2(width/256)),Math.log2(height/256))
-  // while the formula above would be technically correct, problem is that
-  // web map projection is square (as opposed to regular book based world maps).
-  // The polar areas are extremely distorted and people don't
-  // want to look at those - they usually want to see all the continents and
-  // expect to see a rectangle, similar to book based maps.
-  return Math.ceil(Math.log2(width / 256) * ZOOM_FRACTION) / ZOOM_FRACTION
 }
 
 const Geo: FunctionComponent<Props> = props => {
@@ -125,36 +85,7 @@ const Geo: FunctionComponent<Props> = props => {
       attributionControl={false}
     >
       {bingKey ? (
-        <LayersControl position="topright">
-          <LayersControl.BaseLayer
-            checked={!mapStyle || mapStyle === 'Roads'}
-            name="Roads"
-          >
-            <BingLayer minNativeZoom={3} bingkey={bingKey} type="Road" />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer
-            checked={mapStyle === 'Satellite (plain)'}
-            name="Satellite (Plain)"
-          >
-            <BingLayer minNativeZoom={3} bingkey={bingKey} />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer
-            checked={mapStyle === 'Satellite'}
-            name="Satellite (Labels)"
-          >
-            <BingLayer
-              minNativeZoom={3}
-              bingkey={bingKey}
-              type="AerialWithLabels"
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer
-            checked={mapStyle === 'Dark'}
-            name="Dark mode"
-          >
-            <BingLayer minNativeZoom={3} bingkey={bingKey} type="CanvasDark" />
-          </LayersControl.BaseLayer>
-        </LayersControl>
+        <BingMap bingKey={bingKey} mapStyle={mapStyle} />
       ) : (
         <TileLayer minNativeZoom={3} url={tileServerUrl} />
       )}
@@ -163,54 +94,15 @@ const Geo: FunctionComponent<Props> = props => {
         if (!preprocessedTable) {
           return
         }
-        switch (layer.type) {
-          case 'circleMap':
-            const circleLayer = layer as GeoCircleViewLayer
-            return (
-              <CircleMarkerLayer
-                key={index}
-                radiusFieldName={circleLayer.radiusField}
-                colorFieldName={circleLayer.colorField}
-                table={preprocessedTable}
-                properties={circleLayer}
-                stylingConfig={stylingConfig}
-              />
-            )
-          case 'heatmap':
-            const heatmapLayer = layer as GeoHeatMapViewLayer
-            return (
-              <HeatmapLayer
-                key={index}
-                intensityFieldName={heatmapLayer.intensityField}
-                table={preprocessedTable}
-                blur={heatmapLayer.blur}
-                radius={heatmapLayer.radius}
-                properties={heatmapLayer}
-              />
-            )
-          case 'pointMap':
-            const pointMapLayer = layer as GeoPointMapViewLayer
-            return (
-              <PointMapLayer
-                key={index}
-                colorFieldName={pointMapLayer.colorField}
-                table={preprocessedTable}
-                properties={pointMapLayer}
-                stylingConfig={stylingConfig}
-                isClustered={pointMapLayer.isClustered === true}
-              />
-            )
-          case 'trackMap':
-            const trackMapLayer = layer as GeoTrackMapViewLayer
-            return (
-              <TrackMapLayer
-                key={index}
-                table={preprocessedTable}
-                properties={trackMapLayer}
-                stylingConfig={stylingConfig}
-              />
-            )
-        }
+        return (
+          <LayerSwitcher
+            key={index}
+            layer={layer}
+            preprocessedTable={preprocessedTable}
+            stylingConfig={stylingConfig}
+            index={index}
+          />
+        )
       })}
       {preprocessedTable && preprocessedTable.isTruncated() && (
         <Control position="bottomleft">
