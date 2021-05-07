@@ -164,7 +164,6 @@ export const convertBandSpec = (
   if (!Array.isArray(columnKeys)) {
     return null
   }
-  const mappings = spec?.columnGroupMaps?.fill?.mappings
   const valueFormatter = getColumnFormatter(valueColumnKey)
   const {latestIndices} = spec?.columnGroupMaps
   const fillIndices = spec.table.getColumn(FILL)
