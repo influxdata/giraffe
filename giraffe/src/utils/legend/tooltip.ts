@@ -79,7 +79,10 @@ export const getPointsTooltipData = (
   lineData?: LineData,
   stackedDomainValueColumn?: NumericColumnData
 ): LegendData => {
-  const sortOrder = getDataSortOrder(lineData, hoveredRowIndices)
+  // Check for lineData because Scatter Plot does not have lineData
+  const sortOrder = lineData
+    ? getDataSortOrder(lineData, hoveredRowIndices)
+    : hoveredRowIndices
 
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')

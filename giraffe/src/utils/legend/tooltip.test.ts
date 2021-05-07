@@ -68,7 +68,7 @@ describe('getPointsTooltipData', () => {
   describe('tooltip for overlaid line graph', () => {
     const position = 'overlaid'
 
-    it('should have a value column that is not necessarily sorted', () => {
+    it('should have a value column that is sorted in descending order', () => {
       lineSpec = {} as LineLayerSpec
       startingIndex = 3
       const hoveredRowIndices = []
@@ -96,9 +96,14 @@ describe('getPointsTooltipData', () => {
         lineSpec.lineData
       )
       const singleValueColumn = result.find(column => column.name === yColKey)
-      expect(singleValueColumn.values.map(value => Number(value))).toEqual(
-        hoveredValues
-      )
+      expect(
+        singleValueColumn.values.every((value, index) => {
+          if (index === 0) {
+            return true
+          }
+          return Number(value) <= Number(singleValueColumn.values[index - 1])
+        })
+      ).toEqual(true)
     })
   })
 
