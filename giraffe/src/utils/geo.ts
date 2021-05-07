@@ -63,6 +63,7 @@ export const calculateVariableAssignment = (
     Math.pow(2, zoom + 8)
   return {lon, lat, radius: (pixelRadius * metersPerPixel) / 1000}
 }
+<<<<<<< HEAD
 
 export const formatCircleMarkerRowInfo = (
   properties: GeoCircleViewLayer,
@@ -233,3 +234,5 @@ line-height:${CLUSTER_ICON_SIZE - 2 * CLUSTER_ICON_SIZE_BORDER}px;`
     iconSize: L.point(CLUSTER_ICON_SIZE, CLUSTER_ICON_SIZE, true),
   })
 }
+=======
+>>>>>>> refactor: Cleanup GeoLayer.tsx
