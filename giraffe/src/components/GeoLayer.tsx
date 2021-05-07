@@ -7,27 +7,13 @@ import Geo from './Geo'
 
 // Types
 import {Config, Table} from '../types'
-import {GeoLayerConfig, GeoQueryVariables} from '../types/geo'
+import {GeoLayerConfig} from '../types/geo'
+import {calculateVariableAssignment} from '../utils/geo'
 
 interface OwnProps {
   table: Table
   config: GeoLayerConfig
   plotConfig: Config
-}
-
-const calculateVariableAssignment = (
-  width: number,
-  height: number,
-  lon: number,
-  lat: number,
-  zoom: number
-): GeoQueryVariables => {
-  const pixelRadius = Math.sqrt(width * width + height * height) / 2
-  // circumference of earth = 40075016.686m
-  const metersPerPixel =
-    (40075016.686 * Math.abs(Math.cos((lat * Math.PI) / 180))) /
-    Math.pow(2, zoom + 8)
-  return {lon, lat, radius: (pixelRadius * metersPerPixel) / 1000}
 }
 
 interface LastRenderProperties {
