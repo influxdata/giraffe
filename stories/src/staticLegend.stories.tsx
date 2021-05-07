@@ -2,7 +2,7 @@ import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import {withKnobs, number, select, boolean, text} from '@storybook/addon-knobs'
 
-import {Config, Plot, timeFormatter} from '../../giraffe/src'
+import {Config, Plot, fromFlux, timeFormatter} from '../../giraffe/src'
 import {getRandomTable} from '../../giraffe/src/utils/fixtures/randomTable'
 
 import {
@@ -22,12 +22,24 @@ import {
   tooltipOrientationThresholdKnob,
   tooltipColorizeRowsKnob,
 } from './helpers'
+import {
+  colors6,
+  cpu1,
+  cpu2,
+  graphEdge1,
+  hoverAlignment1,
+  hoverAlignment2,
+  mem1,
+  mem2,
+  noLowerAndUpper,
+  same3,
+} from './data/bandCSV'
 
 const maxValue = Math.random() * Math.floor(200)
 
 storiesOf('Static Legend', module)
   .addDecorator(withKnobs)
-  .add('Legend with random fill column names', () => {
+  .add('Line Graph with random fill column names', () => {
     const lines = number('Number of graph lines', 4)
     const fillColumnsCount = number('Number of fill columns', 5)
     const fillColumnNameLength = number('Length of fill column names', 4)
@@ -173,7 +185,7 @@ storiesOf('Static Legend', module)
       </PlotContainer>
     )
   })
-  .add('Legend with random custom fill column names', () => {
+  .add('Line Graph with random custom fill column names', () => {
     const lines = number('Number of graph lines', 4)
     const fillColumnsText = text('fillColumns', 'cluster,host,machine,cpu')
     const fillColumnNames = fillColumnsText.split(',')
@@ -307,6 +319,154 @@ storiesOf('Static Legend', module)
           hoverDimension,
           shadeBelow,
           shadeBelowOpacity,
+        },
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Band Plot with static CSV', () => {
+    const staticData = select(
+      'Static CSV',
+      {
+        colors6,
+        cpu1,
+        cpu2,
+        graphEdge1,
+        hoverAlignment1,
+        hoverAlignment2,
+        mem1,
+        mem2,
+        noLowerAndUpper,
+        same3,
+      },
+      cpu2
+    )
+    const staticLegendHeightRatio = number('Static Legend Height', 0.2, {
+      range: true,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    })
+
+    const fixedWidth = number('Fixed Width')
+    const fixedHeight = number('Fixed Height')
+    const legendHide = boolean('Hide Tooltip?', false)
+    const staticLegendHide = boolean('Hide Static Legend?', false)
+    const fixedPlotSize = {}
+    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+      fixedPlotSize['height'] = fixedHeight
+      fixedPlotSize['width'] = fixedWidth
+    }
+    const colors = colorSchemeKnob()
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob(20)
+    const staticLegendOrientationThreshold = number(
+      'Static Legend Orientation Threshold',
+      20
+    )
+    const legendColorizeRows = tooltipColorizeRowsKnob()
+    const staticLegendColorizeRows = boolean(
+      'Static Legend Colorize Rows?',
+      true
+    )
+    const legendFont = legendFontKnob()
+    const staticLegendFont = text('Static Legend Font', '12px sans-serif')
+    const staticLegendBorder = text('Static Legend Border', '1px solid orange')
+    const staticLegendBackgroundColor = text(
+      'Static Legend Background Color',
+      'transparent'
+    )
+    const tickFont = tickFontKnob()
+    const valueAxisLabel = text('Value Axis Label', '')
+    const xScale = xScaleKnob()
+    const yScale = yScaleKnob()
+    const timeZone = timeZoneKnob()
+    const timeFormat = select(
+      'Time Format',
+      {
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'hh:mm a': 'hh:mm a',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'hh:mm a'
+    )
+    const fromFluxTable = fromFlux(staticData).table
+    const interpolation = interpolationKnob()
+    const showAxes = showAxesKnob()
+    const lineWidth = number('Line Width', 3)
+    const lineOpacity = number('Line Opacity', 0.7)
+    const shadeOpacity = number('Shade Opacity', 0.3)
+    const hoverDimension = select(
+      'Hover Dimension',
+      {auto: 'auto', x: 'x', y: 'y', xy: 'xy'},
+      'auto'
+    )
+    const upperColumnName = text('upperColumnName', 'max')
+    const mainColumnName = text('mainColumnName', 'mean')
+    const lowerColumnName = text('lowerColumnName', 'min')
+    const legendOpacity = number('Legend Opacity', 1.0, {
+      range: true,
+      min: 0,
+      max: 1.0,
+      step: 0.05,
+    })
+
+    const config: Config = {
+      fluxResponse: staticData,
+      valueFormatters: {
+        _time: timeFormatter({timeZone, format: timeFormat}),
+        _value: val =>
+          typeof val === 'number'
+            ? `${val.toFixed(2)}${
+                valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
+              }`
+            : val,
+      },
+      xScale,
+      yScale,
+      tickFont,
+      showAxes,
+      legendColorizeRows,
+      legendFont,
+      legendHide,
+      legendOpacity,
+      legendOrientationThreshold,
+      staticLegend: {
+        backgroundColor: staticLegendBackgroundColor,
+        border: staticLegendBorder,
+        colorizeRows: staticLegendColorizeRows,
+        font: staticLegendFont || legendFont,
+        heightRatio: staticLegendHeightRatio,
+        hide: staticLegendHide,
+        orientationThreshold: staticLegendOrientationThreshold,
+      },
+      layers: [
+        {
+          type: 'band',
+          x: '_time',
+          y: '_value',
+          fill: findStringColumns(fromFluxTable),
+          interpolation,
+          colors,
+          lineWidth,
+          lineOpacity,
+          hoverDimension,
+          shadeOpacity,
+          upperColumnName,
+          mainColumnName,
+          lowerColumnName,
         },
       ],
     }

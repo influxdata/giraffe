@@ -1,13 +1,12 @@
-import {DomainLabel, LineData, LinePosition} from '../../types'
+import {DomainLabel, LineData} from '../../types'
 
 export const getDataSortOrder = (
   lineData: LineData,
   rowIndices: number[],
-  position: LinePosition,
   domainLabel?: DomainLabel
 ): number[] => {
-  if (!position || position === 'overlaid') {
-    return rowIndices
+  if (!lineData || !rowIndices?.length) {
+    return []
   }
 
   const domainLabelName = domainLabel || DomainLabel.Y

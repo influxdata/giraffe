@@ -34,8 +34,8 @@ describe('convertLineSpec', () => {
     const result = convertLineSpec(
       STATIC_LEGEND_DEFAULTS,
       lineSpec,
-      getColumnFormatter,
       yColKey,
+      getColumnFormatter,
       position
     )
 
@@ -65,8 +65,8 @@ describe('convertLineSpec', () => {
     const result = convertLineSpec(
       STATIC_LEGEND_DEFAULTS,
       lineSpec,
-      getColumnFormatter,
       yColKey,
+      getColumnFormatter,
       position
     )
 
