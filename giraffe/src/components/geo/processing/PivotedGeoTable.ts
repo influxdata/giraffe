@@ -5,8 +5,9 @@ import {
   GEO_HASH_COLUMN,
   VALUE_COLUMN,
 } from './tableProcessing'
-import {AbstractGeoTable, CoordinateEncoding} from './AbstractGeoTable'
 import {Table} from '../../../types'
+import {getLatLonMixin, getTimeStringMixin} from './mixins'
+import {CoordinateEncoding, GeoTable, Track} from './GeoTable'
 
 interface GeoRow {
   [key: string]: number | string
@@ -18,7 +19,8 @@ export const isPivotSensible = table => {
   return fieldColumn && valueColumn
 }
 
-export class PivotedGeoTable extends AbstractGeoTable {
+export class PivotedGeoTable implements GeoTable {
+  coordinateEncoding: CoordinateEncoding
   data: GeoRow[]
   truncated: boolean
   maxRows: number
@@ -31,7 +33,7 @@ export class PivotedGeoTable extends AbstractGeoTable {
     let lonFound = false,
       latFound = false
     if (!fieldColumn || !valueColumn) {
-      super(CoordinateEncoding.GEO_HASH)
+      this.coordinateEncoding = CoordinateEncoding.GEO_HASH
       this.data = []
       return
     }
@@ -61,11 +63,10 @@ export class PivotedGeoTable extends AbstractGeoTable {
         }
       }
     }
-    super(
+    this.coordinateEncoding =
       lonFound && latFound
         ? CoordinateEncoding.FIELDS
         : CoordinateEncoding.GEO_HASH
-    )
     this.maxRows = maxRows
     const rows = Object.values(mapData)
     if (rows.length > maxRows) {
@@ -75,6 +76,12 @@ export class PivotedGeoTable extends AbstractGeoTable {
       this.data = rows
       this.truncated = false
     }
+  }
+  mapTracks<T, U>(
+    _mapper: (track: Track, options: U, index: number) => T,
+    _options: U
+  ): T[] {
+    return []
   }
 
   getRowCount(): number {
@@ -92,4 +99,8 @@ export class PivotedGeoTable extends AbstractGeoTable {
   isTruncated(): boolean {
     return this.data.length <= this.maxRows
   }
+
+  getLatLon = getLatLonMixin.bind(this)
+
+  getTimeString = getTimeStringMixin.bind(this)
 }
