@@ -90,6 +90,15 @@ const updateCanvas = (
     )
   )
 
+  //gauge line needs to be changed if gauge unit is being used
+  if (gaugeUnit.toString() === 'bytes') {
+    theme.lineCount = 5
+  } else if (gaugeUnit.toString() === 'time') {
+    theme.lineCount = 4
+  } else if (gaugeUnit.toString() === 'USD') {
+    theme.lineCount = 4
+  }
+
   // The following functions must be called in the specified order
   if (colors.length === MIN_THRESHOLDS) {
     drawGradientGauge(
