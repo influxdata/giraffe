@@ -64,6 +64,9 @@ export const calculateVariableAssignment = (
   return {lon, lat, radius: (pixelRadius * metersPerPixel) / 1000}
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> refactor: circlelayer and pointlayer components
 
 export const formatCircleMarkerRowInfo = (
   properties: GeoCircleViewLayer,
@@ -152,7 +155,10 @@ export const formatPointLayerRowInfo = (
   return result
 }
 
+<<<<<<< HEAD
 // result is being overwritten in the function below
+=======
+>>>>>>> refactor: circlelayer and pointlayer components
 const getClusterValues = (cluster, result: number[]): GeoPointMapViewLayer => {
   let clusterRenderingProperties
   for (const marker of cluster._markers) {
@@ -182,10 +188,14 @@ const getClusterValue = (
       return {value: Math.min(...values), properties}
     case ClusterAggregation.mean:
       return {
+<<<<<<< HEAD
         value:
           values.length >= 0
             ? values.reduce((a, x) => a + x, 0) / values.length
             : 0,
+=======
+        value: values.reduce((a, x) => a + x, 0) / values.length,
+>>>>>>> refactor: circlelayer and pointlayer components
         properties,
       }
     case ClusterAggregation.median:
@@ -234,5 +244,8 @@ line-height:${CLUSTER_ICON_SIZE - 2 * CLUSTER_ICON_SIZE_BORDER}px;`
     iconSize: L.point(CLUSTER_ICON_SIZE, CLUSTER_ICON_SIZE, true),
   })
 }
+<<<<<<< HEAD
 =======
 >>>>>>> refactor: Cleanup GeoLayer.tsx
+=======
+>>>>>>> refactor: circlelayer and pointlayer components
