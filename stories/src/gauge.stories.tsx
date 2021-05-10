@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {boolean, withKnobs, number, text, select} from '@storybook/addon-knobs'
+import {withKnobs, number, text, select} from '@storybook/addon-knobs'
 import {Config, Plot, GaugeTheme} from '../../giraffe/src'
 import {DEFAULT_GAUGE_COLORS} from '../../giraffe/src'
 
