@@ -8,7 +8,8 @@ import {
   getColor,
   normalizeValue,
 } from './dimensionCalculations'
-import {defineToolTipEffect, formatValue} from './processing/toolTips'
+import {defineToolTipEffect} from './processing/toolTips'
+import {formatCircleMarkerRowInfo} from '../../utils/geo'
 
 // Types
 import {GeoTable} from './processing/GeoTable'
@@ -24,42 +25,6 @@ interface Props {
   table: GeoTable
   properties: GeoCircleViewLayer
   stylingConfig: Partial<Config>
-}
-
-const formatRowInfo = (
-  properties: GeoCircleViewLayer,
-  table: GeoTable,
-  index
-) => {
-  const result = []
-  const timeValue = table.getTimeString(index)
-  if (timeValue) {
-    result.push({
-      key: '_time',
-      name: 'Time',
-      type: 'string',
-      values: [timeValue],
-    })
-  }
-  const {colorField, radiusField} = properties
-  const radiusValue = table.getValue(index, radiusField)
-  const {radiusDimension} = properties
-  const radiusInfo = formatValue(
-    radiusField,
-    'Radius',
-    radiusValue,
-    radiusDimension
-  )
-  if (radiusInfo) {
-    result.push(radiusInfo)
-  }
-  const colorValue = table.getValue(index, colorField)
-  const {colorDimension} = properties
-  const colorInfo = formatValue(colorField, 'Color', colorValue, colorDimension)
-  if (colorInfo) {
-    result.push(colorInfo)
-  }
-  return result
 }
 
 export const CircleMarkerLayer: FunctionComponent<Props> = props => {
@@ -106,7 +71,7 @@ export const CircleMarkerLayer: FunctionComponent<Props> = props => {
           radius={radius}
         />
       )
-      const rowInfo = formatRowInfo(properties, table, i)
+      const rowInfo = formatCircleMarkerRowInfo(properties, table, i)
       tooltips.push({markerRef, rowInfo})
     }
   }
