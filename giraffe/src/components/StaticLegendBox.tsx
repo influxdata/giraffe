@@ -3,13 +3,12 @@ import {
   Formatter,
   LayerSpec,
   LegendPropertyNames,
-  LineLayerSpec,
   SizedConfig,
   StaticLegend,
 } from '../types'
 import {CONFIG_DEFAULTS, STATIC_LEGEND_DEFAULTS} from '../constants/index'
 import {Legend} from './Legend'
-import {convertLineSpec} from '../utils/legend/staticLegend'
+import {getLegendData} from '../utils/legend/staticLegend'
 
 interface StaticLegendBoxProps extends StaticLegend {
   config: SizedConfig
@@ -52,27 +51,23 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   const {style = {}} = staticLegendOverride
 
-  const layerConfig = configOverride.layers[staticLegendOverride.layer]
-  const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
-
-  const position = Array.isArray(
-    (spec as LineLayerSpec).stackedDomainValueColumn
-  )
-    ? 'stacked'
-    : 'overlaid'
-  const legendData = convertLineSpec(
-    staticLegendOverride,
-    spec as LineLayerSpec,
-    columnFormatter,
-    valueColumnKey,
-    position
-  )
   const {
     legendBackgroundColor: backgroundColor,
     legendBorder: border,
     legendFont: font,
     legendFontBrightColor: fontBrightColor,
   } = configOverride
+
+  const layerConfig = configOverride.layers[staticLegendOverride.layer]
+  const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
+  const legendData = getLegendData(
+    layerConfig.type,
+    staticLegendOverride,
+    spec,
+    valueColumnKey,
+    columnFormatter
+  )
+
   return (
     <div
       className="giraffe-static-legend"

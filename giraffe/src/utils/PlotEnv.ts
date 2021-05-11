@@ -25,7 +25,6 @@ import {
   Formatter,
   LayerSpec,
   LayerTypes,
-  LineLayerConfig,
   Margins,
   Scale,
   SizedConfig,
@@ -477,11 +476,14 @@ export class PlotEnv {
   }
 
   private get rangePadding(): number {
-    const specifiedLineWidths = this.config.layers
-      .filter(l => l.type === 'line')
-      .map(l => (l as LineLayerConfig).lineWidth)
+    const specifiedLineWidths = this.config.layers.map(layer => {
+      if (layer.type === 'line' || layer.type === 'band') {
+        return layer.lineWidth ?? DEFAULT_RANGE_PADDING
+      }
+      return DEFAULT_RANGE_PADDING
+    })
 
-    return Math.max(DEFAULT_RANGE_PADDING, ...specifiedLineWidths)
+    return Math.max(...specifiedLineWidths)
   }
 }
 

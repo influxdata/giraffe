@@ -19,28 +19,7 @@ describe('getDataSortOrder', () => {
     fillColKeys
   )
 
-  it('leaves overlaid line graphs unsorted', () => {
-    const lineOption = 'overlaid'
-    const lineSpec = lineTransform(
-      table,
-      xColKey,
-      yColKey,
-      fillColKeys,
-      NINETEEN_EIGHTY_FOUR,
-      lineOption
-    )
-
-    const latestIndices = Object.values(lineSpec.columnGroupMaps.latestIndices)
-    const sortOrder = getDataSortOrder(
-      lineSpec.lineData,
-      latestIndices,
-      lineOption,
-      DomainLabel.Y
-    )
-    expect(latestIndices).toEqual(sortOrder)
-  })
-
-  it('sorts stacked line graphs in descending order', () => {
+  it('sorts in in descending order', () => {
     const lineOption = 'stacked'
     const lineSpec = lineTransform(
       table,
@@ -56,7 +35,6 @@ describe('getDataSortOrder', () => {
     const sortOrder = getDataSortOrder(
       lineSpec.lineData,
       latestIndices,
-      lineOption,
       DomainLabel.Y
     )
     expect(sortOrder.length).toBeGreaterThanOrEqual(2)

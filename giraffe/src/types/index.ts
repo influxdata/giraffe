@@ -632,6 +632,8 @@ export interface BandLayerSpec {
   type: 'band' // do not refactor or restrict to SpecTypes.Line
   bandIndexMap: BandIndexMap
   bandName: string
+  upperColumnName: string
+  lowerColumnName: string
   inputTable: Table
   table: Table // has `FILL` column added
   lineData: LineData
@@ -646,6 +648,7 @@ export interface BandLayerSpec {
   }
   columnGroupMaps: {
     fill: ColumnGroupMap
+    latestIndices: LatestIndexMap
   }
 }
 

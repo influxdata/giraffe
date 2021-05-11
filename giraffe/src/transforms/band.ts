@@ -1,16 +1,17 @@
 import {
-  BandLayerSpec,
   Band,
   BandBorder,
+  BandIndexMap,
+  BandLayerSpec,
   ColumnGroupMap,
+  LatestIndexMap,
   LineData,
   Table,
-  BandIndexMap,
 } from '../types'
 
 import {createGroupIDColumn, getBandColorScale} from './'
 
-import {FILL, LOWER, RESULT, UPPER} from '../constants/columnKeys'
+import {FILL, LOWER, RESULT, TIME, UPPER} from '../constants/columnKeys'
 import {BAND_COLOR_SCALE_CONSTANT} from '../constants'
 
 import {isDefined} from '../utils/isDefined'
@@ -420,6 +421,7 @@ export const bandTransform = (
     getBandColorScale(bandIndexMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
 
   const lineData: LineData = {}
+  const latestIndices: LatestIndexMap = {}
 
   let xMin = Infinity
   let xMax = -Infinity
@@ -442,6 +444,23 @@ export const bandTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
+    // remember the latest (most recent) index for each group
+    if (!isDefined(latestIndices[groupID])) {
+      latestIndices[groupID] = i
+    } else if (yColumnKey === TIME) {
+      if (
+        y > yCol[latestIndices[groupID]] ||
+        !isDefined(yCol[latestIndices[groupID]])
+      ) {
+        latestIndices[groupID] = i
+      }
+    } else if (
+      x > xCol[latestIndices[groupID]] ||
+      !isDefined(xCol[latestIndices[groupID]])
+    ) {
+      latestIndices[groupID] = i
+    }
+
     xMin = Math.min(x, xMin)
     xMax = Math.max(x, xMax)
     yMin = Math.min(y, yMin)
@@ -460,6 +479,8 @@ export const bandTransform = (
     type: 'band',
     bandIndexMap,
     bandName: rowColumnName,
+    upperColumnName,
+    lowerColumnName,
     inputTable,
     table,
     lineData,
@@ -470,6 +491,6 @@ export const bandTransform = (
     xColumnType: table.getColumnType(xColumnKey),
     yColumnType: table.getColumnType(yColumnKey),
     scales: {fill: fillScale},
-    columnGroupMaps: {fill: fillColumnMap},
+    columnGroupMaps: {fill: fillColumnMap, latestIndices},
   }
 }
