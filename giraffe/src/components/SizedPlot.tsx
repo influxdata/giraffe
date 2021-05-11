@@ -60,8 +60,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-
-
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
       env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()
@@ -73,7 +71,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const {margins, config} = env
   const {width, height, showAxes} = config
 
-  const resetDomains = env => {
+  const resetDomains = (env) => {
     env.resetDomains()
     forceUpdate()
   }
@@ -110,22 +108,26 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
+  const handleOnMouseUpEnd = () => {
+    console.log('here in on handle on mouse up end; ', clampedValueX)
+  }
+
   const handleXBrushEnd = useCallback(
-      (xRange: number[]) => {
-        console.log('in handleXBrushEnd; range??', xRange)
-        console.log('plot interaction??', plotInteraction)
+    (xRange: number[]) => {
+      console.log('in handleXBrushEnd; range??', xRange)
+      console.log('plot interaction??', plotInteraction)
 
-        env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
 
-        console.log("new env domain???", env.xDomain)
-        forceUpdate()
-      },
-      [env.xScale, env.innerWidth, forceUpdate]
+      console.log('new env domain???', env.xDomain)
+      forceUpdate()
+    },
+    [env.xScale, env.innerWidth, forceUpdate]
   )
 
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
-    ? event => {
+    ? (event) => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
         // There's already an annotation-specific handler for this, that'll handle this.
         if (
@@ -160,7 +162,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   // they are:  hover:  mouseEnter, mousemove, mouseleave
   //            drag target: mouseDown
   // and every time there is a single click, the mouse goes up.  so using that instead.
-//console.log("switched to single click..... ACK")
+  //console.log("switched to single click..... ACK")
 
   return (
     <div
@@ -229,7 +231,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
                   table={newTableFromConfig(config)}
                   allowString={true}
                 >
-                  {latestValue => (
+                  {(latestValue) => (
                     <SingleStatLayer
                       stat={latestValue}
                       config={layerConfig as SingleStatLayerConfig}
@@ -329,6 +331,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
+          onMouseUpEnd={handleOnMouseUpEnd}
         />
       </div>
     </div>

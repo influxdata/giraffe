@@ -4,7 +4,6 @@ import {useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {DragEvent} from '../utils/useDragEvent'
 import {getRectDimensions} from '../utils/brush'
-import {InteractionHandlerArguments} from "../types";
 
 const MIN_SELECTION_SIZE = 5 // pixels
 
@@ -14,7 +13,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
-  onMouseUpEnd?: (plotInteraction: InteractionHandlerArguments) => void
+  onMouseUpEnd?: () => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -23,58 +22,55 @@ export const Brush: FunctionComponent<Props> = ({
   height,
   onXBrushEnd,
   onYBrushEnd,
+  onMouseUpEnd,
 }) => {
   const isBrushing = event && event.direction
 
   useLayoutEffect(() => {
+    if (event?.type !== 'dragend') {
+      return
+    }
 
-    if(event?.type === 'dragend') {
-      if (isBrushing){
-        console.log('brushing now!!!');
+    if (isBrushing) {
+      console.log('got to main action! (woohoo!) ACK')
+      let callback
+      let p0
+      let p1
+
+      if (event.direction === 'x') {
+        p0 = Math.min(event.initialX, event.x)
+        p1 = Math.max(event.initialX, event.x)
+        callback = onXBrushEnd
+      } else if (event.direction === 'y') {
+        p0 = Math.min(event.initialY, event.y)
+        p1 = Math.max(event.initialY, event.y)
+        callback = onYBrushEnd
       } else {
-        console.log("not brushing, but over.... (call onMouseUpEnd here)")
-        //want to elicit an onMouseUpEnd callback here
+        return
       }
-    }
 
-    if (!isBrushing || event.type !== 'dragend') {
-      return
-    }
-
-    console.log("got to main action! (woohoo!) ACK")
-
-    let p0
-    let p1
-    let callback
-
-    if (event.direction === 'x') {
-      p0 = Math.min(event.initialX, event.x)
-      p1 = Math.max(event.initialX, event.x)
-      callback = onXBrushEnd
-    } else if (event.direction === 'y') {
-      p0 = Math.min(event.initialY, event.y)
-      p1 = Math.max(event.initialY, event.y)
-      callback = onYBrushEnd
+      if (p1 - p0 < MIN_SELECTION_SIZE) {
+        return
+      }
+      console.log('brushing now!!!')
+      callback([p0, p1])
     } else {
-      return
+      console.log('not brushing, but over.... (call onMouseUpEnd here)')
+      //want to elicit an onMouseUpEnd callback here
+      onMouseUpEnd()
     }
-
-    if (p1 - p0 < MIN_SELECTION_SIZE) {
-      return
-    }
-
-    callback([p0, p1])
   }, [event?.type])
 
   if (!isBrushing || event.type === 'dragend') {
     return null
   }
 
-  const {x, y, width: brushWidth, height: brushHeight} = getRectDimensions(
-    event,
-    width,
-    height
-  )
+  const {
+    x,
+    y,
+    width: brushWidth,
+    height: brushHeight,
+  } = getRectDimensions(event, width, height)
 
   const selectionStyle: CSSProperties = {
     display: event.initialX === null ? 'none' : 'inherit',
