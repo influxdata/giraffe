@@ -4,6 +4,7 @@ import {useLayoutEffect, FunctionComponent, CSSProperties} from 'react'
 
 import {DragEvent} from '../utils/useDragEvent'
 import {getRectDimensions} from '../utils/brush'
+import {InteractionHandlerArguments} from "../types";
 
 const MIN_SELECTION_SIZE = 5 // pixels
 
@@ -13,6 +14,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
+  onMouseUpEnd?: (plotInteraction: InteractionHandlerArguments) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -26,7 +28,7 @@ export const Brush: FunctionComponent<Props> = ({
 
   useLayoutEffect(() => {
 
-    if(event?.type === 'dragend'){
+    if(event?.type === 'dragend') {
       if (isBrushing){
         console.log('brushing now!!!');
       } else {
