@@ -94,9 +94,9 @@ const updateCanvas = (
   if (gaugeUnit.toString() === 'bytes') {
     theme.lineCount = 5
   } else if (gaugeUnit.toString() === 'time') {
-    theme.lineCount = 4
+    theme.lineCount = 5
   } else if (gaugeUnit.toString() === 'USD') {
-    theme.lineCount = 4
+    theme.lineCount = 5
   }
 
   // The following functions must be called in the specified order
@@ -351,7 +351,7 @@ const drawGaugeLabels = (
       ctx.rotate(-startDegree)
     }
   } else if (gaugeUnit.toString() === 'time') {
-    const labels = ['0', '60s', '60m', '24h', '30d']
+    const labels = ['0', '60s', '60m', '12h', '24h', '30d']
     const lineCount = 5
     for (let i = 0; i <= lineCount; i++) {
       labelRadius = radius + gradientThickness + 23
@@ -372,7 +372,7 @@ const drawGaugeLabels = (
       ctx.rotate(-startDegree)
     }
   } else if (gaugeUnit.toString() === 'USD') {
-    const labels = ['0', '1000', '1000m', '1000b', '1000t']
+    const labels = ['0', '100', '1000', '1000m', '1000b', '1000t']
     const lineCount = 5
     for (let i = 0; i <= lineCount; i++) {
       labelRadius = radius + gradientThickness + 23
