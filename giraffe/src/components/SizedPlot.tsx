@@ -60,13 +60,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-  const handleXBrushEnd = useCallback(
-    (xRange: number[]) => {
-      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
-      forceUpdate()
-    },
-    [env.xScale, env.innerWidth, forceUpdate]
-  )
+
 
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
@@ -116,6 +110,19 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
+  const handleXBrushEnd = useCallback(
+      (xRange: number[]) => {
+        console.log('in handleXBrushEnd; range??', xRange)
+        console.log('plot interaction??', plotInteraction)
+
+        env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+
+        console.log("new env domain???", env.xDomain)
+        forceUpdate()
+      },
+      [env.xScale, env.innerWidth, forceUpdate]
+  )
+
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
     ? event => {
@@ -153,6 +160,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   // they are:  hover:  mouseEnter, mousemove, mouseleave
   //            drag target: mouseDown
   // and every time there is a single click, the mouse goes up.  so using that instead.
+//console.log("switched to single click..... ACK")
 
   return (
     <div
