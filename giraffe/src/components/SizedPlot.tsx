@@ -60,8 +60,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-
-
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
       env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()
@@ -110,17 +108,21 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
+  const handleOnMouseUpEnd = () => {
+    console.log('here in on handle on mouse up end; ', clampedValueX)
+  }
+
   const handleXBrushEnd = useCallback(
-      (xRange: number[]) => {
-        console.log('in handleXBrushEnd; range??', xRange)
-        console.log('plot interaction??', plotInteraction)
+    (xRange: number[]) => {
+      console.log('in handleXBrushEnd; range??', xRange)
+      console.log('plot interaction??', plotInteraction)
 
-        env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
 
-        console.log("new env domain???", env.xDomain)
-        forceUpdate()
-      },
-      [env.xScale, env.innerWidth, forceUpdate]
+      console.log('new env domain???', env.xDomain)
+      forceUpdate()
+    },
+    [env.xScale, env.innerWidth, forceUpdate]
   )
 
   const noOp = () => {}
@@ -135,6 +137,10 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           return
         }
 
+        console.log(
+          '(ACK!!! 53) in singleclick, using plot interaction:',
+          plotInteraction
+        )
         config.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp
@@ -160,7 +166,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   // they are:  hover:  mouseEnter, mousemove, mouseleave
   //            drag target: mouseDown
   // and every time there is a single click, the mouse goes up.  so using that instead.
-//console.log("switched to single click..... ACK")
+  //console.log("switched to single click..... ACK")
 
   return (
     <div
@@ -329,6 +335,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
+          onMouseUpEnd={handleOnMouseUpEnd}
         />
       </div>
     </div>
