@@ -26,6 +26,8 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
   const onMouseDown = useCallback(
     (mouseDownEvent: React.MouseEvent<Element, MouseEvent>) => {
       mouseDownEvent.stopPropagation()
+        
+        console.log('in drag event......(on mouse down...was in frustration land....)')
 
       const el = mouseDownEvent.currentTarget
 
@@ -37,6 +39,8 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
 
       const onMouseMove = mouseMoveEvent => {
         const [x, y] = getXYCoords(mouseMoveEvent)
+
+          console.log('in mouse mouse (drag event)');
 
         const {initialX, initialY} = dragEventRef.current
         let {direction} = dragEventRef.current
@@ -67,6 +71,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         document.removeEventListener('mousemove', onMouseMove)
         document.removeEventListener('mousemove', onMouseUp)
 
+         console.log("in on mouse up (drag event)")
         const [x, y] = getXYCoords(mouseUpEvent)
 
         dragEventRef.current = {
