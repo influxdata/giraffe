@@ -226,7 +226,10 @@ export const convertBandSpec = (
 
   const fillColumns = getTooltipBandGroupColumns(
     spec.table,
-    getDataSortOrder(lineData, rowIndices),
+    getDataSortOrder(
+      lineData,
+      rowIndices.map(index => latestIndices[index])
+    ),
     columnKeys,
     getColumnFormatter,
     colors
