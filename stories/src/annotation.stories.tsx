@@ -139,7 +139,13 @@ storiesOf('Annotations', module)
       layers,
     }
     return (
-      <PlotContainer>
+      <PlotContainer
+        style={{
+          width: 'calc(100vw - 100px)',
+          height: 'calc(100vh - 125px)',
+          margin: '75px 50px 50px 50px',
+        }}
+      >
         <Plot config={config} />
       </PlotContainer>
     )
@@ -274,7 +280,13 @@ storiesOf('Annotations', module)
       interactionHandlers,
     }
     return (
-      <PlotContainer>
+      <PlotContainer
+        style={{
+          width: 'calc(100vw - 100px)',
+          height: 'calc(100vh - 125px)',
+          margin: '75px 50px 50px 50px',
+        }}
+      >
         <Plot config={config} />
       </PlotContainer>
     )
@@ -409,7 +421,13 @@ storiesOf('Annotations', module)
       layers,
     }
     return (
-      <PlotContainer>
+      <PlotContainer
+        style={{
+          width: 'calc(100vw - 100px)',
+          height: 'calc(100vh - 125px)',
+          margin: '75px 50px 50px 50px',
+        }}
+      >
         <Plot config={config} />
       </PlotContainer>
     )
@@ -536,7 +554,13 @@ storiesOf('Annotations', module)
       layers,
     }
     return (
-      <PlotContainer>
+      <PlotContainer
+        style={{
+          width: 'calc(100vw - 100px)',
+          height: 'calc(100vh - 125px)',
+          margin: '75px 50px 50px 50px',
+        }}
+      >
         <Plot config={config} />
       </PlotContainer>
     )
