@@ -24,6 +24,7 @@ import {
   xKnob,
 } from './helpers'
 import {circle_ci_branch, cloudy} from './data/mosaicCSV'
+import {nfl} from './data/nflCSV'
 
 storiesOf('Mosaic', module)
   .addDecorator(withKnobs)
@@ -197,6 +198,75 @@ storiesOf('Mosaic', module)
 
     const config: Config = {
       fluxResponse: cloudy,
+      valueFormatters: {
+        _time: timeFormatter({timeZone, format: timeFormat}),
+      },
+      legendFont,
+      legendOrientationThreshold,
+      showAxes,
+      tickFont,
+      layers: [
+        {
+          type: 'mosaic',
+          x,
+          y: yColumns,
+          yLabelColumnSeparator,
+          yLabelColumns,
+          fill: [selectedFill],
+          hoverDimension,
+          colors,
+        } as LayerConfig,
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('NFL 2020 Regular Season', () => {
+    const table = fromFlux(nfl).table
+    const fillColumns = findStringColumns(table)
+    const x = xKnob(table)
+    const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
+    const selectedFill = select('fill', fillColumns, VALUE)
+    const yColumns = multiSelect('Data yColumns', fillColumns, ['team'])
+    const yLabelColumns = multiSelect('Label yColumns', fillColumns, ['team'])
+    const colors = colorSchemeKnob()
+    const tickFont = tickFontKnob()
+    const legendFont = legendFontKnob()
+    const timeZone = timeZoneKnob()
+    const timeFormat = select(
+      'Time Format',
+      {
+        'MM/DD/YY': 'MM/DD/YY',
+        'MM/DD/YYYY': 'MM/DD/YYYY',
+        'DD/MM/YYYY HH:mm:ss.sss': 'DD/MM/YYYY HH:mm:ss.sss',
+        'MM/DD/YYYY HH:mm:ss.sss': 'MM/DD/YYYY HH:mm:ss.sss',
+        'YYYY/MM/DD HH:mm:ss': 'YYYY/MM/DD HH:mm:ss',
+        'YYYY-MM-DD HH:mm:ss ZZ': 'YYYY-MM-DD HH:mm:ss ZZ',
+        'hh:mm a': 'hh:mm a',
+        'MM/DD HH:mm:ss': 'MM/DD HH:mm:ss',
+        'HH:mm': 'HH:mm',
+        'HH:mm:ss': 'HH:mm:ss',
+        'HH:mm:ss ZZ': 'HH:mm:ss ZZ',
+        'HH:mm:ss.sss': 'HH:mm:ss.sss',
+        'MMMM D, YYYY HH:mm:ss': 'MMMM D, YYYY HH:mm:ss',
+        'dddd, MMMM D, YYYY HH:mm:ss': 'dddd, MMMM D, YYYY HH:mm:ss',
+      },
+      'MM/DD/YY'
+    )
+    const showAxes = showAxesKnob()
+    const hoverDimension = select(
+      'Hover Dimension',
+      {x: 'x', y: 'y', xy: 'xy'},
+      'xy'
+    )
+    const legendOrientationThreshold = tooltipOrientationThresholdKnob()
+
+    const config: Config = {
+      fluxResponse: nfl,
       valueFormatters: {
         _time: timeFormatter({timeZone, format: timeFormat}),
       },
