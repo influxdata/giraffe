@@ -467,7 +467,7 @@ export class PlotEnv {
     }
 
     const derivedColumnType = this.config.layers
-      .map((_, i) => this.getSpec(i).table)
+      .map((_, i) => this.getSpec(i)?.table)
       .filter(table => !!table)
       .map(table => table.getColumnType(columnKey))
       .find(k => !!k)
