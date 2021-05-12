@@ -3,6 +3,7 @@ import {LegendData, ColumnType} from '../types'
 
 // Style Constants
 const legendColumnGap = '12px'
+const legendColumnPadding = '15px'
 const legendColumnMaxWidth = '200px'
 const legendTablePadding = '4px'
 
@@ -36,6 +37,7 @@ export interface LegendStyles {
 }
 
 export const generateLegendStyles = (
+  isScrollable: boolean,
   legendData: LegendData,
   switchToVertical: boolean,
   colorizeRows: boolean,
@@ -47,6 +49,7 @@ export const generateLegendStyles = (
   const table = legendTableStyle(switchToVertical)
   const columns = legendData.map((column, i) =>
     legendColumnStyle(
+      isScrollable,
       column.name,
       i,
       column.type,
@@ -93,8 +96,9 @@ const legendTableStyle = (switchToVertical: boolean): CSSProperties => {
 }
 
 const legendColumnStyle = (
+  isScrollableColumn: boolean,
   name: string,
-  i: number,
+  index: number,
   type: ColumnType,
   switchToVertical: boolean,
   columnCount: number
@@ -106,13 +110,21 @@ const legendColumnStyle = (
     }
   }
 
-  return {
+  const columnStyle: CSSProperties = {
     display: 'flex',
     order: legendColumnOrder(name),
     flexDirection: 'column',
-    marginRight: i === columnCount ? 0 : legendColumnGap,
+    marginRight: index === columnCount ? 0 : legendColumnGap,
     textAlign: type === 'number' ? 'right' : 'left',
   }
+
+  if (isScrollableColumn) {
+    columnStyle.paddingBottom = legendColumnPadding
+    if (index === columnCount) {
+      columnStyle.paddingRight = legendColumnPadding
+    }
+  }
+  return columnStyle
 }
 
 const legendColumnHeaderStyle = (
@@ -124,12 +136,14 @@ const legendColumnHeaderStyle = (
       color: fontColor,
       display: 'table-cell',
       margin: legendTablePadding,
+      whiteSpace: 'nowrap',
     }
   }
 
   return {
     marginBottom: legendTablePadding,
     color: fontColor,
+    whiteSpace: 'nowrap',
   }
 }
 

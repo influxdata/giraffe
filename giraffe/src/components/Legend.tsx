@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {CSSProperties} from 'react'
 import {FunctionComponent} from 'react'
 
 import {LegendData, Config} from '../types'
@@ -7,9 +7,14 @@ import {generateLegendStyles, LegendPillsStyles} from './LegendStyles'
 interface Props {
   data: LegendData
   config: Config
+  isScrollable?: boolean
 }
 
-export const Legend: FunctionComponent<Props> = ({data, config}) => {
+export const Legend: FunctionComponent<Props> = ({
+  data,
+  config,
+  isScrollable = false,
+}) => {
   const {
     width,
     height,
@@ -43,6 +48,7 @@ export const Legend: FunctionComponent<Props> = ({data, config}) => {
   const maxLength = switchToVertical ? width : height
 
   const styles = generateLegendStyles(
+    isScrollable,
     columns,
     switchToVertical,
     colorizeRows,
@@ -76,9 +82,9 @@ interface LegendColumnProps {
   name: string
   maxLength: number
   values: string[]
-  columnStyle: React.CSSProperties
-  columnHeaderStyle: React.CSSProperties
-  columnValueStyles: React.CSSProperties[]
+  columnStyle: CSSProperties
+  columnHeaderStyle: CSSProperties
+  columnValueStyles: CSSProperties[]
 }
 
 const LegendColumn: FunctionComponent<LegendColumnProps> = ({

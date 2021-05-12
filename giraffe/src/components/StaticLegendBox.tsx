@@ -8,6 +8,7 @@ import {
 } from '../types'
 import {CONFIG_DEFAULTS, STATIC_LEGEND_DEFAULTS} from '../constants/index'
 import {Legend} from './Legend'
+import {DapperScrollbars} from './DapperScrollbars'
 import {getLegendData} from '../utils/legend/staticLegend'
 
 interface StaticLegendBoxProps extends StaticLegend {
@@ -77,6 +78,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         backgroundColor,
         border,
         bottom: 0,
+        boxSizing: 'border-box',
         color: fontBrightColor,
         cursor: staticLegendOverride.cursor,
         font,
@@ -91,7 +93,9 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       }}
       data-testid="giraffe-static-legend"
     >
-      <Legend data={legendData} config={configOverride} />
+      <DapperScrollbars removeTracksWhenNotUsed={true} autoHide={true}>
+        <Legend data={legendData} config={configOverride} isScrollable={true} />
+      </DapperScrollbars>
     </div>
   )
 }
