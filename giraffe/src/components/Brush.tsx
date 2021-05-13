@@ -26,10 +26,27 @@ export const Brush: FunctionComponent<Props> = ({
 }) => {
   const isBrushing = event && event.direction
 
+  // debounce a function WITHOUT ARGS
+  // rolling our own, not using lodash b/c lodash is large and not included in giraffe
+  function debounce(func, timeout = 300) {
+    let timer
+    return () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        func()
+      }, timeout)
+    }
+  }
+
+  const debouncedOnMouseUpEnd = debounce(onMouseUpEnd)
+
   useLayoutEffect(() => {
     if (event?.type !== 'dragend') {
+      console.log('the event (not dragend).....(ack-42-1)', event)
       return
     }
+
+    console.log('the event (dragEnd! :).....(ack-42)', event)
 
     if (isBrushing) {
       console.log('got to main action! (woohoo!) ACK')
@@ -56,8 +73,14 @@ export const Brush: FunctionComponent<Props> = ({
       callback([p0, p1])
     } else {
       console.log('not brushing, but over.... (call onMouseUpEnd here)')
-      //want to elicit an onMouseUpEnd callback here
-      onMouseUpEnd()
+      console.log('in progress???', event.inProgress)
+      if (event.inProgress ===  'mouseDownHappened') {
+        console.log('DD-1 for reals!')
+        //want to elicit an onMouseUpEnd callback here
+        debouncedOnMouseUpEnd()
+      } else {
+        console.log('EE-1 ......phantom click.  DO NOTHING')
+      }
     }
   }, [event?.type])
 
@@ -65,12 +88,11 @@ export const Brush: FunctionComponent<Props> = ({
     return null
   }
 
-  const {
-    x,
-    y,
-    width: brushWidth,
-    height: brushHeight,
-  } = getRectDimensions(event, width, height)
+  const {x, y, width: brushWidth, height: brushHeight} = getRectDimensions(
+    event,
+    width,
+    height
+  )
 
   const selectionStyle: CSSProperties = {
     display: event.initialX === null ? 'none' : 'inherit',
