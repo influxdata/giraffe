@@ -717,6 +717,8 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **tickSuffix**: _string. Optional._ The text that appears after each tick label. Use an empty string if no text is preferred.
 
+  - **gaugeUnit**: _select. Optional._ It allows the user to pick a unit of byte, usd, or time. Automatically set to none. This will change the tick prefix to change to the preset units. If Gauge units is selected lineCount is overwritten and will not respond to inputs.
+
   - **decimalPlaces**: _Object. Optional._
 
     - **isEnforced**: _boolean. Optional. Defaults to false when not included._ Indicates whether the number of decimal places ("**digits**") will be enforced. When **isEnforced** is falsy or omitted, **digits** will be locked to 2 for stat values with a decimal and 0 for stat values that are integers, and the **digits** option will be ignored.
