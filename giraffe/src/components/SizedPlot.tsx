@@ -71,7 +71,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const {margins, config} = env
   const {width, height, showAxes} = config
 
-  const resetDomains = (env) => {
+  const resetDomains = env => {
     env.resetDomains()
     forceUpdate()
   }
@@ -127,7 +127,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const noOp = () => {}
   const singleClick = config.interactionHandlers?.singleClick
-    ? (event) => {
+    ? event => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
         // There's already an annotation-specific handler for this, that'll handle this.
         if (
@@ -137,6 +137,10 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           return
         }
 
+        console.log(
+          '(ACK!!! 53) in singleclick, using plot interaction:',
+          plotInteraction
+        )
         config.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp
@@ -231,7 +235,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
                   table={newTableFromConfig(config)}
                   allowString={true}
                 >
-                  {(latestValue) => (
+                  {latestValue => (
                     <SingleStatLayer
                       stat={latestValue}
                       config={layerConfig as SingleStatLayerConfig}
