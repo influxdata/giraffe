@@ -13,20 +13,19 @@ const MIN_DRAG_DELTA = 3
  * We can compensate for that by having a listener for 'onMouseUpEnd' for the consumer of this event (see Brush)
  *
  * but in order to differentiate between a drag and a click, we need to pair up the mouseDowns with the MouseUps and
- * state which one is 'legal' with the mouseState.
+ * only allow 'legal' mouseUps with the mouseState.
  *
- * a 'mouseDown' is only legal if before it a "mouseUp" happened.
+ * a 'mouseUp' is only legal if it can be paired with a previous "mouseDown".
  *
- * if a 'mouseDown' happens after another 'mouseDown' (without a "mouseUp" in between)
+ * if a 'mouseUp' happens after another 'mouseUp' (without a "mouseDown" in between)
  * then it is not legal and the 'mouseState' will be null.
  *
  * the consumer (Brush, in this example) keeps track of whether or not the drag happens.
  *
- *
  * We need differentiation because:
  *
  * the issue is that when the drag is over, both the onBrushEnd (x or y) and then the
- * onMouseUpEnd handlers get triggered.
+ * onMouseUpEnd handlers get triggered; because of multiple mouseUp events.
  *
  * we want one or the other, not both. (a response to a range drag or to a single click)
  *
@@ -36,18 +35,24 @@ const MIN_DRAG_DELTA = 3
  * most of the time, there are additional onMouseUpEvents after that. (i will call them phantom mouseUps)
  *
  * we only want the first onMouseUp event to be legal.
- * so we check that the previous 'mouseState' was a mouseDownEvent, and if so set the mouse state to a mouseUpHappened.
+ * so we check that the previous 'mouseState' was a mouseDownEvent ('mouseDownHappened'), and if so set the mouse state to a 'mouseUpHappened'.
  *
- * when the next mouseUp Event happens (without a proper mouseUp Event), then mouseState will be set to null
+ * When the next mouseUp Event happens (without a proper, previous matching mouseDown Event),
+ * then mouseState will be set to null
  *
- * when the singleclick happens, it will check if the mouseState says 'mouseDownHappened'; if so; then it is a legal
- * mouseDown with a corresponding mouseUpHappened.
- * if the mouseState is null, then it is a phantom click; so nothing will happen.
+ * When the singleclick happens, it will check if the mouseState says 'mouseDownHappened'; if so; then it is a legal
+ * mouseUp; and the mouseState will be set to 'mouseUpHappened'.  if the mouse state is *anything* other then ''mouseDownHappened', then
+ * the mouseState is set to null.
+ *
+ * the consumer checks the mousestate, and only fires the event if the mousestate is 'mouseUpHappened'
  *
  * and thus we have some history and can pair mouse ups with mouse downs and assure that phantom clicks
  * do not cause wonky behavior.
  *
  * removing the phantom clicks entirely is a MUCH harder problem; because this is a clicker used by people with events.
+ *
+ * we are putting the mouseEvent into the event so that the consumer for the 'onMouseUpEnd' can use it, since that consumer
+ * is a mouseListener and needs the mouseEvent information.
  */
 
 export interface DragEvent {
@@ -58,6 +63,7 @@ export interface DragEvent {
   x: number
   y: number
   mouseState: 'mouseUpHappened' | 'mouseDownHappened' | null
+  mouseEvent?: React.MouseEvent
 }
 
 interface UseDragEventProps {
@@ -71,6 +77,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
   const onMouseDown = useCallback(
     (mouseDownEvent: React.MouseEvent<Element, MouseEvent>) => {
       mouseDownEvent.stopPropagation()
+      console.log('43a-1 CHANGED')
 
       console.log(
         'AA-1 in drag event......(on mouse down...was in frustration land....)'
@@ -95,17 +102,11 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         if (!direction) {
           const dx = Math.abs(x - initialX)
           const dy = Math.abs(y - initialY)
-          console.log('moving......dx & dy', dx, dy)
 
           if (dx >= dy && dx > MIN_DRAG_DELTA) {
             direction = 'x'
-            console.log('direction set to x')
           } else if (dy > MIN_DRAG_DELTA) {
             direction = 'y'
-            console.log('direction set to y')
-          } else {
-            //not really moving....set to notMoving! (none)
-            console.log('no direction here....(none) ack-42!')
           }
         }
 
@@ -129,8 +130,8 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
 
         let mouseState = null
 
-        if (dragEventRef?.current?.mouseState === 'mouseUpHappened') {
-          mouseState = 'mouseDownHappened'
+        if (dragEventRef?.current?.mouseState === 'mouseDownHappened') {
+          mouseState = 'mouseUpHappened'
         }
 
         dragEventRef.current = {
@@ -139,6 +140,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
           mouseState,
           x,
           y,
+          mouseEvent: mouseUpEvent,
         }
 
         forceUpdate()
@@ -156,7 +158,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         x,
         y,
         direction: null,
-        mouseState: 'mouseUpHappened',
+        mouseState: 'mouseDownHappened',
       }
 
       forceUpdate()
