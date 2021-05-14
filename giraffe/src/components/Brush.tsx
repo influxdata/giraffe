@@ -73,10 +73,12 @@ export const Brush: FunctionComponent<Props> = ({
       callback([p0, p1])
     } else {
       console.log('not brushing, but over.... (call onMouseUpEnd here)')
-      console.log('in progress???', event.inProgress)
-      if (event.inProgress ===  'mouseDownHappened') {
+      console.log('in progress???', event.mouseState)
+      if (event.mouseState === 'mouseDownHappened') {
         console.log('DD-1 for reals!')
         //want to elicit an onMouseUpEnd callback here
+
+        //TODO:  remove debounce.  pairing up mouse downs with ups removes the need for one.
         debouncedOnMouseUpEnd()
       } else {
         console.log('EE-1 ......phantom click.  DO NOTHING')

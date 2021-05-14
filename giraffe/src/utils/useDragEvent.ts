@@ -7,29 +7,48 @@ import {useForceUpdate} from './useForceUpdate'
 const MIN_DRAG_DELTA = 3
 
 /**
- * inprogress says that a drag is happening
+ * Because dragging and mouse clicks are non trivial, this implementation of DragEvent consumes the mouseDown event
+ * which means that 'onClick' doesn't work for anything that uses these events.
+ *
+ * We can compensate for that by having a listener for 'onMouseUpEnd' for the consumer of this event (see Brush)
+ *
+ * but in order to differentiate between a drag and a click, we need to pair up the mouseDowns with the MouseUps and
+ * state which one is 'legal' with the mouseState.
+ *
+ * a 'mouseDown' is only legal if before it a "mouseUp" happened.
+ *
+ * if a 'mouseDown' happens after another 'mouseDown' (without a "mouseUp" in between)
+ * then it is not legal and the 'mouseState' will be null.
+ *
+ * the consumer (Brush, in this example) keeps track of whether or not the drag happens.
+ *
+ *
+ * We need differentiation because:
  *
  * the issue is that when the drag is over, both the onBrushEnd (x or y) and then the
- * onMouseUp handlers get triggered.
+ * onMouseUpEnd handlers get triggered.
  *
- * if we are doing a drag with an area, we DON'T want the onMouseUp handler triggered
- * if we are doing just a single click, then a dragEvent is triggered (the mouseDownEvent propagation stopping
- * prevents a normal onClick listener from working; and even if that wasn't there then the onClick would get triggered
- * with each drag; which we DON"T want happening)
+ * we want one or the other, not both. (a response to a range drag or to a single click)
  *
- * but with a single click, the onBrushEnd(x,y) is not triggered; because there is an onMouseMoveEvent
+ * Each time there is a drag, there is ONE mouseDownEvent, then mousemove events, then one MouseUp Event that
+ * triggers the onBrushEnd.
  *
- * so, there is one onMouseDown event, then potentially mousemove events,
- * then the dragEnd happens, and the consuming code can tell if the brushEnd(x or y) needs to be called,
- * but whether it maved or not the onMouseUpEnd is called (it can't tell if its the end of a single click or
- * the end of a zoom.
+ * most of the time, there are additional onMouseUpEvents after that. (i will call them phantom mouseUps)
  *
- * but, since there is only ONE mouseDown, we set inProgress to true when that happens, then after the brushEnd we set it to false
+ * we only want the first onMouseUp event to be legal.
+ * so we check that the previous 'mouseState' was a mouseDownEvent, and if so set the mouse state to a mouseUpHappened.
  *
- * and the onMouseUpEnd checks if inprogress is true (was it already consumed by brushEnd?)
- * if inProgress is true; then call onMouseUpEnd (and set inProgress to false), else do nothing.
-  */
-
+ * when the next mouseUp Event happens (without a proper mouseUp Event), then mouseState will be set to null
+ *
+ * when the singleclick happens, it will check if the mouseState says 'mouseDownHappened'; if so; then it is a legal
+ * mouseDown with a corresponding mouseUpHappened.
+ * if the mouseState is null, then it is a phantom click; so nothing will happen.
+ *
+ * and thus we have some history and can pair mouse ups with mouse downs and assure that phantom clicks
+ * do not cause wonky behavior.
+ *
+ * removing the phantom clicks entirely is a MUCH harder problem; because this is a clicker used by people with events.
+ */
 
 export interface DragEvent {
   type: 'drag' | 'dragend'
@@ -38,7 +57,7 @@ export interface DragEvent {
   direction: 'x' | 'y' | null
   x: number
   y: number
-    inProgress: 'mouseUpHappened' | 'mouseDownHappened' | null
+  mouseState: 'mouseUpHappened' | 'mouseDownHappened' | null
 }
 
 interface UseDragEventProps {
@@ -85,8 +104,8 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
             direction = 'y'
             console.log('direction set to y')
           } else {
-              //not really moving....set to notMoving! (none)
-              console.log('no direction here....(none) ack-42!')
+            //not really moving....set to notMoving! (none)
+            console.log('no direction here....(none) ack-42!')
           }
         }
 
@@ -108,18 +127,16 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         console.log('CC-1 in on mouse up (drag event)')
         const [x, y] = getXYCoords(mouseUpEvent)
 
-          let inProgress = null;
+        let mouseState = null
 
-         
-            if (dragEventRef?.current?.inProgress === 'mouseUpHappened') {
-                inProgress = 'mouseDownHappened'
-            }
-
+        if (dragEventRef?.current?.mouseState === 'mouseUpHappened') {
+          mouseState = 'mouseDownHappened'
+        }
 
         dragEventRef.current = {
           ...dragEventRef.current,
           type: 'dragend',
-            inProgress,
+          mouseState,
           x,
           y,
         }
@@ -139,7 +156,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         x,
         y,
         direction: null,
-          inProgress: 'mouseUpHappened'
+        mouseState: 'mouseUpHappened',
       }
 
       forceUpdate()
