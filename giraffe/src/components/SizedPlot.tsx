@@ -108,10 +108,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
-  const handleOnMouseUpEnd = () => {
-    console.log('here in on handle on mouse up end; ', clampedValueX)
-  }
-
   const handleXBrushEnd = useCallback(
     (xRange: number[]) => {
       console.log('in handleXBrushEnd; range??', xRange)
@@ -149,8 +145,13 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     config.interactionHandlers.hover(plotInteraction)
   }
 
-  const callbacks = {
-    singleClick,
+  const handleOnMouseUpEnd = event => {
+    console.log(
+      '22-UPDATED  here in on handle on mouse up end-ACK-updated; ',
+      clampedValueX,
+      plotInteraction
+    )
+    singleClick(event)
   }
 
   const fullsizeStyle: CSSProperties = {
@@ -192,7 +193,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onMouseUp={callbacks.singleClick}
         onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
         {...dragTargetProps}
