@@ -13,7 +13,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
-  onMouseUpEnd?: () => void
+  onMouseUpEnd?: (mouseEvent: React.MouseEvent) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -28,17 +28,17 @@ export const Brush: FunctionComponent<Props> = ({
 
   // debounce a function WITHOUT ARGS
   // rolling our own, not using lodash b/c lodash is large and not included in giraffe
-  function debounce(func, timeout = 300) {
-    let timer
-    return () => {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        func()
-      }, timeout)
-    }
-  }
+  // function debounce(func, timeout = 300) {
+  //   let timer
+  //   return () => {
+  //     clearTimeout(timer)
+  //     timer = setTimeout(() => {
+  //       func()
+  //     }, timeout)
+  //   }
+  // }
 
-  const debouncedOnMouseUpEnd = debounce(onMouseUpEnd)
+  //const debouncedOnMouseUpEnd = debounce(onMouseUpEnd)
 
   useLayoutEffect(() => {
     if (event?.type !== 'dragend') {
@@ -79,7 +79,7 @@ export const Brush: FunctionComponent<Props> = ({
         //want to elicit an onMouseUpEnd callback here
 
         //TODO:  remove debounce.  pairing up mouse downs with ups removes the need for one.
-        debouncedOnMouseUpEnd()
+        onMouseUpEnd(event?.mouseEvent)
       } else {
         console.log('EE-1 ......phantom click.  DO NOTHING')
       }

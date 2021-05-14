@@ -58,6 +58,7 @@ export interface DragEvent {
   x: number
   y: number
   mouseState: 'mouseUpHappened' | 'mouseDownHappened' | null
+  mouseEvent?: React.MouseEvent
 }
 
 interface UseDragEventProps {
@@ -139,6 +140,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
           mouseState,
           x,
           y,
+          mouseEvent: mouseUpEvent,
         }
 
         forceUpdate()
