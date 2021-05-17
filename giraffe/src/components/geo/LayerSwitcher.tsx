@@ -77,5 +77,7 @@ export const LayerSwitcher: FunctionComponent<Props> = ({
           stylingConfig={stylingConfig}
         />
       )
+    default:
+      return null
   }
 }

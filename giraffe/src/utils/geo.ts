@@ -13,6 +13,7 @@ import {getColor} from '../components/geo/dimensionCalculations'
 // Constants
 export const ZOOM_FRACTION = 8
 export const MARKER_ICON_SIZE = [26, 38]
+export const HEX_DIGIT_NUM = 16
 const circumEarth = 40075016.686
 const CLUSTER_ICON_SIZE = 30
 const CLUSTER_ICON_SIZE_BORDER = 4
@@ -125,6 +126,7 @@ export const formatPointLayerRowInfo = (
   return result
 }
 
+// result is being overwritten in the function below
 const getClusterValues = (cluster, result: number[]): GeoPointMapViewLayer => {
   let clusterRenderingProperties
   for (const marker of cluster._markers) {
@@ -154,7 +156,10 @@ const getClusterValue = (
       return {value: Math.min(...values), properties}
     case ClusterAggregation.mean:
       return {
-        value: values.reduce((a, x) => a + x, 0) / values.length,
+        value:
+          values.length >= 0
+            ? values.reduce((a, x) => a + x, 0) / values.length
+            : 0,
         properties,
       }
     case ClusterAggregation.median:

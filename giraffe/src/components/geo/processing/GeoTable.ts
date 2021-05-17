@@ -1,4 +1,4 @@
-export interface LatLon {
+export interface Coordinates {
   lon: number
   lat: number
 }
@@ -15,7 +15,7 @@ export interface GeoTable {
 
   getRowCount(): number
 
-  getLatLon(index: number): LatLon
+  getLatLon(index: number): Coordinates
 
   getTimeString(index: number): string
 
