@@ -26,30 +26,13 @@ export const Brush: FunctionComponent<Props> = ({
 }) => {
   const isBrushing = event && event.direction
 
-  // debounce a function WITHOUT ARGS
-  // rolling our own, not using lodash b/c lodash is large and not included in giraffe
-  // function debounce(func, timeout = 300) {
-  //   let timer
-  //   return () => {
-  //     clearTimeout(timer)
-  //     timer = setTimeout(() => {
-  //       func()
-  //     }, timeout)
-  //   }
-  // }
-
-  //const debouncedOnMouseUpEnd = debounce(onMouseUpEnd)
-
   useLayoutEffect(() => {
     if (event?.type !== 'dragend') {
-      console.log('the event (not dragend).....(ack-42-1)', event)
+      //console.log('the event (not dragend).....(ack-42-1)', event)
       return
     }
 
-    console.log('the event (dragEnd! :).....(ack-42)', event)
-
     if (isBrushing) {
-      console.log('got to main action! (woohoo!) ACK')
       let callback
       let p0
       let p1
@@ -69,17 +52,18 @@ export const Brush: FunctionComponent<Props> = ({
       if (p1 - p0 < MIN_SELECTION_SIZE) {
         return
       }
-      console.log('brushing now!!!')
+      //console.log('brushing now!!!')
       callback([p0, p1])
     } else {
       if (event.mouseState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
         // because brushing (dragging across an area) has not happened
-        console.log('DD-1 for reals!')
+        //console.log('DD-1 for reals!')
         onMouseUpEnd(event?.mouseEvent)
-      } else {
-        console.log('EE-1 ......phantom click.  DO NOTHING')
       }
+      // else {
+      //   //console.log('EE-1 ......phantom click.  DO NOTHING')
+      // }
     }
   }, [event?.type])
 
