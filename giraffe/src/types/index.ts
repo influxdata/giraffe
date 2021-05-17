@@ -144,6 +144,7 @@ export interface InteractionHandlers {
   doubleClick?: (plotInteraction: InteractionHandlerArguments) => void
   singleClick?: (plotInteraction: InteractionHandlerArguments) => void
   hover?: (plotInteraction: InteractionHandlerArguments) => void
+  onXBrush?: (xRange: number[]) => void
 }
 
 export enum FormatterType {
