@@ -144,6 +144,7 @@ export interface InteractionHandlers {
   doubleClick?: (plotInteraction: InteractionHandlerArguments) => void
   singleClick?: (plotInteraction: InteractionHandlerArguments) => void
   hover?: (plotInteraction: InteractionHandlerArguments) => void
+  onXBrush?: (beginning: number | string, end: number | string) => void
 }
 
 export enum FormatterType {
@@ -881,6 +882,7 @@ export interface AnnotationMark {
   title: string
   description: string
   color: string
+  secondaryColor?: string
   startValue: number
   stopValue: number
   dimension: AnnotationDimension

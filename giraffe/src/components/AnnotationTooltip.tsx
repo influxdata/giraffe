@@ -24,14 +24,18 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     legendFont: font,
     legendFontColor: fontColor,
   } = config
-  const {dimension, startValue} = data || {}
+
+  const {dimension, startValue, stopValue} = data || {}
 
   // move this 15 pixels up to get out of the way of the annotation click target
   const yAxisTooltipOffset = -15
 
+  // setting position to be the average between start and stop;
+  // if it is a ranged annotation then it will appear in the middle,
+  // if it is a point annotation then the math is a no-op.
   const position = {
-    x: dimension === 'x' ? startValue : width,
-    y: dimension === 'y' ? startValue : yAxisTooltipOffset,
+    x: dimension === 'x' ? (startValue + stopValue) / 2 : width,
+    y: dimension === 'y' ? (startValue + stopValue) / 2 : yAxisTooltipOffset,
   } as TooltipPosition
 
   const clampedXOffset = Math.round(

@@ -24,6 +24,7 @@ const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
 
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
   const {config, spec, width, height, hoverX, hoverY, xScale, yScale} = props
+  console.log('ack! 45a: width?', width, hoverX, hoverY)
   const lineWidth = config.lineWidth || 2
   const annotationsPositions = useMemo(
     () => getAnnotationsPositions(spec.annotationData, xScale, yScale),
@@ -35,6 +36,8 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
   if (config.hoverDimension === 'x' || config.hoverDimension === 'y') {
     hoverDimension = config.hoverDimension
   }
+
+  //console.log('in annotation layer, got positions:', annotationsPositions)
 
   const hoverMargin = config.hoverMargin
     ? config.hoverMargin
@@ -82,6 +85,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
             color={annotationData.color}
+            secondaryColor={annotationData.secondaryColor}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
             id={annotationData.id}
@@ -94,6 +98,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
             color={annotationData.color}
+            secondaryColor={annotationData.secondaryColor}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
             id={annotationData.id}

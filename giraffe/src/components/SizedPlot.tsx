@@ -82,18 +82,39 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   }, [env])
 
   const defaultSpec = env.getSpec(0)
+  //console.log('got the default spec: ', defaultSpec)
 
-  const valueX = env.xScale.invert(hoverEvent.x)
-  let clampedValueX = NaN
+  // get me the x value (which might be a timestamp) of a particular
+  // point on the x axis
+  const getValueX = (point, snapToDataPoint = true) => {
+    //get the actual value of the point given:
+    const actual = env.xScale.invert(point)
 
-  if (
-    valueX &&
-    (defaultSpec?.type === SpecTypes.Band ||
-      defaultSpec?.type === SpecTypes.Line)
-  ) {
-    const timestamps = defaultSpec?.lineData[0]?.xs ?? []
-    clampedValueX = nearestTimestamp(timestamps, valueX)
+    // eventually:
+    //check the plot type. if it is not enabled for annotations,
+    // just return what we have now.
+    // if it is enabled, then keep going to get the closest
+    // data point
+
+    if (snapToDataPoint) {
+      return getNearestTimeStamp(actual)
+    }
+    return actual
   }
+
+  const getNearestTimeStamp = valueX => {
+    let nearest = NaN
+    if (valueX && defaultSpec?.type === SpecTypes.Line) {
+      const timestamps = defaultSpec?.lineData[0]?.xs ?? []
+      nearest = nearestTimestamp(timestamps, valueX)
+    }
+    return nearest
+  }
+
+  // need them both (need the actual value for hovering)
+  // so expanding it out
+  const valueX = getValueX(hoverEvent.x, false)
+  const clampedValueX = getNearestTimeStamp(valueX)
 
   const plotInteraction: InteractionHandlerArguments = {
     clampedValueX,
@@ -113,16 +134,23 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
       console.log('in handleXBrushEnd; range??', xRange)
       console.log('plot interaction??', plotInteraction)
 
-      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+      if (userConfig?.interactionHandlers?.onXBrush) {
+        console.log('in my xbrush!!! ack 44a')
+        const beginning = getValueX(xRange[0], true)
+        const end = getValueX(xRange[1], true)
 
-      console.log('new env domain???', env.xDomain)
-      forceUpdate()
+        userConfig.interactionHandlers.onXBrush(beginning, end)
+      } else {
+        env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+        console.log('(normal zooming) new env domain???', env.xDomain)
+        forceUpdate()
+      }
     },
-    [env.xScale, env.innerWidth, forceUpdate]
+    [env.xScale, env.innerWidth, userConfig.interactionHandlers, forceUpdate]
   )
 
   const noOp = () => {}
-  const singleClick = config.interactionHandlers?.singleClick
+  const singleClick = userConfig.interactionHandlers?.singleClick
     ? event => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
         // There's already an annotation-specific handler for this, that'll handle this.
@@ -137,12 +165,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           '(ACK!!! 53) in singleclick, using plot interaction:',
           plotInteraction
         )
-        config.interactionHandlers.singleClick(plotInteraction)
+        userConfig.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp
 
-  if (config.interactionHandlers?.hover) {
-    config.interactionHandlers.hover(plotInteraction)
+  if (userConfig.interactionHandlers?.hover) {
+    userConfig.interactionHandlers.hover(plotInteraction)
   }
 
   const handleOnMouseUpEnd = event => {
