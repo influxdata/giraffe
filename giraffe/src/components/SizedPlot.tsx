@@ -3,8 +3,6 @@ import React, {
   FunctionComponent,
   RefObject,
   useCallback,
-  useEffect,
-  useState,
 } from 'react'
 
 import {Axes} from './Axes'
@@ -62,15 +60,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-  const [interactionHandlers, setInteractionHandlers] = useState(
-    userConfig.interactionHandlers
-  )
-  // This will launch only if propName value has chaged.
-  useEffect(() => {
-    console.log('int handlers changed!', userConfig.interactionHandlers)
-    setInteractionHandlers(userConfig.interactionHandlers)
-  }, [userConfig.interactionHandlers])
-
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
       env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()
@@ -124,9 +113,9 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
       console.log('in handleXBrushEnd; range??', xRange)
       console.log('plot interaction??', plotInteraction)
 
-      if (interactionHandlers?.onXBrush) {
+      if (userConfig?.interactionHandlers?.onXBrush) {
         console.log('in my xbrush!!! ack 44a')
-        interactionHandlers.onXBrush(xRange)
+        userConfig.interactionHandlers.onXBrush(xRange)
       } else {
         env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
         console.log('(normal zooming) new env domain???', env.xDomain)
