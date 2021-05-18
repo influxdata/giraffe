@@ -387,6 +387,58 @@ geo.add('Tracks', () => {
   )
 })
 
+geo.add('Tracks with Custom CSV', () => {
+  const csv = text('Paste CSV here:', '')
+  let table = fromFlux(csv).table
+
+  const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
+  const {
+    speed,
+    trackWidth,
+    randomColors,
+    color1,
+    color2,
+    endStopMarkers,
+    endStopMarkerRadius,
+  } = trackKnobs()
+  const config: Config = {
+    table: table,
+    showAxes: false,
+    layers: [
+      {
+        type: 'geo',
+        lat: latitude,
+        lon: longitude,
+        zoom,
+        allowPanAndZoom,
+        detectCoordinateFields: false,
+        layers: [
+          {
+            type: 'trackMap',
+            speed,
+            trackWidth,
+            randomColors,
+            endStopMarkers,
+            endStopMarkerRadius,
+            colors: randomColors
+              ? undefined
+              : [
+                  {type: 'min', hex: color1},
+                  {type: 'max', hex: color2},
+                ],
+          },
+        ],
+        tileServerConfiguration: osmTileServerConfiguration,
+      },
+    ],
+  }
+  return (
+    <PlotContainer>
+      <Plot config={config} />
+    </PlotContainer>
+  )
+})
+
 geo.add('Layering visualizations', () => {
   const {allowPanAndZoom, latitude, longitude, zoom} = genericKnobs()
   const {

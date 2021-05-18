@@ -1,7 +1,7 @@
 // Types
-import {AbstractGeoTable, CoordinateEncoding} from './AbstractGeoTable'
+import {CoordinateEncoding} from './GeoTable'
 import {Table} from '../../../types'
-import {Track} from './GeoTable'
+import {GeoTable, Track} from './GeoTable'
 
 // Constants
 import {
@@ -10,13 +10,15 @@ import {
   LON_COLUMN,
   TABLE_COLUMN,
 } from './tableProcessing'
+import {getLatLonMixin, getTimeStringMixin} from './mixins'
 
-export class NativeGeoTable extends AbstractGeoTable {
+export class NativeGeoTable implements GeoTable {
+  coordinateEncoding: CoordinateEncoding
   table: Table
   maxRows: number
 
   constructor(table: Table, maxRows: number) {
-    super(getDataEncoding(table))
+    this.coordinateEncoding = getDataEncoding(table)
     this.table = table
     this.maxRows = maxRows
   }
@@ -81,6 +83,10 @@ export class NativeGeoTable extends AbstractGeoTable {
     }
     return result
   }
+
+  getLatLon = getLatLonMixin.bind(this)
+
+  getTimeString = getTimeStringMixin.bind(this)
 }
 
 const getDataEncoding = (table: Table): CoordinateEncoding => {

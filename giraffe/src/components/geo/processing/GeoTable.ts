@@ -1,6 +1,11 @@
-export interface LatLon {
+export interface Coordinates {
   lon: number
   lat: number
+}
+
+export enum CoordinateEncoding {
+  GEO_HASH,
+  FIELDS,
 }
 
 export interface Track extends Array<number[]> {}
@@ -10,7 +15,7 @@ export interface GeoTable {
 
   getRowCount(): number
 
-  getLatLon(index: number): LatLon
+  getLatLon(index: number): Coordinates
 
   getTimeString(index: number): string
 
