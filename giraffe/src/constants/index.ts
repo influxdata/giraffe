@@ -53,13 +53,13 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendBorder: '2px solid #202028',
   legendCrosshairColor: '#31313d',
   legendColorizeRows: true,
+  legendOpacity: 1,
 }
 
 export const STATIC_LEGEND_DEFAULTS: Partial<StaticLegend> = {
   cursor: 'auto',
   heightRatio: 0.2,
   layer: 0,
-  opacity: 1,
   valueAxis: 'y',
   widthRatio: 1.0,
 }
