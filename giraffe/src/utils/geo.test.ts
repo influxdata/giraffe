@@ -1,6 +1,13 @@
 import {InfluxColors} from '../constants/colorSchemes'
-import {GeoQueryVariables, GeoViewLayer} from '../types/geo'
-import {calculateVariableAssignment, getMinZoom, getRowLimit} from './geo'
+import {GeoCircleViewLayer, GeoQueryVariables, GeoViewLayer} from '../types/geo'
+import {
+  calculateVariableAssignment,
+  formatCircleMarkerRowInfo,
+  getMinZoom,
+  getRowLimit,
+} from './geo'
+// import {geoTable} from '../../../stories/src/data/geoLayer'
+import {preprocessData} from '../components/geo/processing/tableProcessing'
 
 const pointMapLayer: GeoViewLayer[] = [
   {
@@ -15,6 +22,19 @@ const pointMapLayer: GeoViewLayer[] = [
     isClustered: false,
   },
 ]
+
+const circleMapLayer: GeoCircleViewLayer = {
+  type: 'circleMap',
+  radiusField: 'magnitude',
+  radiusDimension: {label: 'Magnitude'},
+  colorDimension: {label: 'Duration'},
+  colorField: 'duration',
+  colors: [
+    {type: 'min', hex: '#ff00b3'},
+    {value: 50, hex: '#343aeb'},
+    {type: 'max', hex: '#343aeb'},
+  ],
+}
 
 describe('getMinZoom', () => {
   it('can return minimum zoom for viewing maps', () => {
@@ -54,5 +74,18 @@ describe('calculateVariableAssignment', () => {
     }
 
     expect(variableAssignment).toStrictEqual(expectedVariableAssignment)
+  })
+})
+
+describe('formatCircleMarkerRowInfo', () => {
+  it('can return an array with result containing radius and color fields', () => {
+    const properties = circleMapLayer
+    // const table = geoTable()
+    // const geotable = preprocessData(table, 5000, false)
+    const index = 1
+
+    // const result = formatCircleMarkerRowInfo(properties, geotable, index)
+    // console.log('result', result)
+    // const expectedResult = []
   })
 })
