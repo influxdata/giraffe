@@ -37,7 +37,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
     hoverDimension = config.hoverDimension
   }
 
-  console.log('in annotation layer, got positions:', annotationsPositions)
+  //console.log('in annotation layer, got positions:', annotationsPositions)
 
   const hoverMargin = config.hoverMargin
     ? config.hoverMargin
@@ -85,6 +85,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
             color={annotationData.color}
+            secondaryColor={annotationData.secondaryColor}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
             id={annotationData.id}
@@ -97,6 +98,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             startValue={annotationData.startValue}
             stopValue={annotationData.stopValue}
             color={annotationData.color}
+            secondaryColor={annotationData.secondaryColor}
             strokeWidth={lineWidth}
             pin={annotationData.pin}
             id={annotationData.id}
