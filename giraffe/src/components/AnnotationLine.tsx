@@ -90,7 +90,20 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
   }
 
-  console.log('using xProps...jill-foo 32 aab-1')
+  console.log('using xProps...jill-foo 32 aab-1-2')
+
+  const makeRangeRectangle = () => {
+    return createElement('polygon', {
+      points: `${clampedStart}, 0
+          ${clampedEnd}, 0
+          ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
+          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+      fill: color,
+      style: {cursor: 'pointer'},
+      id: props.id,
+      className: 'giraffe-annotation-click-target',
+    })
+  }
 
   const makePin = () => {
     switch (pin) {
@@ -146,6 +159,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         <line {...xProps} strokeDasharray={'4'} />
         <line {...x2Props} strokeOpacity={0} />
         <line {...x2Props} strokeDasharray={'4'} />
+        {makeRangeRectangle()}
       </>
     )
   }
