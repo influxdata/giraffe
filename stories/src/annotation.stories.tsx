@@ -430,15 +430,32 @@ storiesOf('Annotations', module)
     const x = xKnob(table)
     const y = yKnob(table)
     const currentValue = text(
-      '_value',
+      '_startValue',
       x === VALUE
         ? String(table.getColumn(x, 'number')[0])
         : String(table.getColumn(y, 'number')[0])
     )
-    const currentTime = text('_time', String(Date.now() + 1000 * 60 * 6))
+
+    const endValue = text(
+      '_endValue',
+      x === VALUE
+        ? String(table.getColumn(x, 'number')[0])
+        : String(table.getColumn(y, 'number')[0])
+    )
+
+    const currentTime = text('_startTime', String(Date.now() + 1000 * 60 * 6))
+
+    const endTime = text('_endTime', String(Date.now() + 1000 * 60 * 6))
+
+    console.log('startTime:', currentTime)
+    console.log('endTime: ', endTime)
 
     const columnKey = annotationDimension === 'y' ? y : x
-    const annotationsInput = columnKey === TIME ? currentTime : currentValue
+
+    const annotationsInput =
+      columnKey === TIME
+        ? [currentTime.split(), endTime.split()]
+        : [currentValue.split(), endValue.split()]
 
     const tickFont = tickFontKnob()
     const valueAxisLabel = text('Value Axis Label', 'foo')
@@ -446,6 +463,12 @@ storiesOf('Annotations', module)
     const xScale = xScaleKnob()
     const yScale = yScaleKnob()
     const timeZone = timeZoneKnob('America/Los_Angeles')
+
+    const pinType = select(
+      'pin',
+      {start: 'start', stop: 'stop', none: 'none', circle: 'circle'},
+      'start'
+    )
     const timeFormat = select(
       'Time Format',
       {
@@ -484,19 +507,33 @@ storiesOf('Annotations', module)
       'auto'
     )
 
+    const numAnnotations = annotationsInput[0].length
+    console.log('num annotations??', numAnnotations)
+
+    const annotationLayerData = []
+
+    for (let i = 0; i < numAnnotations; i++) {
+      const startVal = annotationsInput[0][i]
+      const endVal = annotationsInput[1][i]
+      annotationLayerData.push({
+        title: `Hi ${i}`,
+        description: `start/value is ${startVal}`,
+        color: annotationColor,
+        dimension: annotationDimension,
+        startValue: Number(startVal),
+        stopValue: Number(endVal),
+        pin: pinType,
+      })
+    }
+
+    console.log('annotation layer data: ', annotationLayerData)
+
     const layers = [
       {
         type: 'annotation',
         x,
         y,
-        annotations: annotationsInput.split(',').map((valueString: string) => ({
-          title: 'Hi',
-          description: `value is ${valueString}`,
-          color: annotationColor,
-          dimension: annotationDimension,
-          startValue: Number(valueString),
-          stopValue: Number(valueString),
-        })),
+        annotations: annotationLayerData,
         fill,
         hoverDimension,
         hoverMargin: annotationHoverMargin,

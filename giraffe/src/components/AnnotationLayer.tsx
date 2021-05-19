@@ -36,6 +36,8 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
     hoverDimension = config.hoverDimension
   }
 
+  console.log('in annotation layer, got positions:', annotationsPositions)
+
   const hoverMargin = config.hoverMargin
     ? config.hoverMargin
     : ANNOTATION_DEFAULT_HOVER_MARGIN
