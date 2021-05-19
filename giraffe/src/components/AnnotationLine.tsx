@@ -69,33 +69,27 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     )
   }
 
+  // dimension is x:
+  const xProps = {
+    x1: clampedStart,
+    x2: clampedStart,
+    y1: '0',
+    y2: length,
+    stroke: color,
+    strokeWidth,
+    id: props.id,
+    className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
+  }
+
+  console.log('using xProps...jill-foo 32')
+
   return (
     // a separate line layer on the annotation line is required on top,
     // because the dashed line doesnt allow for a continuous click-able target
     // this top layer has an opacity of 0 so is not visible.
     <>
-      <line
-        x1={clampedStart}
-        x2={clampedStart}
-        y1="0"
-        y2={length}
-        stroke={color}
-        strokeOpacity={0}
-        strokeWidth={strokeWidth}
-        id={props.id}
-        className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
-      />
-      <line
-        x1={clampedStart}
-        x2={clampedStart}
-        y1="0"
-        y2={length}
-        stroke={color}
-        strokeWidth={strokeWidth}
-        id={props.id}
-        className={`${styles['giraffe-annotation-hover']} giraffe-annotation-line`}
-        strokeDasharray={'4'}
-      />
+      <line {...xProps} strokeOpacity={0} />
+      <line {...xProps} strokeDasharray={'4'} />
       {pin === 'circle' &&
         createElement('circle', {
           r: PIN_CIRCLE_RADIUS,

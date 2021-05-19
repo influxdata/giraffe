@@ -9,6 +9,7 @@ export const getAnnotationsPositions = (
   const annotationMarks: AnnotationMark[] = []
 
   annotationData.forEach(annotation => {
+    console.log('got an annotation to make a position from....', annotation)
     annotationMarks.push({
       ...annotation,
       pin: annotation.pin || 'none',
@@ -25,6 +26,7 @@ export const getAnnotationsPositions = (
   return annotationMarks
 }
 
+// is the mouse within the start/stop area ? (using the margin)
 const isWithinHoverableArea = (
   startValue: number,
   stopValue: number,
