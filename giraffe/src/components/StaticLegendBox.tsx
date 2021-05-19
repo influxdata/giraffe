@@ -57,6 +57,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
     legendBorder: border,
     legendFont: font,
     legendFontBrightColor: fontBrightColor,
+    legendOpacity: opacity,
   } = configOverride
 
   const layerConfig = configOverride.layers[staticLegendOverride.layer]
@@ -84,7 +85,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         font,
         height: `${height}px`,
         left: 0,
-        opacity: staticLegendOverride.opacity,
+        opacity,
         overflow: 'auto',
         position: 'absolute',
         right: 0,
