@@ -6,6 +6,7 @@ import styles from './AnnotationLine.scss'
 interface AnnotationLineProps {
   dimension: AnnotationDimension
   color: string
+  secondaryColor?: string
   strokeWidth: number
   startValue: number
   stopValue: number
@@ -23,6 +24,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
     dimension,
     color,
+    secondaryColor,
     strokeWidth,
     startValue,
     stopValue,
@@ -90,7 +92,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
   }
 
-  console.log('using xProps...jill-foo 32 aab-1-2')
+  //console.log('using xProps...jill-foo 32 aab-1-2')
 
   const makeRangeRectangle = () => {
     return createElement('polygon', {
@@ -98,27 +100,32 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           ${clampedEnd}, 0
           ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
           ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
-      fill: color,
-      style: {cursor: 'pointer'},
+      fill: secondaryColor,
       id: props.id,
-      className: 'giraffe-annotation-click-target',
     })
   }
 
-  const makePin = () => {
-    switch (pin) {
+  const makePin = (pinType?: string, timeSignature?: number) => {
+    if (!timeSignature) {
+      timeSignature = clampedStart
+    }
+    if (!pinType) {
+      pinType = pin
+    }
+
+    switch (pinType) {
       case 'circle':
         return createElement('circle', {
           r: PIN_CIRCLE_RADIUS,
           fill: color,
-          cx: clampedStart,
+          cx: timeSignature,
           cy: PIN_CIRCLE_RADIUS,
         })
       case 'start':
         return createElement('polygon', {
-          points: `${clampedStart - PIN_TRIANGLE_WIDTH}, 0
-          ${clampedStart + PIN_TRIANGLE_WIDTH}, 0
-          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+          points: `${timeSignature - PIN_TRIANGLE_WIDTH}, 0
+          ${timeSignature + PIN_TRIANGLE_WIDTH}, 0
+          ${timeSignature}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
           style: {cursor: 'pointer'},
           id: props.id,
@@ -126,9 +133,9 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         })
       case 'stop':
         return createElement('polygon', {
-          points: `${clampedStart}, 0 ${clampedStart -
+          points: `${timeSignature}, 0 ${timeSignature -
             PIN_TRIANGLE_WIDTH}, ${PIN_TRIANGLE_HEIGHT /
-            2} ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+            2} ${timeSignature}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
         })
       default:
@@ -160,6 +167,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         <line {...x2Props} strokeOpacity={0} />
         <line {...x2Props} strokeDasharray={'4'} />
         {makeRangeRectangle()}
+        {makePin()}
+        {makePin('start', clampedEnd)}
       </>
     )
   }

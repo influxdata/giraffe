@@ -882,6 +882,7 @@ export interface AnnotationMark {
   title: string
   description: string
   color: string
+  secondaryColor?: string
   startValue: number
   stopValue: number
   dimension: AnnotationDimension
