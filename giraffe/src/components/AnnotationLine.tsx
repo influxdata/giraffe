@@ -20,13 +20,22 @@ const PIN_TRIANGLE_HEIGHT = 8
 const PIN_TRIANGLE_WIDTH = 6
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
-  const {dimension, color, strokeWidth, startValue, length, pin} = props
+  const {
+    dimension,
+    color,
+    strokeWidth,
+    startValue,
+    stopValue,
+    length,
+    pin,
+  } = props
 
   // This prevents blurry sub-pixel rendering as well as clipped lines
   // If the line is at the edge of the canvas the stroke will be half obscured
   // because the stroke is centered on the line. Giving a minimum value
   // prevents the line from being clipped
   const clampedStart = Math.max(1, Math.round(startValue))
+  const clampedEnd = Math.max(1, Math.round(stopValue))
 
   if (dimension === 'y') {
     return (
@@ -81,24 +90,19 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
   }
 
-  console.log('using xProps...jill-foo 32')
+  console.log('using xProps...jill-foo 32 aab-1')
 
-  return (
-    // a separate line layer on the annotation line is required on top,
-    // because the dashed line doesnt allow for a continuous click-able target
-    // this top layer has an opacity of 0 so is not visible.
-    <>
-      <line {...xProps} strokeOpacity={0} />
-      <line {...xProps} strokeDasharray={'4'} />
-      {pin === 'circle' &&
-        createElement('circle', {
+  const makePin = () => {
+    switch (pin) {
+      case 'circle':
+        return createElement('circle', {
           r: PIN_CIRCLE_RADIUS,
           fill: color,
           cx: clampedStart,
           cy: PIN_CIRCLE_RADIUS,
-        })}
-      {pin === 'start' &&
-        createElement('polygon', {
+        })
+      case 'start':
+        return createElement('polygon', {
           points: `${clampedStart - PIN_TRIANGLE_WIDTH}, 0
           ${clampedStart + PIN_TRIANGLE_WIDTH}, 0
           ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
@@ -106,16 +110,45 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           style: {cursor: 'pointer'},
           id: props.id,
           className: 'giraffe-annotation-click-target',
-        })}
-      {pin === 'stop' &&
-        createElement('polygon', {
+        })
+      case 'stop':
+        return createElement('polygon', {
           points: `${clampedStart}, 0 ${clampedStart -
             PIN_TRIANGLE_WIDTH}, ${PIN_TRIANGLE_HEIGHT /
             2} ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
-        })}
-    </>
-  )
+        })
+      default:
+        return null
+    }
+  }
+  if (clampedStart === clampedEnd) {
+    return (
+      // a separate line layer on the annotation line is required on top,
+      // because the dashed line doesnt allow for a continuous click-able target
+      // this top layer has an opacity of 0 so is not visible.
+      <>
+        <line {...xProps} strokeOpacity={0} />
+        <line {...xProps} strokeDasharray={'4'} />
+        {makePin()}
+      </>
+    )
+  } else {
+    //they are different, need two lines here
+    const x2Props = {
+      ...xProps,
+      x1: clampedEnd,
+      x2: clampedEnd,
+    }
+    return (
+      <>
+        <line {...xProps} strokeOpacity={0} />
+        <line {...xProps} strokeDasharray={'4'} />
+        <line {...x2Props} strokeOpacity={0} />
+        <line {...x2Props} strokeDasharray={'4'} />
+      </>
+    )
+  }
 }
 
 export default AnnotationLine
