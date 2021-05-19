@@ -24,14 +24,18 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     legendFont: font,
     legendFontColor: fontColor,
   } = config
-  const {dimension, startValue} = data || {}
 
+  console.log('in annotation tooltip; data??', data)
+
+  const {dimension, startValue, stopValue} = data || {}
+
+  //console.log('in annotaton tool tip:  start/stop:', startValue, stopValue)
   // move this 15 pixels up to get out of the way of the annotation click target
   const yAxisTooltipOffset = -15
 
   const position = {
-    x: dimension === 'x' ? startValue : width,
-    y: dimension === 'y' ? startValue : yAxisTooltipOffset,
+    x: dimension === 'x' ? (startValue + stopValue) / 2 : width,
+    y: dimension === 'y' ? (startValue + stopValue) / 2 : yAxisTooltipOffset,
   } as TooltipPosition
 
   const clampedXOffset = Math.round(
