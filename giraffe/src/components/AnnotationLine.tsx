@@ -19,6 +19,7 @@ interface AnnotationLineProps {
 const PIN_CIRCLE_RADIUS = 4
 const PIN_TRIANGLE_HEIGHT = 8
 const PIN_TRIANGLE_WIDTH = 6
+const LARGER_RADIUS = 6
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
@@ -97,8 +98,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     return createElement('polygon', {
       points: `${clampedStart}, 0
           ${clampedEnd}, 0
-          ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
-          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+          ${clampedEnd}, ${ LARGER_RADIUS*2}
+          ${clampedStart}, ${LARGER_RADIUS*2}`,
       fill: secondaryColor,
       id: props.id,
     })
@@ -114,6 +115,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       fill: secondaryColor,
       id: props.id,
       opacity: 0.1,
+      className: 'giraffe-annotation-click-target',
     })
   }
 
@@ -134,14 +136,13 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           cy: PIN_CIRCLE_RADIUS,
         })
       case 'start':
-        return createElement('polygon', {
-          points: `${timeSignature - PIN_TRIANGLE_WIDTH}, 0
-          ${timeSignature + PIN_TRIANGLE_WIDTH}, 0
-          ${timeSignature}, ${PIN_TRIANGLE_HEIGHT}`,
+        return createElement('circle', {
+         r: LARGER_RADIUS,
           fill: color,
           style: {cursor: 'pointer'},
           id: props.id,
-          className: 'giraffe-annotation-click-target',
+          cx: timeSignature,
+          cy: LARGER_RADIUS,
         })
       case 'stop':
         return createElement('polygon', {
