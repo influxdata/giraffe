@@ -436,10 +436,6 @@ storiesOf('Annotations', module)
     const table = annotationsTable
     const includeLineLayer = boolean('Line Layer', true)
     const annotationColor = text('Annotation color string', 'green')
-    const annotationSecondaryColor = text(
-      'Annotation color string',
-      'lightgreen'
-    )
     const annotationDimension = select(
       'Annotation Dimension',
       {
@@ -541,7 +537,6 @@ storiesOf('Annotations', module)
         title: `Hi ${i}`,
         description: `start/value is ${startVal}`,
         color: annotationColor,
-        secondaryColor: annotationSecondaryColor,
         dimension: annotationDimension,
         startValue: Number(startVal),
         stopValue: Number(endVal),

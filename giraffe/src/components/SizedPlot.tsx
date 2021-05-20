@@ -82,7 +82,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   }, [env])
 
   const defaultSpec = env.getSpec(0)
-  //console.log('got the default spec: ', defaultSpec)
 
   // get me the x value (which might be a timestamp) of a particular
   // point on the x axis
@@ -131,18 +130,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const handleXBrushEnd = useCallback(
     (xRange: number[]) => {
-      console.log('in handleXBrushEnd; range??', xRange)
-      console.log('plot interaction??', plotInteraction)
-
       if (userConfig?.interactionHandlers?.onXBrush) {
-        console.log('in my xbrush!!! ack 44a')
         const beginning = getValueX(xRange[0], true)
         const end = getValueX(xRange[1], true)
-
         userConfig.interactionHandlers.onXBrush(beginning, end)
       } else {
         env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
-        console.log('(normal zooming) new env domain???', env.xDomain)
         forceUpdate()
       }
     },
@@ -160,26 +153,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
         ) {
           return
         }
-
-        console.log(
-          '(ACK!!! 53) in singleclick, using plot interaction:',
-          plotInteraction
-        )
         userConfig.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp
 
   if (userConfig.interactionHandlers?.hover) {
     userConfig.interactionHandlers.hover(plotInteraction)
-  }
-
-  const handleOnMouseUpEnd = event => {
-    console.log(
-      '22-UPDATED  here in on handle on mouse up end-ACK-updated; ',
-      clampedValueX,
-      plotInteraction
-    )
-    singleClick(event)
   }
 
   const fullsizeStyle: CSSProperties = {
@@ -190,12 +169,13 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     bottom: 0,
   }
 
-  // for single clicking; using mouseup, since the onClick only gets through
-  // with a double click; and the hover and drag target does not use a mouse up;
-  // they are:  hover:  mouseEnter, mousemove, mouseleave
-  //            drag target: mouseDown
-  // and every time there is a single click, the mouse goes up.  so using that instead.
-  //console.log("switched to single click..... ACK")
+  // for single clicking:
+  // the brush element we are using uses a dragListener that consumes the
+  // 'onMouseDown'; thus the 'onClick' does not trigger.
+  // the Drag listener keeps track of the difference between a drag and a single click,
+  // and calls our 'singleClick' method when a single click happens.
+  // see useDragEvents.ts (the DragEvent in particular)
+  // in the src/util directory for more details.
 
   return (
     <div
@@ -363,7 +343,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
-          onMouseUpEnd={handleOnMouseUpEnd}
+          onClick={singleClick}
         />
       </div>
     </div>

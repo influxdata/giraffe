@@ -9,7 +9,6 @@ export const getAnnotationsPositions = (
   const annotationMarks: AnnotationMark[] = []
 
   annotationData.forEach(annotation => {
-    console.log('got an annotation to make a position from....', annotation)
     annotationMarks.push({
       ...annotation,
       pin: annotation.pin || 'none',
