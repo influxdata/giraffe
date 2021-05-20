@@ -92,8 +92,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
   }
 
-  //console.log('using xProps...jill-foo 32 aab-1-2')
-
+  // this is the rectangle that goes on top of a range annotation
   const makeRangeRectangle = () => {
     return createElement('polygon', {
       points: `${clampedStart}, 0
@@ -102,6 +101,19 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
       fill: secondaryColor,
       id: props.id,
+    })
+  }
+
+  // this is the overlay that goes over the whole range; with 10% opacity
+  const makeRangeOverlay = () => {
+    return createElement('polygon', {
+      points: `${clampedStart}, ${length}
+          ${clampedEnd}, ${length}
+          ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
+          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+      fill: secondaryColor,
+      id: props.id,
+      opacity: 0.1,
     })
   }
 
@@ -154,7 +166,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       </>
     )
   } else {
-    //they are different, need two lines here
+    // they are different, need two lines here
     const x2Props = {
       ...xProps,
       x1: clampedEnd,
@@ -166,6 +178,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         <line {...xProps} strokeDasharray={'4'} />
         <line {...x2Props} strokeOpacity={0} />
         <line {...x2Props} strokeDasharray={'4'} />
+        {makeRangeOverlay()}
         {makeRangeRectangle()}
         {makePin()}
         {makePin('start', clampedEnd)}
