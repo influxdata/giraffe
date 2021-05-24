@@ -19,7 +19,7 @@ interface AnnotationLineProps {
 const PIN_CIRCLE_RADIUS = 4
 const PIN_TRIANGLE_HEIGHT = 8
 const PIN_TRIANGLE_WIDTH = 6
-const LARGER_RADIUS = 6
+//const LARGER_RADIUS = 6
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
