@@ -17,9 +17,9 @@ interface AnnotationLineProps {
 
 // These could become configurable values
 const PIN_CIRCLE_RADIUS = 4
-const PIN_TRIANGLE_HEIGHT = 8
-const PIN_TRIANGLE_WIDTH = 6
-//const LARGER_RADIUS = 6
+const PIN_TRIANGLE_HEIGHT = 11
+const PIN_TRIANGLE_WIDTH = 9
+const LARGER_RADIUS = 6
 
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
@@ -98,8 +98,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     return createElement('polygon', {
       points: `${clampedStart}, 0
           ${clampedEnd}, 0
-          ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
-          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
+          ${clampedEnd}, ${LARGER_RADIUS * 2}
+          ${clampedStart}, ${LARGER_RADIUS * 2}`,
       fill: secondaryColor,
       id: props.id,
     })
@@ -183,8 +183,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         <line {...x2Props} strokeDasharray={'4'} />
         {makeRangeOverlay()}
         {makeRangeRectangle()}
-        {makePin()}
-        {makePin('start', clampedEnd)}
       </>
     )
   }

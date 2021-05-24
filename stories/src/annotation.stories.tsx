@@ -438,7 +438,7 @@ storiesOf('Annotations', module)
     const annotationColor = text('Annotation color string', 'green')
     const annotationSecondaryColor = text(
       'Annotation color string',
-      'lightgreen'
+      'gray'
     )
     const annotationDimension = select(
       'Annotation Dimension',
