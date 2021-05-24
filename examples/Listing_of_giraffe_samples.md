@@ -42,7 +42,8 @@ https://github.com/ShmuelLotman/giraffe_sample </td><td>  Histogram </td><td> Di
 <td>https://github.com/influxdata/influxdb-client-js/blob/master/examples/giraffe.html </td><td>  Line </td><td>  InfluxDB Client </td><td> HTML </td></tr>
 <tr>
 <td>https://github.com/genehynson/telegraf-giraffe-iss </td><td> Map </td><td> InfluxDB Client </td><td> Node/React </td></tr>
-
+<tr>
+<td>https://github.com/blegesse-git/Mosaic-graph </td><td> Mosaic </td><td> Direct CSV </td><td> Node/React </td></tr>
 
 
 *Map Plot feature is not yet released.
