@@ -13,6 +13,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
+  onClick?: (mouseEvent: React.MouseEvent) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -21,36 +22,45 @@ export const Brush: FunctionComponent<Props> = ({
   height,
   onXBrushEnd,
   onYBrushEnd,
+  onClick,
 }) => {
   const isBrushing = event && event.direction
 
   useLayoutEffect(() => {
-    if (!isBrushing || event.type !== 'dragend') {
+    if (event?.type !== 'dragend') {
       return
     }
 
-    let p0
-    let p1
-    let callback
+    if (isBrushing) {
+      let callback
+      let p0
+      let p1
 
-    if (event.direction === 'x') {
-      p0 = Math.min(event.initialX, event.x)
-      p1 = Math.max(event.initialX, event.x)
-      callback = onXBrushEnd
-    } else if (event.direction === 'y') {
-      p0 = Math.min(event.initialY, event.y)
-      p1 = Math.max(event.initialY, event.y)
-      callback = onYBrushEnd
+      if (event.direction === 'x') {
+        p0 = Math.min(event.initialX, event.x)
+        p1 = Math.max(event.initialX, event.x)
+        callback = onXBrushEnd
+      } else if (event.direction === 'y') {
+        p0 = Math.min(event.initialY, event.y)
+        p1 = Math.max(event.initialY, event.y)
+        callback = onYBrushEnd
+      } else {
+        return
+      }
+
+      if (p1 - p0 < MIN_SELECTION_SIZE) {
+        return
+      }
+      // doing brush now
+      callback([p0, p1])
     } else {
-      return
+      if (event.mouseActionState === 'mouseUpHappened') {
+        // a mouseUpHappened, so this is the equivalent of an 'onClick'
+        // because brushing (dragging across an area) has not happened
+        onClick(event?.mouseEvent)
+      }
     }
-
-    if (p1 - p0 < MIN_SELECTION_SIZE) {
-      return
-    }
-
-    callback([p0, p1])
-  })
+  }, [event?.type])
 
   if (!isBrushing || event.type === 'dragend') {
     return null

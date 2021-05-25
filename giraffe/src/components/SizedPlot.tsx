@@ -60,14 +60,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
-  const handleXBrushEnd = useCallback(
-    (xRange: number[]) => {
-      env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
-      forceUpdate()
-    },
-    [env.xScale, env.innerWidth, forceUpdate]
-  )
-
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
       env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()
@@ -91,17 +83,24 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const defaultSpec = env.getSpec(0)
 
-  const valueX = env.xScale.invert(hoverEvent.x)
-  let clampedValueX = NaN
+  const getNearestDataPoint = graphPoint => {
+    // this gets the actual value of the point given:
+    // (the x value of a particular point on the x axis)
+    const valueX = env.xScale.invert(graphPoint)
 
-  if (
-    valueX &&
-    (defaultSpec?.type === SpecTypes.Band ||
-      defaultSpec?.type === SpecTypes.Line)
-  ) {
-    const timestamps = defaultSpec?.lineData[0]?.xs ?? []
-    clampedValueX = nearestTimestamp(timestamps, valueX)
+    // now find the nearest data point:
+    let nearest = NaN
+    if (valueX && defaultSpec?.type === SpecTypes.Line) {
+      const timestamps = defaultSpec?.lineData[0]?.xs ?? []
+      nearest = nearestTimestamp(timestamps, valueX)
+    }
+    return nearest
   }
+
+  // need them both (need the actual value for hovering)
+  // so expanding it out
+  const valueX = env.xScale.invert(hoverEvent.x)
+  const clampedValueX = getNearestDataPoint(hoverEvent.x)
 
   const plotInteraction: InteractionHandlerArguments = {
     clampedValueX,
@@ -116,8 +115,22 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     },
   }
 
+  const handleXBrushEnd = useCallback(
+    (xRange: number[]) => {
+      if (userConfig?.interactionHandlers?.onXBrush) {
+        const beginning = getNearestDataPoint(xRange[0])
+        const end = getNearestDataPoint(xRange[1])
+        userConfig.interactionHandlers.onXBrush(beginning, end)
+      } else {
+        env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)
+        forceUpdate()
+      }
+    },
+    [env.xScale, env.innerWidth, userConfig.interactionHandlers, forceUpdate]
+  )
+
   const noOp = () => {}
-  const singleClick = config.interactionHandlers?.singleClick
+  const singleClick = userConfig.interactionHandlers?.singleClick
     ? event => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
         // There's already an annotation-specific handler for this, that'll handle this.
@@ -127,17 +140,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
         ) {
           return
         }
-
-        config.interactionHandlers.singleClick(plotInteraction)
+        userConfig.interactionHandlers.singleClick(plotInteraction)
       }
     : noOp
 
-  if (config.interactionHandlers?.hover) {
-    config.interactionHandlers.hover(plotInteraction)
-  }
-
-  const callbacks = {
-    singleClick,
+  if (userConfig.interactionHandlers?.hover) {
+    userConfig.interactionHandlers.hover(plotInteraction)
   }
 
   const fullsizeStyle: CSSProperties = {
@@ -148,11 +156,13 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     bottom: 0,
   }
 
-  // for single clicking; using mouseup, since the onClick only gets through
-  // with a double click; and the hover and drag target does not use a mouse up;
-  // they are:  hover:  mouseEnter, mousemove, mouseleave
-  //            drag target: mouseDown
-  // and every time there is a single click, the mouse goes up.  so using that instead.
+  // for single clicking:
+  // the brush element we are using uses a dragListener that consumes the
+  // 'onMouseDown'; thus the 'onClick' does not trigger.
+  // the Drag listener keeps track of the difference between a drag and a single click,
+  // and calls our 'singleClick' method when a single click happens.
+  // see useDragEvents.ts (the DragEvent in particular)
+  // in the src/util directory for more details.
 
   return (
     <div
@@ -178,7 +188,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'crosshair'}`,
         }}
-        onMouseUp={callbacks.singleClick}
         onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
         {...dragTargetProps}
@@ -321,6 +330,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
+          onClick={singleClick}
         />
       </div>
     </div>

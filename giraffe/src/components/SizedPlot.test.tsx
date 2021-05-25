@@ -102,9 +102,11 @@ describe('the SizedPlot', () => {
             )}
           </MockComponent>
         )
-        // when the user (for real) does a single click, then a mouse up happens.
-        // choose mouse up because the single click listener wasn't triggering except on
-        // double clicks
+
+        // we now do the single-click via the dragging listener,
+        // and pair mouseUps with mouseDowns;
+        // so doing a mousedown then a mouse Up to simulate a single click
+        fireEvent.mouseDown(screen.getByTestId('giraffe-inner-plot'))
         fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
 
         expect(resetSpy).not.toHaveBeenCalled()
