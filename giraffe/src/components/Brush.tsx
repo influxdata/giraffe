@@ -13,7 +13,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[]) => void
   onYBrushEnd: (yRange: number[]) => void
-  onMouseUpEnd?: (mouseEvent: React.MouseEvent) => void
+  onClick?: (mouseEvent: React.MouseEvent) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -22,13 +22,12 @@ export const Brush: FunctionComponent<Props> = ({
   height,
   onXBrushEnd,
   onYBrushEnd,
-  onMouseUpEnd,
+  onClick,
 }) => {
   const isBrushing = event && event.direction
 
   useLayoutEffect(() => {
     if (event?.type !== 'dragend') {
-      //console.log('the event (not dragend).....(ack-42-1)', event)
       return
     }
 
@@ -52,18 +51,14 @@ export const Brush: FunctionComponent<Props> = ({
       if (p1 - p0 < MIN_SELECTION_SIZE) {
         return
       }
-      //console.log('brushing now!!!')
+      // doing brush now
       callback([p0, p1])
     } else {
       if (event.mouseState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
         // because brushing (dragging across an area) has not happened
-        //console.log('DD-1 for reals!')
-        onMouseUpEnd(event?.mouseEvent)
+        onClick(event?.mouseEvent)
       }
-      // else {
-      //   //console.log('EE-1 ......phantom click.  DO NOTHING')
-      // }
     }
   }, [event?.type])
 

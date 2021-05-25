@@ -6,7 +6,6 @@ import styles from './AnnotationLine.scss'
 interface AnnotationLineProps {
   dimension: AnnotationDimension
   color: string
-  secondaryColor?: string
   strokeWidth: number
   startValue: number
   stopValue: number
@@ -19,13 +18,39 @@ interface AnnotationLineProps {
 const PIN_CIRCLE_RADIUS = 4
 const PIN_TRIANGLE_HEIGHT = 11
 const PIN_TRIANGLE_WIDTH = 9
-const LARGER_RADIUS = 6
+const RANGE_HEIGHT = 9
 
+/**
+ *  This class draws the annotation itself.  Another handles the tooltip. (AnnotationTooltip)
+ *
+ *  If the annotation is a 'y' annotation, then this class *only* draws a point annotation
+ *  (a single dotted line) (at the start value) with an optional pin on the right.
+ *
+ *  If it the annotation is an 'x' annotation, if the startTime === stopTime
+ *  then this class draws a single dotted line, with an optional pin at the top
+ *
+ *  If startTime < stopTime
+ *  then this draws a line at the start, another at the end, with a 'hat' over it that is
+ *  entirely clickable; along with an overlay with 10% opacity that is NOT clickable.
+ *
+ *  The overlay is not clickable to allow overlapping point annotations.
+ *  If there are two overlapping range annotations (or any type of annotation, range or point)
+ *  then the annotation that was drawn last is clickable.  (they stack).  They are drawn in the order that
+ *  the annotations are created; not in their time order.
+ *
+ *  To make any element of the annotation line clickable, then that element needs to have the 'props.id' assigned to its id,
+ *  and (nice to have, but not required for clicking, but this shows the user that it
+ *  is clickable (affordance)), the style should get changed;
+ *
+ *  add to the 'createElement' object:
+ *
+ *  style: {cursor: 'pointer'}
+ *
+ * */
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
     dimension,
     color,
-    secondaryColor,
     strokeWidth,
     startValue,
     stopValue,
@@ -82,41 +107,33 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   }
 
   // dimension is x:
-  const xProps = {
-    x1: clampedStart,
-    x2: clampedStart,
-    y1: '0',
-    y2: length,
-    stroke: color,
-    strokeWidth,
-    id: props.id,
-    className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
-  }
 
   // this is the rectangle that goes on top of a range annotation
+  // make it *all* click to edit
   const makeRangeRectangle = () => {
+    const pixelMargin = 1
+
     return createElement('polygon', {
-      points: `${clampedStart}, 0
-          ${clampedEnd}, 0
-          ${clampedEnd}, ${LARGER_RADIUS * 2}
-          ${clampedStart}, ${LARGER_RADIUS * 2}`,
-      fill: secondaryColor,
+      points: `${clampedStart - pixelMargin}, 0
+          ${clampedEnd + pixelMargin}, 0
+          ${clampedEnd + pixelMargin}, ${RANGE_HEIGHT}
+          ${clampedStart - pixelMargin}, ${RANGE_HEIGHT}`,
+      fill: color,
       id: props.id,
+      style: {cursor: 'pointer'},
     })
   }
 
   // this is the overlay that goes over the whole range; with 10% opacity
+  // do not make this click to edit, b/c then cannot have overlapping point annotations
   const makeRangeOverlay = () => {
     return createElement('polygon', {
       points: `${clampedStart}, ${length}
           ${clampedEnd}, ${length}
-          ${clampedEnd}, ${PIN_TRIANGLE_HEIGHT}
-          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
-      fill: secondaryColor,
-      id: props.id,
+          ${clampedEnd}, ${RANGE_HEIGHT}
+          ${clampedStart}, ${RANGE_HEIGHT}`,
+      fill: color,
       opacity: 0.1,
-      style: {cursor: 'pointer'},
-      className: 'giraffe-annotation-click-target',
     })
   }
 
@@ -157,7 +174,20 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         return null
     }
   }
+
+  const xProps = {
+    x1: clampedStart,
+    x2: clampedStart,
+    y1: '0',
+    y2: length,
+    stroke: color,
+    strokeWidth,
+    id: props.id,
+    className: `${styles['giraffe-annotation-hover']} giraffe-annotation-line`,
+  }
+
   if (clampedStart === clampedEnd) {
+    // point annotation:
     return (
       // a separate line layer on the annotation line is required on top,
       // because the dashed line doesnt allow for a continuous click-able target
@@ -169,7 +199,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       </>
     )
   } else {
-    // they are different, need two lines here
+    // they are different (range annotation) , need two lines here
     const x2Props = {
       ...xProps,
       x1: clampedEnd,

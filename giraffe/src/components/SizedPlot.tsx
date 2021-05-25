@@ -161,10 +161,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     userConfig.interactionHandlers.hover(plotInteraction)
   }
 
-  // const handleOnMouseUpEnd = event => {
-  //   singleClick(event)
-  // }
-
   const fullsizeStyle: CSSProperties = {
     position: 'absolute',
     top: 0,
@@ -173,11 +169,13 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     bottom: 0,
   }
 
-  // for single clicking; using mouseup, since the onClick only gets through
-  // with a double click; and the hover and drag target does not use a mouse up;
-  // they are:  hover:  mouseEnter, mousemove, mouseleave
-  //            drag target: mouseDown
-  // and every time there is a single click, the mouse goes up.  so using that instead.
+  // for single clicking:
+  // the brush element we are using uses a dragListener that consumes the
+  // 'onMouseDown'; thus the 'onClick' does not trigger.
+  // the Drag listener keeps track of the difference between a drag and a single click,
+  // and calls our 'singleClick' method when a single click happens.
+  // see useDragEvents.ts (the DragEvent in particular)
+  // in the src/util directory for more details.
 
   return (
     <div
@@ -345,7 +343,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
-          onMouseUpEnd={singleClick}
+          onClick={singleClick}
         />
       </div>
     </div>
