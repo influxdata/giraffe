@@ -125,7 +125,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   }
 
   // this is the overlay that goes over the whole range; with 10% opacity
-  // do not make this click to edit, b/c then cannot have overlapping point annotations
+  // making this click to edit will make overlapping point annotations impossible
   const makeRangeOverlay = () => {
     return createElement('polygon', {
       points: `${clampedStart}, ${length}
@@ -137,10 +137,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     })
   }
 
-  const makePin = (pinType?: string, timeSignature?: number) => {
-    if (!timeSignature) {
-      timeSignature = clampedStart
-    }
+  const makePin = (pinType?: string) => {
     if (!pinType) {
       pinType = pin
     }
@@ -150,14 +147,14 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         return createElement('circle', {
           r: PIN_CIRCLE_RADIUS,
           fill: color,
-          cx: timeSignature,
+          cx: clampedStart,
           cy: PIN_CIRCLE_RADIUS,
         })
       case 'start':
         return createElement('polygon', {
-          points: `${timeSignature - PIN_TRIANGLE_WIDTH}, 0
-          ${timeSignature + PIN_TRIANGLE_WIDTH}, 0
-          ${timeSignature}, ${PIN_TRIANGLE_HEIGHT}`,
+          points: `${clampedStart - PIN_TRIANGLE_WIDTH}, 0
+          ${clampedStart + PIN_TRIANGLE_WIDTH}, 0
+          ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
           style: {cursor: 'pointer'},
           id: props.id,
@@ -165,9 +162,9 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         })
       case 'stop':
         return createElement('polygon', {
-          points: `${timeSignature}, 0 ${timeSignature -
+          points: `${clampedStart}, 0 ${clampedStart -
             PIN_TRIANGLE_WIDTH}, ${PIN_TRIANGLE_HEIGHT /
-            2} ${timeSignature}, ${PIN_TRIANGLE_HEIGHT}`,
+            2} ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
           fill: color,
         })
       default:
@@ -198,24 +195,24 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         {makePin()}
       </>
     )
-  } else {
-    // they are different (range annotation) , need two lines here
-    const x2Props = {
-      ...xProps,
-      x1: clampedEnd,
-      x2: clampedEnd,
-    }
-    return (
-      <>
-        <line {...xProps} strokeOpacity={0} />
-        <line {...xProps} strokeDasharray={'4'} />
-        <line {...x2Props} strokeOpacity={0} />
-        <line {...x2Props} strokeDasharray={'4'} />
-        {makeRangeOverlay()}
-        {makeRangeRectangle()}
-      </>
-    )
   }
+
+  // they are different (range annotation) , need two lines here
+  const x2Props = {
+    ...xProps,
+    x1: clampedEnd,
+    x2: clampedEnd,
+  }
+  return (
+    <>
+      <line {...xProps} strokeOpacity={0} />
+      <line {...xProps} strokeDasharray={'4'} />
+      <line {...x2Props} strokeOpacity={0} />
+      <line {...x2Props} strokeDasharray={'4'} />
+      {makeRangeOverlay()}
+      {makeRangeRectangle()}
+    </>
+  )
 }
 
 export default AnnotationLine

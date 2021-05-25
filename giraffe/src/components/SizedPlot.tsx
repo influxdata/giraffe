@@ -83,25 +83,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const defaultSpec = env.getSpec(0)
 
-  // get me the x value (which might be a timestamp) of a particular
-  // point on the x axis
-  const getValueX = (point, snapToDataPoint = true) => {
-    //get the actual value of the point given:
-    const actual = env.xScale.invert(point)
+  const getNearestDataPoint = graphPoint => {
+    // this gets the actual value of the point given:
+    // (the x value of a particular point on the x axis)
+    const valueX = env.xScale.invert(graphPoint)
 
-    // eventually:
-    //check the plot type. if it is not enabled for annotations,
-    // just return what we have now.
-    // if it is enabled, then keep going to get the closest
-    // data point
-
-    if (snapToDataPoint) {
-      return getNearestTimeStamp(actual)
-    }
-    return actual
-  }
-
-  const getNearestTimeStamp = valueX => {
+    // now find the nearest data point:
     let nearest = NaN
     if (valueX && defaultSpec?.type === SpecTypes.Line) {
       const timestamps = defaultSpec?.lineData[0]?.xs ?? []
@@ -112,8 +99,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   // need them both (need the actual value for hovering)
   // so expanding it out
-  const valueX = getValueX(hoverEvent.x, false)
-  const clampedValueX = getNearestTimeStamp(valueX)
+  const valueX = env.xScale.invert(hoverEvent.x)
+  const clampedValueX = getNearestDataPoint(hoverEvent.x)
 
   const plotInteraction: InteractionHandlerArguments = {
     clampedValueX,
@@ -131,8 +118,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const handleXBrushEnd = useCallback(
     (xRange: number[]) => {
       if (userConfig?.interactionHandlers?.onXBrush) {
-        const beginning = getValueX(xRange[0], true)
-        const end = getValueX(xRange[1], true)
+        const beginning = getNearestDataPoint(xRange[0])
+        const end = getNearestDataPoint(xRange[1])
         userConfig.interactionHandlers.onXBrush(beginning, end)
       } else {
         env.xDomain = rangeToDomain(xRange, env.xScale, env.innerWidth)

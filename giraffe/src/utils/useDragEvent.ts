@@ -13,12 +13,12 @@ const MIN_DRAG_DELTA = 3
  * We can compensate for that by having a listener for 'onMouseUpEnd' for the consumer of this event (see Brush)
  *
  * But in order to differentiate between a drag and a click, we need to pair up the mouseDowns with the MouseUps and
- * only allow 'legal' mouseUps with the mouseState.
+ * only allow 'legal' mouseUps with the mouseActionState.
  *
  * A 'mouseUp' is only legal if it can be paired with a previous "mouseDown".
  *
  * If a 'mouseUp' happens after another 'mouseUp' (without a "mouseDown" in between)
- * then it is not legal and the 'mouseState' will be null.
+ * then it is not legal and the 'mouseActionState' will be null.
  *
  * The consumer (Brush, in this example) keeps track of whether or not the drag happens.
  *
@@ -35,16 +35,16 @@ const MIN_DRAG_DELTA = 3
  * Most of the time, there are additional onMouseUpEvents after that. (we will call them phantom mouseUps)
  *
  * We only want the first onMouseUp event to be legal.
- * So we check that the previous 'mouseState' was a mouseDownEvent ('mouseDownHappened'), and if so set the mouse state to a 'mouseUpHappened'.
+ * So we check that the previous 'mouseActionState' was a mouseDownEvent ('mouseDownHappened'), and if so set the mouse state to a 'mouseUpHappened'.
  *
  * When the next mouseUp Event happens (without a proper, previous matching mouseDown Event),
- * then mouseState will be set to null.
+ * then mouseActionState will be set to null.
  *
- * When the singleclick happens, it will check if the mouseState says 'mouseDownHappened'; if so; then it is a legal
- * mouseUp; and the mouseState will be set to 'mouseUpHappened'.  If the mouse state is *anything* other then ''mouseDownHappened', then
- * the mouseState is set to null.
+ * When the singleclick happens, it will check if the mouseActionState says 'mouseDownHappened'; if so; then it is a legal
+ * mouseUp; and the mouseActionState will be set to 'mouseUpHappened'.  If the mouse state is *anything* other then ''mouseDownHappened', then
+ * the mouseActionState is set to null.
  *
- * The consumer checks the mouseState, and only fires the event if the mouseState is 'mouseUpHappened'
+ * The consumer checks the mouseActionState, and only fires the event if the mouseActionState is 'mouseUpHappened'
  *
  * And thus we have some history and can pair mouse ups with mouse downs and assure that phantom clicks
  * do not cause wonky behavior.
@@ -62,7 +62,7 @@ export interface DragEvent {
   direction: 'x' | 'y' | null
   x: number
   y: number
-  mouseState: 'mouseUpHappened' | 'mouseDownHappened' | null
+  mouseActionState: 'mouseUpHappened' | 'mouseDownHappened' | null
   mouseEvent?: React.MouseEvent
 }
 
@@ -120,16 +120,16 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
 
         const [x, y] = getXYCoords(mouseUpEvent)
 
-        let mouseState = null
+        let mouseActionState = null
 
-        if (dragEventRef?.current?.mouseState === 'mouseDownHappened') {
-          mouseState = 'mouseUpHappened'
+        if (dragEventRef?.current?.mouseActionState === 'mouseDownHappened') {
+          mouseActionState = 'mouseUpHappened'
         }
 
         dragEventRef.current = {
           ...dragEventRef.current,
           type: 'dragend',
-          mouseState,
+          mouseActionState,
           x,
           y,
           mouseEvent: mouseUpEvent,
@@ -150,7 +150,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         x,
         y,
         direction: null,
-        mouseState: 'mouseDownHappened',
+        mouseActionState: 'mouseDownHappened',
       }
 
       forceUpdate()

@@ -54,7 +54,7 @@ export const Brush: FunctionComponent<Props> = ({
       // doing brush now
       callback([p0, p1])
     } else {
-      if (event.mouseState === 'mouseUpHappened') {
+      if (event.mouseActionState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
         // because brushing (dragging across an area) has not happened
         onClick(event?.mouseEvent)
