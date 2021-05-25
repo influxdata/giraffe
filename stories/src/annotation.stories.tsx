@@ -211,7 +211,7 @@ storiesOf('Annotations', module)
     const doubleClickHandler = plotInteraction => {
       // eslint-disable-next-line
       console.log(
-        'This double click function is overrdien! Returned arguments:',
+        'This double click function is overridden! Returned arguments:',
         plotInteraction
       )
     }
@@ -465,9 +465,6 @@ storiesOf('Annotations', module)
 
     const endTime = text('_endTime', String(Date.now() + 1000 * 60 * 6))
 
-    console.log('startTime:', currentTime)
-    console.log('endTime: ', endTime)
-
     const columnKey = annotationDimension === 'y' ? y : x
 
     const annotationsInput =
@@ -526,7 +523,6 @@ storiesOf('Annotations', module)
     )
 
     const numAnnotations = annotationsInput[0].length
-    console.log('num annotations??', numAnnotations)
 
     const annotationLayerData = []
 
@@ -543,8 +539,6 @@ storiesOf('Annotations', module)
         pin: pinType,
       })
     }
-
-    console.log('annotation layer data: ', annotationLayerData)
 
     const layers = [
       {
