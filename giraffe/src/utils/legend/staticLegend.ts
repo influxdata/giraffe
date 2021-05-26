@@ -138,17 +138,17 @@ export const convertLineSpec = (
   }
 
   const fillColumns = columnKeys.map(key => {
-    const column: string[] = sortOrder.map(index => {
-      const columnName = mappings[`${fillIndices[index]}`]
-      const fillFormatter = getColumnFormatter(columnName)
-      return fillFormatter(columnName[key])
+    const fillColumn: string[] = sortOrder.map(index => {
+      const columns = mappings[`${fillIndices[index]}`]
+      const fillFormatter = getColumnFormatter(key)
+      return fillFormatter(columns[key])
     })
 
     return {
       key,
       name: key,
       type: spec.table.getColumnType(key),
-      values: column,
+      values: fillColumn,
       colors,
     }
   })
