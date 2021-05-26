@@ -139,9 +139,9 @@ export const convertLineSpec = (
 
   const fillColumns = columnKeys.map(key => {
     const column: string[] = sortOrder.map(index => {
-      const columnValue = mappings[`${fillIndices[index]}`]
-      const fillFormatter = getColumnFormatter(columnValue)
-      return fillFormatter(columnValue[key])
+      const columnName = mappings[`${fillIndices[index]}`]
+      const fillFormatter = getColumnFormatter(columnName)
+      return fillFormatter(columnName[key])
     })
 
     return {
