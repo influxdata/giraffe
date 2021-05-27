@@ -17,6 +17,7 @@ export class NativeGeoTable implements GeoTable {
   coordinateEncoding: CoordinateEncoding
   table: Table
   maxRows: number
+  latLonColumns: LatLonColumns
 
   constructor(
     table: Table,
@@ -27,6 +28,7 @@ export class NativeGeoTable implements GeoTable {
     this.coordinateEncoding = getDataEncoding(table, latLonColumns, s2Column)
     this.table = table
     this.maxRows = maxRows
+    this.latLonColumns = latLonColumns
   }
 
   getRowCount() {

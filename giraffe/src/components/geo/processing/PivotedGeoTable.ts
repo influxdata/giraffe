@@ -32,6 +32,9 @@ export class PivotedGeoTable implements GeoTable {
     const seriesKeyColumns = seriesKeyNames.map(key => table.getColumn(key))
     const fieldColumn = table.getColumn(FIELD_COLUMN, 'string')
     const valueColumn = table.getColumn(VALUE_COLUMN)
+
+    this.latLonColumns = latLonColumns
+
     let lonFound = false,
       latFound = false
     // TODO: Palak: do we need this check here?
