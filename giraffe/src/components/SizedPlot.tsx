@@ -76,6 +76,11 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     forceUpdate()
   }
 
+  // spec types applicable to annotations
+  const annotationSpecTypes = new Set<string>()
+  annotationSpecTypes.add(SpecTypes.Line)
+  annotationSpecTypes.add(SpecTypes.Band)
+
   const memoizedResetDomains = useCallback(() => {
     env.resetDomains()
     forceUpdate()
@@ -95,8 +100,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     let nearest = NaN
     if (
       valueX &&
-      (defaultSpec?.type === SpecTypes.Line ||
-        defaultSpec?.type === SpecTypes.Band)
+      'lineData' in defaultSpec &&
+      annotationSpecTypes.has(defaultSpec.type)
     ) {
       const timestamps = defaultSpec?.lineData[0]?.xs ?? []
       nearest = nearestTimestamp(timestamps, valueX)
