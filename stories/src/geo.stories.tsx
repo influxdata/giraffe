@@ -1,6 +1,13 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {boolean, color, number, select, withKnobs} from '@storybook/addon-knobs'
+import {
+  boolean,
+  color,
+  number,
+  select,
+  withKnobs,
+  text,
+} from '@storybook/addon-knobs'
 
 import {Config, Plot} from '../../giraffe/src'
 
