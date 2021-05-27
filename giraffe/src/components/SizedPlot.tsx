@@ -76,6 +76,12 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     forceUpdate()
   }
 
+  // spec types applicable to annotations.
+  // add to this set as new plot types are added.
+  const annotationSpecTypes = new Set<string>()
+  annotationSpecTypes.add(SpecTypes.Line)
+  annotationSpecTypes.add(SpecTypes.Band)
+
   const memoizedResetDomains = useCallback(() => {
     env.resetDomains()
     forceUpdate()
@@ -88,17 +94,15 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     // (the x value of a particular point on the x axis)
     const valueX = env.xScale.invert(graphPoint)
 
-    // NOTE:  every time a new plot type is added to annotations,
-    // need to add the type below in the 'if' statement clause
-
     // now find the nearest data point:
     let nearest = NaN
     if (
       valueX &&
-      (defaultSpec?.type === SpecTypes.Line ||
-        defaultSpec?.type === SpecTypes.Band)
+      defaultSpec &&
+      'lineData' in defaultSpec &&
+      annotationSpecTypes.has(defaultSpec.type)
     ) {
-      const timestamps = defaultSpec?.lineData[0]?.xs ?? []
+      const timestamps = defaultSpec.lineData[0]?.xs ?? []
       nearest = nearestTimestamp(timestamps, valueX)
     }
     return nearest
