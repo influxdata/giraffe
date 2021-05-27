@@ -95,8 +95,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
     let nearest = NaN
     if (
       valueX &&
-      (defaultSpec.type === SpecTypes.Line ||
-        defaultSpec.type === SpecTypes.Band)
+      (defaultSpec?.type === SpecTypes.Line ||
+        defaultSpec?.type === SpecTypes.Band)
     ) {
       const timestamps = defaultSpec?.lineData[0]?.xs ?? []
       nearest = nearestTimestamp(timestamps, valueX)
