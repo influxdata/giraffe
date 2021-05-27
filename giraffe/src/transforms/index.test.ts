@@ -4,9 +4,9 @@ import {NINETEEN_EIGHTY_FOUR} from '../constants/colorSchemes'
 describe('getBandColorScale', () => {
   const COLOR_TEST_LIMIT = 1000
 
-  it('uses the same color when bandIndexMap has no rowIndices', () => {
+  it('uses the same color when bandLineMap has no rowLines', () => {
     const scale = getBandColorScale(
-      {rowIndices: [], lowerIndices: [], upperIndices: []},
+      {rowLines: [], lowerLines: [], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
 
@@ -23,9 +23,9 @@ describe('getBandColorScale', () => {
     expect(scale(0)).toEqual(scale(100))
   })
 
-  it('uses more than 1 color when bandIndexMap.rowIndices has length greater than 0', () => {
+  it('uses more than 1 color when bandLineMap.rowLines has length greater than 0', () => {
     let scale = getBandColorScale(
-      {rowIndices: [0], lowerIndices: [], upperIndices: []},
+      {rowLines: [0], lowerLines: [], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
     let colorsTracker = {}
@@ -38,7 +38,7 @@ describe('getBandColorScale', () => {
     expect(Object.keys(colorsTracker).length).toBeGreaterThan(1)
 
     scale = getBandColorScale(
-      {rowIndices: [0, 1], lowerIndices: [], upperIndices: []},
+      {rowLines: [0, 1], lowerLines: [], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}
@@ -51,7 +51,7 @@ describe('getBandColorScale', () => {
     expect(Object.keys(colorsTracker).length).toBeGreaterThan(1)
 
     scale = getBandColorScale(
-      {rowIndices: [0, 1, 2, 3], lowerIndices: [], upperIndices: []},
+      {rowLines: [0, 1, 2, 3], lowerLines: [], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}
@@ -64,9 +64,9 @@ describe('getBandColorScale', () => {
     expect(Object.keys(colorsTracker).length).toBeGreaterThan(1)
   })
 
-  it('upper and lower indicies have no effect on the colors when rowIndices are empty', () => {
+  it('upper and lower indicies have no effect on the colors when rowLines are empty', () => {
     let scale = getBandColorScale(
-      {rowIndices: [], lowerIndices: [0, 1], upperIndices: []},
+      {rowLines: [], lowerLines: [0, 1], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
 
@@ -80,7 +80,7 @@ describe('getBandColorScale', () => {
     const lowerWithoutUpper = Object.keys(colorsTracker).length
 
     scale = getBandColorScale(
-      {rowIndices: [], lowerIndices: [], upperIndices: [2, 3]},
+      {rowLines: [], lowerLines: [], upperLines: [2, 3]},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}
@@ -93,7 +93,7 @@ describe('getBandColorScale', () => {
     const upperWithoutLower = Object.keys(colorsTracker).length
 
     scale = getBandColorScale(
-      {rowIndices: [], lowerIndices: [0, 1], upperIndices: [2, 3]},
+      {rowLines: [], lowerLines: [0, 1], upperLines: [2, 3]},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}
@@ -111,9 +111,9 @@ describe('getBandColorScale', () => {
     ).toEqual(true)
   })
 
-  it('upper and lower indicies have no effect on the colors when rowIndices are not empty', () => {
+  it('upper and lower indicies have no effect on the colors when rowLines are not empty', () => {
     let scale = getBandColorScale(
-      {rowIndices: [4, 5], lowerIndices: [0, 1], upperIndices: []},
+      {rowLines: [4, 5], lowerLines: [0, 1], upperLines: []},
       NINETEEN_EIGHTY_FOUR
     )
 
@@ -127,7 +127,7 @@ describe('getBandColorScale', () => {
     const lowerWithoutUpper = Object.keys(colorsTracker).length
 
     scale = getBandColorScale(
-      {rowIndices: [4, 5], lowerIndices: [], upperIndices: [2, 3]},
+      {rowLines: [4, 5], lowerLines: [], upperLines: [2, 3]},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}
@@ -140,7 +140,7 @@ describe('getBandColorScale', () => {
     const upperWithoutLower = Object.keys(colorsTracker).length
 
     scale = getBandColorScale(
-      {rowIndices: [4, 5], lowerIndices: [0, 1], upperIndices: [2, 3]},
+      {rowLines: [4, 5], lowerLines: [0, 1], upperLines: [2, 3]},
       NINETEEN_EIGHTY_FOUR
     )
     colorsTracker = {}

@@ -45,7 +45,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
   const simplifiedLineData = useMemo(
     () =>
       simplifyLineData(
-        alignMinMaxWithBand(spec.lineData, spec.bandIndexMap),
+        alignMinMaxWithBand(spec.lineData, spec.bandLineMap),
         xScale,
         yScale
       ),
@@ -53,7 +53,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
   )
 
   const drawBandsOptions = {
-    bandIndexMap: spec.bandIndexMap,
+    bandLineMap: spec.bandLineMap,
     interpolation: config.interpolation,
     lineData: simplifiedLineData,
     lineWidth: config.lineWidth,
@@ -87,7 +87,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
     hoverY,
     spec.lineData,
     spec.table.getColumn(FILL, 'number'),
-    spec.bandIndexMap,
+    spec.bandLineMap,
     width,
     height
   )

@@ -9,7 +9,7 @@ import {
   Scale,
   NumericColumnData,
   SymbolType,
-  BandIndexMap,
+  BandLineMap,
 } from '../types'
 import {ALL_SYMBOL_TYPES, BAND_COLOR_SCALE_CONSTANT} from '../constants'
 
@@ -85,11 +85,11 @@ export const getNominalColorScale = (
   createNominalColorScale(groupMap.mappings.length, colors)
 
 export const getBandColorScale = (
-  bandIndexMap: BandIndexMap,
+  bandLineMap: BandLineMap,
   colors: string[]
 ): Scale<number, string> =>
   createNominalColorScale(
-    bandIndexMap.rowIndices.length * BAND_COLOR_SCALE_CONSTANT,
+    bandLineMap.rowLines.length * BAND_COLOR_SCALE_CONSTANT,
     colors
   )
 

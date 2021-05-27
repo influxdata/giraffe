@@ -4,16 +4,15 @@ import {useRef, FunctionComponent} from 'react'
 import {Tooltip} from './Tooltip'
 import {Props as BandLayerProps} from './BandLayer'
 import {FILL} from '../constants/columnKeys'
-import {LineHoverDimension, LineData} from '../types'
+import {BandLineMap, LineHoverDimension, LineData} from '../types'
 import {getBandTooltipData} from '../utils/legend/tooltip'
 import {getBandHoverPoints} from '../utils/bandHover'
 import {drawLines} from '../utils/drawLines'
 import {drawLineHoverData} from '../utils/drawLineHoverData'
 import {useCanvas} from '../utils/useCanvas'
-import {BandHoverIndices} from '../utils/bandHover'
 
 interface Props extends BandLayerProps {
-  bandHoverIndices: BandHoverIndices
+  bandHoverIndices: BandLineMap
   dimension: LineHoverDimension
   simplifiedLineData: LineData
 }
@@ -47,11 +46,11 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
   const yColData = spec.table.getColumn(yColKey, 'number')
   const groupColData = spec.table.getColumn(FILL, 'number')
 
-  const {rowIndices} = bandHoverIndices
+  const {rowLines} = bandHoverIndices
 
   const points = getBandHoverPoints(
     spec.table,
-    rowIndices,
+    rowLines,
     xColKey,
     yColKey,
     xScale,
@@ -63,19 +62,19 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
 
   const crosshairX =
     dimension === 'xy' || dimension === 'x'
-      ? xScale(xColData[rowIndices[0]])
+      ? xScale(xColData[rowLines[0]])
       : null
 
   const crosshairY =
     dimension === 'xy' || dimension === 'y'
-      ? yScale(yColData[rowIndices[0]])
+      ? yScale(yColData[rowLines[0]])
       : null
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useCanvas(canvasRef, width, height, context => {
     if (dimension === 'xy') {
-      const groupKey = groupColData[rowIndices[0]]
+      const groupKey = groupColData[rowLines[0]]
       const lineDatum = simplifiedLineData[groupKey]
 
       // Highlight the line that the single hovered point belongs to

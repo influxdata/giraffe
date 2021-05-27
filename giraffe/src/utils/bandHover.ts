@@ -1,4 +1,4 @@
-import {NumericColumnData, BandIndexMap, LineData, Scale, Table} from '../types'
+import {NumericColumnData, BandLineMap, LineData, Scale, Table} from '../types'
 // import {LineData, } from '../types'
 import {isDefined} from './isDefined'
 
@@ -40,12 +40,6 @@ interface LineLengths {
   }
 }
 
-export interface BandHoverIndices {
-  rowIndices: number[]
-  lowerIndices: number[]
-  upperIndices: number[]
-}
-
 export const getLineLengths = (lineData: LineData): LineLengths => {
   const keys = Object.keys(lineData)
 
@@ -73,11 +67,11 @@ export const getBandHoverIndices = (
   hoverRowIndices: number[],
   hoverGroupData: NumericColumnData,
   bandLineIndexMap: object
-): BandIndexMap => {
+): BandLineMap => {
   const bandHoverIndices = {
-    rowIndices: [],
-    lowerIndices: [],
-    upperIndices: [],
+    rowLines: [],
+    lowerLines: [],
+    upperLines: [],
   }
   const hoverGroupBoundaries = {}
 
@@ -111,18 +105,18 @@ export const getBandHoverIndices = (
         const rowBase = lineLengths[hoveredBandId].startIndex
         const offset = index - hoverGroupBoundaries[hoveredBandId].startIndex
 
-        bandHoverIndices.rowIndices.push(rowBase + offset)
+        bandHoverIndices.rowLines.push(rowBase + offset)
 
         if (isDefined(hoverGroupBoundaries[hoveredBandId].upper)) {
           const upperBase =
             lineLengths[hoverGroupBoundaries[hoveredBandId].upper].startIndex
-          bandHoverIndices.upperIndices.push(upperBase + offset)
+          bandHoverIndices.upperLines.push(upperBase + offset)
         }
 
         if (isDefined(hoverGroupBoundaries[hoveredBandId].lower)) {
           const lowerBase =
             lineLengths[hoverGroupBoundaries[hoveredBandId].lower].startIndex
-          bandHoverIndices.lowerIndices.push(lowerBase + offset)
+          bandHoverIndices.lowerLines.push(lowerBase + offset)
         }
       }
     })

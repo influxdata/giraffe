@@ -1,6 +1,6 @@
 import {
   alignMinMaxWithBand,
-  getBandIndexMap,
+  getBandLineMap,
   getBands,
   groupLineIndicesIntoBands,
 } from './band'
@@ -56,57 +56,52 @@ describe('band transform utils', () => {
 
   describe('creates a map of indices by column type for all columns', () => {
     it('creates a map with null indices when the named columns are not found', () => {
-      expect(getBandIndexMap(columnMap, 'lower', 'median', 'upper')).toEqual({
-        upperIndices: [null, null],
-        lowerIndices: [null, null],
-        rowIndices: [null, null],
+      expect(getBandLineMap(columnMap, 'lower', 'median', 'upper')).toEqual({
+        upperLines: [null, null],
+        lowerLines: [null, null],
+        rowLines: [null, null],
       })
-      expect(getBandIndexMap(columnMap, '', '', '')).toEqual({
-        upperIndices: [null, null],
-        lowerIndices: [null, null],
-        rowIndices: [null, null],
+      expect(getBandLineMap(columnMap, '', '', '')).toEqual({
+        upperLines: [null, null],
+        lowerLines: [null, null],
+        rowLines: [null, null],
       })
     })
 
     it('creates a map with no indices when the column map is empty', () => {
       expect(
-        getBandIndexMap(
-          {columnKeys: null, mappings: null},
-          'min',
-          'mean',
-          'max'
-        )
+        getBandLineMap({columnKeys: null, mappings: null}, 'min', 'mean', 'max')
       ).toEqual({
-        upperIndices: [],
-        lowerIndices: [],
-        rowIndices: [],
+        upperLines: [],
+        lowerLines: [],
+        rowLines: [],
       })
       expect(
-        getBandIndexMap(
+        getBandLineMap(
           {columnKeys: undefined, mappings: undefined},
           'min',
           'mean',
           'max'
         )
       ).toEqual({
-        upperIndices: [],
-        lowerIndices: [],
-        rowIndices: [],
+        upperLines: [],
+        lowerLines: [],
+        rowLines: [],
       })
       expect(
-        getBandIndexMap({columnKeys: [], mappings: []}, 'min', 'mean', 'max')
+        getBandLineMap({columnKeys: [], mappings: []}, 'min', 'mean', 'max')
       ).toEqual({
-        upperIndices: [],
-        lowerIndices: [],
-        rowIndices: [],
+        upperLines: [],
+        lowerLines: [],
+        rowLines: [],
       })
     })
 
     it('creates a map with indices that are in the same position for the same band per column type', () => {
-      expect(getBandIndexMap(columnMap, 'min', 'mean', 'max')).toEqual({
-        upperIndices: [0, 1],
-        lowerIndices: [2, 3],
-        rowIndices: [5, 4],
+      expect(getBandLineMap(columnMap, 'min', 'mean', 'max')).toEqual({
+        upperLines: [0, 1],
+        lowerLines: [2, 3],
+        rowLines: [5, 4],
       })
     })
   })
@@ -217,13 +212,13 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const bandIndexMap = {
-        upperIndices: [2],
-        rowIndices: [0],
-        lowerIndices: [1],
+      const bandLineMap = {
+        upperLines: [2],
+        rowLines: [0],
+        lowerLines: [1],
       }
 
-      const result = getBands(lineData, bandIndexMap)
+      const result = getBands(lineData, bandLineMap)
       expect(Array.isArray(result)).toEqual(true)
       expect(result[0].fill).toEqual(lineData[0].fill)
       expect(result[0].lower).toBeDefined()
@@ -318,13 +313,13 @@ describe('band transform utils', () => {
           ],
         },
       }
-      const bandIndexMap = {
-        upperIndices: [3, null, null],
-        rowIndices: [0, 1, 2],
-        lowerIndices: [null, 4, null],
+      const bandLineMap = {
+        upperLines: [3, null, null],
+        rowLines: [0, 1, 2],
+        lowerLines: [null, 4, null],
       }
 
-      const result = getBands(lineData, bandIndexMap)
+      const result = getBands(lineData, bandLineMap)
       expect(Array.isArray(result)).toEqual(true)
 
       expect(result[0].fill).toEqual(lineData[0].fill)
@@ -360,13 +355,13 @@ describe('band transform utils', () => {
           ys: [373.73275, 304.66375, 379.4885],
         },
       }
-      const bandIndexMap = {
-        upperIndices: [],
-        lowerIndices: [],
-        rowIndices: [],
+      const bandLineMap = {
+        upperLines: [],
+        lowerLines: [],
+        rowLines: [],
       }
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({})
+      expect(alignMinMaxWithBand(lineData, bandLineMap)).toEqual({})
     })
 
     it('returns the updated line data with same length rows when one row index is present', () => {
@@ -387,13 +382,13 @@ describe('band transform utils', () => {
           ys: [373.73275, 304.66375, 379.4885],
         },
       }
-      const bandIndexMap = {
-        upperIndices: [0],
-        lowerIndices: [1],
-        rowIndices: [2],
+      const bandLineMap = {
+        upperLines: [0],
+        lowerLines: [1],
+        rowLines: [2],
       }
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+      expect(alignMinMaxWithBand(lineData, bandLineMap)).toEqual({
         0: {
           fill: 'rgb(49, 192, 246)',
           xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
@@ -414,7 +409,7 @@ describe('band transform utils', () => {
       lineData[2].xs.unshift(0)
       lineData[2].ys.unshift(null)
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+      expect(alignMinMaxWithBand(lineData, bandLineMap)).toEqual({
         0: {
           fill: 'rgb(49, 192, 246)',
           xs: [0, 16.422140713571192, 32.844281427142384, 49.26642214071357],
@@ -466,13 +461,13 @@ describe('band transform utils', () => {
           ys: [373.73275, 304.66375, 379.4885],
         },
       }
-      const bandIndexMap = {
-        upperIndices: [0, 1],
-        lowerIndices: [2, 3],
-        rowIndices: [5, 4],
+      const bandLineMap = {
+        upperLines: [0, 1],
+        lowerLines: [2, 3],
+        rowLines: [5, 4],
       }
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+      expect(alignMinMaxWithBand(lineData, bandLineMap)).toEqual({
         0: {
           fill: 'rgb(49, 192, 246)',
           xs: [16.422140713571192, 32.844281427142384, 49.26642214071357],
@@ -510,7 +505,7 @@ describe('band transform utils', () => {
       lineData[5].xs.push(50)
       lineData[5].ys.push(null)
 
-      expect(alignMinMaxWithBand(lineData, bandIndexMap)).toEqual({
+      expect(alignMinMaxWithBand(lineData, bandLineMap)).toEqual({
         0: {
           fill: 'rgb(49, 192, 246)',
           xs: [16.422140713571192, 32.844281427142384, 49.26642214071357, 50],

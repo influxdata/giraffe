@@ -1,4 +1,5 @@
-import {DomainLabel, LineData} from '../../types'
+import {ColumnData, DomainLabel, LineData} from '../../types'
+import {isNumber} from '../isNumber'
 
 export const getDataSortOrder = (
   lineData: LineData,
@@ -28,3 +29,59 @@ export const getDataSortOrder = (
   sortable.sort((first, second) => second - first)
   return sortable.map(numericalValue => numberMap[numericalValue].shift())
 }
+
+export const sortByValuesColumn = (
+  valuesColumn: ColumnData,
+  rowIndices: Array<number>
+): Array<number> => {
+  if (!valuesColumn || !rowIndices?.length) {
+    return []
+  }
+  const numberMap = {}
+  const sortable = []
+  rowIndices.forEach(rowIndex => {
+    const key = isNumber(valuesColumn[`${rowIndex}`])
+      ? valuesColumn[`${rowIndex}`]
+      : 0
+    if (!numberMap[key]) {
+      numberMap[key] = []
+    }
+    numberMap[key].push(rowIndex)
+    sortable.push(key)
+  })
+
+  sortable.sort((first, second) => second - first)
+  return sortable.map(numericalValue => numberMap[numericalValue].shift())
+}
+
+export const isSortable = (values: Array<number>): boolean => {
+  if (!values || !values.length || values.length == 1) {
+    return false
+  }
+  const initialValue = values[0]
+  return values.every((value, index) => {
+    if (index === 0) {
+      return true
+    }
+    return value !== initialValue
+  })
+}
+
+// export const sortBandLines = (
+//   bandValues: ColumnData,
+//   bandLineMap: BandLineMap,
+//   selectedBandLineIndices: Array<number>
+// ): BandLineMap => {
+//   const sortedBandLineMap: BandLineMap = {
+//     upperIndices: [],
+//     rowIndices: [],
+//     lowerIndices: [],
+//   }
+
+//   const {upperIndices, rowIndices, lowerIndices} = bandLineMap
+
+//   if (isSortable(rowIndices.map(rowIndex => bandValues[rowIndex]))) {
+//     // const sortedRowIndices = sortByValuesColumn(bandValues, rowIndices)
+//   }
+//   return sortedBandLineMap
+// }

@@ -1,4 +1,5 @@
 import {
+  BandLineMap,
   LineData,
   LinePosition,
   NumericColumnData,
@@ -14,7 +15,6 @@ import {
   VALUE,
 } from '../../constants/columnKeys'
 
-import {BandHoverIndices} from '../bandHover'
 import {isVoid} from '../isVoid'
 import {getTooltipBandGroupColumns} from './band'
 import {getDataSortOrder} from './sort'
@@ -123,7 +123,7 @@ export const getPointsTooltipData = (
       ? stackedDomainValueColumn
       : []
     tooltipAdditionalColumns.push({
-      key: yColKey,
+      key: `_${STACKED_LINE_CUMULATIVE}`,
       name: STACKED_LINE_CUMULATIVE,
       type: table.getColumnType(yColKey),
       colors,
@@ -140,7 +140,7 @@ export const getPointsTooltipData = (
       .sort()
       .forEach((groupId, key) => (lineCountByGroupId[groupId] = key + 1))
     tooltipAdditionalColumns.push({
-      key: yColKey,
+      key: `_${LINE_COUNT}`,
       name: LINE_COUNT,
       type: table.getColumnType(FILL),
       colors,
@@ -166,7 +166,7 @@ export const getPointsTooltipData = (
 }
 
 export const getBandTooltipData = (
-  bandHoverIndices: BandHoverIndices,
+  bandHoverIndices: BandLineMap,
   table: Table,
   xColKey: string,
   yColKey: string,
@@ -177,19 +177,15 @@ export const getBandTooltipData = (
   fillColKeys: string[],
   lineData: LineData
 ): LegendData => {
-  const {
-    rowIndices: hoveredRowIndices,
-    lowerIndices,
-    upperIndices,
-  } = bandHoverIndices
+  const {rowLines: hoveredRowIndices, lowerLines, upperLines} = bandHoverIndices
 
   const xColumnName =
     xColKey === VALUE ? `${xColKey}:${bandName}` : table.getColumnName(xColKey)
   const yColumnName =
     yColKey === VALUE ? `${yColKey}:${bandName}` : table.getColumnName(yColKey)
   const sortOrder = getDataSortOrder(lineData, hoveredRowIndices)
-  const minOrder = getDataSortOrder(lineData, lowerIndices)
-  const maxOrder = getDataSortOrder(lineData, upperIndices)
+  const minOrder = getDataSortOrder(lineData, lowerLines)
+  const maxOrder = getDataSortOrder(lineData, upperLines)
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(FILL, 'number')
@@ -230,9 +226,9 @@ export const getBandTooltipData = (
         type: table.getColumnType(yColKey),
         colors,
         values: orderDataByValue(
-          lowerIndices,
+          lowerLines,
           minOrder,
-          lowerIndices.map(i => yFormatter(yColData[i]))
+          lowerLines.map(i => yFormatter(yColData[i]))
         ),
       })
     }
@@ -244,9 +240,9 @@ export const getBandTooltipData = (
         type: table.getColumnType(yColKey),
         colors,
         values: orderDataByValue(
-          upperIndices,
+          upperLines,
           maxOrder,
-          upperIndices.map(i => yFormatter(yColData[i]))
+          upperLines.map(i => yFormatter(yColData[i]))
         ),
       })
     }
@@ -258,9 +254,9 @@ export const getBandTooltipData = (
         type: table.getColumnType(xColKey),
         colors,
         values: orderDataByValue(
-          lowerIndices,
+          lowerLines,
           minOrder,
-          lowerIndices.map(i => xFormatter(xColData[i]))
+          lowerLines.map(i => xFormatter(xColData[i]))
         ),
       })
     }
@@ -272,9 +268,9 @@ export const getBandTooltipData = (
         type: table.getColumnType(xColKey),
         colors,
         values: orderDataByValue(
-          upperIndices,
+          upperLines,
           maxOrder,
-          upperIndices.map(i => xFormatter(xColData[i]))
+          upperLines.map(i => xFormatter(xColData[i]))
         ),
       })
     }
