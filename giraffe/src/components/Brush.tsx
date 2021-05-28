@@ -11,7 +11,7 @@ interface Props {
   event: DragEvent | null
   width: number
   height: number
-  onXBrushEnd: (xRange: number[]) => void
+  onXBrushEnd: (xRange: number[], onShiftDown?:boolean) => void
   onYBrushEnd: (yRange: number[]) => void
   onClick?: (mouseEvent: React.MouseEvent) => void
 }
@@ -52,7 +52,7 @@ export const Brush: FunctionComponent<Props> = ({
         return
       }
       // doing brush now
-      callback([p0, p1])
+      callback([p0, p1], event.isShiftDown)
     } else {
       if (event.mouseActionState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
