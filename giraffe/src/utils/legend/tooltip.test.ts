@@ -62,7 +62,9 @@ describe('getPointsTooltipData', () => {
     )
 
     const allValues = sampleTable.getColumn('_value')
-    hoveredValues = hoveredRowIndices.map(i => allValues[i])
+    hoveredValues = hoveredRowIndices
+      .map(i => allValues[i])
+      .sort((a, b) => b - a)
   }
 
   describe('tooltip for overlaid line graph', () => {
@@ -145,15 +147,6 @@ describe('getPointsTooltipData', () => {
         column => column.name === STACKED_LINE_CUMULATIVE
       )
       expect(cumulativeValueColumn).toBeTruthy()
-      expect(
-        cumulativeValueColumn.values.every((value, index, arr) => {
-          if (index === 0) {
-            return true
-          }
-          return Number(arr[index - 1]) >= Number(value)
-        })
-      ).toEqual(true)
-
       expect(result.find(column => column.name === LINE_COUNT)).toBeTruthy()
     })
 
@@ -186,9 +179,9 @@ describe('getPointsTooltipData', () => {
       )
       const singleValueColumn = result.find(column => column.name === yColKey)
       expect(singleValueColumn).toBeTruthy()
-      expect(
-        singleValueColumn.values.map(value => Number(value)).reverse()
-      ).toEqual(hoveredValues)
+      expect(singleValueColumn.values.map(value => Number(value))).toEqual(
+        hoveredValues
+      )
     })
 
     it('should create proper columns when all values are negative numbers', () => {
