@@ -103,7 +103,6 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
 
   const tooltipData = getBandTooltipData(
     bandHoverIndices,
-    spec.table,
     config.x,
     config.y,
     rowColumnName,
@@ -111,7 +110,7 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     upperColumnName,
     columnFormatter,
     fillColKeys,
-    spec.lineData
+    spec
   )
 
   return (

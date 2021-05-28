@@ -1,9 +1,10 @@
 import {
   Band,
   BandBorder,
-  BandLineMap,
   BandLayerSpec,
+  BandLineMap,
   ColumnGroupMap,
+  DomainLabel,
   LatestIndexMap,
   LineData,
   Table,
@@ -17,6 +18,7 @@ import {BAND_COLOR_SCALE_CONSTANT} from '../constants'
 import {isDefined} from '../utils/isDefined'
 import {isFiniteNumber} from '../utils/isFiniteNumber'
 import {isNumber} from '../utils/isNumber'
+import {createLatestBandIndices} from '../utils/legend/band'
 
 export const getBands = (
   lineData: LineData,
@@ -421,7 +423,6 @@ export const bandTransform = (
     getBandColorScale(bandLineMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
 
   const lineData: LineData = {}
-  const latestIndices: LatestIndexMap = {}
 
   let xMin = Infinity
   let xMax = -Infinity
@@ -444,28 +445,18 @@ export const bandTransform = (
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
-    // remember the latest (most recent) index for each group
-    if (!isDefined(latestIndices[groupID])) {
-      latestIndices[groupID] = i
-    } else if (yColumnKey === TIME) {
-      if (
-        y > yCol[latestIndices[groupID]] ||
-        !isDefined(yCol[latestIndices[groupID]])
-      ) {
-        latestIndices[groupID] = i
-      }
-    } else if (
-      x > xCol[latestIndices[groupID]] ||
-      !isDefined(xCol[latestIndices[groupID]])
-    ) {
-      latestIndices[groupID] = i
-    }
-
     xMin = Math.min(x, xMin)
     xMax = Math.max(x, xMax)
     yMin = Math.min(y, yMin)
     yMax = Math.max(y, yMax)
   }
+  // remember the latest (most recent) index for each group
+  const bandDimension = yColumnKey === TIME ? DomainLabel.Y : DomainLabel.X
+  const latestIndices: LatestIndexMap = createLatestBandIndices(
+    lineData,
+    bandLineMap,
+    bandDimension
+  )
 
   Object.keys(bandLineMap).forEach(indexType => {
     bandLineMap[indexType].forEach((groupID, index) => {

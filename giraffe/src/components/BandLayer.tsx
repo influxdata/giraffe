@@ -81,7 +81,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
   }
 
   // Band Plot allows hovering on the nearest band or bands,
-  // and any hoverable point should be associate with a band
+  // and any hoverable point should be associated with a band
   const hoverableColumnData = useBandHoverColumns(
     hoverX,
     hoverY,
