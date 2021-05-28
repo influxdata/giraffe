@@ -165,8 +165,8 @@ geo.add('Map Markers Custom CSV', () => {
   let lattitudeSelection, longitudeSelection, s2GeoHash
 
   if (!useS2CellID) {
-    lattitudeSelection = lattitudeKnob(table, {key: 'field', column: 'lat'})
-    longitudeSelection = longitudeKnob(table, {key: 'field', column: 'lon'})
+    lattitudeSelection = lattitudeKnob(table)
+    longitudeSelection = longitudeKnob(table)
   } else {
     s2GeoHash = s2GeoHashKnob(table, 's2_cell_id')
   }
