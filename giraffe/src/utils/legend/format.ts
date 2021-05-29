@@ -8,11 +8,5 @@ export const formatLegendValues = (
   if (!Array.isArray(indexes)) {
     return []
   }
-  return indexes.map(index => {
-    const latestValue = values[index]
-    if (latestValue === latestValue) {
-      return formatter(latestValue)
-    }
-    return ''
-  })
+  return indexes.map(index => formatter(values[index]))
 }
