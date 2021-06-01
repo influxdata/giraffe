@@ -105,16 +105,8 @@ const findXYColumns = (table: Table) =>
 export const findStringColumns = (table: Table) =>
   table.columnKeys.filter(k => table.getColumnType(k) === 'string')
 
-export const xKnob = (table: Table, initial?: string) => {
-  let randomObj = {x: 'x', y: 'y'}
-  if (randomObj.hasOwnProperty('_time')) {
-    randomObj = {
-      x: 'xx',
-      y: 'yy',
-    }
-  }
-  return select('x', randomObj, initial || '_time')
-}
+export const xKnob = (table: Table, initial?: string) =>
+  select('x', findXYColumns(table), initial || '_time')
 
 export const yKnob = (table: Table, initial?: string) =>
   select('y', findXYColumns(table), initial || '_value' || 'cpu')
