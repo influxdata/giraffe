@@ -35,13 +35,15 @@ export const preprocessData = (
   if (isS2Present || isLatLonAsTags) {
     return new NativeGeoTable(table, rowLimit, latLonColumns, s2Column)
   }
-  // don't delay rendering with data calculation
   return new PivotedGeoTable(table, rowLimit, latLonColumns)
 }
 
 const latLonAsTags = (useS2CellID, latLonColumns) => {
   if (typeof useS2CellID !== 'undefined' && useS2CellID === false) {
-    if (latLonColumns.lat.key === 'tag' && latLonColumns.lon.key === 'tag') {
+    if (
+      latLonColumns?.lat?.key === 'tag' &&
+      latLonColumns?.lon?.key === 'tag'
+    ) {
       return true
     }
     return false

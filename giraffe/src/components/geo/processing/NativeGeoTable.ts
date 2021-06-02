@@ -104,8 +104,8 @@ const getDataEncoding = (
   s2Column: string
 ): CoordinateEncoding => {
   if (
-    typeof latLonColumns.lat !== 'undefined' &&
-    typeof latLonColumns.lon !== 'undefined' &&
+    typeof latLonColumns?.lat !== 'undefined' &&
+    typeof latLonColumns?.lon !== 'undefined' &&
     table.getColumn(latLonColumns.lat.column) !== null &&
     table.getColumn(latLonColumns.lon.column) !== null
   ) {

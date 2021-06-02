@@ -178,8 +178,8 @@ export const tooltipHideKnob = () => boolean('tooltipDisable', false)
 export const annotationPinKnob = () =>
   select('pin', ['none', 'circle', 'start', 'stop'], 'none')
 
-const findTags = (table: Table, latLon: boolean = false) =>
-  table.columnKeys.reduce((acc, k) => {
+const findTags = (table: Table, latLon: boolean = false) => {
+  return table.columnKeys.reduce((acc, k) => {
     const columnType = table.getColumnType(k)
     if (columnType === 'number' || columnType === 'time') {
       return acc
@@ -205,6 +205,7 @@ const findTags = (table: Table, latLon: boolean = false) =>
       },
     }
   }, {})
+}
 
 const findFields = (table: Table) => {
   const fieldValues = table.getColumn('_field')

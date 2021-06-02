@@ -34,6 +34,19 @@ export class PivotedGeoTable implements GeoTable {
     const valueColumn = table.getColumn(VALUE_COLUMN)
 
     this.latLonColumns = latLonColumns
+    if (!latLonColumns) {
+      const latLonObj = {
+        lat: {
+          key: 'field',
+          column: 'lat',
+        },
+        lon: {
+          key: 'field',
+          column: 'lon',
+        },
+      }
+      this.latLonColumns = latLonObj
+    }
 
     let lonFound = false,
       latFound = false
@@ -50,10 +63,10 @@ export class PivotedGeoTable implements GeoTable {
     for (let i = 0; i < entriesCount; i++) {
       const seriesKey = seriesKeyColumns.map(column => column[i]).join()
       const fieldName = fieldColumn[i]
-      if (!lonFound && fieldName === latLonColumns.lon.column) {
+      if (!lonFound && fieldName === this.latLonColumns?.lon?.column) {
         lonFound = true
       }
-      if (!latFound && fieldName === latLonColumns.lat.column) {
+      if (!latFound && fieldName === this.latLonColumns?.lat?.column) {
         latFound = true
       }
       const point = mapData[seriesKey]

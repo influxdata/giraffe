@@ -53,7 +53,7 @@ const Geo: FunctionComponent<Props> = props => {
       ? preprocessData(
           table,
           getRowLimit(props.layers),
-          useS2CellID,
+          useS2CellID || !detectCoordinateFields,
           latLonColumns,
           s2Column
         )
@@ -64,7 +64,7 @@ const Geo: FunctionComponent<Props> = props => {
     const newTable = preprocessData(
       props.table,
       getRowLimit(props.layers),
-      useS2CellID,
+      useS2CellID || !detectCoordinateFields,
       latLonColumns,
       s2Column
     )
