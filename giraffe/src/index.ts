@@ -20,6 +20,7 @@ export {getLatestValues} from './utils/getLatestValues'
 export {formatStatValue} from './utils/formatStatValue'
 
 // Transforms
+export {createGroupIDColumn} from './transforms'
 export {lineTransform} from './transforms/line'
 
 // Constants
