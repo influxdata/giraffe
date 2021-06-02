@@ -54,17 +54,20 @@ export const simplifyLineData = (
 
 export const getDomainDataFromLines = (
   lineData: LineData,
+  fillCol: Array<number | string>,
   domainLabel: DomainLabel
-): number[] => {
-  const result = []
-  const numberOfLines = Object.keys(lineData).length
-  for (let lineIndex = 0; lineIndex < numberOfLines; lineIndex += 1) {
-    const line = lineData[lineIndex] ? lineData[lineIndex][domainLabel] : []
-    if (Array.isArray(line)) {
-      for (let domainIndex = 0; domainIndex < line.length; domainIndex += 1) {
-        result.push(line[domainIndex])
+): Array<number> => {
+  if (Array.isArray(fillCol)) {
+    const counters = {}
+    return fillCol.map(line => {
+      if (!counters[line]) {
+        counters[line] = 0
       }
-    }
+      const index = counters[line]
+      const value = lineData[line][domainLabel][index]
+      counters[line] += 1
+      return value
+    })
   }
-  return result
+  return []
 }

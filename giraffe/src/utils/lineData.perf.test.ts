@@ -2,7 +2,7 @@ import {DomainLabel} from '../types'
 import {getDomainDataFromLines} from './lineData'
 import {lineTransform} from '../transforms/line'
 
-import {dataSize, largeTable, lineData} from './fixtures/line'
+import {dataSize, largeTable, lineData, FILL_COL} from './fixtures/line'
 
 // A number representing the limit on the number of points
 //   in a data set that most, if not all users, could possibly want
@@ -16,7 +16,7 @@ describe('line graph performance', () => {
 
   test(`getDomainDataFromLines on ${REASONABLE_LIMIT} data points`, () => {
     expect(() => {
-      const result = getDomainDataFromLines(lineData, DomainLabel.Y)
+      const result = getDomainDataFromLines(lineData, FILL_COL, DomainLabel.Y)
       expect(result.length).toBeGreaterThanOrEqual(REASONABLE_LIMIT)
     }).not.toThrow()
   })

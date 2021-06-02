@@ -1,14 +1,11 @@
 import {
   BandLayerSpec,
-  ColumnData,
-  DomainLabel,
   Formatter,
   LayerSpec,
   LegendData,
   LineData,
   LineLayerSpec,
   LinePosition,
-  StaticLegend,
 } from '../../types'
 import {
   FILL,
@@ -17,28 +14,11 @@ import {
 } from '../../constants/columnKeys'
 
 import {getTooltipBandGroupColumns} from './band'
-import {getDataSortOrder} from './sort'
-
-export const formatColumnValuesAsLatest = (
-  values: ColumnData,
-  indexes: Array<number>,
-  formatter: Formatter
-): Array<string> => {
-  if (!Array.isArray(indexes)) {
-    return []
-  }
-  return indexes.map(index => {
-    const latestValue = values[index]
-    if (latestValue === latestValue) {
-      return formatter(latestValue)
-    }
-    return ''
-  })
-}
+import {formatLegendValues} from './format'
+import {sortBandLines, sortIndicesByValueColumn} from './sort'
 
 export const getLegendData = (
   layerType: string,
-  staticLegend: StaticLegend,
   spec: LayerSpec,
   valueColumnKey: string,
   getFormatter?: (columnKey: string) => Formatter
@@ -51,7 +31,6 @@ export const getLegendData = (
         ? 'stacked'
         : 'overlaid'
       return convertLineSpec(
-        staticLegend,
         spec as LineLayerSpec,
         valueColumnKey,
         getFormatter,
@@ -71,7 +50,6 @@ export const getLegendData = (
 }
 
 export const convertLineSpec = (
-  staticLegend: StaticLegend,
   spec: LineLayerSpec,
   valueColumnKey: string,
   getColumnFormatter: (colKey: string) => Formatter,
@@ -82,18 +60,16 @@ export const convertLineSpec = (
     return null
   }
   const mappings = spec?.columnGroupMaps?.fill?.mappings
-  const {valueAxis} = staticLegend
   const valueFormatter = getColumnFormatter(valueColumnKey)
   const latestValueIndices = spec?.columnGroupMaps?.latestIndices
   const lineValues = spec.table.getColumn(valueColumnKey)
   const fillIndices = spec.table.getColumn(FILL)
   const lineData: LineData = spec?.lineData
+  const stackedDomainValues = spec.stackedDomainValueColumn ?? []
 
-  const domainLabel = valueAxis === 'x' ? DomainLabel.X : DomainLabel.Y
-  const sortOrder = getDataSortOrder(
-    lineData,
-    Object.values(latestValueIndices),
-    domainLabel
+  const sortOrder = sortIndicesByValueColumn(
+    position === 'stacked' ? stackedDomainValues : lineValues,
+    Object.values(latestValueIndices)
   )
 
   const colors = sortOrder.map(index => lineData[`${fillIndices[index]}`].fill)
@@ -103,14 +79,13 @@ export const convertLineSpec = (
     name: `Latest ${valueColumnKey}`,
     type: spec.table.getColumnType(valueColumnKey),
     colors,
-    values: formatColumnValuesAsLatest(lineValues, sortOrder, valueFormatter),
+    values: formatLegendValues(lineValues, sortOrder, valueFormatter),
   }
 
   const additionalColumns = []
   if (position === 'stacked') {
-    const stackedDomainValues = spec.stackedDomainValueColumn ?? []
     additionalColumns.push({
-      key: valueColumnKey,
+      key: `_${STACKED_LINE_CUMULATIVE}`,
       name: STACKED_LINE_CUMULATIVE,
       type: spec.table.getColumnType(valueColumnKey),
       colors,
@@ -127,7 +102,7 @@ export const convertLineSpec = (
         lineCountByGroupId[`${groupId}`] = key + 1
       })
     additionalColumns.push({
-      key: valueColumnKey,
+      key: `_${LINE_COUNT}`,
       name: LINE_COUNT,
       type: spec.table.getColumnType(valueColumnKey),
       colors,
@@ -138,16 +113,17 @@ export const convertLineSpec = (
   }
 
   const fillColumns = columnKeys.map(key => {
-    const column: string[] = mappings.map(fillColumn => {
+    const fillColumn: string[] = sortOrder.map(index => {
+      const columns = mappings[`${fillIndices[index]}`]
       const fillFormatter = getColumnFormatter(key)
-      return fillFormatter(fillColumn[key])
+      return fillFormatter(columns[key])
     })
 
     return {
       key,
       name: key,
       type: spec.table.getColumnType(key),
-      values: column,
+      values: fillColumn,
       colors,
     }
   })
@@ -166,74 +142,74 @@ export const convertBandSpec = (
   }
   const valueFormatter = getColumnFormatter(valueColumnKey)
   const {latestIndices} = spec?.columnGroupMaps
-  const fillIndices = spec.table.getColumn(FILL)
   const lineData: LineData = spec?.lineData
 
   const bandValues = spec.table.getColumn(valueColumnKey)
   const {bandName, upperColumnName, lowerColumnName} = spec
-  const {bandIndexMap} = spec
-  const {upperIndices, rowIndices, lowerIndices} = bandIndexMap
+  const {bandLineMap} = spec
 
-  const colors = getDataSortOrder(
-    lineData,
-    rowIndices.map(index => latestIndices[index])
-  ).map(index => lineData[`${fillIndices[index]}`].fill)
+  const sortedBandLineMap = sortBandLines(
+    bandValues,
+    bandLineMap,
+    latestIndices
+  )
+  const {
+    upperLines: sortedUpperLines,
+    rowLines: sortedRowLines,
+    lowerLines: sortedLowerLines,
+  } = sortedBandLineMap
+
+  const colors = sortedRowLines.map(line => lineData[line].fill)
 
   const rowValuesColumn = {
     key: valueColumnKey,
     name: `Latest ${valueColumnKey}:${bandName}`,
     type: spec.table.getColumnType(valueColumnKey),
     colors,
-    values: formatColumnValuesAsLatest(
+    values: formatLegendValues(
       bandValues,
-      getDataSortOrder(
-        lineData,
-        rowIndices.map(index => latestIndices[index])
-      ),
+      sortedRowLines.map(line => latestIndices[line]),
       valueFormatter
     ),
   }
 
-  const upperValuesColumn = {
-    key: valueColumnKey,
-    name: `${valueColumnKey}:${upperColumnName}`,
-    type: spec.table.getColumnType(valueColumnKey),
-    colors,
-    values: formatColumnValuesAsLatest(
-      bandValues,
-      getDataSortOrder(
-        lineData,
-        upperIndices.map(index => latestIndices[index])
+  const tooltipAdditionalColumns = []
+
+  if (upperColumnName) {
+    tooltipAdditionalColumns.push({
+      key: valueColumnKey,
+      name: `${valueColumnKey}:${upperColumnName}`,
+      type: spec.table.getColumnType(valueColumnKey),
+      colors,
+      values: formatLegendValues(
+        bandValues,
+        sortedUpperLines.map(line => latestIndices[line]),
+        valueFormatter
       ),
-      valueFormatter
-    ),
+    })
   }
 
-  const lowerValuesColumn = {
-    key: valueColumnKey,
-    name: `${valueColumnKey}:${lowerColumnName}`,
-    type: spec.table.getColumnType(valueColumnKey),
-    colors,
-    values: formatColumnValuesAsLatest(
-      bandValues,
-      getDataSortOrder(
-        lineData,
-        lowerIndices.map(index => latestIndices[index])
+  if (lowerColumnName) {
+    tooltipAdditionalColumns.push({
+      key: valueColumnKey,
+      name: `${valueColumnKey}:${lowerColumnName}`,
+      type: spec.table.getColumnType(valueColumnKey),
+      colors,
+      values: formatLegendValues(
+        bandValues,
+        sortedLowerLines.map(line => latestIndices[line]),
+        valueFormatter
       ),
-      valueFormatter
-    ),
+    })
   }
 
   const fillColumns = getTooltipBandGroupColumns(
     spec.table,
-    getDataSortOrder(
-      lineData,
-      rowIndices.map(index => latestIndices[index])
-    ),
+    sortedRowLines.map(line => latestIndices[line]),
     columnKeys,
     getColumnFormatter,
     colors
   )
 
-  return [rowValuesColumn, upperValuesColumn, lowerValuesColumn, ...fillColumns]
+  return [rowValuesColumn, ...tooltipAdditionalColumns, ...fillColumns]
 }

@@ -1,9 +1,10 @@
 import {
   Band,
   BandBorder,
-  BandIndexMap,
   BandLayerSpec,
+  BandLineMap,
   ColumnGroupMap,
+  DomainLabel,
   LatestIndexMap,
   LineData,
   Table,
@@ -17,25 +18,26 @@ import {BAND_COLOR_SCALE_CONSTANT} from '../constants'
 import {isDefined} from '../utils/isDefined'
 import {isFiniteNumber} from '../utils/isFiniteNumber'
 import {isNumber} from '../utils/isNumber'
+import {createLatestBandIndices} from '../utils/legend/band'
 
 export const getBands = (
   lineData: LineData,
-  bandIndexMap: BandIndexMap
+  bandLineMap: BandLineMap
 ): Band[] => {
-  const {upperIndices = [], rowIndices = [], lowerIndices = []} = bandIndexMap
+  const {upperLines = [], rowLines = [], lowerLines = []} = bandLineMap
   const bands: Band[] = []
-  rowIndices.forEach((rowIndex, i) => {
+  rowLines.forEach((rowIndex, i) => {
     // Each band must have a "main column" which creates a row index
     // Any non-main column not associated with a "main" is not a band
     // Only bands get rendered
     if (!isFiniteNumber(rowIndex)) {
       return
     }
-    const upperIndex = upperIndices[i]
+    const upperIndex = upperLines[i]
     const upperIsFinite = isFiniteNumber(upperIndex)
     const upper = upperIsFinite ? lineData[upperIndex] : {fill: ''}
 
-    const lowerIndex = lowerIndices[i]
+    const lowerIndex = lowerLines[i]
     const lowerIsFinite = isFiniteNumber(lowerIndex)
     const lower = lowerIsFinite ? lineData[lowerIndex] : {fill: ''}
 
@@ -55,16 +57,16 @@ export const getBands = (
   return bands
 }
 
-export const getBandIndexMap = (
+export const getBandLineMap = (
   fillColumnMap: ColumnGroupMap,
   lowerColumnName: string,
   rowColumnName: string,
   upperColumnName: string
-): BandIndexMap => {
+): BandLineMap => {
   const bandIndices = {
-    rowIndices: [],
-    lowerIndices: [],
-    upperIndices: [],
+    rowLines: [],
+    lowerLines: [],
+    upperLines: [],
   }
 
   const bands = Object.values(
@@ -78,9 +80,9 @@ export const getBandIndexMap = (
 
   if (Array.isArray(bands)) {
     bands.forEach(band => {
-      bandIndices.rowIndices.push(isDefined(band.row) ? band.row : null)
-      bandIndices.lowerIndices.push(isDefined(band.lower) ? band.lower : null)
-      bandIndices.upperIndices.push(isDefined(band.upper) ? band.upper : null)
+      bandIndices.rowLines.push(isDefined(band.row) ? band.row : null)
+      bandIndices.lowerLines.push(isDefined(band.lower) ? band.lower : null)
+      bandIndices.upperLines.push(isDefined(band.upper) ? band.upper : null)
     })
   }
 
@@ -126,13 +128,13 @@ export const groupLineIndicesIntoBands = (
 
 export const alignMinMaxWithBand = (
   lineData: LineData,
-  bandIndexMap: BandIndexMap
+  bandLineMap: BandLineMap
 ): LineData => {
-  const {rowIndices, upperIndices, lowerIndices} = bandIndexMap
+  const {rowLines, upperLines, lowerLines} = bandLineMap
 
   const alignedData = {}
 
-  for (let i = 0; i < rowIndices.length; i += 1) {
+  for (let i = 0; i < rowLines.length; i += 1) {
     let bandXs = []
     let bandYs = []
     let upperXs = []
@@ -140,9 +142,9 @@ export const alignMinMaxWithBand = (
     let lowerXs = []
     let lowerYs = []
 
-    const bandId = rowIndices[i]
-    const upperId = upperIndices[i]
-    const lowerId = lowerIndices[i]
+    const bandId = rowLines[i]
+    const upperId = upperLines[i]
+    const lowerId = lowerLines[i]
 
     if (lineData[upperId]) {
       alignedData[upperId] = {
@@ -411,17 +413,16 @@ export const bandTransform = (
   const table = inputTable.addColumn(FILL, 'system', 'number', fillColumn)
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')
-  const bandIndexMap = getBandIndexMap(
+  const bandLineMap = getBandLineMap(
     fillColumnMap,
     lowerColumnName || '',
     rowColumnName,
     upperColumnName || ''
   )
   const fillScale = range =>
-    getBandColorScale(bandIndexMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
+    getBandColorScale(bandLineMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
 
   const lineData: LineData = {}
-  const latestIndices: LatestIndexMap = {}
 
   let xMin = Infinity
   let xMax = -Infinity
@@ -437,38 +438,28 @@ export const bandTransform = (
       lineData[groupID] = {xs: [], ys: [], fill: ''}
       // 'fill' is set temporarily to no color
       //    it will be updated with another loop later,
-      //    because it is faster to walk bandIndexMap once
+      //    because it is faster to walk bandLineMap once
       //    than to search for the indices of many lines
     }
 
     lineData[groupID].xs.push(x)
     lineData[groupID].ys.push(y)
 
-    // remember the latest (most recent) index for each group
-    if (!isDefined(latestIndices[groupID])) {
-      latestIndices[groupID] = i
-    } else if (yColumnKey === TIME) {
-      if (
-        y > yCol[latestIndices[groupID]] ||
-        !isDefined(yCol[latestIndices[groupID]])
-      ) {
-        latestIndices[groupID] = i
-      }
-    } else if (
-      x > xCol[latestIndices[groupID]] ||
-      !isDefined(xCol[latestIndices[groupID]])
-    ) {
-      latestIndices[groupID] = i
-    }
-
     xMin = Math.min(x, xMin)
     xMax = Math.max(x, xMax)
     yMin = Math.min(y, yMin)
     yMax = Math.max(y, yMax)
   }
+  // remember the latest (most recent) index for each group
+  const bandDimension = yColumnKey === TIME ? DomainLabel.Y : DomainLabel.X
+  const latestIndices: LatestIndexMap = createLatestBandIndices(
+    lineData,
+    bandLineMap,
+    bandDimension
+  )
 
-  Object.keys(bandIndexMap).forEach(indexType => {
-    bandIndexMap[indexType].forEach((groupID, index) => {
+  Object.keys(bandLineMap).forEach(indexType => {
+    bandLineMap[indexType].forEach((groupID, index) => {
       if (isNumber(groupID)) {
         lineData[groupID].fill = fillScale(index)
       }
@@ -477,7 +468,7 @@ export const bandTransform = (
 
   return {
     type: 'band',
-    bandIndexMap,
+    bandLineMap,
     bandName: rowColumnName,
     upperColumnName,
     lowerColumnName,

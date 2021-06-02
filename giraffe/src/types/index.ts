@@ -631,7 +631,7 @@ export interface LineLayerSpec {
 
 export interface BandLayerSpec {
   type: 'band' // do not refactor or restrict to SpecTypes.Line
-  bandIndexMap: BandIndexMap
+  bandLineMap: BandLineMap
   bandName: string
   upperColumnName: string
   lowerColumnName: string
@@ -861,10 +861,10 @@ export interface Band {
   fill: string
 }
 
-export interface BandIndexMap {
-  rowIndices: number[]
-  lowerIndices: number[]
-  upperIndices: number[]
+export interface BandLineMap {
+  rowLines: number[]
+  lowerLines: number[]
+  upperLines: number[]
 }
 
 export interface StandardFunctionProps {

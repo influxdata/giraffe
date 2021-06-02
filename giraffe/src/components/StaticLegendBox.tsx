@@ -64,7 +64,6 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
   const legendData = getLegendData(
     layerConfig.type,
-    staticLegendOverride,
     spec,
     valueColumnKey,
     columnFormatter

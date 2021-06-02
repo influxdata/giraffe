@@ -78,9 +78,9 @@ describe('getBandHoverIndices utils', () => {
   describe('getBandHoverIndices', () => {
     it('can handle empty data', () => {
       expect(getBandHoverIndices({}, [], [], {})).toEqual({
-        rowIndices: [],
-        lowerIndices: [],
-        upperIndices: [],
+        rowLines: [],
+        lowerLines: [],
+        upperLines: [],
       })
     })
 
@@ -111,9 +111,9 @@ describe('getBandHoverIndices utils', () => {
           bandLineIndexMap
         )
       ).toEqual({
-        rowIndices: [18, 21, 24],
-        lowerIndices: [15, 12, 9],
-        upperIndices: [6, 3, 0],
+        rowLines: [18, 21, 24],
+        lowerLines: [15, 12, 9],
+        upperLines: [6, 3, 0],
       })
     })
   })

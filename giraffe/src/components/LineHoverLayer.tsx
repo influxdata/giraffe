@@ -110,7 +110,6 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     fillColKeys,
     fillScale,
     position,
-    spec.lineData,
     spec.stackedDomainValueColumn
   )
 

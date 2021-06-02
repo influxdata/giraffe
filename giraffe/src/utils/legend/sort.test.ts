@@ -1,55 +1,81 @@
-import {getDataSortOrder} from './sort'
-import {getRandomTable} from '../fixtures/randomTable'
-import {lineTransform} from '../../transforms/line'
-import {NINETEEN_EIGHTY_FOUR} from '../../constants/colorSchemes'
-import {DomainLabel} from '../../types'
+import {sortBandLines, sortIndicesByValueColumn} from './sort'
 
-describe('getDataSortOrder', () => {
-  const xColKey = '_time'
-  const yColKey = '_value'
-  const maxValue = 100
-  const numberOfRecords = 200
-  const recordsPerLine = 10
-  const fillColKeys = ['cpu', 'host', 'machine']
-  const table = getRandomTable(
-    maxValue,
-    true,
-    numberOfRecords,
-    recordsPerLine,
-    fillColKeys
-  )
+describe('sortIndicesByValueColumn', () => {
+  it('sorts falsy values as last', () => {
+    let lineValues = [0, 10, 20, 30]
+    let indices = [0, 1, 2, 3, 4, 5, 6]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual([
+      3,
+      2,
+      1,
+      0,
+      4,
+      5,
+      6,
+    ])
 
-  it('sorts in in descending order', () => {
-    const lineOption = 'stacked'
-    const lineSpec = lineTransform(
-      table,
-      xColKey,
-      yColKey,
-      fillColKeys,
-      NINETEEN_EIGHTY_FOUR,
-      lineOption
-    )
-    const {stackedDomainValueColumn} = lineSpec
+    indices = [0, 1, 2, 3]
+    lineValues = [undefined, null, 0, NaN]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual(indices)
 
-    const latestIndices = Object.values(lineSpec.columnGroupMaps.latestIndices)
-    const sortOrder = getDataSortOrder(
-      lineSpec.lineData,
-      latestIndices,
-      DomainLabel.Y
-    )
-    expect(sortOrder.length).toBeGreaterThanOrEqual(2)
-    sortOrder.forEach((columnIndex, index) => {
-      if (index < sortOrder.length - 1) {
-        expect(
-          stackedDomainValueColumn[columnIndex] >
-            stackedDomainValueColumn[columnIndex + 1]
-        )
-      } else {
-        expect(
-          stackedDomainValueColumn[columnIndex] <
-            stackedDomainValueColumn[columnIndex + 1]
-        )
-      }
+    lineValues = [NaN, undefined, 0, null]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual(indices)
+
+    lineValues = [0, 0, 0, 0, 0, 0, 0]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual(indices)
+
+    lineValues = [NaN, 1, 0, null]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual(indices)
+
+    lineValues = [NaN, 2, 1000, null, 0, 5]
+    indices = [5, 4, 3, 2, 1, 0]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual([
+      2,
+      5,
+      1,
+      4,
+      3,
+      0,
+    ])
+  })
+
+  it('sorts all values of a line graph by the latest indices', () => {
+    const lineValues = [0, 10, 20, 30]
+    const indices = [0, 1, 2, 3]
+    expect(sortIndicesByValueColumn(lineValues, indices)).toEqual([3, 2, 1, 0])
+  })
+})
+
+describe('sortBandLines', () => {
+  it('sorts band lines according to "rows" in the bandLineMap', () => {
+    const rowFour = [2, 3, 4]
+    const rowFive = [12, 13, 14]
+    const bandValues = [
+      rowFour[0] + 4,
+      rowFour[1] + 4,
+      rowFour[2] + 4,
+      rowFive[0] + 3,
+      rowFive[1] + 3,
+      rowFive[2] + 3,
+      rowFour[0] - 1,
+      rowFour[1] - 1,
+      rowFour[2] - 1,
+      rowFive[0] - 5,
+      rowFive[1] - 5,
+      rowFive[2] - 5,
+      ...rowFour,
+      ...rowFive,
+    ]
+    const bandLineMap = {
+      upperLines: [0, 1],
+      rowLines: [4, 5],
+      lowerLines: [2, 3],
+    }
+    const latestIndices = {0: 2, 1: 5, 2: 8, 3: 11, 4: 14, 5: 17}
+    expect(sortBandLines(bandValues, bandLineMap, latestIndices)).toEqual({
+      upperLines: [1, 0],
+      rowLines: [5, 4],
+      lowerLines: [3, 2],
     })
   })
 })

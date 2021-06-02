@@ -20,24 +20,26 @@ export const mapCumulativeValuesToTimeRange = (
 ): CumulativeValuesByTime => {
   const cumulativeValues: CumulativeValuesByTime = {}
 
-  timesCol.forEach((time, index) => {
-    if (!cumulativeValues[time]) {
-      cumulativeValues[time] = {}
-    }
-    const maxGroup = fillCol[index]
+  if (timesCol) {
+    timesCol.forEach((time, index) => {
+      if (!cumulativeValues[time]) {
+        cumulativeValues[time] = {}
+      }
+      const maxGroup = fillCol[index]
 
-    if (!cumulativeValues[time][maxGroup - 1]) {
-      for (let i = 0; i < maxGroup; i += 1) {
-        if (!cumulativeValues[time][i]) {
-          cumulativeValues[time][i] = 0
+      if (!cumulativeValues[time][maxGroup]) {
+        for (let i = 0; i <= maxGroup; i += 1) {
+          if (!cumulativeValues[time][i]) {
+            cumulativeValues[time][i] = 0
+          }
         }
       }
-    }
-    cumulativeValues[time][maxGroup] =
-      maxGroup - 1 >= 0
-        ? cumulativeValues[time][maxGroup - 1] + valuesCol[index]
-        : valuesCol[index]
-  })
+      cumulativeValues[time][maxGroup] =
+        maxGroup >= 1
+          ? cumulativeValues[time][maxGroup - 1] + valuesCol[index]
+          : valuesCol[index]
+    })
+  }
   return cumulativeValues
 }
 
@@ -155,6 +157,7 @@ export const lineTransform = (
   if (position === 'stacked') {
     stackedDomainValueColumn = getDomainDataFromLines(
       lineData,
+      [...table.getColumn(FILL, 'number')],
       yColumnKey === VALUE ? DomainLabel.Y : DomainLabel.X
     )
   }
