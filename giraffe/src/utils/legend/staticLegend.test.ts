@@ -79,13 +79,10 @@ describe('convertLineSpec', () => {
       })
     })
 
-    it.skip('sorts the legend data in descending order with the correct values in fill columns', () => {
+    it('sorts the legend data in descending order with the correct values in fill columns', () => {
       const customFillKeys = ['result', '_measurement']
       const table = newTable(8)
         .addColumn('_time', 'dateTime:RFC3339', 'time', [
-          // 1622065487240,
-          // 1622065547240,
-          // 1622065607240,
           1622065487240,
           1622065487240,
           1622065487240,
@@ -191,7 +188,7 @@ describe('convertLineSpec', () => {
       })
     })
 
-    it.skip('sorts the legend data in descending order by cumulative of the value axis', () => {
+    it('sorts the legend data in descending order by cumulative of the value axis', () => {
       const lineSpec = lineTransform(
         sampleTable,
         xColKey,
@@ -219,7 +216,7 @@ describe('convertLineSpec', () => {
       })
     })
 
-    it.skip('sorts the legend data in descending order with the correct values in fill columns', () => {
+    it('sorts the legend data in descending order with the correct values in fill columns', () => {
       const customFillKeys = ['rank', 'place']
       const table = newTable(8)
         .addColumn('_time', 'dateTime:RFC3339', 'time', [
@@ -285,17 +282,18 @@ describe('convertLineSpec', () => {
       expect(
         result.find(legendColumn => legendColumn.key === customFillKeys[1])
       ).toBeDefined()
+
       result.forEach(legendColumn => {
         if (legendColumn.key === customFillKeys[0]) {
           expect(legendColumn.values).toEqual([
-            'first',
-            'second',
-            'third',
             'fourth',
+            'third',
+            'second',
+            'first',
           ])
         }
         if (legendColumn.key === customFillKeys[1]) {
-          expect(legendColumn.values).toEqual(['1st', '2nd', '3rd', '4th'])
+          expect(legendColumn.values).toEqual(['4th', '3rd', '2nd', '1st'])
         }
       })
     })

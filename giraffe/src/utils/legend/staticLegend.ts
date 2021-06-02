@@ -65,9 +65,10 @@ export const convertLineSpec = (
   const lineValues = spec.table.getColumn(valueColumnKey)
   const fillIndices = spec.table.getColumn(FILL)
   const lineData: LineData = spec?.lineData
+  const stackedDomainValues = spec.stackedDomainValueColumn ?? []
 
   const sortOrder = sortIndicesByValueColumn(
-    lineValues,
+    position === 'stacked' ? stackedDomainValues : lineValues,
     Object.values(latestValueIndices)
   )
 
@@ -83,7 +84,6 @@ export const convertLineSpec = (
 
   const additionalColumns = []
   if (position === 'stacked') {
-    const stackedDomainValues = spec.stackedDomainValueColumn ?? []
     additionalColumns.push({
       key: `_${STACKED_LINE_CUMULATIVE}`,
       name: STACKED_LINE_CUMULATIVE,

@@ -14,6 +14,7 @@ function getRandomColor() {
   return Math.floor(Math.random() * 255)
 }
 const lineData = {}
+const FILL_COL = []
 const TIME_COL = []
 const VALUE_COL = []
 const CPU_COL = []
@@ -31,6 +32,7 @@ for (let lineNumber = 0; lineNumber < numberOfLines; lineNumber += 1) {
     const index = lineNumber * numberOfLines + dataPointsPerLine
 
     lineData[lineNumber].xs.push(time)
+    FILL_COL.push(lineNumber)
     TIME_COL.push(time)
 
     lineData[lineNumber].ys.push(randomNumber)
@@ -44,4 +46,4 @@ const largeTable = newTable(dataSize)
   .addColumn('_value', 'system', 'number', VALUE_COL)
   .addColumn('cpu', 'string', 'string', CPU_COL)
 
-export {dataSize, largeTable, lineData}
+export {dataSize, largeTable, lineData, FILL_COL}
