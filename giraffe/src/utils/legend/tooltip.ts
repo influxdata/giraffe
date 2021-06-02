@@ -84,7 +84,10 @@ export const getPointsTooltipData = (
 ): LegendData => {
   const lineValues =
     xColKey === VALUE ? table.getColumn(xColKey) : table.getColumn(yColKey)
-  const sortOrder = sortIndicesByValueColumn(lineValues, hoveredRowIndices)
+  const sortOrder = sortIndicesByValueColumn(
+    position === 'stacked' ? stackedDomainValueColumn : lineValues,
+    hoveredRowIndices
+  )
   const xColData = table.getColumn(xColKey, 'number')
   const yColData = table.getColumn(yColKey, 'number')
   const groupColData = table.getColumn(groupColKey, 'number')
