@@ -7,7 +7,7 @@ describe('lineData', () => {
       0: {
         xs: [],
         ys: [],
-        fill: 'yes',
+        fill: 'some color',
       },
     }
     it('should return an empty array when line data has no domain values', () => {
@@ -19,8 +19,8 @@ describe('lineData', () => {
       expect(getDomainDataFromLines(lineData, [], DomainLabel.Y)).toEqual([])
     })
     it('should return an array of domain values in order by group number', () => {
-      lineData[0] = {xs: [100, 101], ys: [1, 2, 3, 4], fill: 'yes'}
-      lineData[1] = {xs: [100, 101], ys: [5, 6, 7, 8], fill: 'yup'}
+      lineData[0] = {xs: [100, 101], ys: [1, 2, 3, 4], fill: 'a color 1'}
+      lineData[1] = {xs: [100, 101], ys: [5, 6, 7, 8], fill: 'a color 2'}
       expect(
         getDomainDataFromLines(lineData, [0, 0, 1, 1], DomainLabel.X)
       ).toEqual([100, 101, 100, 101])
@@ -32,7 +32,7 @@ describe('lineData', () => {
         )
       ).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
 
-      lineData[2] = {xs: [], ys: [], fill: 'yikes'}
+      lineData[2] = {xs: [], ys: [], fill: 'a color 3'}
       expect(
         getDomainDataFromLines(lineData, [0, 0, 1, 1], DomainLabel.X)
       ).toEqual([100, 101, 100, 101])

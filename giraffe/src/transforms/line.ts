@@ -20,7 +20,7 @@ export const mapCumulativeValuesToTimeRange = (
 ): CumulativeValuesByTime => {
   const cumulativeValues: CumulativeValuesByTime = {}
 
-  if (Array.isArray(timesCol)) {
+  if (timesCol) {
     timesCol.forEach((time, index) => {
       if (!cumulativeValues[time]) {
         cumulativeValues[time] = {}

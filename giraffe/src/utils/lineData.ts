@@ -1,4 +1,4 @@
-import {ColumnData, DomainLabel, LineData, Scale, Table} from '../types'
+import {DomainLabel, LineData, Scale, Table} from '../types'
 import {simplify} from '../utils/simplify'
 import {FILL} from '../constants/columnKeys'
 

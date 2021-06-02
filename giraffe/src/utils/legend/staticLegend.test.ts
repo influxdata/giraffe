@@ -79,7 +79,7 @@ describe('convertLineSpec', () => {
       })
     })
 
-    it('sorts the legend data in descending order with the correct values in fill columns', () => {
+    it('sorts the legend data in descending order with the correct values in fill columns when time values are sorted', () => {
       const customFillKeys = ['result', '_measurement']
       const table = newTable(8)
         .addColumn('_time', 'dateTime:RFC3339', 'time', [
@@ -111,6 +111,78 @@ describe('convertLineSpec', () => {
           '2nd',
           '1st',
           '4th',
+          '3rd',
+        ])
+
+      const lineSpec = lineTransform(
+        table,
+        xColKey,
+        yColKey,
+        customFillKeys,
+        NINETEEN_EIGHTY_FOUR,
+        position
+      )
+
+      const result = convertLineSpec(
+        lineSpec,
+        yColKey,
+        getColumnFormatter,
+        position
+      )
+
+      expect(
+        result.find(legendColumn => legendColumn.key === customFillKeys[0])
+      ).toBeDefined()
+      expect(
+        result.find(legendColumn => legendColumn.key === customFillKeys[1])
+      ).toBeDefined()
+      result.forEach(legendColumn => {
+        if (legendColumn.key === customFillKeys[0]) {
+          expect(legendColumn.values).toEqual([
+            'first',
+            'second',
+            'third',
+            'fourth',
+          ])
+        }
+        if (legendColumn.key === customFillKeys[1]) {
+          expect(legendColumn.values).toEqual(['1st', '2nd', '3rd', '4th'])
+        }
+      })
+    })
+
+    it('sorts the legend data in descending order with the correct values in fill columns when time values are unsorted', () => {
+      const customFillKeys = ['result', '_measurement']
+      const table = newTable(8)
+        .addColumn('_time', 'dateTime:RFC3339', 'time', [
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+        ])
+        .addColumn('_value', 'double', 'number', [0, 50, 0, 100, 0, 10, 0, 15])
+        .addColumn(customFillKeys[0], 'string', 'string', [
+          'second',
+          'second',
+          'first',
+          'first',
+          'fourth',
+          'fourth',
+          'third',
+          'third',
+        ])
+        .addColumn(customFillKeys[1], 'string', 'string', [
+          '2nd',
+          '2nd',
+          '1st',
+          '1st',
+          '4th',
+          '4th',
+          '3rd',
           '3rd',
         ])
 
@@ -216,7 +288,7 @@ describe('convertLineSpec', () => {
       })
     })
 
-    it('sorts the legend data in descending order with the correct values in fill columns', () => {
+    it('sorts the legend data in descending order with the correct values in fill columns when the time values are sorted', () => {
       const customFillKeys = ['rank', 'place']
       const table = newTable(8)
         .addColumn('_time', 'dateTime:RFC3339', 'time', [
@@ -240,24 +312,24 @@ describe('convertLineSpec', () => {
           40,
         ])
         .addColumn(customFillKeys[0], 'string', 'string', [
-          'first',
-          'second',
-          'third',
           'fourth',
-          'first',
-          'second',
           'third',
+          'second',
+          'first',
           'fourth',
+          'third',
+          'second',
+          'first',
         ])
         .addColumn(customFillKeys[1], 'string', 'string', [
-          '1st',
-          '2nd',
-          '3rd',
           '4th',
-          '1st',
-          '2nd',
           '3rd',
+          '2nd',
+          '1st',
           '4th',
+          '3rd',
+          '2nd',
+          '1st',
         ])
 
       const lineSpec = lineTransform(
@@ -286,14 +358,96 @@ describe('convertLineSpec', () => {
       result.forEach(legendColumn => {
         if (legendColumn.key === customFillKeys[0]) {
           expect(legendColumn.values).toEqual([
-            'fourth',
-            'third',
-            'second',
             'first',
+            'second',
+            'third',
+            'fourth',
           ])
         }
         if (legendColumn.key === customFillKeys[1]) {
-          expect(legendColumn.values).toEqual(['4th', '3rd', '2nd', '1st'])
+          expect(legendColumn.values).toEqual(['1st', '2nd', '3rd', '4th'])
+        }
+      })
+    })
+
+    it('sorts the legend data in descending order with the correct values in fill columns when the time values are unsorted', () => {
+      const customFillKeys = ['rank', 'place']
+      const table = newTable(8)
+        .addColumn('_time', 'dateTime:RFC3339', 'time', [
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+          1622065487240,
+          1622065667240,
+        ])
+        .addColumn('_value', 'system', 'number', [
+          10,
+          10,
+          20,
+          20,
+          30,
+          30,
+          40,
+          40,
+        ])
+        .addColumn(customFillKeys[0], 'string', 'string', [
+          'fourth',
+          'fourth',
+          'third',
+          'third',
+          'second',
+          'second',
+          'first',
+          'first',
+        ])
+        .addColumn(customFillKeys[1], 'string', 'string', [
+          '4th',
+          '4th',
+          '3rd',
+          '3rd',
+          '2nd',
+          '2nd',
+          '1st',
+          '1st',
+        ])
+
+      const lineSpec = lineTransform(
+        table,
+        xColKey,
+        yColKey,
+        customFillKeys,
+        NINETEEN_EIGHTY_FOUR,
+        position
+      )
+
+      const result = convertLineSpec(
+        lineSpec,
+        yColKey,
+        getColumnFormatter,
+        position
+      )
+
+      expect(
+        result.find(legendColumn => legendColumn.key === customFillKeys[0])
+      ).toBeDefined()
+      expect(
+        result.find(legendColumn => legendColumn.key === customFillKeys[1])
+      ).toBeDefined()
+
+      result.forEach(legendColumn => {
+        if (legendColumn.key === customFillKeys[0]) {
+          expect(legendColumn.values).toEqual([
+            'first',
+            'second',
+            'third',
+            'fourth',
+          ])
+        }
+        if (legendColumn.key === customFillKeys[1]) {
+          expect(legendColumn.values).toEqual(['1st', '2nd', '3rd', '4th'])
         }
       })
     })
