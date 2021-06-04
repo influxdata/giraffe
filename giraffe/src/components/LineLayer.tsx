@@ -18,12 +18,13 @@ export const LineLayer: FunctionComponent<Props> = props => {
   const {
     config,
     spec,
-    width,
     height,
+    width,
     xScale,
     yScale,
     hoverX,
     hoverY,
+    legendHide,
     canvasRef,
   } = props
   const {position} = config
@@ -78,7 +79,8 @@ export const LineLayer: FunctionComponent<Props> = props => {
     height
   )
 
-  const hasHoverData = hoverRowIndices && hoverRowIndices.length > 0
+  const hasHoverData =
+    hoverRowIndices && hoverRowIndices.length > 0 && !legendHide
 
   return (
     <>

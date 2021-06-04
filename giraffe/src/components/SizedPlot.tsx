@@ -69,7 +69,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   )
 
   const {margins, config} = env
-  const {width, height, showAxes} = config
+  const {width, height, legendHide, showAxes} = config
 
   const resetDomains = env => {
     env.resetDomains()
@@ -197,7 +197,9 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           right: `${margins.right}px`,
           bottom: `${margins.bottom}px`,
           left: `${margins.left}px`,
-          cursor: `${userConfig.cursor || 'crosshair'}`,
+          cursor: `${userConfig.cursor ||
+            (!legendHide && 'crosshair') ||
+            'auto'}`,
         }}
         onDoubleClick={memoizedResetDomains}
         {...hoverTargetProps}
@@ -256,6 +258,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
             const sharedProps = {
               hoverX,
               hoverY,
+              legendHide,
               plotConfig: config,
               xScale: env.xScale,
               yScale: env.yScale,

@@ -689,17 +689,18 @@ export interface RectLayerSpec {
 }
 
 export interface LayerProps {
-  xScale: Scale<number, number>
-  yScale: Scale<number, number>
-  width: number
-  height: number
-  spec: LayerSpec
+  columnFormatter: (colKey: string) => (x: any) => string
+  yColumnType: ColumnType
   config: LayerConfig
   plotConfig: SizedConfig
-  yColumnType: ColumnType
-  columnFormatter: (colKey: string) => (x: any) => string
+  spec: LayerSpec
   hoverX: number | null
   hoverY: number | null
+  legendHide: boolean
+  height: number
+  width: number
+  xScale: Scale<number, number>
+  yScale: Scale<number, number>
 }
 
 export interface Scale<D = any, R = any> {
