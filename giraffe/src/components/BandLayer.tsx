@@ -30,6 +30,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
     height,
     hoverX,
     hoverY,
+    legendHide,
     spec,
     width,
     xScale,
@@ -119,7 +120,8 @@ export const BandLayer: FunctionComponent<Props> = props => {
     )
   )
 
-  const hasHoverData = hoverRowIndices && hoverRowIndices.length > 0
+  const hasHoverData =
+    hoverRowIndices && hoverRowIndices.length > 0 && !legendHide
 
   return (
     <>
