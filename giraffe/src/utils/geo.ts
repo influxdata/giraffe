@@ -76,6 +76,7 @@ export const formatCircleMarkerRowInfo = (
       values: [timeValue],
     })
   }
+
   const {colorField, radiusField} = properties
   const radiusValue = table.getValue(index, radiusField)
   const {radiusDimension} = properties
@@ -88,6 +89,7 @@ export const formatCircleMarkerRowInfo = (
   if (radiusInfo) {
     result.push(radiusInfo)
   }
+
   const colorValue = table.getValue(index, colorField)
   const {colorDimension} = properties
   const colorInfo = formatValue(colorField, 'Color', colorValue, colorDimension)

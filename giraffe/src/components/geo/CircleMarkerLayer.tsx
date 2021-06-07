@@ -35,6 +35,7 @@ export const CircleMarkerLayer: FunctionComponent<Props> = props => {
     stylingConfig,
     properties,
   } = props
+
   const {bounds} = properties.radiusDimension
   const radiusMinAndMax = radiusFieldName
     ? calculateMinAndMax(bounds, table, radiusFieldName)

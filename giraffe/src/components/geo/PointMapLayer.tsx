@@ -10,6 +10,8 @@ import {getColor} from './dimensionCalculations'
 import {SVGIcon} from './SVGIcon'
 import {defineToolTipEffect} from './processing/toolTips'
 import {GeoTooltip} from './GeoTooltip'
+import {Tooltip} from '../Tooltip'
+
 import {
   formatPointLayerRowInfo,
   createClusterCustomIcon,
@@ -62,6 +64,7 @@ export const PointMapLayer: FunctionComponent<Props> = props => {
     const rowInfo = formatPointLayerRowInfo(properties, table, i)
     tooltips.push({markerRef, rowInfo})
   }
+
   const tooltip = (
     <GeoTooltip
       stylingConfig={stylingConfig}
@@ -72,6 +75,7 @@ export const PointMapLayer: FunctionComponent<Props> = props => {
         ])
       }}
     />
+    // <Tooltip data={properties} config={stylingConfig} />
   )
   const [visible, setVisible] = useState(true)
   useEffect(() => {

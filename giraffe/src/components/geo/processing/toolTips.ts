@@ -23,6 +23,7 @@ export const defineToolTipEffect = (markerRefs, setToolTip) => {
   return () => {
     for (let i = 0; i < markerRefs.length; i++) {
       const {markerRef, rowInfo} = markerRefs[i]
+      console.log(rowInfo)
       const marker = markerRef.current.leafletElement
       let mouseEntered = false
       marker.on('mouseover', () => {

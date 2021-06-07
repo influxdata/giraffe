@@ -12,6 +12,7 @@ export const GeoTooltip: FunctionComponent<Props> = props => {
   const {stylingConfig, onCreate} = props
   const [tooltipData, setTooltipData] = useState(null)
   onCreate(setTooltipData)
+
   return (
     <>
       {tooltipData && (
@@ -19,7 +20,6 @@ export const GeoTooltip: FunctionComponent<Props> = props => {
           data={tooltipData}
           config={{
             ...(stylingConfig as Config),
-            legendColumns: tooltipData.map(c => c.key),
           }}
         />
       )}
