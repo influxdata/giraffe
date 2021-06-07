@@ -6,6 +6,9 @@ export interface GeoLayerConfig {
   allowPanAndZoom: boolean
   mapStyle?: string
   detectCoordinateFields: boolean
+  useS2CellID?: boolean
+  s2Column?: string
+  latLonColumns?: LatLonColumns
 
   onViewportChange?: (lat: number, lon: number, zoom: number) => void
   onUpdateViewport?: (lat: number, lon: number, zoom: number) => void
@@ -95,4 +98,14 @@ export interface GeoQueryVariables {
   lon: number
   lat: number
   radius: number
+}
+
+export type LatLonColumns = {
+  lat: LatLonColumn
+  lon: LatLonColumn
+}
+
+export type LatLonColumn = {
+  key: string
+  column: string
 }

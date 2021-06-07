@@ -2,19 +2,13 @@ import {S2} from 's2-geometry'
 import {HEX_DIGIT_NUM} from '../../../utils/geo'
 import {CoordinateEncoding} from './GeoTable'
 import {Coordinates} from './GeoTable'
-import {
-  LAT_COLUMN,
-  LON_COLUMN,
-  START_COLUMN,
-  STOP_COLUMN,
-  TIME_COLUMN,
-} from './tableProcessing'
+import {START_COLUMN, STOP_COLUMN, TIME_COLUMN} from './tableProcessing'
 
 export const getLatLonMixin = function(index: number): Coordinates {
   if (this.coordinateEncoding === CoordinateEncoding.FIELDS) {
     return {
-      lon: this.getValue(index, LON_COLUMN),
-      lat: this.getValue(index, LAT_COLUMN),
+      lon: this.getValue(index, this.latLonColumns.lon.column),
+      lat: this.getValue(index, this.latLonColumns.lat.column),
     }
   }
   const cellId = this.getS2CellID(index)

@@ -11,16 +11,24 @@ import {
   TABLE_COLUMN,
 } from './tableProcessing'
 import {getLatLonMixin, getTimeStringMixin} from './mixins'
+import {LatLonColumns} from '../../../types/geo'
 
 export class NativeGeoTable implements GeoTable {
   coordinateEncoding: CoordinateEncoding
   table: Table
   maxRows: number
+  latLonColumns: LatLonColumns
 
-  constructor(table: Table, maxRows: number) {
-    this.coordinateEncoding = getDataEncoding(table)
+  constructor(
+    table: Table,
+    maxRows: number,
+    latLonColumns: LatLonColumns,
+    s2Column: string
+  ) {
+    this.coordinateEncoding = getDataEncoding(table, latLonColumns, s2Column)
     this.table = table
     this.maxRows = maxRows
+    this.latLonColumns = latLonColumns
   }
 
   getRowCount() {
@@ -62,6 +70,7 @@ export class NativeGeoTable implements GeoTable {
     const tableColumn = table.getColumn(TABLE_COLUMN)
     const lonColumn = table.getColumn(LON_COLUMN, 'number')
     const latColumn = table.getColumn(LAT_COLUMN, 'number')
+    // TODO: Palak: remove the hardcoded columns for tracks
 
     const result = []
     let track: Track = []
@@ -89,14 +98,20 @@ export class NativeGeoTable implements GeoTable {
   getTimeString = getTimeStringMixin.bind(this)
 }
 
-const getDataEncoding = (table: Table): CoordinateEncoding => {
+const getDataEncoding = (
+  table: Table,
+  latLonColumns: LatLonColumns,
+  s2Column: string
+): CoordinateEncoding => {
   if (
-    table.getColumn(LON_COLUMN) !== null &&
-    table.getColumn(LAT_COLUMN) !== null
+    typeof latLonColumns?.lat !== 'undefined' &&
+    typeof latLonColumns?.lon !== 'undefined' &&
+    table.getColumn(latLonColumns.lat.column) !== null &&
+    table.getColumn(latLonColumns.lon.column) !== null
   ) {
     return CoordinateEncoding.FIELDS
   }
-  if (table.getColumn(GEO_HASH_COLUMN) !== null) {
+  if (table.getColumn(s2Column) !== null) {
     return CoordinateEncoding.GEO_HASH
   }
   return CoordinateEncoding.GEO_HASH

@@ -1,8 +1,9 @@
 // Types
 import {GeoTable} from './GeoTable'
-import {isPivotSensible, PivotedGeoTable} from './PivotedGeoTable'
+import {PivotedGeoTable} from './PivotedGeoTable'
 import {NativeGeoTable} from './NativeGeoTable'
 import {Table} from '../../../types'
+import {LatLonColumns} from '../../../types/geo'
 
 // Constants
 export const FIELD_COLUMN = '_field'
@@ -26,12 +27,28 @@ export const GEO_HASH_COLUMN = 's2_cell_id'
 export const preprocessData = (
   table: Table,
   rowLimit: number,
-  autoPivoting: boolean
+  isS2Present: boolean,
+  latLonColumns: LatLonColumns,
+  s2Column: string
 ): GeoTable => {
-  if (autoPivoting && isPivotSensible(table)) {
-    return new PivotedGeoTable(table, rowLimit)
+  const isLatLonAsTags = latLonAsTags(isS2Present, latLonColumns)
+  if (isS2Present || isLatLonAsTags) {
+    return new NativeGeoTable(table, rowLimit, latLonColumns, s2Column)
   }
-  return new NativeGeoTable(table, rowLimit)
+  return new PivotedGeoTable(table, rowLimit, latLonColumns)
+}
+
+const latLonAsTags = (useS2CellID, latLonColumns) => {
+  if (typeof useS2CellID !== 'undefined' && useS2CellID === false) {
+    if (
+      latLonColumns?.lat?.key === 'tag' &&
+      latLonColumns?.lon?.key === 'tag'
+    ) {
+      return true
+    }
+    return false
+  }
+  return false
 }
 
 export const getColumnNames = (

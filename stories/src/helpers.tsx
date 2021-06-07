@@ -1,5 +1,6 @@
 import React, {CSSProperties, FC} from 'react'
 import {select, text, boolean, number} from '@storybook/addon-knobs'
+import _ from 'lodash'
 
 import {Table} from '../../giraffe/src'
 import {CPU} from './data/cpu'
@@ -176,3 +177,72 @@ export const tooltipHideKnob = () => boolean('tooltipDisable', false)
 
 export const annotationPinKnob = () =>
   select('pin', ['none', 'circle', 'start', 'stop'], 'none')
+
+const findTags = (table: Table, latLon: boolean = false) => {
+  return table.columnKeys.reduce((acc, k) => {
+    const columnType = table.getColumnType(k)
+    if (columnType === 'number' || columnType === 'time') {
+      return acc
+    }
+
+    if (
+      k === '_measurement' ||
+      k === 'id' ||
+      k === '_field' ||
+      k === 'result'
+    ) {
+      return acc
+    }
+    if (latLon && k === 's2_cell_id') {
+      return acc
+    }
+
+    return {
+      ...acc,
+      [k]: {
+        key: 'tag',
+        column: table.getColumnName(k),
+      },
+    }
+  }, {})
+}
+
+const findFields = (table: Table) => {
+  const fieldValues = table.getColumn('_field')
+  const uniqueFields = _.uniq(fieldValues, true)
+  const fields = uniqueFields.reduce(function(result, item) {
+    result[item] = {
+      key: 'field',
+      column: item,
+    }
+    return result
+  }, {})
+
+  return fields
+}
+
+export const lattitudeKnob = (table: Table, initial?: Record<string, any>) => {
+  return select(
+    'lattitude',
+    {
+      ...findFields(table),
+      ...findTags(table, true),
+    },
+    initial || '_value'
+  )
+}
+
+export const longitudeKnob = (table: Table, initial?: Record<string, any>) => {
+  return select(
+    'longitude',
+    {
+      ...findFields(table),
+      ...findTags(table, true),
+    },
+    initial || '_value'
+  )
+}
+
+export const s2GeoHashKnob = (table: Table, initial?: string) => {
+  return select('S2 Geo Hash:', findTags(table), initial || '_value')
+}
