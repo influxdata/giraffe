@@ -11,7 +11,7 @@ interface Props {
   event: DragEvent | null
   width: number
   height: number
-  onXBrushEnd: (xRange: number[], onShiftDown?:boolean) => void
+  onXBrushEnd: (xRange: number[], onShiftDown?: boolean) => void
   onYBrushEnd: (yRange: number[]) => void
   onClick?: (mouseEvent: React.MouseEvent) => void
 }
