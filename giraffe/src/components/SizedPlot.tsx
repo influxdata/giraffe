@@ -128,9 +128,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const handleXBrushEnd = useCallback(
     (xRange: number[], isShiftDown: boolean) => {
-      console.log('423a: in handle x brush end....is shift down???', isShiftDown)
-
-      if (userConfig?.interactionHandlers?.onXBrush) {
+      if (isShiftDown && userConfig?.interactionHandlers?.onXBrush) {
         const beginning = getNearestDataPoint(xRange[0])
         const end = getNearestDataPoint(xRange[1])
         userConfig.interactionHandlers.onXBrush(beginning, end)
