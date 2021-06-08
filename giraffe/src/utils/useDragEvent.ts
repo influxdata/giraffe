@@ -53,6 +53,8 @@ const MIN_DRAG_DELTA = 3
  *
  * We are putting the mouseEvent into the event so that the consumer for the 'onMouseUpEnd' can use it, since that consumer
  * is a mouseListener and needs the mouseEvent information.
+ *
+ * isShiftDown is added for mouse down events
  */
 
 export interface DragEvent {
@@ -64,6 +66,7 @@ export interface DragEvent {
   y: number
   mouseActionState: 'mouseUpHappened' | 'mouseDownHappened' | null
   mouseEvent?: React.MouseEvent
+  isShiftDown?: boolean
 }
 
 interface UseDragEventProps {
@@ -142,7 +145,11 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
       document.addEventListener('mouseup', onMouseUp)
 
       const [x, y] = getXYCoords(mouseDownEvent)
+      const isShiftDown = mouseDownEvent.getModifierState('Shift')
 
+      // TODO:  even thoug the 'isShiftDown' gets reset with each mousedown,
+      // incase other mouse events/triggers/callbacks want to use the shift key, make sure to set
+      // it to false in all the other places where events are emitted to reset it properly!
       dragEventRef.current = {
         type: 'drag',
         initialX: x,
@@ -151,6 +158,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
         y,
         direction: null,
         mouseActionState: 'mouseDownHappened',
+        isShiftDown,
       }
 
       forceUpdate()
