@@ -81,6 +81,7 @@
     "node-sass": "^4.14.1",
     "papaparse": "^5.3.0",
     "prettier": "^1.19.1",
+    "pretty-quick": "^3.1.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-leaflet": "^2.6.3",
@@ -107,7 +108,6 @@
     "react-dom": "^16.8.0"
   },
   "dependencies": {
-    "merge-images": "^2.0.0",
-    "pretty-quick": "^3.1.0"
+    "merge-images": "^2.0.0"
   }
 }
