@@ -76,15 +76,20 @@ const distanceToMousePointer = (
  * and then when the mouse is directly over that point, it should show the tooltip for
  * the point and not the range
  *
- * Without weighing it, the point annotation hovered tooltip will never show.
+ * Without weighting it, the point annotation hovered tooltip will never show.
+ * (very hard to get it *exactly*; and even if so, 0 === 0)
  *
- * So, if the types of the annotations are different, 'weighing' the range annotation by a small factor
+ * If the types of the annotations are different, 'weighting' the range annotation by a small factor
  * (ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN, which is equal to 10)
- * so that when you are *very* close to the point then the point, and not the range annotation
+ * so that when you are *very* close to the point;  then the point, and not the range annotation
  * will show up in the tooltip popup.
  *
  * If the two types of annotations being compared are the same, then they will be weighed the same
- * and it will be a simple comparison.
+ * and the weights will cancel each other out and it will be a simple comparison.
+ *
+ * NOTE:  the overlap hover margin is currently less than the default hover margin (which is 20)
+ * if the default hover margin gets below the the overlap hover margin, then the overlap margin
+ * should be reduced.
  */
 const getWeightedDistance = distance => {
   if (distance.annoType === 'range') {
@@ -162,7 +167,8 @@ export const getAnnotationHoverIndices = (
               distances.push({index: i, dist, annoType})
             })
 
-            result = [distances.sort(sortDistances)[0].index]
+            const closestAnnotation = distances.sort(sortDistances)[0].index
+            result = [closestAnnotation]
           }
         }
         return result
