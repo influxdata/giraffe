@@ -1,5 +1,6 @@
 import {AnnotationMark, LineHoverDimension, Scale} from '../types'
 import {min} from 'd3-array'
+import {ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN} from '../constants/index'
 
 export const getAnnotationsPositions = (
   annotationData: AnnotationMark[],
@@ -64,6 +65,36 @@ const distanceToMousePointer = (
   return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
+
+/**
+ * while a mouse is hovering within a range annotation, the 'distance' is zero.
+ *
+ * but there might be a point annotation overlapping the range,
+ * and then when the mouse is directly over that point, it sholud show the tooltip for the point and not the range
+ *
+ * so without weighing it, the point annotation hovered tooltip will never show.
+ *
+ * so, if the types of the annotations are different, 'weighing' the range annotation by a small factor
+ * (ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN, which is equal to 10)
+ * so that when you are *very* close to the point then it will show up in the tooltip popup.
+ *
+ * if the two types of annotations being compared are the same, then just do the simple comparison.
+ * */
+const getWeightedDistance = distance => {
+  if (distance.annoType === 'range') {
+    return distance.dist + ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN
+  }
+  return distance.dist
+}
+
+export const sortDistances = (dist1, dist2) => {
+  // just weighting the distance for everything, if the two types are the same
+  // they will get weighted the same and will cancel each other out
+  // add a handicap to the range, so that if within a certain distance, the point will get selected instead
+  return getWeightedDistance(dist1) - getWeightedDistance(dist2)
+}
+
+
 /***********************************************************************************
  * ANNOTATIONS HOVERING
  *
@@ -93,6 +124,7 @@ export const getAnnotationHoverIndices = (
           return result
         }
         const {dimension, startValue, stopValue} = annotation
+        console.log(`${i}: annotation: ${startValue}: ${stopValue}`)
         if (
           (hoverDimension !== 'xy' && hoverDimension !== dimension) ||
           ((hoverDimension === 'xy' || hoverDimension === dimension) &&
@@ -103,19 +135,25 @@ export const getAnnotationHoverIndices = (
               dimension === 'x' ? hoverX : hoverY
             ))
         ) {
+          console.log('pushing:', i)
           result.push(i)
 
           if (result.length > 1) {
+
             const distances = []
             result.forEach(i => {
               const dist = distanceToMousePointer(
                 annotationData[i],
                 dimension === 'x' ? hoverX : hoverY
               )
-              distances.push(dist)
+              const annoType =
+                annotationData[i].startValue === annotationData[i].stopValue
+                  ? 'point'
+                  : 'range'
+              distances.push({index: i, dist, annoType})
             })
-            const closestAnnotation = result[distances.indexOf(min(distances))]
-            result = [closestAnnotation]
+
+            result = [distances.sort(sortDistances)[0].index]
           }
         }
         return result

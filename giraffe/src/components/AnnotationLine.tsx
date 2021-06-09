@@ -120,7 +120,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           ${clampedStart - pixelMargin}, ${RANGE_HEIGHT}`,
       fill: color,
       id: props.id,
-      style: {cursor: 'pointer'},
+      style: {cursor: 'pointer', opacity: '60%'},
     })
   }
 

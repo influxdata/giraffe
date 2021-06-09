@@ -48,6 +48,13 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
     hoverY
   )
 
+  console.log('hover row indices....', hoverRowIndices)
+  //console.log('hoverDimension', hoverDimension)
+  console.log('hoverMargin', hoverMargin)
+  //console.log('anno positions...', annotationsPositions)
+  //console.log('hoverx',hoverX)
+  //console.log('hoverY', hoverY)
+
   let boundingRect: DOMRect
   if (svgRef.current) {
     boundingRect = svgRef.current.getBoundingClientRect()
