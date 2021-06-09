@@ -65,21 +65,27 @@ const distanceToMousePointer = (
   return Math.abs(hoverPosition - annotationMark.startValue)
 }
 
-
 /**
- * while a mouse is hovering within a range annotation, the 'distance' is zero.
+ * Summary: do a weighted comparison between the distance of the mouse to range and point
+ * annotations.
  *
- * but there might be a point annotation overlapping the range,
- * and then when the mouse is directly over that point, it sholud show the tooltip for the point and not the range
+ * Details:
+ * While a mouse is hovering within a range annotation, the 'distance' is zero.
  *
- * so without weighing it, the point annotation hovered tooltip will never show.
+ * But there might be a point annotation overlapping the range,
+ * and then when the mouse is directly over that point, it should show the tooltip for
+ * the point and not the range
  *
- * so, if the types of the annotations are different, 'weighing' the range annotation by a small factor
+ * Without weighing it, the point annotation hovered tooltip will never show.
+ *
+ * So, if the types of the annotations are different, 'weighing' the range annotation by a small factor
  * (ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN, which is equal to 10)
- * so that when you are *very* close to the point then it will show up in the tooltip popup.
+ * so that when you are *very* close to the point then the point, and not the range annotation
+ * will show up in the tooltip popup.
  *
- * if the two types of annotations being compared are the same, then just do the simple comparison.
- * */
+ * If the two types of annotations being compared are the same, then they will be weighed the same
+ * and it will be a simple comparison.
+ */
 const getWeightedDistance = distance => {
   if (distance.annoType === 'range') {
     return distance.dist + ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN
@@ -88,15 +94,14 @@ const getWeightedDistance = distance => {
 }
 
 export const sortDistances = (dist1, dist2) => {
-  // just weighting the distance for everything, if the two types are the same
-  // they will get weighted the same and will cancel each other out
-  // add a handicap to the range, so that if within a certain distance, the point will get selected instead
   return getWeightedDistance(dist1) - getWeightedDistance(dist2)
 }
 
-
 /***********************************************************************************
  * ANNOTATIONS HOVERING
+ *
+ * This returns the index of the annotation in the cell that should have its
+ *  tooltip popup appear.
  *
  * hover dimension 'xy' means find annotations only near the mouse position
  * hover dimension 'x' means find annotations along the x-axis at mouse position
@@ -109,6 +114,13 @@ export const sortDistances = (dist1, dist2) => {
  * Cross dimensions means the annotation is always hovered, occurs when:
  *   hover dimension is 'x' && annotation dimension is 'y'
  *   hover dimension is 'y' && annotation dimension is 'x'
+ *
+ *  This method accounts for overlapping annotations; if a point annotation is within a range
+ *  annotation, the point annotation tooltip *will* show up when the mouse is within
+ *  the ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN, which is equal to 10;
+ *  which is essentially only when the mouse is right on top of the line.
+ *
+ *  (see previous method to sort distances for details)
  *
  */
 export const getAnnotationHoverIndices = (
@@ -124,7 +136,6 @@ export const getAnnotationHoverIndices = (
           return result
         }
         const {dimension, startValue, stopValue} = annotation
-        console.log(`${i}: annotation: ${startValue}: ${stopValue}`)
         if (
           (hoverDimension !== 'xy' && hoverDimension !== dimension) ||
           ((hoverDimension === 'xy' || hoverDimension === dimension) &&
@@ -135,11 +146,9 @@ export const getAnnotationHoverIndices = (
               dimension === 'x' ? hoverX : hoverY
             ))
         ) {
-          console.log('pushing:', i)
           result.push(i)
 
           if (result.length > 1) {
-
             const distances = []
             result.forEach(i => {
               const dist = distanceToMousePointer(
