@@ -64,6 +64,7 @@ export type GeoPointMapViewLayer = GeoViewLayerProperties & {
   maxClusterRadius?: number
   areClustersColored?: boolean
   clusterAggregationFunction?: ClusterAggregation
+  fill?: string[]
 }
 
 export type GeoTrackMapViewLayer = GeoViewLayerProperties & {
