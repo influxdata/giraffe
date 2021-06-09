@@ -9,6 +9,8 @@
     "lint": "eslint '{src,../stories/src}/**/*.{ts,tsx}'",
     "prettier": "pretty-quick --config ../.prettierrc.json --check '{src,../stories/src}/**/*.{ts,tsx}'",
     "prettier:fix": "pretty-quick --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
+    "prettier:all": "prettier --config ../.prettierrc.json --check '{src,../stories/src}/**/*.{ts,tsx}'",
+    "prettier:all:fix": "prettier --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
     "publish": "echo 'To publish giraffe, run ./publish $version'",
     "start": "webpack --config webpack.config.js --watch --progress",
     "test": "jest --collectCoverage --maxWorkers=2",
