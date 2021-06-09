@@ -7,8 +7,8 @@
   "scripts": {
     "build": "rm -rf dist && NODE_ENV=production webpack --config webpack.config.js",
     "lint": "eslint '{src,../stories/src}/**/*.{ts,tsx}'",
-    "prettier": "prettier --config ../.prettierrc.json --check '{src,../stories/src}/**/*.{ts,tsx}'",
-    "prettier:fix": "prettier --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
+    "prettier": "pretty-quick --config ../.prettierrc.json --check '{src,../stories/src}/**/*.{ts,tsx}'",
+    "prettier:fix": "pretty-quick --config ../.prettierrc.json --write '{src,../stories/src}/**/*.{ts,tsx}'",
     "publish": "echo 'To publish giraffe, run ./publish $version'",
     "start": "webpack --config webpack.config.js --watch --progress",
     "test": "jest --collectCoverage --maxWorkers=2",
@@ -107,6 +107,7 @@
     "react-dom": "^16.8.0"
   },
   "dependencies": {
-    "merge-images": "^2.0.0"
+    "merge-images": "^2.0.0",
+    "pretty-quick": "^3.1.0"
   }
 }
