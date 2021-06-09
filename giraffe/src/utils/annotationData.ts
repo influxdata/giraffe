@@ -1,5 +1,4 @@
 import {AnnotationMark, LineHoverDimension, Scale} from '../types'
-import {min} from 'd3-array'
 import {ANNOTATION_DEFAULT_OVERLAP_HOVER_MARGIN} from '../constants/index'
 
 export const getAnnotationsPositions = (
