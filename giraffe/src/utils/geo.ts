@@ -126,8 +126,8 @@ export const formatPointLayerRowInfo = (
     result.push(colorInfo)
   }
 
-  if (properties.fill != []) {
-    properties.fill.forEach(element => {
+  if (properties.fillColumns != []) {
+    properties.fillColumns.forEach(element => {
       const colorValue = table.getValue(index, element)
       const {colorDimension} = properties
       const stringInfo = element.toString()
