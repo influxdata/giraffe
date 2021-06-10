@@ -197,7 +197,7 @@ geo.add('Map Markers Custom CSV', () => {
               {type: 'max', hex: '#343aeb'},
             ],
             isClustered: false,
-            fillColumns: ['_field', '_measurement'],
+            fillColumns: ['_field', '_measurement', '_time'],
           },
         ],
         tileServerConfiguration: osmTileServerConfiguration,
