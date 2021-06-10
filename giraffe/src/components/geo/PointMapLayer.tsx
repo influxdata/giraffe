@@ -10,7 +10,6 @@ import {getColor} from './dimensionCalculations'
 import {SVGIcon} from './SVGIcon'
 import {defineToolTipEffect} from './processing/toolTips'
 import {GeoTooltip} from './GeoTooltip'
-import {Tooltip} from '../Tooltip'
 
 import {
   formatPointLayerRowInfo,
