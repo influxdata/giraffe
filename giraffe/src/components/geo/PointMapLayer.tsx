@@ -74,7 +74,6 @@ export const PointMapLayer: FunctionComponent<Props> = props => {
         ])
       }}
     />
-    // <Tooltip data={properties} config={stylingConfig} />
   )
   const [visible, setVisible] = useState(true)
   useEffect(() => {
