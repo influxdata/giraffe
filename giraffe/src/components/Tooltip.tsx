@@ -22,7 +22,6 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendHide: isHidden,
     legendOpacity,
   } = config
-
   const tooltipElement = useTooltipElement('giraffe-tooltip-container')
 
   const tooltipOpacity = useMemo(() => {

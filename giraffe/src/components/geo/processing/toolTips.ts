@@ -7,12 +7,12 @@ export const formatValue = (
   value: number,
   dimension: Axis = {}
 ) => {
-  const {label, prefix = '', suffix = ''} = dimension
+  const {prefix = '', suffix = ''} = dimension
   const formattedValue = `${prefix}${value}${suffix}`
   if (value !== undefined && value !== null) {
     return {
       key: key,
-      name: label ? label : defaultLabel,
+      name: defaultLabel,
       type: 'string',
       values: [formattedValue],
     }

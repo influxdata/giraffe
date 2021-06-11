@@ -155,6 +155,5 @@ export const getMosaicTooltipData = (
     yTooltipColumn,
     durationTooltipColumn,
   ]
-
   return tooltipColumns
 }
