@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useEffect, useMemo} from 'react'
 import {
   Formatter,
   LayerSpec,
@@ -48,7 +48,10 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   const {
     config: configOverride,
     staticLegend: staticLegendOverride,
-  } = overrideLegendConfig(config, staticLegend)
+  } = useMemo(() => overrideLegendConfig(config, staticLegend), [
+    config,
+    staticLegend,
+  ])
 
   const {style = {}} = staticLegendOverride
 
@@ -62,12 +65,19 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   const layerConfig = configOverride.layers[staticLegendOverride.layer]
   const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
-  const legendData = getLegendData(
-    layerConfig.type,
-    spec,
-    valueColumnKey,
-    columnFormatter
+  const legendData = useMemo(
+    () =>
+      getLegendData(layerConfig.type, spec, valueColumnKey, columnFormatter),
+    [layerConfig.type, spec, valueColumnKey, columnFormatter]
   )
+
+  useEffect(() => {
+    staticLegendOverride.renderEffect({
+      columns: legendData.length,
+      rows: legendData.length ? legendData[0].values.length : 0,
+      font: staticLegendOverride.font,
+    })
+  }, [legendData, staticLegendOverride])
 
   return (
     <div

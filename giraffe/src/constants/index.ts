@@ -60,6 +60,7 @@ export const STATIC_LEGEND_DEFAULTS: Partial<StaticLegend> = {
   cursor: 'auto',
   heightRatio: 0.2,
   layer: 0,
+  renderEffect: () => {},
   valueAxis: 'y',
   widthRatio: 1.0,
 }

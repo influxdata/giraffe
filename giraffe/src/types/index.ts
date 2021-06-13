@@ -124,6 +124,7 @@ export interface StaticLegend {
   message?: string
   opacity?: number
   orientationThreshold?: number
+  renderEffect?: Function // no corresponding legend property, unique to static legend
   style?: CSSProperties // no correspinding legend property, unique to static legend
   valueAxis?: 'x' | 'y' // no corresponding legend property, unique to static legend
   widthRatio?: number // no corresponding legend property, unique to static legend
