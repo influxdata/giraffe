@@ -108,8 +108,15 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
 
   // dimension is x:
 
-  // this is the rectangle that goes on top of a range annotation
-  // make it *all* click to edit
+  /**
+   * This is the rectangle or 'hat' that goes on top of a range annotation.
+   * The entire hat is click to edit for the annotation.
+   *
+   * Setting the opacity to 60%; so that the 'hat' still looks good;
+   * and so that any overlapping point annotations still have their top pinned 'triangle'
+   * show up well on 'top' of the hat  (you can distinguish the triangle that overlaps
+   * the 'hat')
+   */
   const makeRangeRectangle = () => {
     const pixelMargin = 1
 
