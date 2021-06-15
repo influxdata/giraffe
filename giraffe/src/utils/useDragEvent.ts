@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {useRef, useCallback} from 'react'
 import {useForceUpdate} from './useForceUpdate'
+import {resetActiveQuerySwitchToBuilder} from '../../../../ui/src/timeMachine/actions'
 
 // Minimum number of pixels a user must drag before we decide whether the
 // action is a vertical or horizontal drag
@@ -57,6 +58,11 @@ const MIN_DRAG_DELTA = 3
  * isShiftDown is added for mouse down events
  */
 
+enum mouseAction {
+  up = 'UP',
+  down = 'DOWN',
+}
+
 export interface DragEvent {
   type: 'drag' | 'dragend'
   initialX: number
@@ -64,7 +70,11 @@ export interface DragEvent {
   direction: 'x' | 'y' | null
   x: number
   y: number
-  mouseActionState: 'mouseUpHappened' | 'mouseDownHappened' | null
+  mouseActionState:
+    | 'mouseUpHappened'
+    | 'mouseDownHappened'
+    | 'multiClicksHappened'
+    | null
   mouseEvent?: React.MouseEvent
   isShiftDown?: boolean
 }
@@ -73,9 +83,62 @@ interface UseDragEventProps {
   onMouseDown: (e: React.MouseEvent<Element, MouseEvent>) => any
 }
 
+const debounce = (func, timeout = 125) => {
+  let timer
+  let prevMouseAction = []
+  return (...args) => {
+    prevMouseAction.push(args)
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      func.call(this, args, prevMouseAction)
+    }, timeout)
+  }
+}
+
 export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
   const dragEventRef = useRef<DragEvent | null>(null)
   const forceUpdate = useForceUpdate()
+  console.log('what is this??? 43a', this)
+
+  let mouseStack: mouseAction[] = []
+
+  const resetMouseStack = () => {
+    mouseStack = []
+  }
+  // need own reference to mouse stack, as this is being called
+  // in it's own thread (via timeout)
+  const emitMouseUp = (newRef, ack) => {
+    //check the stack:
+
+    //if kosher for mousedown/mouseup;  single click
+    console.log('start...emitMouseUp, ack??', ack)
+    //else, if multiple (more than one) mouse down/up pair (user could click three times by mistake)
+    // then do a double click equivalent
+    console.log('newRef: (43a)', newRef.mouseActionState, newRef)
+    console.log('mousestack (43a):', mouseStack)
+
+    //else, the mouseActionState is null
+    let mouseActionState = 'multiClicksHappened'
+
+    if (mouseStack.length === 2) {
+      mouseActionState = 'mouseUpHappened'
+    }
+
+    //clear the stack:
+    mouseStack = []
+    resetMouseStack()
+
+    dragEventRef.current = {
+      ...newRef,
+      mouseActionState,
+    }
+
+    console.log('just created: 43a', dragEventRef.current)
+    console.log('end...emitMouseUp; cleared mousestack:', mouseStack)
+    forceUpdate()
+  }
+
+  const debouncedMouseUp = debounce(newRef => emitMouseUp(newRef))
 
   const onMouseDown = useCallback(
     (mouseDownEvent: React.MouseEvent<Element, MouseEvent>) => {
@@ -127,9 +190,10 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
 
         if (dragEventRef?.current?.mouseActionState === 'mouseDownHappened') {
           mouseActionState = 'mouseUpHappened'
+          mouseStack.push(mouseAction.up)
         }
 
-        dragEventRef.current = {
+        const newRef = {
           ...dragEventRef.current,
           type: 'dragend',
           mouseActionState,
@@ -138,7 +202,12 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
           mouseEvent: mouseUpEvent,
         }
 
-        forceUpdate()
+        //forceUpdate()
+        console.log(
+          'about to call debouncedMouseUp with this mouse action state:',
+          newRef.mouseActionState
+        )
+        debouncedMouseUp(newRef)
       }
 
       document.addEventListener('mousemove', onMouseMove)
@@ -150,6 +219,9 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
       // TODO:  even thoug the 'isShiftDown' gets reset with each mousedown,
       // incase other mouse events/triggers/callbacks want to use the shift key, make sure to set
       // it to false in all the other places where events are emitted to reset it properly!
+
+      mouseStack.push(mouseAction.down)
+
       dragEventRef.current = {
         type: 'drag',
         initialX: x,

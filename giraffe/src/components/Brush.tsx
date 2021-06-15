@@ -59,6 +59,9 @@ export const Brush: FunctionComponent<Props> = ({
         // because brushing (dragging across an area) has not happened
         onClick(event?.mouseEvent)
       }
+      if (event.mouseActionState === 'multiClicksHappened') {
+        console.log('multi click happened!!! yay yay yay 43a')
+      }
     }
   }, [event?.type])
 
