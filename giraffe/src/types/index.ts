@@ -139,7 +139,7 @@ export interface StaticLegendRenderEffectOptions {
   lineSpacingRatio: number
   padding: number
   headerTextMetrics: Array<TextMetrics>
-  sampleRowTextMetrics: Array<TextMetrics>
+  sampleTextMetrics: Array<TextMetrics>
 }
 
 export interface InteractionHandlerArguments {

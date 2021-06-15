@@ -88,7 +88,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       headerTextMetrics: legendData.map(column =>
         getTextMetrics(staticLegendOverride.font, column.name)
       ),
-      sampleRowTextMetrics: legendData.map(column =>
+      sampleTextMetrics: legendData.map(column =>
         getTextMetrics(staticLegendOverride.font, column.values[0])
       ),
     })
