@@ -443,9 +443,9 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
     - **padding**: _number._ The default padding added around all of the content in the static legend. Does not include any padding that is applied by **style** or any other custom styling.
 
-    - **headerTextMetrics**: _array[object, ...]._ An array of objects that specify the width and height of each name in the header row (horizontal orientation) or header column (vertical orientation).
+    - **headerTextMetrics**: _array[object, ...]._ An array of objects that specifies the width and height of each name in the header row (horizontal orientation) or header column (vertical orientation).
 
-    - **sampleRowTextMetrics**: _array[object, ...]._ An array of objects that specify the width and height of each entry in an example row (horizontal orientation) or example column (vertical orientation)
+    - **sampleRowTextMetrics**: _array[object, ...]._ An array of objects that specifies the width and height of each entry in an example row (horizontal orientation) or example column (vertical orientation).
 
   - **style**: _Object. Optional._ An object containing the key-value pairs used for inline styling the class `.giraffe-static-legend` by using the [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). Primarily used for adjusting `margin` and `padding`. May be used to add additional styling to Static Legend, but does not affect the following styles: `backgroundColor`, `border`, `bottom`, `color`, `cursor`, `font`, `height`, `left`, `opacity`, `overflow`, `position`, `right`, `top`, `width`.
   
