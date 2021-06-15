@@ -1,16 +1,18 @@
 import React, {CSSProperties} from 'react'
 import {FunctionComponent} from 'react'
 
-import {LegendData, Config} from '../types'
+import {Config, LegendData, LegendType} from '../types'
 import {generateLegendStyles, LegendPillsStyles} from './LegendStyles'
 
 interface Props {
+  type: LegendType
   data: LegendData
   config: Config
   isScrollable?: boolean
 }
 
 export const Legend: FunctionComponent<Props> = ({
+  type: legendType,
   data,
   config,
   isScrollable = false,
@@ -48,6 +50,7 @@ export const Legend: FunctionComponent<Props> = ({
   const maxLength = switchToVertical ? width : height
 
   const styles = generateLegendStyles(
+    legendType,
     isScrollable,
     columns,
     switchToVertical,

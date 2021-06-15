@@ -743,7 +743,7 @@ storiesOf('Static Legend', module)
   })
   .add('render effect', () => {
     const lines = number('Number of graph lines', 4)
-    const fillColumnsCount = number('Number of fill columns', 5)
+    const fillColumnsCount = number('Number of fill columns', 7)
     const fillColumnNameLength = number('Length of fill column names', 4)
 
     const STATIC_LEGEND_HEIGHT_RATIO_NOT_SET = 0

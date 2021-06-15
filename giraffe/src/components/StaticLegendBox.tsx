@@ -6,10 +6,17 @@ import {
   SizedConfig,
   StaticLegend,
 } from '../types'
-import {CONFIG_DEFAULTS, STATIC_LEGEND_DEFAULTS} from '../constants/index'
+import {
+  CONFIG_DEFAULTS,
+  STATIC_LEGEND_DEFAULTS,
+  STATIC_LEGEND_BOX_PADDING,
+  STATIC_LEGEND_LINE_SPACING_RATIO,
+  STATIC_LEGEND_SCROLL_PADDING,
+} from '../constants/index'
 import {Legend} from './Legend'
 import {DapperScrollbars} from './DapperScrollbars'
 import {getLegendData} from '../utils/legend/staticLegend'
+import {getTextMetrics} from '../utils/getTextMetrics'
 
 interface StaticLegendBoxProps extends StaticLegend {
   config: SizedConfig
@@ -73,9 +80,17 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   useEffect(() => {
     staticLegendOverride.renderEffect({
-      columns: legendData.length,
-      rows: legendData.length ? legendData[0].values.length : 0,
-      font: staticLegendOverride.font,
+      totalHeight: height + top,
+      staticLegendHeight: height,
+      lineCount: legendData.length ? legendData[0].values.length : 0,
+      lineSpacingRatio: STATIC_LEGEND_LINE_SPACING_RATIO,
+      padding: 2 * STATIC_LEGEND_BOX_PADDING + STATIC_LEGEND_SCROLL_PADDING,
+      headerTextMetrics: legendData.map(column =>
+        getTextMetrics(staticLegendOverride.font, column.name)
+      ),
+      sampleRowTextMetrics: legendData.map(column =>
+        getTextMetrics(staticLegendOverride.font, column.values[0])
+      ),
     })
   }, [legendData, staticLegendOverride])
 
@@ -83,7 +98,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
     <div
       className="giraffe-static-legend"
       style={{
-        padding: 10, // overridable, must be at the top
+        padding: STATIC_LEGEND_BOX_PADDING, // overridable, must be at the top
         ...style,
         backgroundColor,
         border,
@@ -104,7 +119,12 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       data-testid="giraffe-static-legend"
     >
       <DapperScrollbars removeTracksWhenNotUsed={true} autoHide={true}>
-        <Legend data={legendData} config={configOverride} isScrollable={true} />
+        <Legend
+          type="static"
+          data={legendData}
+          config={configOverride}
+          isScrollable={true}
+        />
       </DapperScrollbars>
     </div>
   )

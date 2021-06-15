@@ -432,6 +432,21 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
   - **orientationThreshold**: _number. Optional. Defaults to undefined when excluded._ The number of columns in the legend that will determine the direction of columns in the legend. When _undefined_ or when the total number of columns is less than or equal to it, the columns in the tooltip will display horizontally. When the total number of columns is greater, the columns will display vertically.
 
+  - **renderEffect**: _function(object). Optional. Defaults to an empty function (no operation) when excluded._ A callback function that executes after each render. The purpose is to allow the consumer to adjust `config` properties based on certain aspects of the static legend. An example would be auto-adjusting the height of the static legend to fit its contents. This function is given an _options_ object as the argument which has the following properties:
+    - **totalHeight**: _number._ The height of the `<Plot>` including the static legend.
+
+    - **staticLegendHeight**: _number._ The height of the static legend.
+
+    - **lineCount**: _number._ The total number of rows, when in a horizontal orientation, excluding the header row. Or the total number of columns, when in a vertical orientation, excluding the header column.
+
+    - **lineSpacingRatio**: _number._ The [relative unit length](https://developer.mozilla.org/en-US/docs/Web/CSS/length) in **em** of the spacing between rows. When in a horizontal orientation, this number in **em** is equal to the spacing. When in a vertical orientation, the spacing is twice this number in **em**.
+
+    - **padding**: _number._ The default padding added around all of the content in the static legend. Does not include any padding that is applied by **style** or any other custom styling.
+
+    - **headerTextMetrics**: _array[object, ...]._ An array of objects that specify the width and height of each name in the header row (horizontal orientation) or header column (vertical orientation).
+
+    - **sampleRowTextMetrics**: _array[object, ...]._ An array of objects that specify the width and height of each entry in an example row (horizontal orientation) or example column (vertical orientation)
+
   - **style**: _Object. Optional._ An object containing the key-value pairs used for inline styling the class `.giraffe-static-legend` by using the [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). Primarily used for adjusting `margin` and `padding`. May be used to add additional styling to Static Legend, but does not affect the following styles: `backgroundColor`, `border`, `bottom`, `color`, `cursor`, `font`, `height`, `left`, `opacity`, `overflow`, `position`, `right`, `top`, `width`.
   
   - **valueAxis**: _string. Optional. Defaults to 'y' when not included.  Valid values are either 'x' or 'y'.  This is to set where the 'values' that are displayed in the tooltip come from (which axis, x or y)

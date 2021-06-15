@@ -93,6 +93,8 @@ export interface Config {
   yColumnType?: ColumnType
 }
 
+export type LegendType = 'tooltip' | 'static'
+
 export enum LegendPropertyNames {
   backgroundColor = 'legendBackgroundColor',
   border = 'legendBorder',
@@ -124,10 +126,20 @@ export interface StaticLegend {
   message?: string
   opacity?: number
   orientationThreshold?: number
-  renderEffect?: Function // no corresponding legend property, unique to static legend
+  renderEffect?: (options: StaticLegendRenderEffectOptions) => void // no corresponding legend property, unique to static legend
   style?: CSSProperties // no correspinding legend property, unique to static legend
   valueAxis?: 'x' | 'y' // no corresponding legend property, unique to static legend
   widthRatio?: number // no corresponding legend property, unique to static legend
+}
+
+export interface StaticLegendRenderEffectOptions {
+  totalHeight: number
+  staticLegendHeight: number
+  lineCount: number
+  lineSpacingRatio: number
+  padding: number
+  headerTextMetrics: Array<TextMetrics>
+  sampleRowTextMetrics: Array<TextMetrics>
 }
 
 export interface InteractionHandlerArguments {
@@ -846,6 +858,11 @@ export enum ErrorName {
 export enum DomainLabel {
   X = 'xs',
   Y = 'ys',
+}
+
+export interface TextMetrics {
+  width: number
+  height: number
 }
 
 export type AxisTicks = Date[] | number[]

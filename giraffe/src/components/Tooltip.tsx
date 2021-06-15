@@ -43,7 +43,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     return null
   }
 
-  const tooltipContents = <Legend data={data} config={config} />
+  const tooltipContents = <Legend type="tooltip" data={data} config={config} />
 
   return createPortal(
     <div

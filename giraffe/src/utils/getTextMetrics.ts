@@ -1,7 +1,4 @@
-export interface TextMetrics {
-  width: number
-  height: number
-}
+import {TextMetrics} from '../types'
 
 const addPaddingToSampleText = (text: string): string => {
   if (typeof text !== 'string') {
