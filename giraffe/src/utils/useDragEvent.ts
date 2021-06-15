@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {useRef, useCallback} from 'react'
 import {useForceUpdate} from './useForceUpdate'
-import {resetActiveQuerySwitchToBuilder} from '../../../../ui/src/timeMachine/actions'
 
 // Minimum number of pixels a user must drag before we decide whether the
 // action is a vertical or horizontal drag
@@ -85,12 +84,16 @@ interface UseDragEventProps {
 
 const debounce = (func, timeout = 125) => {
   let timer
-  let prevMouseAction = []
+  let prevMouseAction
   return (...args) => {
+    if (!prevMouseAction) {
+      prevMouseAction = []
+    }
     prevMouseAction.push(args)
     clearTimeout(timer)
     timer = setTimeout(() => {
       func.call(this, args, prevMouseAction)
+      prevMouseAction = []
     }, timeout)
   }
 }
@@ -114,7 +117,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
     console.log('start...emitMouseUp, ack??', ack)
     //else, if multiple (more than one) mouse down/up pair (user could click three times by mistake)
     // then do a double click equivalent
-    console.log('newRef: (43a)', newRef.mouseActionState, newRef)
+    console.log('newRef: (43a)', newRef)
     console.log('mousestack (43a):', mouseStack)
 
     //else, the mouseActionState is null
@@ -138,7 +141,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
     forceUpdate()
   }
 
-  const debouncedMouseUp = debounce(newRef => emitMouseUp(newRef))
+  const debouncedMouseUp = debounce(emitMouseUp)
 
   const onMouseDown = useCallback(
     (mouseDownEvent: React.MouseEvent<Element, MouseEvent>) => {
@@ -193,6 +196,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
           mouseStack.push(mouseAction.up)
         }
 
+        console.log('mouseUpEvent:88a', mouseUpEvent)
         const newRef = {
           ...dragEventRef.current,
           type: 'dragend',
