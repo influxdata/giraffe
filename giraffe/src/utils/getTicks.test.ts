@@ -7,7 +7,7 @@ import {
   getHorizontalTicks,
 } from './getTicks'
 
-jest.mock('./getTextMetrics')
+jest.mock('./textMetrics')
 
 describe('utils/getTicks', () => {
   const font = '10px sans-serif'
