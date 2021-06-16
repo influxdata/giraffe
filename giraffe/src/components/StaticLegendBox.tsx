@@ -16,7 +16,7 @@ import {
 import {Legend} from './Legend'
 import {DapperScrollbars} from './DapperScrollbars'
 import {getLegendData} from '../utils/legend/staticLegend'
-import {getTextMetrics, getStaticLegendTexMetrics} from '../utils/textMetrics'
+import {getStaticLegendTexMetrics} from '../utils/textMetrics'
 
 interface StaticLegendBoxProps extends StaticLegend {
   config: SizedConfig
