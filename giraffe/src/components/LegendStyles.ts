@@ -233,8 +233,8 @@ const staticLegendColumnValueStyle = (
     whiteSpace: 'nowrap',
     fontWeight: 600,
     padding: `${STATIC_LEGEND_LINE_SPACING_RATIO}em`,
-    lineHeight: '1em',
-    height: '1em',
+    lineHeight: '1.25em',
+    height: '1.25em',
     color,
   }
 }
