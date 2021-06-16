@@ -437,15 +437,17 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
     - **staticLegendHeight**: _number._ The height of the static legend.
 
+    - **legendDataLength**: _number._ The total number of "fill" columns plus any additional columns added by the static legend to be rendered.
+
     - **lineCount**: _number._ The total number of rows, when in a horizontal orientation, excluding the header row. Or the total number of columns, when in a vertical orientation, excluding the header column.
 
     - **lineSpacingRatio**: _number._ The [relative unit length](https://developer.mozilla.org/en-US/docs/Web/CSS/length) in **em** of the spacing between rows. When in a horizontal orientation, this number in **em** is equal to the spacing. When in a vertical orientation, the spacing is twice this number in **em**.
 
     - **padding**: _number._ The default padding added around all of the content in the static legend. Does not include any padding that is applied by **style** or any other custom styling.
 
-    - **headerTextMetrics**: _array[object, ...]._ An array of objects that specifies the width and height of each name in the header row (horizontal orientation) or header column (vertical orientation).
+    - **headerTextMetrics**: _Object._ An object whose properties are estimates of the width and height in the header row (horizontal orientation) or header column (vertical orientation).
 
-    - **sampleTextMetrics**: _array[object, ...]._ An array of objects that specifies the width and height of each entry in an example row (horizontal orientation) or example column (vertical orientation).
+    - **sampleTextMetrics**: _Object._ An object whose properties are estimates of the width and height of each entry in an example row (horizontal orientation) or example column (vertical orientation).
 
   - **style**: _Object. Optional._ An object containing the key-value pairs used for inline styling the class `.giraffe-static-legend` by using the [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). Primarily used for adjusting `margin` and `padding`. May be used to add additional styling to Static Legend, but does not affect the following styles: `backgroundColor`, `border`, `bottom`, `color`, `cursor`, `font`, `height`, `left`, `opacity`, `overflow`, `position`, `right`, `top`, `width`.
   

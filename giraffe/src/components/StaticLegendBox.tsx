@@ -16,7 +16,7 @@ import {
 import {Legend} from './Legend'
 import {DapperScrollbars} from './DapperScrollbars'
 import {getLegendData} from '../utils/legend/staticLegend'
-import {getTextMetrics} from '../utils/getTextMetrics'
+import {getTextMetrics, getStaticLegendTexMetrics} from '../utils/textMetrics'
 
 interface StaticLegendBoxProps extends StaticLegend {
   config: SizedConfig
@@ -79,18 +79,16 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   )
 
   useEffect(() => {
+    const {headerTextMetrics, sampleTextMetrics} = getStaticLegendTexMetrics()
     staticLegendOverride.renderEffect({
       totalHeight: height + top,
       staticLegendHeight: height,
+      legendDataLength: legendData.length,
       lineCount: legendData.length ? legendData[0].values.length : 0,
       lineSpacingRatio: STATIC_LEGEND_LINE_SPACING_RATIO,
       padding: 2 * STATIC_LEGEND_BOX_PADDING + STATIC_LEGEND_SCROLL_PADDING,
-      headerTextMetrics: legendData.map(column =>
-        getTextMetrics(staticLegendOverride.font, column.name)
-      ),
-      sampleTextMetrics: legendData.map(column =>
-        getTextMetrics(staticLegendOverride.font, column.values[0])
-      ),
+      headerTextMetrics,
+      sampleTextMetrics,
     })
   }, [legendData, staticLegendOverride])
 

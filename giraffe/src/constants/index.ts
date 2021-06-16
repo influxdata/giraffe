@@ -147,6 +147,9 @@ export const STATIC_LEGEND_LINE_SPACING_RATIO = 1 / 6
 export const STATIC_LEGEND_BOX_PADDING = 10
 export const STATIC_LEGEND_SCROLL_PADDING = 15
 
+export const STATIC_LEGEND_COLUMN_CLASSNAME = 'giraffe-static-legend-column'
+export const LEGEND_COLUMN_CLASSNAME = 'giraffe-legend-column'
+
 export const TOOLTIP_MINIMUM_OPACITY = 0
 export const TOOLTIP_MAXIMUM_OPACITY = 1.0
 

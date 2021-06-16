@@ -3,6 +3,10 @@ import {FunctionComponent} from 'react'
 
 import {Config, LegendData, LegendType} from '../types'
 import {generateLegendStyles, LegendPillsStyles} from './LegendStyles'
+import {
+  LEGEND_COLUMN_CLASSNAME,
+  STATIC_LEGEND_COLUMN_CLASSNAME,
+} from '../constants'
 
 interface Props {
   type: LegendType
@@ -65,9 +69,12 @@ export const Legend: FunctionComponent<Props> = ({
       style={styles.table}
       data-testid="giraffe-legend-table"
     >
-      {!colorizeRows && <LegendPillColumn styles={styles.pills} />}
+      {!colorizeRows && (
+        <LegendPillColumn type={legendType} styles={styles.pills} />
+      )}
       {columns.map(({name, values}, i) => (
         <LegendColumn
+          type={legendType}
           key={name}
           name={name}
           maxLength={maxLength}
@@ -82,6 +89,7 @@ export const Legend: FunctionComponent<Props> = ({
 }
 
 interface LegendColumnProps {
+  type: LegendType
   name: string
   maxLength: number
   values: string[]
@@ -91,6 +99,7 @@ interface LegendColumnProps {
 }
 
 const LegendColumn: FunctionComponent<LegendColumnProps> = ({
+  type: legendType,
   name,
   maxLength,
   values,
@@ -99,14 +108,19 @@ const LegendColumn: FunctionComponent<LegendColumnProps> = ({
   columnValueStyles,
 }) => {
   const valuesLimitedByPlotDimensions = values.slice(0, maxLength)
+  const classNameBase =
+    legendType === 'static'
+      ? STATIC_LEGEND_COLUMN_CLASSNAME
+      : LEGEND_COLUMN_CLASSNAME
+
   return (
-    <div className="giraffe-legend-column" style={columnStyle}>
-      <div className="giraffe-legend-column-header" style={columnHeaderStyle}>
+    <div className={classNameBase} style={columnStyle}>
+      <div className={`${classNameBase}-header`} style={columnHeaderStyle}>
         {name}
       </div>
       {valuesLimitedByPlotDimensions.map((value, i) => (
         <div
-          className="giraffe-legend-column-value"
+          className={`${classNameBase}-value`}
           key={i}
           style={columnValueStyles[i]}
         >
@@ -120,22 +134,28 @@ const LegendColumn: FunctionComponent<LegendColumnProps> = ({
 LegendColumn.displayName = 'LegendColumn'
 
 interface LegendPillColumnProps {
+  type: LegendType
   styles: LegendPillsStyles
 }
 
 const LegendPillColumn: FunctionComponent<LegendPillColumnProps> = ({
+  type: legendType,
   styles,
 }) => {
   const {column, header, value, pills} = styles
+  const classNameBase =
+    legendType === 'static'
+      ? STATIC_LEGEND_COLUMN_CLASSNAME
+      : LEGEND_COLUMN_CLASSNAME
 
   return (
-    <div className="giraffe-legend-column" style={column}>
-      <div className="giraffe-legend-column-header" style={header}>
+    <div className={classNameBase} style={column}>
+      <div className={`${classNameBase}-header`} style={header}>
         &nbsp;
       </div>
       {pills.map((pill, i) => (
-        <div className="giraffe-legend-column-value" key={i} style={value}>
-          <div className="giraffe-legend-column-pill" style={pill} />
+        <div className={`${classNameBase}-value`} key={i} style={value}>
+          <div className={`${classNameBase}-pill`} style={pill} />
         </div>
       ))}
     </div>

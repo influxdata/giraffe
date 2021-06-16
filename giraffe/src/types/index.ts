@@ -135,11 +135,12 @@ export interface StaticLegend {
 export interface StaticLegendRenderEffectOptions {
   totalHeight: number
   staticLegendHeight: number
+  legendDataLength: number
   lineCount: number
   lineSpacingRatio: number
   padding: number
-  headerTextMetrics: Array<TextMetrics>
-  sampleTextMetrics: Array<TextMetrics>
+  headerTextMetrics: TextMetrics
+  sampleTextMetrics: TextMetrics
 }
 
 export interface InteractionHandlerArguments {
