@@ -1,7 +1,5 @@
-export interface TextMetrics {
-  width: number
-  height: number
-}
+import {TextMetrics} from '../types'
+import {STATIC_LEGEND_COLUMN_CLASSNAME} from '../constants'
 
 const addPaddingToSampleText = (text: string): string => {
   if (typeof text !== 'string') {
@@ -48,4 +46,37 @@ export const getTextMetrics = (font: string, text: string): TextMetrics => {
   document.body.removeChild(div)
 
   return metrics
+}
+
+interface StaticLegendTextMetrics {
+  headerTextMetrics: TextMetrics
+  sampleTextMetrics: TextMetrics
+}
+
+export const getStaticLegendTexMetrics = (): StaticLegendTextMetrics => {
+  const sampleHeader = document.querySelector(
+    `.${STATIC_LEGEND_COLUMN_CLASSNAME}-header`
+  ) as HTMLElement
+
+  const sampleValue = document.querySelector(
+    `.${STATIC_LEGEND_COLUMN_CLASSNAME}-value`
+  ) as HTMLElement
+
+  const headerTextMetrics: TextMetrics = {height: 0, width: 0}
+  const sampleTextMetrics: TextMetrics = {height: 0, width: 0}
+
+  if (sampleHeader) {
+    headerTextMetrics.height = sampleHeader.offsetHeight
+    headerTextMetrics.width = sampleHeader.offsetWidth
+  }
+
+  if (sampleValue) {
+    sampleTextMetrics.height = sampleValue.offsetHeight
+    sampleTextMetrics.width = sampleValue.offsetWidth
+  }
+
+  return {
+    headerTextMetrics,
+    sampleTextMetrics,
+  }
 }

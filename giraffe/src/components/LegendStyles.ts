@@ -1,9 +1,13 @@
 import {CSSProperties} from 'react'
-import {LegendData, ColumnType} from '../types'
+import {ColumnType, LegendData, LegendType} from '../types'
 
 // Style Constants
+import {
+  STATIC_LEGEND_LINE_SPACING_RATIO,
+  STATIC_LEGEND_SCROLL_PADDING,
+} from '../constants'
+
 const legendColumnGap = '12px'
-const legendColumnPadding = '15px'
 const legendColumnMaxWidth = '200px'
 const legendTablePadding = '4px'
 
@@ -37,6 +41,7 @@ export interface LegendStyles {
 }
 
 export const generateLegendStyles = (
+  legendType: LegendType,
   isScrollable: boolean,
   legendData: LegendData,
   switchToVertical: boolean,
@@ -60,13 +65,21 @@ export const generateLegendStyles = (
   const headers = legendColumnHeaderStyle(switchToVertical, fontColor)
   const values = legendData.map(column => {
     return column.values.map((_, i) =>
-      legendColumnValueStyle(
-        i,
-        column.colors,
-        colorizeRows,
-        fontBrightColor,
-        switchToVertical
-      )
+      legendType === 'tooltip'
+        ? tooltipColumnValueStyle(
+            i,
+            column.colors,
+            colorizeRows,
+            fontBrightColor,
+            switchToVertical
+          )
+        : staticLegendColumnValueStyle(
+            i,
+            column.colors,
+            colorizeRows,
+            fontBrightColor,
+            switchToVertical
+          )
     )
   })
 
@@ -119,9 +132,9 @@ const legendColumnStyle = (
   }
 
   if (isScrollableColumn) {
-    columnStyle.paddingBottom = legendColumnPadding
+    columnStyle.paddingBottom = STATIC_LEGEND_SCROLL_PADDING
     if (index === columnCount) {
-      columnStyle.paddingRight = legendColumnPadding
+      columnStyle.paddingRight = STATIC_LEGEND_SCROLL_PADDING
     }
   }
   return columnStyle
@@ -147,7 +160,7 @@ const legendColumnHeaderStyle = (
   }
 }
 
-const legendColumnValueStyle = (
+const tooltipColumnValueStyle = (
   i: number,
   colors: string[],
   colorizeRows: boolean,
@@ -182,6 +195,46 @@ const legendColumnValueStyle = (
     fontWeight: 600,
     lineHeight: '1.125em',
     height: '1.125em',
+    color,
+  }
+}
+
+const staticLegendColumnValueStyle = (
+  i: number,
+  colors: string[],
+  colorizeRows: boolean,
+  fontBrightColor: string,
+  switchToVertical: boolean
+): React.CSSProperties => {
+  let color = fontBrightColor
+
+  if (colorizeRows && colors) {
+    color = colors[i]
+  }
+
+  if (switchToVertical) {
+    return {
+      maxWidth: legendColumnMaxWidth,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      color,
+      display: 'table-cell',
+      padding: `${2 * STATIC_LEGEND_LINE_SPACING_RATIO}em`,
+      fontWeight: 600,
+      lineHeight: '1em',
+    }
+  }
+
+  return {
+    maxWidth: legendColumnMaxWidth,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    fontWeight: 600,
+    padding: `${STATIC_LEGEND_LINE_SPACING_RATIO}em`,
+    lineHeight: '1.25em',
+    height: '1.25em',
     color,
   }
 }

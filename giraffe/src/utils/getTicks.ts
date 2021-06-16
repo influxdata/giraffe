@@ -11,7 +11,7 @@ import {TIME, VALUE} from '../constants/columnKeys'
 import {TICK_COUNT_LIMIT} from '../constants'
 
 // Utils
-import {getTextMetrics} from './getTextMetrics'
+import {getTextMetrics} from './textMetrics'
 import {isFiniteNumber} from './isFiniteNumber'
 
 /*

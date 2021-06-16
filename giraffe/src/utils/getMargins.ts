@@ -1,4 +1,4 @@
-import {getTextMetrics} from './getTextMetrics'
+import {getTextMetrics} from './textMetrics'
 import {maxBy} from './extrema'
 
 import {

@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useEffect, useMemo} from 'react'
 import {
   Formatter,
   LayerSpec,
@@ -6,10 +6,17 @@ import {
   SizedConfig,
   StaticLegend,
 } from '../types'
-import {CONFIG_DEFAULTS, STATIC_LEGEND_DEFAULTS} from '../constants/index'
+import {
+  CONFIG_DEFAULTS,
+  STATIC_LEGEND_DEFAULTS,
+  STATIC_LEGEND_BOX_PADDING,
+  STATIC_LEGEND_LINE_SPACING_RATIO,
+  STATIC_LEGEND_SCROLL_PADDING,
+} from '../constants/index'
 import {Legend} from './Legend'
 import {DapperScrollbars} from './DapperScrollbars'
 import {getLegendData} from '../utils/legend/staticLegend'
+import {getStaticLegendTexMetrics} from '../utils/textMetrics'
 
 interface StaticLegendBoxProps extends StaticLegend {
   config: SizedConfig
@@ -48,7 +55,10 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   const {
     config: configOverride,
     staticLegend: staticLegendOverride,
-  } = overrideLegendConfig(config, staticLegend)
+  } = useMemo(() => overrideLegendConfig(config, staticLegend), [
+    config,
+    staticLegend,
+  ])
 
   const {style = {}} = staticLegendOverride
 
@@ -62,18 +72,31 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   const layerConfig = configOverride.layers[staticLegendOverride.layer]
   const valueColumnKey = layerConfig[staticLegendOverride.valueAxis]
-  const legendData = getLegendData(
-    layerConfig.type,
-    spec,
-    valueColumnKey,
-    columnFormatter
+  const legendData = useMemo(
+    () =>
+      getLegendData(layerConfig.type, spec, valueColumnKey, columnFormatter),
+    [layerConfig.type, spec, valueColumnKey, columnFormatter]
   )
+
+  useEffect(() => {
+    const {headerTextMetrics, sampleTextMetrics} = getStaticLegendTexMetrics()
+    staticLegendOverride.renderEffect({
+      totalHeight: height + top,
+      staticLegendHeight: height,
+      legendDataLength: legendData.length,
+      lineCount: legendData.length ? legendData[0].values.length : 0,
+      lineSpacingRatio: STATIC_LEGEND_LINE_SPACING_RATIO,
+      padding: 2 * STATIC_LEGEND_BOX_PADDING + STATIC_LEGEND_SCROLL_PADDING,
+      headerTextMetrics,
+      sampleTextMetrics,
+    })
+  }, [legendData, staticLegendOverride])
 
   return (
     <div
       className="giraffe-static-legend"
       style={{
-        padding: 10, // overridable, must be at the top
+        padding: STATIC_LEGEND_BOX_PADDING, // overridable, must be at the top
         ...style,
         backgroundColor,
         border,
@@ -94,7 +117,12 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       data-testid="giraffe-static-legend"
     >
       <DapperScrollbars removeTracksWhenNotUsed={true} autoHide={true}>
-        <Legend data={legendData} config={configOverride} isScrollable={true} />
+        <Legend
+          type="static"
+          data={legendData}
+          config={configOverride}
+          isScrollable={true}
+        />
       </DapperScrollbars>
     </div>
   )
