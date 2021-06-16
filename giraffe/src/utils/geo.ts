@@ -118,7 +118,7 @@ export const formatPointLayerRowInfo = (
   const {colorDimension} = properties
   const colorInfo = formatValue(
     properties.colorField,
-    'Color',
+    properties.colorField.toString(),
     colorValue,
     colorDimension
   )
