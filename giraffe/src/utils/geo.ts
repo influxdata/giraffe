@@ -118,7 +118,7 @@ export const formatPointLayerRowInfo = (
   const {colorDimension} = properties
   const colorInfo = formatValue(
     properties.colorField,
-    'Color',
+    colorDimension.label ? colorDimension.label : properties.colorField,
     colorValue,
     colorDimension
   )
@@ -127,7 +127,7 @@ export const formatPointLayerRowInfo = (
     result.push(colorInfo)
   }
 
-  if (properties.tooltipColumns != []) {
+  if (Array.isArray(properties.tooltipColumns)) {
     properties.tooltipColumns.forEach(element => {
       if (element !== '_time') {
         const colorValue = table.getValue(index, element)
