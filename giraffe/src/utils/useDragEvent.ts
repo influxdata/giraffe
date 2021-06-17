@@ -147,7 +147,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
       const [x, y] = getXYCoords(mouseDownEvent)
       const isShiftDown = mouseDownEvent.getModifierState('Shift')
 
-      // TODO:  even thoug the 'isShiftDown' gets reset with each mousedown,
+      // TODO:  even though the 'isShiftDown' gets reset with each mousedown,
       // incase other mouse events/triggers/callbacks want to use the shift key, make sure to set
       // it to false in all the other places where events are emitted to reset it properly!
       dragEventRef.current = {
