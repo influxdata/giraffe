@@ -13,7 +13,7 @@ interface Props {
   height: number
   onXBrushEnd: (xRange: number[], onShiftDown?: boolean) => void
   onYBrushEnd: (yRange: number[]) => void
-  onClick?: (mouseEvent: React.MouseEvent) => void
+  onShiftClick?: (mouseEvent: React.MouseEvent) => void
 }
 
 export const Brush: FunctionComponent<Props> = ({
@@ -22,7 +22,7 @@ export const Brush: FunctionComponent<Props> = ({
   height,
   onXBrushEnd,
   onYBrushEnd,
-  onClick,
+  onShiftClick,
 }) => {
   const isBrushing = event && event.direction
 
@@ -57,7 +57,7 @@ export const Brush: FunctionComponent<Props> = ({
       if (event.isShiftDown && event.mouseActionState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
         // because brushing (dragging across an area) has not happened
-        onClick(event?.mouseEvent)
+        onShiftClick(event?.mouseEvent)
       }
     }
   }, [event?.type])

@@ -156,7 +156,7 @@ export interface InteractionHandlerArguments {
 
 export interface InteractionHandlers {
   doubleClick?: (plotInteraction: InteractionHandlerArguments) => void
-  singleClick?: (plotInteraction: InteractionHandlerArguments) => void
+  singleShiftClick?: (plotInteraction: InteractionHandlerArguments) => void
   hover?: (plotInteraction: InteractionHandlerArguments) => void
   onXBrush?: (beginning: number | string, end: number | string) => void
 }
