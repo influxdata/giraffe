@@ -141,7 +141,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   )
 
   const noOp = () => {}
-  const singleClick = userConfig.interactionHandlers?.singleClick
+  const singleShiftClick = userConfig.interactionHandlers?.singleShiftClick
     ? event => {
         // If a click happens on an annotation line or annotation click handler, don't call the interaction handler.
         // There's already an annotation-specific handler for this, that'll handle this.
@@ -151,7 +151,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
         ) {
           return
         }
-        userConfig.interactionHandlers.singleClick(plotInteraction)
+        userConfig.interactionHandlers.singleShiftClick(plotInteraction)
       }
     : noOp
 
@@ -344,7 +344,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
           height={env.innerHeight}
           onXBrushEnd={handleXBrushEnd}
           onYBrushEnd={handleYBrushEnd}
-          onClick={singleClick}
+          onShiftClick={singleShiftClick}
         />
       </div>
     </div>
