@@ -38,7 +38,9 @@
     "visualization"
   ],
   "devDependencies": {
+    "@testing-library/dom": "^7.31.2",
     "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^13.1.9",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-dsv": "^1.0.36",

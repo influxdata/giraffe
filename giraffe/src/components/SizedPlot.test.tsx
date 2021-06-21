@@ -1,6 +1,7 @@
 import React, {FC} from 'react'
 
 import {fireEvent, render, screen} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import {PlotEnv} from '../utils/PlotEnv'
 import {usePlotEnv} from '../utils/usePlotEnv'
@@ -12,6 +13,7 @@ jest.mock('./Geo', () => <></>) // this component causes all sorts of loading pr
 import {newTable} from '../utils/newTable'
 
 import {SizedPlot} from './SizedPlot'
+import {getByTestID} from '../../../../ui/cypress/support/commands'
 
 const table = newTable(3)
   .addColumn('_time', 'dateTime:RFC3339', 'time', [
@@ -84,10 +86,14 @@ describe('the SizedPlot', () => {
 
     describe('the ability to override default behavior', () => {
       it('handles single clicks', () => {
+        console.log('inside icky test...')
+
         const fakeSingleClickInteractionHandler = jest.fn()
         const localConfig = {
           ...config,
-          interactionHandlers: {singleClick: fakeSingleClickInteractionHandler},
+          interactionHandlers: {
+            singleShiftClick: fakeSingleClickInteractionHandler,
+          },
         }
 
         render(
@@ -105,9 +111,18 @@ describe('the SizedPlot', () => {
 
         // we now do the single-click via the dragging listener,
         // and pair mouseUps with mouseDowns;
-        // so doing a mousedown then a mouse Up to simulate a single click
-        fireEvent.mouseDown(screen.getByTestId('giraffe-inner-plot'))
-        fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'))
+        // // so doing a mousedown then a mouse Up to simulate a single click
+        // fireEvent.mouseDown(screen.getByTestId('giraffe-inner-plot'), {shiftKey: true})
+        //fireEvent.mouseUp(screen.getByTestId('giraffe-inner-plot'), {shiftKey: true})
+        //fireEvent(screen.getByTestId('giraffe-inner-plot'), new MouseEvent('mousedown', {shiftKey:true}))
+        //fireEvent(screen.getByTestId('giraffe-inner-plot'), new MouseEvent('mouseup', {shiftKey:true}))
+
+        // fireEvent.click(screen.getByTestId('giraffe-inner-plot'), { shiftKey: true })
+        userEvent.click(screen.getByTestId('giraffe-inner-plot'), {
+          shiftKey: true,
+        })
+
+        //var ack = new MouseEvent('mousedown', {shiftKey:true})
 
         expect(resetSpy).not.toHaveBeenCalled()
         expect(fakeSingleClickInteractionHandler).toHaveBeenCalled()

@@ -60,6 +60,8 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
 
+  console.log('inside sized plot...arghh!!!')
+
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
       env.yDomain = rangeToDomain(yRange, env.yScale, env.innerHeight).reverse()

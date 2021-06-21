@@ -30,6 +30,9 @@ export const Brush: FunctionComponent<Props> = ({
     if (event?.type !== 'dragend') {
       return
     }
+    console.log(
+      `clicking??? shift on? ${event.isShiftDown}, mouse state? ${event.mouseActionState}`
+    )
 
     if (isBrushing) {
       let callback
@@ -54,6 +57,9 @@ export const Brush: FunctionComponent<Props> = ({
       // doing brush now
       callback([p0, p1], event.isShiftDown)
     } else {
+      console.log(
+        `clicking??? shift on? ${event.isShiftDown}, mouse state? ${event.mouseActionState}`
+      )
       if (event.isShiftDown && event.mouseActionState === 'mouseUpHappened') {
         // a mouseUpHappened, so this is the equivalent of an 'onClick'
         // because brushing (dragging across an area) has not happened
