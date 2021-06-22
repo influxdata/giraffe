@@ -100,18 +100,13 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
         ...style,
         backgroundColor,
         border,
-        bottom: 0,
         boxSizing: 'border-box',
         color: fontBrightColor,
         cursor: staticLegendOverride.cursor,
         font,
         height: `${height}px`,
-        left: 0,
         opacity,
         overflow: 'auto',
-        position: 'absolute',
-        right: 0,
-        top: `${top}px`,
         width: `${width}px`,
       }}
       data-testid="giraffe-static-legend"
