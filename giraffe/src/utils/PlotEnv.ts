@@ -378,6 +378,7 @@ export class PlotEnv {
       case LayerTypes.Custom:
       case LayerTypes.SingleStat:
       case LayerTypes.Table:
+      case LayerTypes.SimpleTable:
         return null
 
       default:
