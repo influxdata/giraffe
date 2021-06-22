@@ -3,12 +3,14 @@ import {
   FIELD_COLUMN,
   filterMetaColumns,
   GEO_HASH_COLUMN,
+  TIME_COLUMN,
   VALUE_COLUMN,
 } from './tableProcessing'
 import {Table} from '../../../types'
-import {getLatLonMixin, getTimeStringMixin} from './mixins'
+import {getLatLonMixin} from './mixins'
 import {CoordinateEncoding, GeoTable, Track} from './GeoTable'
 import {LatLonColumns} from '../../../types/geo'
+import {timestampToString} from '../../../utils/geo'
 
 interface GeoRow {
   [key: string]: number | string
@@ -22,12 +24,14 @@ export const isPivotSensible = table => {
 
 export class PivotedGeoTable implements GeoTable {
   coordinateEncoding: CoordinateEncoding
+  table: Table
   data: GeoRow[]
   truncated: boolean
   maxRows: number
   latLonColumns: LatLonColumns
 
   constructor(table: Table, maxRows, latLonColumns) {
+    this.table = table
     const seriesKeyNames = filterMetaColumns(table.columnKeys)
     const seriesKeyColumns = seriesKeyNames.map(key => table.getColumn(key))
     const fieldColumn = table.getColumn(FIELD_COLUMN, 'string')
@@ -110,7 +114,19 @@ export class PivotedGeoTable implements GeoTable {
   }
 
   getValue(index: number, field: string): number {
-    return this.data[index][field] as number
+    if (
+      field === this.latLonColumns?.lat?.column ||
+      field === this.latLonColumns?.lon?.column
+    ) {
+      return this.data[index][field] as number
+    }
+    const column = this.table.getColumn(field)
+    if (!column) {
+      return null
+    }
+    return column[
+      index * Math.max(1, Math.floor(this.table.length / this.maxRows))
+    ] as number
   }
 
   getS2CellID(index: number): string {
@@ -123,5 +139,11 @@ export class PivotedGeoTable implements GeoTable {
 
   getLatLon = getLatLonMixin.bind(this)
 
-  getTimeString = getTimeStringMixin.bind(this)
+  getTimeString(index: number): string {
+    const timeValue = this.getValue(index, TIME_COLUMN)
+
+    if (timeValue) {
+      return timestampToString(timeValue)
+    }
+  }
 }
