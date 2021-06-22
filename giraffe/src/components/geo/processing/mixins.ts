@@ -2,7 +2,6 @@ import {S2} from 's2-geometry'
 import {HEX_DIGIT_NUM} from '../../../utils/geo'
 import {CoordinateEncoding} from './GeoTable'
 import {Coordinates} from './GeoTable'
-import {START_COLUMN, STOP_COLUMN, TIME_COLUMN} from './tableProcessing'
 
 export const getLatLonMixin = function(index: number): Coordinates {
   if (this.coordinateEncoding === CoordinateEncoding.FIELDS) {
@@ -26,24 +25,6 @@ export const getLatLonMixin = function(index: number): Coordinates {
     lat: latLng.lat,
   }
 }
-
-export const getTimeStringMixin = function(index: number): string {
-  const timeValue = this.getValue(index, TIME_COLUMN)
-  if (timeValue) {
-    return timestampToString(timeValue)
-  }
-  const startValue = this.getValue(index, START_COLUMN)
-  const stopValue = this.getValue(index, STOP_COLUMN)
-  if (startValue && stopValue) {
-    return `${timestampToString(startValue)} - ${timestampToString(stopValue)}`
-  }
-  const value = startValue || stopValue
-  if (value) {
-    return timestampToString(value)
-  }
-}
-
-const timestampToString = timeValue => new Date(timeValue).toLocaleString()
 
 const precisionTrimming = precisionTrimmingTable => {
   for (let i = 1; i < 17; i++) {

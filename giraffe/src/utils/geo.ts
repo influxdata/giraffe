@@ -29,6 +29,9 @@ export const getMinZoom = (width: number): number => {
   return Math.ceil(Math.log2(width / 256) * ZOOM_FRACTION) / ZOOM_FRACTION
 }
 
+export const timestampToString = timeValue =>
+  new Date(timeValue).toLocaleString()
+
 export const getRowLimit = (layers: GeoViewLayer[]) => {
   return Math.min.apply(
     null,
@@ -139,7 +142,9 @@ export const formatPointLayerRowInfo = (
           colorValue,
           colorDimension
         )
-        result.push(fillInfo)
+        if (fillInfo) {
+          result.push(fillInfo)
+        }
       }
     })
   }

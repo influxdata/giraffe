@@ -8,10 +8,14 @@ import {
   GEO_HASH_COLUMN,
   LAT_COLUMN,
   LON_COLUMN,
+  START_COLUMN,
+  STOP_COLUMN,
   TABLE_COLUMN,
+  TIME_COLUMN,
 } from './tableProcessing'
-import {getLatLonMixin, getTimeStringMixin} from './mixins'
+import {getLatLonMixin} from './mixins'
 import {LatLonColumns} from '../../../types/geo'
+import {timestampToString} from '../../../utils/geo'
 
 export class NativeGeoTable implements GeoTable {
   coordinateEncoding: CoordinateEncoding
@@ -95,7 +99,23 @@ export class NativeGeoTable implements GeoTable {
 
   getLatLon = getLatLonMixin.bind(this)
 
-  getTimeString = getTimeStringMixin.bind(this)
+  getTimeString(index: number): string {
+    const timeValue = this.getValue(index, TIME_COLUMN)
+    if (timeValue) {
+      return timestampToString(timeValue)
+    }
+    const startValue = this.getValue(index, START_COLUMN)
+    const stopValue = this.getValue(index, STOP_COLUMN)
+    if (startValue && stopValue) {
+      return `${timestampToString(startValue)} - ${timestampToString(
+        stopValue
+      )}`
+    }
+    const value = startValue || stopValue
+    if (value) {
+      return timestampToString(value)
+    }
+  }
 }
 
 const getDataEncoding = (
