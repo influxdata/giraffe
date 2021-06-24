@@ -3,6 +3,7 @@ import {ColumnType, LegendData, LegendType} from '../types'
 
 // Style Constants
 import {
+  STATIC_LEGEND_LINE_HEIGHT_RATIO,
   STATIC_LEGEND_LINE_SPACING_RATIO,
   STATIC_LEGEND_SCROLL_PADDING,
 } from '../constants'
@@ -84,7 +85,11 @@ export const generateLegendStyles = (
   })
 
   // Special "pills" Column Styles
-  const pills = LegendPillsColumnStyles(switchToVertical, legendData)
+  const pills = LegendPillsColumnStyles(
+    legendType,
+    switchToVertical,
+    legendData
+  )
 
   return {
     table,
@@ -233,13 +238,14 @@ const staticLegendColumnValueStyle = (
     whiteSpace: 'nowrap',
     fontWeight: 600,
     padding: `${STATIC_LEGEND_LINE_SPACING_RATIO}em`,
-    lineHeight: '1.25em',
-    height: '1.25em',
+    lineHeight: `${STATIC_LEGEND_LINE_HEIGHT_RATIO}em`,
+    height: `${STATIC_LEGEND_LINE_HEIGHT_RATIO}em`,
     color,
   }
 }
 
 const LegendPillsColumnStyles = (
+  legendType: LegendType,
   switchToVertical: boolean,
   legendData: LegendData
 ): LegendPillsStyles => {
@@ -257,11 +263,19 @@ const LegendPillsColumnStyles = (
 
   let value: CSSProperties = {
     width: 'auto',
-    lineHeight: '1.125em',
-    height: '1.125em',
+    lineHeight:
+      legendType === 'tooltip'
+        ? '1.125em'
+        : `${STATIC_LEGEND_LINE_HEIGHT_RATIO}em`,
+    height:
+      legendType === 'tooltip'
+        ? '1.125em'
+        : `${STATIC_LEGEND_LINE_HEIGHT_RATIO}em`,
     display: 'flex',
     alignItems: 'center',
     alignContent: 'center',
+    padding:
+      legendType === 'tooltip' ? '0' : `${STATIC_LEGEND_LINE_SPACING_RATIO}em`,
   }
 
   if (switchToVertical) {
@@ -279,7 +293,10 @@ const LegendPillsColumnStyles = (
       width: 'auto',
       display: 'table-cell',
       verticalAlign: 'middle',
-      padding: legendTablePadding,
+      padding:
+        legendType === 'tooltip'
+          ? legendTablePadding
+          : `${2 * STATIC_LEGEND_LINE_SPACING_RATIO}em`,
     }
   }
 
