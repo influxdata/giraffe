@@ -90,7 +90,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       headerTextMetrics,
       sampleTextMetrics,
     })
-  }, [legendData, staticLegendOverride])
+  }, [height, legendData, top])
 
   return (
     <div
