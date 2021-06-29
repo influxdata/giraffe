@@ -4,7 +4,6 @@ const pkg = require('./package.json')
 
 module.exports = {
   entry: './src/index.ts',
-  mode: 'production',
   output: {
     filename: 'index.js',
     libraryTarget: 'umd',
@@ -33,7 +32,6 @@ module.exports = {
       root: '_',
     },
   },
-  devtool: 'source-map',
   resolve: {
     alias: {
       src: path.resolve(__dirname, 'src'),
