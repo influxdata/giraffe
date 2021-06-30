@@ -119,7 +119,7 @@ export const useDragEvent = (): [DragEvent | null, UseDragEventProps] => {
 
       const onMouseUp = mouseUpEvent => {
         document.removeEventListener('mousemove', onMouseMove)
-        document.removeEventListener('mousemove', onMouseUp)
+        document.removeEventListener('mouseup', onMouseUp)
 
         const [x, y] = getXYCoords(mouseUpEvent)
 
