@@ -1,7 +1,6 @@
 import {useRef, useEffect} from 'react'
 
 import {AnnotationTooltipOptions} from '../../types'
-import {ANNOTATION_TOOLTIP_CONTAINER_NAME} from '../../constants'
 import {useTooltipStyle, useAnnotationStyle} from './useTooltipStyle'
 
 /*
@@ -14,9 +13,29 @@ import {useTooltipStyle, useAnnotationStyle} from './useTooltipStyle'
   The returned node is intended to be used with `React.createPortal`. It is
   appended to the end of the document to circumvent z-index issues.
 */
-export const useTooltipElement = (
+export const useLegendElement = (className: string) => {
+  const ref = useRef<HTMLDivElement>(null)
+
+  if (ref.current === null) {
+    ref.current = document.createElement('div')
+    ref.current.classList.add(className)
+
+    document.body.appendChild(ref.current)
+  }
+
+  useEffect(() => () => document.body.removeChild(ref.current), [])
+
+  useTooltipStyle(ref.current)
+
+  return ref.current
+}
+
+/*
+  Similar to useLegendElement but for Annotation tooltips
+*/
+export const useAnnotationTooltipElement = (
   className: string,
-  options?: AnnotationTooltipOptions
+  options: AnnotationTooltipOptions
 ) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -29,11 +48,7 @@ export const useTooltipElement = (
 
   useEffect(() => () => document.body.removeChild(ref.current), [])
 
-  if (className == ANNOTATION_TOOLTIP_CONTAINER_NAME) {
-    useAnnotationStyle(ref.current, options)
-  } else {
-    useTooltipStyle(ref.current)
-  }
+  useAnnotationStyle(ref.current, options)
 
   return ref.current
 }
