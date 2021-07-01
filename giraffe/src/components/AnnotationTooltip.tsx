@@ -7,7 +7,7 @@ import {
   ANNOTATION_TOOLTIP_CONTAINER_NAME,
   ANNOTATION_DEFAULT_MAX_WIDTH,
 } from '../constants'
-import {useTooltipElement} from '../utils/legend/useTooltipElement'
+import {useAnnotationTooltipElement} from '../utils/legend/useTooltipElement'
 
 interface Props {
   boundingReference: DOMRect
@@ -46,7 +46,7 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     boundingReference ? boundingReference.y : position.y
   )
 
-  const annotationTooltipElement = useTooltipElement(
+  const annotationTooltipElement = useAnnotationTooltipElement(
     ANNOTATION_TOOLTIP_CONTAINER_NAME,
     {
       xOffset: clampedXOffset,

@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom'
 
 import {LegendData, Config} from '../types'
 import {Legend} from './Legend'
-import {useTooltipElement} from '../utils/legend/useTooltipElement'
+import {useLegendElement} from '../utils/legend/useTooltipElement'
 import {TOOLTIP_MAXIMUM_OPACITY, TOOLTIP_MINIMUM_OPACITY} from '../constants'
 
 interface Props {
@@ -22,7 +22,7 @@ export const Tooltip: FunctionComponent<Props> = ({data, config}) => {
     legendHide: isHidden,
     legendOpacity,
   } = config
-  const tooltipElement = useTooltipElement('giraffe-tooltip-container')
+  const tooltipElement = useLegendElement('giraffe-tooltip-container')
 
   const tooltipOpacity = useMemo(() => {
     if (
