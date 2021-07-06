@@ -94,15 +94,9 @@ describe('formatCircleMarkerRowInfo', () => {
 
     const result = formatCircleMarkerRowInfo(properties, geotable, index)
 
-    const expectedResult = [
-      {
-        key: '_time',
-        name: 'Time',
-        type: 'string',
-        values: ['3/20/2019, 12:00:00 AM'],
-      },
-    ]
-    expect(result).toEqual(expectedResult)
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('key')
+    expect(result[0].key).toBe('_time')
   })
 })
 
@@ -114,20 +108,19 @@ describe('formatPointLayerRowInfo', () => {
       lat: {key: '', column: ''},
       lon: {key: '', column: ''},
     }
-    const geotable = preprocessData(table, 5000, false, latLonColumns, '')
+    const geotable = preprocessData(
+      table,
+      5000,
+      true,
+      latLonColumns,
+      's2_cell_id'
+    )
     const index = 1
 
     const result = formatPointLayerRowInfo(properties, geotable, index)
 
-    const expectedResult = [
-      {
-        key: '_time',
-        name: 'Time',
-        type: 'string',
-        values: ['3/20/2019, 12:00:00 AM'],
-      },
-      {key: '_value', name: 'Value', type: 'string', values: ['7.883']},
-    ]
-    expect(result).toEqual(expectedResult)
+    expect(result).toHaveLength(2)
+    expect(result[0]).toHaveProperty('key')
+    expect(result[0].key).toBe('_time')
   })
 })
