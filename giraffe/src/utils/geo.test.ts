@@ -1,8 +1,10 @@
 import {InfluxColors} from '../constants/colorSchemes'
 import {
   GeoCircleViewLayer,
+  GeoHeatMapViewLayer,
   GeoPointMapViewLayer,
   GeoQueryVariables,
+  GeoTrackMapViewLayer,
 } from '../types/geo'
 import {
   calculateVariableAssignment,
@@ -40,6 +42,27 @@ const circleMapLayer: GeoCircleViewLayer = {
   ],
 }
 
+const heatMapLayer: GeoHeatMapViewLayer = {
+  type: 'heatmap',
+  radius: 2,
+  blur: 0,
+  intensityDimension: {label: 'Magnitude'},
+  intensityField: 'magnitude',
+}
+
+const trackMapLayer: GeoTrackMapViewLayer = {
+  type: 'trackMap',
+  speed: 200,
+  trackWidth: 4,
+  randomColors: false,
+  endStopMarkers: true,
+  endStopMarkerRadius: 4,
+  colors: [
+    {type: 'min', hex: '#0000FF'},
+    {type: 'max', hex: '#F0F0FF'},
+  ],
+}
+
 describe('getMinZoom', () => {
   it('can return minimum zoom for viewing maps', () => {
     const width = 500
@@ -49,14 +72,23 @@ describe('getMinZoom', () => {
 })
 
 describe('getRowLimit', () => {
-  it('will return the layer limit based on layer type', () => {
-    const layerLimit = getRowLimit([pointMapLayer])
-    expect(layerLimit).toBe(2000)
+  it('will return the layer limit based on the layer type', () => {
+    const pointLayerLimit = getRowLimit([pointMapLayer])
+    expect(pointLayerLimit).toBe(2000)
+
+    const circleLayerLimit = getRowLimit([circleMapLayer])
+    expect(circleLayerLimit).toBe(5000)
+
+    const heatLayerLimit = getRowLimit([heatMapLayer])
+    expect(heatLayerLimit).toBe(100000)
+
+    const trackLayerLimit = getRowLimit([trackMapLayer])
+    expect(trackLayerLimit).toBe(2000)
   })
 })
 
 describe('calculateVariableAssignment', () => {
-  it('can return the object with lat, lon and calculated radius', () => {
+  it('can return the object with lat,  lon and calculated radius', () => {
     const width = 500
     const height = 500
     const lon = 36
