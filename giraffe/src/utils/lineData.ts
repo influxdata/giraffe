@@ -50,7 +50,6 @@ export const simplifyLineData = (
   }
 
   return result
-
 }
 
 export const getDomainDataFromLines = (
