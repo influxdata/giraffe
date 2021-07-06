@@ -1,27 +1,31 @@
 import {InfluxColors} from '../constants/colorSchemes'
-import {GeoCircleViewLayer, GeoQueryVariables, GeoViewLayer} from '../types/geo'
+import {
+  GeoCircleViewLayer,
+  GeoPointMapViewLayer,
+  GeoQueryVariables,
+} from '../types/geo'
 import {
   calculateVariableAssignment,
   formatCircleMarkerRowInfo,
+  formatPointLayerRowInfo,
   getMinZoom,
   getRowLimit,
 } from './geo'
-// import {geoTable} from '../../../stories/src/data/geoLayer'
 import {preprocessData} from '../components/geo/processing/tableProcessing'
+import {fromFlux} from './fromFlux'
+import {geoCSV} from '../../../stories/src/data/geo'
 
-const pointMapLayer: GeoViewLayer[] = [
-  {
-    type: 'pointMap',
-    colorDimension: {label: 'Value'},
-    colorField: '_value',
-    colors: [
-      {type: 'min', hex: InfluxColors.Star},
-      {value: 50, hex: InfluxColors.Star},
-      {type: 'max', hex: InfluxColors.Star},
-    ],
-    isClustered: false,
-  },
-]
+const pointMapLayer: GeoPointMapViewLayer = {
+  type: 'pointMap',
+  colorDimension: {label: 'Value'},
+  colorField: '_value',
+  colors: [
+    {type: 'min', hex: InfluxColors.Star},
+    {value: 50, hex: InfluxColors.Star},
+    {type: 'max', hex: InfluxColors.Star},
+  ],
+  isClustered: false,
+}
 
 const circleMapLayer: GeoCircleViewLayer = {
   type: 'circleMap',
@@ -46,7 +50,7 @@ describe('getMinZoom', () => {
 
 describe('getRowLimit', () => {
   it('will return the layer limit based on layer type', () => {
-    const layerLimit = getRowLimit(pointMapLayer)
+    const layerLimit = getRowLimit([pointMapLayer])
     expect(layerLimit).toBe(2000)
   })
 })
@@ -80,12 +84,50 @@ describe('calculateVariableAssignment', () => {
 describe('formatCircleMarkerRowInfo', () => {
   it('can return an array with result containing radius and color fields', () => {
     const properties = circleMapLayer
-    // const table = geoTable()
-    // const geotable = preprocessData(table, 5000, false)
+    const table = fromFlux(geoCSV).table
+    const latLonColumns = {
+      lat: {key: '', column: ''},
+      lon: {key: '', column: ''},
+    }
+    const geotable = preprocessData(table, 5000, false, latLonColumns, '')
     const index = 1
 
-    // const result = formatCircleMarkerRowInfo(properties, geotable, index)
-    // console.log('result', result)
-    // const expectedResult = []
+    const result = formatCircleMarkerRowInfo(properties, geotable, index)
+
+    const expectedResult = [
+      {
+        key: '_time',
+        name: 'Time',
+        type: 'string',
+        values: ['3/20/2019, 12:00:00 AM'],
+      },
+    ]
+    expect(result).toEqual(expectedResult)
+  })
+})
+
+describe('formatPointLayerRowInfo', () => {
+  it('can return an array with result containing radius and color fields', () => {
+    const properties = pointMapLayer
+    const table = fromFlux(geoCSV).table
+    const latLonColumns = {
+      lat: {key: '', column: ''},
+      lon: {key: '', column: ''},
+    }
+    const geotable = preprocessData(table, 5000, false, latLonColumns, '')
+    const index = 1
+
+    const result = formatPointLayerRowInfo(properties, geotable, index)
+
+    const expectedResult = [
+      {
+        key: '_time',
+        name: 'Time',
+        type: 'string',
+        values: ['3/20/2019, 12:00:00 AM'],
+      },
+      {key: '_value', name: 'Value', type: 'string', values: ['7.883']},
+    ]
+    expect(result).toEqual(expectedResult)
   })
 })
