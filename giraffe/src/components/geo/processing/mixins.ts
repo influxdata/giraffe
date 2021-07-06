@@ -2,7 +2,6 @@ import {S2} from 's2-geometry'
 import {HEX_DIGIT_NUM} from '../../../utils/geo'
 import {CoordinateEncoding} from './GeoTable'
 import {Coordinates} from './GeoTable'
-
 export const getLatLonMixin = function(index: number): Coordinates {
   if (this.coordinateEncoding === CoordinateEncoding.FIELDS) {
     return {
