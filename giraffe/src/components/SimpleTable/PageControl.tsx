@@ -9,8 +9,9 @@ import {PaginationNav} from './PaginationNav'
 import styles from './SimpleTableGraph.scss'
 
 const PageControl: FC = () => {
-  const {offset, size, total, setPage} = useContext(PaginationContext)
-
+  const {offset, size, total, totalPages, setPage} = useContext(
+    PaginationContext
+  )
   return (
     <div className={`${styles['visualization--simple-table--paging']}`}>
       <span
@@ -20,8 +21,8 @@ const PageControl: FC = () => {
       </span>
       {total && size && (
         <PaginationNav.PaginationNav
-          totalPages={Math.ceil(total / size)}
-          currentPage={Math.floor(offset / size) + 1}
+          totalPages={totalPages}
+          currentPage={Math.min(Math.floor(offset / size) + 1, totalPages)}
           pageRangeOffset={1}
           onChange={setPage}
         />
