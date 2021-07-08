@@ -243,6 +243,6 @@ export const longitudeKnob = (table: Table, initial?: Record<string, any>) => {
   )
 }
 
-export const s2GeoHashKnob = (table: Table, initial?: string) => {
+export const s2GeoHashKnob = (table: Table, initial?: any) => {
   return select('S2 Geo Hash:', findTags(table), initial || '_value')
 }

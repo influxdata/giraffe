@@ -21,6 +21,7 @@ export class NativeGeoTable implements GeoTable {
   coordinateEncoding: CoordinateEncoding
   table: Table
   maxRows: number
+  s2Column: string
   latLonColumns: LatLonColumns
 
   constructor(
@@ -32,6 +33,7 @@ export class NativeGeoTable implements GeoTable {
     this.coordinateEncoding = getDataEncoding(table, latLonColumns, s2Column)
     this.table = table
     this.maxRows = maxRows
+    this.s2Column = s2Column
     this.latLonColumns = latLonColumns
   }
 
@@ -50,7 +52,7 @@ export class NativeGeoTable implements GeoTable {
   }
 
   getS2CellID(index: number): string {
-    const column = this.table.getColumn(GEO_HASH_COLUMN)
+    const column = this.table.getColumn(this.s2Column || GEO_HASH_COLUMN)
     if (!column) {
       return null
     }
