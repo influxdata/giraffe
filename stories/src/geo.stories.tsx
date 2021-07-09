@@ -169,7 +169,7 @@ geo.add('Map Markers Custom CSV', () => {
     lattitudeSelection = lattitudeKnob(table)
     longitudeSelection = longitudeKnob(table)
   } else {
-    s2GeoHash = s2GeoHashKnob(table, 's2_cell_id')
+    s2GeoHash = s2GeoHashKnob(table, {key: 'tag', column: 's2_cell_id'})
   }
 
   const config: Config = {
@@ -184,7 +184,7 @@ geo.add('Map Markers Custom CSV', () => {
         allowPanAndZoom,
         detectCoordinateFields: false,
         useS2CellID,
-        s2Column: s2GeoHash,
+        s2Column: s2GeoHash.column,
         latLonColumns: {lat: lattitudeSelection, lon: longitudeSelection},
         layers: [
           {
