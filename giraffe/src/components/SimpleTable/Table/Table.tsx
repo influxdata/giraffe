@@ -34,15 +34,13 @@ export const TableRoot = forwardRef<TableRef, TableProps>(
       striped = false,
       borders = BorderType.Horizontal,
       children,
-      fontSize = ComponentSize.Medium,
+      fontSize = ComponentSize.Small,
       highlight = false,
       className,
-      cellPadding = ComponentSize.Small,
     },
     ref
   ) => {
     const tableClass = classnames('cf-table', {
-      [`cf-table__padding-${cellPadding}`]: cellPadding,
       [`cf-table__borders-${borders}`]: borders,
       [`cf-table__font-${fontSize}`]: fontSize,
       'cf-table__striped': striped,

@@ -17,10 +17,7 @@ interface CssExports {
   'cf-table__borders-horizontal': string;
   'cf-table__borders-none': string;
   'cf-table__borders-vertical': string;
-  'cf-table__font-lg': string;
-  'cf-table__font-md': string;
   'cf-table__font-sm': string;
-  'cf-table__font-xs': string;
   'cf-table__highlight': string;
   'cf-table__striped': string;
 }

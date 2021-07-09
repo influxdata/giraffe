@@ -29,11 +29,7 @@ $cf-font-weight--bold: 700;
 
 $cf-border: 2px;
 
-$cf-form-xs-font: 12px;
 $cf-form-sm-font: 13px;
-$cf-form-md-font: 14px;
-$cf-form-lg-font: 17px;
-
 
 $table-border--primary: $g6-smoke;
 $table-border--secondary: $g4-onyx;
@@ -166,17 +162,8 @@ $table-row-background: $g3-castle;
   }
 }
 
-.cf-table__font-xs {
-  @include tableFontModifier($cf-form-xs-font);
-}
 .cf-table__font-sm {
   @include tableFontModifier($cf-form-sm-font);
-}
-.cf-table__font-md {
-  @include tableFontModifier($cf-form-md-font);
-}
-.cf-table__font-lg {
-  @include tableFontModifier($cf-form-lg-font);
 }
 
 /*

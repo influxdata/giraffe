@@ -2,7 +2,6 @@ import React, {FC} from 'react'
 import {Table} from './Table'
 import {SubsetTable} from '../SimpleTableGraph'
 import styles from './SimpleTableGraph.scss'
-import {ComponentSize} from '../../types/input'
 
 interface InnerProps {
   table: SubsetTable
@@ -64,7 +63,6 @@ const InnerTable: FC<InnerProps> = ({table}) => {
   return (
     <Table
       className={`${styles['cf-table']}`}
-      fontSize={ComponentSize.Small}
       striped
       highlight
       testID="simple-table"
