@@ -248,6 +248,10 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return undefined
   }
 
+  if (value === '+Inf' || value === '-Inf') {
+    return value
+  }
+  
   if (value === 'null') {
     return null
   }
