@@ -70,7 +70,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
   let tableLength = 0
-
+  
   try {
     const chunks = splitChunks(fluxCSV)
 
@@ -248,10 +248,6 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return undefined
   }
 
-  if (value === '+Inf' || value === '-Inf') {
-    return value
-  }
-  
   if (value === 'null') {
     return null
   }
@@ -281,7 +277,8 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   }
 
   if (columnType === 'number') {
-    return Number(value)
+    const numVal = Number(value)
+    return numVal === numVal ? numVal : value
   }
 
   return null
