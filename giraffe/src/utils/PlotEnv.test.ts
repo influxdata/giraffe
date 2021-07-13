@@ -29,7 +29,7 @@ describe('PlotEnv', () => {
       lineTransformSpy.mockRestore()
     })
 
-    it('updates xScale when xDomain is updated', () => {
+    it('updates xScale when xDomain is updated and domains are reset', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -40,7 +40,9 @@ describe('PlotEnv', () => {
         width: 1000,
         height: 500,
         xDomain: [10, 19],
+        onSetXDomainDefault: true,
         onSetXDomain: () => {},
+        onResetXDomainDefault: true,
         onResetXDomain: () => {},
         layers: [{type: 'histogram', x: 'a'}],
       }
@@ -55,6 +57,7 @@ describe('PlotEnv', () => {
       )
 
       plotEnv.config = {...config, xDomain: [10, 28]}
+      plotEnv.resetDomains()
 
       expect(plotEnv.xScale(10)).toEqual(rangePadding)
       expect(plotEnv.xScale(28)).toEqual(
