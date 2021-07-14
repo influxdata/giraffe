@@ -40,7 +40,7 @@ describe('PlotEnv', () => {
         width: 1000,
         height: 500,
         xDomain: [10, 19],
-        setXDomainToDefault: true,
+        includeXDomainZoom: true,
         onSetXDomain: () => {},
         resetXDomainToDefault: true,
         onResetXDomain: () => {},

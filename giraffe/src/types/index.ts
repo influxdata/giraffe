@@ -56,29 +56,28 @@ export interface Config {
   layers: LayerConfig[]
 
   // The x domain of the plot can be explicitly set when `xDomain` is passed,
-  // along with `setXDomainToDefault` or `onSetXDomain`,
-  // and `resetXDomainToDefault` or `onResetXDomain`.
+  // along with `includeXDomainZoom`, or `onSetXDomain` and `onResetXDomain`,
+  // or `includeXDomainZoom` with any of the other two.
   // This is known as "controlled" mode, where it always uses the passed x domain
   //   - Any brush interaction with the plot that should change the x domain
-  //     will use the default handler if `setXDomainToDefault` is true,
+  //     will use the built-in brush handler if `includeXDomainZoom` is true,
   //     and call `onSetXDomain` if provided.
-  //   - Double clicking the plot will use the default handler if `onResetXDomain`
-  //     is true, and call `onResetXDomain` if provided.
+  //   - Double clicking the plot will use the built-in reset handler if
+  //     `includeXDomainZoom` is true, and call `onResetXDomain` if provided.
   //
   // When the `xDomain` option is not passed, then the
   // component is "uncontrolled". It will compute, set, and reset the `xDomain`
   // automatically.
   xDomain?: number[]
-  setXDomainToDefault?: boolean
+  includeXDomainZoom?: boolean
   onSetXDomain?: (xDomain: number[]) => void
   resetXDomainToDefault?: boolean
   onResetXDomain?: () => void
 
   // Similar to xDomain above
   yDomain?: number[]
-  setYDomainToDefault?: boolean
+  includeYDomainZoom?: boolean
   onSetYDomain?: (yDomain: number[]) => void
-  resetYDomainToDefault?: boolean
   onResetYDomain?: () => void
 
   // legend properties apply to both the static legend and the tooltip

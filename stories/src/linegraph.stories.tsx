@@ -47,12 +47,11 @@ storiesOf('Line Graph', module)
     const yDomainMax = number('yDomain max')
     const isValidYDomain =
       typeof yDomainMin === 'number' && typeof yDomainMax === 'number'
-    const setYDomainToDefault = boolean('setYDomainToDefault', false)
+    const includeYDomainZoom = boolean('includeYDomainZoom', false)
     const includeOnSetYDomain = boolean(
       'include onSetYDomain empty function ?',
       false
     )
-    const resetYDomainToDefault = boolean('resetYDomainToDefault', false)
     const includeOnResetYDomain = boolean(
       'include onResetYDomain empty function ?',
       false
@@ -128,9 +127,8 @@ storiesOf('Line Graph', module)
           }`,
       },
       yDomain: isValidYDomain ? [yDomainMin, yDomainMax] : null,
-      setYDomainToDefault,
+      includeYDomainZoom,
       onSetYDomain: includeOnSetYDomain ? () => {} : null,
-      resetYDomainToDefault,
       onResetYDomain: includeOnResetYDomain ? () => {} : null,
       xScale,
       yScale,

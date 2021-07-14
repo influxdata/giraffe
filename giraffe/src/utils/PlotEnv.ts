@@ -198,7 +198,7 @@ export class PlotEnv {
   }
 
   public get xDomain(): number[] {
-    if (this.isXControlled && !this.config.setXDomainToDefault) {
+    if (this.isXControlled && !this.config.includeXDomainZoom) {
       return this.config.xDomain
     }
 
@@ -213,7 +213,7 @@ export class PlotEnv {
 
   public set xDomain(newXDomain: number[]) {
     if (this.isXControlled) {
-      if (this.config.setXDomainToDefault === true) {
+      if (this.config.includeXDomainZoom === true) {
         this._xDomain = newXDomain
       }
       if (typeof this.config.onSetXDomain === 'function') {
@@ -225,7 +225,7 @@ export class PlotEnv {
   }
 
   public get yDomain(): number[] {
-    if (this.isYControlled && !this.config.setYDomainToDefault) {
+    if (this.isYControlled && !this.config.includeYDomainZoom) {
       return this.config.yDomain
     }
 
@@ -240,7 +240,7 @@ export class PlotEnv {
 
   public set yDomain(newYDomain: number[]) {
     if (this.isYControlled) {
-      if (this.config.setYDomainToDefault === true) {
+      if (this.config.includeYDomainZoom === true) {
         this._yDomain = newYDomain
       }
       if (typeof this.config.onSetYDomain === 'function') {
@@ -423,7 +423,7 @@ export class PlotEnv {
 
   public resetDomains(): void {
     if (this.isXControlled) {
-      if (this.config.resetXDomainToDefault === true) {
+      if (this.config.includeXDomainZoom === true) {
         this._xDomain = this.config.xDomain
       }
       if (typeof this.config.onResetXDomain === 'function') {
@@ -434,7 +434,7 @@ export class PlotEnv {
     }
 
     if (this.isYControlled) {
-      if (this.config.resetYDomainToDefault === true) {
+      if (this.config.includeYDomainZoom === true) {
         this._yDomain = this.config.yDomain
       }
       if (typeof this.config.onResetYDomain === 'function') {
@@ -446,18 +446,22 @@ export class PlotEnv {
   }
 
   private get isXControlled() {
+    const hasXDomainZoomOption =
+      typeof this.config.includeXDomainZoom === 'boolean'
     return (
       this.config.xDomain &&
-      (this.config.setXDomainToDefault || this.config.onSetXDomain) &&
-      (this.config.resetXDomainToDefault || this.config.onResetXDomain)
+      (hasXDomainZoomOption ||
+        (this.config.onSetXDomain && this.config.onResetXDomain))
     )
   }
 
   private get isYControlled() {
+    const hasYDomainZoomOption =
+      typeof this.config.includeYDomainZoom === 'boolean'
     return (
       this.config.yDomain &&
-      (this.config.setYDomainToDefault || this.config.onSetYDomain) &&
-      (this.config.resetYDomainToDefault || this.config.onResetYDomain)
+      (hasYDomainZoomOption ||
+        (this.config.onSetYDomain && this.config.onResetYDomain))
     )
   }
 
