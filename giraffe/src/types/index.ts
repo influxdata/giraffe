@@ -71,7 +71,6 @@ export interface Config {
   xDomain?: number[]
   includeXDomainZoom?: boolean
   onSetXDomain?: (xDomain: number[]) => void
-  resetXDomainToDefault?: boolean
   onResetXDomain?: () => void
 
   // Similar to xDomain above
