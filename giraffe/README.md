@@ -362,17 +362,21 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
   - "linear" scaling means the same distance between ticks represents the same increase in value.
   - "log" (logarithmic) scaling means the same distance between ticks can represent an exponential increase in value, used as a way to display data with a very wide range of values in a compact space.
 
-- **xDomain**: _array[min, max]. Optional._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the x-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain to set the minimum and maximum value of the x-axis. Any brush interaction with the `<Plot>` that should change the x domain will call the `onSetXDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetXDomain`. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
+- **xDomain**: _array[min, max]. Optional. When used must also include the callback functions **onSetXDomain** and **onResetXDomain**; or include **includeXDomainZoom** with any of the two callback functions._ The x domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the x-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed x domain. Any brush interaction with the `<Plot>` that should change the x domain will use Giraffe's built-in brush handler if `includeXDomainZoom` is `true`. Additionally, the `onSetXDomain` callback function will be invoked if provided. Double clicking the plot will call Giraffe's built-in reset handler if `includeXDomainZoom` is `true`. Additionally, the `onResetXDomain` callback function will be invoked if provided. If the `xDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `xDomain` automatically.
 
-- **onSetXDomain**: _function(array[min, max]). Optional._ See above regarding **xDomain**.
+- **includeXDomainZoom**: _boolean. Optional, for use with **xDomain**._ See above regarding **xDomain**.
 
-- **onResetXDomain**: _function(). Optional._ See above regarding **xDomain**.
+- **onSetXDomain**: _function(array[min, max]). Optional, for use with **xDomain**._ See above regarding **xDomain**.
 
-- **yDomain**: _array[min, max]. Optional._ The y domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will call the `onSetYDomain` option when the component is in controlled mode. Double clicking the plot will call `onResetYDomain`. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
+- **onResetXDomain**: _function(). Optional, for use with **xDomain**._ See above regarding **xDomain**.
 
-- **onSetYDomain**: _function(array[min, max]). Optional._ See above regarding **yDomain**.
+- **yDomain**: _array[min, max]. Optional. When used must also include the callback functions **onSetYDomain** and **onResetYDomain**; or include **includeYDomainZoom** with any of the two callback functions._ The y domain of the plot can be explicitly set with numbers denoting a minimum and a maximum value for the y-axis. If this option is passed, both _min_ and _max_ are required to be numbers, making the `<Plot>` operate in a "controlled" mode, where it always uses the passed y domain. Any brush interaction with the `<Plot>` that should change the y domain will use Giraffe's built-in brush handler if `includeYDomainZoom` is `true`. Additionally, the `onSetYDomain` callback function will be invoked if provided. Double clicking the plot will call Giraffe's built-in reset handler if `includeYDomainZoom` is `true`. Additionally, the `onResetYDomain` callback function will be invoked if provided. If the `yDomain` option is not passed, then the component is "uncontrolled". It will compute, set, and reset the `yDomain` automatically.
 
-- **onResetYDomain**: _function(). Optional._ See above regarding **yDomain**.
+- **includeYDomainZoom**: _boolean. Optional, for use with **yDomain**._ See above regarding **yDomain**.
+
+- **onSetYDomain**: _function(array[min, max]). Optional, for use with **yDomain**._ See above regarding **yDomain**.
+
+- **onResetYDomain**: _function(). Optional, for use with **yDomain**._ See above regarding **yDomain**.
 
 ### Legend and Tooltip properties
 

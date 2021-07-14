@@ -198,12 +198,14 @@ export class PlotEnv {
   }
 
   public get xDomain(): number[] {
-    if (this.isXControlled) {
+    if (this.isXControlled && !this.config.includeXDomainZoom) {
       return this.config.xDomain
     }
 
     if (!this._xDomain) {
-      this._xDomain = this.getXDomain()
+      this._xDomain = this.isXControlled
+        ? this.config.xDomain
+        : this.getXDomain()
     }
 
     return this._xDomain
@@ -211,19 +213,26 @@ export class PlotEnv {
 
   public set xDomain(newXDomain: number[]) {
     if (this.isXControlled) {
-      this.config.onSetXDomain(newXDomain)
+      if (this.config.includeXDomainZoom === true) {
+        this._xDomain = newXDomain
+      }
+      if (typeof this.config.onSetXDomain === 'function') {
+        this.config.onSetXDomain(newXDomain)
+      }
     } else {
       this._xDomain = newXDomain
     }
   }
 
   public get yDomain(): number[] {
-    if (this.isYControlled) {
+    if (this.isYControlled && !this.config.includeYDomainZoom) {
       return this.config.yDomain
     }
 
     if (!this._yDomain) {
-      this._yDomain = this.getYDomain()
+      this._yDomain = this.isYControlled
+        ? this.config.yDomain
+        : this.getYDomain()
     }
 
     return this._yDomain
@@ -231,7 +240,12 @@ export class PlotEnv {
 
   public set yDomain(newYDomain: number[]) {
     if (this.isYControlled) {
-      this.config.onSetYDomain(newYDomain)
+      if (this.config.includeYDomainZoom === true) {
+        this._yDomain = newYDomain
+      }
+      if (typeof this.config.onSetYDomain === 'function') {
+        this.config.onSetYDomain(newYDomain)
+      }
     } else {
       this._yDomain = newYDomain
     }
@@ -409,31 +423,45 @@ export class PlotEnv {
 
   public resetDomains(): void {
     if (this.isXControlled) {
-      this.config.onResetXDomain()
+      if (this.config.includeXDomainZoom === true) {
+        this._xDomain = this.config.xDomain
+      }
+      if (typeof this.config.onResetXDomain === 'function') {
+        this.config.onResetXDomain()
+      }
     } else {
       this._xDomain = this.getXDomain()
     }
 
     if (this.isYControlled) {
-      this.config.onResetYDomain()
+      if (this.config.includeYDomainZoom === true) {
+        this._yDomain = this.config.yDomain
+      }
+      if (typeof this.config.onResetYDomain === 'function') {
+        this.config.onResetYDomain()
+      }
     } else {
       this._yDomain = this.getYDomain()
     }
   }
 
   private get isXControlled() {
+    const hasXDomainZoomOption =
+      typeof this.config.includeXDomainZoom === 'boolean'
     return (
       this.config.xDomain &&
-      this.config.onSetXDomain &&
-      this.config.onResetXDomain
+      (hasXDomainZoomOption ||
+        (this.config.onSetXDomain && this.config.onResetXDomain))
     )
   }
 
   private get isYControlled() {
+    const hasYDomainZoomOption =
+      typeof this.config.includeYDomainZoom === 'boolean'
     return (
       this.config.yDomain &&
-      this.config.onSetYDomain &&
-      this.config.onResetYDomain
+      (hasYDomainZoomOption ||
+        (this.config.onSetYDomain && this.config.onResetYDomain))
     )
   }
 

@@ -29,7 +29,7 @@ describe('PlotEnv', () => {
       lineTransformSpy.mockRestore()
     })
 
-    it('updates xScale when xDomain is updated', () => {
+    it('updates xScale when xDomain is updated without resetting domains', () => {
       const plotEnv = new PlotEnv()
 
       const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -55,6 +55,41 @@ describe('PlotEnv', () => {
       )
 
       plotEnv.config = {...config, xDomain: [10, 28]}
+
+      expect(plotEnv.xScale(10)).toEqual(rangePadding)
+      expect(plotEnv.xScale(28)).toEqual(
+        1000 - plotEnv.margins.left - plotEnv.margins.right - rangePadding * 2
+      )
+    })
+
+    it('updates xScale when xDomain is updated and domains are reset', () => {
+      const plotEnv = new PlotEnv()
+
+      const aData = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      const table = newTable(10).addColumn('a', 'long', 'number', aData)
+
+      const config: SizedConfig = {
+        table,
+        width: 1000,
+        height: 500,
+        xDomain: [10, 19],
+        includeXDomainZoom: true,
+        onSetXDomain: () => {},
+        onResetXDomain: () => {},
+        layers: [{type: 'histogram', x: 'a'}],
+      }
+
+      plotEnv.config = config
+
+      const rangePadding = plotEnv['rangePadding']
+
+      expect(plotEnv.xScale(10)).toEqual(rangePadding)
+      expect(plotEnv.xScale(19)).toEqual(
+        1000 - plotEnv.margins.left - plotEnv.margins.right - rangePadding * 2
+      )
+
+      plotEnv.config = {...config, xDomain: [10, 28]}
+      plotEnv.resetDomains()
 
       expect(plotEnv.xScale(10)).toEqual(rangePadding)
       expect(plotEnv.xScale(28)).toEqual(
