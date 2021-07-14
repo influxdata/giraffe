@@ -198,6 +198,10 @@ export class PlotEnv {
   }
 
   public get xDomain(): number[] {
+    if (this.isXControlled && !this.config.setXDomainToDefault) {
+      return this.config.xDomain
+    }
+
     if (!this._xDomain) {
       this._xDomain = this.isXControlled
         ? this.config.xDomain
@@ -209,7 +213,7 @@ export class PlotEnv {
 
   public set xDomain(newXDomain: number[]) {
     if (this.isXControlled) {
-      if (this.config.onSetXDomainDefault === true) {
+      if (this.config.setXDomainToDefault === true) {
         this._xDomain = newXDomain
       }
       if (typeof this.config.onSetXDomain === 'function') {
@@ -221,6 +225,10 @@ export class PlotEnv {
   }
 
   public get yDomain(): number[] {
+    if (this.isYControlled && !this.config.setYDomainToDefault) {
+      return this.config.yDomain
+    }
+
     if (!this._yDomain) {
       this._yDomain = this.isYControlled
         ? this.config.yDomain
@@ -232,7 +240,7 @@ export class PlotEnv {
 
   public set yDomain(newYDomain: number[]) {
     if (this.isYControlled) {
-      if (this.config.onSetYDomainDefault === true) {
+      if (this.config.setYDomainToDefault === true) {
         this._yDomain = newYDomain
       }
       if (typeof this.config.onSetYDomain === 'function') {
@@ -415,7 +423,7 @@ export class PlotEnv {
 
   public resetDomains(): void {
     if (this.isXControlled) {
-      if (this.config.onResetXDomainDefault === true) {
+      if (this.config.resetXDomainToDefault === true) {
         this._xDomain = this.config.xDomain
       }
       if (typeof this.config.onResetXDomain === 'function') {
@@ -426,7 +434,7 @@ export class PlotEnv {
     }
 
     if (this.isYControlled) {
-      if (this.config.onResetYDomainDefault === true) {
+      if (this.config.resetYDomainToDefault === true) {
         this._yDomain = this.config.yDomain
       }
       if (typeof this.config.onResetYDomain === 'function') {
@@ -440,16 +448,16 @@ export class PlotEnv {
   private get isXControlled() {
     return (
       this.config.xDomain &&
-      (this.config.onSetXDomainDefault || this.config.onSetXDomain) &&
-      (this.config.onResetXDomainDefault || this.config.onResetXDomain)
+      (this.config.setXDomainToDefault || this.config.onSetXDomain) &&
+      (this.config.resetXDomainToDefault || this.config.onResetXDomain)
     )
   }
 
   private get isYControlled() {
     return (
       this.config.yDomain &&
-      (this.config.onSetYDomainDefault || this.config.onSetYDomain) &&
-      (this.config.onResetYDomainDefault || this.config.onResetYDomain)
+      (this.config.setYDomainToDefault || this.config.onSetYDomain) &&
+      (this.config.resetYDomainToDefault || this.config.onResetYDomain)
     )
   }
 

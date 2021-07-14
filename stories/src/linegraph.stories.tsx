@@ -47,9 +47,17 @@ storiesOf('Line Graph', module)
     const yDomainMax = number('yDomain max')
     const isValidYDomain =
       typeof yDomainMin === 'number' && typeof yDomainMax === 'number'
+    const setYDomainToDefault = boolean('setYDomainToDefault', false)
+    const includeOnSetYDomain = boolean(
+      'include onSetYDomain empty function ?',
+      false
+    )
+    const resetYDomainToDefault = boolean('resetYDomainToDefault', false)
+    const includeOnResetYDomain = boolean(
+      'include onResetYDomain empty function ?',
+      false
+    )
 
-    const onSetYDomainDefault = boolean('onSetYDomainDefault', false)
-    const onResetYDomainDefault = boolean('onResetYDomainDefault', false)
     const includeNegativeNumbers = boolean('Include negative numbers ?', false)
     const position = select(
       'Line Position',
@@ -120,8 +128,10 @@ storiesOf('Line Graph', module)
           }`,
       },
       yDomain: isValidYDomain ? [yDomainMin, yDomainMax] : null,
-      onSetYDomainDefault,
-      onResetYDomainDefault,
+      setYDomainToDefault,
+      onSetYDomain: includeOnSetYDomain ? () => {} : null,
+      resetYDomainToDefault,
+      onResetYDomain: includeOnResetYDomain ? () => {} : null,
       xScale,
       yScale,
       tickFont,

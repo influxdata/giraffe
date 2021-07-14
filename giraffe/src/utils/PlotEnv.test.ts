@@ -40,9 +40,9 @@ describe('PlotEnv', () => {
         width: 1000,
         height: 500,
         xDomain: [10, 19],
-        onSetXDomainDefault: true,
+        setXDomainToDefault: true,
         onSetXDomain: () => {},
-        onResetXDomainDefault: true,
+        resetXDomainToDefault: true,
         onResetXDomain: () => {},
         layers: [{type: 'histogram', x: 'a'}],
       }
