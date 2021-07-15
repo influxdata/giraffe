@@ -104,6 +104,8 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     overflowWrap: 'break-word',
   }
 
+  const multiLines = data.title.split('\n')
+
   return createPortal(
     <div
       className="giraffe-annotation-tooltip"
@@ -123,7 +125,13 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
     >
       <div style={tooltipCaretStyle} />
       <div style={tooltipCaretFillStyle} />
-      <div style={textContainerStyle}>{data.title}</div>
+
+      {multiLines.map(line => {
+        if (!line || line === '' || line.trim() === '') {
+          return <br />
+        }
+        return <div style={textContainerStyle}>{line}</div>
+      })}
       <div style={textContainerStyle}>{data.description}</div>
     </div>,
     annotationTooltipElement
