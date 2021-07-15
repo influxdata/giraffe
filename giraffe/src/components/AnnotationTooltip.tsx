@@ -126,11 +126,15 @@ export const AnnotationTooltip: FunctionComponent<Props> = props => {
       <div style={tooltipCaretStyle} />
       <div style={tooltipCaretFillStyle} />
 
-      {multiLines.map(line => {
+      {multiLines.map((line, index) => {
         if (!line || line === '' || line.trim() === '') {
           return <br />
         }
-        return <div style={textContainerStyle}>{line}</div>
+        return (
+          <div key={`annoLine-${index}`} style={textContainerStyle}>
+            {line}
+          </div>
+        )
       })}
       <div style={textContainerStyle}>{data.description}</div>
     </div>,
