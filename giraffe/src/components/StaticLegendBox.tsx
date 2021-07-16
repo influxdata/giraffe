@@ -61,6 +61,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
   ])
 
   const {style = {}} = staticLegendOverride
+  const {renderEffect} = staticLegendOverride
 
   const {
     legendBackgroundColor: backgroundColor,
@@ -80,7 +81,7 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
 
   useEffect(() => {
     const {headerTextMetrics, sampleTextMetrics} = getStaticLegendTexMetrics()
-    staticLegendOverride.renderEffect({
+    renderEffect({
       totalHeight: height + top,
       staticLegendHeight: height,
       legendDataLength: legendData.length,
@@ -90,6 +91,10 @@ export const StaticLegendBox: FunctionComponent<StaticLegendBoxProps> = props =>
       headerTextMetrics,
       sampleTextMetrics,
     })
+    /* run this hook only for the height changes because the purpose is to set the height for user
+     * therefore, the dependencies should not include anything that doesn't affect height
+     */
+    // eslint-disable-next-line
   }, [height, legendData, top])
 
   return (
