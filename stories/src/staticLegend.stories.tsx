@@ -52,8 +52,10 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
 
@@ -198,8 +200,10 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? null : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? null : Number(fixedHeightText)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
