@@ -75,8 +75,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const clampedStart = Math.max(1, Math.round(startValue))
   const clampedEnd = Math.max(1, Math.round(stopValue))
 
-  console.log('ack ack cak 776a')
-
   if (dimension === 'y') {
     return (
       <>
