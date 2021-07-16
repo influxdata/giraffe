@@ -12,6 +12,7 @@ interface AnnotationLineProps {
   length: number
   pin: AnnotationPinType
   id: string
+  onHover?: (forceHide: boolean) => void
 }
 
 // These could become configurable values
@@ -46,6 +47,14 @@ const RANGE_HEIGHT = 9
  *
  *  style: {cursor: 'pointer'}
  *
+ *  the 'onHover' method is for firing when the user is hovering over
+ *  a clickable area.  it sends a 'true' when the user entered a clickable area
+ *  and a 'false' when it leaves.  This is so if there is a hover legend showing,
+ *  then it will be hidden while on the clickable area.
+ *
+ *  adding the 'onHover' to the tops of the annotations that are clickable:
+ *  the range rectangle and the 'start' pin for vertical annotation lines.
+ *
  * */
 export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const {
@@ -56,6 +65,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     stopValue,
     length,
     pin,
+    onHover = () => {},
   } = props
 
   // This prevents blurry sub-pixel rendering as well as clipped lines
@@ -106,8 +116,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     )
   }
 
-  // dimension is x:
-
   /**
    * This is the rectangle or 'hat' that goes on top of a range annotation.
    * The entire hat is click to edit for the annotation.
@@ -128,6 +136,12 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       fill: color,
       id: props.id,
       style: {cursor: 'pointer', opacity: '60%'},
+      onMouseEnter: () => {
+        onHover(true)
+      },
+      onMouseLeave: () => {
+        onHover(false)
+      },
     })
   }
 
@@ -166,6 +180,12 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           style: {cursor: 'pointer'},
           id: props.id,
           className: 'giraffe-annotation-click-target',
+          onMouseEnter: () => {
+            onHover(true)
+          },
+          onMouseLeave: () => {
+            onHover(false)
+          },
         })
       case 'stop':
         return createElement('polygon', {
