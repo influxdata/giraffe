@@ -16,6 +16,7 @@ import {AnnotationLine} from './AnnotationLine'
 export interface AnnotationLayerProps extends LayerProps {
   spec: AnnotationLayerSpec
   config: AnnotationLayerConfig
+  onHover: (forceHide: boolean) => void
 }
 
 const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
@@ -23,7 +24,17 @@ const ANNOTATION_OVERLAY_DEFAULT_STYLE = {
 } as CSSProperties
 
 export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props => {
-  const {config, spec, width, height, hoverX, hoverY, xScale, yScale} = props
+  const {
+    config,
+    spec,
+    width,
+    height,
+    hoverX,
+    hoverY,
+    xScale,
+    yScale,
+    onHover,
+  } = props
   const lineWidth = config.lineWidth || 2
   const annotationsPositions = useMemo(
     () => getAnnotationsPositions(spec.annotationData, xScale, yScale),
@@ -97,6 +108,7 @@ export const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = props =>
             strokeWidth={lineWidth}
             pin={annotationData.pin}
             id={annotationData.id}
+            onHover={onHover}
           />
         )
       )}

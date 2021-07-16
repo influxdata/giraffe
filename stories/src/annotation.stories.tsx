@@ -68,6 +68,7 @@ storiesOf('Annotations', module)
     const legendFont = legendFontKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
     const legendColorizeRows = tooltipColorizeRowsKnob()
+    const legendHide = boolean('Hide Hover Legend', false)
 
     const xTotalTicks = number('X Total Ticks', 8)
     const yTotalTicks = number('Y Total Ticks', 10)
@@ -131,6 +132,7 @@ storiesOf('Annotations', module)
       xScale,
       yScale,
       legendFont,
+      legendHide,
       legendOrientationThreshold,
       legendColorizeRows,
       tickFont,
@@ -505,6 +507,7 @@ storiesOf('Annotations', module)
     const legendFont = legendFontKnob()
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
     const legendColorizeRows = tooltipColorizeRowsKnob()
+    const legendHide = boolean('Hide Hover Legend', false)
 
     const xTotalTicks = number('X Total Ticks', 8)
     const yTotalTicks = number('Y Total Ticks', 10)
@@ -577,6 +580,7 @@ storiesOf('Annotations', module)
       xScale,
       yScale,
       legendFont,
+      legendHide,
       legendOrientationThreshold,
       legendColorizeRows,
       tickFont,

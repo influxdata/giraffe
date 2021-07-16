@@ -3,6 +3,7 @@ import React, {
   FunctionComponent,
   RefObject,
   useCallback,
+  useState,
 } from 'react'
 
 import {Axes} from './Axes'
@@ -59,6 +60,17 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
   const [dragEvent, dragTargetProps] = useDragEvent()
   const hoverX = dragEvent ? null : hoverEvent.x
   const hoverY = dragEvent ? null : hoverEvent.y
+
+  const [forceHoverLegendHide, setForceHoverLegendHide] = useState(false)
+
+  const hideLegend = hideMe => {
+    if (legendHide) {
+      return
+      // it is already hiding, nothing else to do
+      // optimization to reduce unecessary re-renderings
+    }
+    setForceHoverLegendHide(hideMe)
+  }
 
   const handleYBrushEnd = useCallback(
     (yRange: number[]) => {
@@ -258,7 +270,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
             const sharedProps = {
               hoverX,
               hoverY,
-              legendHide,
+              legendHide: legendHide || forceHoverLegendHide,
               plotConfig: config,
               xScale: env.xScale,
               yScale: env.yScale,
@@ -276,6 +288,7 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
                     {...sharedProps}
                     spec={spec}
                     config={layerConfig as AnnotationLayerConfig}
+                    onHover={hideLegend}
                   />
                 )
               case SpecTypes.Line:
