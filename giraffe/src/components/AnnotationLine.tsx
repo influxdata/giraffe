@@ -65,7 +65,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     stopValue,
     length,
     pin,
-    onHover= () => {},
+    onHover = () => {},
   } = props
 
   // This prevents blurry sub-pixel rendering as well as clipped lines
