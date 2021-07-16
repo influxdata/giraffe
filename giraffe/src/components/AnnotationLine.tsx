@@ -75,6 +75,8 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const clampedStart = Math.max(1, Math.round(startValue))
   const clampedEnd = Math.max(1, Math.round(stopValue))
 
+  console.log('ack ack cak 776a')
+
   if (dimension === 'y') {
     return (
       <>
@@ -116,14 +118,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
     )
   }
 
-  // dimension is x:
-  const handleMouseEnter = () => {
-    onHover(true)
-  }
-
-  const handleMouseLeave = () => {
-    onHover(false)
-  }
   /**
    * This is the rectangle or 'hat' that goes on top of a range annotation.
    * The entire hat is click to edit for the annotation.
@@ -136,9 +130,6 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
   const makeRangeRectangle = () => {
     const pixelMargin = 1
 
-    // cannot just directly reference the handleMouseEnter/Leave functions;
-    // that doesn't work (it gets called immediately).
-    // so need the arrow function when using createElement
     return createElement('polygon', {
       points: `${clampedStart - pixelMargin}, 0
           ${clampedEnd + pixelMargin}, 0
@@ -148,10 +139,10 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       id: props.id,
       style: {cursor: 'pointer', opacity: '60%'},
       onMouseEnter: () => {
-        handleMouseEnter()
+        onHover(true)
       },
       onMouseLeave: () => {
-        handleMouseLeave()
+        onHover(false)
       },
     })
   }
@@ -192,10 +183,10 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           id: props.id,
           className: 'giraffe-annotation-click-target',
           onMouseEnter: () => {
-            handleMouseEnter()
+            onHover(true)
           },
           onMouseLeave: () => {
-            handleMouseLeave()
+            onHover(false)
           },
         })
       case 'stop':
