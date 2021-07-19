@@ -1,0 +1,41 @@
+
+$g5-pepper: #383846;
+$g14-chromium: #c6cad3;
+
+$cf-form-md-height: 38px;
+
+/*
+  pagination
+  ------------------------------------------------------------------------------
+*/
+
+$cf-pagination--border-color: $g5-pepper;
+$cf-pagination--direction-icon: $g14-chromium;
+
+.cf-pagination,
+.cf-pagination--container {
+  width: 100%;
+  display: flex;
+  padding: 0;
+}
+
+.cf-pagination--item--container {
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Active State
+.cf-pagination--item--container__active {
+  position: relative;
+  &:after {
+    content: '';
+    background-color: $cf-pagination--border-color;
+    z-index: 1;
+    width: 100%;
+    position: absolute;
+    height: floor($cf-form-md-height * 0.1);
+    left: 0;
+    bottom: 0;
+  }
+}
