@@ -50,6 +50,7 @@
     "@types/memoize-one": "^4.1.1",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
+    "@types/resize-observer-browser": "^0.1.5",
     "@types/webpack": "^4.41.23",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
