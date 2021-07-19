@@ -1,0 +1,423 @@
+
+$g3-castle: #292933;
+$g4-onyx: #31313d;
+$g5-pepper: #383846;
+$g7-graphite: #545667;
+$g9-mountain: #757888;
+$g15-platinum: #d4d7dd;
+$g20-white: #ffffff;
+$c-ocean: #066fc5;
+$c-pool: #00a3ff;
+$c-laser: #00c9ff;
+$c-hydrogen: #6bdfff;
+$c-void: #5c10a0;
+$c-star: #be2ee4;
+$c-amethyst: #8e1fc3;
+$c-comet: #ce58eb;
+$c-emerald: #006f49;
+$c-rainforest: #34bb55;
+$c-honeydew: #67d74e;
+$c-krypton: #9bf445;
+$c-topaz: #e85b1c;
+$c-pineapple: #ffb94a;
+$c-thunder: #ffd255;
+$c-daisy: #fff6b8;
+$c-ruby: #bf3d5e;
+$c-curacao: #f95f53;
+$c-tungsten: #ffb6a0;
+
+$cf-form-xs-height: 22px;
+$cf-form-xs-padding: 8px;
+$cf-form-xs-font: 12px;
+
+$cf-form-sm-height: 30px;
+$cf-form-sm-padding: 10px;
+$cf-form-sm-font: 13px;
+
+$cf-form-md-height: 38px;
+$cf-form-md-padding: 14px;
+$cf-form-md-font: 14px;
+
+$cf-form-lg-height: 46px;
+$cf-form-lg-padding: 18px;
+$cf-form-lg-font: 17px;
+
+$cf-border: 2px;
+$cf-font-weight--medium: 500;
+$cf-text-font: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$cf-radius: 4px;
+
+@mixin gradient-diag-up($startColor, $endColor) {
+  background: $startColor;
+  background: -moz-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: -webkit-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
+}
+
+// Block user select
+@mixin no-user-select() {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}
+%no-user-select {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}
+
+/*
+  Button Styles
+  ------------------------------------------------------------------------------
+*/
+
+.cf-button {
+  font-weight: $cf-font-weight--medium;
+  font-family: $cf-text-font;
+  border-style: solid;
+  border-width: 0;
+  text-decoration: none;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease,
+    color 0.25s ease;
+  outline: none;
+  border-radius: $cf-radius;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  @extend %no-user-select;
+
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    z-index: -1;
+    border-radius: $cf-radius;
+    transition: opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &[disabled]:hover {
+    cursor: default;
+  }
+}
+
+.cf-button-icon {
+  margin-right: 0.4em;
+  margin-left: -0.1em;
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateY(-5%);
+  pointer-events: none;
+
+  .cf-button--label + & {
+    margin-right: -0.1em;
+    margin-left: 0.4em;
+  }
+
+  &:only-child {
+    margin: 0;
+  }
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin buttonSizeModifier($fontSize, $padding, $height) {
+  font-size: $fontSize;
+  padding: 0 $padding;
+  height: $height;
+  line-height: $height;
+
+  .cf-button-spinner {
+    width: $height * 0.5;
+    height: $height * 0.5;
+  }
+
+  .cf-button-icon {
+    font-size: floor($fontSize * 1.2);
+  }
+}
+
+.cf-button-xs {
+  @include buttonSizeModifier(
+    $cf-form-xs-font,
+    $cf-form-xs-padding,
+    $cf-form-xs-height
+  );
+  .cf-button-icon {
+    font-size: $cf-form-xs-font;
+  }
+}
+.cf-button-sm {
+  @include buttonSizeModifier(
+    $cf-form-sm-font,
+    $cf-form-sm-padding,
+    $cf-form-sm-height
+  );
+}
+.cf-button-md {
+  @include buttonSizeModifier(
+    $cf-form-md-font,
+    $cf-form-md-padding,
+    $cf-form-md-height
+  );
+}
+.cf-button-lg {
+  @include buttonSizeModifier(
+    $cf-form-lg-font,
+    $cf-form-lg-padding,
+    $cf-form-lg-height
+  );
+}
+
+/*
+  Shape Modifiers
+  ------------------------------------------------------------------------------
+*/
+.cf-button-square {
+  padding: 0;
+  text-align: center;
+
+  &.cf-button-xs {
+    width: $cf-form-xs-height;
+  }
+  &.cf-button-sm {
+    width: $cf-form-sm-height;
+  }
+  &.cf-button-md {
+    width: $cf-form-md-height;
+  }
+  &.cf-button-lg {
+    width: $cf-form-lg-height;
+  }
+}
+
+.cf-button-stretch {
+  width: 100%;
+}
+
+/*
+  Color Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin buttonColorModifier(
+  $bgA,
+  $bgB,
+  $bgHoverA,
+  $bgHoverB,
+  $text,
+  $textHover,
+  $tertiary: false
+) {
+  color: $text;
+  @include gradient-diag-up($bgA, $bgB);
+
+  &:after {
+    @include gradient-diag-up($bgHoverA, $bgHoverB);
+  }
+
+  &:hover {
+    color: $textHover;
+  }
+
+  &:hover:after {
+    opacity: 1;
+  }
+
+  &:focus {
+    box-shadow: 0 -1px 4px 1px $c-pool, 0 1px 6px 2px $c-star;
+  }
+
+  @if $tertiary {
+    &:active,
+    &:focus,
+    &:active:hover,
+    &.active,
+    &.active:hover {
+      color: $textHover;
+    }
+    &:focus,
+    &.active:hover {
+      &:after {
+        opacity: 1;
+      }
+    }
+  } @else {
+    &:active,
+    &:focus,
+    &:active:hover,
+    &.active,
+    &.active:hover {
+      color: $textHover;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.cf-button--loading,
+  &.cf-button--loading:hover {
+    box-shadow: 0 0 0 0;
+
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  &.cf-button--disabled,
+  &.cf-button--disabled:hover,
+  &.cf-button--disabled:focus {
+    color: rgba(mix($text, $bgB, 50%), 0.8);
+    font-style: italic;
+    @include gradient-diag-up(
+      mix($bgA, $g3-castle, 25%),
+      mix($bgB, $g3-castle, 25%)
+    );
+    box-shadow: none;
+
+    &:after {
+      opacity: 0;
+    }
+  }
+
+  .cf-button-spinner {
+    border-color: rgba($text, 0.25);
+    border-top-color: $text;
+  }
+}
+
+.cf-button-default {
+  @include buttonColorModifier(
+    $g5-pepper,
+    $g5-pepper,
+    $g7-graphite,
+    $g7-graphite,
+    $g15-platinum,
+    $g20-white
+  );
+}
+.cf-button-primary {
+  @include buttonColorModifier(
+    $c-ocean,
+    $c-pool,
+    $c-pool,
+    $c-hydrogen,
+    $g20-white,
+    $g20-white
+  );
+}
+.cf-button-secondary {
+  @include buttonColorModifier(
+    $c-void,
+    $c-amethyst,
+    $c-amethyst,
+    $c-comet,
+    $g20-white,
+    $g20-white
+  );
+}
+.cf-button-tertiary {
+  @include buttonColorModifier(
+    transparent,
+    transparent,
+    $g3-castle,
+    $g3-castle,
+    $g9-mountain,
+    $g20-white,
+    true
+  );
+}
+.cf-button-success {
+  @include buttonColorModifier(
+    $c-emerald,
+    mix($c-honeydew, $c-pool, 80%),
+    $c-rainforest,
+    mix($c-krypton, $c-laser, 80%),
+    $g20-white,
+    $g20-white
+  );
+}
+.cf-button-warning {
+  @include buttonColorModifier(
+    $c-topaz,
+    $c-pineapple,
+    $c-thunder,
+    $c-daisy,
+    $g4-onyx,
+    $g4-onyx
+  );
+}
+.cf-button-danger {
+  @include buttonColorModifier(
+    $c-ruby,
+    $c-curacao,
+    $c-curacao,
+    $c-tungsten,
+    $g20-white,
+    $g20-white
+  );
+}
+
+/*
+  Loading State
+  ------------------------------------------------------------------------------
+*/
+.cf-button--loading,
+.cf-button--loading:hover,
+.cf-button--loading:active,
+.cf-button--loading:active:hover,
+.cf-button--loading[disabled],
+.cf-button--loading[disabled]:hover {
+  color: transparent;
+  position: relative;
+}
+
+/*
+  Loading Spinner
+  ------------------------------------------------------------------------------
+*/
+
+@keyframes ButtonSpinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.cf-button-spinner {
+  pointer-events: none;
+  border-style: solid;
+  border-radius: 50%;
+  animation-duration: 0.85s;
+  animation-name: ButtonSpinner;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-width: $cf-border;
+}
