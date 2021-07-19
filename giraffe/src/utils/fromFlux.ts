@@ -277,7 +277,8 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
   }
 
   if (columnType === 'number') {
-    return Number(value)
+    const numVal = Number(value)
+    return numVal === numVal ? numVal : value
   }
 
   return null
