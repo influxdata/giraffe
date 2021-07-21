@@ -255,6 +255,7 @@ export enum LayerTypes {
   Mosaic = 'mosaic',
   Table = 'table',
   Geo = 'geo',
+  SimpleTable = 'simple table',
 }
 
 export type LayerConfig =
@@ -271,6 +272,7 @@ export type LayerConfig =
   | MosaicLayerConfig
   | TableGraphLayerConfig
   | GeoLayerConfig
+  | SimpleTableLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -451,6 +453,12 @@ export interface ScatterLayerConfig {
   fill?: string[]
   colors?: string[]
   symbol?: string[]
+}
+
+export interface SimpleTableLayerConfig {
+  type: 'simple table' // do not refactor or restrict to LayerTypes.SimpleTable
+  showAll: boolean
+  fluxResponse?: string
 }
 
 export interface TableGraphLayerConfig {
