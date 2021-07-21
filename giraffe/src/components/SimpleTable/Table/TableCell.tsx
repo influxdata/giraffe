@@ -3,11 +3,8 @@ import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {
-  StandardFunctionProps,
-  Alignment,
-  VerticalAlignment,
-} from '../../../types'
+import {StandardFunctionProps} from '../../../types'
+import {Alignment, VerticalAlignment} from '../types'
 import {styleReducer} from '../../../utils/styleReducer'
 
 import styles from './Table.scss'

@@ -3,7 +3,8 @@ import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {StandardFunctionProps, ComponentColor} from '../../../types'
+import {StandardFunctionProps} from '../../../types'
+import {ComponentColor} from '../types'
 
 import {styleReducer} from '../../../utils/styleReducer'
 

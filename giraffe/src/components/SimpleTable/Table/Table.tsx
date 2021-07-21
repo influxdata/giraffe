@@ -8,7 +8,8 @@ import {styleReducer} from '../../../utils/styleReducer'
 
 // Types
 import {ComponentSize} from '../../../types/input'
-import {StandardFunctionProps, BorderType} from '../../../types'
+import {StandardFunctionProps} from '../../../types'
+import {BorderType} from '../types'
 
 export interface TableProps extends StandardFunctionProps {
   /** Padding inside every cell in the table */
