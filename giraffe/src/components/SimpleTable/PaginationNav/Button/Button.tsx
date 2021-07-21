@@ -10,7 +10,7 @@ import styles from './Button.scss'
 
 // Types
 import {IconFont, ComponentSize, ComponentStatus} from '../../../../types/input'
-import {ButtonType, ButtonShape, ComponentColor} from '../../../../types'
+import {ButtonType, ButtonShape, ComponentColor} from '../../types'
 import {ButtonBaseProps} from './ButtonBase'
 
 export interface ButtonProps extends ButtonBaseProps {

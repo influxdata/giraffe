@@ -7,12 +7,8 @@ import styles from './Button.scss'
 
 // Types
 import {ComponentStatus, ComponentSize} from '../../../../types/input'
-import {
-  StandardFunctionProps,
-  ComponentColor,
-  ButtonShape,
-  ButtonType,
-} from '../../../../types'
+import {StandardFunctionProps} from '../../../../types'
+import {ComponentColor, ButtonShape, ButtonType} from '../../types'
 
 // Utils
 import {styleReducer} from '../../../../utils/styleReducer'

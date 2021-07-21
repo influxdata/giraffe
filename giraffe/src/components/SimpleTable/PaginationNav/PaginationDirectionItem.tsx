@@ -11,11 +11,8 @@ import styles from './Pagination.scss'
 
 // Types
 import {ComponentSize, Direction, IconFont} from '../../../types/input'
-import {
-  StandardFunctionProps,
-  ComponentColor,
-  ButtonShape,
-} from '../../../types'
+import {StandardFunctionProps} from '../../../types'
+import {ComponentColor, ButtonShape} from '../types'
 
 export interface PaginationDirectionItemProps extends StandardFunctionProps {
   /** Caret Left or Caret Right on button */

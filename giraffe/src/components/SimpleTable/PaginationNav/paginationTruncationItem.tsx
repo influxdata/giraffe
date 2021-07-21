@@ -8,11 +8,8 @@ import styles from './Pagination.scss'
 
 // Types
 import {ComponentSize} from '../../../types/input'
-import {
-  StandardFunctionProps,
-  ComponentColor,
-  ButtonShape,
-} from '../../../types'
+import {StandardFunctionProps} from '../../../types'
+import {ComponentColor, ButtonShape} from '../types'
 
 // Utils
 import {styleReducer} from '../../../utils/styleReducer'
