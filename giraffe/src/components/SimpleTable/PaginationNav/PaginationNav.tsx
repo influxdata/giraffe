@@ -1,6 +1,5 @@
 // Libraries
 import React, {forwardRef, useState, useEffect, useLayoutEffect} from 'react'
-import classnames from 'classnames'
 import {PaginationDirectionItem} from './PaginationDirectionItem'
 
 // Components
@@ -13,9 +12,6 @@ import styles from './Pagination.scss'
 // Types
 import {Direction, ComponentSize} from '../../../types/input'
 import {StandardFunctionProps} from '../../../types'
-
-// Utils
-import {styleReducer} from '../../../utils/styleReducer'
 
 export interface PaginationNavProps extends StandardFunctionProps {
   /** Total nuber of pages there exists */
@@ -42,7 +38,6 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
       id,
       style,
       testID = 'pagination-nav',
-      className,
       totalPages,
       currentPage = 1,
       onChange,
@@ -53,11 +48,6 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
     ref
   ) => {
     const innerRef = React.useRef<HTMLUListElement>(null)
-    const paginationNavClassName = classnames('cf-pagination', {
-      [`${className}`]: className,
-    })
-      .split(' ')
-      .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     const [activePage, setActivePage] = useState(currentPage)
 
@@ -184,7 +174,7 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
 
     return (
       <nav
-        className={paginationNavClassName}
+        className={`${styles['cf-pagination']}`}
         data-testid={testID}
         id={id}
         style={style}

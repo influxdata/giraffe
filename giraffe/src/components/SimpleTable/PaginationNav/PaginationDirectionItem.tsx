@@ -1,10 +1,6 @@
 // Libraries
 import React, {forwardRef, MouseEvent} from 'react'
-import classnames from 'classnames'
 import {Button} from './Button/Button'
-
-// Utils
-import {styleReducer} from '../../../utils/styleReducer'
 
 // Styles
 import styles from './Pagination.scss'
@@ -32,7 +28,6 @@ export const PaginationDirectionItem = forwardRef<
       id,
       style,
       testID = 'pagination-direction-item',
-      className,
       direction,
       onClick,
       size = ComponentSize.Medium,
@@ -40,15 +35,9 @@ export const PaginationDirectionItem = forwardRef<
     },
     ref
   ) => {
-    const paginationClassName = classnames('cf-pagination--item--container', {
-      [`${className}`]: className,
-    })
-      .split(' ')
-      .reduce((accum, current) => styleReducer(styles, accum, current), '')
-
     return (
       <li
-        className={paginationClassName}
+        className={`${styles['cf-pagination--item--container']}`}
         data-testid={testID}
         id={id}
         style={style}
