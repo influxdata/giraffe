@@ -78,9 +78,6 @@ export const ButtonBase = forwardRef<ButtonBaseRef, ButtonBaseProps>(
       `cf-button cf-button-${size} cf-button-${color}`,
       {
         'cf-button-square': shape === ButtonShape.Square,
-        'cf-button-stretch': shape === ButtonShape.StretchToFit,
-        'cf-button--loading': status === ComponentStatus.Loading,
-        'cf-button--disabled': status === ComponentStatus.Disabled,
         active,
         [`${className}`]: className,
       }
