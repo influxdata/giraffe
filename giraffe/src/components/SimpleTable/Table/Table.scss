@@ -1,21 +1,9 @@
 
-$g3-castle: #292933;
-$g4-onyx: #31313d;
-$g6-smoke: #434453;
-$g11-sidewalk: #999dab;
-$g15-platinum: #d4d7dd;
-$g17-whisper: #eeeff2;
-
-$cf-font-weight--medium: 500;
-$cf-font-weight--bold: 700;
-
 $cf-border: 2px;
 
-$cf-form-sm-font: 13px;
-
-$table-border--primary: $g6-smoke;
-$table-border--secondary: $g4-onyx;
-$table-row-background: $g3-castle;
+$table-border--primary: #434453;
+$table-border--secondary: #31313d;
+$table-row-background: #292933;
 
 /*
   Table
@@ -27,14 +15,14 @@ $table-row-background: $g3-castle;
 }
 
 .cf-table--cell {
-  color: $g11-sidewalk;
+  color: #999dab;
   transition: background-color 0.25s ease, color 0.25s ease;
-  font-weight: $cf-font-weight--medium;  
+  font-weight: 500;  
 }
 
 .cf-table--header-cell {
-  color: $g15-platinum;
-  font-weight: $cf-font-weight--bold;  
+  color: #d4d7dd;
+  font-weight: 700;  
 }
 
 .cf-table--row {
@@ -145,7 +133,7 @@ $table-row-background: $g3-castle;
 }
 
 .cf-table__font-sm {
-  @include tableFontModifier($cf-form-sm-font);
+  @include tableFontModifier(13px);
 }
 
 /*
@@ -167,7 +155,7 @@ $table-row-background: $g3-castle;
 }
 
 .cf-table__highlight .cf-table--body .cf-table--row:hover .cf-table--cell {
-  color: $g17-whisper;
+  color: #eeeff2;
 }
 
 /*

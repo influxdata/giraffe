@@ -1,14 +1,8 @@
 
-$g5-pepper: #383846;
-
-$cf-form-md-height: 38px;
-
 /*
   pagination
   ------------------------------------------------------------------------------
 */
-
-$cf-pagination--border-color: $g5-pepper;
 
 .cf-pagination,
 .cf-pagination--container {
@@ -28,11 +22,11 @@ $cf-pagination--border-color: $g5-pepper;
   position: relative;
   &:after {
     content: '';
-    background-color: $cf-pagination--border-color;
+    background-color: #383846;
     z-index: 1;
     width: 100%;
     position: absolute;
-    height: floor($cf-form-md-height * 0.1);
+    height: 3px;
     left: 0;
     bottom: 0;
   }

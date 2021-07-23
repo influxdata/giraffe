@@ -1,12 +1,4 @@
 
-$cf-marg-b: 8px;
-
-$g6-smoke: #434453;
-$g9-mountain: #757888;
-$g13-mist: #bec2cc;
-
-$cf-font-weight--medium: 500;
-
 .visualization--simple-table {
   width: 100%;
   height: 100%;
@@ -16,7 +8,7 @@ $cf-font-weight--medium: 500;
   user-select: text;
 
   .cf-table {
-    border: 2px solid $g6-smoke;
+    border: 2px solid #434453;
     margin-bottom: 10px;
     width: 100%;
   }
@@ -31,7 +23,7 @@ $cf-font-weight--medium: 500;
     display: block;
     font-size: 10px;
     text-transform: uppercase;
-    color: $g9-mountain;
+    color: #757888;
     font-weight: 500;
 
     &:first-of-type {
@@ -54,8 +46,8 @@ $cf-font-weight--medium: 500;
 
 .visualization--simple-table--paging-label {
   display: inline-block;
-  margin-right: $cf-marg-b;
-  color: $g13-mist;
-  font-weight: $cf-font-weight--medium;
+  margin-right: 8px;
+  color: #bec2cc;
+  font-weight: 500;
   width: 189px;
 }
