@@ -125,15 +125,11 @@ $table-row-background: #292933;
   ------------------------------------------------------------------------------
 */
 
-@mixin tableFontModifier($fontSize) {
+.cf-table__font-sm {
   .cf-table--cell,
   .cf-table--header-cell {
-    font-size: $fontSize;
+    font-size: 13px;
   }
-}
-
-.cf-table__font-sm {
-  @include tableFontModifier(13px);
 }
 
 /*
@@ -156,31 +152,4 @@ $table-row-background: #292933;
 
 .cf-table__highlight .cf-table--body .cf-table--row:hover .cf-table--cell {
   color: #eeeff2;
-}
-
-/*
-  Row Color Modifiers
-  ------------------------------------------------------------------------------
-*/
-
-@mixin tableColorModifier($background, $backgroundAlt, $backgroundHover, $border, $text) {
-  .cf-table .cf-table--body & .cf-table--cell,
-  .cf-table .cf-table--body & .cf-table--header-cell,
-  .cf-table .cf-table--header & .cf-table--cell,
-  .cf-table .cf-table--header & .cf-table--header-cell {
-    background-color: $background;
-    border-color: $border;
-    color: rgba($text, 0.8);
-  }
-
-  .cf-table__striped .cf-table--body &:nth-child(odd) .cf-table--cell,
-  .cf-table__striped .cf-table--body &:nth-child(odd) .cf-table--header-cell {
-    background-color: $backgroundAlt;
-  }
-
-  .cf-table__highlight .cf-table--body &:hover .cf-table--cell,
-  .cf-table__highlight .cf-table--body &:hover .cf-table--header-cell {
-    background-color: $backgroundHover;
-    color: $text;
-  }
 }
