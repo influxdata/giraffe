@@ -1,10 +1,10 @@
 // Libraries
 import React, {forwardRef, useState, useEffect, useLayoutEffect} from 'react'
-import {PaginationDirectionItem} from './PaginationDirectionItem'
 
 // Components
 import {PaginationItem} from './PaginationItem'
 import {PaginationTruncationItem} from './paginationTruncationItem'
+import {PaginationDirectionItem} from './PaginationDirectionItem'
 
 // Styles
 import styles from './Pagination.scss'

@@ -14,11 +14,6 @@ const PageControl: FC = () => {
   )
   return (
     <div className={`${styles['visualization--simple-table--paging']}`}>
-      <span
-        className={`${styles['visualization--simple-table--paging-label']}`}
-      >
-        Showing most recent 100 results per series
-      </span>
       {total && size && (
         <PaginationNav.PaginationNav
           totalPages={totalPages}
