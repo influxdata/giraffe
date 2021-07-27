@@ -1,0 +1,215 @@
+
+$cf-form-md-height: 38px;
+$cf-form-md-padding: 14px;
+$cf-form-md-font: 14px;
+
+$cf-radius: 4px;
+
+@mixin gradient-diag-up($startColor, $endColor) {
+  background: $startColor;
+  background: -moz-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: -webkit-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
+}
+
+// Block user select
+@mixin no-user-select() {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}
+%no-user-select {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}
+
+/*
+  Button Styles
+  ------------------------------------------------------------------------------
+*/
+
+.cf-button {
+  font-weight: 500;
+  font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  border-style: solid;
+  border-width: 0;
+  text-decoration: none;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease,
+    color 0.25s ease;
+  outline: none;
+  border-radius: $cf-radius;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  @extend %no-user-select;
+
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    z-index: -1;
+    border-radius: $cf-radius;
+    transition: opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.cf-button-icon {
+  margin-right: 0.4em;
+  margin-left: -0.1em;
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateY(-5%);
+  pointer-events: none;
+
+  .cf-button--label + & {
+    margin-right: -0.1em;
+    margin-left: 0.4em;
+  }
+
+  &:only-child {
+    margin: 0;
+  }
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin buttonSizeModifier($fontSize, $padding, $height) {
+  font-size: $fontSize;
+  padding: 0 $padding;
+  height: $height;
+  line-height: $height;
+
+  .cf-button-spinner {
+    width: $height * 0.5;
+    height: $height * 0.5;
+  }
+
+  .cf-button-icon {
+    font-size: floor($fontSize * 1.2);
+  }
+}
+
+.cf-button-md {
+  @include buttonSizeModifier(
+    $cf-form-md-font,
+    $cf-form-md-padding,
+    $cf-form-md-height
+  );
+}
+
+/*
+  Shape Modifiers
+  ------------------------------------------------------------------------------
+*/
+.cf-button-square {
+  padding: 0;
+  text-align: center;
+
+  &.cf-button-md {
+    width: $cf-form-md-height;
+  }
+}
+
+/*
+  Color Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin buttonColorModifier(
+  $bgA,
+  $bgB,
+  $bgHoverA,
+  $bgHoverB,
+  $text,
+  $textHover,
+  $tertiary: false
+) {
+  color: $text;
+  @include gradient-diag-up($bgA, $bgB);
+
+  &:after {
+    @include gradient-diag-up($bgHoverA, $bgHoverB);
+  }
+
+  &:hover {
+    color: $textHover;
+  }
+
+  &:hover:after {
+    opacity: 1;
+  }
+
+  &:focus {
+    box-shadow: 0 -1px 4px 1px #00a3ff, 0 1px 6px 2px #be2ee4;
+  }
+
+  @if $tertiary {
+    &:active,
+    &:focus,
+    &:active:hover,
+    &.active,
+    &.active:hover {
+      color: $textHover;
+    }
+    &:focus,
+    &.active:hover {
+      &:after {
+        opacity: 1;
+      }
+    }
+  } @else {
+    &:active,
+    &:focus,
+    &:active:hover,
+    &.active,
+    &.active:hover {
+      color: $textHover;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  .cf-button-spinner {
+    border-color: rgba($text, 0.25);
+    border-top-color: $text;
+  }
+}
+
+.cf-button-tertiary {
+  $g3-castle: #292933;
+
+  @include buttonColorModifier(
+    transparent,
+    transparent,
+    $g3-castle,
+    $g3-castle,
+    #757888,
+    #ffffff,
+    true
+  );
+}
