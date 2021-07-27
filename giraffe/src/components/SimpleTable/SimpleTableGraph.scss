@@ -1,24 +1,11 @@
 
-$cf-border: 2px;
-$cf-marg-b: 8px;
-
-$g2-kevlar: #202028;
-$g3-castle: #292933;
-$g6-smoke: #434453;
-$g9-mountain: #757888;
-$g13-mist: #bec2cc;
-
-$cf-font-weight--medium: 500;
-
-$cf-code-font: 'IBMPlexMono', monospace;
-
 .visualization--simple-table {
   width: 100%;
   height: 100%;
 
   display: flex;
   flex-direction: column;
-  font-family: $cf-code-font;
+  font-family: 'IBMPlexMono', monospace;
   user-select: text;
 
   .cf-table {

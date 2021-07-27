@@ -1,18 +1,8 @@
 
-$g3-castle: #292933;
-$g9-mountain: #757888;
-$g20-white: #ffffff;
-
-$c-pool: #00a3ff;
-$c-star: #be2ee4;
-
 $cf-form-md-height: 38px;
 $cf-form-md-padding: 14px;
 $cf-form-md-font: 14px;
 
-$cf-border: 2px;
-$cf-font-weight--medium: 500;
-$cf-text-font: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
 $cf-radius: 4px;
 
 @mixin gradient-diag-up($startColor, $endColor) {
@@ -53,8 +43,8 @@ $cf-radius: 4px;
 */
 
 .cf-button {
-  font-weight: $cf-font-weight--medium;
-  font-family: $cf-text-font;
+  font-weight: 500;
+  font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
   border-style: solid;
   border-width: 0;
   text-decoration: none;
@@ -173,7 +163,7 @@ $cf-radius: 4px;
   }
 
   &:focus {
-    box-shadow: 0 -1px 4px 1px $c-pool, 0 1px 6px 2px $c-star;
+    box-shadow: 0 -1px 4px 1px #00a3ff, 0 1px 6px 2px #be2ee4;
   }
 
   @if $tertiary {
@@ -211,13 +201,15 @@ $cf-radius: 4px;
 }
 
 .cf-button-tertiary {
+  $g3-castle: #292933;
+
   @include buttonColorModifier(
     transparent,
     transparent,
     $g3-castle,
     $g3-castle,
-    $g9-mountain,
-    $g20-white,
+    #757888,
+    #ffffff,
     true
   );
 }
