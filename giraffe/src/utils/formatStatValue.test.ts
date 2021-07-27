@@ -141,6 +141,13 @@ describe('formatStatValue', () => {
     ).toEqual(`${prefix}123,456,789${suffix}`)
   })
 
+  it('formats a long number with commas', () => {
+    const result = formatStatValue(34566)
+    expect(result).toEqual('34,566')
+
+    expect(formatStatValue(2134566)).toEqual('2,134,566')
+  })
+
   it('formats a float value', () => {
     prefix = 'abc '
     value = 123.456789

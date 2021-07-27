@@ -10,6 +10,7 @@ import {generateThresholdsListHexs} from '../utils/colorOperations'
 import {isString} from '../utils/isString'
 import {defaultTo} from '../utils/defaultTo'
 import {styleReducer} from '../utils/styleReducer'
+import {formatStatValue} from '../utils/formatStatValue'
 
 // Types
 import {TableViewProperties, SortOptions, RenamableField} from '../types'
@@ -58,7 +59,6 @@ const asLink = (str: string) => {
       if (match.index - index > 0) {
         out.push(str.slice(index, match.index))
       }
-
       link = str.slice(match.index, match.index + match[1].length)
       out.push(
         <a href={link} target="_blank">
@@ -167,7 +167,6 @@ const getContents = (props: Props): string => {
   if (data && dataType.includes('dateTime')) {
     return timeFormatter(data)
   }
-
   if (
     isString(data) &&
     isFieldName(isVerticalTimeAxis, rowIndex, columnIndex)
@@ -175,8 +174,9 @@ const getContents = (props: Props): string => {
     return defaultTo(getFieldName(props), '').toString()
   }
 
-  if (!isNaN(+data) && decimalPlaces.isEnforced && decimalPlaces.digits < 100) {
-    return (+data).toFixed(decimalPlaces.digits)
+  if (!isNaN(+data)) {
+    // method needs the first arg to be a number to work properly
+    return formatStatValue(+data, {decimalPlaces})
   }
 
   return defaultTo(data, '').toString()

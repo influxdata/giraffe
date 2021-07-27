@@ -31,7 +31,7 @@ storiesOf('Table Graph', module)
       'YYYY-MM-DD HH:mm:ss ZZ'
     )
     const theme = select('Theme', {dark: 'dark', light: 'light'}, 'dark')
-    const fixFirstColumn = boolean('Fix First Column', false)
+    const fixFirstColumn = boolean('Fix First Column 22', false)
     const config: Config = {
       fluxResponse: tableCSV,
       layers: [
@@ -75,8 +75,8 @@ storiesOf('Table Graph', module)
                 visible: true,
               },
               {
-                displayName: 'cpu',
-                internalName: 'cpu',
+                displayName: 'cpu2',
+                internalName: 'cpu2',
                 visible: true,
               },
               {
