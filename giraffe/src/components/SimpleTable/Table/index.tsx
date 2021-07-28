@@ -9,6 +9,7 @@ import {TableHeader} from './TableHeader'
 import {TableHeaderCell} from './TableHeaderCell'
 import {TableRow} from './TableRow'
 
+// Originally taken from Clockface and reduced
 export class Table extends Component<TableProps> {
   public static readonly displayName = 'Table'
 

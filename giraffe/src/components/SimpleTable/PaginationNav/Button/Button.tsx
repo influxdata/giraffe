@@ -18,6 +18,7 @@ export interface ButtonProps extends ButtonBaseProps {
 
 export type ButtonRef = ButtonBaseRef
 
+// Originally taken from Clockface and reduced
 export const Button = forwardRef<ButtonRef, ButtonProps>(
   ({testID = 'button', onClick, active = false, text, icon = ''}, ref) => {
     if (!icon && !text) {

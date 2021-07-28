@@ -30,6 +30,7 @@ export interface PaginationNavProps extends StandardFunctionProps {
 
 export type PaginationNavRef = HTMLElement
 
+// Originally taken from Clockface and reduced
 export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
   (
     {
