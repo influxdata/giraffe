@@ -22,22 +22,13 @@ export const PaginationDirectionItem = forwardRef<
   PaginationDirectionItemProps
 >(
   (
-    {
-      id,
-      style,
-      testID = 'pagination-direction-item',
-      direction,
-      onClick,
-      isActive,
-    },
+    {testID = 'pagination-direction-item', direction, onClick, isActive},
     ref
   ) => {
     return (
       <li
         className={`${styles['cf-pagination--item--container']}`}
         data-testid={testID}
-        id={id}
-        style={style}
         ref={ref}
       >
         <Button
