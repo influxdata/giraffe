@@ -3,8 +3,6 @@ $cf-form-md-height: 38px;
 $cf-form-md-padding: 14px;
 $cf-form-md-font: 14px;
 
-$cf-radius: 4px;
-
 @mixin gradient-diag-up($startColor, $endColor) {
   background: $startColor;
   background: -moz-linear-gradient(45deg, $startColor 0%, $endColor 100%);
@@ -14,17 +12,6 @@ $cf-radius: 4px;
 }
 
 // Block user select
-@mixin no-user-select() {
-  user-select: none !important;
-  -moz-user-select: none !important;
-  -webkit-user-select: none !important;
-  -ms-user-select: none !important;
-  -o-user-select: none !important;
-  &,
-  &:hover {
-    cursor: default;
-  }
-}
 %no-user-select {
   user-select: none !important;
   -moz-user-select: none !important;
@@ -43,6 +30,8 @@ $cf-radius: 4px;
 */
 
 .cf-button {
+  $cf-radius: 4px;
+
   font-weight: 500;
   font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
   border-style: solid;
@@ -97,28 +86,20 @@ $cf-radius: 4px;
   Size Modifiers
   ------------------------------------------------------------------------------
 */
-@mixin buttonSizeModifier($fontSize, $padding, $height) {
-  font-size: $fontSize;
-  padding: 0 $padding;
-  height: $height;
-  line-height: $height;
+.cf-button-md {
+  font-size: $cf-form-md-font;
+  padding: 0 $cf-form-md-padding;
+  height: $cf-form-md-height;
+  line-height: $cf-form-md-height;
 
   .cf-button-spinner {
-    width: $height * 0.5;
-    height: $height * 0.5;
+    width: $cf-form-md-height * 0.5;
+    height: $cf-form-md-height * 0.5;
   }
 
   .cf-button-icon {
-    font-size: floor($fontSize * 1.2);
+    font-size: floor($cf-form-md-font * 1.2);
   }
-}
-
-.cf-button-md {
-  @include buttonSizeModifier(
-    $cf-form-md-font,
-    $cf-form-md-padding,
-    $cf-form-md-height
-  );
 }
 
 /*
@@ -193,23 +174,41 @@ $cf-radius: 4px;
       }
     }
   }
-
-  .cf-button-spinner {
-    border-color: rgba($text, 0.25);
-    border-top-color: $text;
-  }
 }
 
 .cf-button-tertiary {
   $g3-castle: #292933;
 
-  @include buttonColorModifier(
-    transparent,
-    transparent,
-    $g3-castle,
-    $g3-castle,
-    #757888,
-    #ffffff,
-    true
-  );
+  color: #757888;
+  @include gradient-diag-up(transparent, transparent);
+
+  &:after {
+    @include gradient-diag-up($g3-castle, $g3-castle);
+  }
+
+  &:hover {
+    color: #ffffff;
+  }
+
+  &:hover:after {
+    opacity: 1;
+  }
+
+  &:focus {
+    box-shadow: 0 -1px 4px 1px #00a3ff, 0 1px 6px 2px #be2ee4;
+  }
+
+  &:active,
+  &:focus,
+  &:active:hover,
+  &.active,
+  &.active:hover {
+    color: #ffffff;
+  }
+  &:focus,
+  &.active:hover {
+    &:after {
+      opacity: 1;
+    }
+  }
 }
