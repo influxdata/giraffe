@@ -12,7 +12,6 @@ import styles from './Pagination.scss'
 // Types
 import {ComponentSize} from '../../../types/input'
 import {StandardFunctionProps} from '../../../types'
-import {ComponentColor, ButtonShape} from '../types'
 
 export interface PaginationItemProps extends StandardFunctionProps {
   page?: string
@@ -35,7 +34,6 @@ export const PaginationItem = forwardRef<
       page,
       isActive,
       onClick,
-      size = ComponentSize.Medium,
     },
     ref
   ) => {
@@ -58,11 +56,8 @@ export const PaginationItem = forwardRef<
         ref={ref}
       >
         <Button
-          size={size}
-          color={ComponentColor.Tertiary}
           onClick={onClick}
           active={isActive}
-          shape={ButtonShape.Square}
           text={page}
         ></Button>
       </li>

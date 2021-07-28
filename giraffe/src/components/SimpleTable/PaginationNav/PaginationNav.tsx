@@ -186,7 +186,6 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
               direction={Direction.Left}
               onClick={() => moveToPage(activePage - 1)}
               key={'pagination--item-left'}
-              size={size}
               isActive={activePage > 1}
             />
           )}
@@ -236,7 +235,6 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
               direction={Direction.Right}
               onClick={() => moveToPage(activePage + 1)}
               key={'pagination--item-right'}
-              size={size}
               isActive={activePage < totalPages}
             />
           )}

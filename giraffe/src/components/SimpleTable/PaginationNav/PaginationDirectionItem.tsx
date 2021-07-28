@@ -6,15 +6,13 @@ import {Button} from './Button/Button'
 import styles from './Pagination.scss'
 
 // Types
-import {ComponentSize, Direction, IconFont} from '../../../types/input'
+import {Direction, IconFont} from '../../../types/input'
 import {StandardFunctionProps} from '../../../types'
-import {ComponentColor, ButtonShape} from '../types'
 
 export interface PaginationDirectionItemProps extends StandardFunctionProps {
   /** Caret Left or Caret Right on button */
   direction: Direction
   onClick?: (e?: MouseEvent<HTMLButtonElement>) => void
-  size?: ComponentSize
   isActive: boolean
 }
 
@@ -30,7 +28,6 @@ export const PaginationDirectionItem = forwardRef<
       testID = 'pagination-direction-item',
       direction,
       onClick,
-      size = ComponentSize.Medium,
       isActive,
     },
     ref
@@ -44,10 +41,7 @@ export const PaginationDirectionItem = forwardRef<
         ref={ref}
       >
         <Button
-          size={size}
-          color={ComponentColor.Tertiary}
           onClick={onClick}
-          shape={ButtonShape.Square}
           icon={IconFont[direction]}
           active={isActive}
         ></Button>

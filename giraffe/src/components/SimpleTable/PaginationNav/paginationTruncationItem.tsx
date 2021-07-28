@@ -9,7 +9,6 @@ import styles from './Pagination.scss'
 // Types
 import {ComponentSize} from '../../../types/input'
 import {StandardFunctionProps} from '../../../types'
-import {ComponentColor, ButtonShape} from '../types'
 
 // Utils
 import {styleReducer} from '../../../utils/styleReducer'
@@ -31,7 +30,6 @@ export const PaginationTruncationItem = forwardRef<
       testID = 'pagination-truncation-item',
       className,
       onClick,
-      size = ComponentSize.Medium,
     },
     ref
   ) => {
@@ -50,10 +48,7 @@ export const PaginationTruncationItem = forwardRef<
         ref={ref}
       >
         <Button
-          size={size}
-          color={ComponentColor.Tertiary}
           onClick={onClick}
-          shape={ButtonShape.Square}
           text={'...'}
         ></Button>
       </li>
