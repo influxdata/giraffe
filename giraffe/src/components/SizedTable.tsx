@@ -96,6 +96,7 @@ export const SizedTable: FunctionComponent<Props> = ({
               case LayerTypes.SimpleTable: {
                 return (
                   <SimpleTableLayer
+                    key={layerIndex}
                     config={
                       {...layerConfig, fluxResponse} as SimpleTableLayerConfig
                     }
