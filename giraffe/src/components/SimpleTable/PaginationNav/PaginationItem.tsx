@@ -26,15 +26,7 @@ export const PaginationItem = forwardRef<
   PaginationItemProps
 >(
   (
-    {
-      id,
-      style,
-      testID = 'pagination-item',
-      className,
-      page,
-      isActive,
-      onClick,
-    },
+    {id, style, testID = 'pagination-item', className, page, isActive, onClick},
     ref
   ) => {
     const paginationItemContainerClassName = classnames(
@@ -55,11 +47,7 @@ export const PaginationItem = forwardRef<
         style={style}
         ref={ref}
       >
-        <Button
-          onClick={onClick}
-          active={isActive}
-          text={page}
-        ></Button>
+        <Button onClick={onClick} active={isActive} text={page}></Button>
       </li>
     )
   }

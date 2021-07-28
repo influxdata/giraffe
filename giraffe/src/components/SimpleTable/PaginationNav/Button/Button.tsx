@@ -19,16 +19,7 @@ export interface ButtonProps extends ButtonBaseProps {
 export type ButtonRef = ButtonBaseRef
 
 export const Button = forwardRef<ButtonRef, ButtonProps>(
-  (
-    {
-      testID = 'button',
-      onClick,
-      active = false,
-      text,
-      icon = '',
-    },
-    ref
-  ) => {
+  ({testID = 'button', onClick, active = false, text, icon = ''}, ref) => {
     if (!icon && !text) {
       throw new Error('Button requires either "text" or "icon" props')
     }
@@ -41,10 +32,7 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(
         tabIndex={0}
         ref={ref}
       >
-        <IconAndText
-          text={text}
-          icon={icon}
-        />
+        <IconAndText text={text} icon={icon} />
       </ButtonBase>
     )
   }

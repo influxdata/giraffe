@@ -24,13 +24,7 @@ export const PaginationTruncationItem = forwardRef<
   PaginationTruncationItemProps
 >(
   (
-    {
-      id,
-      style,
-      testID = 'pagination-truncation-item',
-      className,
-      onClick,
-    },
+    {id, style, testID = 'pagination-truncation-item', className, onClick},
     ref
   ) => {
     const paginationClassName = classnames('cf-pagination--item--container', {
@@ -47,10 +41,7 @@ export const PaginationTruncationItem = forwardRef<
         style={style}
         ref={ref}
       >
-        <Button
-          onClick={onClick}
-          text={'...'}
-        ></Button>
+        <Button onClick={onClick} text={'...'}></Button>
       </li>
     )
   }

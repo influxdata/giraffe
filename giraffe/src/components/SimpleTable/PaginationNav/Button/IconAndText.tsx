@@ -29,7 +29,7 @@ export const IconAndText: FunctionComponent<IconAndTextProps> = ({
   if (!icon && !text) {
     return null
   }
-  
+
   return (
     <>
       {iconEl}
