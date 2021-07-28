@@ -61,12 +61,7 @@ const InnerTable: FC<InnerProps> = ({table}) => {
     })
 
   return (
-    <Table
-      className={`${styles['cf-table']}`}
-      striped
-      highlight
-      testID="simple-table"
-    >
+    <Table testID="simple-table" className={`${styles['cf-table']}`}>
       <Table.Header>
         <Table.Row>{headers}</Table.Row>
       </Table.Header>
