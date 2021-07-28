@@ -8,8 +8,6 @@ interface InnerProps {
 }
 
 const InnerTable: FC<InnerProps> = ({table}) => {
-  const {} = table
-
   const headers = Object.values(table.cols).map(c => {
     if (c.name === 'table') {
       return (
