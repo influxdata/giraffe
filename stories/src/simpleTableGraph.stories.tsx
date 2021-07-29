@@ -8,14 +8,14 @@ import {tableCSV} from './data/tableGraph'
 storiesOf('Simple Table Graph', module)
   .addDecorator(withKnobs)
   .add('Table Graph', () => {
-    const fixFirstColumn = boolean('showAll', false)
+    const showAll = boolean('showAll', false)
 
     const config: Config = {
       fluxResponse: tableCSV,
       layers: [
         {
           type: 'simple table',
-          showAll: fixFirstColumn,
+          showAll: showAll,
         },
       ],
     }
