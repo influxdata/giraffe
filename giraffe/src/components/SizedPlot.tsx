@@ -63,8 +63,6 @@ export const SizedPlot: FunctionComponent<SizedPlotProps> = ({
 
   const [forceHoverLegendHide, setForceHoverLegendHide] = useState(false)
 
-  //console.log('displaying graph....domain? ', env.xDomain)
-
   const hideLegend = hideMe => {
     if (legendHide) {
       return
