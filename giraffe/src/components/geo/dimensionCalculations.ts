@@ -86,7 +86,7 @@ export const getColor = (
   }
   const {low, high} = getColorThresholds(color, value)
   if (!interpolateColors) {
-    return value > high.value ? high.hex : low.hex
+    return value >= high.value ? high.hex : low.hex
   }
   const fittedValue = fitIntoDefinedRange(value, low, high)
   const interpolationMin = low.value
