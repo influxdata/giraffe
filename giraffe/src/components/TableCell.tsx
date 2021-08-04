@@ -173,7 +173,6 @@ export const getContents = (props: Props): string => {
     return ''
   }
 
-  //console.log('in getContents', props)
   if (data && dataType.includes('dateTime')) {
     return timeFormatter(data)
   }
