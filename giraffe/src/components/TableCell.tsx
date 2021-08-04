@@ -152,7 +152,12 @@ const getClassName = (props: Props): string => {
   return classes
 }
 
-const getContents = (props: Props): string => {
+function isBlank(pString) {
+  // Checks for a non-white space character
+  return !/[^\s]+/.test(pString)
+}
+
+export const getContents = (props: Props): string => {
   const {
     properties,
     data,
@@ -164,6 +169,11 @@ const getContents = (props: Props): string => {
   } = props
   const {decimalPlaces} = properties
 
+  if (!data || (isString(data) && isBlank(data))) {
+    return ''
+  }
+
+  //console.log('in getContents', props)
   if (data && dataType.includes('dateTime')) {
     return timeFormatter(data)
   }
