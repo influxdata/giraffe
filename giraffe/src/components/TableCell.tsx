@@ -170,7 +170,7 @@ export const getContents = (props: Props): string => {
   const {decimalPlaces} = properties
 
   if (!data || (isString(data) && isBlank(data))) {
-    return ''
+    return String(data)
   }
 
   if (data && dataType.includes('dateTime')) {
