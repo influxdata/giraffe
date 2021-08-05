@@ -280,20 +280,18 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   }, [size])
 
   useEffect(() => {
-    if (size > maxSize) {
-      setMaxSize(size)
-    }
-  }, [size])
+    setMaxSize(measurePage(result, 0, height))
+  }, [height, result])
 
   useEffect(() => {
     setPage(1)
   }, [result])
 
   useEffect(() => {
-    if (size) {
-      setTotalPages(Math.ceil((result?.table?.length ?? 0) / size))
+    if (maxSize) {
+      setTotalPages(Math.ceil((result?.table?.length ?? 0) / maxSize))
     }
-  }, [height, result])
+  }, [maxSize, result])
 
   const inner = tables.map((t, tIdx) => (
     <InnerTable table={t} key={`table${tIdx}`} />

@@ -14,7 +14,7 @@ const PageControl: FC = () => {
   )
   return (
     <div className={`${styles['visualization--simple-table--paging']}`}>
-      {total && size && (
+      {total && size > 0 && (
         <PaginationNav.PaginationNav
           totalPages={totalPages}
           currentPage={Math.min(Math.floor(offset / size) + 1, totalPages)}
