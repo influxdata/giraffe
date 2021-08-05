@@ -13,13 +13,11 @@ import styles from './Button.scss'
 export interface IconAndTextProps {
   text?: string
   icon?: IconFont | string
-  placeIconAfterText?: boolean
 }
 
 export const IconAndText: FunctionComponent<IconAndTextProps> = ({
   text,
   icon,
-  placeIconAfterText = false,
 }) => {
   const iconEl = !!icon && (
     <Icon glyph={icon} className={`${styles['cf-button-icon']}`} />
@@ -30,15 +28,6 @@ export const IconAndText: FunctionComponent<IconAndTextProps> = ({
 
   if (!icon && !text) {
     return null
-  }
-
-  if (placeIconAfterText) {
-    return (
-      <>
-        {textEl}
-        {iconEl}
-      </>
-    )
   }
 
   return (

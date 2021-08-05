@@ -48,7 +48,8 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
   if (
     graphType === LayerTypes.Table ||
     graphType === LayerTypes.RawFluxDataTable ||
-    graphType === LayerTypes.Gauge
+    graphType === LayerTypes.Gauge ||
+    graphType === LayerTypes.SimpleTable
   ) {
     return <SizedTable config={sizedConfig}>{children}</SizedTable>
   }

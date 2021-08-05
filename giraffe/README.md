@@ -877,6 +877,11 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **svgStyle**: _Not used. Reserved for future implementation._
 
+- **SimpleTableLayerConfig**: _Object._ Maximum one per `<Plot>`. SimpleTableLayerConfig uses the `fluxResponse` property from `config` as the data to be rendered. Properties are:
+
+  - **type**: _'simple table'. **Required**._ Specifies that this LayerConfig is a simple table.
+
+  - **showAll**: _boolean. **Required**._ Specifies whether or not to include the columns `_start` and `_stop` in the table visualization.
 
 - **CustomLayerConfig**: _Object._ No limit per `<Plot>`.
 

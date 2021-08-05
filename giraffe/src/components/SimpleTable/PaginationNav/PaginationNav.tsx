@@ -1,16 +1,16 @@
 // Libraries
 import React, {forwardRef, useState, useEffect, useLayoutEffect} from 'react'
-import {PaginationDirectionItem} from './PaginationDirectionItem'
 
 // Components
 import {PaginationItem} from './PaginationItem'
 import {PaginationTruncationItem} from './paginationTruncationItem'
+import {PaginationDirectionItem} from './PaginationDirectionItem'
 
 // Styles
 import styles from './Pagination.scss'
 
 // Types
-import {Direction, ComponentSize} from '../../../types/input'
+import {Direction} from '../../../types/input'
 import {StandardFunctionProps} from '../../../types'
 
 export interface PaginationNavProps extends StandardFunctionProps {
@@ -26,24 +26,19 @@ export interface PaginationNavProps extends StandardFunctionProps {
    * pageRangeOffset = 3 will result in 11 items -> {1,...,(4,5,6),7,(8,9,10)...20} and so on
    * The compute functions will need to be refactored to provide more flexible range*/
   pageRangeOffset: number
-  hideDirectionIcon?: boolean
-  size?: ComponentSize
 }
 
 export type PaginationNavRef = HTMLElement
 
+// Originally taken from Clockface and reduced
 export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
   (
     {
-      id,
-      style,
       testID = 'pagination-nav',
       totalPages,
       currentPage = 1,
-      onChange,
       pageRangeOffset = 1,
-      hideDirectionIcon = false,
-      size = ComponentSize.Medium,
+      onChange,
     },
     ref
   ) => {
@@ -90,28 +85,14 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
       }
     }
 
-    const resizeBasedOnParentSize = (
-      size: ComponentSize,
-      pageRangeOffset: number
-    ) => {
+    const resizeBasedOnParentSize = (pageRangeOffset: number) => {
       if (!innerRef.current) {
         return pageRangeOffset
       }
       const {width} = innerRef.current.getBoundingClientRect() as DOMRect
-
-      let itemSize = 0
-      if (size == ComponentSize.Medium) {
-        itemSize = 38
-      } else if (size == ComponentSize.ExtraSmall) {
-        itemSize = 22
-      } else if (size == ComponentSize.Small) {
-        itemSize = 30
-      } else if (size == ComponentSize.Large) {
-        itemSize = 46
-      }
-
+      const itemSize = 38
       const maxItemCount = Math.floor(width / itemSize)
-      const directionButtonCount = hideDirectionIcon ? 0 : 2
+      const directionButtonCount = 2
       const maxRangeOffset = Math.floor(
         (maxItemCount - 5 - directionButtonCount) / 2
       )
@@ -138,12 +119,9 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
 
     useLayoutEffect(() => {
       setBreakpoints(
-        computePageSpread(
-          activePage,
-          resizeBasedOnParentSize(size, pageRangeOffset)
-        )
+        computePageSpread(activePage, resizeBasedOnParentSize(pageRangeOffset))
       )
-    }, [totalPages, pageRangeOffset, size, hideDirectionIcon])
+    }, [totalPages, pageRangeOffset])
 
     useEffect(() => {
       setActivePage(currentPage)
@@ -155,14 +133,14 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
         setBreakpoints(
           computePageSpread(
             activePage,
-            resizeBasedOnParentSize(size, pageRangeOffset)
+            resizeBasedOnParentSize(pageRangeOffset)
           )
         )
       } else if (activePage < breakpoints.firstBreakpoint) {
         setBreakpoints(
           computePageSpread(
             activePage,
-            resizeBasedOnParentSize(size, pageRangeOffset)
+            resizeBasedOnParentSize(pageRangeOffset)
           )
         )
       }
@@ -176,32 +154,24 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
       <nav
         className={`${styles['cf-pagination']}`}
         data-testid={testID}
-        id={id}
-        style={style}
         ref={ref}
       >
         <ul className={`${styles['cf-pagination--container']}`} ref={innerRef}>
-          {!hideDirectionIcon && (
-            <PaginationDirectionItem
-              direction={Direction.Left}
-              onClick={() => moveToPage(activePage - 1)}
-              key={'pagination--item-left'}
-              size={size}
-              isActive={activePage > 1}
-            />
-          )}
-          {
-            <PaginationItem
-              page={'1'}
-              isActive={checkActive(1)}
-              onClick={() => moveToPage(1)}
-              key={'pagination--item-1'}
-              size={size}
-            />
-          }
+          <PaginationDirectionItem
+            direction={Direction.Left}
+            onClick={() => moveToPage(activePage - 1)}
+            key={'pagination--item-left'}
+            isActive={activePage > 1}
+          />
+          <PaginationItem
+            page={'1'}
+            isActive={checkActive(1)}
+            onClick={() => moveToPage(1)}
+            key={'pagination--item-1'}
+          />
           {breakpoints.firstBreakpoint > 2 && (
             // compute whether it should be an ellipse or a number
-            <PaginationTruncationItem size={size}></PaginationTruncationItem>
+            <PaginationTruncationItem />
           )}
           {[...Array(totalPages)]
             .map((_, i) => i)
@@ -215,12 +185,11 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
                 isActive={checkActive(item)}
                 onClick={() => moveToPage(item)}
                 key={'pagination--item-' + item}
-                size={size}
               />
             ))}
           {// compute whether it should be an ellipse or a number
           breakpoints.secondBreakpoint !== totalPages - 1 && (
-            <PaginationTruncationItem size={size}></PaginationTruncationItem>
+            <PaginationTruncationItem />
           )}
           {//compute last number
           totalPages !== 1 && (
@@ -228,18 +197,14 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
               page={totalPages.toString()}
               isActive={checkActive(totalPages)}
               onClick={() => moveToPage(totalPages)}
-              size={size}
             />
           )}
-          {!hideDirectionIcon && (
-            <PaginationDirectionItem
-              direction={Direction.Right}
-              onClick={() => moveToPage(activePage + 1)}
-              key={'pagination--item-right'}
-              size={size}
-              isActive={activePage < totalPages}
-            />
-          )}
+          <PaginationDirectionItem
+            key={'pagination--item-right'}
+            direction={Direction.Right}
+            onClick={() => moveToPage(activePage + 1)}
+            isActive={activePage < totalPages}
+          />
         </ul>
       </nav>
     )

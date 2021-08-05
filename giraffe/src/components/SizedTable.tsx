@@ -5,6 +5,7 @@ import {
   SizedConfig,
   TableGraphLayerConfig,
   LayerTypes,
+  SimpleTableLayerConfig,
 } from '../types'
 
 import {GaugeLayer} from './GaugeLayer'
@@ -13,6 +14,7 @@ import {newTableFromConfig} from '../utils/newTable'
 import {RawFluxDataTable} from './RawFluxDataTable'
 import {FluxTablesTransform} from './FluxTablesTransform'
 import {TableGraphLayer} from './TableGraphLayer'
+import {SimpleTableLayer} from './SimpleTableLayer'
 
 import {usePlotEnv} from '../utils/usePlotEnv'
 
@@ -90,6 +92,17 @@ export const SizedTable: FunctionComponent<Props> = ({
                     }}
                   />
                 )
+
+              case LayerTypes.SimpleTable: {
+                return (
+                  <SimpleTableLayer
+                    key={layerIndex}
+                    config={
+                      {...layerConfig, fluxResponse} as SimpleTableLayerConfig
+                    }
+                  />
+                )
+              }
 
               case LayerTypes.Table:
                 return (
