@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {withKnobs, select, boolean} from '@storybook/addon-knobs'
+import {withKnobs, select, boolean, number} from '@storybook/addon-knobs'
 import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
@@ -32,6 +32,8 @@ storiesOf('Table Graph', module)
     )
     const theme = select('Theme', {dark: 'dark', light: 'light'}, 'dark')
     const fixFirstColumn = boolean('Fix First Column', false)
+    const enforceDecimalPlaces = boolean('Enforce Decimals', true)
+    const numberOfDecimalPlaces = number('Number of Decimal Places', 3)
     const config: Config = {
       fluxResponse: tableCSV,
       layers: [
@@ -87,8 +89,8 @@ storiesOf('Table Graph', module)
             ],
             timeFormat,
             decimalPlaces: {
-              digits: 3,
-              isEnforced: true,
+              digits: numberOfDecimalPlaces,
+              isEnforced: enforceDecimalPlaces,
             },
           },
           timeZone: 'Local',
