@@ -598,7 +598,7 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
     useImperativeHandle(ref, () => {
       return {
         recomputeGridSize: () => recomputeGridSize(state, props),
-        forceUpdate: () => useForceUpdate(),
+        forceUpdate: useForceUpdate,
       }
     })
 
