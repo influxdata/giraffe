@@ -25,9 +25,7 @@ interface Props extends Partial<GeoLayerConfig> {
 
 const Geo: FunctionComponent<Props> = props => {
   const {width, height} = props
-  if (width === 0 || height === 0) {
-    return null
-  }
+
   const {
     lat,
     lon,
@@ -70,6 +68,10 @@ const Geo: FunctionComponent<Props> = props => {
     )
     setPreprocessedTable(newTable)
   }, [table, detectCoordinateFields])
+
+  if (width === 0 || height === 0) {
+    return null
+  }
 
   const onViewportChange = (viewport: {center?: number[]; zoom?: number}) => {
     const {onViewportChange} = props
