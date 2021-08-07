@@ -24,18 +24,18 @@ interface Props extends Partial<GeoLayerConfig> {
 }
 
 const Geo: FunctionComponent<Props> = props => {
-  const {width, height} = props
-
   const {
-    lat,
-    lon,
-    zoom,
-    mapStyle,
-    stylingConfig,
     allowPanAndZoom,
-    useS2CellID,
+    height,
+    lat,
     latLonColumns,
+    lon,
+    mapStyle,
     s2Column,
+    stylingConfig,
+    useS2CellID,
+    width,
+    zoom,
   } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
