@@ -1,5 +1,5 @@
 // Libraries
-import React, {createRef, FunctionComponent, useLayoutEffect} from 'react'
+import React, {createRef, FunctionComponent} from 'react'
 import {CircleMarker} from 'react-leaflet'
 
 // Utils
@@ -8,7 +8,6 @@ import {
   getColor,
   normalizeValue,
 } from './dimensionCalculations'
-import {defineToolTipEffect} from './processing/toolTips'
 import {formatCircleMarkerRowInfo} from '../../utils/geo'
 
 // Types
@@ -79,12 +78,9 @@ export const CircleMarkerLayer: FunctionComponent<Props> = props => {
   const tooltip = (
     <GeoTooltip
       stylingConfig={stylingConfig}
-      onCreate={setTooltip => {
-        useLayoutEffect(defineToolTipEffect(tooltips, setTooltip), [
-          properties,
-          table,
-        ])
-      }}
+      properties={properties}
+      table={table}
+      tooltips={tooltips}
     />
   )
   return (
