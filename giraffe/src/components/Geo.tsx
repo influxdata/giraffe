@@ -42,7 +42,9 @@ const Geo: FunctionComponent<Props> = props => {
   const mapRef = React.createRef()
 
   useEffect(() => {
-    ;(mapRef.current as any).leafletElement._onResize()
+    if (width && height) {
+      ;(mapRef.current as any).leafletElement._onResize()
+    }
   }, [width, height])
 
   const {table, detectCoordinateFields} = props
