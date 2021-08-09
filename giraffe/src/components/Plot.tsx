@@ -10,12 +10,20 @@ interface PlotProps {
   layerCanvasRef?: RefObject<HTMLCanvasElement>
 }
 
-export const Plot: FunctionComponent<PlotProps> = ({
-  children,
-  config,
-  axesCanvasRef = useRef<HTMLCanvasElement>(null),
-  layerCanvasRef = useRef<HTMLCanvasElement>(null),
-}) => {
+export const Plot: FunctionComponent<PlotProps> = props => {
+  const {children, config} = props
+
+  let axesCanvasRef = useRef<HTMLCanvasElement>(null)
+  let layerCanvasRef = useRef<HTMLCanvasElement>(null)
+
+  if (props.axesCanvasRef) {
+    axesCanvasRef = props.axesCanvasRef
+  }
+
+  if (props.layerCanvasRef) {
+    layerCanvasRef = props.layerCanvasRef
+  }
+
   if (config.width && config.height) {
     return (
       <div className="giraffe-fixedsizer" style={{position: 'relative'}}>
