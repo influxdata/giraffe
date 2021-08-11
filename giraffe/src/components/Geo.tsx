@@ -39,11 +39,11 @@ const Geo: FunctionComponent<Props> = props => {
   } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
-  const mapRef = React.createRef()
+  const mapRef = React.createRef<any>()
 
   useEffect(() => {
     if (width && height) {
-      ;(mapRef.current as any).leafletElement._onResize()
+      mapRef.current?.leafletElement._onResize()
     }
   }, [width, height])
 
