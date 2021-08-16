@@ -1,17 +1,28 @@
-import {FunctionComponent, useState} from 'react'
+import {FunctionComponent, useLayoutEffect, useState} from 'react'
 import React from 'react'
-import {Config} from '../../types'
 import {Tooltip} from '../Tooltip'
 
+// Utils
+import {defineToolTipEffect} from './processing/toolTips'
+
+// Types
+import {Config} from '../../types'
+import {GeoTable} from './processing/GeoTable'
+import {GeoCircleViewLayer, GeoPointMapViewLayer} from '../../types/geo'
 interface Props {
   stylingConfig: Partial<Config>
-  onCreate
+  properties: GeoPointMapViewLayer | GeoCircleViewLayer
+  table: GeoTable
+  tooltips: Array<{markerRef; rowInfo}>
 }
 
 export const GeoTooltip: FunctionComponent<Props> = props => {
-  const {stylingConfig, onCreate} = props
+  const {stylingConfig, properties, table, tooltips} = props
   const [tooltipData, setTooltipData] = useState(null)
-  onCreate(setTooltipData)
+  useLayoutEffect(defineToolTipEffect(tooltips, setTooltipData), [
+    properties,
+    table,
+  ])
 
   return (
     <>

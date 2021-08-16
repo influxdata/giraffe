@@ -1,6 +1,6 @@
 // Libraries
 import React, {useEffect, useState} from 'react'
-import {FunctionComponent, useLayoutEffect} from 'react'
+import {FunctionComponent} from 'react'
 import {Marker} from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import 'react-leaflet-markercluster/dist/styles.min.css'
@@ -8,7 +8,6 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 // Utils
 import {getColor} from './dimensionCalculations'
 import {SVGIcon} from './SVGIcon'
-import {defineToolTipEffect} from './processing/toolTips'
 import {GeoTooltip} from './GeoTooltip'
 
 import {
@@ -67,12 +66,9 @@ export const PointMapLayer: FunctionComponent<Props> = props => {
   const tooltip = (
     <GeoTooltip
       stylingConfig={stylingConfig}
-      onCreate={setTooltip => {
-        useLayoutEffect(defineToolTipEffect(tooltips, setTooltip), [
-          properties,
-          table,
-        ])
-      }}
+      properties={properties}
+      table={table}
+      tooltips={tooltips}
     />
   )
   const [visible, setVisible] = useState(true)
