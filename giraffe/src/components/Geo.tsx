@@ -24,27 +24,27 @@ interface Props extends Partial<GeoLayerConfig> {
 }
 
 const Geo: FunctionComponent<Props> = props => {
-  const {width, height} = props
-  if (width === 0 || height === 0) {
-    return null
-  }
   const {
-    lat,
-    lon,
-    zoom,
-    mapStyle,
-    stylingConfig,
     allowPanAndZoom,
-    useS2CellID,
+    height,
+    lat,
     latLonColumns,
+    lon,
+    mapStyle,
     s2Column,
+    stylingConfig,
+    useS2CellID,
+    width,
+    zoom,
   } = props
   const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
-  const mapRef = React.createRef()
+  const mapRef = React.createRef<any>()
 
   useEffect(() => {
-    ;(mapRef.current as any).leafletElement._onResize()
+    if (width && height) {
+      mapRef.current?.leafletElement._onResize()
+    }
   }, [width, height])
 
   const {table, detectCoordinateFields} = props
@@ -70,6 +70,10 @@ const Geo: FunctionComponent<Props> = props => {
     )
     setPreprocessedTable(newTable)
   }, [table, detectCoordinateFields])
+
+  if (width === 0 || height === 0) {
+    return null
+  }
 
   const onViewportChange = (viewport: {center?: number[]; zoom?: number}) => {
     const {onViewportChange} = props
