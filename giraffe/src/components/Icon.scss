@@ -29,6 +29,58 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  &.more:before {
+    content: '\e974';
+  }
+  &.drag-to-expand-white:before {
+    content: '\e901';
+    color: #fff;
+  }
+  &.drag-to-expand:before {
+    content: '\e902';
+  }
+  &.shield-solid:before {
+    content: '\e903';
+  }
+  &.lock:before {
+    content: '\e900';
+  }
+  &.heart-solid:before {
+    content: '\e96f';
+  }
+  &.bucket-outline:before {
+    content: '\e961';
+  }
+  &.chat:before {
+    content: '\e933';
+  }
+  &.currency-eur:before {
+    content: '\e968';
+  }
+  &.currency-gbp:before {
+    content: '\e969';
+  }
+  &.currency-usd:before {
+    content: '\e96a';
+  }
+  &.moon:before {
+    content: '\e95c';
+  }
+  &.share-solid:before {
+    content: '\e96e';
+  }
+  &.shield:before {
+    content: '\e96b';
+  }
+  &.sun:before {
+    content: '\e95d';
+  }
+  &.upgrade:before {
+    content: '\e95f';
+  }
+  &.merge:before {
+    content: '\e975';
+  }
   &.add-cell:before {
     content: '\e925';
   }
@@ -38,11 +90,11 @@
   &.alerts:before {
     content: '\e921';
   }
-  &.annotate-plus:before {
-    content: '\e952';
-  }
   &.annotate:before {
     content: '\e953';
+  }
+  &.annotate-plus:before {
+    content: '\e952';
   }
   &.authzero:before {
     content: '\e951';
@@ -50,53 +102,41 @@
   &.bar-chart:before {
     content: '\e913';
   }
-  &.bell-ringing:before {
-    content: '\e935';
+  &.bell:before {
+    content: '\e934';
   }
   &.bell-solid:before {
     content: '\e937';
   }
-  &.bell:before {
-    content: '\e934';
-  }
   &.brush:before {
     content: '\e93d';
-  }
-  &.calendar:before {
-    content: '\e938';
   }
   &.capacitor2:before {
     content: '\e923';
   }
   &.caret-down:before {
-    content: '\e902';
+    content: '\e904';
   }
   &.caret-left:before {
-    content: '\e901';
+    content: '\e905';
   }
   &.caret-right:before {
-    content: '\e903';
-  }
-  &.caret-up:before {
     content: '\e906';
   }
-  &.chat:before {
-    content: '\e933';
+  &.caret-up:before {
+    content: '\e907';
   }
   &.checkmark:before {
     content: '\e918';
   }
-  &.circle-thick:before {
-    content: '\e90e';
-  }
   &.circle:before {
     content: '\e940';
   }
+  &.circle-thick:before {
+    content: '\e90e';
+  }
   &.clock:before {
     content: '\e920';
-  }
-  &.cloud:before {
-    content: '\e93f';
   }
   &.cog-outline:before {
     content: '\e91c';
@@ -108,7 +148,7 @@
     content: '\e91b';
   }
   &.crown-outline:before {
-    content: '\e900';
+    content: '\e908';
   }
   &.crown2:before {
     content: '\e94b';
@@ -116,14 +156,11 @@
   &.cube:before {
     content: '\e90b';
   }
-  &.cubo-nav:before {
-    content: '\e91a';
+  &.cubo:before {
+    content: '\e95e';
   }
   &.cubo-uniform:before {
     content: '\e93c';
-  }
-  &.cubo:before {
-    content: '\e95e';
   }
   &.dash-f:before {
     content: '\e927';
@@ -133,12 +170,6 @@
   }
   &.dash-j:before {
     content: '\e92b';
-  }
-  &.dashboards:before {
-    content: '\e93a';
-  }
-  &.disks-nav:before {
-    content: '\e946';
   }
   &.disks:before {
     content: '\e950';
@@ -161,14 +192,17 @@
   &.export:before {
     content: '\e90f';
   }
+  &.eye:before {
+    content: '\e91f';
+  }
   &.eye-closed:before {
     content: '\e956';
   }
   &.eye-open:before {
     content: '\e957';
   }
-  &.eye:before {
-    content: '\e91f';
+  &.fn:before {
+    content: '\e960';
   }
   &.github:before {
     content: '\e928';
@@ -176,17 +210,14 @@
   &.google:before {
     content: '\e92a';
   }
-  &.graphline-2:before {
-    content: '\e924';
-  }
   &.group:before {
-    content: '\e908';
-  }
-  &.heroku-simple:before {
-    content: '\e948';
+    content: '\e909';
   }
   &.heroku:before {
     content: '\e947';
+  }
+  &.heroku-simple:before {
+    content: '\e948';
   }
   &.import:before {
     content: '\e910';
@@ -199,9 +230,6 @@
   }
   &.minimize:before {
     content: '\e954';
-  }
-  &.moon:before {
-    content: '\e95c';
   }
   &.nav-chat:before {
     content: '\e941';
@@ -224,11 +252,11 @@
   &.play:before {
     content: '\e914';
   }
-  &.plus-skinny:before {
-    content: '\e922';
-  }
   &.plus:before {
     content: '\e90a';
+  }
+  &.plus-skinny:before {
+    content: '\e922';
   }
   &.polaroid:before {
     content: '\e95b';
@@ -243,7 +271,7 @@
     content: '\e949';
   }
   &.remove:before {
-    content: '\e909';
+    content: '\e90d';
   }
   &.search:before {
     content: '\e916';
@@ -254,11 +282,11 @@
   &.shuffle:before {
     content: '\e94e';
   }
-  &.square-check:before {
-    content: '\e943';
-  }
   &.square:before {
     content: '\e93e';
+  }
+  &.square-check:before {
+    content: '\e943';
   }
   &.star:before {
     content: '\e930';
@@ -266,14 +294,11 @@
   &.stop:before {
     content: '\e931';
   }
-  &.sun:before {
-    content: '\e95d';
-  }
   &.text-block:before {
     content: '\e911';
   }
   &.trash:before {
-    content: '\e905';
+    content: '\e915';
   }
   &.triangle:before {
     content: '\e92c';
@@ -281,40 +306,82 @@
   &.undo:before {
     content: '\e95a';
   }
-  &.upgrade:before {
-    content: '\e95f';
+  &.user:before {
+    content: '\e919';
   }
   &.user-add:before {
-    content: '\e907';
+    content: '\e91e';
   }
   &.user-outline:before {
-    content: '\e915';
+    content: '\e932';
   }
   &.user-remove:before {
-    content: '\e904';
+    content: '\e939';
   }
-  &.user:before {
-    content: '\e90d';
+  &.users-trio:before {
+    content: '\e945';
+  }
+  &.wand:before {
+    content: '\e94d';
+  }
+  &.wood:before {
+    content: '\e970';
+  }
+  &.wrench:before {
+    content: '\e971';
+  }
+  &.zap:before {
+    content: '\e973';
+  }
+  &.bell-ringing:before {
+    content: '\e935';
+  }
+  &.calendar:before {
+    content: '\e938';
+  }
+  &.cloud:before {
+    content: '\e93f';
+  }
+  &.cubo-nav:before {
+    content: '\e91a';
+  }
+  &.dashboards:before {
+    content: '\e93a';
+  }
+  &.disks-nav:before {
+    content: '\e946';
+  }
+  &.graphline-2:before {
+    content: '\e924';
   }
   &.users-duo:before {
     content: '\e93b';
   }
-  &.users-trio:before {
-    content: '\e939';
-  }
-  &.wand:before {
-    content: '\e945';
-  }
-  &.wood:before {
-    content: '\e91e';
-  }
   &.wrench-nav:before {
-    content: '\e94d';
+    content: '\e972';
   }
-  &.wrench:before {
-    content: '\e919';
+  &.book:before {
+    content: '\e966';
   }
-  &.zap:before {
-    content: '\e932';
+  &.book-code:before {
+    content: '\e967';
+  }
+  &.book-pencil:before {
+    content: '\e965';
+  }
+  &.bucket-solid:before {
+    content: '\e962';
+  }
+  &.funnel-outline:before {
+    content: '\e963';
+  }
+  &.funnel-solid:before {
+    content: '\e964';
+  }
+  &.layers:before {
+    content: '\e96c';
+  }
+  &.share:before {
+    content: '\e96d';
   }
 }
