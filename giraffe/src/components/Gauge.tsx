@@ -385,11 +385,12 @@ const drawNeedle = (
 
   let needleRotation: number
 
-  let digits = decimalPlaces?.isEnforced
-    ? decimalPlaces.digits
-    : gaugePosition.toString().indexOf('.') === -1
-    ? 0
-    : 2
+  let digits = 2
+  if (decimalPlaces?.isEnforced) {
+    digits = decimalPlaces.digits
+  } else if (gaugePosition.toString().indexOf('.') === -1) {
+    digits = 0
+  }
 
   digits = Math.min(digits, MAX_DECIMAL_PLACES)
 

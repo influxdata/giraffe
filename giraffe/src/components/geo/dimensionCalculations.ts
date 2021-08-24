@@ -58,13 +58,16 @@ const fitIntoDefinedRange = (
   low: DashboardColor,
   high: DashboardColor
 ) => {
-  const bottomFitted =
-    low.type === 'min' ? (value < low.value ? low.value : value) : value
-  return high.type === 'max'
-    ? bottomFitted > high.value
-      ? high.value
-      : bottomFitted
-    : bottomFitted
+  let bottomFitted = value
+  if (low.type === 'min' && value < low.value) {
+    bottomFitted = low.value
+  }
+
+  if (high.type === 'max' && bottomFitted > high.value) {
+    return high.value
+  }
+
+  return bottomFitted
 }
 
 const mixColors = (index: number, component1: number, component2: number) => {

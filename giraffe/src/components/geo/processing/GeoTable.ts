@@ -34,11 +34,17 @@ export interface MinAndMax {
 
 export const getMinAndMax = (table: GeoTable, field: string): MinAndMax => {
   const rowCount = table.getRowCount()
-  const acc: MinAndMax = {}
+  const range: MinAndMax = {}
   for (let i = 0; i < rowCount; i++) {
     const value = table.getValue(i, field)
-    acc.min = acc.min === undefined ? value : value < acc.min ? value : acc.min
-    acc.max = acc.max === undefined ? value : value > acc.max ? value : acc.max
+
+    if (range.min === undefined || value < range.min) {
+      range.min = value
+    }
+
+    if (range.max === undefined || value > range.max) {
+      range.max = value
+    }
   }
-  return acc
+  return range
 }
