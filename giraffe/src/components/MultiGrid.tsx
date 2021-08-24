@@ -516,6 +516,42 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
 
     const {deferredMeasurementCache, fixedColumnCount, fixedRowCount} = props
 
+    let cacheBottomLeftGrid = null
+    if (deferredMeasurementCache) {
+      cacheBottomLeftGrid = deferredMeasurementCache
+      if (fixedRowCount > 0) {
+        cacheBottomLeftGrid = new CellMeasurerCacheDecorator({
+          cellMeasurerCache: deferredMeasurementCache,
+          columnIndexOffset: 0,
+          rowIndexOffset: fixedRowCount,
+        })
+      }
+    }
+
+    let cacheBottomRightGrid = null
+    if (deferredMeasurementCache) {
+      cacheBottomRightGrid = deferredMeasurementCache
+      if (fixedColumnCount > 0 || fixedRowCount > 0) {
+        cacheBottomRightGrid = new CellMeasurerCacheDecorator({
+          cellMeasurerCache: deferredMeasurementCache,
+          columnIndexOffset: fixedColumnCount,
+          rowIndexOffset: fixedRowCount,
+        })
+      }
+    }
+
+    let cacheTopRightGrid = null
+    if (deferredMeasurementCache) {
+      cacheTopRightGrid = deferredMeasurementCache
+      if (fixedColumnCount > 0) {
+        cacheTopRightGrid = new CellMeasurerCacheDecorator({
+          cellMeasurerCache: deferredMeasurementCache,
+          columnIndexOffset: fixedColumnCount,
+          rowIndexOffset: 0,
+        })
+      }
+    }
+
     const [state, setState] = useState<State>({
       scrollLeft: 0,
       scrollTop: 0,
@@ -528,33 +564,9 @@ export const MultiGrid = forwardRef<MultiGridInputHandles, PropsMultiGrid>(
       bottomRightGrid: null,
       topLeftGrid: null,
       topRightGrid: null,
-      deferredMeasurementCacheBottomLeftGrid: deferredMeasurementCache
-        ? fixedRowCount > 0
-          ? new CellMeasurerCacheDecorator({
-              cellMeasurerCache: deferredMeasurementCache,
-              columnIndexOffset: 0,
-              rowIndexOffset: fixedRowCount,
-            })
-          : deferredMeasurementCache
-        : null,
-      deferredMeasurementCacheBottomRightGrid: deferredMeasurementCache
-        ? fixedColumnCount > 0 || fixedRowCount > 0
-          ? new CellMeasurerCacheDecorator({
-              cellMeasurerCache: deferredMeasurementCache,
-              columnIndexOffset: fixedColumnCount,
-              rowIndexOffset: fixedRowCount,
-            })
-          : deferredMeasurementCache
-        : null,
-      deferredMeasurementCacheTopRightGrid: deferredMeasurementCache
-        ? fixedColumnCount > 0
-          ? new CellMeasurerCacheDecorator({
-              cellMeasurerCache: deferredMeasurementCache,
-              columnIndexOffset: fixedColumnCount,
-              rowIndexOffset: 0,
-            })
-          : deferredMeasurementCache
-        : null,
+      deferredMeasurementCacheBottomLeftGrid: cacheBottomLeftGrid,
+      deferredMeasurementCacheBottomRightGrid: cacheBottomRightGrid,
+      deferredMeasurementCacheTopRightGrid: cacheTopRightGrid,
       leftGridWidth: 0,
       topGridHeight: 0,
       lastRenderedColumnWidth: 0,

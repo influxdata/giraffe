@@ -30,11 +30,14 @@ const toNumber = (value: any): number => {
   }
   value = value.replace(reTrim, '')
   const isBinary = reIsBinary.test(value)
-  return isBinary || reIsOctal.test(value)
-    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-    : reIsBadHex.test(value)
-    ? NotANumber
-    : +value
+
+  if (isBinary || reIsOctal.test(value)) {
+    if (freeParseInt(value.slice(2), isBinary ? 2 : 8)) {
+      return reIsBadHex.test(value)
+    }
+    return NotANumber
+  }
+  return +value
 }
 
 const toFinite = (value: any): number => {
@@ -73,7 +76,16 @@ const createRange = () => {
     } else {
       end = toFinite(end)
     }
-    step = step === undefined ? (start < end ? 1 : -1) : toFinite(step)
+
+    if (step === undefined) {
+      step = -1
+      if (start < end) {
+        step = 1
+      }
+    } else {
+      step = toFinite(step)
+    }
+
     return baseRange(start, end, step)
   }
 }
