@@ -32,9 +32,9 @@ const toNumber = (value: any): number => {
   const isBinary = reIsBinary.test(value)
 
   if (isBinary || reIsOctal.test(value)) {
-    if (freeParseInt(value.slice(2), isBinary ? 2 : 8)) {
-      return reIsBadHex.test(value)
-    }
+    return freeParseInt(value.slice(2), isBinary ? 2 : 8)
+  }
+  if (reIsBadHex.test(value)) {
     return NotANumber
   }
   return +value
