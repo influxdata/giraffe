@@ -28,7 +28,7 @@ export const SizedTable: FunctionComponent<Props> = ({
 }) => {
   const env = usePlotEnv(userConfig)
 
-  const {margins, config} = env
+  const {config} = env
   const {width, height} = config
 
   config.showAxes = false
@@ -55,11 +55,6 @@ export const SizedTable: FunctionComponent<Props> = ({
       <div
         className="giraffe-inner-plot"
         style={{
-          position: 'absolute',
-          top: `${margins.top}px`,
-          right: `${margins.right}px`,
-          bottom: `${margins.bottom}px`,
-          left: `${margins.left}px`,
           cursor: `${userConfig.cursor || 'auto'}`,
         }}
       >
