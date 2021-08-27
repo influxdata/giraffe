@@ -298,6 +298,8 @@ storiesOf('Mosaic', module)
     const customCSV = text('Paste CSV here:', '')
     const x = text('x', '_time')
     const y = text('y', '')
+    const yLabelColumnSeparator = text('yLabelColumnSeparator', '')
+    const fill = text('fill', '_value')
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
 
@@ -320,7 +322,6 @@ storiesOf('Mosaic', module)
       },
       'hh:mm a'
     )
-    const fill = ['_value']
     const showAxes = showAxesKnob()
     const hoverDimension = select('Hover Dimension', {x: 'x', xy: 'xy'}, 'xy')
     const legendOrientationThreshold = tooltipOrientationThresholdKnob()
@@ -337,8 +338,10 @@ storiesOf('Mosaic', module)
         {
           type: 'mosaic',
           x,
-          y: [y],
-          fill,
+          y: y.split(','),
+          yLabelColumns: y.split(','),
+          yLabelColumnSeparator,
+          fill: [fill],
           hoverDimension,
           colors,
         } as LayerConfig,
