@@ -89,7 +89,8 @@ const getStyle = (props: Props) => {
     isFixed(isFirstColumnFixed, rowIndex, columnIndex) ||
     isTimeData(props) ||
     isTimestamp(dataType) ||
-    isNaN(Number(data))
+    isNaN(Number(data)) ||
+    dataType.includes('string')
   ) {
     return style
   }
@@ -114,6 +115,7 @@ const getClassName = (props: Props): string => {
     columnIndex,
     hoveredRowIndex,
     hoveredColumnIndex,
+    dataType,
   } = props
   const classes = classnames('table-graph-cell', {
     'table-graph-cell__fixed-row': isFixedRow(rowIndex, columnIndex),
@@ -132,7 +134,8 @@ const getClassName = (props: Props): string => {
       columnIndex,
       hoveredColumnIndex
     ),
-    'table-graph-cell__numerical': !isNaN(Number(data)),
+    'table-graph-cell__numerical':
+      !isNaN(Number(data)) && !dataType.includes('string'),
     'table-graph-cell__field-name': isFieldName(
       isVerticalTimeAxis,
       rowIndex,
@@ -183,7 +186,7 @@ export const getContents = (props: Props): string => {
     return defaultTo(getFieldName(props), '').toString()
   }
 
-  if (!isNaN(+data)) {
+  if (!isNaN(+data) && !dataType.includes('string')) {
     // method needs the first arg to be a number to work properly
     return formatStatValue(+data, {decimalPlaces})
   }
