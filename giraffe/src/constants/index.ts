@@ -51,7 +51,7 @@ export const CONFIG_DEFAULTS: Partial<Config> = {
   legendFontBrightColor: '#f6f6f8',
   legendBackgroundColor: '#0f0e15',
   legendBorder: '2px solid #202028',
-  legendCrosshairColor: '#31313d',
+  legendCrosshairColor: '#f3f3f3',
   legendColorizeRows: true,
   legendOpacity: 1,
 }
