@@ -27,7 +27,7 @@ export const TableHeaderCell = forwardRef<
     <th
       data-testid={testID}
       ref={ref}
-      style={{textAlign: 'left', verticalAlign: 'middle'}}
+      style={{textAlign: 'left', verticalAlign: 'top'}}
       colSpan={1}
       className={tableHeaderCellClass}
     >
