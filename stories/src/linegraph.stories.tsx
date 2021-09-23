@@ -410,7 +410,7 @@ storiesOf('Line Graph', module)
           type: 'line',
           x,
           y,
-          fill: findStringColumns(table),
+          fill: ['_time'],
           interpolation,
           colors,
           lineWidth,
