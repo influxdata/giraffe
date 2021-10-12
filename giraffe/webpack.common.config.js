@@ -57,31 +57,14 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /leaflet\.css/,
-        use: [
-          {loader: 'style-loader'},
-          {loader: 'css-loader'},
-        ],
+        use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
       },
       {
         test: /leaflet\.css/,
-        use: [
-          {loader: 'style-loader'},
-          'css-loader',
-        ],
+        use: [{loader: 'style-loader'}, 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[contenthash:10].[ext]',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        test: /\.(png|svg|jpg|gif|eot|ttf|woff|woff2|otf)$/,
         use: [
           {
             loader: 'file-loader',
