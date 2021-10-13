@@ -56,11 +56,6 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /leaflet\.css/,
-        use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
-      },
-      {
-        test: /leaflet\.css/,
         use: [{loader: 'style-loader'}, 'css-loader'],
       },
       {
