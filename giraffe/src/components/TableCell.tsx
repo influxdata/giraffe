@@ -285,6 +285,26 @@ const getTimeFieldIndex = (resolvedRenamableFields): number => {
   return timeIndex - hiddenBeforeTime
 }
 
+const getCellIdString = (props: Props): string => {
+  const {isVerticalTimeAxis, rowIndex, columnIndex, sortOptions, data} = props
+
+  if (
+    isFieldName(isVerticalTimeAxis, rowIndex, columnIndex) &&
+    isSorted(sortOptions, data) &&
+    isAscending(sortOptions)
+  ) {
+    return 'table-graph-cell__sort-asc'
+  } else if (
+    isFieldName(isVerticalTimeAxis, rowIndex, columnIndex) &&
+    isSorted(sortOptions, data) &&
+    !isAscending(sortOptions)
+  ) {
+    return 'table-graph-cell__sort-desc'
+  } else {
+    return 'table-graph-cell'
+  }
+}
+
 export const TableCell: FunctionComponent<Props> = (props: Props) => {
   const {
     data,
@@ -310,7 +330,7 @@ export const TableCell: FunctionComponent<Props> = (props: Props) => {
         onClick={handleClick}
         data-column-index={columnIndex}
         data-row-index={rowIndex}
-        data-testid={`${data}-table-header`}
+        data-testid={`${data}-table-header ${getCellIdString(props)}`}
         onMouseOver={onHover}
         title={getContents(props)}
       >
