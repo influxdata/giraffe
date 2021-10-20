@@ -38,7 +38,16 @@ export const PaginationItem = forwardRef<
       data-testid={testID}
       ref={ref}
     >
-      <Button onClick={onClick} active={isActive} text={page}></Button>
+      <Button
+        onClick={onClick}
+        active={isActive}
+        text={page}
+        testID={
+          isActive
+            ? `pagination-item-${page}-active`
+            : `pagination-item-${page}`
+        }
+      />
     </li>
   )
 })
