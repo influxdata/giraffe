@@ -91,6 +91,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
         {pin === 'circle' &&
           createElement('circle', {
             r: PIN_CIRCLE_RADIUS,
+            className: 'giraffe-annotation-click-target',
             fill: color,
             cx: length - PIN_CIRCLE_RADIUS,
             cy: clampedStart,
@@ -100,10 +101,10 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
             points: `${length - PIN_TRIANGLE_HEIGHT}, ${clampedStart} ${length -
               PIN_TRIANGLE_HEIGHT / 2}, ${clampedStart +
               PIN_TRIANGLE_WIDTH} ${length}, ${clampedStart}`,
-            fill: color,
-            style: {cursor: 'pointer'},
-            id: props.id,
             className: 'giraffe-annotation-click-target',
+            fill: color,
+            id: props.id,
+            style: {cursor: 'pointer'},
           })}
         {pin === 'stop' &&
           createElement('polygon', {
@@ -133,6 +134,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           ${clampedEnd + pixelMargin}, 0
           ${clampedEnd + pixelMargin}, ${RANGE_HEIGHT}
           ${clampedStart - pixelMargin}, ${RANGE_HEIGHT}`,
+      className: 'giraffe-annotation-click-target',
       fill: color,
       id: props.id,
       style: {cursor: 'pointer', opacity: '60%'},
@@ -167,6 +169,7 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
       case 'circle':
         return createElement('circle', {
           r: PIN_CIRCLE_RADIUS,
+          className: 'giraffe-annotation-click-target',
           fill: color,
           cx: clampedStart,
           cy: PIN_CIRCLE_RADIUS,
@@ -176,10 +179,10 @@ export const AnnotationLine: FunctionComponent<AnnotationLineProps> = props => {
           points: `${clampedStart - PIN_TRIANGLE_WIDTH}, 0
           ${clampedStart + PIN_TRIANGLE_WIDTH}, 0
           ${clampedStart}, ${PIN_TRIANGLE_HEIGHT}`,
-          fill: color,
-          style: {cursor: 'pointer'},
-          id: props.id,
           className: 'giraffe-annotation-click-target',
+          fill: color,
+          id: props.id,
+          style: {cursor: 'pointer'},
           onMouseEnter: () => {
             onHover(true)
           },
