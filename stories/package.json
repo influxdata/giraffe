@@ -2,6 +2,11 @@
   "name": "@influxdata/giraffe-stories",
   "version": "2.18.9",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/influxdata/giraffe.git",
+    "directory":"stories"
+  },
   "scripts": {
     "lint": "eslint '{src,../giraffe/src}/**/*.{ts,tsx}'",
     "prettier": "prettier --config ../.prettierrc.json --check '{src,../giraffe/src}/**/*.{ts,tsx}'",
