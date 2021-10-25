@@ -272,19 +272,12 @@ const parseValue = (value: string | undefined, columnType: ColumnType): any => {
     return Date.parse(value.trim())
   }
 
-  if (columnType === 'number' && value === '') {
-    return null
-  }
-
   if (columnType === 'number') {
-    if (value === '+Inf') {
-      return '+Inf'
+    if (value === '') {
+      return null
     }
-
-    if (value === '-Inf') {
-      return '-Inf'
-    }
-    return Number(value)
+    const parsedValue = Number(value)
+    return parsedValue === parsedValue ? parsedValue : value
   }
 
   return null
