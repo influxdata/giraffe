@@ -1,8 +1,8 @@
 {
   "name": "@influxdata/giraffe",
-  "version": "2.19.1",
+  "version": "2.19.2",
   "main": "dist/index.js",
-  "module": "src/index.ts",
+  "module": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && NODE_ENV=production webpack --config webpack.prod.config.js",
