@@ -21,25 +21,7 @@ interface Props {
   children: (transformedDataBundle: TransformTableDataReturnType) => JSX.Element
 }
 
-const areFormatPropertiesEqual = (
-  prevProperties: Props,
-  newProperties: Props
-) => {
-  const formatProps = ['tableOptions', 'fieldOptions', 'timeFormat', 'sort']
-  if (!prevProperties.properties) {
-    return false
-  }
-  const propsEqual = formatProps.every(k =>
-    isEqual(prevProperties.properties[k], newProperties.properties[k])
-  )
-
-  return propsEqual
-}
-
-const memoizedTableTransform = memoizeOne(
-  transformTableData,
-  areFormatPropertiesEqual
-)
+const memoizedTableTransform = memoizeOne(transformTableData, isEqual)
 
 export const TableGraphTransform: FunctionComponent<Props> = (props: Props) => {
   const {properties, data, dataTypes, sortOptions} = props
