@@ -53,8 +53,8 @@ export const mosaicTransform = (
     })
   }
 
-  // Mosaic can only have one column as the fill value,
-  //   always the first fill column key
+  // Mosaic can have only one column as the fill value:
+  // always the first fill column key
   const valueKey = fillColumnMap.columnKeys[0]
 
   const timeStampMap = new Map()
@@ -152,7 +152,7 @@ export const mosaicTransform = (
   const sortedDataMapKeys = memoizedSortDataMapKeys([...dataMap.keys()])
 
   sortedDataMapKeys.forEach(key => {
-    //combine all series into the proper shape
+    // combine all series into the proper shape
     xMinData = xMinData.concat(dataMap.get(key).xMin)
     xMaxData = xMaxData.concat(dataMap.get(key).xMax)
     fillData = fillData.concat(dataMap.get(key).fill)
