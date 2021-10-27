@@ -1,19 +1,30 @@
-import {newTable} from '../utils/newTable'
+import memoizeOne from 'memoize-one'
 import {MosaicLayerSpec, Table} from '../types'
 import {DISPLAY_NAME, FILL, SERIES, X_MAX, X_MIN} from '../constants/columnKeys'
-import {createGroupIDColumn} from './'
+import {isEqual} from '../utils/isEqual'
+import {newTable} from '../utils/newTable'
 import {resolveDomain} from '../utils/resolveDomain'
-import {getNominalColorScale} from './'
+import {createGroupIDColumn, getNominalColorScale} from './'
+
+const memoizedSortTimeStamps = memoizeOne(
+  (timeStamps: Iterable<number>) => [...timeStamps].sort(),
+  isEqual
+)
+
+const memoizedSortDataMapKeys = memoizeOne(
+  (dataMapKeys: Iterable<string>) => [...dataMapKeys].sort(),
+  isEqual
+)
 
 export const mosaicTransform = (
   inputTable: Table,
   xColumnKey: string,
-  yColumnKeys: string[],
-  yLabelColumns: string[],
+  yColumnKeys: Array<string>,
+  yLabelColumns: Array<string>,
   yLabelColumnSeparator: string,
-  xDomain: number[],
-  fillColKeys: string[],
-  colors: string[]
+  xDomain: Array<number>,
+  fillColKeys: Array<string>,
+  colors: Array<string>
 ): MosaicLayerSpec => {
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
@@ -34,26 +45,27 @@ export const mosaicTransform = (
         : columnName,
     ''
   )
-  const yInputCols = {}
+  const yInputCols = new Map()
   if (Array.isArray(yColumnKeys)) {
     yColumnKeys.forEach(columnKey => {
-      const column = inputTable.getColumn(columnKey, 'string')
-      yInputCols[columnKey] = column
+      if (columnKey) {
+        const column = inputTable.getColumn(columnKey, 'string')
+        yInputCols.set(columnKey, column)
+      }
     })
   }
 
-  // Mosaic can only have one column as the fill value,
-  //   always the first fill column key
+  // Mosaic can have only one column as the fill value:
+  // always the first fill column key
   const valueKey = fillColumnMap.columnKeys[0]
 
-  const timeStampMap = {}
-
+  const timeStampMap = new Map()
   for (let i = 0; i < inputTable.length; i++) {
     const yColumnTick = Array.isArray(yColumnKeys)
       ? yColumnKeys.reduce((combinedValue, key) => {
           let value = ''
-          if (yInputCols[key]) {
-            value = yInputCols[key][i]
+          if (yInputCols.has(key) && Array.isArray(yInputCols.get(key))) {
+            value = yInputCols.get(key)[i]
           }
           return `${combinedValue}${value}`
         }, '')
@@ -61,8 +73,8 @@ export const mosaicTransform = (
 
     const yTickLabel = labelColumns.reduce((combinedValue, key) => {
       let value = ''
-      if (yInputCols[key]) {
-        value = yInputCols[key][i]
+      if (yInputCols.has(key)) {
+        value = yInputCols.get(key)[i]
       }
       return combinedValue
         ? `${combinedValue}${yLabelColumnSeparator}${value}`
@@ -72,17 +84,17 @@ export const mosaicTransform = (
     const currentX = xInputCol[i]
     const currentFillValue = fillColumnMap.mappings[fillColumn[i]][valueKey]
 
-    if (!timeStampMap[currentX]) {
-      timeStampMap[currentX] = []
+    if (!timeStampMap.has(currentX)) {
+      timeStampMap.set(currentX, [])
     }
-    timeStampMap[currentX].push({
+    timeStampMap.get(currentX).push({
       yTickLabel,
       yColumnTick,
       fill: currentFillValue,
     })
   }
 
-  const sortedTimeStamps = Object.keys(timeStampMap).sort()
+  const sortedTimeStamps = memoizedSortTimeStamps([...timeStampMap.keys()])
   let tableLength = 0
 
   /*
@@ -97,34 +109,33 @@ export const mosaicTransform = (
       yTickLabel: string,
     }
   */
-  const dataMap = {}
+  const dataMap = new Map()
 
   sortedTimeStamps.forEach(timeStamp => {
-    timeStampMap[timeStamp].forEach(data => {
-      if (!dataMap[data.yColumnTick]) {
-        dataMap[data.yColumnTick] = {
-          xMin: [Number(timeStamp)],
-          xMax: [Number(timeStamp)],
+    timeStampMap.get(timeStamp).forEach(data => {
+      if (!dataMap.has(data.yColumnTick)) {
+        dataMap.set(data.yColumnTick, {
+          xMin: [timeStamp],
+          xMax: [timeStamp],
           fill: [data.fill],
           series: [data.yColumnTick],
           displayedColumns: [data.yTickLabel],
           yTickLabel: data.yTickLabel,
-        }
+        })
         tableLength += 1
       } else {
-        const prevMaxIndex = dataMap[data.yColumnTick].xMax.length - 1
-        const prevFill =
-          dataMap[data.yColumnTick].fill[
-            dataMap[data.yColumnTick].fill.length - 1
-          ]
+        const prevMaxIndex = dataMap.get(data.yColumnTick).xMax.length - 1
+        const prevFill = dataMap.get(data.yColumnTick).fill[
+          dataMap.get(data.yColumnTick).fill.length - 1
+        ]
 
-        dataMap[data.yColumnTick].xMax[prevMaxIndex] = Number(timeStamp)
+        dataMap.get(data.yColumnTick).xMax[prevMaxIndex] = timeStamp
         if (prevFill !== data.fill) {
-          dataMap[data.yColumnTick].xMin.push(Number(timeStamp))
-          dataMap[data.yColumnTick].xMax.push(Number(timeStamp))
-          dataMap[data.yColumnTick].fill.push(data.fill)
-          dataMap[data.yColumnTick].series.push(data.yColumnTick)
-          dataMap[data.yColumnTick].displayedColumns.push(data.yTickLabel)
+          dataMap.get(data.yColumnTick).xMin.push(timeStamp)
+          dataMap.get(data.yColumnTick).xMax.push(timeStamp)
+          dataMap.get(data.yColumnTick).fill.push(data.fill)
+          dataMap.get(data.yColumnTick).series.push(data.yColumnTick)
+          dataMap.get(data.yColumnTick).displayedColumns.push(data.yTickLabel)
           tableLength += 1
         }
       }
@@ -139,24 +150,21 @@ export const mosaicTransform = (
   const yTicks = []
   const ySeries = []
 
-  for (const key in dataMap) {
-    //combine all series into the proper shape
-    xMinData = xMinData.concat(dataMap[key].xMin)
-    xMaxData = xMaxData.concat(dataMap[key].xMax)
-    fillData = fillData.concat(dataMap[key].fill)
-    seriesData = seriesData.concat(dataMap[key].series)
+  const sortedDataMapKeys = memoizedSortDataMapKeys([...dataMap.keys()])
+
+  sortedDataMapKeys.forEach(key => {
+    // combine all series into the proper shape
+    xMinData = xMinData.concat(dataMap.get(key).xMin)
+    xMaxData = xMaxData.concat(dataMap.get(key).xMax)
+    fillData = fillData.concat(dataMap.get(key).fill)
+    seriesData = seriesData.concat(dataMap.get(key).series)
     displayedColumnsData = displayedColumnsData.concat(
-      dataMap[key].displayedColumns
+      dataMap.get(key).displayedColumns
     )
     ySeries.push(key)
-    yTicks.push(dataMap[key].yTickLabel)
-  }
-  /*
-    xMin (start time) | xMax (end time) | Value Category | host | cpu
-    -------------------------------------------------------------------
-        1554308748000  |   1554308758000 |     'eenie'    | "a"  |  1
-        1554308748000  |   1554308758000 |       'mo'     | "b"  |  2
-  */
+    yTicks.push(dataMap.get(key).yTickLabel)
+  })
+
   const table = newTable(tableLength)
     .addColumn(X_MIN, 'system', 'number', xMinData)
     .addColumn(X_MAX, 'system', 'number', xMaxData)
