@@ -48,8 +48,10 @@ export const mosaicTransform = (
   const yInputCols = new Map()
   if (Array.isArray(yColumnKeys)) {
     yColumnKeys.forEach(columnKey => {
-      const column = inputTable.getColumn(columnKey, 'string')
-      yInputCols.set(columnKey, column)
+      if (columnKey) {
+        const column = inputTable.getColumn(columnKey, 'string')
+        yInputCols.set(columnKey, column)
+      }
     })
   }
 
@@ -58,12 +60,11 @@ export const mosaicTransform = (
   const valueKey = fillColumnMap.columnKeys[0]
 
   const timeStampMap = new Map()
-
   for (let i = 0; i < inputTable.length; i++) {
     const yColumnTick = Array.isArray(yColumnKeys)
       ? yColumnKeys.reduce((combinedValue, key) => {
           let value = ''
-          if (yInputCols.has(key)) {
+          if (yInputCols.has(key) && Array.isArray(yInputCols.get(key))) {
             value = yInputCols.get(key)[i]
           }
           return `${combinedValue}${value}`
