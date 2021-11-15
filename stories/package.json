@@ -1,11 +1,11 @@
 {
   "name": "@influxdata/giraffe-stories",
-  "version": "2.20.0",
+  "version": "2.20.1",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/influxdata/giraffe.git",
-    "directory":"stories"
+    "directory": "stories"
   },
   "scripts": {
     "lint": "eslint '{src,../giraffe/src}/**/*.{ts,tsx}'",
