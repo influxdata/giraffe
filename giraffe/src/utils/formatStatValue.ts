@@ -34,6 +34,8 @@ export const formatStatValue = (
 
   digits = Math.min(digits, MAX_DECIMAL_PLACES)
 
+  console.log('value', value)
+
   if (isNumber(value)) {
     const [wholeNumber, fractionalNumber] = Number(value)
       .toFixed(digits)
