@@ -18,7 +18,7 @@ import {
   timeZoneKnob,
   tooltipOrientationThresholdKnob,
   tooltipColorizeRowsKnob,
-  tableKnob,
+  getCPUTable,
   fillKnob,
   symbolKnob,
 } from './helpers'
@@ -26,7 +26,7 @@ import {
 storiesOf('Scatter Plot', module)
   .addDecorator(withKnobs)
   .add('Static CSV', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()

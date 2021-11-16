@@ -52,13 +52,13 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
 
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
@@ -198,12 +198,12 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
@@ -355,12 +355,12 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
@@ -488,12 +488,12 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
@@ -621,12 +621,12 @@ storiesOf('Static Legend', module)
       step: 0.01,
     })
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }
@@ -759,13 +759,13 @@ storiesOf('Static Legend', module)
       }
     )
 
-    const fixedWidth = number('Fixed Width')
-    const fixedHeight = number('Fixed Height')
+    const fixedWidth = number('Fixed Width', -1)
+    const fixedHeight = number('Fixed Height', -1)
     const legendHide = boolean('Hide Tooltip?', false)
     const staticLegendHide = boolean('Hide Static Legend?', false)
 
     const fixedPlotSize = {}
-    if (typeof fixedHeight === 'number' && typeof fixedWidth === 'number') {
+    if (fixedHeight > 0 && fixedWidth > 0) {
       fixedPlotSize['height'] = fixedHeight
       fixedPlotSize['width'] = fixedWidth
     }

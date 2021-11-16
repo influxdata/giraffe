@@ -4,7 +4,6 @@ import _ from 'lodash'
 
 import {Table} from '../../giraffe/src'
 import {CPU} from './data/cpu'
-import {cpuTable} from './data/mosaicTable'
 
 import * as giraffe from '../../giraffe/src'
 
@@ -81,8 +80,7 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
-export const tableKnob = (initial?: Table) =>
-  select('Data', {CPU, cpuTable}, initial || CPU)
+export const getCPUTable = () => CPU
 
 /*
   Find all column keys in a table suitable for mapping to the `x` or `y`
@@ -221,25 +219,25 @@ const findFields = (table: Table) => {
   return fields
 }
 
-export const lattitudeKnob = (table: Table, initial?: Record<string, any>) => {
+export const lattitudeKnob = (table: Table) => {
   return select(
     'lattitude',
     {
       ...findFields(table),
       ...findTags(table, true),
     },
-    initial || '_value'
+    '_value'
   )
 }
 
-export const longitudeKnob = (table: Table, initial?: Record<string, any>) => {
+export const longitudeKnob = (table: Table) => {
   return select(
     'longitude',
     {
       ...findFields(table),
       ...findTags(table, true),
     },
-    initial || '_value'
+    '_value'
   )
 }
 
