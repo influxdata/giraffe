@@ -471,8 +471,8 @@ storiesOf('Annotations', module)
 
     const annotationsInput =
       columnKey === TIME
-        ? [currentTime.split(), endTime.split()]
-        : [currentValue.split(), endValue.split()]
+        ? [[currentTime], [endTime]]
+        : [[currentValue], [endValue]]
 
     const tickFont = tickFontKnob()
     const valueAxisLabel = text('Value Axis Label', 'foo')

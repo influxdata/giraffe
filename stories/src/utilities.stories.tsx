@@ -22,7 +22,7 @@ import {
   interpolationKnob,
   legendFontKnob,
   showAxesKnob,
-  tableKnob,
+  getCPUTable,
   tickFontKnob,
   timeZoneKnob,
   tooltipColorizeRowsKnob,
@@ -51,7 +51,7 @@ import {
 storiesOf('Utilities', module)
   .addDecorator(withKnobs)
   .add('Screenshot A Stacked Line Layer', () => {
-    const table = tableKnob(stackedLineTable)
+    const table = stackedLineTable
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -165,7 +165,7 @@ storiesOf('Utilities', module)
     )
   })
   .add('Screenshot A Line', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -271,7 +271,7 @@ storiesOf('Utilities', module)
     )
   })
   .add('Screenshot A Heatmap', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob(MAGMA)
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -326,7 +326,7 @@ storiesOf('Utilities', module)
     )
   })
   .add('Screenshot A Histogram', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
