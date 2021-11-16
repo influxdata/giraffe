@@ -34,8 +34,10 @@ storiesOf('Line Graph', module)
     const fillColumnsCount = number('Number of fill columns', 5)
     const fillColumnNameLength = number('Length of fill column names', 4)
 
-    const fixedWidth = number('Fixed Width', -1)
-    const fixedHeight = number('Fixed Height', -1)
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? -1 : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? -1 : Number(fixedHeightText)
 
     const fixedPlotSize = {}
     if (fixedHeight > 0 && fixedWidth > 0) {
@@ -165,8 +167,10 @@ storiesOf('Line Graph', module)
     const xTickStart = number('xTickStart', new Date().getTime())
     const xTickStep = number('xTickStep', 200_000)
     const xTotalTicks = number('xTotalTicks', 5)
-    const yTickStart = number('yTickStart', NaN)
-    const yTickStep = number('yTickStep', NaN)
+    const yTickStartText = text('yTickStart', '')
+    const yTickStepText = text('yTickStep', '')
+    const yTickStart = !yTickStartText ? null : Number(yTickStartText)
+    const yTickStep = !yTickStepText ? null : Number(yTickStepText)
     const yTotalTicks = number('yTotalTicks', 8)
     const timeFormat = select(
       'Time Format',
