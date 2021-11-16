@@ -165,8 +165,10 @@ storiesOf('Line Graph', module)
     const xTickStart = number('xTickStart', new Date().getTime())
     const xTickStep = number('xTickStep', 200_000)
     const xTotalTicks = number('xTotalTicks', 5)
-    const yTickStart = number('yTickStart', NaN)
-    const yTickStep = number('yTickStep', NaN)
+    const yTickStartText = text('yTickStart', '')
+    const yTickStepText = text('yTickStep', '')
+    const yTickStart = !yTickStartText ? null : Number(yTickStartText)
+    const yTickStep = !yTickStepText ? null : Number(yTickStepText)
     const yTotalTicks = number('yTotalTicks', 8)
     const timeFormat = select(
       'Time Format',
