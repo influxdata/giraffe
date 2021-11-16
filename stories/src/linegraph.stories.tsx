@@ -34,8 +34,10 @@ storiesOf('Line Graph', module)
     const fillColumnsCount = number('Number of fill columns', 5)
     const fillColumnNameLength = number('Length of fill column names', 4)
 
-    const fixedWidth = number('Fixed Width', -1)
-    const fixedHeight = number('Fixed Height', -1)
+    const fixedWidthText = text('Fixed Width', '')
+    const fixedHeightText = text('Fixed Height', '')
+    const fixedWidth = !fixedWidthText ? -1 : Number(fixedWidthText)
+    const fixedHeight = !fixedHeightText ? -1 : Number(fixedHeightText)
 
     const fixedPlotSize = {}
     if (fixedHeight > 0 && fixedWidth > 0) {
