@@ -110,9 +110,6 @@ export const lineTransform = (
     let x = xCol[i]
     let y = yCol[i]
 
-    // console.log(fillColumn[i], fillScale(groupID))
-    // console.log('lineData', lineData[groupID])
-
     if (!lineData[groupID]) {
       lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
     } else if (colorMapping) {
