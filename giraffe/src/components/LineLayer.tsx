@@ -47,8 +47,6 @@ export const LineLayer: FunctionComponent<Props> = props => {
     config.colorMappingCallback(config.colorMapping)
   }
 
-  console.log('drawline options', drawLinesOptions, config)
-
   useCanvas(
     canvasRef,
     width,

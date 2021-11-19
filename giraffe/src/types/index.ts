@@ -426,6 +426,8 @@ export interface LineLayerConfig {
   colors?: string[]
   shadeBelow?: boolean
   shadeBelowOpacity?: number
+  colorMapping?: any
+  colorMappingCallback?: (arg: any) => void
 }
 
 export interface BandLayerConfig {

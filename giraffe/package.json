@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/influxdata/giraffe.git",
-    "directory":"giraffe"
+    "directory": "giraffe"
   },
   "scripts": {
     "build": "rm -rf dist && NODE_ENV=production webpack --config webpack.prod.config.js",

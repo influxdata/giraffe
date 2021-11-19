@@ -5,7 +5,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/influxdata/giraffe.git",
-    "directory":"stories"
+    "directory": "stories"
   },
   "scripts": {
     "lint": "eslint '{src,../giraffe/src}/**/*.{ts,tsx}'",

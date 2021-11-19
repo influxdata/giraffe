@@ -75,7 +75,6 @@ export const lineTransform = (
     fillColKeys
   )
 
-
   const table = inputTable.addColumn(FILL, 'system', 'number', fillColumn)
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')
@@ -112,9 +111,10 @@ export const lineTransform = (
 
     if (!lineData[groupID]) {
       lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
-    } else if (colorMapping) {
-      console.log('yeah', colorMapping.mappings[groupID].colorMapping)
-      lineData[groupID].fill = colorMapping.mappings[groupID].colorMapping
+      // override the fill with the saved colorMapping, when it exists
+      if (colorMapping) {
+        lineData[groupID].fill = colorMapping.mappings[groupID].colorMapping
+      }
     }
 
     if (position === 'stacked') {
