@@ -36,7 +36,6 @@ export const SingleStatLayer: FunctionComponent<Props> = props => {
     textOpacity = 1,
   } = config
 
-  console.log('config', config, stat)
   const formattedValue = formatStatValue(stat, {decimalPlaces, prefix, suffix})
 
   let viewBox = getDefaultViewBox(formattedValue)

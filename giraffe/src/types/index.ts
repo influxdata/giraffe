@@ -426,7 +426,7 @@ export interface LineLayerConfig {
   colors?: string[]
   shadeBelow?: boolean
   shadeBelowOpacity?: number
-  colorMapping?: any
+  colorMapping?: ColumnGroupMap
   colorMappingCallback?: (arg: any) => void
 }
 

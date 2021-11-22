@@ -1,4 +1,5 @@
 import {
+  ColumnGroupMap,
   CumulativeValuesByTime,
   DomainLabel,
   LatestIndexMap,
@@ -65,11 +66,8 @@ export const lineTransform = (
   fillColKeys: string[],
   colors: string[],
   position: LinePosition,
-  colorMapping: any = null,
-  colorMappingCallback?: (any) => void
+  colorMapping: ColumnGroupMap = null
 ): LineLayerSpec => {
-  // if colormap and callback are sent, we can skip this probably
-
   const [fillColumn, fillColumnMap] = createGroupIDColumn(
     inputTable,
     fillColKeys
@@ -113,7 +111,7 @@ export const lineTransform = (
       lineData[groupID] = {xs: [], ys: [], fill: fillScale(groupID)}
       // override the fill with the saved colorMapping, when it exists
       if (colorMapping) {
-        lineData[groupID].fill = colorMapping.mappings[groupID].colorMapping
+        lineData[groupID].fill = colorMapping.mappings[groupID].color
       }
     }
 
