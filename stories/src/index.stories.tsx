@@ -12,7 +12,7 @@ import {
   xScaleKnob,
   yScaleKnob,
   fillKnob,
-  tableKnob,
+  getCPUTable,
   colorSchemeKnob,
   legendFontKnob,
   tickFontKnob,
@@ -27,7 +27,7 @@ import {
 storiesOf('XY Plot', module)
   .addDecorator(withKnobs)
   .add('Stacked Line Layer', () => {
-    const table = tableKnob(stackedLineTable)
+    const table = stackedLineTable
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -120,7 +120,7 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Line', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -205,7 +205,7 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Heatmap', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob(MAGMA)
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()
@@ -237,7 +237,7 @@ storiesOf('XY Plot', module)
     )
   })
   .add('Histogram', () => {
-    const table = tableKnob()
+    const table = getCPUTable()
     const colors = colorSchemeKnob()
     const legendFont = legendFontKnob()
     const tickFont = tickFontKnob()

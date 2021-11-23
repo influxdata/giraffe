@@ -23,7 +23,12 @@ export const useLegendElement = (className: string) => {
     document.body.appendChild(ref.current)
   }
 
-  useEffect(() => () => document.body.removeChild(ref.current), [])
+  useEffect(
+    () => () => {
+      document.body.removeChild(ref.current)
+    },
+    []
+  )
 
   useTooltipStyle(ref.current)
 
@@ -46,7 +51,12 @@ export const useAnnotationTooltipElement = (
     document.body.appendChild(ref.current)
   }
 
-  useEffect(() => () => document.body.removeChild(ref.current), [])
+  useEffect(
+    () => () => {
+      document.body.removeChild(ref.current)
+    },
+    []
+  )
 
   useAnnotationStyle(ref.current, options)
 

@@ -1,6 +1,6 @@
 {
   "name": "@influxdata/giraffe-stories",
-  "version": "2.20.0",
+  "version": "2.20.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
-    "@storybook/addon-knobs": "^5.0.11",
-    "@storybook/core": "5",
-    "@storybook/react": "^5.0.10",
+    "@storybook/addon-knobs": "^6.3.1",
+    "@storybook/core": "^6.3.12",
+    "@storybook/react": "^6.3.12",
     "@storybook/storybook-deployer": "^2.8.1",
     "@types/node-sass": "^4.11.0",
     "@types/react": "^16.8.3",
