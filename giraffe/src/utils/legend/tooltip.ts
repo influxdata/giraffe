@@ -1,6 +1,7 @@
 import {
   BandLayerSpec,
-  BandLineMap, ColumnGroupMap,
+  BandLineMap,
+  ColumnGroupMap,
   DomainLabel,
   LatestIndexMap,
   LegendColumn,
