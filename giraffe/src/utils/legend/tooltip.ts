@@ -1,6 +1,6 @@
 import {
   BandLayerSpec,
-  BandLineMap,
+  BandLineMap, ColumnGroupMap,
   DomainLabel,
   LatestIndexMap,
   LegendColumn,
@@ -80,7 +80,8 @@ export const getPointsTooltipData = (
   fillColKeys: string[],
   fillScale: Scale<number, string>,
   position?: LinePosition,
-  stackedDomainValueColumn?: NumericColumnData
+  stackedDomainValueColumn?: NumericColumnData,
+  colorMapping?: ColumnGroupMap
 ): LegendData => {
   const lineValues =
     xColKey === VALUE ? table.getColumn(xColKey) : table.getColumn(yColKey)
@@ -95,7 +96,11 @@ export const getPointsTooltipData = (
   const colors = orderDataByValue(
     hoveredRowIndices,
     sortOrder,
-    hoveredRowIndices.map(i => fillScale(groupColData[i]))
+    hoveredRowIndices.map(i =>
+      colorMapping
+        ? colorMapping.mappings[groupColData[i]].color
+        : fillScale(groupColData[i])
+    )
   )
 
   const xFormatter = getValueFormatter(xColKey)

@@ -39,6 +39,7 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     lineWidth,
     shadeBelow,
     shadeBelowOpacity,
+    colorMapping,
   } = config
 
   const xColData = spec.table.getColumn(xColKey, 'number')
@@ -110,7 +111,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     fillColKeys,
     fillScale,
     position,
-    spec.stackedDomainValueColumn
+    spec.stackedDomainValueColumn,
+    colorMapping
   )
 
   return (
