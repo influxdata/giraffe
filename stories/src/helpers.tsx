@@ -80,6 +80,59 @@ export const colorSchemeKnob = (initial?: string[]) =>
     initial || giraffe.NINETEEN_EIGHTY_FOUR
   )
 
+export const colorMappingKnob = () =>
+  text(
+    'Color Mapping Object',
+    `{
+    "mappings": [
+        {
+            "_start": 1637779429742,
+            "_stop": 1637783029742,
+            "_field": "co",
+            "_measurement": "airSensors",
+            "sensor_id": "TLM0100",
+            "result": "mean",
+            "color": "#ffffff"
+        },
+        {
+            "_start": 1637779429742,
+            "_stop": 1637783029742,
+            "_field": "co",
+            "_measurement": "airSensors",
+            "sensor_id": "TLM0101",
+            "result": "mean",
+            "color": "#ff0000"
+        },
+        {
+            "_start": 1637779429742,
+            "_stop": 1637783029742,
+            "_field": "co",
+            "_measurement": "airSensors",
+            "sensor_id": "TLM0103",
+            "result": "mean",
+            "color": "#ffffff"
+        },
+        {
+            "_start": 1637779429742,
+            "_stop": 1637783029742,
+            "_field": "co",
+            "_measurement": "airSensors",
+            "sensor_id": "TLM0102",
+            "result": "mean",
+            "color": "#ff0000"
+        }
+    ],
+    "columnKeys": [
+        "_start",
+        "_stop",
+        "_field",
+        "_measurement",
+        "sensor_id",
+        "result"
+    ]
+}`
+  )
+
 export const getCPUTable = () => CPU
 
 /*
