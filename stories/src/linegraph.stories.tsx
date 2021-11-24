@@ -491,7 +491,7 @@ storiesOf('Line Graph', module)
         yScale,
         legendOrientationThreshold,
         legendColorizeRows,
-        staticLegend:{},
+        staticLegend: {},
         layers: [
           {
             type: 'line',
