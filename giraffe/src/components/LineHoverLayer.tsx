@@ -55,7 +55,8 @@ export const LineHoverLayer: FunctionComponent<Props> = ({
     yColKey,
     xScale,
     yScale,
-    fillScale
+    fillScale,
+    colorMapping
   )
 
   const crosshairColor = plotConfig.legendCrosshairColor
