@@ -426,6 +426,8 @@ export interface LineLayerConfig {
   colors?: string[]
   shadeBelow?: boolean
   shadeBelowOpacity?: number
+  colorMapping?: ColumnGroupMap
+  colorMappingCallback?: (arg: any) => void
 }
 
 export interface BandLayerConfig {
@@ -837,7 +839,7 @@ export type SymbolType =
 
 export interface ColumnGroupMap {
   // The column keys that specify the grouping
-  columnKeys: string[]
+  columnKeys?: string[]
 
   // A group ID `i` takes on the values specified by `mappings[i]` for the
   // column keys that specify the grouping

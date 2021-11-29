@@ -43,6 +43,10 @@ export const LineLayer: FunctionComponent<Props> = props => {
     shadeAboveY: height,
   }
 
+  if (config.colorMapping && config.colorMappingCallback) {
+    config.colorMappingCallback(config.colorMapping)
+  }
+
   useCanvas(
     canvasRef,
     width,
