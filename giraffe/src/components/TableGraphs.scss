@@ -159,7 +159,7 @@ $table-light-graph--text-highlight: #383846;
   -o-user-select: text !important;
   -webkit-user-select: text !important;
   background-color: $table-graph--cell;
-  border: (2px / 2) solid $table-graph--border;
+  border: (2px * 0.5) solid $table-graph--border;
   box-sizing: border-box;
   color: $table-graph--text-color;
   font-size: $table-graph--font;
