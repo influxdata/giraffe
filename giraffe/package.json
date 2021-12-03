@@ -1,6 +1,6 @@
 {
   "name": "@influxdata/giraffe",
-  "version": "2.21.0",
+  "version": "2.21.1",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "license": "MIT",
