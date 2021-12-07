@@ -9,5 +9,8 @@
     "prettier": "prettier --config .prettierrc.json --check '{giraffe,stories}/**/*.{ts,tsx}'",
     "prettier:fix": "prettier --config .prettierrc.json --write '{giraffe,stories}/**/*.{ts,tsx}'",
     "publish": "echo 'To publish giraffe, run ./giraffe/publish $version'"
+  },
+  "resolutions": {
+    "immer": "^9.0.6"
   }
 }
