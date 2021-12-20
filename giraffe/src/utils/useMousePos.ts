@@ -14,7 +14,7 @@ interface UseMousePosProps {
 const mousePositionFromEvent = (e: MouseEvent<HTMLDivElement>) => {
   const {top, left} = e.currentTarget.getBoundingClientRect()
 
-  return {x: e.pageX - left, y: e.pageY - top}
+  return {x: e.clientX - left, y: e.clientY - top}
 }
 
 export const useMousePos = (): [MousePosition, UseMousePosProps] => {
@@ -50,9 +50,7 @@ export const useRefMousePos = (el: Element): MousePosition => {
     }
 
     const onMouseEnter = e => {
-      const {left, top} = el.getBoundingClientRect()
-
-      setState({x: e.pageX - left, y: e.pageY - top})
+      setState({x: e.x, y: e.y})
     }
 
     const onMouseMove = e => {
