@@ -9,7 +9,6 @@ import {
 } from '../constants'
 
 const legendColumnGap = '12px'
-const legendColumnMaxWidth = '200px'
 const legendTablePadding = '4px'
 
 const legendColumnOrder = (name: string): number | undefined => {
@@ -180,9 +179,6 @@ const tooltipColumnValueStyle = (
 
   if (switchToVertical) {
     return {
-      maxWidth: legendColumnMaxWidth,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       color,
       display: 'table-cell',
@@ -193,9 +189,6 @@ const tooltipColumnValueStyle = (
   }
 
   return {
-    maxWidth: legendColumnMaxWidth,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     fontWeight: 600,
     lineHeight: '1.125em',
@@ -219,9 +212,6 @@ const staticLegendColumnValueStyle = (
 
   if (switchToVertical) {
     return {
-      maxWidth: legendColumnMaxWidth,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       color,
       display: 'table-cell',
@@ -232,9 +222,6 @@ const staticLegendColumnValueStyle = (
   }
 
   return {
-    maxWidth: legendColumnMaxWidth,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     fontWeight: 600,
     padding: `${STATIC_LEGEND_LINE_SPACING_RATIO}em`,
