@@ -487,7 +487,7 @@ Hour12 is a boolean value on wether you are in military time(false) or am/pm(tru
 
   - **fill**: _array[string, ...]. Optional._ An array of column names of column filters that should be visualized. If this option is not included, the data in the graph will be interpreted as belonging to a single column.
 
-  - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://help.infragistics.com/Help/Doc/Silverlight/2011.1/CLR4.0/html/xamWebChart_Stacked_Line_Chart.html).
+  - **position**: _"overlaid" | "stacked". Optional._ Indicates whether the line graph's lines have no bearing on other lines (overlaid), or the lines are cumulatives of every line below it, ie [stacked](https://www.infragistics.com/help/winforms/chart-about-stacked-line-charts).
 
   - **hoverDimension**: _"x" | "y" | "xy" | "auto". Optional. Defaults to "auto" when not included._ Indicates whether the tooltip should display all data points along an entire axis during mouse hover.
 
