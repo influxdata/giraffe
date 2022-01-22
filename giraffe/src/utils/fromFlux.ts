@@ -165,7 +165,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     return {
       table: newTable(0),
       fluxGroupKeyUnion: [],
-      error,
+      error: error as Error,
     }
   }
 }
