@@ -102,7 +102,10 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
         }
         if (line.startsWith('#default')) {
           const defaults = line.split(',')
-          if (defaults.length >= 2 && defaults[RESULT_COLUMN_INDEX].length) {
+          if (
+            defaults.length >= RESULT_COLUMN_INDEX + 1 &&
+            defaults[RESULT_COLUMN_INDEX].length
+          ) {
             resultColumnNames.add(defaults[RESULT_COLUMN_INDEX])
           }
         }
