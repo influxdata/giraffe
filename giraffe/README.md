@@ -463,7 +463,7 @@ When using the comma separated values (CSV) from the Flux query as the `fluxResp
 
 Giraffe comes with utility functions.
 
-- **fromFlux**: _function(string)._ Takes a Flux CSV, converts it, and returns a `Table` used in the [table property](#data-properties) of the config.
+- **fromFlux**: _function(string)._ Takes a Flux CSV, converts it, and returns an object that includes `Table` used in the [table property](#data-properties) of the config.
 
 - **fromRows**: _function([Object, ...], Object)._ The first argument is an array of objects, each representing a row of data. The optional second argument describes the schema for the data. Returns a `Table` used in the [table property](#data-properties) of the config.
 

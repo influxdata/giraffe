@@ -291,10 +291,12 @@ describe('fromFlux', () => {
         'server_version',
         'cpu',
       ],
+      resultColumnNames: ['_result'],
     }
     const fFlux = fromFlux(resp)
     expect(fFlux).toEqual(expected)
   })
+
   it('can parse a Flux CSV with mismatched schemas', () => {
     const CSV = `#group,false,false,true,true,false,true,true,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string
@@ -311,6 +313,8 @@ describe('fromFlux', () => {
 ,,3,2019-02-01T23:38:32.524234Z,2019-02-01T23:39:02.524234Z,2019-02-01T23:38:43Z,fourty,usage_guest,cpu,cpu0,oox4k.local`
 
     const actual = fromFlux(CSV)
+
+    expect(actual.resultColumnNames).toEqual(['_result'])
 
     expect(actual.table.getColumn('result', 'string')).toEqual([
       '_result',
@@ -442,6 +446,38 @@ describe('fromFlux', () => {
     const {fluxGroupKeyUnion} = fromFlux(CSV)
 
     expect(fluxGroupKeyUnion).toEqual(['a', 'c', 'd'])
+  })
+
+  it('returns all result column names', () => {
+    const CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,strangeColumnA,,,
+,a,b,c,d
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,strangeColumnB,,,
+,a,b,c,d`
+
+    const {resultColumnNames} = fromFlux(CSV)
+
+    expect(resultColumnNames).toEqual(['strangeColumnA', 'strangeColumnB'])
+  })
+
+  it('handles blank result column names', () => {
+    const CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,,,,
+,a,b,c,d
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,,,,
+,a,b,c,d`
+
+    const {resultColumnNames} = fromFlux(CSV)
+
+    expect(resultColumnNames).toEqual([])
   })
 
   it('parses empty numeric values as null', () => {
