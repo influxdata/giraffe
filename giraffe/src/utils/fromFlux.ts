@@ -3,13 +3,18 @@ import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 
+const RESULT_COLUMN_INDEX = 1
 export interface FromFluxResult {
   error?: Error
+
   // The single parsed `Table`
   table: Table
 
   // The union of unique group keys from all input Flux tables
   fluxGroupKeyUnion: string[]
+
+  // All possible values of the "result" column
+  resultColumnNames: string[]
 }
 
 type Column =
@@ -69,6 +74,7 @@ interface Columns {
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
   const fluxGroupKeyUnion = new Set<string>()
+  const resultColumnNames = new Set<string>()
   let tableLength = 0
 
   try {
@@ -83,11 +89,26 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const chunk of chunks) {
-      tableText = chunk
-        .split('\n')
-        .filter(line => !line.startsWith('#'))
-        .join('\n')
-        .trim()
+      const splittedChunk = chunk.split('\n')
+
+      const tableTexts = []
+      const annotationTexts = []
+
+      splittedChunk.forEach(line => {
+        if (line.startsWith('#')) {
+          annotationTexts.push(line)
+        } else {
+          tableTexts.push(line)
+        }
+        if (line.startsWith('#default')) {
+          const defaults = line.split(',')
+          if (defaults.length >= 2 && defaults[RESULT_COLUMN_INDEX].length) {
+            resultColumnNames.add(defaults[RESULT_COLUMN_INDEX])
+          }
+        }
+      })
+
+      tableText = tableTexts.join('\n').trim()
 
       assert(
         !!tableText,
@@ -96,11 +117,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 
       tableData = csvParse(tableText)
 
-      annotationText = chunk
-        .split('\n')
-        .filter(line => line.startsWith('#'))
-        .join('\n')
-        .trim()
+      annotationText = annotationTexts.join('\n').trim()
 
       assert(
         !!annotationText,
@@ -158,14 +175,16 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     const result = {
       table,
       fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+      resultColumnNames: Array.from(resultColumnNames),
     }
 
     return result
   } catch (error) {
     return {
+      error: error as Error,
       table: newTable(0),
       fluxGroupKeyUnion: [],
-      error,
+      resultColumnNames: [],
     }
   }
 }
