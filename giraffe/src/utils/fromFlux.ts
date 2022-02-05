@@ -2,8 +2,7 @@ import {csvParse, csvParseRows} from 'd3-dsv'
 import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
-
-const RESULT_COLUMN_INDEX = 1
+import {RESULT} from '../constants/columnKeys'
 export interface FromFluxResult {
   error?: Error
 
@@ -100,15 +99,6 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
         } else {
           tableTexts.push(line)
         }
-        if (line.startsWith('#default')) {
-          const defaults = line.split(',')
-          if (
-            defaults.length >= RESULT_COLUMN_INDEX + 1 &&
-            defaults[RESULT_COLUMN_INDEX].length
-          ) {
-            resultColumnNames.add(defaults[RESULT_COLUMN_INDEX])
-          }
-        }
       })
 
       tableText = tableTexts.join('\n').trim()
@@ -151,6 +141,13 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
         columnDefault = annotationData.defaultByColumnName[columnName]
 
         for (let i = 0; i < tableData.length; i++) {
+          if (columnName === RESULT) {
+            if (columnDefault.length) {
+              resultColumnNames.add(columnDefault)
+            } else if (tableData[i][columnName].length) {
+              resultColumnNames.add(tableData[i][columnName])
+            }
+          }
           columns[columnKey].data[tableLength + i] = parseValue(
             tableData[i][columnName] || columnDefault,
             columnType
