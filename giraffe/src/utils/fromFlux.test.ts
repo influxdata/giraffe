@@ -544,12 +544,14 @@ describe('fromFlux', () => {
     const NO_RESULT_CSV = `#group,true,false,false,true
 #datatype,string,string,string,string
 #default,strangeColumnA,,,
-,result,b,c,d
+,a,b,c,d
+,,,,
 
 #group,false,false,true,false
 #datatype,string,string,string,string
 #default,strangeColumnB,,,
-,result,b,c,d`
+,a,b,c,d
+,,,,`
 
     const {resultColumnNames} = fromFlux(NO_RESULT_CSV)
 
