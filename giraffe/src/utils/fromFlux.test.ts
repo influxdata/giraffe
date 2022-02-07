@@ -437,11 +437,13 @@ describe('fromFlux', () => {
 #datatype,string,string,string,string
 #default,,,,
 ,a,b,c,d
+,,,,
 
 #group,false,false,true,false
 #datatype,string,string,string,string
 #default,,,,
-,a,b,c,d`
+,a,b,c,d
+,,,,`
 
     const {fluxGroupKeyUnion} = fromFlux(CSV)
 
@@ -452,30 +454,106 @@ describe('fromFlux', () => {
     const CSV = `#group,true,false,false,true
 #datatype,string,string,string,string
 #default,strangeColumnA,,,
-,a,b,c,d
+,result,b,c,d
+,,0,0,0
 
 #group,false,false,true,false
 #datatype,string,string,string,string
 #default,strangeColumnB,,,
-,a,b,c,d`
+,result,b,c,d
+,,0,0,0`
 
     const {resultColumnNames} = fromFlux(CSV)
 
     expect(resultColumnNames).toEqual(['strangeColumnA', 'strangeColumnB'])
   })
 
-  it('handles blank result column names', () => {
-    const CSV = `#group,true,false,false,true
+  it('handles result column in unexpected column position', () => {
+    const DEFAULT_CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,,resultInUnexpectedPosA,,
+,a,result,c,d
+,0,,0,0
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,,resultInUnexpectedPosB,,
+,a,result,c,d
+,0,,0,0`
+
+    const defaultCSV = fromFlux(DEFAULT_CSV)
+
+    expect(defaultCSV.resultColumnNames).toEqual([
+      'resultInUnexpectedPosA',
+      'resultInUnexpectedPosB',
+    ])
+
+    const ROWS_CSV = `#group,true,false,false,true
 #datatype,string,string,string,string
 #default,,,,
-,a,b,c,d
+,a,result,c,d
+,0,resultInUnexpectedPosA,0,0
 
 #group,false,false,true,false
 #datatype,string,string,string,string
 #default,,,,
-,a,b,c,d`
+,a,result,c,d
+,0,resultInUnexpectedPosB,0,0`
 
-    const {resultColumnNames} = fromFlux(CSV)
+    const rowsCSV = fromFlux(ROWS_CSV)
+
+    expect(rowsCSV.resultColumnNames).toEqual([
+      'resultInUnexpectedPosA',
+      'resultInUnexpectedPosB',
+    ])
+  })
+
+  it('handles blank result column names and empty rows', () => {
+    const BLANK_RESULT_COLUMN_CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,,,,
+,result,b,c,d
+,,0,0,0
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,,,,
+,result,b,c,d
+,,0,0,0`
+
+    const blankResultColumn = fromFlux(BLANK_RESULT_COLUMN_CSV)
+
+    expect(blankResultColumn.resultColumnNames).toEqual([])
+
+    const EMPTY_ROWS_CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,strangeColumnA,,,
+,result,b,c,d
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,strangeColumnB,,,
+,result,b,c,d`
+
+    const emptyRows = fromFlux(EMPTY_ROWS_CSV)
+
+    expect(emptyRows.resultColumnNames).toEqual([])
+  })
+
+  it('handles missing result column', () => {
+    const NO_RESULT_CSV = `#group,true,false,false,true
+#datatype,string,string,string,string
+#default,strangeColumnA,,,
+,a,b,c,d
+,,,,
+
+#group,false,false,true,false
+#datatype,string,string,string,string
+#default,strangeColumnB,,,
+,a,b,c,d
+,,,,`
+
+    const {resultColumnNames} = fromFlux(NO_RESULT_CSV)
 
     expect(resultColumnNames).toEqual([])
   })
