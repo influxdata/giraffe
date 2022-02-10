@@ -4,6 +4,7 @@ import {LayerTypes, PlotDimensions, SizedConfig} from '../types'
 
 import {get} from '../utils/get'
 import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
+import {normalizeConfig} from '../utils/normalizeConfig'
 import {usePlotEnv} from '../utils/usePlotEnv'
 
 import {SizedPlot} from './SizedPlot'
@@ -28,16 +29,16 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
     config.staticLegend
   )
 
-  const sizedConfig: SizedConfig = useMemo(
+  const normalizedConfig: SizedConfig = useMemo(
     () => ({
-      ...config,
+      ...normalizeConfig(config),
       height: resized.height,
       width: resized.width,
     }),
-    [config, height, width]
+    [config, height, width] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
-  const env = usePlotEnv(sizedConfig)
+  const env = usePlotEnv(normalizedConfig)
   const spec = env.getSpec(0)
   const graphType = get(config, 'layers.0.type')
 
@@ -51,14 +52,14 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
     graphType === LayerTypes.Gauge ||
     graphType === LayerTypes.SimpleTable
   ) {
-    return <SizedTable config={sizedConfig}>{children}</SizedTable>
+    return <SizedTable config={normalizedConfig}>{children}</SizedTable>
   }
 
   return (
     <>
       <SizedPlot
         axesCanvasRef={axesCanvasRef}
-        config={sizedConfig}
+        config={normalizedConfig}
         layerCanvasRef={layerCanvasRef}
         env={env}
       >
@@ -67,7 +68,7 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       {config.staticLegend && !config.staticLegend.hide ? (
         <StaticLegendBox
           columnFormatter={env.getFormatterForColumn}
-          config={config}
+          config={normalizedConfig}
           height={height - resized.height}
           spec={spec}
           top={resized.height}

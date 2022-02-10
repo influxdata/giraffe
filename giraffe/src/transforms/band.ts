@@ -410,19 +410,14 @@ export const bandTransform = (
     fillColKeys
   )
 
-  const validLowerColumnName =
-    lowerColumnName && lowerColumnName !== rowColumnName ? lowerColumnName : ''
-  const validUpperColumnName =
-    upperColumnName && upperColumnName !== rowColumnName ? upperColumnName : ''
-
   const table = inputTable.addColumn(FILL, 'system', 'number', fillColumn)
   const xCol = table.getColumn(xColumnKey, 'number')
   const yCol = table.getColumn(yColumnKey, 'number')
   const bandLineMap = getBandLineMap(
     fillColumnMap,
-    validLowerColumnName,
+    lowerColumnName,
     rowColumnName,
-    validUpperColumnName
+    upperColumnName
   )
   const fillScale = range =>
     getBandColorScale(bandLineMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
@@ -475,8 +470,8 @@ export const bandTransform = (
     type: 'band',
     bandLineMap,
     bandName: rowColumnName,
-    upperColumnName: validUpperColumnName,
-    lowerColumnName: validLowerColumnName,
+    upperColumnName,
+    lowerColumnName,
     inputTable,
     table,
     lineData,

@@ -37,15 +37,11 @@ export const BandLayer: FunctionComponent<Props> = props => {
     yScale,
   } = props
 
-  const {mainColumnName: rowColumnName} = config
-
-  let {upperColumnName, lowerColumnName} = config
-  if (!upperColumnName || upperColumnName === rowColumnName) {
-    upperColumnName = ''
-  }
-  if (!lowerColumnName || lowerColumnName === rowColumnName) {
-    lowerColumnName = ''
-  }
+  const {
+    lowerColumnName,
+    mainColumnName: rowColumnName,
+    upperColumnName,
+  } = config
 
   const simplifiedLineData = useMemo(
     () =>
