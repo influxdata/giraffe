@@ -36,10 +36,10 @@ export const BandHoverLayer: FunctionComponent<Props> = ({
     y: yColKey,
     fill: fillColKeys,
     lineWidth,
-    lowerColumnName = '',
+    lowerColumnName,
     mainColumnName: rowColumnName,
     shadeOpacity,
-    upperColumnName = '',
+    upperColumnName,
   } = config
 
   const xColData = spec.table.getColumn(xColKey, 'number')

@@ -38,9 +38,9 @@ export const BandLayer: FunctionComponent<Props> = props => {
   } = props
 
   const {
-    lowerColumnName = '',
+    lowerColumnName,
     mainColumnName: rowColumnName,
-    upperColumnName = '',
+    upperColumnName,
   } = config
 
   const simplifiedLineData = useMemo(

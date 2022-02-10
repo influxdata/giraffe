@@ -415,9 +415,9 @@ export const bandTransform = (
   const yCol = table.getColumn(yColumnKey, 'number')
   const bandLineMap = getBandLineMap(
     fillColumnMap,
-    lowerColumnName || '',
+    lowerColumnName,
     rowColumnName,
-    upperColumnName || ''
+    upperColumnName
   )
   const fillScale = range =>
     getBandColorScale(bandLineMap, colors)(range * BAND_COLOR_SCALE_CONSTANT)
