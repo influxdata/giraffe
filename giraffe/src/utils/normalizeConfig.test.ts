@@ -35,7 +35,61 @@ describe('normalizeConfig', () => {
       })
     })
 
-    it('overrides the "lowerColumnName" and "upperColumnName" when they match "mainColumnName"', () => {
+    it('overrides the "lowerColumnName" when it matches "mainColumnName"', () => {
+      const mainColumnName = 'mean'
+      const config = {
+        layers: [
+          {
+            type: 'band',
+            x: '_time',
+            y: '_value',
+            fill: ['result', '_field', '_measurement', 'cpu', 'host'],
+            mainColumnName,
+            lowerColumnName: mainColumnName,
+          },
+        ],
+      } as Config
+      expect(normalizeConfig(config)).toEqual({
+        ...config,
+        layers: [
+          {
+            ...config.layers[0],
+            upperColumnName: '',
+            mainColumnName,
+            lowerColumnName: '',
+          },
+        ],
+      })
+    })
+
+    it('overrides the "upperColumnName" when it matches "mainColumnName"', () => {
+      const mainColumnName = 'mean'
+      const config = {
+        layers: [
+          {
+            type: 'band',
+            x: '_time',
+            y: '_value',
+            fill: ['result', '_field', '_measurement', 'cpu', 'host'],
+            upperColumnName: mainColumnName,
+            mainColumnName,
+          },
+        ],
+      } as Config
+      expect(normalizeConfig(config)).toEqual({
+        ...config,
+        layers: [
+          {
+            ...config.layers[0],
+            upperColumnName: '',
+            mainColumnName,
+            lowerColumnName: '',
+          },
+        ],
+      })
+    })
+
+    it('overrides the "lowerColumnName" and "upperColumnName" when they both match "mainColumnName"', () => {
       const mainColumnName = 'mean'
       const config = {
         layers: [
@@ -67,6 +121,36 @@ describe('normalizeConfig', () => {
       const upperColumnName = 'max'
       const mainColumnName = 'mean'
       const lowerColumnName = 'min'
+      const config = {
+        layers: [
+          {
+            type: 'band',
+            x: '_time',
+            y: '_value',
+            fill: ['result', '_field', '_measurement', 'cpu', 'host'],
+            upperColumnName,
+            mainColumnName,
+            lowerColumnName,
+          },
+        ],
+      } as Config
+      expect(normalizeConfig(config)).toEqual({
+        ...config,
+        layers: [
+          {
+            ...config.layers[0],
+            upperColumnName,
+            mainColumnName,
+            lowerColumnName,
+          },
+        ],
+      })
+    })
+
+    it('allows lowerColumnName and upperColumnName to match if they do not match mainColumnName', () => {
+      const upperColumnName = 'upperandlower'
+      const mainColumnName = 'mean'
+      const lowerColumnName = upperColumnName
       const config = {
         layers: [
           {
