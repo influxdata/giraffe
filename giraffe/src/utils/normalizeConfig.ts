@@ -8,7 +8,7 @@ export const normalizeLayers = (layers: LayerConfig[]): LayerConfig[] =>
       if (!upperColumnName || upperColumnName === layerConfig.mainColumnName) {
         upperColumnName = ''
       }
-      if (!lowerColumnName || lowerColumnName === layerConfig.upperColumnName) {
+      if (!lowerColumnName || lowerColumnName === layerConfig.mainColumnName) {
         lowerColumnName = ''
       }
       return {...layerConfig, upperColumnName, lowerColumnName}
