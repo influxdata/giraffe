@@ -1,7 +1,15 @@
 import {Config} from '../types'
-import {normalizeConfig} from './normalizeConfig'
+import {normalizeConfig, normalizeLayers} from './normalizeConfig'
 
 describe('normalizeConfig', () => {
+  it('handles unexpected arguments', () => {
+    const emptyConfig = {layers: []}
+
+    expect(normalizeConfig(undefined)).toEqual(emptyConfig)
+    expect(normalizeConfig(null)).toEqual(emptyConfig)
+    expect(normalizeConfig(emptyConfig)).toEqual(emptyConfig)
+  })
+
   describe('config for Band Layer', () => {
     it('returns the config when it has a proper band layer', () => {
       const config = {
@@ -103,4 +111,11 @@ describe('normalizeConfig', () => {
       - SingleStatLayerConfig
       - TableGraphLayerConfig
   */
+})
+
+describe('normalizeLayers', () => {
+  it('handles incorrect usage', () => {
+    expect(normalizeLayers(undefined)).toEqual([])
+    expect(normalizeLayers(null)).toEqual([])
+  })
 })
