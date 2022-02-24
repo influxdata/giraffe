@@ -45,8 +45,7 @@ if ! git status | grep -q "Your branch is up to date with 'origin/master'."; the
 fi
 
 if ! git status | grep -q 'working tree clean'; then
-  echo "Error! Cannot publish with dirty working tree"
-  exit 1
+  echo "*** Warning: publishing with dirty working tree"
 fi
 
 echo "Installing dependencies"
