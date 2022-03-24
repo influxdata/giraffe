@@ -281,7 +281,7 @@ export const binaryPrefixFormatter = ({
 
     const decimalFormattedNumber = formatSigFigs(binaryFormattedNumber)
 
-    if (format != true) {
+    if (format !== true) {
       return `${prefix}${x}${suffix}`
     }
 
@@ -321,10 +321,11 @@ export const siPrefixFormatter = ({
     `.${significantDigits}${trimZeros ? '~' : ''}s`
   )
 
-  if (format != true) {
+  if (format !== true) {
     formatter = (x: number): string => `${prefix}${x}${suffix}`
+  } else {
+    formatter = (x: number): string => `${prefix}${formatSIPrefix(x)}${suffix}`
   }
-  formatter = (x: number): string => `${prefix}${formatSIPrefix(x)}${suffix}`
 
   formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.SIPrefix as FormatterType.SIPrefix
 
