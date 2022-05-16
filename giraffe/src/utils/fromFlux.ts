@@ -273,38 +273,27 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
 
           if (value === undefined) {
             result = undefined
-          }
-
-          if (value === 'null') {
+          } else if (value === 'null') {
             result = null
-          }
-
-          if (value === 'NaN') {
+          } else if (value === 'NaN') {
             result = NaN
-          }
-
-          if (columnType === 'boolean' && value === 'true') {
+          } else if (columnType === 'boolean' && value === 'true') {
             result = true
-          }
-
-          if (columnType === 'boolean' && value === 'false') {
+          } else if (columnType === 'boolean' && value === 'false') {
             result = false
-          }
-
-          if (columnType === 'string') {
+          } else if (columnType === 'string') {
             result = value
-          }
-
-          if (columnType === 'time') {
+          } else if (columnType === 'time') {
             result = Date.parse(value.trim())
-          }
-
-          if (columnType === 'number') {
+          } else if (columnType === 'number') {
             if (value === '') {
               result = null
+            } else {
+              const parsedValue = Number(value)
+              result = parsedValue === parsedValue ? parsedValue : value
             }
-            const parsedValue = Number(value)
-            result = parsedValue === parsedValue ? parsedValue : value
+          } else {
+            result = null
           }
 
           columns[columnKey].data[tableLength + i] = result
@@ -400,7 +389,7 @@ const splitChunksFast = (fluxCSV: string): string[] => {
   // [0]: https://github.com/influxdata/influxdb/issues/15017
   let curr = 0
 
-  let chunks = []
+  const chunks = []
   while (curr !== -1) {
     const oldVal = curr
     const nextIndex = trimmedResponse
@@ -412,12 +401,10 @@ const splitChunksFast = (fluxCSV: string): string[] => {
       break
     } else {
       chunks.push([oldVal, oldVal + nextIndex])
-      curr = oldVal + nextIndex + 3
+      curr = oldVal + nextIndex + 2
     }
   }
-  chunks = chunks.map(([start, end]) => trimmedResponse.substring(start, end))
-
-  return chunks
+  return chunks.map(([start, end]) => trimmedResponse.substring(start, end))
 }
 
 const parseAnnotations = (
