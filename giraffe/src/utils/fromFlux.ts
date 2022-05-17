@@ -245,57 +245,31 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnKey = ''
     let columnDefault: any = ''
 
-    let chunk = ''
     for (const [start, end] of chunks) {
-      let index = 0
-      chunk = fluxCSV.substring(start, end)
+      const splittedChunk = fluxCSV.substring(start, end).split('\n')
 
-      annotationText = ''
-      tableText = ''
+      const tableTexts = []
+      const annotationTexts = []
 
-      while (index !== -1) {
-        const oldIndex = index
-        index = chunk.substring(oldIndex, chunk.length).search(/\n/)
-
-        if (index === -1) {
-          if (chunk[oldIndex] === '#') {
-            annotationText = `${annotationText}${chunk.substring(
-              oldIndex,
-              chunk.length
-            )}`
-          } else {
-            tableText = `${tableText}${chunk.substring(oldIndex, chunk.length)}`
-          }
-          break
+      splittedChunk.forEach(line => {
+        if (line.startsWith('#')) {
+          annotationTexts.push(line)
         } else {
-          if (chunk[oldIndex] === '#') {
-            annotationText = `${annotationText}${chunk.substring(
-              oldIndex,
-              oldIndex + index + 1
-            )}`
-          } else {
-            tableText = `${tableText}${chunk.substring(
-              oldIndex,
-              oldIndex + index + 1
-            )}`
-          }
-          index = index + oldIndex + 1
+          tableTexts.push(line)
         }
-      }
+      })
+
+      tableText = tableTexts.join('\n').trim()
 
       assert(
         !!tableText,
         'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
       )
 
-      /**
-       * csvParse is a slow operation, but so we may want to see whether we can
-       * find an alternative solution to the problem.
-       *
-       * Also, the trimStart here is because we're getting a \n prepended at some point,
-       * so this trims that off
-       */
-      tableData = csvParse(tableText.trimStart())
+      // TODO(ariel): csvParse is a slow operation
+      tableData = csvParse(tableText)
+
+      annotationText = annotationTexts.join('\n').trim()
 
       assert(
         !!annotationText,
