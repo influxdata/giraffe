@@ -189,6 +189,190 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   }
 }
 
+export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
+  const columns: Columns = {}
+  const fluxGroupKeyUnion = new Set<string>()
+  const resultColumnNames = new Set<string>()
+  let tableLength = 0
+
+  try {
+    fluxCSV = fluxCSV.trimEnd()
+
+    if (fluxCSV === '') {
+      return {
+        table: newTable(0),
+        fluxGroupKeyUnion: [],
+        resultColumnNames: [],
+      }
+    }
+
+    // Split the response into separate chunks whenever we encounter:
+    //
+    // 1. A newline
+    // 2. Followed by any amount of whitespace
+    // 3. Followed by a newline
+    // 4. Followed by a `#` character
+    //
+    // The last condition is [necessary][0] for handling CSV responses with
+    // values containing newlines.
+    //
+    // [0]: https://github.com/influxdata/influxdb/issues/15017
+
+    // finds the first non-whitespace character
+    let curr = fluxCSV.search(/\S/)
+
+    const chunks = []
+    while (curr !== -1) {
+      const oldVal = curr
+      const nextIndex = fluxCSV
+        .substring(curr, fluxCSV.length)
+        .search(/\n\s*\n#/)
+      if (nextIndex === -1) {
+        chunks.push([oldVal, fluxCSV.length])
+        curr = -1
+        break
+      } else {
+        chunks.push([oldVal, oldVal + nextIndex])
+        curr = oldVal + nextIndex + 2
+      }
+    }
+
+    // declaring all nested variables here to reduce memory drain
+    let tableText = ''
+    let tableData: any = []
+    let annotationText = ''
+    let columnType: any = ''
+    let columnKey = ''
+    let columnDefault: any = ''
+
+    for (const [start, end] of chunks) {
+      const splittedChunk = fluxCSV.substring(start, end).split('\n')
+
+      const tableTexts = []
+      const annotationTexts = []
+
+      splittedChunk.forEach(line => {
+        if (line.startsWith('#')) {
+          annotationTexts.push(line)
+        } else {
+          tableTexts.push(line)
+        }
+      })
+
+      tableText = tableTexts.join('\n').trim()
+
+      assert(
+        !!tableText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
+
+      // TODO(ariel): csvParse is a slow operation
+      tableData = csvParse(tableText)
+
+      annotationText = annotationTexts.join('\n').trim()
+
+      assert(
+        !!annotationText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
+      const annotationData = parseAnnotations(annotationText, tableData.columns)
+
+      for (const columnName of tableData.columns.slice(1)) {
+        columnType =
+          TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
+
+        assert(
+          !!columnType,
+          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
+        )
+
+        columnKey = `${columnName} (${columnType})`
+
+        if (!columns[columnKey]) {
+          columns[columnKey] = {
+            name: columnName,
+            type: columnType,
+            fluxDataType: annotationData.datatypeByColumnName[columnName],
+            data: [],
+          } as Column
+        }
+
+        columnDefault = annotationData.defaultByColumnName[columnName]
+
+        for (let i = 0; i < tableData.length; i++) {
+          if (columnName === RESULT) {
+            if (columnDefault.length) {
+              resultColumnNames.add(columnDefault)
+            } else if (tableData[i][columnName].length) {
+              resultColumnNames.add(tableData[i][columnName])
+            }
+          }
+          const value = tableData[i][columnName] || columnDefault
+          let result = null
+
+          if (value === undefined) {
+            result = undefined
+          } else if (value === 'null') {
+            result = null
+          } else if (value === 'NaN') {
+            result = NaN
+          } else if (columnType === 'boolean' && value === 'true') {
+            result = true
+          } else if (columnType === 'boolean' && value === 'false') {
+            result = false
+          } else if (columnType === 'string') {
+            result = value
+          } else if (columnType === 'time') {
+            result = Date.parse(value.trim())
+          } else if (columnType === 'number') {
+            if (value === '') {
+              result = null
+            } else {
+              const parsedValue = Number(value)
+              result = parsedValue === parsedValue ? parsedValue : value
+            }
+          } else {
+            result = null
+          }
+
+          columns[columnKey].data[tableLength + i] = result
+        }
+
+        if (annotationData.groupKey.includes(columnName)) {
+          fluxGroupKeyUnion.add(columnKey)
+        }
+      }
+
+      tableLength += tableData.length
+    }
+
+    resolveNames(columns, fluxGroupKeyUnion)
+
+    const table = Object.entries(columns).reduce(
+      (table, [key, {name, fluxDataType, type, data}]) => {
+        data.length = tableLength
+        return table.addColumn(key, fluxDataType, type, data, name)
+      },
+      newTable(tableLength)
+    )
+
+    const result = {
+      table,
+      fluxGroupKeyUnion: Array.from(fluxGroupKeyUnion),
+      resultColumnNames: Array.from(resultColumnNames),
+    }
+
+    return result
+  } catch (error) {
+    return {
+      error: error as Error,
+      table: newTable(0),
+      fluxGroupKeyUnion: [],
+      resultColumnNames: [],
+    }
+  }
+}
+
 /*
   A Flux CSV response can contain multiple CSV files each joined by a newline.
   This function splits up a CSV response into these individual CSV files.
