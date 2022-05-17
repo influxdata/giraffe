@@ -196,7 +196,46 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
   let tableLength = 0
 
   try {
-    const chunks = splitChunksFast(fluxCSV)
+    fluxCSV = fluxCSV.trimEnd()
+
+    if (fluxCSV === '') {
+      return {
+        table: newTable(0),
+        fluxGroupKeyUnion: [],
+        resultColumnNames: [],
+      }
+    }
+
+    // Split the response into separate chunks whenever we encounter:
+    //
+    // 1. A newline
+    // 2. Followed by any amount of whitespace
+    // 3. Followed by a newline
+    // 4. Followed by a `#` character
+    //
+    // The last condition is [necessary][0] for handling CSV responses with
+    // values containing newlines.
+    //
+    // [0]: https://github.com/influxdata/influxdb/issues/15017
+
+    // finds the first non-whitespace character
+    let curr = fluxCSV.search(/\S/)
+
+    const chunks = []
+    while (curr !== -1) {
+      const oldVal = curr
+      const nextIndex = fluxCSV
+        .substring(curr, fluxCSV.length)
+        .search(/\n\s*\n#/)
+      if (nextIndex === -1) {
+        chunks.push([oldVal, fluxCSV.length])
+        curr = -1
+        break
+      } else {
+        chunks.push([oldVal, oldVal + nextIndex])
+        curr = oldVal + nextIndex + 2
+      }
+    }
 
     // declaring all nested variables here to reduce memory drain
     let tableText = ''
@@ -206,31 +245,57 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnKey = ''
     let columnDefault: any = ''
 
-    for (const chunk of chunks) {
-      const splittedChunk = chunk.split('\n')
+    let chunk = ''
+    for (const [start, end] of chunks) {
+      let index = 0
+      chunk = fluxCSV.substring(start, end)
 
-      const tableTexts = []
-      const annotationTexts = []
+      annotationText = ''
+      tableText = ''
 
-      splittedChunk.forEach(line => {
-        if (line.startsWith('#')) {
-          annotationTexts.push(line)
+      while (index !== -1) {
+        const oldIndex = index
+        index = chunk.substring(oldIndex, chunk.length).search(/\n/)
+
+        if (index === -1) {
+          if (chunk[oldIndex] === '#') {
+            annotationText = `${annotationText}${chunk.substring(
+              oldIndex,
+              chunk.length
+            )}`
+          } else {
+            tableText = `${tableText}${chunk.substring(oldIndex, chunk.length)}`
+          }
+          break
         } else {
-          tableTexts.push(line)
+          if (chunk[oldIndex] === '#') {
+            annotationText = `${annotationText}${chunk.substring(
+              oldIndex,
+              oldIndex + index + 1
+            )}`
+          } else {
+            tableText = `${tableText}${chunk.substring(
+              oldIndex,
+              oldIndex + index + 1
+            )}`
+          }
+          index = index + oldIndex + 1
         }
-      })
-
-      tableText = tableTexts.join('\n').trim()
+      }
 
       assert(
         !!tableText,
         'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
       )
 
-      // TODO(ariel): csvParse is a slow operation
-      tableData = csvParse(tableText)
-
-      annotationText = annotationTexts.join('\n').trim()
+      /**
+       * csvParse is a slow operation, but so we may want to see whether we can
+       * find an alternative solution to the problem.
+       *
+       * Also, the trimStart here is because we're getting a \n prepended at some point,
+       * so this trims that off
+       */
+      tableData = csvParse(tableText.trimStart())
 
       assert(
         !!annotationText,
@@ -362,49 +427,6 @@ const splitChunks = (fluxCSV: string): string[] => {
     .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
-}
-
-/*
-  A Flux CSV response can contain multiple CSV files each joined by a newline.
-  This function splits up a CSV response into these individual CSV files.
-  See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
-*/
-const splitChunksFast = (fluxCSV: string): string[] => {
-  const trimmedResponse = fluxCSV.trim()
-
-  if (trimmedResponse === '') {
-    return []
-  }
-
-  // Split the response into separate chunks whenever we encounter:
-  //
-  // 1. A newline
-  // 2. Followed by any amount of whitespace
-  // 3. Followed by a newline
-  // 4. Followed by a `#` character
-  //
-  // The last condition is [necessary][0] for handling CSV responses with
-  // values containing newlines.
-  //
-  // [0]: https://github.com/influxdata/influxdb/issues/15017
-  let curr = 0
-
-  const chunks = []
-  while (curr !== -1) {
-    const oldVal = curr
-    const nextIndex = trimmedResponse
-      .substring(curr, trimmedResponse.length)
-      .search(/\n\s*\n#/)
-    if (nextIndex === -1) {
-      chunks.push([oldVal, trimmedResponse.length])
-      curr = -1
-      break
-    } else {
-      chunks.push([oldVal, oldVal + nextIndex])
-      curr = oldVal + nextIndex + 2
-    }
-  }
-  return chunks.map(([start, end]) => trimmedResponse.substring(start, end))
 }
 
 const parseAnnotations = (
