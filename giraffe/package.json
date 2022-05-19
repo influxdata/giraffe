@@ -80,7 +80,6 @@
     "intl-dateformat": "^0.1.1",
     "jest": "^27.1.3",
     "jest-css-modules-transform": "^4.4.2",
-    "jest-environment-jsdom-sixteen": "2.0.0",
     "leaflet": "^1.6.0",
     "leaflet-ant-path": "^1.3.0",
     "leaflet.markercluster": "^1.4.1",
