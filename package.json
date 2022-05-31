@@ -11,6 +11,7 @@
     "publish": "echo 'To publish giraffe, run ./giraffe/publish $version'"
   },
   "resolutions": {
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "jsprim": "^1.4.2"
   }
 }
