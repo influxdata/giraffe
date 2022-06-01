@@ -105,21 +105,21 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     // [0]: https://github.com/influxdata/influxdb/issues/15017
 
     // finds the first non-whitespace character
-    let curr = fluxCSV.search(/\S/)
+    let currentIndex = fluxCSV.search(/\S/)
 
     const chunks = []
-    while (curr !== -1) {
-      const oldVal = curr
+    while (currentIndex !== -1) {
+      const prevIndex = currentIndex
       const nextIndex = fluxCSV
-        .substring(curr, fluxCSV.length)
+        .substring(currentIndex, fluxCSV.length)
         .search(/\n\s*\n#/)
       if (nextIndex === -1) {
-        chunks.push([oldVal, fluxCSV.length])
-        curr = -1
+        chunks.push([prevIndex, fluxCSV.length])
+        currentIndex = -1
         break
       } else {
-        chunks.push([oldVal, oldVal + nextIndex])
-        curr = oldVal + nextIndex + 2
+        chunks.push([prevIndex, prevIndex + nextIndex])
+        currentIndex = prevIndex + nextIndex + 2
       }
     }
 
