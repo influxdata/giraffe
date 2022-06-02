@@ -322,45 +322,68 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const [start, end] of chunks) {
-      const splittedChunk = fluxCSV.substring(start, end).split('\n')
+      annotationText = ''
+      tableText = ''
 
-      const tableTexts = []
-      const annotationTexts = []
+      let index = start
 
-      splittedChunk.forEach(line => {
-        if (line.startsWith('#')) {
-          annotationTexts.push(line)
+      while (index < end) {
+        const startsWithHash = fluxCSV[index] === '#'
+        const isPrevNewLine =
+          fluxCSV[index - 1] === '\n' || fluxCSV[index - 1] === undefined
+        // check to see if the one before that is whitespace or a new line
+        const isWhitespaceOrNewLine =
+          fluxCSV[index - 2] === undefined || fluxCSV[index - 2]?.trim() === ''
+        if (startsWithHash && isPrevNewLine && isWhitespaceOrNewLine) {
+          const nextIndex =
+            fluxCSV.substring(index, end).lastIndexOf('\n#') + index
+          const endOfAnnotation = fluxCSV.indexOf('\n', nextIndex + 1)
+
+          if (nextIndex === -1 || endOfAnnotation === -1) {
+            throw new Error(
+              'annotation text was incompelte and could not be processed'
+            )
+          }
+          // TODO(ariel): check to see if this is in the middle of a string
+          // or if this is actually the end of the annotation text
+          annotationText = fluxCSV.substring(index, endOfAnnotation)
+          index = endOfAnnotation + 1
         } else {
-          tableTexts.push(line)
+          tableText = fluxCSV.substring(index, end)
+          index = end
+          break
         }
-      })
+      }
 
-      tableText = tableTexts.join('\n').trim()
+      if (!!tableText) {
+        throw new Error(
+          'could not find table text lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+        )
+      }
 
-      assert(
-        !!tableText,
-        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-      )
-
-      // TODO(ariel): csvParse is a slow operation
+      /**
+       * csvParse is a slow operation, so we may want to see whether we can
+       * find an alternative solution to the problem.
+       */
       tableData = csvParse(tableText)
 
-      annotationText = annotationTexts.join('\n').trim()
+      if (!!annotationText) {
+        throw new Error(
+          'could not find annotation lines lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+        )
+      }
 
-      assert(
-        !!annotationText,
-        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-      )
       const annotationData = parseAnnotations(annotationText, tableData.columns)
 
       for (const columnName of tableData.columns.slice(1)) {
         columnType =
           TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
 
-        assert(
-          !!columnType,
-          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
-        )
+        if (!!columnType) {
+          throw new Error(
+            `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
+          )
+        }
 
         columnKey = `${columnName} (${columnType})`
 
