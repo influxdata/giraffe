@@ -355,11 +355,10 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         }
       }
 
-      if (!!tableText) {
-        throw new Error(
-          'could not find table text lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-        )
-      }
+      assert(
+        !!tableText,
+        'could not find table text lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
 
       /**
        * csvParse is a slow operation, so we may want to see whether we can
@@ -367,23 +366,20 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
        */
       tableData = csvParse(tableText)
 
-      if (!!annotationText) {
-        throw new Error(
-          'could not find annotation lines lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-        )
-      }
-
+      assert(
+        !!annotationText,
+        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
+      )
       const annotationData = parseAnnotations(annotationText, tableData.columns)
 
       for (const columnName of tableData.columns.slice(1)) {
         columnType =
           TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
 
-        if (!!columnType) {
-          throw new Error(
-            `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
-          )
-        }
+        assert(
+          !!columnType,
+          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
+        )
 
         columnKey = `${columnName} (${columnType})`
 
