@@ -333,7 +333,8 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
           fluxCSV[index - 1] === '\n' || fluxCSV[index - 1] === undefined
         // check to see if the one before that is whitespace or a new line
         const isWhitespaceOrNewLine =
-          fluxCSV[index - 2] === undefined || fluxCSV[index - 2]?.trim() === ''
+          fluxCSV[index - 2] === undefined ||
+          fluxCSV[index - 2]?.search(/\S/) === -1
         if (startsWithHash && isPrevNewLine && isWhitespaceOrNewLine) {
           const nextIndex =
             fluxCSV.substring(index, end).lastIndexOf('\n#') + index
