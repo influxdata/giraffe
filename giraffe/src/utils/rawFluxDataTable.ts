@@ -2,7 +2,7 @@ import Papa from 'papaparse'
 import HtmlEntities from 'he'
 import unraw from 'unraw'
 
-import {parseChunks} from './fluxParsing'
+import {parseChunks} from './fromFlux'
 import {
   CSV_OBJECT_BASE_NAME,
   CSV_OBJECT_START_STRING,
