@@ -1349,5 +1349,4 @@ multiple new lines!`,
 
     expect(table.getColumn('_value')).toStrictEqual(expectedColumns)
   })
-
 })
