@@ -77,7 +77,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   let tableLength = 0
 
   try {
-    const chunks = splitChunks(fluxCSV)
+    const chunks = parseChunks(fluxCSV)
 
     // declaring all nested variables here to reduce memory drain
     let tableText = ''
@@ -88,7 +88,9 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const chunk of chunks) {
-      const splittedChunk = chunk.split('\n')
+      const splittedChunk = chunk
+        .split('\n,')
+        .map((s, i) => (i === 0 ? s : `,${s}`)) // Add back the `#` characters that were removed by splitting
 
       const tableTexts = []
       const annotationTexts = []
@@ -378,7 +380,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
   This function splits up a CSV response into these individual CSV files.
   See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
 */
-const splitChunks = (fluxCSV: string): string[] => {
+export const parseChunks = (fluxCSV: string): string[] => {
   const trimmedResponse = fluxCSV.trim()
 
   if (trimmedResponse === '') {
@@ -397,8 +399,8 @@ const splitChunks = (fluxCSV: string): string[] => {
   //
   // [0]: https://github.com/influxdata/influxdb/issues/15017
   const chunks = trimmedResponse
-    .split(/\n\s*\n#/)
-    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
+    .split(/\n\s*\n#group/)
+    .map((s, i) => (i === 0 ? s : `#group${s}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
 }

@@ -4,6 +4,7 @@ import uuid from 'uuid'
 import {FluxTable} from '../types'
 import {get} from './get'
 import {groupBy} from './groupBy'
+import { parseChunks } from "./fromFlux";
 
 export const parseResponseError = (response: string): FluxTable[] => {
   const data = Papa.parse(response.trim()).data as string[][]
@@ -20,38 +21,6 @@ export const parseResponseError = (response: string): FluxTable[] => {
   ]
 }
 
-/*
-  A Flux CSV response can contain multiple CSV files each joined by a newline.
-  This function splits up a CSV response into these individual CSV files.
-
-  See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
-*/
-export const parseChunks = (response: string): string[] => {
-  const trimmedResponse = response.trim()
-
-  if (trimmedResponse === '') {
-    return []
-  }
-
-  // Split the response into separate chunks whenever we encounter:
-  //
-  // 1. A newline
-  // 2. Followed by any amount of whitespace
-  // 3. Followed by a newline
-  // 4. Followed by a `#` character
-  //
-  // The last condition is [necessary][0] for handling CSV responses with
-  // values containing newlines.
-  //
-  // [0]: https://github.com/influxdata/influxdb/issues/15017
-
-  const chunks = trimmedResponse
-    .split(/\n\s*\n#/)
-    .map((s, i) => (i === 0 ? s : `#${s}`))
-
-  return chunks
-}
-
 export const parseResponse = (response: string): FluxTable[] => {
   const chunks = parseChunks(response)
   const tables = chunks.reduce((acc, chunk) => {
@@ -62,7 +31,9 @@ export const parseResponse = (response: string): FluxTable[] => {
 }
 
 export const parseTables = (responseChunk: string): FluxTable[] => {
-  const lines = responseChunk.split('\n')
+  const lines = responseChunk
+    .split('\n,')
+    .map((s, i) => (i === 0 ? s : `,${s}`)) // Add back the `#` characters that were removed by splitting
   const annotationLines: string = lines
     .filter(line => line.startsWith('#'))
     .join('\n')
