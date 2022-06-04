@@ -213,7 +213,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     // 1. A newline
     // 2. Followed by any amount of whitespace
     // 3. Followed by a newline
-    // 4. Followed by a `#` character
+    // 4. Followed by a `#` character that has datatype|group|default, following it ex. (#group or #datatype)
     //
     // The last condition is [necessary][0] for handling CSV responses with
     // values containing newlines.
@@ -228,7 +228,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       const oldVal = curr
       const nextIndex = fluxCSV
         .substring(curr, fluxCSV.length)
-        .search(/\n\s*\n#(?=datatype|group|default)/)
+        .search(/\n\s*\n#(?=datatype|group|default)/) // regex uses a lookahead operator to look ahead for the keywords
       if (nextIndex === -1) {
         chunks.push([oldVal, fluxCSV.length])
         curr = -1
