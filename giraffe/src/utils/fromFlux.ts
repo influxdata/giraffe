@@ -398,9 +398,11 @@ export const parseChunks = (fluxCSV: string): string[] => {
   // values containing newlines.
   //
   // [0]: https://github.com/influxdata/influxdb/issues/15017
+
+  // use positive lookahead
   const chunks = trimmedResponse
-    .split(/\n\s*\n#group/)
-    .map((s, i) => (i === 0 ? s : `#group${s}`)) // Add back the `#` characters that were removed by splitting
+    .split(/\n\s*\n#(?=datatype|group|default)/)
+    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
 }

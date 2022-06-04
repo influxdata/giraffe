@@ -23,6 +23,7 @@ export const parseResponseError = (response: string): FluxTable[] => {
 
 export const parseResponse = (response: string): FluxTable[] => {
   const chunks = parseChunks(response)
+  console.log(chunks)
   const tables = chunks.reduce((acc, chunk) => {
     return [...acc, ...parseTables(chunk)]
   }, [])
