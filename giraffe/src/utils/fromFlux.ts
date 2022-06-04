@@ -228,7 +228,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       const oldVal = curr
       const nextIndex = fluxCSV
         .substring(curr, fluxCSV.length)
-        .search(/\n\s*\n#/)
+        .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
         chunks.push([oldVal, fluxCSV.length])
         curr = -1
@@ -248,7 +248,9 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const [start, end] of chunks) {
-      const splittedChunk = fluxCSV.substring(start, end).split('\n')
+      const splittedChunk = fluxCSV.substring(start, end).split('\n,')
+        .map((line, index) => (index === 0 ? line : `,${line}`)) // Add back the `,` (comma) characters that were removed during splitting
+
 
       const tableTexts = []
       const annotationTexts = []

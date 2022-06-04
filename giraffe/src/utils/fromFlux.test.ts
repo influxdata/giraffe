@@ -1316,4 +1316,38 @@ there",5
 
     expect(table.getColumn('time')).toEqual([1610972402582])
   })
+
+  it('parses query with newlines and hashtags', () => {
+    const CSV = `#group,false,false,true,false
+#datatype,string,long,long,string
+#default,_result,,,
+,result,table,_time_reverse,_value
+,,0,-1652887800000000000,"Row 1
+
+#newline #somehashTags https://a_link.com/giraffe"
+,,0,-1652887811000000000,Row 2
+,,0,-1652888700000000000,"Row 3: 👇👇👇 // emojis
+Mew line!"
+,,0,-1652889550000000000,"Row 4:
+New line 1!
+New line 2!
+multiple new lines!`
+    const {table} = fastFromFlux(CSV)
+
+    const expectedColumns = [
+      `Row 1
+
+#newline #somehashTags https://a_link.com/giraffe`,
+      'Row 2',
+      `Row 3: 👇👇👇 // emojis
+Mew line!`,
+      `Row 4:
+New line 1!
+New line 2!
+multiple new lines!`,
+    ]
+
+    expect(table.getColumn('_value')).toStrictEqual(expectedColumns)
+  })
+
 })
