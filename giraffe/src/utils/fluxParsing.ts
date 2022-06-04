@@ -33,7 +33,7 @@ export const parseResponse = (response: string): FluxTable[] => {
 export const parseTables = (responseChunk: string): FluxTable[] => {
   const lines = responseChunk
     .split('\n,')
-    .map((s, i) => (i === 0 ? s : `,${s}`)) // Add back the `#` characters that were removed by splitting
+    .map((line, index) => (index === 0 ? line : `,${line}`)) // Add back the `#` characters that were removed by splitting
   const annotationLines: string = lines
     .filter(line => line.startsWith('#'))
     .join('\n')

@@ -90,7 +90,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     for (const chunk of chunks) {
       const splittedChunk = chunk
         .split('\n,')
-        .map((string, index) => (index === 0 ? string : `,${string}`)) // Add back the `,` (comma) characters that were removed during splitting
+        .map((line, index) => (index === 0 ? line : `,${line}`)) // Add back the `,` (comma) characters that were removed during splitting
 
       const tableTexts = []
       const annotationTexts = []
