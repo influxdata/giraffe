@@ -90,7 +90,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     for (const chunk of chunks) {
       const splittedChunk = chunk
         .split('\n,')
-        .map((s, i) => (i === 0 ? s : `,${s}`)) // Add back the `,` (comma) characters that were removed during splitting
+        .map((string, index) => (index === 0 ? string : `,${string}`)) // Add back the `,` (comma) characters that were removed during splitting
 
       const tableTexts = []
       const annotationTexts = []
@@ -402,7 +402,7 @@ export const parseChunks = (fluxCSV: string): string[] => {
   // use positive lookahead
   const chunks = trimmedResponse
     .split(/\n\s*\n#(?=datatype|group|default)/)
-    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
+    .map((chunk, chunkNumber) => (chunkNumber === 0 ? chunk : `#${chunk}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
 }
