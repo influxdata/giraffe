@@ -392,7 +392,7 @@ export const parseChunks = (fluxCSV: string): string[] => {
   // 1. A newline
   // 2. Followed by any amount of whitespace
   // 3. Followed by a newline
-  // 4. Followed by a `#` character
+  // 4. Followed by a `#` character that has datatype|group|default, following it ex. (#group or #datatype)
   //
   // The last condition is [necessary][0] for handling CSV responses with
   // values containing newlines.
