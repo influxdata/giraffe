@@ -4,7 +4,7 @@ import uuid from 'uuid'
 import {FluxTable} from '../types'
 import {get} from './get'
 import {groupBy} from './groupBy'
-import { parseChunks } from "./fromFlux";
+import {parseChunks} from './fromFlux'
 
 export const parseResponseError = (response: string): FluxTable[] => {
   const data = Papa.parse(response.trim()).data as string[][]
