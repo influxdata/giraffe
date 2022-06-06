@@ -17,6 +17,7 @@ export const SINGLE_STAT_DEFAULT_STYLE: CSS.Properties = {
   WebkitUserSelect: 'text',
   MozUserSelect: 'text',
   msUserSelect: 'text',
+  cursor: 'text',
   position: 'absolute',
   top: 0,
   left: 0,
