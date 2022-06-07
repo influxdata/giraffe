@@ -82,9 +82,10 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
       This function splits up a CSV response into these individual CSV files.
       See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
     */
-    fluxCSV = fluxCSV.trimEnd()
+    // finds the first non-whitespace character
+    let currentIndex = fluxCSV.search(/\S/)
 
-    if (fluxCSV === '') {
+    if (currentIndex === -1) {
       return {
         table: newTable(0),
         fluxGroupKeyUnion: [],
@@ -103,9 +104,6 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     // values containing newlines.
     //
     // [0]: https://github.com/influxdata/influxdb/issues/15017
-
-    // finds the first non-whitespace character
-    let currentIndex = fluxCSV.search(/\S/)
 
     const chunks = []
     while (currentIndex !== -1) {
@@ -210,7 +208,11 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
           } else if (columnType === 'string') {
             result = value
           } else if (columnType === 'time') {
-            result = Date.parse(value.trim())
+            if (/\s/.test(value)) {
+              result = Date.parse(value.trim())
+            } else {
+              result = Date.parse(value)
+            }
           } else if (columnType === 'number') {
             if (value === '') {
               result = null
@@ -272,9 +274,10 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       This function splits up a CSV response into these individual CSV files.
       See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
     */
-    fluxCSV = fluxCSV.trimEnd()
+    // finds the first non-whitespace character
+    let curr = fluxCSV.search(/\S/)
 
-    if (fluxCSV === '') {
+    if (curr === -1) {
       return {
         table: newTable(0),
         fluxGroupKeyUnion: [],
@@ -293,9 +296,6 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     // values containing newlines.
     //
     // [0]: https://github.com/influxdata/influxdb/issues/15017
-
-    // finds the first non-whitespace character
-    let curr = fluxCSV.search(/\S/)
 
     const chunks = []
     while (curr !== -1) {
@@ -399,7 +399,11 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
           } else if (columnType === 'string') {
             result = value
           } else if (columnType === 'time') {
-            result = Date.parse(value.trim())
+            if (/\s/.test(value)) {
+              result = Date.parse(value.trim())
+            } else {
+              result = Date.parse(value)
+            }
           } else if (columnType === 'number') {
             if (value === '') {
               result = null
