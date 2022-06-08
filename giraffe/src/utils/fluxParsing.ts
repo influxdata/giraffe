@@ -62,7 +62,7 @@ export const parseResponse = (response: string): FluxTable[] => {
 }
 
 export const parseTables = (responseChunk: string): FluxTable[] => {
-  const lines = responseChunk.split('\n')
+  const lines = Papa.parse(responseChunk).data.map(line => line.join(','))
   const annotationLines: string = lines
     .filter(line => line.startsWith('#'))
     .join('\n')
