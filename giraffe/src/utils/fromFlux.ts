@@ -4,6 +4,8 @@ import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
 import Papa from 'papaparse'
+import {parseChunks} from './fluxParsing'
+import {escapeCommas} from './escape'
 export interface FromFluxResult {
   error?: Error
 
@@ -78,7 +80,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   let tableLength = 0
 
   try {
-    const chunks = splitChunks(fluxCSV)
+    const chunks = parseChunks(fluxCSV)
 
     // declaring all nested variables here to reduce memory drain
     let tableText = ''
@@ -89,7 +91,10 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const chunk of chunks) {
-      const splittedChunk: string[] = Papa.parse(chunk).data.map(line => line.join(','))
+      const parsedChunkData = Papa.parse(chunk).data
+      const splittedChunk: string[] = parsedChunkData.map(line =>
+        line.map(escapeCommas).join(',')
+      )
 
       const tableTexts = []
       const annotationTexts = []
@@ -227,7 +232,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       const oldVal = curr
       const nextIndex = fluxCSV
         .substring(curr, fluxCSV.length)
-        .search(/\n\s*\n#/)
+        .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
         chunks.push([oldVal, fluxCSV.length])
         curr = -1
@@ -247,7 +252,10 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const [start, end] of chunks) {
-      const splittedChunk = fluxCSV.substring(start, end).split('\n')
+      const parsedChunkData = Papa.parse(fluxCSV.substring(start, end)).data
+      const splittedChunk: string[] = parsedChunkData.map(line =>
+        line.map(escapeCommas).join(',')
+      )
 
       const tableTexts = []
       const annotationTexts = []
@@ -372,36 +380,6 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       resultColumnNames: [],
     }
   }
-}
-
-/*
-  A Flux CSV response can contain multiple CSV files each joined by a newline.
-  This function splits up a CSV response into these individual CSV files.
-  See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
-*/
-const splitChunks = (fluxCSV: string): string[] => {
-  const trimmedResponse = fluxCSV.trim()
-
-  if (trimmedResponse === '') {
-    return []
-  }
-
-  // Split the response into separate chunks whenever we encounter:
-  //
-  // 1. A newline
-  // 2. Followed by any amount of whitespace
-  // 3. Followed by a newline
-  // 4. Followed by a `#` character
-  //
-  // The last condition is [necessary][0] for handling CSV responses with
-  // values containing newlines.
-  //
-  // [0]: https://github.com/influxdata/influxdb/issues/15017
-  const chunks = trimmedResponse
-    .split(/\n\s*\n#/)
-    .map((s, i) => (i === 0 ? s : `#${s}`)) // Add back the `#` characters that were removed by splitting
-
-  return chunks
 }
 
 const parseAnnotations = (
