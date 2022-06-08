@@ -112,7 +112,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
       const prevIndex = currentIndex
       const nextIndex = fluxCSV
         .substring(currentIndex, fluxCSV.length)
-        .search(/\n\s*\n#/)
+        .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
         chunks.push([prevIndex, fluxCSV.length])
         currentIndex = -1
