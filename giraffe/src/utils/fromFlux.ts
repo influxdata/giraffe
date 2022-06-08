@@ -5,7 +5,7 @@ import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
 import Papa from 'papaparse'
 import {parseChunks} from './fluxParsing'
-import {escapeCommas} from './escape'
+import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 export interface FromFluxResult {
   error?: Error
 
@@ -93,7 +93,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     for (const chunk of chunks) {
       const parsedChunkData = Papa.parse(chunk).data
       const splittedChunk: string[] = parsedChunkData.map(line =>
-        line.map(escapeCommas).join(',')
+        line.map(escapeCSVFieldWithSpecialCharacters).join(',')
       )
 
       const tableTexts = []
@@ -254,7 +254,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     for (const [start, end] of chunks) {
       const parsedChunkData = Papa.parse(fluxCSV.substring(start, end)).data
       const splittedChunk: string[] = parsedChunkData.map(line =>
-        line.map(escapeCommas).join(',')
+        line.map(escapeCSVFieldWithSpecialCharacters).join(',')
       )
 
       const tableTexts = []

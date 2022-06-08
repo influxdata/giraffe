@@ -4,7 +4,7 @@ import uuid from 'uuid'
 import {FluxTable} from '../types'
 import {get} from './get'
 import {groupBy} from './groupBy'
-import {escapeCommas} from './escape'
+import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 
 export const parseResponseError = (response: string): FluxTable[] => {
   const data = Papa.parse(response.trim()).data as string[][]
@@ -66,7 +66,7 @@ export const parseResponse = (response: string): FluxTable[] => {
 export const parseTables = (responseChunk: string): FluxTable[] => {
   const linesData = Papa.parse(responseChunk).data
   const lines: string[] = linesData.map(line =>
-    line.map(escapeCommas).join(',')
+    line.map(escapeCSVFieldWithSpecialCharacters).join(',')
   )
   const annotationLines: string = lines
     .filter(line => line.startsWith('#'))
