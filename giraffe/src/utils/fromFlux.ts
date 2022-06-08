@@ -3,6 +3,7 @@ import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
+import Papa from 'papaparse'
 export interface FromFluxResult {
   error?: Error
 
@@ -88,7 +89,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     let columnDefault: any = ''
 
     for (const chunk of chunks) {
-      const splittedChunk = chunk.split('\n')
+      const splittedChunk: string[] = Papa.parse(chunk).data.map(line => line.join(','))
 
       const tableTexts = []
       const annotationTexts = []
