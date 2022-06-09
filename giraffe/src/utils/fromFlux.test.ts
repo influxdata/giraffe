@@ -647,9 +647,9 @@ there",5
 #datatype,string,long,long,string
 #default,_result,,,
 ,result,table,_time_reverse,_value
-,,0,-1652887800000000000,"[2022-05-18 15:30:00 UTC] @textAndCommas: NASDAQ: $EZFL EzFill, an on-demand fueling service operating in several sectors, released Q1 earnings last week. Check out this interview with Mike McConnell, EzFill CEO, to get the full rundown. Visit https://t.co/L64iQ98BFy to stay updated.
+,,0,-1652887800000000000,"[2022-05-18 15:30:00 UTC] @textAndCommas: Visit https://a.link/
 
-#hashtag #another hash tag"
+,#hashtag, #another, hash tag"
 ,,0,-1652888700000000000,"[2022-05-18 15:45:00 UTC] @emojis: 👇👇👇
 , new line
 another new line"`
@@ -659,9 +659,9 @@ another new line"`
     const valueColumn = table.getColumn('_value')
 
     const expectedValueColumn = [
-      `[2022-05-18 15:30:00 UTC] @textAndCommas: NASDAQ: $EZFL EzFill, an on-demand fueling service operating in several sectors, released Q1 earnings last week. Check out this interview with Mike McConnell, EzFill CEO, to get the full rundown. Visit https://t.co/L64iQ98BFy to stay updated.
+      `[2022-05-18 15:30:00 UTC] @textAndCommas: Visit https://a.link/
 
-#hashtag #another hash tag`,
+,#hashtag, #another, hash tag`,
       `[2022-05-18 15:45:00 UTC] @emojis: 👇👇👇
 , new line
 another new line`,
