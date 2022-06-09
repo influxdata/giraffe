@@ -966,7 +966,7 @@ describe('fastFromFlux', () => {
     const fFlux = fastFromFlux(resp)
     expect(fFlux).toEqual(expected)
   })
-  it.only('parses query with newlines and hashtags', () => {
+  it('parses query with newlines and hashtags', () => {
     const CSV = `#group,false,false,true,false
 #datatype,string,long,long,string
 #default,_result,,,
