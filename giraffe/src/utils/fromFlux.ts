@@ -408,7 +408,6 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
                 columns[parsed.columnKey[index]].data[tableLength] = result
               }
             })
-            console.log({data: JSON.stringify(results.data), tableLength})
             tableLength++
           }
         },
