@@ -115,7 +115,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
         .substring(currentIndex, fluxCSV.length)
         .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
-        chunks.push([prevIndex, fluxCSV.length])
+        chunks.push([prevIndex, fluxCSV.length - 1])
         currentIndex = -1
         break
       } else {
@@ -134,12 +134,19 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     let chunk = ''
 
     for (const [start, end] of chunks) {
-      chunk = fluxCSV.substring(start, end)
+      /**
+       * substring doesn't include the index for the end. For example:
+       *
+       * 'hello'.substring(0, 1) // 'h'
+       *
+       * Given the fact that we want to include the last character of the chunk
+       * we want to add + 1 to the substring ending
+       */
+      chunk = fluxCSV.substring(start, end + 1)
       const parsedChunkData = Papa.parse(chunk).data
       const splittedChunk: string[] = parsedChunkData.map(line =>
         line.map(escapeCSVFieldWithSpecialCharacters).join(',')
       )
-
       const tableTexts = []
       const annotationTexts = []
 
@@ -307,7 +314,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         .substring(curr, fluxCSV.length)
         .search(/\n\s*\n#/)
       if (nextIndex === -1) {
-        chunks.push([oldVal, fluxCSV.length])
+        chunks.push([oldVal, fluxCSV.length - 1])
         curr = -1
         break
       } else {
@@ -320,8 +327,9 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnKey = ''
     const fluxGroupKeyUnion = new Set<string>()
     const resultColumnNames = new Set<string>()
-
+    let _end
     for (const [start, end] of chunks) {
+      _end = end
       let annotationMode = true
 
       const parsed = {
@@ -331,7 +339,19 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         header: [],
         columnKey: [],
       }
-      Papa.parse(fluxCSV.substring(start, end).trimEnd(), {
+      // we want to move the pointer to the first non-whitespace character at the end of the chunk
+      while (/\s/.test(fluxCSV[_end]) && _end > start) {
+        _end--
+      }
+      /**
+       * substring doesn't include the index for the end. For example:
+       *
+       * 'hello'.substring(0, 1) // 'h'
+       *
+       * Given the fact that we want to include the last character of the chunk
+       * we want to add + 1 to the substring ending
+       */
+      Papa.parse(fluxCSV.substring(start, _end + 1), {
         step: function(results) {
           if (results.data[0] === '#group') {
             parsed.group = results.data.slice(1)
