@@ -331,7 +331,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         header: [],
         columnKey: [],
       }
-      Papa.parse(fluxCSV.substring(start, end), {
+      Papa.parse(fluxCSV.substring(start, end).trimEnd(), {
         step: function(results) {
           if (results.data[0] === '#group') {
             parsed.group = results.data.slice(1)
@@ -408,6 +408,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
                 columns[parsed.columnKey[index]].data[tableLength] = result
               }
             })
+            console.log({data: JSON.stringify(results.data), tableLength})
             tableLength++
           }
         },
