@@ -4,6 +4,7 @@ import uuid from 'uuid'
 import {FluxTable} from '../types'
 import {get} from './get'
 import {groupBy} from './groupBy'
+import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 
 export const parseResponseError = (response: string): FluxTable[] => {
   const data = Papa.parse(response.trim()).data as string[][]
@@ -45,9 +46,10 @@ export const parseChunks = (response: string): string[] => {
   //
   // [0]: https://github.com/influxdata/influxdb/issues/15017
 
+  // use regex lookahead
   const chunks = trimmedResponse
-    .split(/\n\s*\n#/)
-    .map((s, i) => (i === 0 ? s : `#${s}`))
+    .split(/\n\s*\n#(?=datatype|group|default)/)
+    .map((chunk, chunkNumber) => (chunkNumber === 0 ? chunk : `#${chunk}`)) // Add back the `#` characters that were removed by splitting
 
   return chunks
 }
@@ -62,7 +64,10 @@ export const parseResponse = (response: string): FluxTable[] => {
 }
 
 export const parseTables = (responseChunk: string): FluxTable[] => {
-  const lines = responseChunk.split('\n')
+  const linesData = Papa.parse(responseChunk).data
+  const lines: string[] = linesData.map(line =>
+    line.map(escapeCSVFieldWithSpecialCharacters).join(',')
+  )
   const annotationLines: string = lines
     .filter(line => line.startsWith('#'))
     .join('\n')

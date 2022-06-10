@@ -3,6 +3,8 @@ import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
+import Papa from 'papaparse'
+import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 export interface FromFluxResult {
   error?: Error
 
@@ -110,7 +112,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
       const prevIndex = currentIndex
       const nextIndex = fluxCSV
         .substring(currentIndex, fluxCSV.length)
-        .search(/\n\s*\n#/)
+        .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
         chunks.push([prevIndex, fluxCSV.length])
         currentIndex = -1
@@ -132,7 +134,10 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 
     for (const [start, end] of chunks) {
       chunk = fluxCSV.substring(start, end)
-      const splittedChunk = chunk.split('\n')
+      const parsedChunkData = Papa.parse(chunk).data
+      const splittedChunk: string[] = parsedChunkData.map(line =>
+        line.map(escapeCSVFieldWithSpecialCharacters).join(',')
+      )
 
       const tableTexts = []
       const annotationTexts = []
