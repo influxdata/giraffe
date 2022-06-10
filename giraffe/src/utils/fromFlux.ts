@@ -4,7 +4,6 @@ import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
-import Papa from 'papaparse'
 import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 export interface FromFluxResult {
   error?: Error
