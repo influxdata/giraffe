@@ -966,6 +966,36 @@ describe('fastFromFlux', () => {
     const fFlux = fastFromFlux(resp)
     expect(fFlux).toEqual(expected)
   })
+  it('parses query with newlines and hashtags', () => {
+    const CSV = `#group,false,false,true,false
+#datatype,string,long,long,string
+#default,_result,,,
+,result,table,_time_reverse,_value
+,,0,-1652887800000000000,"Row 1
+#newline #somehashTags https://a_link.com/giraffe"
+,,0,-1652887811000000000,Row 2
+,,0,-1652888700000000000,"Row 3: 👇👇👇 // emojis
+,Mew line!"
+,,0,-1652889550000000000,"Row 4:
+New line 1!
+New line 2!
+multiple new lines!`
+    const {table} = fastFromFlux(CSV)
+
+    const expectedColumns = [
+      `Row 1
+#newline #somehashTags https://a_link.com/giraffe`,
+      'Row 2',
+      `Row 3: 👇👇👇 // emojis
+,Mew line!`,
+      `Row 4:
+New line 1!
+New line 2!
+multiple new lines!`,
+    ]
+
+    expect(table.getColumn('_value')).toStrictEqual(expectedColumns)
+  })
 
   it('can parse a Flux CSV with mismatched schemas', () => {
     const CSV = `#group,false,false,true,true,false,true,true,true,true,true
@@ -1081,8 +1111,6 @@ describe('fastFromFlux', () => {
     expect(() => {
       fastFromFlux(CSV)
     }).not.toThrow()
-    const actual = fastFromFlux(CSV)
-    expect(actual.error).toBeTruthy()
   })
 
   it('uses the default annotation to fill in empty values', () => {
