@@ -4,7 +4,6 @@ import {Table, ColumnType, FluxDataType} from '../types'
 import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
-import {escapeCSVFieldWithSpecialCharacters} from './escapeCSVFieldWithSpecialCharacters'
 export interface FromFluxResult {
   error?: Error
 
@@ -142,10 +141,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
        * we want to add + 1 to the substring ending
        */
       chunk = fluxCSV.substring(start, end + 1)
-      const parsedChunkData = Papa.parse(chunk).data
-      const splittedChunk: string[] = parsedChunkData.map(line =>
-        line.map(escapeCSVFieldWithSpecialCharacters).join(',')
-      )
+      const splittedChunk = chunk.split('\n')
       const tableTexts = []
       const annotationTexts = []
 

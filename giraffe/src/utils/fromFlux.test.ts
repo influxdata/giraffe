@@ -1339,4 +1339,41 @@ there",5
 
     expect(table.getColumn('time')).toEqual([1610972402582])
   })
+  it('should parse JSON data as part of the table body correctly', () => {
+    const CSV = `#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string,string,string,string
+#default,_result,,,,,,,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,env,error,errorCode,errorType,orgID,ot_trace_sampled,role,source
+,,0,2022-06-15T19:05:02.361293138Z,2022-06-15T20:05:02.361293138Z,2022-06-15T19:05:05.145623698Z,"{""request"":{""organization_id"":""fc0e1bf81e62ea27"",""jwttoken"":""REDACTED"",""compiler"":{""Now"":""2022-06-15T19:05:00Z"",""query"":""import ""influxdata/influxdb/monitor""\nimport ""experimental""\nimport ""influxdata/influxdb/v1""\n\ndata = from(bucket: ""Website Monitoring Bucket"")\n    |\u003e range(start: -10m)\n    |\u003e filter(fn: (r) =\u003e r[""_measurement""] == ""http_response"")\n    |\u003e filter(fn: (r) =\u003e r[""_field""] == ""result_code"")\n    |\u003e filter(fn: (r) =\u003e r[""method""] == ""HEAD"")\n    |\u003e filter(fn: (r) =\u003e r[""result""] == ""success"")\n    |\u003e filter(fn: (r) =\u003e r[""server""] == ""https://influxdata.com"")\n\noption task = {name: ""Name this Check"", every: 1m, offset: 0s}\n\ncheck = {_check_id: ""0854d93f9225d000"", _check_name: ""Name this Check"", _type: ""deadman"", tags: {}}\ncrit = (r) =\u003e r[""dead""]\nmessageFn = (r) =\u003e ""Check: $\{r._check_name} is: $\{r._level}""\n\ndata |\u003e v1[""fieldsAsCols""]() |\u003e monitor[""deadman""](t: experimental[""subDuration""](from: now(), d: 90s))\n    |\u003e monitor[""check""](data: check, messageFn: messageFn, crit: crit)""},""source"":""tasks"",""parameters"":null,""UseIOx"":false,""compiler_type"":""flux""},""dialect"":{},""dialect_type"":""no-content""}",request,query_log,prod01-eu-central-1,"failed to initialize execute state: could not find bucket ""Website Monitoring Bucket""",not found,user,fc0e1bf81e62ea27,false,queryd-pull-internal,tasks\
+`
+
+    const {table} = fastFromFlux(CSV)
+
+    const valueColumn = table.getColumn('_value')
+
+    const expectedValueColumn = [
+      '{"request":{"organization_id":"fc0e1bf81e62ea27","jwttoken":"REDACTED","compiler":{"Now":"2022-06-15T19:05:00Z","query":"import "influxdata/influxdb/monitor"\n' +
+        'import "experimental"\n' +
+        'import "influxdata/influxdb/v1"\n' +
+        '\n' +
+        'data = from(bucket: "Website Monitoring Bucket")\n' +
+        '    |> range(start: -10m)\n' +
+        '    |> filter(fn: (r) => r["_measurement"] == "http_response")\n' +
+        '    |> filter(fn: (r) => r["_field"] == "result_code")\n' +
+        '    |> filter(fn: (r) => r["method"] == "HEAD")\n' +
+        '    |> filter(fn: (r) => r["result"] == "success")\n' +
+        '    |> filter(fn: (r) => r["server"] == "https://influxdata.com")\n' +
+        '\n' +
+        'option task = {name: "Name this Check", every: 1m, offset: 0s}\n' +
+        '\n' +
+        'check = {_check_id: "0854d93f9225d000", _check_name: "Name this Check", _type: "deadman", tags: {}}\n' +
+        'crit = (r) => r["dead"]\n' +
+        'messageFn = (r) => "Check: ${r._check_name} is: ${r._level}"\n' +
+        '\n' +
+        'data |> v1["fieldsAsCols"]() |> monitor["deadman"](t: experimental["subDuration"](from: now(), d: 90s))\n' +
+        '    |> monitor["check"](data: check, messageFn: messageFn, crit: crit)"},"source":"tasks","parameters":null,"UseIOx":false,"compiler_type":"flux"},"dialect":{},"dialect_type":"no-content"}',
+    ]
+
+    expect(valueColumn).toEqual(expectedValueColumn)
+  })
 })
