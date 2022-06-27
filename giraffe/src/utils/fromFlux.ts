@@ -103,17 +103,17 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
 
     const chunks = []
     while (currentIndex !== -1) {
-      const oldVal = currentIndex
+      const prevIndex = currentIndex
       const nextIndex = fluxCSV
         .substring(currentIndex, fluxCSV.length)
         .search(/\n\s*\n#/)
       if (nextIndex === -1) {
-        chunks.push([oldVal, fluxCSV.length - 1])
+        chunks.push([prevIndex, fluxCSV.length - 1])
         currentIndex = -1
         break
       } else {
-        chunks.push([oldVal, oldVal + nextIndex])
-        currentIndex = oldVal + nextIndex + 2
+        chunks.push([prevIndex, prevIndex + nextIndex])
+        currentIndex = prevIndex + nextIndex + 2
       }
     }
 
@@ -156,14 +156,12 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
           } else if (results.data[0][0] !== '#' && annotationMode === true) {
             annotationMode = false
             parsed.header = results.data.slice(1)
-            parsed.header.reduce((acc, currentIndex, index) => {
-              columnKey = `${currentIndex} (${
-                TO_COLUMN_TYPE[parsed.datatype[index]]
-              })`
+            parsed.header.reduce((acc, curr, index) => {
+              columnKey = `${curr} (${TO_COLUMN_TYPE[parsed.datatype[index]]})`
               parsed.columnKey.push(columnKey)
               if (!acc[columnKey]) {
                 acc[columnKey] = {
-                  name: currentIndex,
+                  name: curr,
                   type: TO_COLUMN_TYPE[parsed.datatype[index]],
                   fluxDataType: parsed.datatype[index],
                   data: [],
@@ -290,17 +288,17 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
 
     const chunks = []
     while (currentIndex !== -1) {
-      const oldVal = currentIndex
+      const prevIndex = currentIndex
       const nextIndex = fluxCSV
         .substring(currentIndex, fluxCSV.length)
         .search(/\n\s*\n#/)
       if (nextIndex === -1) {
-        chunks.push([oldVal, fluxCSV.length - 1])
+        chunks.push([prevIndex, fluxCSV.length - 1])
         currentIndex = -1
         break
       } else {
-        chunks.push([oldVal, oldVal + nextIndex])
-        currentIndex = oldVal + nextIndex + 2
+        chunks.push([prevIndex, prevIndex + nextIndex])
+        currentIndex = prevIndex + nextIndex + 2
       }
     }
 
@@ -343,14 +341,12 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
           } else if (results.data[0][0] !== '#' && annotationMode === true) {
             annotationMode = false
             parsed.header = results.data.slice(1)
-            parsed.header.reduce((acc, currentIndex, index) => {
-              columnKey = `${currentIndex} (${
-                TO_COLUMN_TYPE[parsed.datatype[index]]
-              })`
+            parsed.header.reduce((acc, curr, index) => {
+              columnKey = `${curr} (${TO_COLUMN_TYPE[parsed.datatype[index]]})`
               parsed.columnKey.push(columnKey)
               if (!acc[columnKey]) {
                 acc[columnKey] = {
-                  name: currentIndex,
+                  name: curr,
                   type: TO_COLUMN_TYPE[parsed.datatype[index]],
                   fluxDataType: parsed.datatype[index],
                   data: [],
