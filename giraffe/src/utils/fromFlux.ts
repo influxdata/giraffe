@@ -1,7 +1,5 @@
-import {csvParse, csvParseRows} from 'd3-dsv'
 import Papa from 'papaparse'
 import {Table, ColumnType, FluxDataType} from '../types'
-import {assert} from './assert'
 import {newTable} from './newTable'
 import {RESULT} from '../constants/columnKeys'
 export interface FromFluxResult {
@@ -73,10 +71,7 @@ interface Columns {
 */
 export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const columns: Columns = {}
-  const fluxGroupKeyUnion = new Set<string>()
-  const resultColumnNames = new Set<string>()
   let tableLength = 0
-
   try {
     /*
       A Flux CSV response can contain multiple CSV files each joined by a newline.
@@ -84,9 +79,9 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
       See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
     */
     // finds the first non-whitespace character
-    let currentIndex = fluxCSV.search(/\S/)
+    let curr = fluxCSV.search(/\S/)
 
-    if (currentIndex === -1) {
+    if (curr === -1) {
       return {
         table: newTable(0),
         fluxGroupKeyUnion: [],
@@ -107,31 +102,41 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
     // [0]: https://github.com/influxdata/influxdb/issues/15017
 
     const chunks = []
-    while (currentIndex !== -1) {
-      const prevIndex = currentIndex
+    while (curr !== -1) {
+      const oldVal = curr
       const nextIndex = fluxCSV
-        .substring(currentIndex, fluxCSV.length)
-        .search(/\n\s*\n#(?=datatype|group|default)/)
+        .substring(curr, fluxCSV.length)
+        .search(/\n\s*\n#/)
       if (nextIndex === -1) {
-        chunks.push([prevIndex, fluxCSV.length - 1])
-        currentIndex = -1
+        chunks.push([oldVal, fluxCSV.length - 1])
+        curr = -1
         break
       } else {
-        chunks.push([prevIndex, prevIndex + nextIndex])
-        currentIndex = prevIndex + nextIndex + 2
+        chunks.push([oldVal, oldVal + nextIndex])
+        curr = oldVal + nextIndex + 2
       }
     }
 
     // declaring all nested variables here to reduce memory drain
-    let tableText = ''
-    let tableData: any = []
-    let annotationText = ''
-    let columnType: any = ''
     let columnKey = ''
-    let columnDefault: any = ''
-    let chunk = ''
-
+    const fluxGroupKeyUnion = new Set<string>()
+    const resultColumnNames = new Set<string>()
+    let _end
     for (const [start, end] of chunks) {
+      _end = end
+      let annotationMode = true
+
+      const parsed = {
+        group: [],
+        datatype: [],
+        default: [],
+        header: [],
+        columnKey: [],
+      }
+      // we want to move the pointer to the first non-whitespace character at the end of the chunk
+      while (/\s/.test(fluxCSV[_end]) && _end > start) {
+        _end--
+      }
       /**
        * substring doesn't include the index for the end. For example:
        *
@@ -140,111 +145,90 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
        * Given the fact that we want to include the last character of the chunk
        * we want to add + 1 to the substring ending
        */
-      chunk = fluxCSV.substring(start, end + 1)
-      const splittedChunk = chunk.split('\n')
-      const tableTexts = []
-      const annotationTexts = []
-
-      splittedChunk.forEach(line => {
-        if (line.startsWith('#')) {
-          annotationTexts.push(line)
-        } else {
-          tableTexts.push(line)
-        }
-      })
-
-      tableText = tableTexts.join('\n').trim()
-
-      assert(
-        !!tableText,
-        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-      )
-
-      tableData = csvParse(tableText)
-
-      annotationText = annotationTexts.join('\n').trim()
-
-      assert(
-        !!annotationText,
-        'could not find annotation lines in Flux response; are `annotations` enabled in the Flux query `dialect` option?'
-      )
-      const annotationData = parseAnnotations(annotationText, tableData.columns)
-
-      for (const columnName of tableData.columns.slice(1)) {
-        columnType =
-          TO_COLUMN_TYPE[annotationData.datatypeByColumnName[columnName]]
-
-        assert(
-          !!columnType,
-          `encountered unknown Flux column type ${annotationData.datatypeByColumnName[columnName]}`
-        )
-
-        columnKey = `${columnName} (${columnType})`
-
-        if (!columns[columnKey]) {
-          columns[columnKey] = {
-            name: columnName,
-            type: columnType,
-            fluxDataType: annotationData.datatypeByColumnName[columnName],
-            data: [],
-          } as Column
-        }
-
-        columnDefault = annotationData.defaultByColumnName[columnName]
-
-        for (let i = 0; i < tableData.length; i++) {
-          if (columnName === RESULT) {
-            if (columnDefault.length) {
-              resultColumnNames.add(columnDefault)
-            } else if (tableData[i][columnName].length) {
-              resultColumnNames.add(tableData[i][columnName])
-            }
-          }
-          const value = tableData[i][columnName] || columnDefault
-          let result = null
-
-          if (value === undefined) {
-            result = undefined
-          } else if (value === 'null') {
-            result = null
-          } else if (value === 'NaN') {
-            result = NaN
-          } else if (columnType === 'boolean' && value === 'true') {
-            result = true
-          } else if (columnType === 'boolean' && value === 'false') {
-            result = false
-          } else if (columnType === 'string') {
-            result = value
-          } else if (columnType === 'time') {
-            if (/\s/.test(value)) {
-              result = Date.parse(value.trim())
-            } else {
-              result = Date.parse(value)
-            }
-          } else if (columnType === 'number') {
-            if (value === '') {
-              result = null
-            } else {
-              const parsedValue = Number(value)
-              result = parsedValue === parsedValue ? parsedValue : value
-            }
+      Papa.parse(fluxCSV.substring(start, _end + 1), {
+        step: function(results) {
+          if (results.data[0] === '#group') {
+            parsed.group = results.data.slice(1)
+          } else if (results.data[0] === '#datatype') {
+            parsed.datatype = results.data.slice(1)
+          } else if (results.data[0] === '#default') {
+            parsed.default = results.data.slice(1)
+          } else if (results.data[0][0] !== '#' && annotationMode === true) {
+            annotationMode = false
+            parsed.header = results.data.slice(1)
+            parsed.header.reduce((acc, curr, index) => {
+              columnKey = `${curr} (${TO_COLUMN_TYPE[parsed.datatype[index]]})`
+              parsed.columnKey.push(columnKey)
+              if (!acc[columnKey]) {
+                acc[columnKey] = {
+                  name: curr,
+                  type: TO_COLUMN_TYPE[parsed.datatype[index]],
+                  fluxDataType: parsed.datatype[index],
+                  data: [],
+                }
+              }
+              if (parsed.group[index] === 'true') {
+                fluxGroupKeyUnion.add(columnKey)
+              }
+              return acc
+            }, columns)
           } else {
-            result = null
+            results.data.slice(1).forEach((data, index) => {
+              const value = data || parsed.default[index]
+              let result = null
+
+              if (value === undefined) {
+                result = undefined
+              } else if (value === 'null') {
+                result = null
+              } else if (value === 'NaN') {
+                result = NaN
+              } else if (
+                TO_COLUMN_TYPE[parsed.datatype[index]] === 'boolean' &&
+                value === 'true'
+              ) {
+                result = true
+              } else if (
+                TO_COLUMN_TYPE[parsed.datatype[index]] === 'boolean' &&
+                value === 'false'
+              ) {
+                result = false
+              } else if (TO_COLUMN_TYPE[parsed.datatype[index]] === 'string') {
+                result = value
+              } else if (TO_COLUMN_TYPE[parsed.datatype[index]] === 'time') {
+                if (/\s/.test(value)) {
+                  result = Date.parse(value.trim())
+                } else {
+                  result = Date.parse(value)
+                }
+              } else if (TO_COLUMN_TYPE[parsed.datatype[index]] === 'number') {
+                if (value === '') {
+                  result = null
+                } else {
+                  const parsedValue = Number(value)
+                  result = parsedValue === parsedValue ? parsedValue : value
+                }
+              } else {
+                result = null
+              }
+
+              if (columns[parsed.columnKey[index]] !== undefined) {
+                if (
+                  columns[parsed.columnKey[index]].name === RESULT &&
+                  result
+                ) {
+                  resultColumnNames.add(result)
+                }
+                columns[parsed.columnKey[index]].data[tableLength] = result
+              }
+            })
+            tableLength++
           }
-
-          columns[columnKey].data[tableLength + i] = result
-        }
-
-        if (annotationData.groupKey.includes(columnName)) {
-          fluxGroupKeyUnion.add(columnKey)
-        }
-      }
-
-      tableLength += tableData.length
+        },
+      })
     }
 
     resolveNames(columns, fluxGroupKeyUnion)
-
     const table = Object.entries(columns).reduce(
       (table, [key, {name, fluxDataType, type, data}]) => {
         data.length = tableLength
@@ -453,40 +437,6 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       resultColumnNames: [],
     }
   }
-}
-
-const parseAnnotations = (
-  annotationData: string,
-  headerRow: string[]
-): {
-  groupKey: string[]
-  datatypeByColumnName: {[columnName: string]: any}
-  defaultByColumnName: {[columnName: string]: any}
-} => {
-  const rows = csvParseRows(annotationData)
-
-  const groupRow = rows.find(row => row[0] === '#group')
-  const datatypeRow = rows.find(row => row[0] === '#datatype')
-  const defaultRow = rows.find(row => row[0] === '#default')
-
-  assert(!!groupRow, 'could not find group annotation in Flux response')
-  assert(!!datatypeRow, 'could not find datatype annotation in Flux response')
-  assert(!!defaultRow, 'could not find default annotation in Flux response')
-
-  const groupKey = groupRow.reduce(
-    (acc, val, i) => (val === 'true' ? [...acc, headerRow[i]] : acc),
-    []
-  )
-
-  const datatypeByColumnName = datatypeRow
-    .slice(1)
-    .reduce((acc, val, i) => ({...acc, [headerRow[i + 1]]: val}), {})
-
-  const defaultByColumnName = defaultRow
-    .slice(1)
-    .reduce((acc, val, i) => ({...acc, [headerRow[i + 1]]: val}), {})
-
-  return {groupKey, datatypeByColumnName, defaultByColumnName}
 }
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
