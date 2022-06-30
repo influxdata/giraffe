@@ -307,7 +307,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       const oldVal = curr
       const nextIndex = fluxCSV
         .substring(curr, fluxCSV.length)
-        .search(/\n\s*\n#/)
+        .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
         chunks.push([oldVal, fluxCSV.length - 1])
         curr = -1
@@ -322,9 +322,10 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     let columnKey = ''
     const fluxGroupKeyUnion = new Set<string>()
     const resultColumnNames = new Set<string>()
-    let _end
+    let _end, _start
     for (const [start, end] of chunks) {
       _end = end
+      _start = start
       let annotationMode = true
 
       const parsed = {
@@ -335,8 +336,12 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         columnKey: [],
       }
       // we want to move the pointer to the first non-whitespace character at the end of the chunk
-      while (/\s/.test(fluxCSV[_end]) && _end > start) {
+      while (/\s/.test(fluxCSV[_end]) && _end > _start) {
         _end--
+      }
+      // we want to move the pointer to the first non-whitespace character at the start of the chunk
+      while (/\s/.test(fluxCSV[_start]) && _start < _end) {
+        _start++
       }
       /**
        * substring doesn't include the index for the end. For example:
@@ -346,7 +351,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
        * Given the fact that we want to include the last character of the chunk
        * we want to add + 1 to the substring ending
        */
-      Papa.parse(fluxCSV.substring(start, _end + 1), {
+      Papa.parse(fluxCSV.substring(_start, _end + 1), {
         step: function(results) {
           if (results.data[0] === '#group') {
             parsed.group = results.data.slice(1)
@@ -356,8 +361,7 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
             parsed.default = results.data.slice(1)
           } else if (results.data[0][0] !== '#' && annotationMode === true) {
             annotationMode = false
-            parsed.header = results.data.slice(1)
-            parsed.header.reduce((acc, curr, index) => {
+            results.data.slice(1).reduce((acc, curr, index) => {
               columnKey = `${curr} (${TO_COLUMN_TYPE[parsed.datatype[index]]})`
               parsed.columnKey.push(columnKey)
               if (!acc[columnKey]) {

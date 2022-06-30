@@ -296,6 +296,206 @@ describe('fromFlux', () => {
     const fFlux = fromFlux(resp)
     expect(fFlux).toEqual(expected)
   })
+  it('should be able to handle multiple tables with different values and results and |r returned CSV', () => {
+    const resp = `#group,false,false,true,true,false,false,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,crypto,description,symbol\r
+,,0,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T12:48:00Z,19058.5865,price,coindesk,EUR,bitcoin,Euro,&euro;\r
+\r
+#group,false,false,true,true,false,false,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string\r
+#default,_result,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,location\r
+,,1,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T00:59:24.885285715Z,89,degrees,average_temperature,coyote_creek\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string\r
+#default,_result,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,location,randtag\r
+,,2,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T06:17:24.885285715Z,100,index,h2o_quality,santa_monica,3\r
+\r
+#group,false,false,true,true,false,false,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string\r
+#default,_result,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,sensor_id\r
+,,3,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T12:49:32Z,71.07602188197231,temperature,airSensors,TLM0103\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,id,magType,net,title\r
+,,4,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T13:43:29.505Z,green,alert,earthquake,7000hkud,us7000hkud,mww,us,"M 5.4 - 44 km W of Hengchun, Taiwan"\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,id,magType,net,title\r
+,,5,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T15:09:54.052Z,3.1,cdi,earthquake,7000hkux,us7000hkux,mb,us,"M 4.6 - 107 km NNW of Te Anau, New Zealand"\r
+`
+
+    const expected = {
+      _field: {
+        data: ['price', 'degrees', 'index', 'temperature', 'alert', 'cdi'],
+        fluxDataType: 'string',
+        name: '_field',
+        type: 'string',
+      },
+      _measurement: {
+        data: [
+          'coindesk',
+          'average_temperature',
+          'h2o_quality',
+          'airSensors',
+          'earthquake',
+          'earthquake',
+        ],
+        fluxDataType: 'string',
+        name: '_measurement',
+        type: 'string',
+      },
+      _start: {
+        data: [
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_start',
+        type: 'time',
+      },
+      _stop: {
+        data: [
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_stop',
+        type: 'time',
+      },
+      _time: {
+        data: [
+          1656506880000,
+          1656464364885,
+          1656483444885,
+          1656506972000,
+          1656423809505,
+          1656428994052,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_time',
+        type: 'time',
+      },
+      '_value (number)': {
+        data: [19058.5865, 89, 100, 71.07602188197231, , 3.1],
+        fluxDataType: 'double',
+        name: '_value',
+        type: 'number',
+      },
+      '_value (string)': {
+        data: [, , , ,'green', ,],
+        fluxDataType: 'string',
+        name: '_value',
+        type: 'string',
+      },
+      code: {
+        data: ['EUR', , , , '7000hkud', '7000hkux'],
+        fluxDataType: 'string',
+        name: 'code',
+        type: 'string',
+      },
+      crypto: {
+        data: ['bitcoin', , , , , ,],
+        fluxDataType: 'string',
+        name: 'crypto',
+        type: 'string',
+      },
+      description: {
+        data: ['Euro', , , , , ,],
+        fluxDataType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      id: {
+        data: [, , , , 'us7000hkud', 'us7000hkux'],
+        fluxDataType: 'string',
+        name: 'id',
+        type: 'string',
+      },
+      location: {
+        data: [, 'coyote_creek', 'santa_monica', , , ,],
+        fluxDataType: 'string',
+        name: 'location',
+        type: 'string',
+      },
+      magType: {
+        data: [, , , , 'mww', 'mb'],
+        fluxDataType: 'string',
+        name: 'magType',
+        type: 'string',
+      },
+      net: {
+        data: [, , , , 'us', 'us'],
+        fluxDataType: 'string',
+        name: 'net',
+        type: 'string',
+      },
+      randtag: {
+        data: [, , '3', , , ,],
+        fluxDataType: 'string',
+        name: 'randtag',
+        type: 'string',
+      },
+      result: {
+        data: [
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+        ],
+        fluxDataType: 'string',
+        name: 'result',
+        type: 'string',
+      },
+      sensor_id: {
+        data: [, , , 'TLM0103', , ,],
+        fluxDataType: 'string',
+        name: 'sensor_id',
+        type: 'string',
+      },
+      symbol: {
+        data: ['&euro;', , , , , ,],
+        fluxDataType: 'string',
+        name: 'symbol',
+        type: 'string',
+      },
+      table: {
+        data: [0, 1, 2, 3, 4, 5],
+        fluxDataType: 'long',
+        name: 'table',
+        type: 'number',
+      },
+      title: {
+        data: [, , , ,'M 5.4 - 44 km W of Hengchun, Taiwan', 'M 4.6 - 107 km NNW of Te Anau, New Zealand'],
+        fluxDataType: 'string',
+        name: 'title',
+        type: 'string',
+      },
+    }
+
+    const response = fromFlux(resp)
+    const columns: any = (response.table as any)?.columns
+    expect(columns).toStrictEqual(expected)
+  })
 
   it('can parse a Flux CSV with mismatched schemas', () => {
     const CSV = `#group,false,false,true,true,false,true,true,true,true,true
@@ -965,6 +1165,206 @@ describe('fastFromFlux', () => {
     }
     const fFlux = fastFromFlux(resp)
     expect(fFlux).toEqual(expected)
+  })
+  it('should be able to handle multiple tables with different values and results and |r returned CSV', () => {
+    const resp = `#group,false,false,true,true,false,false,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,crypto,description,symbol\r
+,,0,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T12:48:00Z,19058.5865,price,coindesk,EUR,bitcoin,Euro,&euro;\r
+\r
+#group,false,false,true,true,false,false,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string\r
+#default,_result,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,location\r
+,,1,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T00:59:24.885285715Z,89,degrees,average_temperature,coyote_creek\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string\r
+#default,_result,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,location,randtag\r
+,,2,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T06:17:24.885285715Z,100,index,h2o_quality,santa_monica,3\r
+\r
+#group,false,false,true,true,false,false,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string\r
+#default,_result,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,sensor_id\r
+,,3,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-29T12:49:32Z,71.07602188197231,temperature,airSensors,TLM0103\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,id,magType,net,title\r
+,,4,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T13:43:29.505Z,green,alert,earthquake,7000hkud,us7000hkud,mww,us,"M 5.4 - 44 km W of Hengchun, Taiwan"\r
+\r
+#group,false,false,true,true,false,false,true,true,true,true,true,true,true\r
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string,string,string,string\r
+#default,_result,,,,,,,,,,,,\r
+,result,table,_start,_stop,_time,_value,_field,_measurement,code,id,magType,net,title\r
+,,5,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T15:09:54.052Z,3.1,cdi,earthquake,7000hkux,us7000hkux,mb,us,"M 4.6 - 107 km NNW of Te Anau, New Zealand"\r
+`
+
+    const expected = {
+      _field: {
+        data: ['price', 'degrees', 'index', 'temperature', 'alert', 'cdi'],
+        fluxDataType: 'string',
+        name: '_field',
+        type: 'string',
+      },
+      _measurement: {
+        data: [
+          'coindesk',
+          'average_temperature',
+          'h2o_quality',
+          'airSensors',
+          'earthquake',
+          'earthquake',
+        ],
+        fluxDataType: 'string',
+        name: '_measurement',
+        type: 'string',
+      },
+      _start: {
+        data: [
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+          1656422554916,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_start',
+        type: 'time',
+      },
+      _stop: {
+        data: [
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+          1656508954916,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_stop',
+        type: 'time',
+      },
+      _time: {
+        data: [
+          1656506880000,
+          1656464364885,
+          1656483444885,
+          1656506972000,
+          1656423809505,
+          1656428994052,
+        ],
+        fluxDataType: 'dateTime:RFC3339',
+        name: '_time',
+        type: 'time',
+      },
+      '_value (number)': {
+        data: [19058.5865, 89, 100, 71.07602188197231, , 3.1],
+        fluxDataType: 'double',
+        name: '_value',
+        type: 'number',
+      },
+      '_value (string)': {
+        data: [, , , ,'green', ,],
+        fluxDataType: 'string',
+        name: '_value',
+        type: 'string',
+      },
+      code: {
+        data: ['EUR', , , , '7000hkud', '7000hkux'],
+        fluxDataType: 'string',
+        name: 'code',
+        type: 'string',
+      },
+      crypto: {
+        data: ['bitcoin', , , , , ,],
+        fluxDataType: 'string',
+        name: 'crypto',
+        type: 'string',
+      },
+      description: {
+        data: ['Euro', , , , , ,],
+        fluxDataType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      id: {
+        data: [, , , , 'us7000hkud', 'us7000hkux'],
+        fluxDataType: 'string',
+        name: 'id',
+        type: 'string',
+      },
+      location: {
+        data: [, 'coyote_creek', 'santa_monica', , , ,],
+        fluxDataType: 'string',
+        name: 'location',
+        type: 'string',
+      },
+      magType: {
+        data: [, , , , 'mww', 'mb'],
+        fluxDataType: 'string',
+        name: 'magType',
+        type: 'string',
+      },
+      net: {
+        data: [, , , , 'us', 'us'],
+        fluxDataType: 'string',
+        name: 'net',
+        type: 'string',
+      },
+      randtag: {
+        data: [, , '3', , , ,],
+        fluxDataType: 'string',
+        name: 'randtag',
+        type: 'string',
+      },
+      result: {
+        data: [
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+          '_result',
+        ],
+        fluxDataType: 'string',
+        name: 'result',
+        type: 'string',
+      },
+      sensor_id: {
+        data: [, , , 'TLM0103', , ,],
+        fluxDataType: 'string',
+        name: 'sensor_id',
+        type: 'string',
+      },
+      symbol: {
+        data: ['&euro;', , , , , ,],
+        fluxDataType: 'string',
+        name: 'symbol',
+        type: 'string',
+      },
+      table: {
+        data: [0, 1, 2, 3, 4, 5],
+        fluxDataType: 'long',
+        name: 'table',
+        type: 'number',
+      },
+      title: {
+        data: [, , , ,'M 5.4 - 44 km W of Hengchun, Taiwan', 'M 4.6 - 107 km NNW of Te Anau, New Zealand'],
+        fluxDataType: 'string',
+        name: 'title',
+        type: 'string',
+      },
+    }
+
+    const response = fastFromFlux(resp)
+    const columns: any = (response.table as any)?.columns
+    expect(columns).toStrictEqual(expected)
   })
   it('parses query with newlines and hashtags', () => {
     const CSV = `#group,false,false,true,false
