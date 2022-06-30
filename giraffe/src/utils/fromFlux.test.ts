@@ -492,9 +492,29 @@ describe('fromFlux', () => {
       },
     }
 
-    const response = fromFlux(resp)
-    const columns: any = (response.table as any)?.columns
+    const expectedGroupKeys = [
+      '_start',
+      '_stop',
+      '_field',
+      '_measurement',
+      'code',
+      'crypto',
+      'description',
+      'symbol',
+      'location',
+      'randtag',
+      'sensor_id',
+      'id',
+      'magType',
+      'net',
+      'title',
+    ]
+
+    const parsed = fromFlux(resp)
+    const columns: any = (parsed.table as any)?.columns
+    const fluxGroupKeyUnion = parsed.fluxGroupKeyUnion
     expect(columns).toStrictEqual(expected)
+    expect(fluxGroupKeyUnion).toStrictEqual(expectedGroupKeys)
   })
 
   it('can parse a Flux CSV with mismatched schemas', () => {
@@ -1362,9 +1382,29 @@ describe('fastFromFlux', () => {
       },
     }
 
-    const response = fastFromFlux(resp)
-    const columns: any = (response.table as any)?.columns
+    const expectedGroupKeys = [
+      '_start',
+      '_stop',
+      '_field',
+      '_measurement',
+      'code',
+      'crypto',
+      'description',
+      'symbol',
+      'location',
+      'randtag',
+      'sensor_id',
+      'id',
+      'magType',
+      'net',
+      'title',
+    ]
+
+    const parsed = fastFromFlux(resp)
+    const columns: any = (parsed.table as any)?.columns
+    const fluxGroupKeyUnion = parsed.fluxGroupKeyUnion
     expect(columns).toStrictEqual(expected)
+    expect(fluxGroupKeyUnion).toStrictEqual(expectedGroupKeys)
   })
   it('parses query with newlines and hashtags', () => {
     const CSV = `#group,false,false,true,false
