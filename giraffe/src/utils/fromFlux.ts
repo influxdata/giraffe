@@ -332,7 +332,6 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
         group: [],
         datatype: [],
         default: [],
-        header: [],
         columnKey: [],
       }
       // we want to move the pointer to the first non-whitespace character at the end of the chunk
