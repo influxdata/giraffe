@@ -333,7 +333,7 @@ describe('fromFlux', () => {
 ,result,table,_start,_stop,_time,_value,_field,_measurement,code,id,magType,net,title\r
 ,,5,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T15:09:54.052Z,3.1,cdi,earthquake,7000hkux,us7000hkux,mb,us,"M 4.6 - 107 km NNW of Te Anau, New Zealand"\r
 `
-
+    /* eslint-disable */
     const expected = {
       _field: {
         data: ['price', 'degrees', 'index', 'temperature', 'alert', 'cdi'],
@@ -491,6 +491,7 @@ describe('fromFlux', () => {
         type: 'string',
       },
     }
+    /* eslint-enable */
 
     const expectedGroupKeys = [
       '_start',
@@ -1222,6 +1223,7 @@ describe('fastFromFlux', () => {
 ,,5,2022-06-28T13:22:34.9161857Z,2022-06-29T13:22:34.9161857Z,2022-06-28T15:09:54.052Z,3.1,cdi,earthquake,7000hkux,us7000hkux,mb,us,"M 4.6 - 107 km NNW of Te Anau, New Zealand"\r
 `
 
+    /* eslint-disable */
     const expected = {
       _field: {
         data: ['price', 'degrees', 'index', 'temperature', 'alert', 'cdi'],
@@ -1380,6 +1382,7 @@ describe('fastFromFlux', () => {
       },
     }
 
+    /* eslint-enable */
     const expectedGroupKeys = [
       '_start',
       '_stop',

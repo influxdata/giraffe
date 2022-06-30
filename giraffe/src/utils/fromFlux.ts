@@ -491,7 +491,6 @@ const parseAnnotations = (
   return {groupKey, datatypeByColumnName, defaultByColumnName}
 }
 
-
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
   boolean: 'boolean',
   unsignedLong: 'number',
