@@ -279,9 +279,9 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
       See https://github.com/influxdata/flux/blob/master/docs/SPEC.md#multiple-tables.
     */
     // finds the first non-whitespace character
-    let curr = fluxCSV.search(/\S/)
+    let currentIndex = fluxCSV.search(/\S/)
 
-    if (curr === -1) {
+    if (currentIndex === -1) {
       return {
         table: newTable(0),
         fluxGroupKeyUnion: [],
@@ -302,18 +302,18 @@ export const fastFromFlux = (fluxCSV: string): FromFluxResult => {
     // [0]: https://github.com/influxdata/influxdb/issues/15017
 
     const chunks = []
-    while (curr !== -1) {
-      const oldVal = curr
+    while (currentIndex !== -1) {
+      const prevIndex = currentIndex
       const nextIndex = fluxCSV
-        .substring(curr, fluxCSV.length)
+        .substring(currentIndex, fluxCSV.length)
         .search(/\n\s*\n#(?=datatype|group|default)/)
       if (nextIndex === -1) {
-        chunks.push([oldVal, fluxCSV.length - 1])
-        curr = -1
+        chunks.push([prevIndex, fluxCSV.length - 1])
+        currentIndex = -1
         break
       } else {
-        chunks.push([oldVal, oldVal + nextIndex])
-        curr = oldVal + nextIndex + 2
+        chunks.push([prevIndex, prevIndex + nextIndex])
+        currentIndex = prevIndex + nextIndex + 2
       }
     }
 
