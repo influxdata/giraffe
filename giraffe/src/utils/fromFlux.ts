@@ -76,7 +76,6 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
   const fluxGroupKeyUnion = new Set<string>()
   const resultColumnNames = new Set<string>()
   let tableLength = 0
-
   try {
     /*
       A Flux CSV response can contain multiple CSV files each joined by a newline.
@@ -111,7 +110,7 @@ export const fromFlux = (fluxCSV: string): FromFluxResult => {
       const prevIndex = currentIndex
       const nextIndex = fluxCSV
         .substring(currentIndex, fluxCSV.length)
-        .search(/\n\s*\n#(?=datatype|group|default)/)
+        .search(/\n\s*\n#/)
       if (nextIndex === -1) {
         chunks.push([prevIndex, fluxCSV.length - 1])
         currentIndex = -1
@@ -491,6 +490,7 @@ const parseAnnotations = (
 
   return {groupKey, datatypeByColumnName, defaultByColumnName}
 }
+
 
 const TO_COLUMN_TYPE: {[fluxDatatype: string]: ColumnType} = {
   boolean: 'boolean',

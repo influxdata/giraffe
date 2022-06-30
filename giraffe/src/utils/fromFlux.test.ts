@@ -629,10 +629,8 @@ describe('fromFlux', () => {
       '#group,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true'
 
     expect(() => {
-      fromFlux(CSV)
+      fastFromFlux(CSV)
     }).not.toThrow()
-    const actual = fromFlux(CSV)
-    expect(actual.error).toBeTruthy()
   })
 
   it('uses the default annotation to fill in empty values', () => {
