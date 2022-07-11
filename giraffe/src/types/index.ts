@@ -326,6 +326,7 @@ export interface GaugeLayerConfig {
   gaugeColors: Color[]
   gaugeSize?: number
   gaugeTheme?: Partial<GaugeTheme>
+  gaugeUnit: string[]
 }
 
 export interface GaugeTheme {
