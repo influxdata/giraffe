@@ -217,12 +217,12 @@ describe('siPrefixFormatter', () => {
 
   it('can shorten a positive number larger than septillion', () => {
     const f = siPrefixFormatter()
-    expect(f(1.7e308)).toEqual('1.7e+284Y') 
+    expect(f(1.7e308)).toEqual('1.7e+284Y')
   })
 
   it('can shorten a negative number smaller than septillion', () => {
     const f = siPrefixFormatter()
-    expect(f(-1.7e308)).toEqual('-1.7e+284Y') 
+    expect(f(-1.7e308)).toEqual('-1.7e+284Y')
   })
 })
 
