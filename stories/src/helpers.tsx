@@ -54,7 +54,8 @@ export const colorSchemeKnob = (initial?: string[]) =>
     'Color Scheme',
     {
       'Nineteen Eighty Four': giraffe.NINETEEN_EIGHTY_FOUR,
-      'Color Blind Friendly': giraffe.COLOR_BLIND_FRIENDLY,
+      'Color Blind Friendly Light': giraffe.COLOR_BLIND_FRIENDLY_LIGHT,
+      'Color Blind Friendly Dark': giraffe.COLOR_BLIND_FRIENDLY_DARK,
       Atlantis: giraffe.ATLANTIS,
       'Do Androids Dream': giraffe.DO_ANDROIDS_DREAM,
       Delorean: giraffe.DELOREAN,
