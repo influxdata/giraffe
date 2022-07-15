@@ -326,11 +326,11 @@ export const siPrefixFormatter = ({
   } else {
     formatter = (x: number): string => {
       // below code shortens extremely large or small numbers (greater than septillion+) by 
-      // first converting number to SI format, then removes the SI prefix to convert
+      // first converting number to SI format, then removing the SI unit to convert
       // number to scientific notation, and finally 
-      // adds yotta (Y) prefix at the end of number
+      // adding yotta (Y) back
       if (x >= 1e30 || x <= -1e30) {
-        const siFormattedValue = String(formatSIPrefix(Math.abs(x))).slice(0,-1) // removes SI unit yotta
+        const siFormattedValue = String(formatSIPrefix(Math.abs(x))).slice(0,-1)
         return `${prefix}${x < 0 ? '-' : ''}${d3Format(`.${significantDigits}`)(Number(siFormattedValue))}Y${suffix}`
       } else {
         return `${prefix}${formatSIPrefix(x)}${suffix}`
