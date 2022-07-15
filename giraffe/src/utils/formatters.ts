@@ -324,7 +324,19 @@ export const siPrefixFormatter = ({
   if (format !== true) {
     formatter = (x: number): string => `${prefix}${x}${suffix}`
   } else {
-    formatter = (x: number): string => `${prefix}${formatSIPrefix(x)}${suffix}`
+    formatter = (x: number): string => {
+      // below code shortens extremely large or small numbers (greater than septillion+) by 
+      // first converting number to SI format, then removes the SI prefix to convert
+      // number to scientific notation, and finally 
+      // adds yotta (Y) prefix at the end of number
+      if (x >= 1e30 || x <= -1e30) {
+        const siFormattedValue = String(formatSIPrefix(Math.abs(x))).slice(0,-1) // removes SI unit yotta
+        return `${prefix}${x < 0 ? '-' : ''}${d3Format(`.${significantDigits}`)(Number(siFormattedValue))}Y${suffix}`
+      } else {
+        return `${prefix}${formatSIPrefix(x)}${suffix}`
+      }
+
+    } 
   }
 
   formatter._GIRAFFE_FORMATTER_TYPE = FormatterType.SIPrefix as FormatterType.SIPrefix
