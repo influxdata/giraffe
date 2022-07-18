@@ -337,9 +337,8 @@ export const siPrefixFormatter = ({
         return `${prefix}${x < 0 ? '-' : ''}${d3Format(`.${significantDigits}`)(
           Number(siFormattedValue)
         )}Y${suffix}`
-      } else {
-        return `${prefix}${formatSIPrefix(x)}${suffix}`
       }
+      return `${prefix}${formatSIPrefix(x)}${suffix}`
     }
   }
 
