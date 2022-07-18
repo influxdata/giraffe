@@ -214,6 +214,16 @@ describe('siPrefixFormatter', () => {
     expect(f(37)).toEqual('37.00')
     expect(f(37.1234)).toEqual('37.12')
   })
+
+  it('can shorten a positive number larger than septillion', () => {
+    const f = siPrefixFormatter()
+    expect(f(1.7e308)).toEqual('1.7e+284Y')
+  })
+
+  it('can shorten a negative number smaller than septillion', () => {
+    const f = siPrefixFormatter()
+    expect(f(-1.7e308)).toEqual('-1.7e+284Y')
+  })
 })
 
 describe('binaryPrefixFormatter', () => {
