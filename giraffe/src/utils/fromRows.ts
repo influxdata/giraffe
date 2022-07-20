@@ -24,6 +24,9 @@ export const fromRows = <T extends object>(
 
       if (schema) {
         columnType = schema[key]
+        if (!columnType) {
+          columnType = inferColumnType(row[key])
+        }
         value = parseValue(row[key], columnType)
       } else {
         columnType = inferColumnType(row[key])
