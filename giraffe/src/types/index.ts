@@ -261,20 +261,20 @@ export enum LayerTypes {
 }
 
 export type LayerConfig =
-  | CustomLayerConfig
   | AnnotationLayerConfig
-  | RawFluxDataTableLayerConfig
+  | BandLayerConfig
+  | CustomLayerConfig
   | GaugeLayerConfig
-  | SingleStatLayerConfig
+  | GeoLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
   | LineLayerConfig
-  | BandLayerConfig
-  | ScatterLayerConfig
   | MosaicLayerConfig
-  | TableGraphLayerConfig
-  | GeoLayerConfig
+  | RawFluxDataTableLayerConfig
+  | ScatterLayerConfig
   | SimpleTableLayerConfig
+  | SingleStatLayerConfig
+  | TableGraphLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -462,8 +462,6 @@ export interface ScatterLayerConfig {
 export interface SimpleTableLayerConfig {
   type: 'simple table' // do not refactor or restrict to LayerTypes.SimpleTable
   showAll: boolean
-  fluxResponse?: string
-  fromFluxResult?: FromFluxResult
 }
 
 export interface TableGraphLayerConfig {

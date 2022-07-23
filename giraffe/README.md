@@ -893,10 +893,6 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
 
   - **showAll**: _boolean. **Required**._ Specifies whether or not to include the columns `_start` and `_stop` in the table visualization.
 
-  - **fluxResponse**: _String. Optional._ [The unparsed string of comma separated values returned from a Flux query representing the data to be visualized](https://github.com/influxdata/flux/blob/master/docs/SPEC.md#csv). Ignored when **fromFluxResult** is present, as **fromFluxResult** takes precendence. If this property is used without **fromFluxResult**, parsing will be executed. NOTE: does not need to be repeated in the `layers` if already present in the parent `config`. Does not replace the parent property and cannot be present without the parent version of this property.
-
-  - **fromFluxResult**: _Object._ When present, overrides **fluxResponse** and prevents any parsing of the **fluxResponse**. An object containing the properties of the result of parsing **fluxResponse**. When both are missing, `config` will create an empty data set without any parsing. NOTE: does not need to be repeated in the `layers` if already present in the parent `config`. Does not replace the parent property and cannot be present without the parent version of this property.
-
 - **CustomLayerConfig**: _Object._ No limit per `<Plot>`.
 
   A custom layer is an overlay on the Plot that is not one of the above pre-defined plot types. A render callback function is passed in as the renderer for the custom layer. It has two properties:

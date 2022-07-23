@@ -90,13 +90,9 @@ export const SizedTable: FunctionComponent<Props> = ({
                 return (
                   <SimpleTableLayer
                     key={layerIndex}
-                    config={
-                      {
-                        ...layerConfig,
-                        fromFluxResult: config.fromFluxResult,
-                        fluxResponse: config.fluxResponse,
-                      } as SimpleTableLayerConfig
-                    }
+                    config={layerConfig as SimpleTableLayerConfig}
+                    fluxResponse={config.fluxResponse}
+                    fromFluxResult={config.fromFluxResult}
                   />
                 )
               }
