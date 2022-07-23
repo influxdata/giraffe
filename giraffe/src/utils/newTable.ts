@@ -2,7 +2,7 @@ import {Table, ColumnType, ColumnData, Config, FluxDataType} from '../types'
 import {fromFlux} from './fromFlux'
 
 // Don't export me!
-class SimpleTable implements Table {
+class EmpiricalTable implements Table {
   public readonly length: number = 0
 
   private columns: {
@@ -97,7 +97,7 @@ class SimpleTable implements Table {
       )
     }
 
-    const table = new SimpleTable(this.length)
+    const table = new EmpiricalTable(this.length)
 
     table.columns = {
       ...this.columns,
@@ -113,7 +113,7 @@ class SimpleTable implements Table {
   }
 }
 
-export const newTable = (length: number): Table => new SimpleTable(length)
+export const newTable = (length: number): Table => new EmpiricalTable(length)
 
 export const newTableFromConfig = (config: Config): Table => {
   if (!config) {

@@ -13,12 +13,12 @@ interface Props {
 }
 
 export const SimpleTableLayer: FunctionComponent<Props> = (props: Props) => {
-  const {showAll, fluxResponse} = props.config
+  const {showAll, fluxResponse, fromFluxResult} = props.config
   const properties: SimpleTableViewProperties = {
     type: 'simple-table',
     showAll,
   }
-  const result = fromFlux(fluxResponse)
+  const result = fromFluxResult ? fromFluxResult : fromFlux(fluxResponse)
 
   return <SimpleTable result={result} properties={properties} />
 }

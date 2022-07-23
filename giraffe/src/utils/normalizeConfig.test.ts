@@ -1,13 +1,15 @@
 import {Config} from '../types'
 import {normalizeConfig, normalizeLayers} from './normalizeConfig'
+import {newTable} from './newTable'
 
 describe('normalizeConfig', () => {
-  it('handles unexpected arguments', () => {
-    const emptyConfig = {layers: []}
+  const emptyConfig = {layers: []}
+  const normalizedDataConfig = {table: newTable(0), layers: []}
 
+  it('handles unexpected arguments', () => {
     expect(normalizeConfig(undefined)).toEqual(emptyConfig)
     expect(normalizeConfig(null)).toEqual(emptyConfig)
-    expect(normalizeConfig(emptyConfig)).toEqual(emptyConfig)
+    expect(normalizeConfig(emptyConfig)).toEqual(normalizedDataConfig)
   })
 
   describe('config for Band Layer', () => {
@@ -24,6 +26,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -50,6 +53,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -77,6 +81,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -105,6 +110,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -135,6 +141,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -165,6 +172,7 @@ describe('normalizeConfig', () => {
         ],
       } as Config
       expect(normalizeConfig(config)).toEqual({
+        ...normalizedDataConfig,
         ...config,
         layers: [
           {
@@ -174,6 +182,115 @@ describe('normalizeConfig', () => {
             lowerColumnName,
           },
         ],
+      })
+    })
+  })
+
+  describe('config for SimpleTable', () => {
+    it('ignores the table property and can find the fromFluxResult property', () => {
+      const fromFluxResult = {
+        table: newTable(2),
+        fluxGroupKeyUnion: [],
+        resultColumnNames: [],
+      }
+      const config = {
+        fromFluxResult,
+        layers: [
+          {
+            type: 'simple table',
+            showAll: true,
+          },
+        ],
+      } as Config
+
+      expect(normalizeConfig(config)).toEqual(config)
+
+      config.table = newTable(10)
+      expect(normalizeConfig(config)).toEqual(config)
+
+      config.table = newTable(1000)
+      expect(normalizeConfig(config)).toEqual(config)
+
+      delete config.table
+      expect(normalizeConfig(config)).toEqual(config)
+    })
+
+    it('ignores the table property and can find the fluxResponse property', () => {
+      const fluxResponse = `#group,false,false,true,true,false,false,true,true,true,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string,string
+#default,_result,,,,,,,,,
+,result,table,_start,_stop,_time,_value,_field,_measurement,cpu,host
+`
+      const config = {
+        fluxResponse,
+        layers: [
+          {
+            type: 'simple table',
+            showAll: true,
+          },
+        ],
+      } as Config
+
+      expect(normalizeConfig(config)).toEqual(config)
+
+      config.table = newTable(0)
+      expect(normalizeConfig(config)).toEqual(config)
+
+      config.table = newTable(100000)
+      expect(normalizeConfig(config)).toEqual(config)
+
+      delete config.table
+      expect(normalizeConfig(config)).toEqual(config)
+    })
+
+    it('uses the fromFluxResult property over the fluxResponse property', () => {
+      const fromFluxResult = {
+        table: newTable(2),
+        fluxGroupKeyUnion: [],
+        resultColumnNames: [],
+      }
+
+      const config = {
+        fromFluxResult,
+        layers: [
+          {
+            type: 'simple table',
+            showAll: true,
+          },
+        ],
+      } as Config
+
+      config.fluxResponse = ''
+      let firstResult = normalizeConfig(config)
+      expect(firstResult).toEqual(config)
+      expect(firstResult.table).toBeUndefined()
+
+      config.fluxResponse = 'not valid csv'
+      let secondResult = normalizeConfig(config)
+      expect(secondResult).toEqual(config)
+      expect(secondResult.table).toBeUndefined()
+
+      expect(firstResult.fromFluxResult).toEqual(secondResult.fromFluxResult)
+    })
+
+    it('creates a default fromFluxResult property when fromFromResult and fluxResponse are both missing', () => {
+      const defaultFromFluxResult = {
+        table: newTable(0),
+        fluxGroupKeyUnion: [],
+        resultColumnNames: [],
+      }
+      const config = {
+        layers: [
+          {
+            type: 'simple table',
+            showAll: true,
+          },
+        ],
+      } as Config
+
+      expect(normalizeConfig(config)).toEqual({
+        fromFluxResult: {...defaultFromFluxResult},
+        ...config,
       })
     })
   })
@@ -191,7 +308,6 @@ describe('normalizeConfig', () => {
       - MosaicLayerConfig
       - RawFluxDataTableLayerConfig
       - ScatterLayerConfig
-      - SimpleTableLayerConfig
       - SingleStatLayerConfig
       - TableGraphLayerConfig
   */
