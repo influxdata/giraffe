@@ -24,7 +24,7 @@ export const normalizeConfig = (config: Config): Config => {
     const {fluxResponse, fromFluxResult, table} = config
 
     switch (config.layers?.[0]?.type) {
-      case 'simple table':
+      case 'simple table': {
         if (fromFluxResult) {
           dataProperties.fromFluxResult = fromFluxResult
         } else if (fluxResponse) {
@@ -37,10 +37,12 @@ export const normalizeConfig = (config: Config): Config => {
           }
         }
         break
+      }
 
-      case 'table':
+      case 'table': {
         dataProperties.fluxResponse = fluxResponse ? fluxResponse : ''
         break
+      }
 
       default:
         if (table) {
