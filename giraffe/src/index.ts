@@ -55,10 +55,11 @@ export {
   NumericColumnData,
   RawFluxDataTableLayerConfig,
   Scale,
-  SingleStatLayerConfig,
   SimpleTableLayerConfig,
+  SingleStatLayerConfig,
   StaticLegend,
   Table,
+  TableGraphLayerConfig,
 } from './types'
 
 export * from './types/geo'

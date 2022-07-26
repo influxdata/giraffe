@@ -2,6 +2,7 @@ import CSS from 'csstype'
 import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
+import {FromFluxResult} from '../utils/fromFlux'
 
 export interface PlotDimensions {
   height: number
@@ -51,8 +52,9 @@ export interface Config {
   xScale?: string
   yScale?: string
 
-  table?: Table
   fluxResponse?: string
+  fromFluxResult?: FromFluxResult
+  table?: Table
   layers: LayerConfig[]
 
   // The x domain of the plot can be explicitly set when `xDomain` is passed,
@@ -259,20 +261,20 @@ export enum LayerTypes {
 }
 
 export type LayerConfig =
-  | CustomLayerConfig
   | AnnotationLayerConfig
-  | RawFluxDataTableLayerConfig
+  | BandLayerConfig
+  | CustomLayerConfig
   | GaugeLayerConfig
-  | SingleStatLayerConfig
+  | GeoLayerConfig
   | HeatmapLayerConfig
   | HistogramLayerConfig
   | LineLayerConfig
-  | BandLayerConfig
-  | ScatterLayerConfig
   | MosaicLayerConfig
-  | TableGraphLayerConfig
-  | GeoLayerConfig
+  | RawFluxDataTableLayerConfig
+  | ScatterLayerConfig
   | SimpleTableLayerConfig
+  | SingleStatLayerConfig
+  | TableGraphLayerConfig
 
 export interface CustomLayerConfig {
   type: 'custom' // do not refactor or restrict to LayerTypes.Custom
@@ -460,7 +462,6 @@ export interface ScatterLayerConfig {
 export interface SimpleTableLayerConfig {
   type: 'simple table' // do not refactor or restrict to LayerTypes.SimpleTable
   showAll: boolean
-  fluxResponse?: string
 }
 
 export interface TableGraphLayerConfig {

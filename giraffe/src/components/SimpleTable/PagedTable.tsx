@@ -42,7 +42,7 @@ const measurePage = (
   let signature
 
   while (rowIdx < result.table.length) {
-    if (result.table.columns.table.data[rowIdx] !== currentTable) {
+    if (result.table.columns?.table?.data?.[rowIdx] !== currentTable) {
       signature = Object.values(result.table.columns)
         .map(
           c =>
@@ -66,7 +66,7 @@ const measurePage = (
         lastSignature = signature
       }
 
-      currentTable = result.table.columns.table.data[rowIdx]
+      currentTable = result.table.columns?.table?.data?.[rowIdx]
 
       continue
     }
@@ -80,7 +80,7 @@ const measurePage = (
     rowIdx++
   }
 
-  return rowIdx - offset
+  return Math.max(0, rowIdx - offset)
 }
 
 const subsetResult = (
@@ -109,26 +109,28 @@ const subsetResult = (
     }, {})
 
   const tables: SubsetTable[] = []
-  let lastTable
+  let lastTable = ''
 
   // group by table id (series)
   for (let ni = 0; ni < size; ni++) {
     if (
-      `y${subset['result'][0].data[ni]}:t${subset['table'][0].data[ni]}` ===
+      `y${subset['result']?.[0]?.data?.[ni]}:t${subset['table']?.[0]?.data?.[ni]}` ===
       lastTable
     ) {
       continue
     }
 
-    lastTable = `y${subset['result'][0].data[ni]}:t${subset['table'][0].data[ni]}`
+    if (subset['result']?.[0]?.data?.[ni] && subset['table']?.[0]?.data?.[ni]) {
+      lastTable = `y${subset['result'][0].data[ni]}:t${subset['table'][0].data[ni]}`
+    }
 
     if (tables.length) {
       tables[tables.length - 1].end = ni
     }
 
     tables.push({
-      idx: subset['table'][0].data[ni],
-      yield: subset['result'][0].data[ni],
+      idx: subset['table']?.[0]?.data?.[ni] ?? -1,
+      yield: subset['result']?.[0]?.data?.[ni] ?? '',
       cols: [],
       signature: '',
       start: ni,
@@ -238,13 +240,14 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     }
 
     let timeout
+    let animationFrameID
     const resizer = new ResizeObserver(entries => {
       if (timeout) {
         clearTimeout(timeout)
       }
 
       timeout = setTimeout(() => {
-        requestAnimationFrame(() => {
+        animationFrameID = requestAnimationFrame(() => {
           setHeight(entries[0].contentRect.height)
         })
       }, 200)
@@ -262,40 +265,41 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
     return () => {
       resizer.disconnect()
+      cancelAnimationFrame(animationFrameID)
       if (timeout) {
         clearTimeout(timeout)
       }
     }
-  }, [ref?.current])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const size = useMemo(() => {
     return measurePage(result, offset, height)
   }, [result, offset, height])
   const tables = useMemo(() => {
     return subsetResult(result, offset, size, properties.showAll)
-  }, [result, offset, size])
+  }, [result, offset, size]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setSize(size)
-  }, [size])
+  }, [size]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setMaxSize(measurePage(result, 0, height))
-  }, [height, result])
+  }, [height, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setPage(1)
-  }, [result])
+  }, [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (maxSize) {
       setTotalPages(Math.ceil((result?.table?.length ?? 0) / maxSize))
     }
-  }, [maxSize, result])
+  }, [maxSize, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inner = tables.map((t, tIdx) => (
-    <InnerTable table={t} key={`table${tIdx}`} />
-  ))
+  const inner =
+    !!size &&
+    tables.map((t, tIdx) => <InnerTable table={t} key={`table${tIdx}`} />)
 
   return (
     <div

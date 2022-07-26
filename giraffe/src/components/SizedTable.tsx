@@ -40,8 +40,6 @@ export const SizedTable: FunctionComponent<Props> = ({
     bottom: 0,
   }
 
-  const fluxResponse = config.fluxResponse ? config.fluxResponse : ''
-
   return (
     <div
       className="giraffe-plot"
@@ -92,16 +90,19 @@ export const SizedTable: FunctionComponent<Props> = ({
                 return (
                   <SimpleTableLayer
                     key={layerIndex}
-                    config={
-                      {...layerConfig, fluxResponse} as SimpleTableLayerConfig
-                    }
+                    config={layerConfig as SimpleTableLayerConfig}
+                    fluxResponse={config.fluxResponse}
+                    fromFluxResult={config.fromFluxResult}
                   />
                 )
               }
 
               case LayerTypes.Table:
                 return (
-                  <FluxTablesTransform key={layerIndex} files={[fluxResponse]}>
+                  <FluxTablesTransform
+                    key={layerIndex}
+                    files={[config.fluxResponse]}
+                  >
                     {tables => (
                       <TableGraphLayer
                         config={

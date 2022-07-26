@@ -3,22 +3,28 @@ import React, {FunctionComponent} from 'react'
 import {SimpleTable, SimpleTableViewProperties} from './SimpleTableGraph'
 
 // Utils
-import {fromFlux} from '../utils/fromFlux'
+import {fromFlux, FromFluxResult} from '../utils/fromFlux'
 
 // Types
 import {SimpleTableLayerConfig} from '../types'
 
 interface Props {
   config: SimpleTableLayerConfig
+  fluxResponse?: string
+  fromFluxResult: FromFluxResult
 }
 
-export const SimpleTableLayer: FunctionComponent<Props> = (props: Props) => {
-  const {showAll, fluxResponse} = props.config
+export const SimpleTableLayer: FunctionComponent<Props> = ({
+  config,
+  fluxResponse,
+  fromFluxResult,
+}: Props) => {
+  const {showAll} = config
   const properties: SimpleTableViewProperties = {
     type: 'simple-table',
     showAll,
   }
-  const result = fromFlux(fluxResponse)
+  const result = fromFluxResult ? fromFluxResult : fromFlux(fluxResponse)
 
   return <SimpleTable result={result} properties={properties} />
 }
