@@ -7,8 +7,7 @@ import {Input} from './Input'
 import {TableSidebarItem} from './TableSidebarItem'
 
 // Types
-import {IconFont} from '../types/input'
-import {FluxTable, Theme} from '../types'
+import {IconFont, FluxTable, Theme} from '../types'
 
 // Styles
 import styles from './TableGraphs.scss'

@@ -1,3 +1,4 @@
+@import '../../../style/variables.scss';
 
 /*
   pagination
@@ -5,10 +6,12 @@
 */
 
 .cf-pagination,
+.cf-pagination-input--container,
 .cf-pagination--container {
-  width: 100%;
   display: flex;
+  align-items: center;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 .cf-pagination--item--container {
@@ -22,12 +25,18 @@
   position: relative;
   &:after {
     content: '';
-    background-color: #383846;
+    background-color: $cf-pagination--border-color;
     z-index: 1;
     width: 100%;
     position: absolute;
-    height: 3px;
+    height: floor($cf-form-md-height * 0.1);
     left: 0;
     bottom: 0;
   }
+}
+
+.cf-pagination-input--item {
+  margin: 0 16px;
+  color: $cf-grey-65;
+  font-weight: $cf-font-weight--medium;
 }

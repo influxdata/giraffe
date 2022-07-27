@@ -4,6 +4,10 @@ import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
 import {FromFluxResult} from '../utils/fromFlux'
 
+export * from './component'
+export * from './input'
+export * from './timeZones'
+
 export interface PlotDimensions {
   height: number
   width: number
@@ -507,8 +511,6 @@ export interface RenamableField {
   displayName?: string
   visible?: boolean
 }
-
-export * from './timeZones'
 
 export type Theme = 'light' | 'dark'
 

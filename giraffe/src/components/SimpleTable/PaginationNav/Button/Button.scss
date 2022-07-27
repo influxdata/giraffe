@@ -1,80 +1,64 @@
-
-$cf-form-md-height: 38px;
-$cf-form-md-padding: 14px;
-$cf-form-md-font: 14px;
-
-@mixin gradient-diag-up($startColor, $endColor) {
-  background: $startColor;
-  background: -moz-linear-gradient(45deg, $startColor 0%, $endColor 100%);
-  background: -webkit-linear-gradient(45deg, $startColor 0%, $endColor 100%);
-  background: linear-gradient(45deg, $startColor 0%, $endColor 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
-}
-
-// Block user select
-%no-user-select {
-  user-select: none !important;
-  -moz-user-select: none !important;
-  -webkit-user-select: none !important;
-  -ms-user-select: none !important;
-  -o-user-select: none !important;
-  &,
-  &:hover {
-    cursor: default;
-  }
-}
+@import '../../../../style/variables.scss';
 
 /*
   Button Styles
   ------------------------------------------------------------------------------
 */
-
 .cf-button {
-  $cf-radius: 4px;
-
-  font-weight: 500;
-  font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-weight: $cf-font-weight--medium;
+  font-family: $cf-text-font;
   border-style: solid;
   border-width: 0;
   text-decoration: none;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease,
-    color 0.25s ease;
+  transition: background-color $cf-transition-default,
+    box-shadow $cf-transition-default, color $cf-transition-default;
   outline: none;
   border-radius: $cf-radius;
   white-space: nowrap;
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
   @extend %no-user-select;
 
+  & > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &:not(.cf-dropdown--button) {
+    @extend %type-uppercase;
+  }
+
   &:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
-    z-index: -1;
-    border-radius: $cf-radius;
-    transition: opacity 0.25s ease;
-    opacity: 0;
+    @include createOverlayBase();
   }
 
   &:hover {
     cursor: pointer;
   }
+
+  &:not([disabled]):hover:after {
+    opacity: $cf-hover-active-opacity;
+  }
+
+  &[disabled]:hover {
+    cursor: default;
+  }
 }
 
 .cf-button-icon {
-  margin-right: 0.4em;
-  margin-left: -0.1em;
+  margin-right: 0.6em;
+  margin-left: 0;
   display: inline-block;
-  vertical-align: middle;
-  transform: translateY(-5%);
   pointer-events: none;
 
   .cf-button--label + & {
-    margin-right: -0.1em;
-    margin-left: 0.4em;
+    margin-right: 0;
+    margin-left: 0.6em;
   }
 
   &:only-child {
@@ -86,20 +70,44 @@ $cf-form-md-font: 14px;
   Size Modifiers
   ------------------------------------------------------------------------------
 */
-.cf-button-md {
-  font-size: $cf-form-md-font;
-  padding: 0 $cf-form-md-padding;
-  height: $cf-form-md-height;
-  line-height: $cf-form-md-height;
+@mixin buttonSizeModifier($fontSize, $paddingH, $height) {
+  font-size: $fontSize;
+  padding: 0 $paddingH;
+  height: $height;
 
   .cf-button-spinner {
-    width: $cf-form-md-height * 0.5;
-    height: $cf-form-md-height * 0.5;
+    width: $height * 0.5;
+    height: $height * 0.5;
   }
+}
 
-  .cf-button-icon {
-    font-size: floor($cf-form-md-font * 1.2);
-  }
+.cf-button-xs {
+  @include buttonSizeModifier(
+    $cf-form-xs-font,
+    $cf-form-xs-padding,
+    $cf-form-xs-height
+  );
+}
+.cf-button-sm {
+  @include buttonSizeModifier(
+    $cf-form-sm-font,
+    $cf-form-sm-padding,
+    $cf-form-sm-height
+  );
+}
+.cf-button-md {
+  @include buttonSizeModifier(
+    $cf-form-md-font,
+    $cf-form-md-padding,
+    $cf-form-md-height
+  );
+}
+.cf-button-lg {
+  @include buttonSizeModifier(
+    $cf-form-lg-font,
+    $cf-form-lg-padding,
+    $cf-form-lg-height
+  );
 }
 
 /*
@@ -108,43 +116,50 @@ $cf-form-md-font: 14px;
 */
 .cf-button-square {
   padding: 0;
-  text-align: center;
+  letter-spacing: 0;
+  line-height: 1;
+  flex-shrink: 0;
 
+  & > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: $cf-space-3xs;
+  }
+
+  &.cf-button-xs {
+    width: $cf-space-m;
+    height: $cf-space-m;
+  }
+  &.cf-button-sm {
+    width: $cf-form-sm-height;
+  }
   &.cf-button-md {
     width: $cf-form-md-height;
   }
+  &.cf-button-lg {
+    width: $cf-form-lg-height;
+  }
+}
+
+.cf-button-stretch {
+  width: 100%;
 }
 
 /*
   Color Modifiers
   ------------------------------------------------------------------------------
 */
-@mixin buttonColorModifier(
-  $bgA,
-  $bgB,
-  $bgHoverA,
-  $bgHoverB,
-  $text,
-  $textHover,
-  $tertiary: false
-) {
+@mixin buttonColorModifier($bgA, $bgB, $text, $textHover, $tertiary: false) {
   color: $text;
   @include gradient-diag-up($bgA, $bgB);
-
-  &:after {
-    @include gradient-diag-up($bgHoverA, $bgHoverB);
-  }
 
   &:hover {
     color: $textHover;
   }
 
-  &:hover:after {
-    opacity: 1;
-  }
-
   &:focus {
-    box-shadow: 0 -1px 4px 1px #00a3ff, 0 1px 6px 2px #be2ee4;
+    @include focus-shadow();
   }
 
   @if $tertiary {
@@ -158,7 +173,7 @@ $cf-form-md-font: 14px;
     &:focus,
     &.active:hover {
       &:after {
-        opacity: 1;
+        opacity: $cf-hover-active-opacity;
       }
     }
   } @else {
@@ -170,45 +185,132 @@ $cf-form-md-font: 14px;
       color: $textHover;
 
       &:after {
-        opacity: 1;
+        opacity: $cf-hover-active-opacity;
       }
     }
   }
+
+  &.cf-button--loading,
+  &.cf-button--loading:hover {
+    box-shadow: 0 0 0 0;
+  }
+
+  &.cf-button--disabled,
+  &.cf-button--disabled:hover,
+  &.cf-button--disabled:focus {
+    cursor: not-allowed;
+    opacity: $cf-disabled-opacity;
+  }
+
+  .cf-button-spinner {
+    border-color: rgba($text, 0.25);
+    border-top-color: $text;
+  }
+}
+
+.cf-button-default,
+.cf-button-secondary {
+  @include buttonColorModifier(
+    $cf-button-default-bg,
+    $cf-button-default-bg,
+    $cf-white,
+    $cf-white
+  );
+}
+
+.cf-button-primary,
+.cf-button-success {
+  @include buttonColorModifier($c-pool, $c-pulsar, $cf-white, $cf-white);
 }
 
 .cf-button-tertiary {
-  $g3-castle: #292933;
+  @include buttonColorModifier(
+    transparent,
+    transparent,
+    $cf-grey-65,
+    $cf-grey-65,
+    true
+  );
+}
 
-  color: #757888;
-  @include gradient-diag-up(transparent, transparent);
+.cf-button-warning,
+.cf-button-danger {
+  @include buttonColorModifier($c-ruby, $c-topaz, $cf-white, $cf-white);
+}
 
-  &:after {
-    @include gradient-diag-up($g3-castle, $g3-castle);
+.cf-button-colorless {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  height: auto;
+  font-weight: $cf-font-weight--regular;
+
+  &.cf-button-xs {
+    font-size: $cf-text-base-0;
   }
 
-  &:hover {
-    color: #ffffff;
-  }
+  &.cf-button-square {
+    color: $cf-grey-45;
 
-  &:hover:after {
-    opacity: 1;
-  }
-
-  &:focus {
-    box-shadow: 0 -1px 4px 1px #00a3ff, 0 1px 6px 2px #be2ee4;
-  }
-
-  &:active,
-  &:focus,
-  &:active:hover,
-  &.active,
-  &.active:hover {
-    color: #ffffff;
-  }
-  &:focus,
-  &.active:hover {
-    &:after {
-      opacity: 1;
+    &:focus,
+    &:hover {
+      color: $cf-white;
     }
   }
+
+  .cf-button--label {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  &:focus .cf-button--label,
+  &:hover .cf-button--label {
+    text-decoration: underline;
+  }
+
+  &:after {
+    display: none;
+  }
+}
+
+/*
+  Loading State
+  ------------------------------------------------------------------------------
+*/
+.cf-button--loading,
+.cf-button--loading:hover,
+.cf-button--loading:active,
+.cf-button--loading:active:hover,
+.cf-button--loading[disabled],
+.cf-button--loading[disabled]:hover {
+  color: transparent;
+  position: relative;
+}
+
+/*
+  Loading Spinner
+  ------------------------------------------------------------------------------
+*/
+
+@keyframes ButtonSpinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.cf-button-spinner {
+  pointer-events: none;
+  border-style: solid;
+  border-radius: 50%;
+  animation-duration: 0.85s;
+  animation-name: ButtonSpinner;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-width: $cf-border;
 }

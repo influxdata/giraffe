@@ -3,8 +3,7 @@ import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {StandardFunctionProps} from '../types'
-import {IconFont} from '../types/input'
+import {IconFont, StandardFunctionProps} from '../types'
 
 // Styles
 import styles from './Icon.scss'

@@ -3,19 +3,15 @@ export enum AutoComplete {
   Off = 'off',
 }
 
-export enum ComponentSize {
-  ExtraSmall = 'xs',
-  Small = 'sm',
-  Medium = 'md',
-  Large = 'lg',
+export enum ButtonShape {
+  Default = 'none',
+  Square = 'square',
+  StretchToFit = 'stretch',
 }
 
-export enum ComponentStatus {
-  Default = 'default',
-  Loading = 'loading',
-  Error = 'error',
-  Valid = 'valid',
-  Disabled = 'disabled',
+export enum ButtonType {
+  Button = 'button',
+  Submit = 'submit',
 }
 
 export enum IconFont {

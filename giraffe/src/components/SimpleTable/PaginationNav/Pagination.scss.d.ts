@@ -5,6 +5,8 @@ interface CssExports {
   'cf-pagination--container': string;
   'cf-pagination--item--container': string;
   'cf-pagination--item--container__active': string;
+  'cf-pagination-input--container': string;
+  'cf-pagination-input--item': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

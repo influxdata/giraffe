@@ -1,0 +1,127 @@
+$cf-form-md-height: 44px;
+$cf-form-md-padding: 14px;
+$cf-form-md-font: 14px;
+$cf-font-weight--regular: 400;
+$cf-font-weight--medium: 600;
+
+$cf-code-font: 'Roboto Mono', monospace;
+$cf-text-font: 'Proxima Nova', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+
+$cf-time-quick: 200ms;
+$cf-ease-snappy: cubic-bezier(0.18, 0.16, 0.2, 1);
+$cf-transition-default: $cf-time-quick $cf-ease-snappy;
+
+$cf-hover-active-opacity: 0.08;
+
+$cf-radius: 2px;
+$cf-border: 2px;
+
+$cf-space-3xs: 4px;
+$cf-space-2xs: 8px;
+$cf-space-xs: 12px;
+$cf-space-m: 24px;
+$cf-form-xs-padding: $cf-space-xs;
+$cf-form-sm-padding: $cf-space-xs;
+$cf-form-lg-padding: $cf-space-m;
+$cf-form-xs-height: 33px;
+$cf-form-sm-height: 40px;
+$cf-form-lg-height: 52px;
+
+$cf-grey-5: #07070e;
+$cf-grey-15: #1a1a2a;
+$cf-grey-25: #333346;
+$cf-grey-45: #68687b;
+$cf-grey-65: #9e9ead;
+$cf-grey-75: #b9b9c5;
+$cf-grey-95: #f1f1f3;
+
+$cf-white: #ffffff;
+$c-pool: #00a3ff;
+$c-pulsar: #513cc6;
+$c-ruby: #bf3d5e;
+$c-topaz: #e85b1c;
+$g0-obsidian: #0f0e15;
+$g5-pepper: $cf-grey-25;
+$g13-mist: #bec2cc;
+
+$cf-button-default-bg: $cf-grey-25;
+$cf-pagination--border-color: $g5-pepper;
+
+$cf-disabled-opacity: 0.5;
+
+@mixin createOverlayBase() {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  border-radius: $cf-radius;
+  transition: opacity $cf-transition-default;
+  opacity: 0;
+  background-color: #ffffff;
+  pointer-events: none;
+}
+
+@mixin gradient-diag-up($startColor, $endColor) {
+  background: $startColor;
+  background: -moz-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: -webkit-linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  background: linear-gradient(45deg, $startColor 0%, $endColor 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$startColor', endColorstr='$endColor',GradientType=1 );
+}
+
+@mixin focus-shadow($color: $c-pool) {
+  box-shadow: inset 0 0 0 $cf-border rgba($color, 0.75),
+    0px 0px ($cf-border * 2) $color;
+}
+
+:root {
+  --giraffe-fluid-min-width: 320;
+  --giraffe-fluid-max-width: 1372;
+
+  --fluid-screen: 100vw;
+  --giraffe-fluid-bp: calc(
+    (var(--fluid-screen) - var(--giraffe-fluid-min-width) / 16 * 1rem) /
+      (var(--giraffe-fluid-max-width) - var(--giraffe-fluid-min-width))
+  );
+  --giraffe-f-0-min: 14;
+  --giraffe-f-0-max: 14;
+  --giraffe-step-0: calc(
+    ((var(--giraffe-f-0-min) / 16) * 1rem) +
+      (var(--giraffe-f-0-max) - var(--giraffe-f-0-min)) *
+      var(--giraffe-fluid-bp)
+  );
+
+  --girafe-f-1-min: 15.75;
+  --giraffe-f-1-max: 16.8;
+  --step-1: calc(
+    ((var(--girafe-f-1-min) / 16) * 1rem) +
+      (var(--giraffe-f-1-max) - var(--girafe-f-1-min)) * var(--giraffe-fluid-bp)
+  );
+}
+
+$cf-form-xs-font: #{var(--giraffe-step-0)};
+$cf-form-sm-font: #{var(--giraffe-step-0)};
+$cf-form-lg-font: #{var(--giraffe-step-1)};
+$cf-text-base: #{var(--giraffe-step-0)};
+
+$cf-text-base-0: $cf-text-base;
+
+%type-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+// Block user select
+%no-user-select {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  &,
+  &:hover {
+    cursor: default;
+  }
+}

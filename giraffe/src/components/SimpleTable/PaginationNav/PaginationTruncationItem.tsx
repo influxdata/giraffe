@@ -1,15 +1,16 @@
 // Libraries
 import React, {forwardRef, MouseEvent} from 'react'
-import {Button} from './Button/Button'
 import classnames from 'classnames'
+
+// Components
+import {Button} from './Button/Button'
 
 // Types
 import {
   ButtonShape,
   ComponentColor,
   ComponentSize,
-  Direction,
-  IconFont,
+  ComponentStatus,
   StandardFunctionProps,
 } from '../../../types'
 
@@ -17,29 +18,24 @@ import {
 import styles from './Pagination.scss'
 import {styleReducer} from '../../../utils/styleReducer'
 
-export interface PaginationDirectionItemProps extends StandardFunctionProps {
-  /** Caret Left or Caret Right on button */
-  direction: Direction
-  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void
+export interface PaginationTruncationItemProps extends StandardFunctionProps {
+  onClick?: (e?: MouseEvent<HTMLElement>) => void
   size?: ComponentSize
-  isActive: boolean
 }
 
-export type PaginationDirectionItemRef = HTMLLIElement
-export const PaginationDirectionItem = forwardRef<
-  PaginationDirectionItemRef,
-  PaginationDirectionItemProps
+export type PaginationTruncationItemRef = HTMLLIElement
+export const PaginationTruncationItem = forwardRef<
+  PaginationTruncationItemRef,
+  PaginationTruncationItemProps
 >(
   (
     {
       id,
       style,
-      testID = 'pagination-direction-item',
+      testID = 'pagination-truncation-item',
       className,
-      direction,
       onClick,
       size = ComponentSize.Medium,
-      isActive,
     },
     ref
   ) => {
@@ -48,8 +44,6 @@ export const PaginationDirectionItem = forwardRef<
     })
       .split(' ')
       .reduce((accum, current) => styleReducer(styles, accum, current), '')
-
-    const iconFont = direction === Direction.Left ? 'CaretLeft' : 'CaretRight'
 
     return (
       <li
@@ -64,12 +58,13 @@ export const PaginationDirectionItem = forwardRef<
           color={ComponentColor.Tertiary}
           onClick={onClick}
           shape={ButtonShape.Square}
-          icon={IconFont[iconFont]}
-          active={isActive}
-        ></Button>
+          text={'...'}
+          status={ComponentStatus.Disabled}
+          style={{background: 'transparent'}}
+        />
       </li>
     )
   }
 )
 
-PaginationDirectionItem.displayName = 'PaginationDirectionItem'
+PaginationTruncationItem.displayName = 'PaginationTruncationItem'

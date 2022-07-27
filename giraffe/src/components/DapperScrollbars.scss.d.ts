@@ -4,11 +4,15 @@ interface CssExports {
   'cf-dapper-scrollbars': string;
   'cf-dapper-scrollbars--autohide': string;
   'cf-dapper-scrollbars--content': string;
+  'cf-dapper-scrollbars--lg': string;
+  'cf-dapper-scrollbars--md': string;
+  'cf-dapper-scrollbars--sm': string;
   'cf-dapper-scrollbars--thumb-x': string;
   'cf-dapper-scrollbars--thumb-y': string;
   'cf-dapper-scrollbars--track-x': string;
   'cf-dapper-scrollbars--track-y': string;
   'cf-dapper-scrollbars--wrapper': string;
+  'cf-dapper-scrollbars--xs': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
