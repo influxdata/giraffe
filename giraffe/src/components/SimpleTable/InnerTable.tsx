@@ -1,6 +1,7 @@
 import React, {FC} from 'react'
 import {Table} from './Table'
 import {SubsetTable} from '../SimpleTableGraph'
+import {ComponentSize} from '../../types'
 import styles from './SimpleTableGraph.scss'
 
 interface InnerProps {
@@ -61,7 +62,13 @@ const InnerTable: FC<InnerProps> = ({table}) => {
     })
 
   return (
-    <Table testID="simple-table" className={`${styles['cf-table']}`}>
+    <Table
+      className={`${styles['cf-table']}`}
+      fontSize={ComponentSize.Small}
+      striped
+      highlight
+      testID="simple-table"
+    >
       <Table.Header>
         <Table.Row>{headers}</Table.Row>
       </Table.Header>

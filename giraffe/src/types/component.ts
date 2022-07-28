@@ -23,3 +23,11 @@ export enum ComponentStatus {
   Valid = 'valid',
   Disabled = 'disabled',
 }
+
+export enum BorderType {
+  None = 'none',
+  Horizontal = 'horizontal',
+  Vertical = 'vertical',
+  Both = 'both',
+  All = 'all',
+}
