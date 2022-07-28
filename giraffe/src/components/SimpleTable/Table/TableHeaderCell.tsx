@@ -16,7 +16,7 @@ export type TableHeaderCellRef = HTMLTableHeaderCellElement
 export const TableHeaderCell = forwardRef<
   TableHeaderCellRef,
   TableHeaderCellProps
->(({testID = 'table-header-cell', className, children}, ref) => {
+>(({testID = 'table-header-cell', className, children, style}, ref) => {
   const tableHeaderCellClass = classnames('cf-table--header-cell', {
     [`${className}`]: className,
   })
@@ -27,7 +27,7 @@ export const TableHeaderCell = forwardRef<
     <th
       data-testid={testID}
       ref={ref}
-      style={{textAlign: 'left', verticalAlign: 'top'}}
+      style={{...style, textAlign: 'left', verticalAlign: 'top'}}
       colSpan={1}
       className={tableHeaderCellClass}
     >

@@ -8,6 +8,8 @@ import {tableCSV, nonNumbersInNumbersColumn} from './data/tableGraph'
 storiesOf('Simple Table Graph', module)
   .addDecorator(withKnobs)
   .add('Simple Table', () => {
+    const backgroundColor = text('Background contrast color:', 'black')
+
     const showAll = boolean('showAll', false)
 
     const config: Config = {
@@ -21,12 +23,16 @@ storiesOf('Simple Table Graph', module)
     }
 
     return (
-      <PlotContainer>
+      // Simple Table needs a black background by default,
+      //   override Storybook's dark grey
+      <PlotContainer style={{backgroundColor}}>
         <Plot config={config} />
       </PlotContainer>
     )
   })
   .add('Non-numbers in a numbers column', () => {
+    const backgroundColor = text('Background contrast color:', 'black')
+
     const showAll = boolean('showAll', false)
 
     const config: Config = {
@@ -40,7 +46,9 @@ storiesOf('Simple Table Graph', module)
     }
 
     return (
-      <PlotContainer>
+      // Simple Table needs a black background by default,
+      //   override Storybook's dark grey
+      <PlotContainer style={{backgroundColor}}>
         <Plot config={config} />
       </PlotContainer>
     )
@@ -49,6 +57,9 @@ storiesOf('Simple Table Graph', module)
     const csv = text('Paste CSV here:', '')
 
     let fromFluxResult = fromFlux(csv)
+
+    const backgroundColor = text('Background contrast color:', 'black')
+
     const showAll = boolean('showAll', false)
 
     const config: Config = {
@@ -62,7 +73,9 @@ storiesOf('Simple Table Graph', module)
     }
 
     return (
-      <PlotContainer>
+      // Simple Table needs a black background by default,
+      //   override Storybook's dark grey
+      <PlotContainer style={{backgroundColor}}>
         <Plot config={config} />
       </PlotContainer>
     )

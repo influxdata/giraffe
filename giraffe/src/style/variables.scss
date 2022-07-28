@@ -3,6 +3,7 @@ $cf-form-md-padding: 14px;
 $cf-form-md-font: 14px;
 $cf-font-weight--regular: 400;
 $cf-font-weight--medium: 600;
+$cf-font-weight--bold: 700;
 
 $cf-code-font: 'Roboto Mono', monospace;
 $cf-text-font: 'Proxima Nova', Helvetica, Arial, Tahoma, Verdana, sans-serif;
@@ -19,6 +20,7 @@ $cf-border: 2px;
 $cf-space-3xs: 4px;
 $cf-space-2xs: 8px;
 $cf-space-xs: 12px;
+$cf-space-s: 16px;
 $cf-space-m: 24px;
 $cf-form-xs-padding: $cf-space-xs;
 $cf-form-sm-padding: $cf-space-xs;
@@ -31,18 +33,35 @@ $cf-grey-5: #07070e;
 $cf-grey-15: #1a1a2a;
 $cf-grey-25: #333346;
 $cf-grey-45: #68687b;
+$cf-grey-55: #828294;
 $cf-grey-65: #9e9ead;
 $cf-grey-75: #b9b9c5;
 $cf-grey-95: #f1f1f3;
 
-$cf-white: #ffffff;
+$c-amethyst: #8e1fc3;
+$c-dreamsicle: #ff8564;
+$c-emerald: #006f49;
+$c-fire: #dc4e58;
+$c-ocean: #066fc5;
+$c-pineapple: #ffb94a;
 $c-pool: #00a3ff;
 $c-pulsar: #513cc6;
+$c-rainforest: #2fa74d;
 $c-ruby: #bf3d5e;
+$c-sapphire: #0b3a8d;
+$c-star: #be2ee4;
+$c-thunder: #ffd255;
+$c-tiger: #f48d38;
 $c-topaz: #e85b1c;
+$c-void: #5c10a0;
+$c-viridian: #009f5f;
+$cf-white: #ffffff;
 $g0-obsidian: #0f0e15;
+$g3-castle: $cf-grey-15;
 $g5-pepper: $cf-grey-25;
 $g13-mist: #bec2cc;
+$g17-whisper: $cf-grey-95;
+$g20-white: $cf-white;
 
 $cf-button-default-bg: $cf-grey-25;
 $cf-pagination--border-color: $g5-pepper;
@@ -85,6 +104,15 @@ $cf-disabled-opacity: 0.5;
     (var(--fluid-screen) - var(--giraffe-fluid-min-width) / 16 * 1rem) /
       (var(--giraffe-fluid-max-width) - var(--giraffe-fluid-min-width))
   );
+
+  --giraffe-f--1-min: 12.44;
+  --giraffe-f--1-max: 11.67;
+  --giraffe-step--1: calc(
+    ((var(--giraffe-f--1-min) / 16) * 1rem) +
+      (var(--giraffe-f--1-max) - var(--giraffe-f--1-min)) *
+      var(--giraffe-fluid-bp)
+  );
+
   --giraffe-f-0-min: 14;
   --giraffe-f-0-max: 14;
   --giraffe-step-0: calc(
@@ -99,14 +127,25 @@ $cf-disabled-opacity: 0.5;
     ((var(--girafe-f-1-min) / 16) * 1rem) +
       (var(--giraffe-f-1-max) - var(--girafe-f-1-min)) * var(--giraffe-fluid-bp)
   );
+
+  --giraffe-f-2-min: 17.72;
+  --giraffe-f-2-max: 20.16;
+  --giraffe-step-2: calc(
+    ((var(--giraffe-f-2-min) / 16) * 1rem) +
+      (var(--giraffe-f-2-max) - var(--giraffe-f-2-min)) * var(--fluid-bp)
+  );
 }
 
+$cf-text-tiny: #{var(--giraffe-step--1)};
 $cf-form-xs-font: #{var(--giraffe-step-0)};
 $cf-form-sm-font: #{var(--giraffe-step-0)};
 $cf-form-lg-font: #{var(--giraffe-step-1)};
 $cf-text-base: #{var(--giraffe-step-0)};
 
+$cf-text-base--1: $cf-text-tiny;
 $cf-text-base-0: $cf-text-base;
+$cf-text-base-1: #{var(--giraffe-step-1)};
+$cf-text-base-2: #{var(--giraffe-step-2)};
 
 %type-uppercase {
   text-transform: uppercase;
