@@ -45,7 +45,7 @@ export const TableSidebar: FunctionComponent<Props> = (props: Props) => {
       {data.length > 0 && (
         <div className={styles['time-machine-sidebar--heading']}>
           <Input
-            icon={IconFont.Search}
+            icon={IconFont.Search_New}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               handleSearch(event, setSearchTerm)
             }

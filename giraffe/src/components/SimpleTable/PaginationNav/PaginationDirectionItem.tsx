@@ -49,7 +49,10 @@ export const PaginationDirectionItem = forwardRef<
       .split(' ')
       .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
-    const iconFont = direction === Direction.Left ? 'CaretLeft' : 'CaretRight'
+    const iconFont =
+      direction === Direction.Left
+        ? IconFont.CaretLeft_New
+        : IconFont.CaretRight_New
 
     return (
       <li
@@ -64,7 +67,7 @@ export const PaginationDirectionItem = forwardRef<
           color={ComponentColor.Tertiary}
           onClick={onClick}
           shape={ButtonShape.Square}
-          icon={IconFont[iconFont]}
+          icon={iconFont}
           active={isActive}
         ></Button>
       </li>

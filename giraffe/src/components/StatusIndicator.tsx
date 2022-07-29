@@ -80,7 +80,7 @@ export const StatusIndicator = forwardRef<
     if (status === ComponentStatus.Valid) {
       statusElement = (
         <Icon
-          glyph={IconFont.Checkmark}
+          glyph={IconFont.CheckMark_New}
           className={styles['cf-status-indicator--child']}
         />
       )
