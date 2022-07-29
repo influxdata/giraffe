@@ -103,8 +103,9 @@ export enum IconFont {
 }
 
 export enum Direction {
-  Left = 'CaretLeft',
-  Right = 'CaretRight',
+  Left = 'left',
+  Right = 'right',
+  None = 'none',
 }
 
 export enum InputType {
