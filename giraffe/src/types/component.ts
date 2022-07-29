@@ -31,3 +31,15 @@ export enum BorderType {
   Both = 'both',
   All = 'all',
 }
+
+export enum Alignment {
+  Left = 'left',
+  Center = 'center',
+  Right = 'right',
+}
+
+export enum VerticalAlignment {
+  Top = 'top',
+  Middle = 'middle',
+  Bottom = 'bottom',
+}

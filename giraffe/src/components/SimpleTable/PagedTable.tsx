@@ -1,9 +1,9 @@
 import React, {
   FC,
   useContext,
+  useEffect,
   useMemo,
   useRef,
-  useEffect,
   useState,
 } from 'react'
 import {DapperScrollbars} from '../DapperScrollbars'
@@ -58,7 +58,7 @@ const measurePage = (
           runningHeight += 10
         }
 
-        if (runningHeight >= height) {
+        if (runningHeight + 0.25 * rowHeight >= height) {
           break
         }
 
@@ -220,9 +220,6 @@ interface Props {
   result: FluxResult['parsed']
 }
 
-const pagedTableHeaderId = 'pagedTableRowId'
-const pagedTableBodyId = 'pagedTabledBodyId'
-
 const PagedTable: FC<Props> = ({result, properties}) => {
   const {
     offset,
@@ -232,30 +229,36 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     setPage,
     setTotalPages,
   } = useContext(PaginationContext)
-  const [height, setHeight] = useState(0)
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const [rowHeight, setRowHeight] = useState(0)
-  const ref = useRef()
+  const [height, setHeight] = useState<number>(0)
+  const [headerHeight, setHeaderHeight] = useState<number>(0)
+  const [rowHeight, setRowHeight] = useState<number>(0)
+  const ref = useRef<HTMLDivElement>()
+  const pagedTableHeaderRef = useRef<HTMLTableSectionElement>()
+  const pagedTableBodyRef = useRef<HTMLTableSectionElement>()
 
-  if (headerHeight === 0) {
-    const calculatedHeaderHeight =
-      document.querySelector<HTMLElement>(`#${pagedTableHeaderId}`)
-        ?.offsetHeight ?? 0
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (headerHeight === 0 && pagedTableHeaderRef?.current) {
+      const calculatedHeaderHeight =
+        pagedTableHeaderRef.current.clientHeight ?? 0
 
-    if (calculatedHeaderHeight !== headerHeight) {
-      setHeaderHeight(calculatedHeaderHeight)
+      if (calculatedHeaderHeight !== headerHeight) {
+        setHeaderHeight(calculatedHeaderHeight)
+      }
     }
-  }
+  })
 
-  if (rowHeight === 0) {
-    const calculatedRowHeight =
-      document.querySelector<HTMLElement>(`#${pagedTableBodyId} > tr`)
-        ?.offsetHeight ?? 0
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (rowHeight === 0 && pagedTableBodyRef?.current) {
+      const calculatedRowHeight =
+        pagedTableBodyRef.current?.children?.[0].clientHeight ?? 0
 
-    if (calculatedRowHeight !== rowHeight) {
-      setRowHeight(calculatedRowHeight)
+      if (calculatedRowHeight !== rowHeight) {
+        setRowHeight(calculatedRowHeight)
+      }
     }
-  }
+  })
 
   // this makes sure that the table is always filling it's parent container
   useEffect(() => {
@@ -326,11 +329,8 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     tables.map((t, tIdx) => (
       <InnerTable
         table={t}
-        pagedTableIds={{
-          pagedTableHeaderId,
-          pagedTableBodyId,
-        }}
         key={`table${tIdx}`}
+        pagedTableRefs={{pagedTableHeaderRef, pagedTableBodyRef}}
       />
     ))
 
