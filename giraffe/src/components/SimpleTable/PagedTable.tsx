@@ -326,10 +326,10 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
   const inner =
     !!size &&
-    tables.map((t, tIdx) => (
+    tables.map((table, index) => (
       <InnerTable
-        table={t}
-        key={`table${tIdx}`}
+        table={table}
+        key={`table${index}`}
         pagedTableRefs={{pagedTableHeaderRef, pagedTableBodyRef}}
       />
     ))

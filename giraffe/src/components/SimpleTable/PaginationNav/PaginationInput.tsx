@@ -19,8 +19,8 @@ import {
 
 export interface PaginationInputProps extends StandardFunctionProps {
   currentPage: number
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void | undefined
-  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void | undefined
+  onClick?: (event?: MouseEvent<HTMLButtonElement>) => void
   size?: ComponentSize
 }
 

@@ -19,7 +19,7 @@ import styles from './Pagination.scss'
 import {styleReducer} from '../../../utils/styleReducer'
 
 export interface PaginationTruncationItemProps extends StandardFunctionProps {
-  onClick?: (e?: MouseEvent<HTMLElement>) => void
+  onClick?: (event?: MouseEvent<HTMLElement>) => void
   size?: ComponentSize
 }
 

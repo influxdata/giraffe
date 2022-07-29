@@ -156,8 +156,8 @@ export const Pagination = forwardRef<PaginationNavRef, PaginationNavProps>(
       }
     }
 
-    const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-      let parsedValue = parseInt(e.target.value, 10)
+    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+      let parsedValue = parseInt(event.target.value, 10)
 
       if (parsedValue > totalPages) {
         parsedValue = totalPages

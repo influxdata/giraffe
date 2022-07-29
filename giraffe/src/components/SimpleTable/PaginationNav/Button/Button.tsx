@@ -30,27 +30,27 @@ export type ButtonRef = ButtonBaseRef
 export const Button = forwardRef<ButtonRef, ButtonProps>(
   (
     {
-      id,
-      text,
-      style,
-      onClick,
-      tabIndex,
-      titleText,
-      disabledTitleText,
+      active = false,
       className,
-      onMouseOut,
-      onMouseOver,
+      color = ComponentColor.Default,
+      disabledTitleText,
+      icon = '',
+      id,
+      onClick,
       onMouseEnter,
       onMouseLeave,
-      icon = '',
-      active = false,
-      testID = 'button',
-      type = ButtonType.Button,
-      size = ComponentSize.Small,
+      onMouseOut,
+      onMouseOver,
       placeIconAfterText = false,
       shape = ButtonShape.Default,
-      color = ComponentColor.Default,
+      size = ComponentSize.Small,
       status = ComponentStatus.Default,
+      style,
+      tabIndex,
+      testID = 'button',
+      text,
+      titleText,
+      type = ButtonType.Button,
     },
     ref
   ) => {
@@ -60,25 +60,25 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(
 
     return (
       <ButtonBase
-        id={id}
-        ref={ref}
-        size={size}
-        type={type}
-        color={color}
-        shape={shape}
-        style={style}
         active={active}
-        status={status}
-        testID={testID}
+        className={className}
+        color={color}
+        disabledTitleText={disabledTitleText}
+        id={id}
         onClick={onClick}
-        onMouseOut={onMouseOut}
-        onMouseOver={onMouseOver}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className={className}
-        titleText={titleText || text}
-        disabledTitleText={disabledTitleText}
+        onMouseOut={onMouseOut}
+        onMouseOver={onMouseOver}
+        ref={ref}
+        shape={shape}
+        size={size}
+        status={status}
+        style={style}
         tabIndex={!!tabIndex ? tabIndex : 0}
+        testID={testID}
+        titleText={titleText || text}
+        type={type}
       >
         <IconAndText
           placeIconAfterText={placeIconAfterText}
