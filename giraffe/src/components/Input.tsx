@@ -20,14 +20,14 @@ import styles from './Input.scss'
 import {styleReducer} from '../utils/styleReducer'
 
 // Types
-import {StandardFunctionProps} from '../types'
 import {
-  ComponentStatus,
-  ComponentSize,
-  IconFont,
   AutoComplete,
+  ComponentSize,
+  ComponentStatus,
+  IconFont,
   InputType,
-} from '../types/input'
+  StandardFunctionProps,
+} from '../types'
 
 export interface InputProps extends StandardFunctionProps {
   /** Minimum value for number & range types */

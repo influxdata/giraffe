@@ -1,58 +1,25 @@
+@import '../style/variables.scss';
+
 $dapper-scrollbars--size: 6px;
-$g0-obsidian: #0f0e15;
-$g13-mist: #bec2cc;
 
 .cf-dapper-scrollbars {
   box-sizing: border-box;
 }
+
+/*
+  DapperScrollbars
+  ------------------------------------------------------------------------------
+*/
 
 .cf-dapper-scrollbars--wrapper {
   margin-right: 0 !important;
   margin-bottom: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  color: $g13-mist;
 }
 
 .cf-dapper-scrollbars--content {
   display: block !important;
-}
-
-.cf-dapper-scrollbars--track-x,
-.cf-dapper-scrollbars--track-y {
-  border-radius: $dapper-scrollbars--size !important;
-  position: absolute !important;
-  background-color: rgba($g0-obsidian, 0.4) !important;
-  user-select: none !important;
-  overflow: hidden !important;
-  transition: opacity 0.25s ease !important;
-}
-
-.cf-dapper-scrollbars--track-x {
-  height: $dapper-scrollbars--size !important;
-  width: calc(100% - #{$dapper-scrollbars--size}) !important;
-  bottom: $dapper-scrollbars--size * 0.5 !important;
-  left: $dapper-scrollbars--size * 0.5 !important;
-}
-
-.cf-dapper-scrollbars--track-y {
-  width: $dapper-scrollbars--size !important;
-  height: calc(100% - #{$dapper-scrollbars--size}) !important;
-  right: $dapper-scrollbars--size * 0.5 !important;
-  top: $dapper-scrollbars--size * 0.5 !important;
-}
-
-.cf-dapper-scrollbars--thumb-x,
-.cf-dapper-scrollbars--thumb-y {
-  border-radius: $dapper-scrollbars--size * 0.5 !important;
-}
-
-.cf-dapper-scrollbars--thumb-x {
-  height: $dapper-scrollbars--size !important;
-}
-
-.cf-dapper-scrollbars--thumb-y {
-  width: $dapper-scrollbars--size !important;
 }
 
 .cf-dapper-scrollbars--autohide {
@@ -67,4 +34,53 @@ $g13-mist: #bec2cc;
       opacity: 1;
     }
   }
+}
+
+@mixin cf-dapper-scrollbars-size-modifier($dapper-scrollbars--size) {
+  .cf-dapper-scrollbars--track-x,
+  .cf-dapper-scrollbars--track-y {
+    border-radius: $dapper-scrollbars--size !important;
+    position: absolute !important;
+    background-color: rgba($cf-grey-95, 0.15) !important;
+    user-select: none !important;
+    overflow: hidden !important;
+    transition: opacity $cf-transition-default !important;
+  }
+
+  .cf-dapper-scrollbars--track-x {
+    height: $dapper-scrollbars--size !important;
+    width: calc(100% - #{$dapper-scrollbars--size}) !important;
+    bottom: $dapper-scrollbars--size * 0.5 !important;
+    left: $dapper-scrollbars--size * 0.5 !important;
+  }
+
+  .cf-dapper-scrollbars--track-y {
+    width: $dapper-scrollbars--size !important;
+    height: calc(100% - #{$dapper-scrollbars--size}) !important;
+    right: $dapper-scrollbars--size * 0.5 !important;
+    top: $dapper-scrollbars--size * 0.5 !important;
+  }
+
+  .cf-dapper-scrollbars--thumb-x,
+  .cf-dapper-scrollbars--thumb-y {
+    border-radius: $dapper-scrollbars--size * 0.5 !important;
+  }
+
+  .cf-dapper-scrollbars--thumb-x {
+    height: $dapper-scrollbars--size !important;
+  }
+
+  .cf-dapper-scrollbars--thumb-y {
+    width: $dapper-scrollbars--size !important;
+  }
+}
+
+.cf-dapper-scrollbars--xs,
+.cf-dapper-scrollbars--sm,
+.cf-dapper-scrollbars--md {
+  @include cf-dapper-scrollbars-size-modifier(4px);
+}
+
+.cf-dapper-scrollbars--lg {
+  @include cf-dapper-scrollbars-size-modifier(8px);
 }

@@ -1,19 +1,28 @@
-import React, {FC} from 'react'
+import React, {FC, Ref} from 'react'
 import {Table} from './Table'
 import {SubsetTable} from '../SimpleTableGraph'
+import {ComponentSize, VerticalAlignment} from '../../types'
 import styles from './SimpleTableGraph.scss'
 
 interface InnerProps {
   table: SubsetTable
+  pagedTableRefs: {
+    pagedTableHeaderRef: Ref<HTMLTableSectionElement>
+    pagedTableBodyRef: Ref<HTMLTableSectionElement>
+  }
 }
 
-const InnerTable: FC<InnerProps> = ({table}) => {
+const InnerTable: FC<InnerProps> = ({
+  pagedTableRefs: {pagedTableHeaderRef, pagedTableBodyRef},
+  table,
+}) => {
   const headers = Object.values(table.cols).map(c => {
     if (c.name === 'table') {
       return (
         <Table.HeaderCell
           key="htable"
           className={`${styles['cf-table--header-cell']}`}
+          verticalAlignment={VerticalAlignment.Top}
           style={{textTransform: 'none'}}
         >
           table
@@ -23,8 +32,8 @@ const InnerTable: FC<InnerProps> = ({table}) => {
     }
     return (
       <Table.HeaderCell
-        key={`h${c.name}`}
         className={`${styles['cf-table--header-cell']}`}
+        key={`h${c.name}`}
         style={{textTransform: 'none'}}
       >
         {c.name}
@@ -48,7 +57,6 @@ const InnerTable: FC<InnerProps> = ({table}) => {
 
         return (
           <Table.Cell
-            className={`${styles['cf-table--cell']}`}
             key={`h${c.name}:r${idx}`}
             testID={`table-cell ${c.data[idx]}`}
           >
@@ -61,11 +69,17 @@ const InnerTable: FC<InnerProps> = ({table}) => {
     })
 
   return (
-    <Table testID="simple-table" className={`${styles['cf-table']}`}>
-      <Table.Header>
+    <Table
+      className={`${styles['cf-table']}`}
+      fontSize={ComponentSize.Small}
+      striped
+      highlight
+      testID="simple-table"
+    >
+      <Table.Header ref={pagedTableHeaderRef}>
         <Table.Row>{headers}</Table.Row>
       </Table.Header>
-      <Table.Body>{rows}</Table.Body>
+      <Table.Body ref={pagedTableBodyRef}>{rows}</Table.Body>
     </Table>
   )
 }

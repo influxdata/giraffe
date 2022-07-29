@@ -7,8 +7,10 @@ import {Button} from './Button/Button'
 
 // Types
 import {
+  ButtonShape,
   ComponentColor,
   ComponentSize,
+  ComponentStatus,
   StandardFunctionProps,
 } from '../../../types'
 
@@ -16,44 +18,36 @@ import {
 import styles from './Pagination.scss'
 import {styleReducer} from '../../../utils/styleReducer'
 
-export interface PaginationItemProps extends StandardFunctionProps {
-  page?: string
-  isActive: boolean
-  onClick?: (e?: MouseEvent<HTMLElement>) => void
+export interface PaginationTruncationItemProps extends StandardFunctionProps {
+  onClick?: (event?: MouseEvent<HTMLElement>) => void
   size?: ComponentSize
 }
 
-export type PaginationItemRef = HTMLLIElement
-export const PaginationItem = forwardRef<
-  PaginationItemRef,
-  PaginationItemProps
+export type PaginationTruncationItemRef = HTMLLIElement
+export const PaginationTruncationItem = forwardRef<
+  PaginationTruncationItemRef,
+  PaginationTruncationItemProps
 >(
   (
     {
       id,
       style,
-      testID = 'pagination-item',
+      testID = 'pagination-truncation-item',
       className,
-      page,
-      isActive,
       onClick,
-      size = ComponentSize.Small,
+      size = ComponentSize.Medium,
     },
     ref
   ) => {
-    const paginationItemContainerClassName = classnames(
-      'cf-pagination--item--container',
-      {
-        'cf-pagination--item--container__active': isActive && page,
-        [`${className}`]: className,
-      }
-    )
+    const paginationClassName = classnames('cf-pagination--item--container', {
+      [`${className}`]: className,
+    })
       .split(' ')
       .reduce((accum, current) => styleReducer(styles, accum, current), '')
 
     return (
       <li
-        className={paginationItemContainerClassName}
+        className={paginationClassName}
         data-testid={testID}
         id={id}
         style={style}
@@ -63,12 +57,14 @@ export const PaginationItem = forwardRef<
           size={size}
           color={ComponentColor.Tertiary}
           onClick={onClick}
-          active={isActive}
-          text={page}
+          shape={ButtonShape.Square}
+          text={'...'}
+          status={ComponentStatus.Disabled}
+          style={{background: 'transparent'}}
         />
       </li>
     )
   }
 )
 
-PaginationItem.displayName = 'PaginationItem'
+PaginationTruncationItem.displayName = 'PaginationTruncationItem'

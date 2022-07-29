@@ -1,22 +1,24 @@
+@import '../../style/variables.scss';
+
 .visualization--simple-table {
   width: 100%;
   height: 100%;
 
   display: flex;
   flex-direction: column;
-  font-family: 'Roboto Mono', monospace;
+  font-family: $cf-code-font;
   user-select: text;
 
   .cf-dapper-scrollbars {
-    border-bottom: 2px solid #07070e;
+    border-bottom: $cf-border solid $cf-grey-5;
   }
 
   .cf-dapper-scrollbars--track-x {
-    background-color: rgba(#1a1a2a, 0.5) !important;
+    background-color: rgba($cf-grey-15, 0.5) !important;
   }
 
   .cf-table {
-    border: 2px solid #333346;
+    border: $cf-border solid $cf-grey-25;
     margin-bottom: 10px;
     width: 100%;
   }
@@ -30,7 +32,7 @@
   .cf-table--header-cell label {
     display: block;
     font-size: 10px;
-    color: #68687b;
+    color: $cf-grey-45;
     font-weight: 500;
 
     &:first-of-type {
@@ -54,8 +56,8 @@
 
 .visualization--simple-table--paging-label {
   display: inline-block;
-  margin-right: 8px;
-  color: #b9b9c5;
-  font-weight: 600;
+  margin-right: $cf-space-2xs;
+  color: $cf-grey-75;
+  font-weight: $cf-font-weight--medium;
   width: 189px;
 }

@@ -11,6 +11,7 @@ import Scrollbar from 'react-scrollbars-custom'
 import {ScrollState} from 'react-scrollbars-custom/dist/types/types'
 
 import {StandardFunctionProps} from '../types'
+import {ComponentSize} from '../types'
 import {InfluxColors} from '../constants/colorSchemes'
 import styles from './DapperScrollbars.scss'
 
@@ -58,6 +59,8 @@ interface DapperScrollbarsProps extends StandardFunctionProps {
   onScroll?: Function
   /** Function called after component updated */
   onUpdate?: Function
+  /** Component Size **/
+  size?: ComponentSize
 }
 
 export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
@@ -76,12 +79,13 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
   noScrollY = false,
   autoSizeWidth = false,
   autoSizeHeight = false,
-  thumbStopColor = InfluxColors.Pool,
-  thumbStartColor = InfluxColors.Star,
+  thumbStopColor = 'rgba(255, 255, 255, 0.25)',
+  thumbStartColor = 'rgba(255, 255, 255, 0.25)',
   testID = 'dapper-scrollbars',
   removeTracksWhenNotUsed = true,
   removeTrackYWhenNotUsed = true,
   removeTrackXWhenNotUsed = true,
+  size = ComponentSize.Small,
 }) => {
   const scrollEl = useRef<any>(null)
   // State is used here to ensure that the scroll position does not jump when
@@ -90,12 +94,18 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
   const [scrollLeftPos, setScrollLeftPos] = useState<number>(Number(scrollLeft))
 
   useEffect(() => {
-    setScrollTopPos(Number(scrollTop))
+    if (scrollTop >= 0) {
+      setScrollTopPos(Number(scrollTop))
+    }
+  }, [scrollTop])
+
+  useEffect(() => {
     setScrollLeftPos(Number(scrollLeft))
-  }, [scrollTop, scrollLeft])
+  }, [scrollLeft])
 
   let dapperScrollbarsClasses = classnames('cf-dapper-scrollbars', {
     'cf-dapper-scrollbars--autohide': autoHide,
+    [`cf-dapper-scrollbars--${size}`]: size,
   })
     .split(' ')
     .reduce((accum, current) => styleReducer(styles, accum, current), '')
@@ -163,7 +173,7 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
               ref={elementRef}
               style={thumbStyle}
               {...restProps}
-              data-testid={`${testID}-thumb-x`}
+              data-testid={`${testID}--thumb-x`}
             />
           )
         },
@@ -179,7 +189,7 @@ export const DapperScrollbars: FunctionComponent<DapperScrollbarsProps> = ({
               ref={elementRef}
               style={thumbStyle}
               {...restProps}
-              data-testid={`${testID}-thumb-y`}
+              data-testid={`${testID}--thumb-y`}
             />
           )
         },

@@ -12,9 +12,10 @@ export interface TableHeaderProps extends StandardFunctionProps {}
 export type TableHeaderRef = HTMLTableSectionElement
 
 export const TableHeader = forwardRef<TableHeaderRef, TableHeaderProps>(
-  ({testID = 'table-header', children}, ref) => {
+  ({id, testID = 'table-header', children}, ref) => {
     return (
       <thead
+        id={id}
         data-testid={testID}
         ref={ref}
         className={`${styles['cf-table--header']}`}

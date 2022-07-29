@@ -6,8 +6,13 @@ import classnames from 'classnames'
 import {Icon} from './Icon'
 
 // Types
-import {StandardFunctionProps} from '../types'
-import {ComponentStatus, IconFont, ComponentSize} from '../types/input'
+import {} from '../types'
+import {
+  ComponentSize,
+  ComponentStatus,
+  IconFont,
+  StandardFunctionProps,
+} from '../types'
 
 // Styles
 import styles from './StatusIndicator.scss'
@@ -75,7 +80,7 @@ export const StatusIndicator = forwardRef<
     if (status === ComponentStatus.Valid) {
       statusElement = (
         <Icon
-          glyph={IconFont.Checkmark}
+          glyph={IconFont.CheckMark_New}
           className={styles['cf-status-indicator--child']}
         />
       )

@@ -1,9 +1,9 @@
 import React, {
   FC,
   useContext,
+  useEffect,
   useMemo,
   useRef,
-  useEffect,
   useState,
 } from 'react'
 import {DapperScrollbars} from '../DapperScrollbars'
@@ -23,13 +23,12 @@ interface ExtendedColumn {
   data: any[]
 }
 
-const HEADER_HEIGHT = 51
-const ROW_HEIGHT = 25
-
 const measurePage = (
   result: FluxResult['parsed'],
   offset: number,
-  height: number
+  height: number,
+  headerHeight: number,
+  rowHeight: number
 ): number => {
   if (height === 0) {
     return 0
@@ -53,13 +52,13 @@ const measurePage = (
         .join('|')
 
       if (signature !== lastSignature) {
-        runningHeight += HEADER_HEIGHT
+        runningHeight += headerHeight
 
         if (currentTable !== undefined) {
           runningHeight += 10
         }
 
-        if (runningHeight >= height) {
+        if (runningHeight + 0.25 * rowHeight >= height) {
           break
         }
 
@@ -71,9 +70,9 @@ const measurePage = (
       continue
     }
 
-    runningHeight += ROW_HEIGHT
+    runningHeight += rowHeight
 
-    if (runningHeight >= height) {
+    if (runningHeight + 0.25 * rowHeight >= height) {
       break
     }
 
@@ -230,8 +229,36 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     setPage,
     setTotalPages,
   } = useContext(PaginationContext)
-  const [height, setHeight] = useState(0)
-  const ref = useRef()
+  const [height, setHeight] = useState<number>(0)
+  const [headerHeight, setHeaderHeight] = useState<number>(0)
+  const [rowHeight, setRowHeight] = useState<number>(0)
+  const ref = useRef<HTMLDivElement>()
+  const pagedTableHeaderRef = useRef<HTMLTableSectionElement>()
+  const pagedTableBodyRef = useRef<HTMLTableSectionElement>()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (headerHeight === 0 && pagedTableHeaderRef?.current) {
+      const calculatedHeaderHeight =
+        pagedTableHeaderRef.current.clientHeight ?? 0
+
+      if (calculatedHeaderHeight !== headerHeight) {
+        setHeaderHeight(calculatedHeaderHeight)
+      }
+    }
+  })
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (rowHeight === 0 && pagedTableBodyRef?.current) {
+      const calculatedRowHeight =
+        pagedTableBodyRef.current?.children?.[0].clientHeight ?? 0
+
+      if (calculatedRowHeight !== rowHeight) {
+        setRowHeight(calculatedRowHeight)
+      }
+    }
+  })
 
   // this makes sure that the table is always filling it's parent container
   useEffect(() => {
@@ -273,8 +300,8 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const size = useMemo(() => {
-    return measurePage(result, offset, height)
-  }, [result, offset, height])
+    return measurePage(result, offset, height, headerHeight, rowHeight)
+  }, [result, offset, height, headerHeight, rowHeight])
   const tables = useMemo(() => {
     return subsetResult(result, offset, size, properties.showAll)
   }, [result, offset, size]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -284,8 +311,8 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   }, [size]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setMaxSize(measurePage(result, 0, height))
-  }, [height, result]) // eslint-disable-line react-hooks/exhaustive-deps
+    setMaxSize(measurePage(result, 0, height, headerHeight, rowHeight))
+  }, [result, height, headerHeight, rowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setPage(1)
@@ -299,7 +326,13 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
   const inner =
     !!size &&
-    tables.map((t, tIdx) => <InnerTable table={t} key={`table${tIdx}`} />)
+    tables.map((table, index) => (
+      <InnerTable
+        table={table}
+        key={`table${index}`}
+        pagedTableRefs={{pagedTableHeaderRef, pagedTableBodyRef}}
+      />
+    ))
 
   return (
     <div

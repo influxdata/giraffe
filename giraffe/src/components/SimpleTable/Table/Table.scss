@@ -1,9 +1,8 @@
+@import '../../../style/variables.scss';
 
-$cf-border: 2px;
-
-$table-border--primary: #434453;
-$table-border--secondary: #31313d;
-$table-row-background: #292933;
+$table-border--primary: $cf-grey-25;
+$table-border--secondary: $cf-grey-15;
+$table-row-background: $cf-grey-15;
 
 /*
   Table
@@ -15,18 +14,20 @@ $table-row-background: #292933;
 }
 
 .cf-table--cell {
-  color: #999dab;
-  transition: background-color 0.25s ease, color 0.25s ease;
-  font-weight: 500;  
+  color: $cf-grey-75;
+  transition: background-color $cf-transition-default,
+    color $cf-transition-default;
+  font-weight: $cf-font-weight--medium;
 }
 
 .cf-table--header-cell {
-  color: #d4d7dd;
-  font-weight: 700;  
+  color: $cf-grey-55;
+  font-weight: $cf-font-weight--bold;
+  @extend %type-uppercase;
 }
 
 .cf-table--row {
-  transition: background-color 0.25s ease;
+  transition: background-color $cf-transition-default;
 }
 
 /*
@@ -55,10 +56,13 @@ $table-row-background: #292933;
     border-bottom: $cf-border solid $table-border--secondary;
   }
 
-  .cf-table--header:first-child .cf-table--row:first-child .cf-table--header-cell {
+  .cf-table--header:first-child
+    .cf-table--row:first-child
+    .cf-table--header-cell {
     border-top: 0;
   }
 
+  .cf-table--footer:last-child .cf-table--row:last-child .cf-table--cell,
   .cf-table--body:last-child .cf-table--row:last-child .cf-table--cell {
     border-bottom: 0;
   }
@@ -74,14 +78,18 @@ $table-row-background: #292933;
   .cf-table--header .cf-table--row .cf-table--header-cell:first-child,
   .cf-table--header .cf-table--row .cf-table--cell:first-child,
   .cf-table--body .cf-table--row .cf-table--header-cell:first-child,
-  .cf-table--body .cf-table--row .cf-table--cell:first-child {
+  .cf-table--body .cf-table--row .cf-table--cell:first-child,
+  .cf-table--footer .cf-table--row .cf-table--header-cell:first-child,
+  .cf-table--footer .cf-table--row .cf-table--cell:first-child {
     border-left: 0;
   }
 
   .cf-table--header .cf-table--row .cf-table--header-cell:last-child,
   .cf-table--header .cf-table--row .cf-table--cell:last-child,
   .cf-table--body .cf-table--row .cf-table--header-cell:last-child,
-  .cf-table--body .cf-table--row .cf-table--cell:last-child {
+  .cf-table--body .cf-table--row .cf-table--cell:last-child,
+  .cf-table--footer .cf-table--row .cf-table--header-cell:last-child,
+  .cf-table--footer .cf-table--row .cf-table--cell:last-child {
     border-right: 0;
   }
 }
@@ -92,10 +100,13 @@ $table-row-background: #292933;
     border: $cf-border solid $table-border--secondary;
   }
 
-  .cf-table--header:first-child .cf-table--row:first-child .cf-table--header-cell {
+  .cf-table--header:first-child
+    .cf-table--row:first-child
+    .cf-table--header-cell {
     border-top: 0;
   }
 
+  .cf-table--footer:last-child .cf-table--row:last-child .cf-table--cell,
   .cf-table--body:last-child .cf-table--row:last-child .cf-table--cell {
     border-bottom: 0;
   }
@@ -103,14 +114,18 @@ $table-row-background: #292933;
   .cf-table--header .cf-table--row .cf-table--header-cell:first-child,
   .cf-table--header .cf-table--row .cf-table--cell:first-child,
   .cf-table--body .cf-table--row .cf-table--header-cell:first-child,
-  .cf-table--body .cf-table--row .cf-table--cell:first-child {
+  .cf-table--body .cf-table--row .cf-table--cell:first-child,
+  .cf-table--footer .cf-table--row .cf-table--header-cell:first-child,
+  .cf-table--footer .cf-table--row .cf-table--cell:first-child {
     border-left: 0;
   }
 
   .cf-table--header .cf-table--row .cf-table--header-cell:last-child,
   .cf-table--header .cf-table--row .cf-table--cell:last-child,
   .cf-table--body .cf-table--row .cf-table--header-cell:last-child,
-  .cf-table--body .cf-table--row .cf-table--cell:last-child {
+  .cf-table--body .cf-table--row .cf-table--cell:last-child,
+  .cf-table--footer .cf-table--row .cf-table--header-cell:last-child,
+  .cf-table--footer .cf-table--row .cf-table--cell:last-child {
     border-right: 0;
   }
 }
@@ -121,15 +136,53 @@ $table-row-background: #292933;
 }
 
 /*
+  Padding Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+@mixin tablePaddingModifier($padding) {
+  .cf-table--cell,
+  .cf-table--header-cell {
+    padding: $padding;
+  }
+}
+
+.cf-table__padding-xs {
+  @include tablePaddingModifier($cf-space-2xs);
+}
+.cf-table__padding-sm {
+  @include tablePaddingModifier($cf-space-xs);
+}
+.cf-table__padding-md {
+  @include tablePaddingModifier($cf-space-s);
+}
+.cf-table__padding-lg {
+  @include tablePaddingModifier($cf-space-m);
+}
+
+/*
   Font Size Modifiers
   ------------------------------------------------------------------------------
 */
 
-.cf-table__font-sm {
+@mixin tableFontModifier($fontSize) {
   .cf-table--cell,
   .cf-table--header-cell {
-    font-size: 13px;
+    font-size: $fontSize;
   }
+}
+
+.cf-table__font-xs {
+  @include tableFontModifier($cf-text-base--1);
+}
+.cf-table__font-sm {
+  @include tableFontModifier($cf-text-base-0);
+}
+.cf-table__font-md {
+  @include tableFontModifier($cf-text-base-1);
+}
+.cf-table__font-lg {
+  @include tableFontModifier($cf-text-base-2);
 }
 
 /*
@@ -151,5 +204,86 @@ $table-row-background: #292933;
 }
 
 .cf-table__highlight .cf-table--body .cf-table--row:hover .cf-table--cell {
-  color: #eeeff2;
+  color: $g17-whisper;
+}
+
+/*
+  Row Color Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+@mixin tableColorModifier(
+  $background,
+  $backgroundAlt,
+  $backgroundHover,
+  $border,
+  $text
+) {
+  .cf-table .cf-table--body & .cf-table--cell,
+  .cf-table .cf-table--body & .cf-table--header-cell,
+  .cf-table .cf-table--header & .cf-table--cell,
+  .cf-table .cf-table--header & .cf-table--header-cell,
+  .cf-table .cf-table--footer & .cf-table--cell,
+  .cf-table .cf-table--footer & .cf-table--header-cell {
+    background-color: $background;
+    border-color: $border;
+    color: rgba($text, 0.8);
+  }
+
+  .cf-table__striped .cf-table--body &:nth-child(odd) .cf-table--cell,
+  .cf-table__striped .cf-table--body &:nth-child(odd) .cf-table--header-cell {
+    background-color: $backgroundAlt;
+  }
+
+  .cf-table__highlight .cf-table--body &:hover .cf-table--cell,
+  .cf-table__highlight .cf-table--body &:hover .cf-table--header-cell {
+    background-color: $backgroundHover;
+    color: $text;
+  }
+}
+
+.cf-table--row__primary {
+  @include tableColorModifier(
+    $c-sapphire,
+    mix($c-ocean, $c-sapphire, 50%),
+    $c-ocean,
+    $c-pool,
+    $g20-white
+  );
+}
+.cf-table--row__secondary {
+  @include tableColorModifier(
+    $c-void,
+    mix($c-amethyst, $c-void, 50%),
+    $c-amethyst,
+    $c-star,
+    $g20-white
+  );
+}
+.cf-table--row__success {
+  @include tableColorModifier(
+    $c-emerald,
+    mix($c-viridian, $c-emerald, 50%),
+    $c-viridian,
+    $c-rainforest,
+    $g20-white
+  );
+}
+.cf-table--row__warning {
+  @include tableColorModifier(
+    $c-tiger,
+    mix($c-pineapple, $c-tiger, 50%),
+    $c-pineapple,
+    $c-thunder,
+    $g3-castle
+  );
+}
+.cf-table--row__danger {
+  @include tableColorModifier(
+    $c-ruby,
+    mix($c-fire, $c-ruby, 50%),
+    $c-fire,
+    $c-dreamsicle,
+    $g20-white
+  );
 }

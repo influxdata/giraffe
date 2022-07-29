@@ -10,9 +10,10 @@ export interface TableBodyProps extends StandardFunctionProps {}
 export type TableBodyRef = HTMLTableSectionElement
 
 export const TableBody = forwardRef<TableBodyRef, TableBodyProps>(
-  ({testID = 'table-body', children}, ref) => {
+  ({id, testID = 'table-body', children}, ref) => {
     return (
       <tbody
+        id={id}
         data-testid={testID}
         ref={ref}
         className={`${styles['cf-table--body']}`}

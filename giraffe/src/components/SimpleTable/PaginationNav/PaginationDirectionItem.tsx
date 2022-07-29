@@ -1,18 +1,27 @@
 // Libraries
 import React, {forwardRef, MouseEvent} from 'react'
 import {Button} from './Button/Button'
+import classnames from 'classnames'
+
+// Types
+import {
+  ButtonShape,
+  ComponentColor,
+  ComponentSize,
+  Direction,
+  IconFont,
+  StandardFunctionProps,
+} from '../../../types'
 
 // Styles
 import styles from './Pagination.scss'
-
-// Types
-import {Direction, IconFont} from '../../../types/input'
-import {StandardFunctionProps} from '../../../types'
+import {styleReducer} from '../../../utils/styleReducer'
 
 export interface PaginationDirectionItemProps extends StandardFunctionProps {
   /** Caret Left or Caret Right on button */
   direction: Direction
   onClick?: (e?: MouseEvent<HTMLButtonElement>) => void
+  size?: ComponentSize
   isActive: boolean
 }
 
@@ -22,18 +31,43 @@ export const PaginationDirectionItem = forwardRef<
   PaginationDirectionItemProps
 >(
   (
-    {testID = 'pagination-direction-item', direction, onClick, isActive},
+    {
+      id,
+      style,
+      testID = 'pagination-direction-item',
+      className,
+      direction,
+      onClick,
+      size = ComponentSize.Medium,
+      isActive,
+    },
     ref
   ) => {
+    const paginationClassName = classnames('cf-pagination--item--container', {
+      [`${className}`]: className,
+    })
+      .split(' ')
+      .reduce((accum, current) => styleReducer(styles, accum, current), '')
+
+    const iconFont =
+      direction === Direction.Left
+        ? IconFont.CaretLeft_New
+        : IconFont.CaretRight_New
+
     return (
       <li
-        className={`${styles['cf-pagination--item--container']}`}
+        className={paginationClassName}
         data-testid={testID}
+        id={id}
+        style={style}
         ref={ref}
       >
         <Button
+          size={size}
+          color={ComponentColor.Tertiary}
           onClick={onClick}
-          icon={IconFont[direction]}
+          shape={ButtonShape.Square}
+          icon={iconFont}
           active={isActive}
         ></Button>
       </li>
