@@ -40,6 +40,8 @@ const measurePage = (
   let lastSignature
   let signature
 
+  const lastVisibleRowMinimumHeight = 0.2 * rowHeight
+
   while (rowIdx < result.table.length) {
     if (result.table.columns?.table?.data?.[rowIdx] !== currentTable) {
       signature = Object.values(result.table.columns)
@@ -72,7 +74,7 @@ const measurePage = (
 
     runningHeight += rowHeight
 
-    if (runningHeight + 0.25 * rowHeight >= height) {
+    if (runningHeight + lastVisibleRowMinimumHeight >= height) {
       break
     }
 
