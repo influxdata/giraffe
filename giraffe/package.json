@@ -95,7 +95,7 @@
     "react-leaflet-markercluster": "^2.0.0",
     "react-scrollbars-custom": "^4.0.20",
     "react-virtualized": "^9.21.2",
-    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-virtualized-auto-sizer": "^1.0.6",
     "s2-geometry": "^1.2.10",
     "sass-loader": "^10.0.3",
     "style-loader": "^2.0.0",

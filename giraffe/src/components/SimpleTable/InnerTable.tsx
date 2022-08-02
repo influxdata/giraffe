@@ -57,6 +57,7 @@ const InnerTable: FC<InnerProps> = ({
 
         return (
           <Table.Cell
+            className={`${styles['cf-table--cell']}`}
             key={`h${c.name}:r${idx}`}
             testID={`table-cell ${c.data[idx]}`}
           >
