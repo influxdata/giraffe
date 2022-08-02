@@ -254,7 +254,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   useEffect(() => {
     if (rowHeight === 0 && pagedTableBodyRef?.current) {
       const calculatedRowHeight =
-        pagedTableBodyRef.current?.children?.[0].clientHeight ?? 0
+        pagedTableBodyRef.current.children?.[0]?.clientHeight ?? 0
 
       if (calculatedRowHeight !== rowHeight) {
         setRowHeight(calculatedRowHeight)
