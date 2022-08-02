@@ -341,7 +341,12 @@ const PagedTable: FC<Props> = ({result, properties}) => {
       className={`${styles['visualization--simple-table--results']}`}
       ref={ref}
     >
-      <DapperScrollbars noScrollY>{inner}</DapperScrollbars>
+      <DapperScrollbars
+        className={`${styles['cf-dapper-scrollbars']}`}
+        noScrollY
+      >
+        {inner}
+      </DapperScrollbars>
     </div>
   )
 }
