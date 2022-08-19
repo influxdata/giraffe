@@ -324,7 +324,7 @@ export const TableCell: FunctionComponent<Props> = (props: Props) => {
 
   if (rowIndex === 0) {
     return (
-      <div
+      <button
         style={getStyle(props)}
         className={getClassName(props)}
         onClick={handleClick}
@@ -335,7 +335,7 @@ export const TableCell: FunctionComponent<Props> = (props: Props) => {
         title={getContents(props)}
       >
         {getContents(props)}
-      </div>
+      </button>
     )
   }
   return (
