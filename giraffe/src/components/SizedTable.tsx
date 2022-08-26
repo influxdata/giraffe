@@ -8,7 +8,7 @@ import {
   SimpleTableLayerConfig,
 } from '../types'
 
-import {GaugeLayer} from './GaugeLayer'
+import {GaugeLayer} from './Gauge'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
 import {RawFluxDataTable} from './RawFluxDataTable'

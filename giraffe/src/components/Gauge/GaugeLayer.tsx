@@ -3,11 +3,11 @@ import React, {FunctionComponent} from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 // Types
-import {GaugeLayerConfig} from '../types'
+import {GaugeLayerConfig} from '../../types'
 import {Gauge} from './Gauge'
 
 // Constants
-import {GAUGE_THEME_DARK} from '../constants/gaugeStyles'
+import {GAUGE_THEME_DARK} from '../../constants/gaugeStyles'
 
 interface Props {
   value: number

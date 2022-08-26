@@ -1,10 +1,10 @@
 // Libraries
 import React, {FunctionComponent, useRef, useEffect} from 'react'
-import {range} from '../utils/range'
-import {get} from '../utils/get'
+import {range} from '../../utils/range'
+import {get} from '../../utils/get'
 
 // Utils
-import {formatStatValue, MAX_DECIMAL_PLACES} from '../utils/formatStatValue'
+import {formatStatValue, MAX_DECIMAL_PLACES} from '../../utils/formatStatValue'
 
 import {
   COLOR_TYPE_MIN,
@@ -12,10 +12,10 @@ import {
   DEFAULT_VALUE_MIN,
   DEFAULT_VALUE_MAX,
   MIN_THRESHOLDS,
-} from '../constants/gaugeStyles'
+} from '../../constants/gaugeStyles'
 
 // Types
-import {Color, DecimalPlaces, GaugeTheme} from '../types'
+import {Color, DecimalPlaces, GaugeTheme} from '../../types'
 
 interface Props {
   width: number
