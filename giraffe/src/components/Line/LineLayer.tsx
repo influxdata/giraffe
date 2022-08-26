@@ -1,12 +1,12 @@
 import React, {FunctionComponent, RefObject, useMemo} from 'react'
 
-import {LayerProps, LineLayerSpec, LineLayerConfig} from '../types'
+import {LayerProps, LineLayerSpec, LineLayerConfig} from '../../types'
 import {LineHoverLayer} from './LineHoverLayer'
-import {simplifyLineData} from '../utils/lineData'
-import {useCanvas} from '../utils/useCanvas'
-import {drawLines} from '../utils/drawLines'
-import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {FILL} from '../constants/columnKeys'
+import {simplifyLineData} from '../../utils/lineData'
+import {useCanvas} from '../../utils/useCanvas'
+import {drawLines} from '../../utils/drawLines'
+import {useHoverPointIndices} from '../../utils/useHoverPointIndices'
+import {FILL} from '../../constants/columnKeys'
 
 export interface Props extends LayerProps {
   spec: LineLayerSpec

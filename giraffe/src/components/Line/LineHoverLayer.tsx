@@ -1,15 +1,15 @@
 import * as React from 'react'
 import {useRef, FunctionComponent} from 'react'
 
-import {Tooltip} from './Tooltip'
+import {Tooltip} from '../Tooltip'
 import {Props as LineLayerProps} from './LineLayer'
-import {FILL} from '../constants/columnKeys'
-import {LineHoverDimension, LineData} from '../types'
-import {getPointsTooltipData} from '../utils/legend/tooltip'
-import {getLineHoverPoints} from '../utils/lineHover'
-import {drawLines} from '../utils/drawLines'
-import {drawLineHoverData} from '../utils/drawLineHoverData'
-import {useCanvas} from '../utils/useCanvas'
+import {FILL} from '../../constants/columnKeys'
+import {LineHoverDimension, LineData} from '../../types'
+import {getPointsTooltipData} from '../../utils/legend/tooltip'
+import {getLineHoverPoints} from '../../utils/lineHover'
+import {drawLines} from '../../utils/drawLines'
+import {drawLineHoverData} from '../../utils/drawLineHoverData'
+import {useCanvas} from '../../utils/useCanvas'
 
 interface Props extends LineLayerProps {
   rowIndices: number[] | null

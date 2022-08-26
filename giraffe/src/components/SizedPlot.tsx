@@ -23,7 +23,7 @@ import {
 
 import {AnnotationLayer} from './AnnotationLayer'
 import {SingleStatLayer} from './SingleStatLayer'
-import {LineLayer} from './LineLayer'
+import {LineLayer} from './Line'
 import {BandLayer} from './BandLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
