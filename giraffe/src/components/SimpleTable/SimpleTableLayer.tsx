@@ -1,12 +1,14 @@
 // Libraries
 import React, {FunctionComponent} from 'react'
+
+// Components
 import {SimpleTable, SimpleTableViewProperties} from './SimpleTableGraph'
 
 // Utils
-import {fromFlux, FromFluxResult} from '../utils/fromFlux'
+import {fromFlux, FromFluxResult} from '../../utils/fromFlux'
 
 // Types
-import {SimpleTableLayerConfig} from '../types'
+import {SimpleTableLayerConfig} from '../../types'
 
 interface Props {
   config: SimpleTableLayerConfig

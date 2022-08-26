@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import {DapperScrollbars} from '../DapperScrollbars'
 import {FluxDataType} from '../../index'
-import {SubsetTable, SimpleTableViewProperties} from '../SimpleTableGraph'
+import {SubsetTable, SimpleTableViewProperties} from './SimpleTableGraph'
 import {FluxResult, Column} from './flows'
 import {PaginationContext} from './pagination'
 import InnerTable from './InnerTable'

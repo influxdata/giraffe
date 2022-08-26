@@ -1,12 +1,12 @@
 import React, {FC} from 'react'
-import {FluxDataType} from '../index'
+import {FluxDataType} from '../../index'
 
-import PageControl from './SimpleTable/PageControl'
-import PagedTable from './SimpleTable/PagedTable'
-import {FluxResult} from './SimpleTable/flows'
-import {PaginationProvider} from './SimpleTable/pagination'
+import PageControl from './PageControl'
+import PagedTable from './PagedTable'
+import {FluxResult} from './flows'
+import {PaginationProvider} from './pagination'
 
-import styles from './SimpleTable/SimpleTableGraph.scss'
+import styles from './SimpleTableGraph.scss'
 
 export interface SimpleTableViewProperties {
   type: 'simple-table'
