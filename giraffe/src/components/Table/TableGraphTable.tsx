@@ -1,6 +1,6 @@
 // Libraries
 import React, {FunctionComponent, useState, useEffect, useRef} from 'react'
-import {timeFormatter} from '../utils/formatters'
+import {timeFormatter} from '../../utils/formatters'
 
 // Components
 import {ColumnSizer, SizedColumnProps} from 'react-virtualized'
@@ -10,8 +10,8 @@ import {MultiGrid, MultiGridInputHandles, PropsMultiGrid} from './MultiGrid'
 
 // Utils
 import {withHoverTime, InjectedHoverProps} from './hoverTime'
-import {findHoverTimeIndex, resolveTimeFormat} from '../utils/tableGraph'
-import {get} from '../utils/get'
+import {findHoverTimeIndex, resolveTimeFormat} from '../../utils/tableGraph'
+import {get} from '../../utils/get'
 
 // Constants
 import {
@@ -19,7 +19,7 @@ import {
   DEFAULT_FIX_FIRST_COLUMN,
   DEFAULT_VERTICAL_TIME_AXIS,
   DEFAULT_TIME_FIELD,
-} from '../constants/tableGraph'
+} from '../../constants/tableGraph'
 const COLUMN_MIN_WIDTH = 100
 const ROW_HEIGHT = 30
 
@@ -29,7 +29,7 @@ import {
   TimeZone,
   Theme,
   TransformTableDataReturnType,
-} from '../types'
+} from '../../types'
 
 // Styles
 import styles from './TableGraphs.scss'

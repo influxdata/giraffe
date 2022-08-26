@@ -3,17 +3,17 @@ import React, {FunctionComponent} from 'react'
 import classnames from 'classnames'
 
 // Constants
-import {ASCENDING, DEFAULT_TIME_FIELD} from '../constants/tableGraph'
+import {ASCENDING, DEFAULT_TIME_FIELD} from '../../constants/tableGraph'
 
 // Utils
-import {generateThresholdsListHexs} from '../utils/colorOperations'
-import {isString} from '../utils/isString'
-import {defaultTo} from '../utils/defaultTo'
-import {styleReducer} from '../utils/styleReducer'
-import {formatStatValue} from '../utils/formatStatValue'
+import {generateThresholdsListHexs} from '../../utils/colorOperations'
+import {isString} from '../../utils/isString'
+import {defaultTo} from '../../utils/defaultTo'
+import {styleReducer} from '../../utils/styleReducer'
+import {formatStatValue} from '../../utils/formatStatValue'
 
 // Types
-import {TableViewProperties, SortOptions, RenamableField} from '../types'
+import {TableViewProperties, SortOptions, RenamableField} from '../../types'
 import {CellRendererProps} from './TableGraphTable'
 
 // Styles

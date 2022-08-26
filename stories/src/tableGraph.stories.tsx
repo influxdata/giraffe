@@ -5,7 +5,7 @@ import {Config, Plot} from '../../giraffe/src'
 
 import {PlotContainer} from './helpers'
 import {TableGraphLayerConfig} from '../../giraffe/src/types'
-import {HoverTimeProvider} from '../../giraffe/src/components/hoverTime'
+import {HoverTimeProvider} from '../../giraffe/src/components/Table'
 import {DEFAULT_TABLE_COLORS} from '../../giraffe/src'
 
 import {tableCSV} from './data/tableGraph'

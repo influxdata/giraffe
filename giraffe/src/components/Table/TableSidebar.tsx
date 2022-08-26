@@ -2,12 +2,12 @@
 import React, {FunctionComponent, ChangeEvent, useState} from 'react'
 
 // Components
-import {DapperScrollbars} from './DapperScrollbars'
-import {Input} from './Input'
+import {DapperScrollbars} from '../DapperScrollbars'
+import {Input} from '../Input'
 import {TableSidebarItem} from './TableSidebarItem'
 
 // Types
-import {IconFont, FluxTable, Theme} from '../types'
+import {IconFont, FluxTable, Theme} from '../../types'
 
 // Styles
 import styles from './TableGraphs.scss'

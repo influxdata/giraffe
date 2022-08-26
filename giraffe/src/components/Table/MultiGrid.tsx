@@ -5,9 +5,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react'
-import {CellMeasurerCacheDecorator} from '../utils/CellMeasurerCacheDecorator'
+import {CellMeasurerCacheDecorator} from '../../utils/CellMeasurerCacheDecorator'
 import {Grid} from 'react-virtualized'
-import {DapperScrollbars} from './DapperScrollbars'
+import {DapperScrollbars} from '../DapperScrollbars'
 
 import styles from './TableGraphs.scss'
 

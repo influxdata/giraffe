@@ -6,10 +6,10 @@ import {TableGraph} from './TableGraph'
 import {TableSidebar} from './TableSidebar'
 
 // Utils
-import {get} from '../utils/get'
+import {get} from '../../utils/get'
 
 // Types
-import {FluxTable, TableGraphLayerConfig} from '../types'
+import {FluxTable, TableGraphLayerConfig} from '../../types'
 
 // Styles
 import styles from './TableGraphs.scss'

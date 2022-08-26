@@ -4,16 +4,16 @@ import {
   ASCENDING,
   DESCENDING,
   DEFAULT_SORT_DIRECTION,
-} from '../constants/tableGraph'
+} from '../../constants/tableGraph'
 import {
   TableViewProperties,
   SortOptions,
   FluxTable,
   TimeZone,
   Theme,
-} from '../types'
+} from '../../types'
 
-import {get} from '../utils/get'
+import {get} from '../../utils/get'
 
 import {TableGraphTransform} from './TableGraphTransform'
 import {TableGraphTable} from './TableGraphTable'

@@ -3,15 +3,15 @@ import {FunctionComponent} from 'react'
 import memoizeOne from 'memoize-one'
 
 // Utils
-import {transformTableData} from '../utils/tableGraph'
-import {isEqual} from '../utils/isEqual'
+import {transformTableData} from '../../utils/tableGraph'
+import {isEqual} from '../../utils/isEqual'
 
 // Types
 import {
   TableViewProperties,
   SortOptions,
   TransformTableDataReturnType,
-} from '../types'
+} from '../../types'
 
 interface Props {
   data: string[][]
