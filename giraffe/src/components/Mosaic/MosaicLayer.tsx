@@ -1,19 +1,19 @@
 import * as React from 'react'
 import {useRef, FunctionComponent} from 'react'
 
-import {useCanvas} from '../utils/useCanvas'
-import {drawMosaic} from '../utils/drawMosaic'
+import {useCanvas} from '../../utils/useCanvas'
+import {drawMosaic} from '../../utils/drawMosaic'
 import {
   MosaicLayerConfig,
   MosaicLayerSpec,
   LayerProps,
   LegendData,
-} from '../types'
+} from '../../types'
 import {
   findHoveredBoxes,
   getMosaicTooltipData,
-} from '../utils/legend/mosaicTooltip'
-import {Tooltip} from './Tooltip'
+} from '../../utils/legend/mosaicTooltip'
+import {Tooltip} from '../Tooltip'
 
 export interface Props extends LayerProps {
   spec: MosaicLayerSpec

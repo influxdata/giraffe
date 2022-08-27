@@ -27,7 +27,7 @@ import {LineLayer} from './Line'
 import {BandLayer} from './BandLayer'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
-import {MosaicLayer} from './MosaicLayer'
+import {MosaicLayer} from './Mosaic'
 import GeoLayer from './GeoLayer'
 
 import {Brush} from './Brush'
