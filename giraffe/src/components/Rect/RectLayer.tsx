@@ -1,14 +1,19 @@
 import React, {FunctionComponent, RefObject} from 'react'
 
-import {useCanvas} from '../utils/useCanvas'
-import {drawRects} from '../utils/drawRects'
+import {useCanvas} from '../../utils/useCanvas'
+import {drawRects} from '../../utils/drawRects'
 import {
   findHoveredRects,
   get1DTooltipData,
   get2DTooltipData,
-} from '../utils/legend/rectTooltip'
-import {Tooltip} from './Tooltip'
-import {RectLayerConfig, RectLayerSpec, LayerProps, LegendData} from '../types'
+} from '../../utils/legend/rectTooltip'
+import {Tooltip} from '../Tooltip'
+import {
+  RectLayerConfig,
+  RectLayerSpec,
+  LayerProps,
+  LegendData,
+} from '../../types'
 
 export interface Props extends LayerProps {
   spec: RectLayerSpec

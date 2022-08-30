@@ -26,7 +26,7 @@ import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './Line'
 import {BandLayer} from './Band'
 import {ScatterLayer} from './Scatter'
-import {RectLayer} from './RectLayer'
+import {RectLayer} from './Rect'
 import {MosaicLayer} from './Mosaic'
 import GeoLayer from './GeoLayer'
 
