@@ -1,12 +1,12 @@
 import * as React from 'react'
 import {useRef, FunctionComponent} from 'react'
 
-import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../types'
-import {drawPoints} from '../utils/drawPoints'
-import {useCanvas} from '../utils/useCanvas'
+import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../../types'
+import {drawPoints} from '../../utils/drawPoints'
+import {useCanvas} from '../../utils/useCanvas'
 import {ScatterHoverLayer} from './ScatterHoverLayer'
-import {SCATTER_POINT_SIZE} from '../constants'
-import {FILL, SYMBOL} from '../constants/columnKeys'
+import {SCATTER_POINT_SIZE} from '../../constants'
+import {FILL, SYMBOL} from '../../constants/columnKeys'
 
 interface Props extends LayerProps {
   spec: ScatterLayerSpec

@@ -1,13 +1,13 @@
 import React, {useRef, FunctionComponent} from 'react'
 
-import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../types'
-import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {drawPoints} from '../utils/drawPoints'
-import {Tooltip} from './Tooltip'
-import {getPointsTooltipData} from '../utils/legend/tooltip'
-import {SCATTER_HOVER_POINT_SIZE} from '../constants'
-import {FILL, SYMBOL} from '../constants/columnKeys'
-import {useCanvas} from '../utils/useCanvas'
+import {ScatterLayerConfig, ScatterLayerSpec, LayerProps} from '../../types'
+import {useHoverPointIndices} from '../../utils/useHoverPointIndices'
+import {drawPoints} from '../../utils/drawPoints'
+import {Tooltip} from '../Tooltip'
+import {getPointsTooltipData} from '../../utils/legend/tooltip'
+import {SCATTER_HOVER_POINT_SIZE} from '../../constants'
+import {FILL, SYMBOL} from '../../constants/columnKeys'
+import {useCanvas} from '../../utils/useCanvas'
 
 interface Props extends LayerProps {
   spec: ScatterLayerSpec
