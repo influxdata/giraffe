@@ -1,5 +1,8 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
+
+import {SIN} from './sin'
+
 import {
   timeFormatter,
   binaryPrefixFormatter,
@@ -9,11 +12,12 @@ import {
   Config,
   Plot,
 } from '../../giraffe/src'
+import {PlotContainer} from './helpers'
 
 import {CPU} from './data/cpu'
 
-storiesOf('Snapshot Tests', module)
-  .add('with multiple minimum values', () => {
+storiesOf('Tests', module)
+  .add('Snapshot - with multiple minimum values', () => {
     // https://github.com/influxdata/giraffe/issues/51
 
     const {table} = fromFlux(
@@ -51,7 +55,7 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
-  .add('line layer with shaded area and step interpolation', () => {
+  .add('Snapshot - line layer with shaded area and step interpolation', () => {
     const config: Config = {
       width: 600,
       height: 400,
@@ -70,7 +74,7 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
-  .add('time zone support', () => {
+  .add('Snapshot - time zone support', () => {
     const config: Config = {
       width: 300,
       height: 200,
@@ -127,7 +131,7 @@ storiesOf('Snapshot Tests', module)
       </div>
     )
   })
-  .add('binary prefix formatting', () => {
+  .add('Snapshot - binary prefix formatting', () => {
     const table = newTable(4)
       .addColumn('time', 'system', 'number', [0, 1, 2, 3])
       .addColumn('bytes', 'system', 'number', [
@@ -155,7 +159,7 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
-  .add('with fromRows adapter', () => {
+  .add('Snapshot - with fromRows adapter', () => {
     const table = fromRows([
       {x: 0.6637748924084008, y: 0},
       {x: 0.5484188553850314, y: 0.03450358980217672},
@@ -195,7 +199,7 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
-  .add('custom y ticks', () => {
+  .add('Snapshot - custom y ticks', () => {
     const config: Config = {
       width: 600,
       height: 400,
@@ -213,7 +217,7 @@ storiesOf('Snapshot Tests', module)
 
     return <Plot config={config} />
   })
-  .add('specific histogram bin settings should not crash', () => {
+  .add('Snapshot - specific histogram bin settings should not crash', () => {
     const {table} = fromFlux(
       `#group,false,false,true,true,false,false,true,true,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,long,string,string,string
@@ -245,4 +249,23 @@ storiesOf('Snapshot Tests', module)
     }
 
     return <Plot config={config} />
+  })
+  .add('Stress Test - Line', () => {
+    const config: Config = {
+      table: SIN,
+      layers: [
+        {
+          type: 'line',
+          x: 'x',
+          y: 'y',
+          fill: ['tag'],
+        },
+      ],
+    }
+
+    return (
+      <PlotContainer>
+        <Plot config={config} />
+      </PlotContainer>
+    )
   })

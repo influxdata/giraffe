@@ -11,6 +11,7 @@ import {fluxCSV} from './data/fluxCSV'
 storiesOf('Raw Flux Data Table', module)
   .addDecorator(withKnobs)
   .add('Raw Flux Data Table', () => {
+    const backgroundColor = text('Background contrast color:', 'grey')
     const csv1 = text('Paste first CSV here:', '')
     const csv2 = text('Paste second CSV here:', '')
 
@@ -41,7 +42,7 @@ storiesOf('Raw Flux Data Table', module)
       ],
     }
     return (
-      <PlotContainer>
+      <PlotContainer style={{backgroundColor}}>
         <Plot config={config} />
       </PlotContainer>
     )

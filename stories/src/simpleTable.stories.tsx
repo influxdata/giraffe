@@ -5,7 +5,7 @@ import {PlotContainer} from './helpers'
 import {Config, Plot, fromFlux} from '../../giraffe/src'
 import {tableCSV, nonNumbersInNumbersColumn} from './data/tableGraph'
 
-storiesOf('Simple Table Graph', module)
+storiesOf('Simple Table', module)
   .addDecorator(withKnobs)
   .add('Simple Table', () => {
     const backgroundColor = text('Background contrast color:', 'black')

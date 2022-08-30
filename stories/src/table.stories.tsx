@@ -10,9 +10,9 @@ import {DEFAULT_TABLE_COLORS} from '../../giraffe/src'
 
 import {tableCSV} from './data/tableGraph'
 
-storiesOf('Table Graph', module)
+storiesOf('Table', module)
   .addDecorator(withKnobs)
-  .add('Table Graph', () => {
+  .add('Table', () => {
     const timeFormat = select(
       'Time Format',
       {

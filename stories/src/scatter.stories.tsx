@@ -23,7 +23,7 @@ import {
   symbolKnob,
 } from './helpers'
 
-storiesOf('Scatter Plot', module)
+storiesOf('Scatter', module)
   .addDecorator(withKnobs)
   .add('Static CSV', () => {
     const table = getCPUTable()
