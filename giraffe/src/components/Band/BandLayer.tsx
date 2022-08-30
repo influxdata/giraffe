@@ -1,18 +1,18 @@
 import React, {FunctionComponent, RefObject, useMemo} from 'react'
 
-import {LayerProps, BandLayerSpec, BandLayerConfig} from '../types'
+import {LayerProps, BandLayerSpec, BandLayerConfig} from '../../types'
 import {BandHoverLayer} from './BandHoverLayer'
-import {simplifyLineData} from '../utils/lineData'
-import {useCanvas} from '../utils/useCanvas'
-import {drawBands} from '../utils/drawBands'
-import {useHoverPointIndices} from '../utils/useHoverPointIndices'
-import {useBandHoverColumns} from '../utils/useBandHover'
-import {FILL} from '../constants/columnKeys'
-import {getBandHoverIndices, getLineLengths} from '../utils/bandHover'
+import {simplifyLineData} from '../../utils/lineData'
+import {useCanvas} from '../../utils/useCanvas'
+import {drawBands} from '../../utils/drawBands'
+import {useHoverPointIndices} from '../../utils/useHoverPointIndices'
+import {useBandHoverColumns} from '../../utils/useBandHover'
+import {FILL} from '../../constants/columnKeys'
+import {getBandHoverIndices, getLineLengths} from '../../utils/bandHover'
 import {
   groupLineIndicesIntoBands,
   alignMinMaxWithBand,
-} from '../transforms/band'
+} from '../../transforms/band'
 
 export interface Props extends LayerProps {
   spec: BandLayerSpec

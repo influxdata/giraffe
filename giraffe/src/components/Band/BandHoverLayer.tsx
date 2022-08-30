@@ -1,15 +1,15 @@
 import * as React from 'react'
 import {useRef, FunctionComponent} from 'react'
 
-import {Tooltip} from './Tooltip'
+import {Tooltip} from '../Tooltip'
 import {Props as BandLayerProps} from './BandLayer'
-import {FILL} from '../constants/columnKeys'
-import {BandLineMap, LineHoverDimension, LineData} from '../types'
-import {getBandTooltipData} from '../utils/legend/tooltip'
-import {getBandHoverPoints} from '../utils/bandHover'
-import {drawLines} from '../utils/drawLines'
-import {drawLineHoverData} from '../utils/drawLineHoverData'
-import {useCanvas} from '../utils/useCanvas'
+import {FILL} from '../../constants/columnKeys'
+import {BandLineMap, LineHoverDimension, LineData} from '../../types'
+import {getBandTooltipData} from '../../utils/legend/tooltip'
+import {getBandHoverPoints} from '../../utils/bandHover'
+import {drawLines} from '../../utils/drawLines'
+import {drawLineHoverData} from '../../utils/drawLineHoverData'
+import {useCanvas} from '../../utils/useCanvas'
 
 interface Props extends BandLayerProps {
   bandHoverIndices: BandLineMap

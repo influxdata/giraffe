@@ -24,7 +24,7 @@ import {
 import {AnnotationLayer} from './AnnotationLayer'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './Line'
-import {BandLayer} from './BandLayer'
+import {BandLayer} from './Band'
 import {ScatterLayer} from './ScatterLayer'
 import {RectLayer} from './RectLayer'
 import {MosaicLayer} from './Mosaic'
