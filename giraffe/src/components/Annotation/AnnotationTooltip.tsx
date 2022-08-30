@@ -2,12 +2,12 @@ import React, {CSSProperties} from 'react'
 import {FunctionComponent} from 'react'
 import {createPortal} from 'react-dom'
 
-import {Config, AnnotationMark, TooltipPosition} from '../types'
+import {Config, AnnotationMark, TooltipPosition} from '../../types'
 import {
   ANNOTATION_TOOLTIP_CONTAINER_NAME,
   ANNOTATION_DEFAULT_MAX_WIDTH,
-} from '../constants'
-import {useAnnotationTooltipElement} from '../utils/legend/useTooltipElement'
+} from '../../constants'
+import {useAnnotationTooltipElement} from '../../utils/legend/useTooltipElement'
 
 interface Props {
   boundingReference: DOMRect

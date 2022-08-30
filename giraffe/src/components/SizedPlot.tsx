@@ -21,7 +21,7 @@ import {
   SpecTypes,
 } from '../types'
 
-import {AnnotationLayer} from './AnnotationLayer'
+import {AnnotationLayer} from './Annotation'
 import {SingleStatLayer} from './SingleStatLayer'
 import {LineLayer} from './Line'
 import {BandLayer} from './Band'

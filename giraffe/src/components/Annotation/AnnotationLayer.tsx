@@ -4,12 +4,12 @@ import {
   AnnotationLayerSpec,
   LayerProps,
   LineHoverDimension,
-} from '../types'
+} from '../../types'
 import {
   getAnnotationHoverIndices,
   getAnnotationsPositions,
-} from '../utils/annotationData'
-import {ANNOTATION_DEFAULT_HOVER_MARGIN} from '../constants/index'
+} from '../../utils/annotationData'
+import {ANNOTATION_DEFAULT_HOVER_MARGIN} from '../../constants/index'
 import {AnnotationHoverLayer} from './AnnotationHoverLayer'
 import {AnnotationLine} from './AnnotationLine'
 

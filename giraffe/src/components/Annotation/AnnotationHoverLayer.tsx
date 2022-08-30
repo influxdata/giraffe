@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from 'react'
-import {AnnotationMark} from '../types'
+import {AnnotationMark} from '../../types'
 import {AnnotationLayerProps} from './AnnotationLayer'
 import {AnnotationTooltip} from './AnnotationTooltip'
 

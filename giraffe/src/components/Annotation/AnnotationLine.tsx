@@ -1,5 +1,5 @@
 import React, {FunctionComponent, createElement} from 'react'
-import {AnnotationDimension, AnnotationPinType} from '../types'
+import {AnnotationDimension, AnnotationPinType} from '../../types'
 
 import styles from './AnnotationLine.scss'
 
