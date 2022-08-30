@@ -6,9 +6,9 @@ import {AutoSizer} from 'react-virtualized'
 import Geo from './Geo'
 
 // Types
-import {Config, Table} from '../types'
-import {GeoLayerConfig} from '../types/geo'
-import {calculateVariableAssignment} from '../utils/geo'
+import {Config, Table} from '../../types'
+import {GeoLayerConfig} from '../../types/geo'
+import {calculateVariableAssignment} from '../../utils/geo'
 
 interface OwnProps {
   table: Table
@@ -143,7 +143,7 @@ const onAutoResize = (
   )
 }
 
-const GeoLayer: FunctionComponent<OwnProps> = React.memo(props => {
+export const GeoLayer: FunctionComponent<OwnProps> = React.memo(props => {
   if (props.config.tileServerConfiguration) {
     return (
       <AutoSizer>
@@ -157,5 +157,3 @@ const GeoLayer: FunctionComponent<OwnProps> = React.memo(props => {
   }
   return null
 })
-
-export default GeoLayer

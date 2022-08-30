@@ -5,16 +5,16 @@ import Control from 'react-leaflet-control'
 import 'leaflet/dist/leaflet.css'
 
 // Components
-import {BingMap} from './geo/bing-maps/BingMap'
-import {LayerSwitcher} from './geo/LayerSwitcher'
+import {BingMap} from './bing-maps/BingMap'
+import {LayerSwitcher} from './LayerSwitcher'
 
 // Utils
-import {preprocessData} from './geo/processing/tableProcessing'
-import {ZOOM_FRACTION, getMinZoom, getRowLimit} from '../utils/geo'
+import {preprocessData} from './processing/tableProcessing'
+import {ZOOM_FRACTION, getMinZoom, getRowLimit} from '../../utils/geo'
 
 // Types
-import {GeoLayerConfig} from '..'
-import {Config, Table} from '../types'
+import {GeoLayerConfig} from '../..'
+import {Config, Table} from '../../types'
 
 interface Props extends Partial<GeoLayerConfig> {
   width: number

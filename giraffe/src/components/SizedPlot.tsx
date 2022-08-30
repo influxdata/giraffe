@@ -28,7 +28,7 @@ import {BandLayer} from './Band'
 import {ScatterLayer} from './Scatter'
 import {RectLayer} from './Rect'
 import {MosaicLayer} from './Mosaic'
-import GeoLayer from './GeoLayer'
+import {GeoLayer} from './Geo'
 
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'

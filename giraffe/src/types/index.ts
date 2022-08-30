@@ -5,6 +5,7 @@ import {GeoLayerConfig} from './geo'
 import {FromFluxResult} from '../utils/fromFlux'
 
 export * from './component'
+export * from './geo'
 export * from './input'
 export * from './timeZones'
 

@@ -1,5 +1,4 @@
 import React, {FunctionComponent} from 'react'
-import {GeoViewLayer} from '../../types/geo'
 
 //components
 import CircleMarkerLayer from './CircleMarkerLayer'
@@ -9,13 +8,14 @@ import TrackMapLayer from './TrackMapLayer'
 
 //types
 import {
+  Config,
   GeoCircleViewLayer,
   GeoHeatMapViewLayer,
   GeoPointMapViewLayer,
   GeoTrackMapViewLayer,
-} from '../../'
+  GeoViewLayer,
+} from '../../types'
 import {GeoTable} from './processing/GeoTable'
-import {Config} from '../../types'
 
 interface Props {
   layer: GeoViewLayer

@@ -42,6 +42,7 @@ export {
   Formatter,
   GaugeLayerConfig,
   GaugeTheme,
+  GeoLayerConfig,
   GetColumn,
   HistogramLayerConfig,
   HistogramPosition,
@@ -61,5 +62,3 @@ export {
   Table,
   TableGraphLayerConfig,
 } from './types'
-
-export * from './types/geo'
