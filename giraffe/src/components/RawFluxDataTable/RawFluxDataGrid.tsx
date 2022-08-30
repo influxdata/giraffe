@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import {Grid} from 'react-virtualized'
 
-import {range} from '../utils/range'
+import {range} from '../../utils/range'
 
 import styles from './RawFluxDataGrid.scss'
 

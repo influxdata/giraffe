@@ -4,11 +4,11 @@ import memoizeOne from 'memoize-one'
 import {RawFluxDataGrid} from './RawFluxDataGrid'
 
 // Utils
-import {parseFiles, parseFilesWithObjects} from '../utils/rawFluxDataTable'
-import {DapperScrollbars} from './DapperScrollbars'
+import {parseFiles, parseFilesWithObjects} from '../../utils/rawFluxDataTable'
+import {DapperScrollbars} from '../DapperScrollbars'
 
 // Types
-import {RawFluxDataTableLayerConfig} from '../types'
+import {RawFluxDataTableLayerConfig} from '../../types'
 
 interface Props {
   config: RawFluxDataTableLayerConfig
