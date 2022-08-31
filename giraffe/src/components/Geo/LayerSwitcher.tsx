@@ -13,7 +13,7 @@ import {
   GeoHeatMapViewLayer,
   GeoPointMapViewLayer,
   GeoTrackMapViewLayer,
-  GeoViewLayer,
+  GeoVie../..,
 } from '../../types'
 import {GeoTable} from './processing/GeoTable'
 
