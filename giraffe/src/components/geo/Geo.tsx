@@ -29,15 +29,16 @@ const Geo: FunctionComponent<Props> = props => {
     height,
     lat,
     latLonColumns,
+    layers,
     lon,
     mapStyle,
     s2Column,
     stylingConfig,
+    tileServerConfiguration,
     useS2CellID,
     width,
     zoom,
   } = props
-  const {layers, tileServerConfiguration} = props
   const {tileServerUrl, bingKey} = tileServerConfiguration
   const mapRef = React.createRef<any>()
 
