@@ -7,7 +7,7 @@ import {usePlotEnv} from '../utils/usePlotEnv'
 
 import {LineLayerConfig, SizedConfig} from '../types'
 
-jest.mock('./Geo', () => <></>) // this component causes all sorts of loading problems
+jest.mock('./GeoMap', () => <></>) // this component causes all sorts of loading problems
 
 import {newTable} from '../utils/newTable'
 
