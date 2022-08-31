@@ -10,12 +10,12 @@ import classnames from 'classnames'
 import Scrollbar from 'react-scrollbars-custom'
 import {ScrollState} from 'react-scrollbars-custom/dist/types/types'
 
-import {StandardFunctionProps} from '../types'
-import {ComponentSize} from '../types'
-import {InfluxColors} from '../constants/colorSchemes'
+import {StandardFunctionProps} from '../../types'
+import {ComponentSize} from '../../types'
+import {InfluxColors} from '../../constants/colorSchemes'
 import styles from './DapperScrollbars.scss'
 
-import {styleReducer} from '../utils/styleReducer'
+import {styleReducer} from '../../utils/styleReducer'
 
 // Types
 type UIEventHandler = (event: UIEvent<HTMLDivElement>) => void
