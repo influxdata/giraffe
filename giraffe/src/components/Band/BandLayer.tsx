@@ -2,7 +2,7 @@ import React, {FunctionComponent, RefObject, useMemo} from 'react'
 
 import {LayerProps, BandLayerSpec, BandLayerConfig} from '../../types'
 import {BandHoverLayer} from './BandHoverLayer'
-import {simplifyLineData} from '../../utils/lineData'
+import {simplifyBandData} from '../../utils/lineData'
 import {useCanvas} from '../../utils/useCanvas'
 import {drawBands} from '../../utils/drawBands'
 import {useHoverPointIndices} from '../../utils/useHoverPointIndices'
@@ -45,7 +45,7 @@ export const BandLayer: FunctionComponent<Props> = props => {
 
   const simplifiedLineData = useMemo(
     () =>
-      simplifyLineData(
+      simplifyBandData(
         alignMinMaxWithBand(spec.lineData, spec.bandLineMap),
         xScale,
         yScale

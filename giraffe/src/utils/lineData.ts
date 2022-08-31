@@ -52,6 +52,23 @@ export const simplifyLineData = (
   return result
 }
 
+export const simplifyBandData = (
+  lineData: LineData,
+  xScale,
+  yScale
+): LineData => {
+  const result = {}
+
+  for (const [k, {xs, ys, fill}] of Object.entries(lineData)) {
+    const simplifedXs = xs.map(x => xScale(x || 0))
+    const simplifiedYs = ys.map(y => yScale(y || 0))
+
+    result[k] = {xs: simplifedXs, ys: simplifiedYs, fill}
+  }
+
+  return result
+}
+
 export const getDomainDataFromLines = (
   lineData: LineData,
   fillCol: Array<number | string>,
