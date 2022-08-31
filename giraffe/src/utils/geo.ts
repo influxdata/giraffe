@@ -6,10 +6,10 @@ import {
   GeoQueryVariables,
   GeoViewLayer,
 } from '../types'
-import {GeoTable} from '../components/Geo/processing/GeoTable'
+import {GeoTable} from '../components/GeoMap/processing/GeoTable'
 
-import {formatValue} from '../components/Geo/processing/toolTips'
-import {getColor} from '../components/Geo/dimensionCalculations'
+import {formatValue} from '../components/GeoMap/processing/toolTips'
+import {getColor} from '../components/GeoMap/dimensionCalculations'
 
 // Constants
 export const ZOOM_FRACTION = 8
