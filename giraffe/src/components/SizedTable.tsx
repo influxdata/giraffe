@@ -8,13 +8,13 @@ import {
   SimpleTableLayerConfig,
 } from '../types'
 
-import {GaugeLayer} from './GaugeLayer'
+import {GaugeLayer} from './Gauge'
 import {LatestValueTransform} from './LatestValueTransform'
 import {newTableFromConfig} from '../utils/newTable'
 import {RawFluxDataTable} from './RawFluxDataTable'
 import {FluxTablesTransform} from './FluxTablesTransform'
-import {TableGraphLayer} from './TableGraphLayer'
-import {SimpleTableLayer} from './SimpleTableLayer'
+import {TableGraphLayer} from './Table'
+import {SimpleTableLayer} from './SimpleTable'
 
 import {usePlotEnv} from '../utils/usePlotEnv'
 

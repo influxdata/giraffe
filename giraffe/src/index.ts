@@ -1,6 +1,6 @@
 // Components
 export {Plot} from './components/Plot'
-export {HoverTimeProvider} from './components/hoverTime'
+export {HoverTimeProvider} from './components/Table'
 
 // Utils
 export {fromFlux, fastFromFlux, FromFluxResult} from './utils/fromFlux'
@@ -42,6 +42,7 @@ export {
   Formatter,
   GaugeLayerConfig,
   GaugeTheme,
+  GeoLayerConfig,
   GetColumn,
   HistogramLayerConfig,
   HistogramPosition,
@@ -61,5 +62,3 @@ export {
   Table,
   TableGraphLayerConfig,
 } from './types'
-
-export * from './types/geo'

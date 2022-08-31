@@ -1,14 +1,15 @@
 import L from 'leaflet'
-import {GeoViewLayer} from '..'
-import {GeoTable} from '../components/geo/processing/GeoTable'
 import {
   ClusterAggregation,
   GeoCircleViewLayer,
   GeoPointMapViewLayer,
   GeoQueryVariables,
-} from '../types/geo'
-import {formatValue} from '../components/geo/processing/toolTips'
-import {getColor} from '../components/geo/dimensionCalculations'
+  GeoViewLayer,
+} from '../types'
+import {GeoTable} from '../components/GeoMap/processing/GeoTable'
+
+import {formatValue} from '../components/GeoMap/processing/toolTips'
+import {getColor} from '../components/GeoMap/dimensionCalculations'
 
 // Constants
 export const ZOOM_FRACTION = 8

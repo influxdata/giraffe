@@ -21,14 +21,14 @@ import {
   SpecTypes,
 } from '../types'
 
-import {AnnotationLayer} from './AnnotationLayer'
-import {SingleStatLayer} from './SingleStatLayer'
-import {LineLayer} from './LineLayer'
-import {BandLayer} from './BandLayer'
-import {ScatterLayer} from './ScatterLayer'
-import {RectLayer} from './RectLayer'
-import {MosaicLayer} from './MosaicLayer'
-import GeoLayer from './GeoLayer'
+import {AnnotationLayer} from './Annotation'
+import {SingleStatLayer} from './SingleStat'
+import {LineLayer} from './Line'
+import {BandLayer} from './Band'
+import {ScatterLayer} from './Scatter'
+import {RectLayer} from './Rect'
+import {MosaicLayer} from './Mosaic'
+import {GeoLayer} from './GeoMap'
 
 import {Brush} from './Brush'
 import {rangeToDomain} from '../utils/brush'

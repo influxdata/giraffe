@@ -1,6 +1,6 @@
 import React, {FC, Ref} from 'react'
 import {Table} from './Table'
-import {SubsetTable} from '../SimpleTableGraph'
+import {SubsetTable} from './SimpleTableGraph'
 import {ComponentSize, VerticalAlignment} from '../../types'
 import styles from './SimpleTableGraph.scss'
 

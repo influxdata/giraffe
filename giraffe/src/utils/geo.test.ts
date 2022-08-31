@@ -13,7 +13,7 @@ import {
   getMinZoom,
   getRowLimit,
 } from './geo'
-import {preprocessData} from '../components/geo/processing/tableProcessing'
+import {preprocessData} from '../components/GeoMap/processing/tableProcessing'
 import {fromFlux} from './fromFlux'
 import {geoCSV} from '../../../stories/src/data/geo'
 

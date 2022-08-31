@@ -1,0 +1,286 @@
+/*
+   Icon Font
+   -----------------------------------------------------------------------------
+   Created using a tool called IcoMoon
+   See more at http://icomoon.io
+*/
+
+@font-face {
+  font-family: 'icomoon';
+  src: url('../../fonts/icomoon.eot') format('embedded-opentype');
+  src: url('../../fonts/icomoon.eot') format('embedded-opentype'),
+    url('../../fonts/icomoon.woff2') format('woff2'),
+    url('../../fonts/icomoon.ttf') format('truetype'),
+    url('../../fonts/icomoon.woff') format('woff'),
+    url('../../fonts/icomoon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.cf-icon {
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  // Better Font Rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  &.Bill:before {
+    content: '\e954';
+  }
+  &.Logout:before {
+    content: '\e950';
+  }
+  &.PieChart:before {
+    content: '\e951';
+  }
+  &.CurrencyDollar:before {
+    content: '\e952';
+  }
+  &.Subtract:before {
+    content: '\e953';
+  }
+  &.Timer:before {
+    content: '\e94f';
+  }
+  &.CaretOutlineRight:before {
+    content: '\e94b';
+  }
+  &.CollapseLeft:before {
+    content: '\e94c';
+  }
+  &.CollapseRight:before {
+    content: '\e94d';
+  }
+  &.ChangeState:before {
+    content: '\e94e';
+  }
+  &.QuestionMark_Outline:before {
+    content: '\e94a';
+  }
+  &.Info_New:before {
+    content: '\e949';
+  }
+  &.SidebarClose:before {
+    content: '\e947';
+  }
+  &.SidebarOpen:before {
+    content: '\e948';
+  }
+  &.CaretDown_New:before {
+    content: '\e912';
+  }
+  &.CaretLeft_New:before {
+    content: '\e913';
+  }
+  &.CaretRight_New:before {
+    content: '\e914';
+  }
+  &.CaretUp_New:before {
+    content: '\e915';
+  }
+  &.Play:before {
+    content: '\e900';
+  }
+  &.Pause:before {
+    content: '\e901';
+  }
+  &.EyeOpen:before {
+    content: '\e902';
+  }
+  &.Flask:before {
+    content: '\e903';
+  }
+  &.AddCell_New:before {
+    content: '\e904';
+  }
+  &.QuestionMark:before {
+    content: '\e905';
+  }
+  &.AlertTriangle:before {
+    content: '\e906';
+  }
+  &.Annotate_New:before {
+    content: '\e907';
+  }
+  &.ArrowDown_New:before {
+    content: '\e908';
+  }
+  &.ArrowLeft_New:before {
+    content: '\e909';
+  }
+  &.ArrowRight_New:before {
+    content: '\e90a';
+  }
+  &.BarChart_New:before {
+    content: '\e90b';
+  }
+  &.Bell:before {
+    content: '\e90c';
+  }
+  &.BookCode:before {
+    content: '\e90d';
+  }
+  &.BookOutline:before {
+    content: '\e90e';
+  }
+  &.Braces:before {
+    content: '\e90f';
+  }
+  &.BucketSolid:before {
+    content: '\e910';
+  }
+  &.Calendar:before {
+    content: '\e911';
+  }
+  &.Chat:before {
+    content: '\e916';
+  }
+  &.Checkmark_New:before {
+    content: '\e917';
+  }
+  &.CircleThick:before {
+    content: '\e918';
+  }
+  &.Clipboard_New:before {
+    content: '\e919';
+  }
+  &.Clock_New:before {
+    content: '\e91a';
+  }
+  &.Cloud:before {
+    content: '\e91b';
+  }
+  &.CogOutline_New:before {
+    content: '\e91c';
+  }
+  &.CogSolid_New:before {
+    content: '\e91d';
+  }
+  &.Coppercoin:before {
+    content: '\e91e';
+  }
+  &.CrownSolid_New:before {
+    content: '\e91f';
+  }
+  &.Cube:before {
+    content: '\e920';
+  }
+  &.CuboSolid:before {
+    content: '\e921';
+  }
+  &.Cubouniform:before {
+    content: '\e922';
+  }
+  &.Darkmode_New:before {
+    content: '\e923';
+  }
+  &.DashH:before {
+    content: '\e924';
+  }
+  &.Download_New:before {
+    content: '\e925';
+  }
+  &.ExpandB:before {
+    content: '\e926';
+  }
+  &.Export_New:before {
+    content: '\e927';
+  }
+  &.EyeClosed:before {
+    content: '\e928';
+  }
+  &.FunnelSolid:before {
+    content: '\e929';
+  }
+  &.GraphLine_New:before {
+    content: '\e92a';
+  }
+  &.Group:before {
+    content: '\e92b';
+  }
+  &.History:before {
+    content: '\e92c';
+  }
+  &.Duplicate_New:before {
+    content: '\e92d';
+  }
+  &.Install:before {
+    content: '\e92e';
+  }
+  &.Layers:before {
+    content: '\e92f';
+  }
+  &.Lightmode_New:before {
+    content: '\e930';
+  }
+  &.Link:before {
+    content: '\e931';
+  }
+  &.Lock:before {
+    content: '\e932';
+  }
+  &.More:before {
+    content: '\e933';
+  }
+  &.Pencil:before {
+    content: '\e934';
+  }
+  &.Plus_New:before {
+    content: '\e935';
+  }
+  &.Refresh_New:before {
+    content: '\e936';
+  }
+  &.Remove_New:before {
+    content: '\e937';
+  }
+  &.Save:before {
+    content: '\e938';
+  }
+  &.Search_New:before {
+    content: '\e939';
+  }
+  &.Share:before {
+    content: '\e93a';
+  }
+  &.Shield:before {
+    content: '\e93b';
+  }
+  &.Star:before {
+    content: '\e93c';
+  }
+  &.StarSmile:before {
+    content: '\e93d';
+  }
+  &.Subscribe:before {
+    content: '\e93e';
+  }
+  &.Switch_New:before {
+    content: '\e93f';
+  }
+  &.Text_New:before {
+    content: '\e940';
+  }
+  &.Trash_New:before {
+    content: '\e941';
+  }
+  &.Undo:before {
+    content: '\e942';
+  }
+  &.Upload_New:before {
+    content: '\e943';
+  }
+  &.Upload_Outline:before {
+    content: '\e944';
+  }
+  &.User:before {
+    content: '\e945';
+  }
+  &.Zap:before {
+    content: '\e946';
+  }
+}
