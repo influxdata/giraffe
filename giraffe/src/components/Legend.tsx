@@ -2,11 +2,11 @@ import React, {CSSProperties} from 'react'
 import {FunctionComponent} from 'react'
 
 import {Config, LegendData, LegendType} from '../types'
-import {generateLegendStyles, LegendPillsStyles} from './LegendStyles'
 import {
   LEGEND_COLUMN_CLASSNAME,
   STATIC_LEGEND_COLUMN_CLASSNAME,
 } from '../constants'
+import {generateLegendStyles, LegendPillsStyles} from '../style/legend'
 
 interface Props {
   type: LegendType
