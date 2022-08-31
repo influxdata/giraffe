@@ -3,13 +3,13 @@ import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {IconFont, StandardFunctionProps} from '../types'
+import {IconFont, StandardFunctionProps} from '../../types'
 
 // Styles
 import styles from './Icon.scss'
 
 // Utils
-import {styleReducer} from '../utils/styleReducer'
+import {styleReducer} from '../../utils/styleReducer'
 
 export interface IconProps extends StandardFunctionProps {
   /** Icon to display */

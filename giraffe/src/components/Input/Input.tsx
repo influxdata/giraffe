@@ -10,14 +10,14 @@ import React, {
 import classnames from 'classnames'
 
 // Components
-import {Icon} from './Icon'
+import {Icon} from '../Icon'
 import {StatusIndicator} from './StatusIndicator'
 
 // Styles
 import styles from './Input.scss'
 
 // Utils
-import {styleReducer} from '../utils/styleReducer'
+import {styleReducer} from '../../utils/styleReducer'
 
 // Types
 import {
@@ -27,7 +27,7 @@ import {
   IconFont,
   InputType,
   StandardFunctionProps,
-} from '../types'
+} from '../../types'
 
 export interface InputProps extends StandardFunctionProps {
   /** Minimum value for number & range types */

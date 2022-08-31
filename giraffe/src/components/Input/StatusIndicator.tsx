@@ -3,22 +3,22 @@ import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Components
-import {Icon} from './Icon'
+import {Icon} from '../Icon'
 
 // Types
-import {} from '../types'
+import {} from '../../types'
 import {
   ComponentSize,
   ComponentStatus,
   IconFont,
   StandardFunctionProps,
-} from '../types'
+} from '../../types'
 
 // Styles
 import styles from './StatusIndicator.scss'
 
 // Utils
-import {styleReducer} from '../utils/styleReducer'
+import {styleReducer} from '../../utils/styleReducer'
 
 export interface StatusIndicatorProps extends StandardFunctionProps {
   /** The status to indicate */
