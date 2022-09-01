@@ -1,13 +1,17 @@
 import {DomainLabel} from '../types'
-import {getDomainDataFromLines, simplifyBandData} from './lineData'
+import {
+  getDomainDataFromLines,
+  simplifyBandData,
+  simplifyLineData,
+} from './lineData'
 import {getLinearScale} from './getLinearScale'
 
 describe('lineData', () => {
   describe('get domain data from line data', () => {
     const lineData = {
       0: {
-        xs: [],
-        ys: [],
+        xs: [] as any,
+        ys: [] as any,
         fill: 'some color',
       },
     }
@@ -48,11 +52,11 @@ describe('lineData', () => {
   })
 
   describe('simplifyBandData', () => {
-    const xScale = getLinearScale(0, 100, 0, 1200)
-
     const NOW = new Date().getTime()
     const TWENTY_FOUR_HOURS_FROM_NOW = NOW + 1000 * 60 * 60 * 24
-    const yScale = getLinearScale(NOW, TWENTY_FOUR_HOURS_FROM_NOW, 800, 0)
+    const xScale = getLinearScale(NOW, TWENTY_FOUR_HOURS_FROM_NOW, 0, 1200)
+
+    const yScale = getLinearScale(0, 100, 800, 0)
 
     it('returns the same number of points that it receives for each line', () => {
       const lineData = {
@@ -64,8 +68,11 @@ describe('lineData', () => {
             NOW + 1000 * 60 * 60 * 3,
             NOW + 1000 * 60 * 60 * 4,
             NOW + 1000 * 60 * 60 * 5,
+            NOW + 1000 * 60 * 60 * 6,
+            NOW + 1000 * 60 * 60 * 7,
+            NOW + 1000 * 60 * 60 * 8,
           ],
-          ys: [77, 60, 33, 63, 71],
+          ys: [77, 77, 77, 90, 90, 77, 77, 77],
         },
         1: {
           fill: '#31C0F6',
@@ -75,8 +82,11 @@ describe('lineData', () => {
             NOW + 1000 * 60 * 60 * 3,
             NOW + 1000 * 60 * 60 * 4,
             NOW + 1000 * 60 * 60 * 5,
+            NOW + 1000 * 60 * 60 * 6,
+            NOW + 1000 * 60 * 60 * 7,
+            NOW + 1000 * 60 * 60 * 8,
           ],
-          ys: [25, 40, 32, 22, 58],
+          ys: [25, 40, 32, 22, 58, 33, 52, 66],
         },
         2: {
           fill: '#31C0F6',
@@ -86,10 +96,23 @@ describe('lineData', () => {
             NOW + 1000 * 60 * 60 * 3,
             NOW + 1000 * 60 * 60 * 4,
             NOW + 1000 * 60 * 60 * 5,
+            NOW + 1000 * 60 * 60 * 6,
+            NOW + 1000 * 60 * 60 * 7,
+            NOW + 1000 * 60 * 60 * 8,
           ],
-          ys: [22, 31, 9, 13, 44],
+          ys: [1, 1, 1, 2, 1, 1, 1, 1],
         },
       }
+
+      const truncatedResult = simplifyLineData(lineData, xScale, yScale)
+      expect(truncatedResult[0].xs.length).not.toEqual(lineData[0].xs.length)
+      expect(truncatedResult[2].xs.length).not.toEqual(lineData[2].xs.length)
+      expect(truncatedResult[0].xs.length).not.toEqual(
+        truncatedResult[1].xs.length
+      )
+      expect(truncatedResult[1].xs.length).not.toEqual(
+        truncatedResult[2].xs.length
+      )
 
       const result = simplifyBandData(lineData, xScale, yScale)
       expect(result[0].xs.length).toEqual(lineData[0].xs.length)
