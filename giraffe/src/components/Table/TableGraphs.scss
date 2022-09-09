@@ -1,25 +1,4 @@
-$table-graph--border: #292933;
-$table-graph--cell-highlight: #202028;
-$table-graph--cell: #0f0e15;
-$table-graph--font: 12px;
-$table-graph--heading-bg--active: #292933;
-$table-graph--heading-bg: #181820;
-$table-graph--heading-sort: #00a3ff;
-$table-graph--heading-text-corner: #f6f6f8;
-$table-graph--heading-text: #c6cad3;
-$table-graph--text-color: #999dab;
-$table-graph--text-highlight: #ffffff;
-
-$table-light-graph--border: #e7e8eb;
-$table-light-graph--cell-highlight: #f6f6f8;
-$table-light-graph--cell: #ffffff;
-$table-light-graph--heading-bg--active: #e7e8eb;
-$table-light-graph--heading-bg: #eeeff2;
-$table-light-graph--heading-sort: #00a3ff;
-$table-light-graph--heading-text-corner: #434453;
-$table-light-graph--heading-text: #757888;
-$table-light-graph--text-color: #676978;
-$table-light-graph--text-highlight: #383846;
+@import '../../style/variables.scss';
 
 @font-face {
   font-family: 'icomoon';
