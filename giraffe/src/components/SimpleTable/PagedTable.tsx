@@ -23,19 +23,28 @@ interface ExtendedColumn {
   data: any[]
 }
 
-const measurePage = (
+/*
+ * @param result - the result of the query
+ * @param paginationOffset - the start index of the first row of the current page
+ * @param totalAvailableSpace - the total available space for the table
+ * @param headerHeight - the height of the table header
+ * @param rowHeight - the height of each row
+ * @returns the number of rows that are on the given page (defined by the paginationOffset)
+ * */
+
+const getNumberOfRowsOnCurrentPage = (
   result: FluxResult['parsed'],
-  offset: number,
-  height: number,
+  paginationOffset: number,
+  totalAvailableSpace: number,
   headerHeight: number,
   rowHeight: number
 ): number => {
-  if (height === 0) {
+  if (totalAvailableSpace === 0) {
     return 0
   }
 
   let runningHeight = 14
-  let rowIdx = offset
+  let rowIdx = paginationOffset
   let currentTable
   let lastSignature
   let signature
@@ -60,7 +69,7 @@ const measurePage = (
           runningHeight += 10
         }
 
-        if (runningHeight + 0.25 * rowHeight >= height) {
+        if (runningHeight + 0.25 * rowHeight >= totalAvailableSpace) {
           break
         }
 
@@ -74,29 +83,32 @@ const measurePage = (
 
     runningHeight += rowHeight
 
-    if (runningHeight + lastVisibleRowMinimumHeight >= height) {
+    if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableSpace) {
       break
     }
 
     rowIdx++
   }
 
-  return Math.max(0, rowIdx - offset)
+  return Math.max(0, rowIdx - paginationOffset)
 }
 
 const subsetResult = (
   result: FluxResult['parsed'],
-  offset: number,
-  size: number,
+  paginationOffset: number,
+  currentPageSize: number,
   disableFilter: boolean
 ): SubsetTable[] => {
   // only look at data within the page
   const subset = Object.values(result.table.columns)
     .map(
-      (c: Column): ExtendedColumn => ({
-        ...c,
-        group: result.fluxGroupKeyUnion.includes(c.name),
-        data: c.data.slice(offset, offset + size),
+      (column: Column): ExtendedColumn => ({
+        ...column,
+        group: result.fluxGroupKeyUnion.includes(column.name),
+        data: column.data.slice(
+          paginationOffset,
+          paginationOffset + currentPageSize
+        ),
       })
     )
     .filter(c => !!c.data.filter(_c => _c !== undefined).length)
@@ -113,7 +125,7 @@ const subsetResult = (
   let lastTable = ''
 
   // group by table id (series)
-  for (let ni = 0; ni < size; ni++) {
+  for (let ni = 0; ni < currentPageSize; ni++) {
     if (
       `y${subset['result']?.[0]?.data?.[ni]}:t${subset['table']?.[0]?.data?.[ni]}` ===
       lastTable
@@ -140,7 +152,7 @@ const subsetResult = (
   }
 
   if (tables.length) {
-    tables[tables.length - 1].end = size
+    tables[tables.length - 1].end = currentPageSize
   }
 
   // reorder the column names, filter empty columns, join repeating tables under one header
@@ -227,18 +239,24 @@ const INITIAL_HEIGHT = 0
 const INITIAL_ROW_HEIGHT = 10 // must be greater than 0
 const PagedTable: FC<Props> = ({result, properties}) => {
   const {
-    offset,
+    paginationOffset,
     setSize,
-    maxSize,
+    maxNumberOfRowsOfRowsOnPage,
     setMaxSize,
-    setPage,
+    setCurrentPage,
     setTotalPages,
   } = useContext(PaginationContext)
-  const [height, setHeight] = useState<number>(INITIAL_HEIGHT)
-  const [headerHeight, setHeaderHeight] = useState<number>(
+
+  const [availableHeightForTable, setAvailableHeightForTable] = useState<
+    number
+  >(INITIAL_HEIGHT)
+
+  const [tableHeaderHeight, setTableHeaderHeight] = useState<number>(
     INITIAL_HEADER_HEIGHT
   )
-  const [rowHeight, setRowHeight] = useState<number>(INITIAL_ROW_HEIGHT)
+  const [tableRowHeight, setTableRowHeight] = useState<number>(
+    INITIAL_ROW_HEIGHT
+  )
   const ref = useRef<HTMLDivElement>()
   const pagedTableHeaderRef = useRef<HTMLTableSectionElement>()
   const pagedTableBodyRef = useRef<HTMLTableSectionElement>()
@@ -246,26 +264,26 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
-      headerHeight === INITIAL_HEADER_HEIGHT &&
+      tableHeaderHeight === INITIAL_HEADER_HEIGHT &&
       pagedTableHeaderRef?.current
     ) {
       const calculatedHeaderHeight =
         pagedTableHeaderRef.current.clientHeight ?? 0
 
-      if (calculatedHeaderHeight !== headerHeight) {
-        setHeaderHeight(calculatedHeaderHeight)
+      if (calculatedHeaderHeight !== tableHeaderHeight) {
+        setTableHeaderHeight(calculatedHeaderHeight)
       }
     }
   })
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (rowHeight === INITIAL_ROW_HEIGHT && pagedTableBodyRef?.current) {
+    if (tableRowHeight === INITIAL_ROW_HEIGHT && pagedTableBodyRef?.current) {
       const calculatedRowHeight =
         pagedTableBodyRef.current.children?.[0]?.clientHeight ?? 0
 
-      if (calculatedRowHeight !== rowHeight) {
-        setRowHeight(calculatedRowHeight)
+      if (calculatedRowHeight !== tableRowHeight) {
+        setTableRowHeight(calculatedRowHeight)
       }
     }
   })
@@ -285,7 +303,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
       timeout = setTimeout(() => {
         animationFrameID = requestAnimationFrame(() => {
-          setHeight(
+          setAvailableHeightForTable(
             Math.min(entries[0].contentRect.height, window.screen.height)
           )
         })
@@ -298,10 +316,12 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
     const rect = curr?.getBoundingClientRect()
 
-    if (rect && rect.height !== height) {
-      setHeight(Math.min(rect.height, window.screen.height))
+    // only update the value if its unique
+    if (rect && rect.height !== availableHeightForTable) {
+      setAvailableHeightForTable(Math.min(rect.height, window.screen.height))
     }
 
+    // cleanup
     return () => {
       resizer.disconnect()
       cancelAnimationFrame(animationFrameID)
@@ -311,33 +331,60 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const size = useMemo(() => {
-    return measurePage(result, offset, height, headerHeight, rowHeight)
-  }, [result, offset, height, headerHeight, rowHeight])
+  const numberOfRowsOnCurrentPage = useMemo(() => {
+    return getNumberOfRowsOnCurrentPage(
+      result,
+      paginationOffset,
+      availableHeightForTable,
+      tableHeaderHeight,
+      tableRowHeight
+    )
+  }, [result, paginationOffset, availableHeightForTable, tableHeaderHeight, tableRowHeight])
+
+  console.log('numberOfRowsOnCurrentPage', numberOfRowsOnCurrentPage)
   const tables = useMemo(() => {
-    return subsetResult(result, offset, size, properties.showAll)
-  }, [result, offset, size]) // eslint-disable-line react-hooks/exhaustive-deps
+    return subsetResult(
+      result,
+      paginationOffset,
+      numberOfRowsOnCurrentPage,
+      properties.showAll
+    )
+  }, [result, paginationOffset, numberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Pagination stuff
+  useEffect(() => {
+    setSize(numberOfRowsOnCurrentPage)
+  }, [numberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setSize(size)
-  }, [size]) // eslint-disable-line react-hooks/exhaustive-deps
+    // The max number of rows that will ever be on a page will be the number of rows on the first page
+    // hence the paginationOffset is 0
+    const paginationOffsetForFirstPage = 0
+    const maxNumberOfRowsOnPage = getNumberOfRowsOnCurrentPage(
+      result,
+      paginationOffsetForFirstPage,
+      availableHeightForTable,
+      tableHeaderHeight,
+      tableRowHeight
+    )
+    console.log({maxNumberOfRows: maxNumberOfRowsOnPage})
+    setMaxSize(maxNumberOfRowsOnPage)
+  }, [result, availableHeightForTable, tableHeaderHeight, tableRowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setMaxSize(measurePage(result, 0, height, headerHeight, rowHeight))
-  }, [result, height, headerHeight, rowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    setPage(1)
+    setCurrentPage(1)
   }, [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (maxSize) {
-      setTotalPages(Math.ceil((result?.table?.length ?? 0) / maxSize))
+    if (maxNumberOfRowsOfRowsOnPage) {
+      setTotalPages(
+        Math.ceil((result?.table?.length ?? 0) / maxNumberOfRowsOfRowsOnPage)
+      )
     }
-  }, [maxSize, result]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [maxNumberOfRowsOfRowsOnPage, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inner =
-    !!size &&
+    !!numberOfRowsOnCurrentPage &&
     tables.map((table, index) => (
       <InnerTable
         table={table}
