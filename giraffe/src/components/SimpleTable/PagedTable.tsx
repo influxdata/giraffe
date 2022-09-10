@@ -222,6 +222,9 @@ interface Props {
   result: FluxResult['parsed']
 }
 
+const INITIAL_HEADER_HEIGHT = 0
+const INITIAL_HEIGHT = 0
+const INITIAL_ROW_HEIGHT = 10 // must be greater than 0
 const PagedTable: FC<Props> = ({result, properties}) => {
   const {
     offset,
@@ -231,16 +234,21 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     setPage,
     setTotalPages,
   } = useContext(PaginationContext)
-  const [height, setHeight] = useState<number>(0)
-  const [headerHeight, setHeaderHeight] = useState<number>(0)
-  const [rowHeight, setRowHeight] = useState<number>(0)
+  const [height, setHeight] = useState<number>(INITIAL_HEIGHT)
+  const [headerHeight, setHeaderHeight] = useState<number>(
+    INITIAL_HEADER_HEIGHT
+  )
+  const [rowHeight, setRowHeight] = useState<number>(INITIAL_ROW_HEIGHT)
   const ref = useRef<HTMLDivElement>()
   const pagedTableHeaderRef = useRef<HTMLTableSectionElement>()
   const pagedTableBodyRef = useRef<HTMLTableSectionElement>()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (headerHeight === 0 && pagedTableHeaderRef?.current) {
+    if (
+      headerHeight === INITIAL_HEADER_HEIGHT &&
+      pagedTableHeaderRef?.current
+    ) {
       const calculatedHeaderHeight =
         pagedTableHeaderRef.current.clientHeight ?? 0
 
@@ -252,7 +260,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (rowHeight === 0 && pagedTableBodyRef?.current) {
+    if (rowHeight === INITIAL_ROW_HEIGHT && pagedTableBodyRef?.current) {
       const calculatedRowHeight =
         pagedTableBodyRef.current.children?.[0]?.clientHeight ?? 0
 
