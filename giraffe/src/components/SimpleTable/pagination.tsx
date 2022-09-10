@@ -7,7 +7,7 @@ import {
 interface PaginationContextType {
   paginationOffset: number // this is the start index of the first row of the current page
   numberOfRowsOnCurrentPage: number // the size of the page
-  maxNumberOfRowsOfRowsOnAnyPage: number // the max number of rows on any page
+  maxNumberOfRowsOnAnyPage: number // the max number of rows on any page
   totalNumberOfRows: number // the total number of rows in the table
   totalPages: number // the total number of pages
 
@@ -23,7 +23,7 @@ interface PaginationContextType {
 const DEFAULT_CONTEXT: PaginationContextType = {
   paginationOffset: 0,
   numberOfRowsOnCurrentPage: 0,
-  maxNumberOfRowsOfRowsOnAnyPage: 0,
+  maxNumberOfRowsOnAnyPage: 0,
   totalNumberOfRows: 0,
   totalPages: 0,
 
@@ -50,7 +50,7 @@ export const PaginationProvider: FC<PaginationProviderProps> = ({
 }) => {
   const [offset, setOffset] = useState(DEFAULT_CONTEXT.paginationOffset)
   const [size, setSize] = useState(DEFAULT_CONTEXT.numberOfRowsOnCurrentPage)
-  const [maxSize, setMaxSize] = useState(DEFAULT_CONTEXT.maxNumberOfRowsOfRowsOnAnyPage)
+  const [maxSize, setMaxSize] = useState(DEFAULT_CONTEXT.maxNumberOfRowsOnAnyPage)
   const [totalPages, setTotalPages] = useState(DEFAULT_CONTEXT.totalPages)
 
   const next = useCallback(() => {
@@ -77,7 +77,7 @@ export const PaginationProvider: FC<PaginationProviderProps> = ({
       value={{
         paginationOffset: offset,
         numberOfRowsOnCurrentPage: size,
-        maxNumberOfRowsOfRowsOnAnyPage: maxSize,
+        maxNumberOfRowsOnAnyPage: maxSize,
         totalNumberOfRows: total,
         totalPages,
         next,

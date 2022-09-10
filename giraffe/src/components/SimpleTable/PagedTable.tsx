@@ -241,7 +241,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   const {
     paginationOffset,
     setNumberOfRowsOnCurrentPage,
-    maxNumberOfRowsOfRowsOnAnyPage,
+    maxNumberOfRowsOnAnyPage,
     setMaxNumberOfRowsOnAnyPage,
     setCurrentPage,
     setTotalPages,
@@ -376,12 +376,12 @@ const PagedTable: FC<Props> = ({result, properties}) => {
   }, [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (maxNumberOfRowsOfRowsOnAnyPage) {
+    if (maxNumberOfRowsOnAnyPage) {
       setTotalPages(
-        Math.ceil((result?.table?.length ?? 0) / maxNumberOfRowsOfRowsOnAnyPage)
+        Math.ceil((result?.table?.length ?? 0) / maxNumberOfRowsOnAnyPage)
       )
     }
-  }, [maxNumberOfRowsOfRowsOnAnyPage, result]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [maxNumberOfRowsOnAnyPage, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const inner =
     !!numberOfRowsOnCurrentPage &&
