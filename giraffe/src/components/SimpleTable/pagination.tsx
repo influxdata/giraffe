@@ -7,15 +7,15 @@ import {
 interface PaginationContextType {
   paginationOffset: number // this is the start index of the first row of the current page
   numberOfRowsOnCurrentPage: number // the size of the page
-  maxNumberOfRowsOfRowsOnPage: number // the max size of the page
-  totalNumberOfRows: number // the total number of entries
+  maxNumberOfRowsOfRowsOnAnyPage: number // the max number of rows on any page
+  totalNumberOfRows: number // the total number of rows in the table
   totalPages: number // the total number of pages
 
   next: () => void
   previous: () => void
 
-  setSize: (size: number) => void
-  setMaxSize: (page: number) => void
+  setNumberOfRowsOnCurrentPage: (size: number) => void
+  setMaxNumberOfRowsOnAnyPage: (page: number) => void
   setCurrentPage: (page: number) => void
   setTotalPages: (totalPages: number) => void
 }
@@ -23,15 +23,15 @@ interface PaginationContextType {
 const DEFAULT_CONTEXT: PaginationContextType = {
   paginationOffset: 0,
   numberOfRowsOnCurrentPage: 0,
-  maxNumberOfRowsOfRowsOnPage: 0,
+  maxNumberOfRowsOfRowsOnAnyPage: 0,
   totalNumberOfRows: 0,
   totalPages: 0,
 
   next: () => {},
   previous: () => {},
 
-  setSize: (_size: number) => {},
-  setMaxSize: (_maxSize: number) => {},
+  setNumberOfRowsOnCurrentPage: (_size: number) => {},
+  setMaxNumberOfRowsOnAnyPage: (_maxSize: number) => {},
   setCurrentPage: (_page: number) => {},
   setTotalPages: (_totalPages: number) => {},
 }
@@ -50,7 +50,7 @@ export const PaginationProvider: FC<PaginationProviderProps> = ({
 }) => {
   const [offset, setOffset] = useState(DEFAULT_CONTEXT.paginationOffset)
   const [size, setSize] = useState(DEFAULT_CONTEXT.numberOfRowsOnCurrentPage)
-  const [maxSize, setMaxSize] = useState(DEFAULT_CONTEXT.maxNumberOfRowsOfRowsOnPage)
+  const [maxSize, setMaxSize] = useState(DEFAULT_CONTEXT.maxNumberOfRowsOfRowsOnAnyPage)
   const [totalPages, setTotalPages] = useState(DEFAULT_CONTEXT.totalPages)
 
   const next = useCallback(() => {
@@ -77,13 +77,13 @@ export const PaginationProvider: FC<PaginationProviderProps> = ({
       value={{
         paginationOffset: offset,
         numberOfRowsOnCurrentPage: size,
-        maxNumberOfRowsOfRowsOnPage: maxSize,
+        maxNumberOfRowsOfRowsOnAnyPage: maxSize,
         totalNumberOfRows: total,
         totalPages,
         next,
         previous,
-        setSize,
-        setMaxSize,
+        setNumberOfRowsOnCurrentPage: setSize,
+        setMaxNumberOfRowsOnAnyPage: setMaxSize,
         setCurrentPage: setPage,
         setTotalPages,
       }}
