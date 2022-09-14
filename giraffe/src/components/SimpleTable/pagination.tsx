@@ -5,34 +5,39 @@ import {
   calcPrevPageOffset,
 } from '../../utils/paginationUtils'
 interface PaginationContextType {
-  offset: number // the start index
-  size: number // the size of the page
-  maxSize: number // the max size of the page
-  total: number // the total number of entries
+  paginationOffset: number // this is the start index of the first row of the current page
+
+  // if the table has 100 rows and the available space is 10 rows, then the number of rows on current page is 10
+  // on the other hand, if the table has 2 rows and the available space is 10 rows, then the number of rows on current page is 2
+  numberOfRowsOnCurrentPage: number
+
+  maxNumberOfRowsOnAnyPage: number
+  totalNumberOfRows: number // the total number of rows/entries in the table
   totalPages: number // the total number of pages
 
   next: () => void
   previous: () => void
 
-  setSize: (size: number) => void
-  setMaxSize: (page: number) => void
-  setPage: (page: number) => void
+  // setters
+  setNumberOfRowsOnCurrentPage: (size: number) => void
+  setMaxNumberOfRowsOnAnyPage: (page: number) => void
+  setCurrentPage: (page: number) => void
   setTotalPages: (totalPages: number) => void
 }
 
 const DEFAULT_CONTEXT: PaginationContextType = {
-  offset: 0,
-  size: 0,
-  maxSize: 0,
-  total: 0,
+  paginationOffset: 0,
+  numberOfRowsOnCurrentPage: 0,
+  maxNumberOfRowsOnAnyPage: 0,
+  totalNumberOfRows: 0,
   totalPages: 0,
 
   next: () => {},
   previous: () => {},
 
-  setSize: (_size: number) => {},
-  setMaxSize: (_maxSize: number) => {},
-  setPage: (_page: number) => {},
+  setNumberOfRowsOnCurrentPage: (_size: number) => {},
+  setMaxNumberOfRowsOnAnyPage: (_maxSize: number) => {},
+  setCurrentPage: (_page: number) => {},
   setTotalPages: (_totalPages: number) => {},
 }
 
@@ -41,50 +46,71 @@ export const PaginationContext = createContext<PaginationContextType>(
 )
 
 interface PaginationProviderProps {
-  total?: number
+  totalNumberOfRows?: number
 }
 
 export const PaginationProvider: FC<PaginationProviderProps> = ({
-  total,
+  totalNumberOfRows,
   children,
 }) => {
-  const [offset, setOffset] = useState(DEFAULT_CONTEXT.offset)
-  const [size, setSize] = useState(DEFAULT_CONTEXT.size)
-  const [maxSize, setMaxSize] = useState(DEFAULT_CONTEXT.maxSize)
+  const [paginationOffset, setPaginationOffset] = useState(
+    DEFAULT_CONTEXT.paginationOffset
+  )
+  const [numberOfRowsOnCurrentPage, setNumberOfRowsOnCurrentPage] = useState(
+    DEFAULT_CONTEXT.numberOfRowsOnCurrentPage
+  )
+  const [maxNumberOfRowsOnAnyPage, setMaxNumberOfRowsOnAnyPage] = useState(
+    DEFAULT_CONTEXT.maxNumberOfRowsOnAnyPage
+  )
   const [totalPages, setTotalPages] = useState(DEFAULT_CONTEXT.totalPages)
 
   const next = useCallback(() => {
-    if (total) {
-      setOffset(calcNextPageOffset(offset, size, total))
+    if (totalNumberOfRows) {
+      setPaginationOffset(
+        calcNextPageOffset(
+          paginationOffset,
+          numberOfRowsOnCurrentPage,
+          totalNumberOfRows
+        )
+      )
     } else {
-      setOffset(offset + size)
+      setPaginationOffset(paginationOffset + numberOfRowsOnCurrentPage)
     }
-  }, [offset, size, setOffset, total])
+  }, [
+    paginationOffset,
+    numberOfRowsOnCurrentPage,
+    setPaginationOffset,
+    totalNumberOfRows,
+  ])
 
   const previous = useCallback(() => {
-    setOffset(calcPrevPageOffset(offset, size))
-  }, [offset, size, setOffset])
+    setPaginationOffset(
+      calcPrevPageOffset(paginationOffset, numberOfRowsOnCurrentPage)
+    )
+  }, [paginationOffset, numberOfRowsOnCurrentPage, setPaginationOffset])
 
   const setPage = useCallback(
     (page: number) => {
-      setOffset(calcOffset(page, maxSize, total))
+      setPaginationOffset(
+        calcOffset(page, maxNumberOfRowsOnAnyPage, totalNumberOfRows)
+      )
     },
-    [maxSize, setOffset, total]
+    [maxNumberOfRowsOnAnyPage, setPaginationOffset, totalNumberOfRows]
   )
 
   return (
     <PaginationContext.Provider
       value={{
-        offset,
-        size,
-        maxSize,
-        total,
+        paginationOffset,
+        numberOfRowsOnCurrentPage,
+        maxNumberOfRowsOnAnyPage,
+        totalNumberOfRows,
         totalPages,
         next,
         previous,
-        setSize,
-        setMaxSize,
-        setPage,
+        setNumberOfRowsOnCurrentPage: setNumberOfRowsOnCurrentPage,
+        setMaxNumberOfRowsOnAnyPage: setMaxNumberOfRowsOnAnyPage,
+        setCurrentPage: setPage,
         setTotalPages,
       }}
     >
