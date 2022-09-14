@@ -18,6 +18,7 @@ interface PaginationContextType {
   next: () => void
   previous: () => void
 
+  // setters
   setNumberOfRowsOnCurrentPage: (size: number) => void
   setMaxNumberOfRowsOnAnyPage: (page: number) => void
   setCurrentPage: (page: number) => void
