@@ -1,3 +1,17 @@
+@import '../../style/variables.scss';
+
+@font-face {
+  font-family: 'icomoon';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../../fonts/icomoon.eot') format('embedded-opentype');
+  src: url('../../fonts/icomoon.eot') format('embedded-opentype'),
+    url('../../fonts/icomoon.woff2') format('woff2'),
+    url('../../fonts/icomoon.ttf') format('truetype'),
+    url('../../fonts/icomoon.woff') format('woff'),
+    url('../../fonts/icomoon.svg') format('svg');
+}
+
 .raw-flux-data-table--cell {
   border: 2px solid #202028;
   box-sizing: border-box;
@@ -16,6 +30,9 @@
     box-sizing: border-box;
     border: 2px solid #0f0e15;
     border-radius: 2px;
+    color: $table-graph--text-color;
+    font-size: $table-graph--font;
+    font-weight: 400;
     position: absolute;
     padding: 5px;
     min-height: 100%;
