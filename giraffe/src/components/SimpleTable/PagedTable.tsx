@@ -35,11 +35,11 @@ interface ExtendedColumn {
 const getNumberOfRowsOnCurrentPage = (
   result: FluxResult['parsed'],
   paginationOffset: number,
-  totalAvailableSpace: number,
+  totalAvailableHeight: number,
   headerHeight: number,
   rowHeight: number
 ): number => {
-  if (totalAvailableSpace === 0) {
+  if (totalAvailableHeight === 0) {
     return 0
   }
 
@@ -69,7 +69,7 @@ const getNumberOfRowsOnCurrentPage = (
           runningHeight += 10
         }
 
-        if (runningHeight + 0.25 * rowHeight >= totalAvailableSpace) {
+        if (runningHeight + 0.25 * rowHeight >= totalAvailableHeight) {
           break
         }
 
@@ -83,7 +83,7 @@ const getNumberOfRowsOnCurrentPage = (
 
     runningHeight += rowHeight
 
-    if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableSpace) {
+    if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableHeight) {
       break
     }
 
