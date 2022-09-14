@@ -372,7 +372,6 @@ const PagedTable: FC<Props> = ({result, properties}) => {
       tableHeaderHeight,
       tableRowHeight
     )
-    console.log({maxNumberOfRows: maxNumberOfRowsOnPage})
     setMaxNumberOfRowsOnAnyPage(maxNumberOfRowsOnPage)
   }, [result, availableHeightForTable, tableHeaderHeight, tableRowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
 
