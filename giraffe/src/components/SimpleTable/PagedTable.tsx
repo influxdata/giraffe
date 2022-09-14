@@ -288,7 +288,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
     }
   })
 
-  // this makes sure that the table is always filling it's parent container
+  // this makes sure that the table is always filling its parent container
   useEffect(() => {
     if (!ref || !ref.current) {
       return
