@@ -111,7 +111,7 @@ const subsetResult = (
         ),
       })
     )
-    .filter(c => !!c.data.filter(_c => _c !== undefined).length)
+    .filter(column => !!column.data.filter(_c => _c !== undefined).length)
     .reduce((arr, curr) => {
       if (arr[curr.name]) {
         arr[curr.name].push(curr)
@@ -339,9 +339,14 @@ const PagedTable: FC<Props> = ({result, properties}) => {
       tableHeaderHeight,
       tableRowHeight
     )
-  }, [result, paginationOffset, availableHeightForTable, tableHeaderHeight, tableRowHeight])
+  }, [
+    result,
+    paginationOffset,
+    availableHeightForTable,
+    tableHeaderHeight,
+    tableRowHeight,
+  ])
 
-  console.log('numberOfRowsOnCurrentPage', numberOfRowsOnCurrentPage)
   const tables = useMemo(() => {
     return subsetResult(
       result,
