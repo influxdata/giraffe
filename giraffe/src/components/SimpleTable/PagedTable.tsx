@@ -26,7 +26,7 @@ interface ExtendedColumn {
 /*
  * @param result - the result of the query
  * @param paginationOffset - the start index of the first row of the current page
- * @param totalAvailableSpace - the total available space for the table
+ * @param totalAvailableHeight - the total available height for the table
  * @param headerHeight - the height of the table header
  * @param rowHeight - the height of each row
  * @returns the number of rows that are on the given page (defined by the paginationOffset)
