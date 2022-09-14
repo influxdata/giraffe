@@ -6,7 +6,11 @@ import {
 } from '../../utils/paginationUtils'
 interface PaginationContextType {
   paginationOffset: number // this is the start index of the first row of the current page
+
+  // if the table has 100 rows and the available space is 10 rows, then the number of rows on current page is 10
+  // on the other hand, if the table has 2 rows and the available space is 10 rows, then the number of rows on current page is 2
   numberOfRowsOnCurrentPage: number
+
   maxNumberOfRowsOnAnyPage: number
   totalNumberOfRows: number // the total number of rows/entries in the table
   totalPages: number // the total number of pages
