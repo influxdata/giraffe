@@ -38,7 +38,7 @@ interface Props {
 export const SimpleTable: FC<Props> = ({properties, result}) => {
   return (
     <div className={`${styles['visualization--simple-table']}`}>
-      <PaginationProvider total={result?.table?.length || 0}>
+      <PaginationProvider totalNumberOfRows={result?.table?.length || 0}>
         <PagedTable properties={properties} result={result} />
         <PageControl />
       </PaginationProvider>
