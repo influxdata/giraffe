@@ -230,14 +230,14 @@ const subsetResult = (
 }
 
 interface Props {
-  properties: SimpleTableViewProperties
+  showAll: boolean
   result: FluxResult['parsed']
 }
 
 const INITIAL_HEADER_HEIGHT = 0
 const INITIAL_HEIGHT = 0
 const INITIAL_ROW_HEIGHT = 10 // must be greater than 0
-const PagedTable: FC<Props> = ({result, properties}) => {
+const PagedTable: FC<Props> = ({result, showAll}) => {
   const {
     paginationOffset,
     setNumberOfRowsOnCurrentPage,
@@ -352,7 +352,7 @@ const PagedTable: FC<Props> = ({result, properties}) => {
       result,
       paginationOffset,
       numberOfRowsOnCurrentPage,
-      properties.showAll
+      showAll
     )
   }, [result, paginationOffset, numberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
 

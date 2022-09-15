@@ -36,10 +36,11 @@ interface Props {
 }
 
 export const SimpleTable: FC<Props> = ({properties, result}) => {
+  const showAll = properties?.showAll ?? false
   return (
     <div className={`${styles['visualization--simple-table']}`}>
       <PaginationProvider totalNumberOfRows={result?.table?.length || 0}>
-        <PagedTable properties={properties} result={result} />
+        <PagedTable showAll={showAll} result={result} />
         <PageControl />
       </PaginationProvider>
     </div>
