@@ -1,5 +1,5 @@
 // Libraries
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useMemo} from 'react'
 
 // Components
 import {SimpleTable, SimpleTableViewProperties} from './SimpleTableGraph'
@@ -22,11 +22,20 @@ export const SimpleTableLayer: FunctionComponent<Props> = ({
   fromFluxResult,
 }: Props) => {
   const {showAll} = config
-  const properties: SimpleTableViewProperties = {
-    type: 'simple-table',
-    showAll,
-  }
-  const result = fromFluxResult ? fromFluxResult : fromFlux(fluxResponse)
+  const properties: SimpleTableViewProperties = useMemo(
+    () => ({
+      type: 'simple-table',
+      showAll,
+    }),
+    [showAll]
+  )
 
-  return <SimpleTable result={result} properties={properties} />
+  const result = useMemo(
+    () => (fromFluxResult ? fromFluxResult : fromFlux(fluxResponse)),
+    [fluxResponse, fromFluxResult]
+  )
+
+  return useMemo(() => {
+    return <SimpleTable result={result} properties={properties} />
+  }, [result, properties])
 }
