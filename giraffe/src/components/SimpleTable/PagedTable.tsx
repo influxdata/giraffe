@@ -69,7 +69,10 @@ const getNumberOfRowsOnCurrentPage = (
           runningHeight += 10
         }
 
-        if (runningHeight + 0.25 * rowHeight >= totalAvailableHeight) {
+        if (
+          runningHeight + lastVisibleRowMinimumHeight >=
+          totalAvailableHeight
+        ) {
           break
         }
 
