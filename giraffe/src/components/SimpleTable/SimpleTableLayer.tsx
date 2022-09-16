@@ -35,7 +35,8 @@ export const SimpleTableLayer: FunctionComponent<Props> = ({
     [fluxResponse, fromFluxResult]
   )
 
-  return useMemo(() => {
-    return <SimpleTable result={result} properties={properties} />
-  }, [result, properties])
+  return useMemo(
+    () => <SimpleTable result={result} properties={properties} />,
+    [result, properties]
+  )
 }
