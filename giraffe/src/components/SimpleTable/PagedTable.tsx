@@ -116,13 +116,13 @@ const subsetResult = (
       })
     )
     .filter(column => !!column.data.filter(_c => _c !== undefined).length)
-    .reduce((arr, curr) => {
-      if (arr[curr.name]) {
-        arr[curr.name].push(curr)
-        return arr
+    .reduce((acc, curr) => {
+      if (acc[curr.name]) {
+        acc[curr.name].push(curr)
+        return acc
       }
-      arr[curr.name] = [curr]
-      return arr
+      acc[curr.name] = [curr]
+      return acc
     }, {})
 
   const tables: SubsetTable[] = []
