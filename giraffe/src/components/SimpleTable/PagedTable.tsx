@@ -43,13 +43,14 @@ const getNumberOfRowsOnCurrentPage = (
     return 0
   }
 
+  const visibleRowHeight = Math.max(rowHeight, 10)
   let runningHeight = 14
   let rowIdx = paginationOffset
   let currentTable
   let lastSignature
   let signature
 
-  const lastVisibleRowMinimumHeight = 0.2 * rowHeight
+  const lastVisibleRowMinimumHeight = 0.2 * visibleRowHeight
 
   while (rowIdx < result.table.length) {
     if (result.table.columns?.table?.data?.[rowIdx] !== currentTable) {
@@ -84,7 +85,7 @@ const getNumberOfRowsOnCurrentPage = (
       continue
     }
 
-    runningHeight += rowHeight
+    runningHeight += visibleRowHeight
 
     if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableHeight) {
       break
@@ -237,9 +238,9 @@ interface Props {
   result: FluxResult['parsed']
 }
 
-const INITIAL_HEADER_HEIGHT = 10 // must be greater than 0
+const INITIAL_HEADER_HEIGHT = 0
 const INITIAL_HEIGHT = 0
-const INITIAL_ROW_HEIGHT = 10 // must be greater than 0
+const INITIAL_ROW_HEIGHT = 0
 const PagedTable: FC<Props> = ({result, showAll}) => {
   const {
     paginationOffset,
