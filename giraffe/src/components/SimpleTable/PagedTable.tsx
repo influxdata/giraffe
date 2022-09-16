@@ -234,7 +234,7 @@ interface Props {
   result: FluxResult['parsed']
 }
 
-const INITIAL_HEADER_HEIGHT = 0
+const INITIAL_HEADER_HEIGHT = 10 // must be greater than 0
 const INITIAL_HEIGHT = 0
 const INITIAL_ROW_HEIGHT = 10 // must be greater than 0
 const PagedTable: FC<Props> = ({result, showAll}) => {
@@ -264,8 +264,8 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
-      tableHeaderHeight === INITIAL_HEADER_HEIGHT &&
-      pagedTableHeaderRef?.current
+      pagedTableHeaderRef?.current?.children?.[0]?.clientHeight > 0 &&
+      tableHeaderHeight === INITIAL_HEADER_HEIGHT
     ) {
       const calculatedHeaderHeight =
         pagedTableHeaderRef.current.clientHeight ?? 0
@@ -278,7 +278,10 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (tableRowHeight === INITIAL_ROW_HEIGHT && pagedTableBodyRef?.current) {
+    if (
+      pagedTableBodyRef?.current?.children?.[0]?.clientHeight > 0 &&
+      tableRowHeight === INITIAL_ROW_HEIGHT
+    ) {
       const calculatedRowHeight =
         pagedTableBodyRef.current.children?.[0]?.clientHeight ?? 0
 
