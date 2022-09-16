@@ -268,7 +268,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
-      pagedTableHeaderRef?.current?.children?.[0]?.clientHeight > 0 &&
+      pagedTableHeaderRef?.current?.clientHeight > 0 &&
       tableHeaderHeight === INITIAL_HEADER_HEIGHT
     ) {
       const calculatedHeaderHeight = pagedTableHeaderRef.current.clientHeight
