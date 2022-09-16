@@ -12,6 +12,7 @@
   },
   "resolutions": {
     "immer": "^9.0.6",
-    "jsprim": "^1.4.2"
+    "jsprim": "^1.4.2",
+    "shell-quote": "1.7.3"
   }
 }
