@@ -246,6 +246,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
     paginationOffset,
     setNumberOfRowsOnCurrentPage,
     maxNumberOfRowsOnAnyPage,
+    numberOfRowsOnCurrentPage,
     setMaxNumberOfRowsOnAnyPage,
     setCurrentPage,
     setTotalPages,
@@ -337,7 +338,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const numberOfRowsOnCurrentPage = useMemo(() => {
+  const updatedNumberOfRowsOnCurrentPage = useMemo(() => {
     return getNumberOfRowsOnCurrentPage(
       result,
       paginationOffset,
@@ -353,19 +354,12 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
     tableRowHeight,
   ])
 
-  const tables = useMemo(() => {
-    return subsetResult(
-      result,
-      paginationOffset,
-      numberOfRowsOnCurrentPage,
-      showAll
-    )
-  }, [numberOfRowsOnCurrentPage, paginationOffset, result]) // eslint-disable-line react-hooks/exhaustive-deps
-
   // Pagination stuff
   useEffect(() => {
-    setNumberOfRowsOnCurrentPage(numberOfRowsOnCurrentPage)
-  }, [numberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
+    if (updatedNumberOfRowsOnCurrentPage !== numberOfRowsOnCurrentPage) {
+      setNumberOfRowsOnCurrentPage(updatedNumberOfRowsOnCurrentPage)
+    }
+  }, [updatedNumberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // The max number of rows that will ever be on a page will be the number of rows on the first page
@@ -393,15 +387,29 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
     }
   }, [maxNumberOfRowsOnAnyPage, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inner =
-    !!numberOfRowsOnCurrentPage &&
-    tables.map((table, index) => (
-      <InnerTable
-        table={table}
-        key={`table${index}`}
-        pagedTableRefs={{pagedTableHeaderRef, pagedTableBodyRef}}
-      />
-    ))
+  const tables = useMemo(
+    () =>
+      subsetResult(
+        result,
+        paginationOffset,
+        numberOfRowsOnCurrentPage,
+        showAll
+      ),
+    [numberOfRowsOnCurrentPage, paginationOffset, result] // eslint-disable-line react-hooks/exhaustive-deps
+  )
+
+  const inner = useMemo(() => {
+    if (numberOfRowsOnCurrentPage > 0) {
+      return tables.map((table, index) => (
+        <InnerTable
+          table={table}
+          key={`table${index}`}
+          pagedTableRefs={{pagedTableHeaderRef, pagedTableBodyRef}}
+        />
+      ))
+    }
+    return null
+  }, [numberOfRowsOnCurrentPage, tables])
 
   return (
     <div
