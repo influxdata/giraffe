@@ -346,9 +346,9 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
       tableRowHeight
     )
   }, [
-    result,
-    paginationOffset,
     availableHeightForTable,
+    paginationOffset,
+    result,
     tableHeaderHeight,
     tableRowHeight,
   ])
@@ -360,7 +360,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
       numberOfRowsOnCurrentPage,
       showAll
     )
-  }, [result, paginationOffset, numberOfRowsOnCurrentPage]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [numberOfRowsOnCurrentPage, paginationOffset, result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Pagination stuff
   useEffect(() => {
@@ -379,7 +379,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
       tableRowHeight
     )
     setMaxNumberOfRowsOnAnyPage(maxNumberOfRowsOnPage)
-  }, [result, availableHeightForTable, tableHeaderHeight, tableRowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [availableHeightForTable, result, tableHeaderHeight, tableRowHeight]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setCurrentPage(1)
