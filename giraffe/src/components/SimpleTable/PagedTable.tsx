@@ -267,8 +267,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
       pagedTableHeaderRef?.current?.children?.[0]?.clientHeight > 0 &&
       tableHeaderHeight === INITIAL_HEADER_HEIGHT
     ) {
-      const calculatedHeaderHeight =
-        pagedTableHeaderRef.current.clientHeight ?? 0
+      const calculatedHeaderHeight = pagedTableHeaderRef.current.clientHeight
 
       if (calculatedHeaderHeight !== tableHeaderHeight) {
         setTableHeaderHeight(calculatedHeaderHeight)
@@ -283,7 +282,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
       tableRowHeight === INITIAL_ROW_HEIGHT
     ) {
       const calculatedRowHeight =
-        pagedTableBodyRef.current.children?.[0]?.clientHeight ?? 0
+        pagedTableBodyRef.current.children[0].clientHeight
 
       if (calculatedRowHeight !== tableRowHeight) {
         setTableRowHeight(calculatedRowHeight)
