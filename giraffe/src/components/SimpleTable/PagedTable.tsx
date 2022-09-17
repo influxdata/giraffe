@@ -24,6 +24,13 @@ interface ExtendedColumn {
 }
 
 /*
+  The minimum height of a table row that allows the estimated number of
+  rows on a page to be calculated correctly. This should be at least big
+  in pixels as the font size.
+*/
+const MINIMUM_VISIBLE_ROW_HEIGHT = 16
+
+/*
  * @param result - the result of the query
  * @param paginationOffset - the start index of the first row of the current page
  * @param totalAvailableHeight - the total available height for the table
@@ -31,7 +38,6 @@ interface ExtendedColumn {
  * @param rowHeight - the height of each row
  * @returns the number of rows that are on the given page (defined by the paginationOffset)
  * */
-
 const getNumberOfRowsOnCurrentPage = (
   result: FluxResult['parsed'],
   paginationOffset: number,
@@ -43,7 +49,7 @@ const getNumberOfRowsOnCurrentPage = (
     return 0
   }
 
-  const visibleRowHeight = Math.max(rowHeight, 10)
+  const visibleRowHeight = Math.max(rowHeight, MINIMUM_VISIBLE_ROW_HEIGHT)
   let runningHeight = 14
   let rowIdx = paginationOffset
   let currentTable
