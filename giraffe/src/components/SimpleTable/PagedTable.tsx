@@ -23,12 +23,7 @@ interface ExtendedColumn {
   data: any[]
 }
 
-/*
-  The minimum height of a table row that allows the estimated number of
-  rows on a page to be calculated correctly. This should be at least big
-  in pixels as the font size.
-*/
-const MINIMUM_VISIBLE_ROW_HEIGHT = 16
+const MAXIMUM_ESTIMATED_ROW_HEIGHT = 42
 
 /*
  * @param result - the result of the query
@@ -49,7 +44,13 @@ const getNumberOfRowsOnCurrentPage = (
     return 0
   }
 
-  const visibleRowHeight = Math.max(rowHeight, MINIMUM_VISIBLE_ROW_HEIGHT)
+  const minimumLength = result?.table?.length ?? 1
+  const estimatedRowHeight = Math.min(
+    Math.ceil(totalAvailableHeight / minimumLength),
+    MAXIMUM_ESTIMATED_ROW_HEIGHT
+  )
+  const visibleRowHeight = Math.max(rowHeight, estimatedRowHeight)
+
   let runningHeight = 14
   let rowIdx = paginationOffset
   let currentTable
