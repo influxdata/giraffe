@@ -8,11 +8,6 @@ import {PaginationProvider} from './pagination'
 
 import styles from './SimpleTableGraph.scss'
 
-export interface SimpleTableViewProperties {
-  type: 'simple-table'
-  showAll: boolean
-}
-
 interface SubsetTableColumn {
   name: string
   type: string
@@ -31,15 +26,15 @@ export interface SubsetTable {
 }
 
 interface Props {
-  properties: SimpleTableViewProperties
   result: FluxResult['parsed']
+  showAll: boolean
 }
 
-export const SimpleTable: FC<Props> = ({properties, result}) => {
+export const SimpleTable: FC<Props> = ({result, showAll}) => {
   return (
     <div className={`${styles['visualization--simple-table']}`}>
       <PaginationProvider totalNumberOfRows={result?.table?.length || 0}>
-        <PagedTable properties={properties} result={result} />
+        <PagedTable showAll={showAll} result={result} />
         <PageControl />
       </PaginationProvider>
     </div>
