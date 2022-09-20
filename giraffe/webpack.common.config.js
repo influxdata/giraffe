@@ -59,7 +59,7 @@ module.exports = {
         use: [{loader: 'style-loader'}, 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|gif|eot|ttf|woff|woff2|otf)$/,
+        test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
@@ -69,6 +69,17 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(eot|ttf|woff|woff2|otf)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: Infinity
+            },
+          },
+        ],
+      }
     ],
   },
 }
