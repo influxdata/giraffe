@@ -317,7 +317,7 @@ const drawGaugeLabels = (
   const arcIncrement = arcLength / lineCount
 
   // Format labels text
-  ctx.font = `bold ${labelFontSize}px Rubik`
+  ctx.font = `bold ${labelFontSize}px 'Proxima Nova', Helvetica, Arial, Tahoma, Verdana, sans-serif`
   ctx.fillStyle = labelColor
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'right'
@@ -356,7 +356,7 @@ const drawGaugeValue = (
   const {gaugePosition, prefix, suffix, decimalPlaces} = props
   const {valueColor, valuePositionYOffset, valuePositionXOffset} = props.theme
 
-  ctx.font = `${labelValueFontSize}px Rubik`
+  ctx.font = `${labelValueFontSize}px 'Proxima Nova', Helvetica, Arial, Tahoma, Verdana, sans-serif`
   ctx.fillStyle = valueColor
   ctx.textBaseline = 'middle'
   ctx.textAlign = 'center'
