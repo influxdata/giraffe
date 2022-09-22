@@ -9,7 +9,7 @@ import React, {
 import {DapperScrollbars} from '../DapperScrollbars'
 import {FluxDataType} from '../../index'
 import {SubsetTable} from './SimpleTableGraph'
-import {FluxResult, Column} from './flows'
+import {FluxResult} from './flows'
 import {PaginationContext} from './pagination'
 import InnerTable from './InnerTable'
 
@@ -108,27 +108,31 @@ const subsetResult = (
   currentPageSize: number,
   disableFilter: boolean
 ): SubsetTable[] => {
+  if (currentPageSize <= 0 || !result) {
+    return []
+  }
+
   // only look at data within the page
-  const subset = Object.values(result.table.columns)
-    .map(
-      (column: Column): ExtendedColumn => ({
-        ...column,
-        group: result.fluxGroupKeyUnion.includes(column.name),
-        data: column.data.slice(
-          paginationOffset,
-          paginationOffset + currentPageSize
-        ),
-      })
-    )
-    .filter(column => !!column.data.filter(_c => _c !== undefined).length)
-    .reduce((acc, curr) => {
-      if (acc[curr.name]) {
-        acc[curr.name].push(curr)
-        return acc
+  const subset = {}
+  if (Array.isArray(result.table?.columnKeys)) {
+    result.table.columnKeys.forEach(columnKey => {
+      const data = result.table.columns[columnKey].data.slice(
+        paginationOffset,
+        paginationOffset + currentPageSize
+      )
+      if (data.some(value => value !== undefined)) {
+        subset[columnKey] = [
+          {
+            name: columnKey,
+            type: result.table.columns[columnKey].type,
+            fluxDataType: result.table.columns[columnKey].fluxDataType,
+            group: result.fluxGroupKeyUnion.includes(columnKey),
+            data,
+          } as ExtendedColumn,
+        ]
       }
-      acc[curr.name] = [curr]
-      return acc
-    }, {})
+    })
+  }
 
   const tables: SubsetTable[] = []
   let lastTable = ''
