@@ -44,6 +44,12 @@ const getNumberOfRowsOnCurrentPage = (
     return 0
   }
 
+  // this means that no rows have been mounted or measured, so we need to
+  // mount one row to measure the row height
+  if (rowHeight === 0) {
+    return 1
+  }
+
   const minimumLength = result?.table?.length ?? 1
   const estimatedRowHeight = Math.min(
     Math.ceil(totalAvailableHeight / minimumLength),
