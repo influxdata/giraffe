@@ -23,8 +23,6 @@ interface ExtendedColumn {
   data: any[]
 }
 
-const MAXIMUM_ESTIMATED_ROW_HEIGHT = 42
-
 /*
  * @param result - the result of the query
  * @param paginationOffset - the start index of the first row of the current page
@@ -40,16 +38,15 @@ const getNumberOfRowsOnCurrentPage = (
   headerHeight: number,
   rowHeight: number
 ): number => {
-  if (totalAvailableHeight === 0) {
+  if (totalAvailableHeight <= 0) {
     return 0
   }
 
-  const minimumLength = result?.table?.length ?? 1
-  const estimatedRowHeight = Math.min(
-    Math.ceil(totalAvailableHeight / minimumLength),
-    MAXIMUM_ESTIMATED_ROW_HEIGHT
-  )
-  const visibleRowHeight = Math.max(rowHeight, estimatedRowHeight)
+  // this means that no rows have been mounted or measured, so we need to
+  // mount one row to measure the row height
+  if (rowHeight <= 0) {
+    return 1
+  }
 
   let runningHeight = 14
   let rowIdx = paginationOffset
@@ -57,7 +54,8 @@ const getNumberOfRowsOnCurrentPage = (
   let lastSignature
   let signature
 
-  const lastVisibleRowMinimumHeight = 0.2 * visibleRowHeight
+  // rowHeight is now guaranteed to be greater than zero
+  const lastVisibleRowMinimumHeight = 0.2 * rowHeight
 
   while (rowIdx < result.table.length) {
     if (result.table.columns?.table?.data?.[rowIdx] !== currentTable) {
@@ -92,7 +90,7 @@ const getNumberOfRowsOnCurrentPage = (
       continue
     }
 
-    runningHeight += visibleRowHeight
+    runningHeight += rowHeight
 
     if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableHeight) {
       break
@@ -402,7 +400,7 @@ const PagedTable: FC<Props> = ({result, showAll}) => {
         numberOfRowsOnCurrentPage,
         showAll
       ),
-    [numberOfRowsOnCurrentPage, paginationOffset, result] // eslint-disable-line react-hooks/exhaustive-deps
+    [numberOfRowsOnCurrentPage, paginationOffset, result, showAll]
   )
 
   const inner = useMemo(() => {
