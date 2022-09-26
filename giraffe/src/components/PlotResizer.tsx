@@ -1,8 +1,7 @@
 import React, {FC, RefObject, useMemo} from 'react'
 
-import {LayerTypes, PlotDimensions, SizedConfig} from '../types'
+import {PlotDimensions, SizedConfig} from '../types'
 
-import {get} from '../utils/get'
 import {resizePlotWithStaticLegend} from '../utils/legend/resizePlot'
 import {normalizeConfig} from '../utils/normalizeConfig'
 import {usePlotEnv} from '../utils/usePlotEnv'
@@ -40,19 +39,9 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
 
   const env = usePlotEnv(normalizedConfig)
   const spec = env.getSpec(0)
-  const graphType = get(config, 'layers.0.type')
 
   if (width === 0 || height === 0) {
     return null
-  }
-
-  if (
-    graphType === LayerTypes.Table ||
-    graphType === LayerTypes.RawFluxDataTable ||
-    graphType === LayerTypes.Gauge ||
-    graphType === LayerTypes.SimpleTable
-  ) {
-    return <SizedTable config={normalizedConfig}>{children}</SizedTable>
   }
 
   return (
@@ -77,4 +66,29 @@ export const PlotResizer: FC<PlotResizerProps> = props => {
       ) : null}
     </>
   )
+}
+
+interface TableResizerProps {
+  config: SizedConfig
+  height: number
+  width: number
+}
+
+export const TableResizer: FC<TableResizerProps> = props => {
+  const {children, config, height, width} = props
+
+  const normalizedConfig: SizedConfig = useMemo(
+    () => ({
+      ...normalizeConfig(config),
+      height,
+      width,
+    }),
+    [config, height, width]
+  )
+
+  if (width === 0 || height === 0) {
+    return null
+  }
+
+  return <SizedTable config={normalizedConfig}>{children}</SizedTable>
 }

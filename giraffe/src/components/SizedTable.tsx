@@ -16,19 +16,11 @@ import {FluxTablesTransform} from './FluxTablesTransform'
 import {TableGraphLayer} from './Table'
 import {SimpleTableLayer} from './SimpleTable'
 
-import {usePlotEnv} from '../utils/usePlotEnv'
-
 interface Props {
   config: SizedConfig
 }
 
-export const SizedTable: FunctionComponent<Props> = ({
-  config: userConfig,
-  children,
-}) => {
-  const env = usePlotEnv(userConfig)
-
-  const {config} = env
+export const SizedTable: FunctionComponent<Props> = ({config, children}) => {
   const {width, height} = config
 
   config.showAxes = false
@@ -53,7 +45,7 @@ export const SizedTable: FunctionComponent<Props> = ({
       <div
         className="giraffe-inner-plot"
         style={{
-          cursor: `${userConfig.cursor || 'auto'}`,
+          cursor: `${config.cursor || 'auto'}`,
         }}
       >
         <div className="giraffe-layers" style={fullsizeStyle}>
@@ -112,22 +104,6 @@ export const SizedTable: FunctionComponent<Props> = ({
                     )}
                   </FluxTablesTransform>
                 )
-
-              case LayerTypes.Custom:
-                const renderProps = {
-                  key: layerIndex,
-                  width,
-                  height,
-                  innerWidth: env.innerWidth,
-                  innerHeight: env.innerHeight,
-                  xScale: env.xScale,
-                  yScale: env.yScale,
-                  xDomain: env.xDomain,
-                  yDomain: env.yDomain,
-                  columnFormatter: env.getFormatterForColumn,
-                  yColumnType: env.yColumnType,
-                }
-                return layerConfig.render(renderProps)
 
               default:
                 return null

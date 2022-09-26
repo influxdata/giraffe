@@ -1,9 +1,16 @@
+// Libraries
 import React, {FunctionComponent, RefObject, useRef} from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
+// Components
+import {PlotResizer, TableResizer} from './PlotResizer'
+
+// Types
 import {Config, SizedConfig} from '../types'
 
-import {PlotResizer} from './PlotResizer'
+// Utils
+import {hasPlotEnv} from '../utils/hasPlotEnv'
+
 interface PlotProps {
   config: Config
   axesCanvasRef?: RefObject<HTMLCanvasElement>
@@ -25,7 +32,7 @@ export const Plot: FunctionComponent<PlotProps> = props => {
   }
 
   if (config.width && config.height) {
-    return (
+    return hasPlotEnv(config) ? (
       <div className="giraffe-fixedsizer" style={{position: 'relative'}}>
         <PlotResizer
           axesCanvasRef={axesCanvasRef}
@@ -37,10 +44,18 @@ export const Plot: FunctionComponent<PlotProps> = props => {
           {children}
         </PlotResizer>
       </div>
+    ) : (
+      <TableResizer
+        config={config as SizedConfig}
+        height={config.height}
+        width={config.width}
+      >
+        {children}
+      </TableResizer>
     )
   }
 
-  return (
+  return hasPlotEnv(config) ? (
     <AutoSizer className="giraffe-autosizer">
       {({width, height}) => (
         <PlotResizer
@@ -52,6 +67,18 @@ export const Plot: FunctionComponent<PlotProps> = props => {
         >
           {children}
         </PlotResizer>
+      )}
+    </AutoSizer>
+  ) : (
+    <AutoSizer className="giraffe-autosizer">
+      {({width, height}) => (
+        <TableResizer
+          config={config as SizedConfig}
+          height={height}
+          width={width}
+        >
+          {children}
+        </TableResizer>
       )}
     </AutoSizer>
   )
