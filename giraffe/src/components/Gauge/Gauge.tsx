@@ -6,13 +6,14 @@ import {get} from '../../utils/get'
 // Utils
 import {formatStatValue, MAX_DECIMAL_PLACES} from '../../utils/formatStatValue'
 
+// Styles
 import {
   COLOR_TYPE_MIN,
   COLOR_TYPE_MAX,
   DEFAULT_VALUE_MIN,
   DEFAULT_VALUE_MAX,
   MIN_THRESHOLDS,
-} from '../../constants/gaugeStyles'
+} from '../../style/gaugeStyles'
 
 // Types
 import {Color, DecimalPlaces, GaugeTheme} from '../../types'

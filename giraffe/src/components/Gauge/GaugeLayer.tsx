@@ -6,8 +6,8 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import {GaugeLayerConfig} from '../../types'
 import {Gauge} from './Gauge'
 
-// Constants
-import {GAUGE_THEME_DARK} from '../../constants/gaugeStyles'
+// Styles
+import {GAUGE_THEME_DARK} from '../../style/gaugeStyles'
 
 interface Props {
   value: number
