@@ -1,11 +1,12 @@
-import * as React from 'react'
+import React from 'react'
 import {storiesOf} from '@storybook/react'
 import {boolean, number, select, text, withKnobs} from '@storybook/addon-knobs'
 import {
   Config,
-  Plot,
-  LayerConfig,
   LASER,
+  LayerConfig,
+  Plot,
+  SINGLE_STAT_SVG_NO_USER_SELECT,
   timeFormatter,
 } from '../../giraffe/src'
 
@@ -247,6 +248,7 @@ storiesOf('Single Stat', module)
           viewBox: stat =>
             `${viewBoxX} ${viewBoxY} ${stat.length * viewBoxWidth} 100`,
         },
+        svgStyle: SINGLE_STAT_SVG_NO_USER_SELECT,
       })
     }
 
