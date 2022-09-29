@@ -26,7 +26,7 @@ export {lineTransform} from './transforms/line'
 // Constants
 export * from './constants/colorSchemes'
 export * from './constants/columnKeys'
-export * from './constants/gaugeStyles'
+export * from './style/gaugeStyles'
 export * from './constants/singleStatStyles'
 export {DEFAULT_TABLE_COLORS} from './constants/tableGraph'
 
