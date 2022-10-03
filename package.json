@@ -13,6 +13,6 @@
   "resolutions": {
     "immer": "^9.0.6",
     "jsprim": "^1.4.2",
-    "shell-quote": "1.7.3"
+    "shell-quote": "^1.7.3"
   }
 }
