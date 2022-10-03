@@ -1,10 +1,9 @@
-import CSS from 'csstype'
-
+import {CSSProperties} from 'react'
 export const LASER = '#00C9FF'
 
 export const SINGLE_STAT_DEFAULT_TEST_ID = 'giraffe-layer-single-stat'
 
-export const SINGLE_STAT_DEFAULT_STYLE: CSS.Properties = {
+export const SINGLE_STAT_DEFAULT_STYLE: CSSProperties = {
   alignItems: 'center',
   borderRadius: '4px',
   bottom: 0,
@@ -27,7 +26,7 @@ export const SINGLE_STAT_DEFAULT_STYLE: CSS.Properties = {
   width: '100%',
 }
 
-export const SINGLE_STAT_RESIZER_DEFAULT_STYLE: CSS.Properties = {
+export const SINGLE_STAT_RESIZER_DEFAULT_STYLE: CSSProperties = {
   overflow: 'hidden',
   width: '100%',
   height: '100%',
@@ -47,6 +46,14 @@ export const SINGLE_STAT_SVG_TEXT_DEFAULT_ATTRIBUTES = {
   opacity: 1,
 }
 
-export const SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE: CSS.Properties = {
+export const SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE: CSSProperties = {
   fill: LASER,
+}
+
+export const SINGLE_STAT_SVG_NO_USER_SELECT: CSSProperties = {
+  MozUserSelect: 'none',
+  WebkitTouchCallout: 'none',
+  WebkitUserSelect: 'none',
+  msUserSelect: 'none',
+  userSelect: 'none',
 }

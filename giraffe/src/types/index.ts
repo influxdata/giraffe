@@ -1,4 +1,3 @@
-import CSS from 'csstype'
 import {CSSProperties, ReactNode} from 'react'
 import {TimeZone} from './timeZones'
 import {GeoLayerConfig} from './geo'
@@ -295,7 +294,7 @@ export interface AnnotationLayerConfig {
   hoverDimension?: LineHoverDimension | 'auto'
   hoverMargin?: number
   svgAttributes?: SVGAttributes
-  svgStyle?: CSS.Properties
+  svgStyle?: CSSProperties
   lineWidth?: number
   handleAnnotationClick?: (id: string) => void
 }
@@ -364,12 +363,12 @@ export interface SingleStatLayerConfig {
   textOpacity?: number
   backgroundColor?: string
   testID?: string
-  style?: CSS.Properties
-  resizerStyle?: CSS.Properties
+  style?: CSSProperties
+  resizerStyle?: CSSProperties
   svgAttributes?: SVGAttributes
-  svgStyle?: CSS.Properties
+  svgStyle?: CSSProperties
   svgTextAttributes?: SVGAttributes
-  svgTextStyle?: CSS.Properties
+  svgTextStyle?: CSSProperties
 }
 
 export type SVGAttributeFunction = (stat: string) => string

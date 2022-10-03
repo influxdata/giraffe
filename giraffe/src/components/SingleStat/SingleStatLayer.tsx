@@ -6,7 +6,7 @@ import {
   SINGLE_STAT_SVG_DEFAULT_ATTRIBUTES,
   SINGLE_STAT_SVG_TEXT_DEFAULT_ATTRIBUTES,
   SINGLE_STAT_SVG_TEXT_DEFAULT_STYLE,
-} from '../../constants/singleStatStyles'
+} from '../../style/singleStatStyles'
 import {SingleStatLayerConfig} from '../../types'
 import {formatStatValue} from '../../utils/formatStatValue'
 
