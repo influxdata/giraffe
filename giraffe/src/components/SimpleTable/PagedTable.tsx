@@ -23,6 +23,8 @@ interface ExtendedColumn {
   data: any[]
 }
 
+const TABLE_MARGIN = 10
+
 /*
  * @param result - the result of the query
  * @param paginationOffset - the start index of the first row of the current page
@@ -54,31 +56,28 @@ const getNumberOfRowsOnCurrentPage = (
   let lastSignature
   let signature
 
-  // rowHeight is now guaranteed to be greater than zero
-  const lastVisibleRowMinimumHeight = 0.2 * rowHeight
-
   while (rowIdx < result.table.length) {
     if (result.table.columns?.table?.data?.[rowIdx] !== currentTable) {
       signature = Object.values(result.table.columns)
-        .map(
-          c =>
-            `${c.name}::${c.fluxDataType}::${result.fluxGroupKeyUnion.includes(
-              c.name
-            )}`
-        )
+        .map(column => {
+          if (column.data[rowIdx] !== undefined) {
+            return `${column.name}::${
+              column.fluxDataType
+            }::${result.fluxGroupKeyUnion.includes(column.name)}`
+          }
+          return 'undefined'
+        })
         .join('|')
 
       if (signature !== lastSignature) {
         runningHeight += headerHeight
 
         if (currentTable !== undefined) {
-          runningHeight += 10
+          runningHeight += TABLE_MARGIN
         }
 
-        if (
-          runningHeight + lastVisibleRowMinimumHeight >=
-          totalAvailableHeight
-        ) {
+        // Stop counting if the new table cannot fit even 1 row
+        if (runningHeight + rowHeight >= totalAvailableHeight) {
           break
         }
 
@@ -92,7 +91,7 @@ const getNumberOfRowsOnCurrentPage = (
 
     runningHeight += rowHeight
 
-    if (runningHeight + lastVisibleRowMinimumHeight >= totalAvailableHeight) {
+    if (runningHeight >= totalAvailableHeight) {
       break
     }
 

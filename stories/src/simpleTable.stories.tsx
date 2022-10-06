@@ -5,6 +5,7 @@ import {PlotContainer} from './helpers'
 import {Config, Plot, fromFlux} from '../../giraffe/src'
 import {tableCSV, nonNumbersInNumbersColumn} from './data/tableGraph'
 import {largeDataSet} from './data/largeDataSet'
+import {multiTableUnusualCSV} from './data/multiTableUnusualCSV'
 
 storiesOf('Simple Table', module)
   .addDecorator(withKnobs)
@@ -61,6 +62,29 @@ storiesOf('Simple Table', module)
 
     const config: Config = {
       fluxResponse: largeDataSet,
+      layers: [
+        {
+          type: 'simple table',
+          showAll: showAll,
+        },
+      ],
+    }
+
+    return (
+      // Simple Table needs a black background by default,
+      //   override Storybook's dark grey
+      <PlotContainer style={{backgroundColor}}>
+        <Plot config={config} />
+      </PlotContainer>
+    )
+  })
+  .add('Multi-table unusual data set', () => {
+    const backgroundColor = text('Background contrast color:', 'black')
+
+    const showAll = boolean('showAll', false)
+
+    const config: Config = {
+      fluxResponse: multiTableUnusualCSV,
       layers: [
         {
           type: 'simple table',
