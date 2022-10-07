@@ -77,6 +77,13 @@ storiesOf('Single Stat', module)
             viewBox: stat =>
               `${viewBoxX} ${viewBoxY} ${stat.length * viewBoxWidth} 100`,
           },
+          svgTextStyle: {
+            fontSize: '100',
+            fontWeight: 'lighter',
+            dominantBaseline: 'middle',
+            textAnchor: 'middle',
+            letterSpacing: '-0.05em',
+          },
         },
       ],
     }
@@ -132,6 +139,13 @@ storiesOf('Single Stat', module)
           svgAttributes: {
             viewBox: stat =>
               `${viewBoxX} ${viewBoxY} ${stat.length * viewBoxWidth} 100`,
+          },
+          svgTextStyle: {
+            fontSize: '100',
+            fontWeight: 'lighter',
+            dominantBaseline: 'middle',
+            textAnchor: 'middle',
+            letterSpacing: '-0.05em',
           },
         },
       ],
@@ -249,6 +263,13 @@ storiesOf('Single Stat', module)
             `${viewBoxX} ${viewBoxY} ${stat.length * viewBoxWidth} 100`,
         },
         svgStyle: SINGLE_STAT_SVG_NO_USER_SELECT,
+        svgTextStyle: {
+          fontSize: '100',
+          fontWeight: 'lighter',
+          dominantBaseline: 'middle',
+          textAnchor: 'middle',
+          letterSpacing: '-0.05em',
+        },
       })
     }
 
