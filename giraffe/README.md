@@ -838,7 +838,7 @@ TableGraphLayerConfig uses the `fluxResponse` property from `config` as the data
       &#60;/div&#62;
     </pre>
 
-  - **style**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-layer-single-stat` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `backgroundColor` cannot be overridden and is controlled by the **backgroundColor** option (see above). See the `SINGLE_STAT_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
+  - **style**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-layer-single-stat` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. `backgroundColor` cannot be overridden and is controlled by the **backgroundColor** option (see above).
 
   - **resizerStyle**: _Object. Optional. Recommendation: do not include._ An object containing the key-value pairs used for inline styling `.giraffe-single-stat--resizer` by setting its [style property](https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle/style). If used, please be aware of existing default styles that may need to be overridden. See the `SINGLE_STAT_RESIZER_DEFAULT_STYLE` [here](./src/constants/singleStatStyles.ts).
 
