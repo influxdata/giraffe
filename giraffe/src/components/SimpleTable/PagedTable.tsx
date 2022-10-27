@@ -98,7 +98,7 @@ const getNumberOfRowsOnCurrentPage = (
     rowIdx++
   }
 
-  return Math.max(0, rowIdx - paginationOffset)
+  return Math.max(1, rowIdx - paginationOffset)
 }
 
 const subsetResult = (
