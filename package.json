@@ -14,6 +14,13 @@
     "immer": "^9.0.6",
     "jsprim": "^1.4.2",
     "minimatch": "^3.0.5",
-    "shell-quote": "^1.7.3"
+    "shell-quote": "^1.7.3",
+    "**/@influxdata/**/giraffe-stories/**/react-dev-utils/**/loader-utils": "^2.0.3",
+    "**/@influxdata/**/giraffe-stories/**/sass-loader/**/loader-utils": "^2.0.3",
+    "**/@influxdata/**/giraffe/**/awesome-typescript-loader/**/loader-utils": "^1.4.1",
+    "**/@influxdata/**/giraffe-stories/**/babel-loader/**/loader-utils": "^1.4.1",
+    "**/@influxdata/**/giraffe-stories/**/css-modules-typescript-loader/**/loader-utils": "^1.4.1",
+    "**/@influxdata/**/giraffe-stories/**/file-loader/**/loader-utils": "^1.4.1",
+    "**/@influxdata/**/giraffe-stories/**/ts-loader/**/loader-utils": "^1.4.1"
   }
 }
