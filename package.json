@@ -21,6 +21,7 @@
     "**/@influxdata/**/giraffe-stories/**/babel-loader/**/loader-utils": "^1.4.2",
     "**/@influxdata/**/giraffe-stories/**/css-modules-typescript-loader/**/loader-utils": "^1.4.2",
     "**/@influxdata/**/giraffe-stories/**/file-loader/**/loader-utils": "^1.4.2",
+    "**/@influxdata/**/giraffe-stories/**/resolve-url-loader/**/loader-utils": "^1.4.2",
     "**/@influxdata/**/giraffe-stories/**/ts-loader/**/loader-utils": "^1.4.2"
   }
 }
