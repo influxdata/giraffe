@@ -103,7 +103,7 @@
     "typescript": "3.8.3",
     "unraw": "2.0.0",
     "url-loader": "^4.1.1",
-    "uuid": "^3.2.1",
+    "uuid": "^14.0.0",
     "version-bump-prompt": "^5.0.0",
     "webpack": "^5.94.0",
     "webpack-cli": "^4.2.0"
