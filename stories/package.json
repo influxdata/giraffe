@@ -17,7 +17,7 @@
     "publish": "storybook-to-ghpages --out=.out"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
+    "@babel/core": "^7.29.6",
     "@storybook/addon-knobs": "^6.3.1",
     "@storybook/core": "^6.3.12",
     "@storybook/react": "^6.3.12",
