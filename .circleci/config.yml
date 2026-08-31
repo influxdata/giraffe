@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: cimg/node:24.20
+    resource_class: large
     working_directory: ~/repo
     steps:
       - checkout
@@ -20,6 +21,7 @@ jobs:
       - run: cd giraffe && yarn run build
       - run: cd stories && yarn run lint
       - run: cd stories && yarn run typecheck
+      - run: cd stories && yarn run build-storybook -o .out
       - store_artifacts:
           path: giraffe/coverage
       # See: https://github.com/influxdata/giraffe/issues/129
