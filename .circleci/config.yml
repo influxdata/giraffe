@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:24.20
     working_directory: ~/repo
     steps:
       - checkout
