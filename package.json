@@ -11,6 +11,7 @@
     "publish": "echo 'To publish giraffe, run ./giraffe/publish $version'"
   },
   "resolutions": {
+    "d3-color": "^3.1.0",
     "immer": "^9.0.6",
     "jsprim": "^1.4.2",
     "minimatch": "^3.0.5",
