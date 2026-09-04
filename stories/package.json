@@ -13,8 +13,9 @@
     "prettier:fix": "prettier --config ../.prettierrc.json --write '{src,../giraffe/src}/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit --pretty",
     "start": "yarn -s run prettier:fix && yarn -s run storybook",
-    "storybook": "start-storybook -p 50000",
-    "publish": "storybook-to-ghpages --out=.out"
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 50000",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
+    "publish": "NODE_OPTIONS=--openssl-legacy-provider storybook-to-ghpages --out=.out"
   },
   "devDependencies": {
     "@babel/core": "^7.29.6",
