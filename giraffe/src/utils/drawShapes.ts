@@ -4,13 +4,12 @@ export const drawCircle = (
   y: number,
   diameter: number = 5
 ) => {
-  ctx.lineWidth = diameter
+  // Draw a real arc rather than a zero-length line with round caps. Chromium
+  // 153+ prunes zero-length segments (per the canvas spec), so the old
+  // approach rendered nothing there.
   ctx.beginPath()
-  ctx.lineCap = 'round'
-  ctx.moveTo(x, y)
-  ctx.lineTo(x, y)
-  ctx.stroke()
-  ctx.lineCap = 'butt'
+  ctx.arc(x, y, diameter / 2, 0, 2 * Math.PI)
+  ctx.fill()
 }
 
 export const drawSquare = (
